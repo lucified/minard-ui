@@ -1,0 +1,71 @@
+{
+  "name": "minard-ui",
+  "license": "UNLICENSED",
+  "version": "0.0.1",
+  "description": "Minard frontend",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run-script webpack-dev-server",
+    "clean": "rm -rf dist",
+    "build": "npm run-script clean && webpack",
+    "test": "npm run compile && mocha",
+    "deploy": "npm run-script github-deploy-notify && npm run-script build && npm run-script circle-artifact && npm run-script atomic-s3 && npm run-script flowdock-deploy-notify",
+    "atomic-s3": "atomic-s3 --verbose",
+    "github-deploy-notify": "github-deploy-notify --verbose",
+    "flowdock-deploy-notify": "flowdock-deploy-notify --verbose",
+    "webpack-dev-server": "webpack-dev-server --config=webpack.config.dev.js --inline --hot --port 3000 --host 0.0.0.0",
+    "compile": "tsc",
+    "circle-artifact": "node circle-artifact.js"
+  },
+  "engines": {
+    "node": "^6.0.0"
+  },
+  "homepage": "https://gitub.com/lucified/minard-ui",
+  "contributors": [
+    {
+      "name": "Juho Ojala",
+      "email": "juho@lucify.com"
+    },
+    {
+      "name": "Ville Saarinen",
+      "email": "ville.saarinen@lucify.com"
+    },
+    {
+      "name": "Ville Väänänen",
+      "email": "ville@lucify.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucified/minard-ui.git"
+  },
+  "devDependencies": {
+    "@types/node": "^4.0.28-alpha",
+    "@types/react": "^0.14.26-alpha",
+    "@types/react-dom": "^0.14.12-alpha",
+    "atomic-s3": "^0.1.2",
+    "chai": "^3.5.0",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.9.0",
+    "github-deploy-notify": "~0.1.8",
+    "handlebars": "^4.0.5",
+    "handlebars-loader": "^1.1.4",
+    "html-webpack-plugin": "^2.22.0",
+    "lucify-deploy-config": "^0.1.8",
+    "mocha": "^2.5.3",
+    "node-sass": "^3.8.0",
+    "postcss-loader": "^0.9.1",
+    "postcss-reporter": "^1.4.1",
+    "sass-loader": "^3.2.0",
+    "source-map-loader": "^0.1.5",
+    "style-loader": "^0.13.0",
+    "ts-loader": "^0.8.2",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2"
+  }
+}
