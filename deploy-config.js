@@ -22,7 +22,7 @@ const opts = {
   },
   publicPath: (env) => {
     if (env === 'production' || env === 'staging') {
-      return '/hello-world/';
+      return '/minard/';
     }
     return null;
   },
