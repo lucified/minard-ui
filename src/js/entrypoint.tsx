@@ -1,10 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import Hello from './components/hello-world.tsx';
-import props from './utils';
+import App from './components/app.tsx';
 
 ReactDOM.render(
-    <Hello name={props.name}/>,
+    <App />,
     document.getElementById('content')
 );

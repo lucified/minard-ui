@@ -1,11 +1,10 @@
 
 import { expect } from 'chai';
 
-import * as props from '../src/js/utils';
 
-describe('hello-world', () => {
+describe('app', () => {
   it('works', () => {
-    // expect(props.default.name).to.be.an.object;
-    expect(props.default.name).to.equal('friend');
+    const foo: boolean = true;
+    expect(foo).to.equal(true);
   });
 });
