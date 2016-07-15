@@ -8,7 +8,7 @@
     "start": "npm run-script webpack-dev-server",
     "clean": "rm -rf dist",
     "build": "npm run-script clean && webpack",
-    "test": "npm run compile && mocha",
+    "test": "npm run compile && mocha lib/test",
     "deploy": "npm run-script github-deploy-notify && npm run-script build && npm run-script circle-artifact && npm run-script atomic-s3",
     "atomic-s3": "atomic-s3 --verbose",
     "github-deploy-notify": "github-deploy-notify --verbose",
