@@ -40,9 +40,13 @@
     "url": "git+https://github.com/lucified/minard-ui.git"
   },
   "devDependencies": {
+    "@types/lodash": "0.0.27",
     "@types/node": "^4.0.28-alpha",
     "@types/react": "^0.14.26-alpha",
     "@types/react-dom": "^0.14.12-alpha",
+    "@types/react-redux": "^4.4.27",
+    "@types/redux": "^3.3.26",
+    "@types/redux-logger": "^2.6.28",
     "atomic-s3": "^0.1.2",
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
@@ -66,7 +70,11 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "react": "^15.0.2",
-    "react-dom": "^15.0.2"
+    "lodash": "^4.13.1",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-logger": "^2.6.1"
   }
 }
