@@ -6,7 +6,7 @@
     "module": "commonjs",
     "target": "es5",
     "jsx": "react",
-    "types": ["node"]
+    "types": ["node", "mocha"]
   },
   "exclude": [
     "node_modules",
