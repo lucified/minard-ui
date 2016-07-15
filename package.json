@@ -40,8 +40,8 @@
     "url": "git+https://github.com/lucified/minard-ui.git"
   },
   "devDependencies": {
-    "@types/lodash": "0.0.27",
     "@types/chai": "^3.4.28",
+    "@types/lodash": "0.0.27",
     "@types/mocha": "^2.2.27",
     "@types/node": "^4.0.28-alpha",
     "@types/react": "^0.14.26-alpha",
