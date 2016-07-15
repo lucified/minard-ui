@@ -1,10 +1,19 @@
 
 # Minard UI single-page app
 
+## Requirements
+
+NPM must be installed.
+
+```shell
+npm install -g typescript tslint tslint-react
+```
+
 ## Install
 
 ```shell
 npm install
+npm link typescript
 ```
 ## Development
 
@@ -23,7 +32,7 @@ npm run-script deploy
 Prerequisites:
  - The AWS profile `lucify-protected` is defined `~/.aws/credentials`.
 
-Note that we set `GITHUB_TOKEN` to an empty string to 
+Note that we set `GITHUB_TOKEN` to an empty string to
 make sure it is not defined, so that we don't send any
 notifications of local deployments to GitHub deployment API.
 
