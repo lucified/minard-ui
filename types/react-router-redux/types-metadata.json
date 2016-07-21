@@ -1,0 +1,31 @@
+{
+    "authors": "Isman Usoh <http://github.com/isman-usoh>, Noah Shipley <https://github.com/noah79>, Dimitri Rosenberg <https://github.com/rosendi>",
+    "definitionFilename": "index.d.ts",
+    "libraryDependencies": [
+        "history",
+        "react-router",
+        "redux"
+    ],
+    "moduleDependencies": [
+        "redux"
+    ],
+    "libraryMajorVersion": "4",
+    "libraryMinorVersion": "0",
+    "libraryName": "react-router-redux v4.0.0",
+    "typingsPackageName": "react-router-redux",
+    "projectName": "https://github.com/rackt/react-router-redux",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "sourceBranch": "types-2.0",
+    "kind": "ProperModule",
+    "globals": [
+        "ReactRouterRedux"
+    ],
+    "declaredModules": [
+        "react-router-redux"
+    ],
+    "files": [
+        "index.d.ts"
+    ],
+    "hasPackageJson": false,
+    "contentHash": "c6c0a45e993a75320db12dae3adeeb94479c24f4b9c95d778da2eb1ee0cf9c17"
+}

@@ -1,0 +1,84 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "@types/react-router-redux",
+        "scope": "@types",
+        "escapedName": "@types%2freact-router-redux",
+        "name": "@types/react-router-redux",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/vsaarinen/Repos/minard-ui"
+    ]
+  ],
+  "_from": "@types/react-router-redux@latest",
+  "_id": "@types/react-router-redux@4.0.28",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/@types/react-router-redux",
+  "_nodeVersion": "6.3.0",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/react-router-redux-4.0.28.tgz_1468934070471_0.42988672642968595"
+  },
+  "_npmUser": {
+    "name": "types",
+    "email": "ts-npm-types@microsoft.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "@types/react-router-redux",
+    "scope": "@types",
+    "escapedName": "@types%2freact-router-redux",
+    "name": "@types/react-router-redux",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/react-router-redux/-/react-router-redux-4.0.28.tgz",
+  "_shasum": "523fe513244a00b17b379c68c758cadf25c4fd43",
+  "_shrinkwrap": null,
+  "_spec": "@types/react-router-redux",
+  "_where": "/Users/vsaarinen/Repos/minard-ui",
+  "author": {
+    "name": "Isman Usoh",
+    "email": "http://github.com/isman-usoh"
+  },
+  "dependencies": {
+    "@types/history": "2.0.*",
+    "@types/react-router": "2.0.*",
+    "@types/redux": "3.3.*"
+  },
+  "description": "TypeScript definitions for react-router-redux v4.0.0",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "523fe513244a00b17b379c68c758cadf25c4fd43",
+    "tarball": "https://registry.npmjs.org/@types/react-router-redux/-/react-router-redux-4.0.28.tgz"
+  },
+  "license": "MIT",
+  "main": "",
+  "maintainers": [
+    {
+      "name": "types",
+      "email": "ryan.cavanaugh@microsoft.com"
+    }
+  ],
+  "name": "@types/react-router-redux",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+  },
+  "scripts": {},
+  "typings": "index.d.ts",
+  "version": "4.0.28"
+}

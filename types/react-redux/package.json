@@ -1,0 +1,83 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "@types/react-redux",
+        "scope": "@types",
+        "escapedName": "@types%2freact-redux",
+        "name": "@types/react-redux",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/vsaarinen/Repos/minard-ui"
+    ]
+  ],
+  "_from": "@types/react-redux@latest",
+  "_id": "@types/react-redux@4.4.27",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/@types/react-redux",
+  "_nodeVersion": "6.3.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/react-redux-4.4.27.tgz_1468511540068_0.9329502813052386"
+  },
+  "_npmUser": {
+    "name": "types",
+    "email": "ts-npm-types@microsoft.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "@types/react-redux",
+    "scope": "@types",
+    "escapedName": "@types%2freact-redux",
+    "name": "@types/react-redux",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/react-redux/-/react-redux-4.4.27.tgz",
+  "_shasum": "3b86108fe7f64abd2323ee9de77de74c60bc7863",
+  "_shrinkwrap": null,
+  "_spec": "@types/react-redux",
+  "_where": "/Users/vsaarinen/Repos/minard-ui",
+  "author": {
+    "name": "Qubo",
+    "email": "https://github.com/tkqubo"
+  },
+  "dependencies": {
+    "@types/react": "0.14.*",
+    "@types/redux": "3.3.*"
+  },
+  "description": "TypeScript definitions for react-redux 4.4.0",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "3b86108fe7f64abd2323ee9de77de74c60bc7863",
+    "tarball": "https://registry.npmjs.org/@types/react-redux/-/react-redux-4.4.27.tgz"
+  },
+  "license": "MIT",
+  "main": "",
+  "maintainers": [
+    {
+      "name": "types",
+      "email": "ryan.cavanaugh@microsoft.com"
+    }
+  ],
+  "name": "@types/react-redux",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+  },
+  "scripts": {},
+  "typings": "index.d.ts",
+  "version": "4.4.27"
+}

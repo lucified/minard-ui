@@ -1,0 +1,25 @@
+{
+    "authors": "Sergey Buturlakin <https://github.com/sergey-buturlakin>, Nathan Brown <https://github.com/ngbrown>",
+    "definitionFilename": "index.d.ts",
+    "libraryDependencies": [],
+    "moduleDependencies": [
+        "history/lib/actions"
+    ],
+    "libraryMajorVersion": "2",
+    "libraryMinorVersion": "0",
+    "libraryName": "history v2.0.0",
+    "typingsPackageName": "history",
+    "projectName": "https://github.com/rackt/history",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "sourceBranch": "types-2.0",
+    "kind": "UMD",
+    "globals": [
+        "History"
+    ],
+    "declaredModules": [],
+    "files": [
+        "index.d.ts"
+    ],
+    "hasPackageJson": false,
+    "contentHash": "4b1b4c3166f6923c59c1332a7531418a0a49ac28cd074b513b39835cf29fc84b"
+}
