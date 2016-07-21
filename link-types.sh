@@ -9,6 +9,7 @@ cd node_modules/@types
 
 # TODO: once NPM is updated with latest DefinitelyTyped definitions, remove these
 
+# Redux-related changes copied from https://github.com/DefinitelyTyped/DefinitelyTyped/commit/d417f687ab0c81ed72bffbc5dace5f643369bb70#diff-f8f9f864b333905086c5149ba61d7df4
 rm -rf react-redux
 ln -s ../../types/react-redux
 
