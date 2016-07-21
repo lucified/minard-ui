@@ -2,11 +2,22 @@
   "compilerOptions": {
     "outDir": "./lib/",
     "sourceMap": true,
-    "noImplicitAny": true,
     "module": "commonjs",
     "target": "es5",
     "jsx": "react",
-    "types": ["node", "mocha"]
+    "types": ["node", "mocha"],
+    "pretty": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "react-redux": ["types/react-redux/index.d.ts"],
+      "react-router-redux": ["types/react-router-redux/index.d.ts"],
+      "history": ["types/history/index.d.ts"]
+    }
   },
   "exclude": [
     "node_modules",

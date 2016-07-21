@@ -5,9 +5,9 @@
 
 /// <reference types="redux" />
 /// <reference types="react-router"/>
-/// <reference types="history"/>
 
 import * as Redux from "redux";
+import * as History from "history";
 
 export = ReactRouterRedux;
 
