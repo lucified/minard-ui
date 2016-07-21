@@ -26,7 +26,7 @@ const opts = {
     }
     return null;
   },
-  flow: '275d5d70-71e4-47c3-8c93-608e6bf16d8f', // The minard development flow
+  flow: 'bdc6c13b-be3f-42a9-9f71-e9197dd8fb03', // The main flow
 };
 
 module.exports = lucifyDeployConfig(null, opts);
