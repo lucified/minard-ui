@@ -1,13 +1,17 @@
-import { applyMiddleware, createStore } from 'redux';
+import { routerReducer } from 'react-router-redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import createLogger = require('redux-logger'); // https://github.com/Microsoft/TypeScript/issues/5565
 
-import rootReducer from './reducers';
+//import rootReducer from './reducers';
 
 declare var module: { hot: any }; // An ugly hack
 
 export default function configureStore(initialState: Object) {
   const store = createStore(
-    rootReducer,
+    combineReducers({
+      // TODO: add reducers here
+      routing: routerReducer,
+    }),
     initialState,
     applyMiddleware(createLogger()) // createLogger() must be last
   );

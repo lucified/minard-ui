@@ -1,8 +1,17 @@
 import * as React from 'react';
-import { Route } from 'react-router';
+import { Route, Router } from 'react-router';
+import * as ReactRouterRedux from 'react-router-redux';
 
 import App from './components/App';
 
-export default (
-  <Route path="/" component={App} />
-);
+interface Props {
+  history: ReactRouterRedux.ReactRouterReduxHistory;
+}
+
+export default (props: Props) => {
+  return (
+    <Router history={props.history}>
+      <Route path="/" component={App} />
+    </Router>
+  );
+};
