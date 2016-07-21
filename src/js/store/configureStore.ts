@@ -10,7 +10,7 @@ export default function configureStore(initialState: Object) {
     rootReducer,
     initialState,
     applyMiddleware(createLogger()) // createLogger() must be last
-  )
+  );
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
