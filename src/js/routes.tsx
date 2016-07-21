@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Route, Router } from 'react-router';
 import * as ReactRouterRedux from 'react-router-redux';
 
-import App from './components/App';
+import App from './components/app';
 
 interface Props {
   history: ReactRouterRedux.ReactRouterReduxHistory;

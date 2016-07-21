@@ -12,6 +12,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "react-redux": ["types/react-redux/index.d.ts"],
