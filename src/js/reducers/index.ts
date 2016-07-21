@@ -1,5 +1,8 @@
-import { combineReducers } from 'redux';
+interface Action {
+  type: string;
+  payload?: any;
+  error?: string;
+}
 
-
-const rootReducer = combineReducers({});
+const rootReducer = (state: any, action: Action) => state;
 export default rootReducer;
