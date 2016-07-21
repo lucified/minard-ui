@@ -39,8 +39,8 @@ const loaders = [
 ];
 
 const htmlWebpackPluginConfig = {
-  title: 'Hello world title',
-  description: 'Hello world description',
+  title: 'Minard',
+  description: 'A preview server',
   template: require.resolve('./src/templates/index.hbs'),
   inject: false,
   filename: 'index.html',
@@ -94,4 +94,3 @@ if (process.env.NODE_ENV === 'production' || process.env.LUCIFY_ENV === 'product
 }
 
 module.exports = config;
-
