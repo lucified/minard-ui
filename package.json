@@ -46,7 +46,7 @@
     "@types/node": "^4.0.28-alpha",
     "@types/react": "^0.14.26-alpha",
     "@types/react-dom": "^0.14.12-alpha",
-    "@types/react-redux": "^4.4.27",
+    "@types/react-router": "^2.0.29",
     "@types/redux": "^3.3.26",
     "@types/redux-logger": "^2.6.28",
     "atomic-s3": "^0.1.2",
