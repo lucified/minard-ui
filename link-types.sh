@@ -14,3 +14,6 @@ ln -s ../../types/react-redux
 
 rm -rf react-router-redux
 ln -s ../../types/react-router-redux
+
+rm -rf history
+ln -s ../../types/history
