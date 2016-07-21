@@ -117,12 +117,19 @@ export interface Module {
     };
 }
 
-export { default as createHistory } from "history/lib/createBrowserHistory";
-export { default as createHashHistory } from "history/lib/createHashHistory";
-export { default as createMemoryHistory } from "history/lib/createMemoryHistory";
-export { default as createLocation } from "history/lib/createLocation";
-export { default as useBasename } from "history/lib/useBasename";
-export { default as useBeforeUnload } from "history/lib/useBeforeUnload";
-export { default as useQueries } from "history/lib/useQueries";
-import * as Actions from "history/lib/actions";
+// Created the exports below based on https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/react-router/history.d.ts
+export function createHistory(options?: HistoryOptions): History;
+export function createHashHistory(options?: HistoryOptions): History;
+export function createMemoryHistory(options?: HistoryOptions): History;
+export function createLocation(path?: Path, state?: LocationState, action?: Action, key?: LocationKey): Location;
+export function useBasename<T>(createHistory: CreateHistory<T>): CreateHistory<T>;
+export function useBeforeUnload<T>(createHistory: CreateHistory<T>): CreateHistory<T & HistoryBeforeUnload>;
+export function useQueries<T>(createHistory: CreateHistory<T>): CreateHistory<T & HistoryQueries>;
+
+declare module Actions {
+    export const PUSH: string
+    export const REPLACE: string
+    export const POP: string
+}
+
 export { Actions };
