@@ -4,6 +4,9 @@ import * as React from 'react';
 require('font-awesome/css/font-awesome.css');
 import '../../scss/styles.scss';
 
+import Footer from './footer';
+import Header from './header';
+
 interface AppProps extends React.Props<App> {
 
 }
@@ -11,7 +14,15 @@ interface AppProps extends React.Props<App> {
 export default class App extends React.Component<AppProps, any> {
   public render() {
     return (
-      <h1>Testing</h1>
+      <div className="container grid-1200">
+        <div className="columns">
+          <div className="column">
+            <Header />
+            {this.props.children}
+            <Footer />
+          </div>
+        </div>
+      </div>
     );
   }
 }
