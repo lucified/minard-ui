@@ -15,8 +15,7 @@
     "flowdock-deploy-notify": "flowdock-deploy-notify --verbose",
     "webpack-dev-server": "webpack-dev-server --config=webpack.config.dev.js --inline --hot --port 3000 --host 0.0.0.0",
     "compile": "tsc",
-    "circle-artifact": "node circle-artifact.js",
-    "postinstall": "./link-assets.sh"
+    "circle-artifact": "node circle-artifact.js"
   },
   "engines": {
     "node": "^6.0.0"
