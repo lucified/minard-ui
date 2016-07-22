@@ -1,7 +1,6 @@
 import * as React from 'react';
+import * as Icon from 'react-fontawesome';
 import { Link } from 'react-router';
-
-const Icon = require('react-fontawesome');
 
 interface HeaderProps extends React.Props<Header> {
 

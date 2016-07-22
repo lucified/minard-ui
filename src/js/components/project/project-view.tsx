@@ -1,10 +1,9 @@
 import * as React from 'react';
+import * as Icon from 'react-fontawesome';
 
 import ProjectActivity from './project-activity';
 import ProjectBranches from './project-branches';
 import ProjectHeader from './project-header';
-
-const Icon = require('react-fontawesome');
 
 interface ProjectViewProps extends React.Props<ProjectView> {
   id?: string;
