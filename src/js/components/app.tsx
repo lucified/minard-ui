@@ -1,10 +1,14 @@
 import * as React from 'react';
 
-interface Props extends React.Props<App> {
+// require global styles
+require('font-awesome/css/font-awesome.css');
+import '../../scss/styles.scss';
+
+interface AppProps extends React.Props<App> {
 
 }
 
-export default class App extends React.Component<Props, any> {
+export default class App extends React.Component<AppProps, any> {
   public render() {
     return (
       <h1>Testing</h1>
