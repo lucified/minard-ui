@@ -29,17 +29,20 @@ npm link typescript
 ```shell
 npm start # then open http://localhost:3000/ in a browser
 ```
+
 ## Deploy
+
+Prerequisites:
+ - The AWS profile `lucify-protected` is defined `~/.aws/credentials`.
 
 Deploy to Lucify's production environment with
 ```shell
 LUCIFY_ENV=production \
 AWS_PROFILE=lucify-protected \
-GITHUB_TOKEN=''
+GITHUB_TOKEN='' \
+FLOW_TOKEN='yourFlowdockAPIToken' \
 npm run-script deploy
 ```
-Prerequisites:
- - The AWS profile `lucify-protected` is defined `~/.aws/credentials`.
 
 Note that we set `GITHUB_TOKEN` to an empty string to
 make sure it is not defined, so that we don't send any
