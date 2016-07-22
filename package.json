@@ -15,7 +15,8 @@
     "flowdock-deploy-notify": "flowdock-deploy-notify --verbose",
     "webpack-dev-server": "webpack-dev-server --config=webpack.config.dev.js --inline --hot --port 3000 --host 0.0.0.0",
     "compile": "tsc",
-    "circle-artifact": "node circle-artifact.js"
+    "circle-artifact": "node circle-artifact.js",
+    "postinstall": "./link-assets.sh"
   },
   "engines": {
     "node": "^6.0.0"
@@ -72,9 +73,11 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "font-awesome": "^4.6.3",
     "lodash": "^4.13.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
+    "react-fontawesome": "^1.1.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.6.0",
     "react-router-redux": "^4.0.5",
