@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import configureStore from './configureStore';
 import Routes from './routes';
+import configureStore from './configure-store';
 
 const initialState = {};
 const store = configureStore(initialState);

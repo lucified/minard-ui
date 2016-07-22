@@ -6,13 +6,14 @@ import createLogger = require('redux-logger'); // https://github.com/Microsoft/T
 
 declare var module: { hot: any }; // An ugly hack
 
-export default function configureStore(initialState: Object) {
+function configureStore(initialState: Object) {
   const store = createStore(
     combineReducers({
       // TODO: add reducers here
       routing: routerReducer,
     }),
     initialState,
+    // TODO: remove logger for production
     applyMiddleware(createLogger()) // createLogger() must be last
   );
 
@@ -26,3 +27,5 @@ export default function configureStore(initialState: Object) {
 
   return store;
 }
+
+export default configureStore;
