@@ -1,6 +1,15 @@
 
 # Minard UI single-page app
 
+The Minard single page app. Technologies used:
+
+- TypeScript 2.0
+- React + react-router
+- Redux
+- redux-saga
+- [Spectre CSS](https://picturepan2.github.io/spectre/)
+- [Font Awesome](http://fontawesome.io/icons/)
+
 ## Requirements
 
 NPM must be installed.
