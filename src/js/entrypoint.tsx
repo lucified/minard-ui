@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { hashHistory } from 'react-router';
+import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import Routes from './routes';
 import configureStore from './configure-store';
+import routes from './routes';
 
 const initialState = {};
 const store = configureStore(initialState);
@@ -14,7 +14,7 @@ const history = syncHistoryWithStore(hashHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Routes history={history} />
+    <Router history={history} routes={routes} />
   </Provider>,
   document.getElementById('content')
 );
