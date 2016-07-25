@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface ProjectActivityProps extends React.Props<ProjectActivity> {
+interface ProjectActivityProps {
 
 }
 

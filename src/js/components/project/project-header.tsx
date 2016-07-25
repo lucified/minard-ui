@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface ProjectHeaderProps extends React.Props<ProjectHeader> {
+interface ProjectHeaderProps {
 
 }
 

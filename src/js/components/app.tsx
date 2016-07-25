@@ -7,7 +7,7 @@ import '../../scss/styles.scss';
 import Footer from './footer';
 import Header from './header';
 
-interface AppProps extends React.Props<App> {
+interface AppProps {
 
 }
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface FooterProps extends React.Props<Footer> {
+interface FooterProps {
 
 }
 
