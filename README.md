@@ -8,7 +8,7 @@ The Minard single page app. Technologies used:
 - Redux
 - redux-saga
 - [Spectre CSS](https://picturepan2.github.io/spectre/)
-- [Font Awesome](http://fontawesome.io/icons/)
+- [Font Awesome](http://fontawesome.io/icons/) + react-fontawesome
 
 ## Requirements
 
