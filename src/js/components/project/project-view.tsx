@@ -5,13 +5,15 @@ import ProjectActivity from './project-activity';
 import ProjectBranches from './project-branches';
 import ProjectHeader from './project-header';
 
-interface ProjectViewProps extends React.Props<ProjectView> {
-  id?: string;
+interface ProjectViewProps {
+  params: {
+    id: string;
+  };
 }
 
 class ProjectView extends React.Component<ProjectViewProps, any> {
   public render() {
-    const { id } = this.props;
+    const { id } = this.props.params;
 
     if (!id) {
       return (
