@@ -30,7 +30,8 @@ class ActivityGroup extends React.Component<PassedProps & GeneratedProps, any> {
         </div>
         <div className={classNames('column', 'col-9', styles.activityContent)}>
           {activities.map(activity =>
-            <SingleActivity activity={activity} branch={branch} key={activity.id} />)}
+            <SingleActivity activity={activity} branch={branch} key={activity.id} />
+          )}
         </div>
       </div>
     );
