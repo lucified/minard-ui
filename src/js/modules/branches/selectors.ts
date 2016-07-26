@@ -5,4 +5,6 @@ import {
   getBranch as modelGetBranch,
 } from './model';
 
-export const getBranch = (state: StateTree, id: string) => modelGetBranch(state.entities.branches, id);
+const selectBranchTree = (state: StateTree) => state.entities.branches;
+
+export const getBranch = (state: StateTree, id: string) => modelGetBranch(selectBranchTree(state), id);

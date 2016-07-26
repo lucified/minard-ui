@@ -5,5 +5,7 @@ import {
   getActivityForProject as modelGetActivityForProject,
 } from './model';
 
+const selectActivityTree = (state: StateTree) => state.entities.activities;
+
 export const getActivityForProject = (state: StateTree, projectId: string) =>
-  modelGetActivityForProject(state.entities.activities, projectId);
+  modelGetActivityForProject(selectActivityTree(state), projectId);

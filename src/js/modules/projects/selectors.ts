@@ -8,7 +8,9 @@ import {
   getProjects as modelGetProjects,
 } from './model';
 
-export const getIDs = (state: StateTree) => modelGetIDs(state.entities.projects);
-export const getProjects = (state: StateTree) => modelGetProjects(state.entities.projects);
-export const getProject = (state: StateTree, id: string) => modelGetProject(state.entities.projects, id);
-export const getBranches = (state: StateTree, id: string) => modelGetBranches(state.entities.projects, id);
+const selectProjectTree = (state: StateTree) => state.entities.projects;
+
+export const getIDs = (state: StateTree) => modelGetIDs(selectProjectTree(state));
+export const getProjects = (state: StateTree) => modelGetProjects(selectProjectTree(state));
+export const getProject = (state: StateTree, id: string) => modelGetProject(selectProjectTree(state), id);
+export const getBranches = (state: StateTree, id: string) => modelGetBranches(selectProjectTree(state), id);

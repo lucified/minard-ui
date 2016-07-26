@@ -5,4 +5,6 @@ import {
   getCommit as modelGetCommit,
 } from './model';
 
-export const getCommit = (state: StateTree, id: string) => modelGetCommit(state.entities.commits, id);
+const selectCommitTree = (state: StateTree) => state.entities.commits;
+
+export const getCommit = (state: StateTree, id: string) => modelGetCommit(selectCommitTree(state), id);
