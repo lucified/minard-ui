@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import projects from '../modules/projects';
+import projects, { Project } from '../modules/projects';
 
-import Project from './project';
+import ProjectSummary from './project-summary';
 
 interface Props {
-  projectIDs: string[];
+  projects: Project[];
 }
 
-const TeamProjectsView = ({ projectIDs }: Props) => (
+const TeamProjectsView = ({ projects }: Props) => (
   <div>
-    {projectIDs.map(id => <Project key={id} id={id} />)}
+    {projects.map(project => <ProjectSummary key={project.id} project={project} />)}
   </div>
 );
 
 const mapStateToProps = (state: any) => ({
-  projectIDs: projects.selectors.getIDs(state),
+  projects: projects.selectors.getProjects(state),
 });
 
 export default connect(mapStateToProps)(TeamProjectsView);

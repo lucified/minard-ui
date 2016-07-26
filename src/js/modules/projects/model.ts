@@ -1,10 +1,7 @@
-export interface Project {
-  id: string;
-  name: string;
-}
+import * as _ from 'lodash';
 
-export interface ProjectState {
-  [id: string]: Project;
-}
+import * as t from './types';
 
-export const getIDs = (projects: ProjectState) => Object.keys(projects);
+export const getProjects = (projects: t.ProjectState) => _.values(projects);
+export const getIDs = (projects: t.ProjectState) => Object.keys(projects);
+export const getName = (projects: t.ProjectState, id: string) => projects[id].name;

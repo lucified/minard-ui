@@ -1,5 +1,5 @@
 import { Action } from './actions';
-import { ProjectState } from './model';
+import { ProjectState } from './types';
 
 const initialState: ProjectState = {
   1: {

@@ -3,3 +3,5 @@ import reducer from './reducer';
 import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
+export { Project, ProjectState } from './types';
+
