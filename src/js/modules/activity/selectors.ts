@@ -1,11 +1,11 @@
-// Functions in selectors.ts are passed the root state object. Select the appropriate
-// member that contains all project data and pass that to the actual selectors in model.ts
+import * as _ from 'lodash';
+
 import { StateTree } from '../../reducers';
-import {
-  getActivityForProject as modelGetActivityForProject,
-} from './model';
+import * as t from './types';
 
 const selectActivityTree = (state: StateTree) => state.entities.activities;
 
 export const getActivityForProject = (state: StateTree, projectId: string) =>
-  modelGetActivityForProject(selectActivityTree(state), projectId);
+  _.values<t.Activity>(selectActivityTree(state))
+  .filter(activity => activity.project === projectId)
+  .sort((a, b) => b.timestamp - a.timestamp);
