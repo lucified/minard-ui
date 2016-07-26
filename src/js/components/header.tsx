@@ -16,7 +16,7 @@ class Header extends React.Component<Props, any> {
               <Link to="/" className="navbar-brand">Minard</Link>
             </section>
             <section className="navbar-section">
-              <Link to="/"><Icon name="user" size="lg" /></Link>
+              <a href="#"><Icon name="user" size="lg" /></a>
             </section>
           </header>
         </div>
