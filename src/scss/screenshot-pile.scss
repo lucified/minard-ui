@@ -1,0 +1,39 @@
+.pile {
+  position: relative;
+  width: 234px;
+  height: 148px;
+}
+
+.screenshot {
+  position: absolute;
+  display: block;
+  height: auto;
+  max-width: 90%;
+}
+
+.screenshot-0 {
+  top: 0px;
+  left: 0px;
+  z-index: 5;
+}
+
+.screenshot-1 {
+  top: 4px;
+  left: 4px;
+  z-index: 4;
+  opacity: 0.8;
+}
+
+.screenshot-2 {
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  opacity: 0.6;
+}
+
+.screenshot-3 {
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  opacity: 0.2;
+}

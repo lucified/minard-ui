@@ -1,0 +1,24 @@
+.activity {
+  margin-left: 2rem;
+}
+
+.activity::before {
+  content: '\25CF';
+  font-weight: 100;
+  position: absolute;
+  left: -0.8rem;
+}
+
+.metadata {
+  display: flex;
+  font-size: 0.9em;
+  color: darkgray;
+}
+
+.action {
+  align-self: flex-start;
+}
+
+.timestamp {
+  margin-left: auto;
+}

@@ -4,14 +4,21 @@ import * as React from 'react';
 require('font-awesome/css/font-awesome.css');
 import '../../scss/styles.scss';
 
-interface AppProps extends React.Props<App> {
+import Footer from './footer';
+import Header from './header';
+
+interface Props {
 
 }
 
-export default class App extends React.Component<AppProps, any> {
+export default class App extends React.Component<Props, any> {
   public render() {
     return (
-      <h1>Testing</h1>
+      <div className="container grid-1200">
+        <Header />
+        {this.props.children}
+        <Footer />
+      </div>
     );
   }
 }

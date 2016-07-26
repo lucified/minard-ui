@@ -5,6 +5,7 @@
     "interface-name": [false, "always-prefix"],
     "quotemark": [true, "single", "avoid-escape", "jsx-double"],
     "no-var-requires": false,
+    "member-ordering": [false],
     "jsx-alignment": true,
     "jsx-no-lambda": true,
     "jsx-no-string-ref": true,
