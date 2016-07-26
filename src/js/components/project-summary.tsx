@@ -9,7 +9,7 @@ interface Props {
 
 const ProjectSummary = ({ project }: Props) => (
   <div>
-    <Link to={`/project/${project.id}`}>{name}</Link>
+    <Link to={`/project/${project.id}`}>{project.name}</Link>
   </div>
 );
 

@@ -4,4 +4,3 @@ import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
 export { Project, ProjectState } from './types';
-

@@ -14,4 +14,4 @@ const initialState: ProjectState = {
 
 export default (state: ProjectState = initialState, _action: Action) => {
   return state;
-}
+};
