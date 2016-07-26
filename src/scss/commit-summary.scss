@@ -1,0 +1,24 @@
+.hash {
+   margin-left: auto;
+   color: darkgray;
+   font-weight: 200;
+}
+
+.header {
+  -webkit-align-self: flex-start;
+  align-self: flex-start;
+  margin-bottom: 1rem;
+}
+
+.title {
+  margin-bottom: 0rem;
+}
+
+.description {
+  color: gray;
+  font-weight: 200;
+}
+
+.metadata {
+  flex-grow: 1;
+}

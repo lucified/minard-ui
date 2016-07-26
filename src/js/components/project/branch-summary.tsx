@@ -1,22 +1,41 @@
+import * as _ from 'lodash';
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import { Branch } from '../../modules/branches';
+import commits, { Commit } from '../../modules/commits';
+import { StateTree } from '../../reducers';
 
-const screenshot = require('../../../images/screenshot.png');
+import CommitSummary from '../commit-summary';
+import ScreenshotPile from '../screenshot-pile';
 
-interface Props {
+interface PassedProps {
   branch: Branch;
 }
 
-const BranchSummary = ({ branch }: Props) => (
+interface GeneratedProps {
+  commits: Commit[];
+}
+
+const BranchSummary = ({ branch, commits }: PassedProps & GeneratedProps) => (
   <div className="columns">
     <div className="column col-3">
-      <img className="img-responsive" src={screenshot} />
+      <ScreenshotPile commits={commits} />
     </div>
     <div className="column col-9">
-      {branch.name}
+      <div className="card">
+        <div className="card-header">
+          <h4 className="card-title">{branch.name}</h4>
+          <h6 className="card-meta">{branch.description}</h6>
+        </div>
+        <CommitSummary commit={_.maxBy(commits.filter(commit => commit.hasDeployment), commit => commit.timestamp)} />
+      </div>
     </div>
   </div>
 );
 
-export default BranchSummary;
+const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
+  commits: ownProps.branch.commits.map(commitId => commits.selectors.getCommit(state, commitId)),
+});
+
+export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(BranchSummary);
