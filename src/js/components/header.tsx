@@ -9,14 +9,18 @@ interface Props {
 class Header extends React.Component<Props, any> {
   public render() {
     return (
-      <header className="navbar nav-default">
-        <section className="navbar-header">
-          <Link to="/" className="navbar-brand">Minard</Link>
-        </section>
-        <section className="navbar-section">
-          <Link to="/"><Icon name="user" size="lg" /></Link>
-        </section>
-      </header>
+      <div className="columns">
+        <div className="column col-12">
+          <header className="navbar nav-default">
+            <section className="navbar-header">
+              <Link to="/" className="navbar-brand">Minard</Link>
+            </section>
+            <section className="navbar-section">
+              <Link to="/"><Icon name="user" size="lg" /></Link>
+            </section>
+          </header>
+        </div>
+      </div>
     );
   }
 }

@@ -15,13 +15,9 @@ export default class App extends React.Component<Props, any> {
   public render() {
     return (
       <div className="container grid-1200">
-        <div className="columns">
-          <div className="column">
-            <Header />
-            {this.props.children}
-            <Footer />
-          </div>
-        </div>
+        <Header />
+        {this.props.children}
+        <Footer />
       </div>
     );
   }
