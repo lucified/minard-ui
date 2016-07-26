@@ -22,7 +22,7 @@ class ProjectBranches extends React.Component<Props, any> {
         <div className="columns">
           <div className="column col-1" />
           <div className="column col-10">
-            {branches.map(branch => <BranchSummary branch={branch} />)}
+            {branches.map(branch => <BranchSummary key={branch.id} branch={branch} />)}
           </div>
           <div className="column col-1" />
         </div>
