@@ -7,11 +7,11 @@ import '../../scss/styles.scss';
 import Footer from './footer';
 import Header from './header';
 
-interface AppProps {
+interface Props {
 
 }
 
-export default class App extends React.Component<AppProps, any> {
+export default class App extends React.Component<Props, any> {
   public render() {
     return (
       <div className="container grid-1200">

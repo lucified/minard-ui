@@ -5,11 +5,11 @@ import projects from '../modules/projects';
 
 import Project from './project';
 
-interface TeamProjectsViewProps {
+interface Props {
   projectIDs: string[];
 }
 
-const TeamProjectsView = ({ projectIDs }: TeamProjectsViewProps) => (
+const TeamProjectsView = ({ projectIDs }: Props) => (
   <div>
     {projectIDs.map(id => <Project key={id} id={id} />)}
   </div>

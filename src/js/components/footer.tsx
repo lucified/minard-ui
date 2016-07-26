@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-interface FooterProps {
+interface Props {
 
 }
 
-class Footer extends React.Component<FooterProps, any> {
+class Footer extends React.Component<Props, any> {
   public render() {
     return <div />;
   }

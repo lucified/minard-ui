@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-interface ProjectActivityProps {
+interface Props {
 
 }
 
-class ProjectActivity extends React.Component<ProjectActivityProps, any> {
+class ProjectActivity extends React.Component<Props, any> {
   public render() {
     return <div />;
   }

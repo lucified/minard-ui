@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-interface ProjectBranchesProps {
+interface Props {
 
 }
 
-class ProjectBranches extends React.Component<ProjectBranchesProps, any> {
+class ProjectBranches extends React.Component<Props, any> {
   public render() {
     return <div />;
   }

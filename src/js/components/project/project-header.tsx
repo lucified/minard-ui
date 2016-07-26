@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-interface ProjectHeaderProps {
+interface Props {
 
 }
 
-class ProjectHeader extends React.Component<ProjectHeaderProps, any> {
+class ProjectHeader extends React.Component<Props, any> {
   public render() {
     return <div />;
   }

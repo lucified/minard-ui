@@ -2,11 +2,11 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { Link } from 'react-router';
 
-interface HeaderProps {
+interface Props {
 
 }
 
-class Header extends React.Component<HeaderProps, any> {
+class Header extends React.Component<Props, any> {
   public render() {
     return (
       <header className="navbar nav-default">
