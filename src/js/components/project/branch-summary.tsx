@@ -9,6 +9,8 @@ import { StateTree } from '../../reducers';
 import CommitSummary from '../commit-summary';
 import ScreenshotPile from '../screenshot-pile';
 
+const styles = require('../../../scss/branch-summary.scss');
+
 interface PassedProps {
   branch: Branch;
 }
@@ -23,11 +25,11 @@ const BranchSummary = ({ branch, commits }: PassedProps & GeneratedProps) => (
       <ScreenshotPile commits={commits} />
     </div>
     <div className="column col-9">
+      <div className={styles.header}>
+        <h4 className={styles.title}>{branch.name}</h4>
+        <h6 className={styles.description}>{branch.description}</h6>
+      </div>
       <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">{branch.name}</h4>
-          <h6 className="card-meta">{branch.description}</h6>
-        </div>
         <CommitSummary commit={_.maxBy(commits.filter(commit => commit.hasDeployment), commit => commit.timestamp)} />
       </div>
     </div>
