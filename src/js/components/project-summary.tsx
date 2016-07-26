@@ -8,8 +8,18 @@ interface Props {
 }
 
 const ProjectSummary = ({ project }: Props) => (
-  <div>
-    <Link to={`/project/${project.id}`}>{project.name}</Link>
+  <div className="columns">
+    <div className="column col-12">
+      <Link to={`/project/${project.id}`}>
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">
+              {project.name}
+            </div>
+          </div>
+        </div>
+      </Link>
+    </div>
   </div>
 );
 
