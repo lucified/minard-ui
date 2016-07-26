@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
+import activity, { Activity } from '../../modules/activity';
 import branches, { Branch } from '../../modules/branches';
 import projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
@@ -17,8 +18,9 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  project?: Project;
-  branches?: Branch[];
+  project: Project;
+  branches: Branch[];
+  activities: Activity[];
 }
 
 class ProjectView extends React.Component<PassedProps & GeneratedProps, any> {
@@ -35,7 +37,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedProps, any> {
       );
     }
 
-    const { branches } = this.props;
+    const { branches, activities } = this.props;
 
     return (
       <div>
@@ -43,7 +45,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedProps, any> {
         <div className="divider" />
         <ProjectBranches branches={branches} />
         <div className="divider" />
-        <ProjectActivity project={project} />
+        <ProjectActivity activities={activities} />
       </div>
     );
   }
@@ -53,6 +55,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
   project: projects.selectors.getProject(state, ownProps.params.id),
   branches: projects.selectors.getBranches(state, ownProps.params.id)
     .map(branchId => branches.selectors.getBranch(state, branchId)),
+  activities: activity.selectors.getActivityForProject(state, ownProps.params.id),
 });
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectView);

@@ -3,6 +3,8 @@ import * as Icon from 'react-fontawesome';
 
 import { Project } from '../../modules/projects';
 
+const styles = require('../../../scss/project-header.scss')
+
 interface Props {
   project: Project;
 }
@@ -14,7 +16,7 @@ class ProjectHeader extends React.Component<Props, any> {
     return (
       <div className="columns">
         <div className="column col-4">
-          <p><strong>{project.name}</strong></p>
+          <span className={styles.title}>{project.name}</span>
         </div>
         <div className="column col-7">
           <p>{project.description}</p>

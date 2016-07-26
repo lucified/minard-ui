@@ -6,6 +6,7 @@ export interface Commit {
   author: string;
   description?: string;
   hasDeployment: boolean;
+  deployment?: string;
   screenshot?: string;
 }
 
