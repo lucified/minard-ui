@@ -26,7 +26,7 @@ const opts = {
     }
     return null;
   },
-  flow: 'bdc6c13b-be3f-42a9-9f71-e9197dd8fb03', // The main flow
+  flow: 'bdc6c13b-be3f-42a9-9f71-e9197dd8fb03', // The Main flow ID
 };
 
 module.exports = lucifyDeployConfig(null, opts);
