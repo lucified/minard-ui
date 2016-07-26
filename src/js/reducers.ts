@@ -1,7 +1,7 @@
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 
-import projects from './modules/projects';
+import projects, { ProjectState } from './modules/projects';
 
 export default combineReducers({
   entities: combineReducers({
@@ -9,3 +9,10 @@ export default combineReducers({
   }),
   routing: routerReducer,
 });
+
+export interface StateTree {
+  entities: {
+    projects: ProjectState;
+  };
+  routing: any;
+}

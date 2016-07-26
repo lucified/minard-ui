@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import projects, { Project } from '../modules/projects';
+import { StateTree } from '../reducers';
 
 import ProjectSummary from './project-summary';
 
@@ -15,7 +16,7 @@ const TeamProjectsView = ({ projects }: Props) => (
   </div>
 );
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: StateTree) => ({
   projects: projects.selectors.getProjects(state),
 });
 
