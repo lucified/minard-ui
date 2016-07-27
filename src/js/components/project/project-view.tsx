@@ -43,7 +43,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedProps, any> {
       <div>
         <ProjectHeader project={project} />
         <div className="divider" />
-        <ProjectBranches branches={branches} project={project} />
+        <ProjectBranches branches={branches} />
         <div className="divider" />
         <ProjectActivity activities={activities} />
       </div>

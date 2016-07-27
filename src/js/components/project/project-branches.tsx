@@ -2,14 +2,12 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
 import { Branch } from '../../modules/branches';
-import { Project } from '../../modules/projects';
 
 import SectionTitle from '../common/section-title';
 import BranchSummary from './branch-summary';
 
 interface Props {
   branches: Branch[];
-  project: Project;
 }
 
 class ProjectBranches extends React.Component<Props, any> {
@@ -24,7 +22,7 @@ class ProjectBranches extends React.Component<Props, any> {
   }
 
   public render() {
-    const { branches, project } = this.props;
+    const { branches } = this.props;
 
     return (
       <div>
@@ -33,7 +31,7 @@ class ProjectBranches extends React.Component<Props, any> {
           <div className="columns">
             <div className="column col-1" />
             <div className="column col-10">
-              {branches.map(branch => <BranchSummary key={branch.id} branch={branch} project={project} />)}
+              {branches.map(branch => <BranchSummary key={branch.id} branch={branch} />)}
             </div>
             <div className="column col-1" />
           </div>

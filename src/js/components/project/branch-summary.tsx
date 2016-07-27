@@ -5,7 +5,6 @@ import { Link } from 'react-router';
 
 import { Branch } from '../../modules/branches';
 import commits, { Commit } from '../../modules/commits';
-import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 import CommitSummary from '../common/commit-summary';
@@ -15,7 +14,6 @@ const styles = require('../../../scss/branch-summary.scss');
 
 interface PassedProps {
   branch: Branch;
-  project: Project;
 }
 
 interface GeneratedProps {
@@ -23,15 +21,15 @@ interface GeneratedProps {
   latestDeployedCommit?: Commit;
 }
 
-const BranchSummary = ({ branch, commits, project, latestDeployedCommit }: PassedProps & GeneratedProps) => (
+const BranchSummary = ({ branch, commits, latestDeployedCommit }: PassedProps & GeneratedProps) => (
   <div className="columns">
     <div className="column col-3">
-      <Link to={`/project/${project.id}/${branch.name}`}>
+      <Link to={`/project/${branch.project}/${branch.name}`}>
         <ScreenshotPile commits={commits} />
       </Link>
     </div>
     <div className="column col-9">
-      <Link to={`/project/${project.id}/${branch.name}`}>
+      <Link to={`/project/${branch.project}/${branch.name}`}>
         <div className={styles.header}>
           <h4 className={styles.title}>{branch.name}</h4>
           <h6 className={styles.description}>{branch.description}</h6>
@@ -60,7 +58,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
 
   return {
     commits: branchCommits,
-    latestDeployedCommit
+    latestDeployedCommit,
   };
 };
 
