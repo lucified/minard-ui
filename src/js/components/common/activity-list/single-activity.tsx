@@ -44,7 +44,9 @@ class SingleActivity extends React.Component<Props, any> {
         <div className={styles.metadata}>
           <div className={styles.action}>
             {`${activity.author} ${this.getAction(activity)} `}
-            <Link to="#">{activity.deployment}</Link> in {branch.name}
+            <Link to="#">{activity.deployment}</Link>
+            {' in '}
+            <Link to={`project/${branch.project}/${branch.name}`}>{branch.name}</Link>
           </div>
           <div className={styles.timestamp}>
             {moment(activity.timestamp).fromNow()}
