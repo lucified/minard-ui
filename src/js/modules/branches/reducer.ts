@@ -15,6 +15,12 @@ const initialState: BranchState = {
     project: '1',
     commits: ['2-aacd00f02', '2-a998823423'],
   },
+  3: {
+    id: '3',
+    name: 'third-long-name-branch',
+    project: '1',
+    commits: [],
+  },
 };
 
 export default (state: BranchState = initialState, _action: Action) => {
