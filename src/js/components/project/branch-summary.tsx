@@ -20,9 +20,10 @@ interface PassedProps {
 
 interface GeneratedProps {
   commits: Commit[];
+  latestDeployedCommit?: Commit;
 }
 
-const BranchSummary = ({ branch, commits, project }: PassedProps & GeneratedProps) => (
+const BranchSummary = ({ branch, commits, project, latestDeployedCommit }: PassedProps & GeneratedProps) => (
   <div className="columns">
     <div className="column col-3">
       <Link to={`/project/${project.id}/${branch.name}`}>
@@ -37,14 +38,30 @@ const BranchSummary = ({ branch, commits, project }: PassedProps & GeneratedProp
         </div>
       </Link>
       <div className="card">
-        <CommitSummary commit={_.maxBy(commits.filter(commit => commit.hasDeployment), commit => commit.timestamp)} />
+        {latestDeployedCommit ?
+          <CommitSummary commit={latestDeployedCommit} /> : (
+            <div className="card-header">
+              <h4 className="card-title">No previews available</h4>
+              <h6 className="card-meta">Make some commits to {branch.name} generate previews</h6>
+            </div>
+          )
+        }
       </div>
     </div>
   </div>
 );
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
-  commits: ownProps.branch.commits.map(commitId => commits.selectors.getCommit(state, commitId)),
-});
+const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
+  const branchCommits = ownProps.branch.commits.map(commitId => commits.selectors.getCommit(state, commitId));
+  const latestDeployedCommit = _.maxBy(
+    branchCommits.filter(commit => commit.hasDeployment),
+    commit => commit.timestamp
+  );
+
+  return {
+    commits: branchCommits,
+    latestDeployedCommit
+  };
+};
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(BranchSummary);
