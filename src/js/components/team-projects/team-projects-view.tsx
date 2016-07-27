@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import projects, { Project } from '../modules/projects';
-import { StateTree } from '../reducers';
+import projects, { Project } from '../../modules/projects';
+import { StateTree } from '../../reducers';
 
 import ProjectSummary from './project-summary';
 

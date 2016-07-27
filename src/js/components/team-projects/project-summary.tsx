@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 
-import { Project } from '../modules/projects';
+import { Project } from '../../modules/projects';
 
 interface Props {
   project: Project;

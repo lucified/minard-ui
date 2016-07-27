@@ -2,11 +2,11 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { Link } from 'react-router';
 
-import { Activity, ActivityType } from '../modules/activity';
-import { Branch } from '../modules/branches';
+import { Activity, ActivityType } from '../../../modules/activity';
+import { Branch } from '../../../modules/branches';
 
-const styles = require('../../scss/single-activity.scss');
-const avatar = require('../../images/avatar.png');
+const styles = require('../../../../scss/single-activity.scss');
+const avatar = require('../../../../images/avatar.png');
 
 interface Props {
   activity: Activity;

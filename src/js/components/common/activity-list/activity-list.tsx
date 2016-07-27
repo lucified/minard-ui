@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Activity } from '../modules/activity';
+import { Activity } from '../../../modules/activity';
 
 import ActivityGroup from './activity-group';
 

@@ -6,8 +6,8 @@ import { Branch } from '../../modules/branches';
 import commits, { Commit } from '../../modules/commits';
 import { StateTree } from '../../reducers';
 
-import CommitSummary from '../commit-summary';
-import ScreenshotPile from '../screenshot-pile';
+import CommitSummary from '../common/commit-summary';
+import ScreenshotPile from '../common/screenshot-pile';
 
 const styles = require('../../../scss/branch-summary.scss');
 

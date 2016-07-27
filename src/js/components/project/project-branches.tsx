@@ -3,8 +3,8 @@ import * as Icon from 'react-fontawesome';
 
 import { Branch } from '../../modules/branches';
 
+import SectionTitle from '../common/section-title';
 import BranchSummary from './branch-summary';
-import SectionTitle from './section-title';
 
 interface Props {
   branches: Branch[];

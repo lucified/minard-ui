@@ -2,10 +2,10 @@ import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 
-import { Commit } from '../modules/commits';
+import { Commit } from '../../modules/commits';
 
-const styles = require('../../scss/commit-summary.scss');
-const avatar = require('../../images/avatar.png');
+const styles = require('../../../scss/commit-summary.scss');
+const avatar = require('../../../images/avatar.png');
 
 interface Props {
   commit: Commit;

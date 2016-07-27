@@ -2,9 +2,9 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 
-import { Commit } from '../modules/commits';
+import { Commit } from '../../modules/commits';
 
-const styles = require('../../scss/screenshot-pile.scss');
+const styles = require('../../../scss/screenshot-pile.scss');
 
 interface Props {
   commits: Commit[];

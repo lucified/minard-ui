@@ -2,14 +2,14 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { Activity } from '../modules/activity';
-import branches, { Branch } from '../modules/branches';
-import { StateTree } from '../reducers';
+import { Activity } from '../../../modules/activity';
+import branches, { Branch } from '../../../modules/branches';
+import { StateTree } from '../../../reducers';
 
 import SingleActivity from './single-activity';
 
-const styles = require('../../scss/activity-group.scss');
-const screenshot = require('../../images/screenshot.png');
+const styles = require('../../../../scss/activity-group.scss');
+const screenshot = require('../../../../images/screenshot.png');
 
 interface PassedProps {
   activities: Activity[];

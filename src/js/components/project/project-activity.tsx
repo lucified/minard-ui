@@ -3,8 +3,8 @@ import * as Icon from 'react-fontawesome';
 
 import { Activity } from '../../modules/activity';
 
-import ActivityList from '../activity-list';
-import SectionTitle from './section-title';
+import ActivityList from '../common/activity-list/activity-list';
+import SectionTitle from '../common/section-title';
 
 interface Props {
   activities: Activity[];
