@@ -11,19 +11,23 @@ interface Props {
 }
 
 class ProjectActivity extends React.Component<Props, any> {
+  private getEmptyContent() {
+    return (
+      <div className="empty">
+        <Icon name="code-fork" fixedWidth size="3x" />
+        <p className="empty-title">Nothing has happened in your project!</p>
+        <p className="empty-meta">Commit some code to get things started.</p>
+      </div>
+    );
+  }
+
   public render() {
     const { activities } = this.props;
 
     return (
       <div>
         <SectionTitle>Activity</SectionTitle>
-        {(activities.length === 0) ? (
-          <div className="empty">
-            <Icon name="code-fork" fixedWidth size="3x" />
-            <p className="empty-title">Nothing has happened in your project!</p>
-            <p className="empty-meta">Commit some code to get things started.</p>
-          </div>
-        ) : (
+        {(activities.length === 0) ? this.getEmptyContent() : (
           <div className="columns">
             <div className="column col-1" />
             <div className="column col-10">

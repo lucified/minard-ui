@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-
+import * as Icon from 'react-fontawesome';
 
 import { Commit } from '../../modules/commits';
 
@@ -15,6 +15,14 @@ class ScreenshotPile extends React.Component<Props, any> {
     const { commits } = this.props;
     const latestDeployedCommits = commits.filter(commit => commit.hasDeployment)
       .sort((a, b) => a.timestamp - b.timestamp);
+
+    if (latestDeployedCommits.length === 0) {
+      return (
+        <div className={styles.pile}>
+          <Icon className={styles.empty} name="times" size="4x" />
+        </div>
+      );
+    }
 
     return (
       <div className={styles.pile}>

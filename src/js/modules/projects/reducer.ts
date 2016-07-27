@@ -6,7 +6,7 @@ const initialState: ProjectState = {
     id: '1',
     name: 'First project',
     description: 'This is the first project description. It might not be set.',
-    branches: ['1', '2'],
+    branches: ['1', '2', '3'],
   },
   2: {
     id: '2',

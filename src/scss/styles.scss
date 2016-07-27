@@ -2,6 +2,12 @@
 :global {
   @import '~spectre.css/dist/spectre';
 
+  // Remove padding for breadcrumbs
+  .breadcrumb {
+    padding: 0;
+    margin-top: 0;
+  }
+
    // Add custom larger screen size
   @media screen and (min-width: 1220px) {
     .grid-1200 {

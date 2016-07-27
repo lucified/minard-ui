@@ -46,8 +46,7 @@ const initialState: CommitState = {
     author: 'ville.saarinen@gmail.com',
     timestamp: 1469530291791,
     message: 'And this is one as well',
-    hasDeployment: true,
-    screenshot: screenshot,
+    hasDeployment: false,
   },
   '1-29752a385': {
     hash: '29752a385',
