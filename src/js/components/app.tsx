@@ -2,7 +2,7 @@ import * as React from 'react';
 
 // require global styles
 require('font-awesome/css/font-awesome.css');
-import '../../scss/styles.scss';
+import './styles.scss';
 
 import Footer from './footer';
 import Header from './header';

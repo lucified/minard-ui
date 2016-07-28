@@ -11,7 +11,7 @@ import { StateTree } from '../../../reducers';
 
 import MinardLink from '../minard-link';
 
-const styles = require('../../../../scss/single-activity.scss');
+const styles = require('./single-activity.scss');
 
 interface PassedProps {
   activity: Activity;

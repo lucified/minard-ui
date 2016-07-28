@@ -11,7 +11,7 @@ import CommitSummary from '../common/commit-summary';
 import MinardLink from '../common/minard-link';
 import ScreenshotPile from '../common/screenshot-pile';
 
-const styles = require('../../../scss/branch-summary.scss');
+const styles = require('./branch-summary.scss');
 
 interface PassedProps {
   branch: Branch;

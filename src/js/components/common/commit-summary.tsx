@@ -5,7 +5,7 @@ import * as Gravatar from 'react-gravatar';
 
 import { Commit } from '../../modules/commits';
 
-const styles = require('../../../scss/commit-summary.scss');
+const styles = require('./commit-summary.scss');
 
 interface Props {
   commit: Commit;

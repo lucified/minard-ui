@@ -8,7 +8,7 @@ import { StateTree } from '../../../reducers';
 
 import SingleActivity from './single-activity';
 
-const styles = require('../../../../scss/activity-group.scss');
+const styles = require('./activity-group.scss');
 const screenshot = require('../../../../images/screenshot.png');
 
 interface PassedProps {
