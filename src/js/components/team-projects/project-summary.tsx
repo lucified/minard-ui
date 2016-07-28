@@ -49,7 +49,7 @@ const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: Passe
           <div className={styles.latestActivity}>
             {latestDeployedCommit.author} deployed a new preview {moment(latestDeployedCommit.timestamp).fromNow()}
             <br />
-            <MinardLink commit={latestDeployedCommit}>
+            <MinardLink openInNewWindow commit={latestDeployedCommit}>
               Open latest preview <Icon name="external-link" />
             </MinardLink>
           </div>
