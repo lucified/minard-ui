@@ -9,6 +9,8 @@ import { Branch } from '../../../modules/branches';
 import projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
+import MinardLink from '../minard-link';
+
 const styles = require('../../../../scss/single-activity.scss');
 
 interface PassedProps {
@@ -50,14 +52,14 @@ class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> 
         {`${activity.author} ${this.getAction(activity)} `}
         <Link to="#">{activity.deployment}</Link>
         {' in '}
-        <Link to={`project/${branch.project}/${branch.name}`}>{branch.name}</Link>
+        <MinardLink branch={branch}>{branch.name}</MinardLink>
       </span>
     );
   }
 
   private getProjectLabel(project: Project) {
     return (
-      <span> in <Link to={`project/${project.id}`}>{project.name}</Link></span>
+      <span> in <MinardLink project={project}>{project.name}</MinardLink></span>
     );
   }
 

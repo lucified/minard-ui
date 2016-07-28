@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Link } from 'react-router';
 
 import { Branch } from '../../modules/branches';
 import { Project } from '../../modules/projects';
+
+import MinardLink from './minard-link';
 
 interface Props {
   branch?: Branch;
@@ -12,11 +13,11 @@ interface Props {
 const Breadcrumbs = ({ branch, project }: Props) => (
   <ul className="breadcrumb">
     <li className="breadcrumb-item">
-      <Link to={`/project/${project.id}`}>{project.name}</Link>
+      <MinardLink project={project}>{project.name}</MinardLink>
     </li>
     {branch && (
       <li className="breadcrumb-item">
-        <Link to={`/project/${project.id}/${branch.name}`}>{branch.name}</Link>
+        <MinardLink branch={branch}>{branch.name}</MinardLink>
       </li>
     )}
   </ul>

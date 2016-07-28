@@ -5,13 +5,13 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import branches from '../../modules/branches';
 import commits, { Commit } from '../../modules/commits';
 import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import MinardLink from '../common/minard-link';
 import ScreenshotPile from '../common/screenshot-pile';
 
 const styles = require('../../../scss/project-summary.scss');
@@ -28,15 +28,15 @@ interface GeneratedProps {
 const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: PassedProps & GeneratedProps) => (
   <div className="columns">
     <div className={classNames('column', 'col-3', styles.screenshot)}>
-      <Link to={`/project/${project.id}`}>
+      <MinardLink project={project}>
         <ScreenshotPile commits={projectCommits} />
-      </Link>
+      </MinardLink>
     </div>
     <div className="column col-9">
-      <Link to={`/project/${project.id}`}>
+      <MinardLink project={project}>
         <h3 className={styles.title}>{project.name}</h3>
         <p>{project.description}</p>
-      </Link>
+      </MinardLink>
       <div className="flex">
         <div className={styles.activeUsers}>
           {project.activeUsers.map(user => // TODO: have an upper range for this
@@ -49,9 +49,9 @@ const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: Passe
           <div className={styles.latestActivity}>
             {latestDeployedCommit.author} deployed a new preview {moment(latestDeployedCommit.timestamp).fromNow()}
             <br />
-            <Link to={`/project/${project.id}/${latestDeployedCommit.branch}/${latestDeployedCommit.hash}`}>
+            <MinardLink commit={latestDeployedCommit}>
               Open latest preview <Icon name="external-link" />
-            </Link>
+            </MinardLink>
           </div>
         )}
       </div>
