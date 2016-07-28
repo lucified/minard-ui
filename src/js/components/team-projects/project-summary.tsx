@@ -14,7 +14,7 @@ import { StateTree } from '../../reducers';
 import MinardLink from '../common/minard-link';
 import ScreenshotPile from '../common/screenshot-pile';
 
-const styles = require('../../../scss/project-summary.scss');
+const styles = require('./project-summary.scss');
 
 interface PassedProps {
   project: Project;

@@ -4,7 +4,7 @@ import * as Icon from 'react-fontawesome';
 
 import { Commit } from '../../modules/commits';
 
-const styles = require('../../../scss/screenshot-pile.scss');
+const styles = require('./screenshot-pile.scss');
 
 interface Props {
   commits: Commit[];

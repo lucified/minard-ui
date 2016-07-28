@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const styles = require('../../../scss/section-title.scss');
+const styles = require('./section-title.scss');
 
 const SectionTitle = ({children}: {children?: any}) => (
   <div className="columns">

@@ -3,7 +3,7 @@ import * as Icon from 'react-fontawesome';
 
 import { Project } from '../../modules/projects';
 
-const styles = require('../../../scss/project-header.scss')
+const styles = require('./project-header.scss')
 
 interface Props {
   project: Project;
