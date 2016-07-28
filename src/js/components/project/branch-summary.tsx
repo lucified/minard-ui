@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -22,7 +23,7 @@ interface GeneratedProps {
 }
 
 const BranchSummary = ({ branch, commits, latestDeployedCommit }: PassedProps & GeneratedProps) => (
-  <div className="columns">
+  <div className={classNames('columns', styles.branch)}>
     <div className="column col-3">
       <Link to={`/project/${branch.project}/${branch.name}`}>
         <ScreenshotPile commits={commits} />
