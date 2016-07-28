@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "react-fontawesome": ["types/react-fontawesome.d.ts"],
+      "react-gravatar": ["types/react-gravatar.d.ts"],
       "react-redux": ["types/react-redux/index.d.ts"],
       "react-router-redux": ["types/react-router-redux/index.d.ts"],
       "history": ["types/history/index.d.ts"]

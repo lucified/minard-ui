@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import * as React from 'react';
+import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -9,7 +10,6 @@ import projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
 const styles = require('../../../../scss/single-activity.scss');
-const avatar = require('../../../../images/avatar.png');
 
 interface PassedProps {
   activity: Activity;
@@ -78,7 +78,7 @@ class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> 
         <div className="columns">
           <div className="column col-1">
             <figure className="avatar avatar-lg">
-              <img src={avatar} />
+              <Gravatar email={activity.author} />
             </figure>
           </div>
           <div className="column col-11">
