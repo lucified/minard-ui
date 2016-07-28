@@ -13,6 +13,7 @@ const screenshot = require('../../../../images/screenshot.png');
 
 interface PassedProps {
   activities: Activity[];
+  showProjectName: boolean;
 }
 
 interface GeneratedProps {
@@ -21,7 +22,7 @@ interface GeneratedProps {
 
 class ActivityGroup extends React.Component<PassedProps & GeneratedProps, any> {
   public render() {
-    const { activities, branch } = this.props;
+    const { activities, branch, showProjectName } = this.props;
 
     return (
       <div className={classNames('columns', styles.activityGroup)}>
@@ -30,7 +31,12 @@ class ActivityGroup extends React.Component<PassedProps & GeneratedProps, any> {
         </div>
         <div className={classNames('column', 'col-9', styles.activityContent)}>
           {activities.map(activity =>
-            <SingleActivity activity={activity} branch={branch} key={activity.id} />
+            <SingleActivity
+              activity={activity}
+              branch={branch}
+              key={activity.id}
+              showProjectName={showProjectName}
+            />
           )}
         </div>
       </div>

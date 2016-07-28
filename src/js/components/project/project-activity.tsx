@@ -3,7 +3,7 @@ import * as Icon from 'react-fontawesome';
 
 import { Activity } from '../../modules/activity';
 
-import ActivityList from '../common/activity-list/activity-list';
+import ActivityList from '../common/activity-list';
 import SectionTitle from '../common/section-title';
 
 interface Props {
@@ -31,7 +31,7 @@ class ProjectActivity extends React.Component<Props, any> {
           <div className="columns">
             <div className="column col-1" />
             <div className="column col-10">
-              <ActivityList activities={activities} />
+              <ActivityList activities={activities} showProjectName={false} />
             </div>
             <div className="column col-1" />
           </div>
