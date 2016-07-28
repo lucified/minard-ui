@@ -8,6 +8,10 @@
     margin-top: 0;
   }
 
+  a {
+    text-decoration: none;
+  }
+
    // Add custom larger screen size
   @media screen and (min-width: 1220px) {
     .grid-1200 {
