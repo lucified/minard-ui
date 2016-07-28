@@ -1,6 +1,6 @@
 export interface Commit {
   hash: string;
-  branchId: string;
+  branch: string;
   timestamp: number;
   message: string;
   author: string;

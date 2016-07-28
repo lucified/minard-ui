@@ -49,7 +49,7 @@ const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: Passe
           <div className={styles.latestActivity}>
             {latestDeployedCommit.author} deployed a new preview {moment(latestDeployedCommit.timestamp).fromNow()}
             <br />
-            <Link to={`/project/${project.id}/${latestDeployedCommit.branchId}/${latestDeployedCommit.hash}`}>
+            <Link to={`/project/${project.id}/${latestDeployedCommit.branch}/${latestDeployedCommit.hash}`}>
               Open latest preview <Icon name="external-link" />
             </Link>
           </div>
