@@ -6,6 +6,7 @@ import { Activity } from '../../../modules/activity';
 import branches, { Branch } from '../../../modules/branches';
 import { StateTree } from '../../../reducers';
 
+import MinardLink from '../minard-link';
 import SingleActivity from './single-activity';
 
 const styles = require('./activity-group.scss');
@@ -27,7 +28,7 @@ class ActivityGroup extends React.Component<PassedProps & GeneratedProps, any> {
     return (
       <div className={classNames('columns', styles.activityGroup)}>
         <div className={classNames('column', 'col-3', styles.activityScreenshot)}>
-          <img src={screenshot} className="img-responsive" />
+          <MinardLink><img src={screenshot} className="img-responsive" /></MinardLink>
         </div>
         <div className={classNames('column', 'col-9', styles.activityContent)}>
           {activities.map(activity =>

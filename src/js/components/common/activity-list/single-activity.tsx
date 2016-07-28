@@ -2,7 +2,6 @@ import * as moment from 'moment';
 import * as React from 'react';
 import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import { Activity, ActivityType } from '../../../modules/activity';
 import { Branch } from '../../../modules/branches';
@@ -50,7 +49,7 @@ class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> 
     return (
       <span>
         {`${activity.author} ${this.getAction(activity)} `}
-        <Link to="#">{activity.deployment}</Link>
+        <MinardLink>{activity.deployment}</MinardLink>
         {' in '}
         <MinardLink branch={branch}>{branch.name}</MinardLink>
       </span>

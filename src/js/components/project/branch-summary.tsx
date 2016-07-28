@@ -38,7 +38,7 @@ const BranchSummary = ({ branch, commits, latestDeployedCommit }: PassedProps & 
       </MinardLink>
       <div className="card">
         {latestDeployedCommit ?
-          <CommitSummary commit={latestDeployedCommit} /> : (
+          <CommitSummary commit={latestDeployedCommit} enableLink /> : (
             <div className="card-header">
               <h4 className="card-title">No previews available</h4>
               <h6 className="card-meta">Make some commits to {branch.name} generate previews</h6>
