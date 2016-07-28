@@ -2,13 +2,13 @@ import * as classNames from 'classnames';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import { Branch } from '../../modules/branches';
 import commits, { Commit } from '../../modules/commits';
 import { StateTree } from '../../reducers';
 
 import CommitSummary from '../common/commit-summary';
+import MinardLink from '../common/minard-link';
 import ScreenshotPile from '../common/screenshot-pile';
 
 const styles = require('../../../scss/branch-summary.scss');
@@ -25,17 +25,17 @@ interface GeneratedProps {
 const BranchSummary = ({ branch, commits, latestDeployedCommit }: PassedProps & GeneratedProps) => (
   <div className={classNames('columns', styles.branch)}>
     <div className="column col-3">
-      <Link to={`/project/${branch.project}/${branch.name}`}>
+      <MinardLink branch={branch}>
         <ScreenshotPile commits={commits} />
-      </Link>
+      </MinardLink>
     </div>
     <div className="column col-9">
-      <Link to={`/project/${branch.project}/${branch.name}`}>
+      <MinardLink branch={branch}>
         <div className={styles.header}>
           <h4 className={styles.title}>{branch.name}</h4>
           <h6 className={styles.description}>{branch.description}</h6>
         </div>
-      </Link>
+      </MinardLink>
       <div className="card">
         {latestDeployedCommit ?
           <CommitSummary commit={latestDeployedCommit} /> : (
