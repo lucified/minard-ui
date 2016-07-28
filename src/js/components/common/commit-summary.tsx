@@ -15,7 +15,7 @@ const CommitSummary = ({commit}: Props) => (
   <div className="container flex">
      <div className={styles.avatarBox}>
       <figure className="avatar avatar-lg">
-        <Gravatar email={commit.author} />
+        <Gravatar email={commit.author} https />
       </figure>
     </div>
     <div className={styles.commitContent}>

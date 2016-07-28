@@ -78,7 +78,7 @@ class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> 
         <div className="columns">
           <div className="column col-1">
             <figure className="avatar avatar-lg">
-              <Gravatar email={activity.author} />
+              <Gravatar email={activity.author} https />
             </figure>
           </div>
           <div className="column col-11">

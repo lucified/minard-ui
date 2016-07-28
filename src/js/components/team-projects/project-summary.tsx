@@ -41,7 +41,7 @@ const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: Passe
         <div className={styles.activeUsers}>
           {project.activeUsers.map(user => // TODO: have an upper range for this
             <figure key={`avatar-${user}`} className={classNames('avatar', styles.avatar)}>
-              <Gravatar email={user} />
+              <Gravatar email={user} https />
             </figure>
           )}
         </div>
