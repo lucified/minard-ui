@@ -10,12 +10,12 @@ interface Props {
   activities: Activity[];
 }
 
-class ProjectActivity extends React.Component<Props, any> {
+class ActivitySection extends React.Component<Props, any> {
   private getEmptyContent() {
     return (
       <div className="empty">
         <Icon name="code-fork" fixedWidth size="3x" />
-        <p className="empty-title">Nothing has happened in your project!</p>
+        <p className="empty-title">Nothing has happened in your projects!</p>
         <p className="empty-meta">Commit some code to get things started.</p>
       </div>
     );
@@ -31,7 +31,7 @@ class ProjectActivity extends React.Component<Props, any> {
           <div className="columns">
             <div className="column col-1" />
             <div className="column col-10">
-              <ActivityList activities={activities} showProjectName={false} />
+              <ActivityList activities={activities} showProjectName={true} />
             </div>
             <div className="column col-1" />
           </div>
@@ -41,4 +41,4 @@ class ProjectActivity extends React.Component<Props, any> {
   }
 }
 
-export default ProjectActivity;
+export default ActivitySection;

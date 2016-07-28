@@ -1,11 +1,11 @@
 import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
+import * as Gravatar from 'react-gravatar';
 
 import { Commit } from '../../modules/commits';
 
 const styles = require('../../../scss/commit-summary.scss');
-const avatar = require('../../../images/avatar.png');
 
 interface Props {
   commit: Commit;
@@ -15,7 +15,7 @@ const CommitSummary = ({commit}: Props) => (
   <div className="container flex">
      <div className={styles.avatarBox}>
       <figure className="avatar avatar-lg">
-        <img src={avatar} />
+        <Gravatar email={commit.author} https />
       </figure>
     </div>
     <div className={styles.commitContent}>

@@ -6,6 +6,7 @@ import ActivityGroup from './activity-group';
 
 interface Props {
   activities: Activity[];
+  showProjectName: boolean;
 }
 
 class ActivityList extends React.Component<Props, any> {
@@ -26,12 +27,14 @@ class ActivityList extends React.Component<Props, any> {
   }
 
   public render() {
-    const { activities } = this.props;
+    const { activities, showProjectName } = this.props;
     const groupedActivities = this.generateDeploymentGroups(activities);
 
     return (
       <div>
-        {groupedActivities.map((activityGroup, i) => <ActivityGroup key={i} activities={activityGroup} />)}
+        {groupedActivities.map((activityGroup, i) =>
+          <ActivityGroup key={i} activities={activityGroup} showProjectName={showProjectName} />
+        )}
       </div>
     );
   }

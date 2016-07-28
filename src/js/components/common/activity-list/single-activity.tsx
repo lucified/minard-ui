@@ -1,19 +1,27 @@
 import * as moment from 'moment';
 import * as React from 'react';
+import * as Gravatar from 'react-gravatar';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { Activity, ActivityType } from '../../../modules/activity';
 import { Branch } from '../../../modules/branches';
+import projects, { Project } from '../../../modules/projects';
+import { StateTree } from '../../../reducers';
 
 const styles = require('../../../../scss/single-activity.scss');
-const avatar = require('../../../../images/avatar.png');
 
-interface Props {
+interface PassedProps {
   activity: Activity;
   branch: Branch;
+  showProjectName: boolean;
 }
 
-class SingleActivity extends React.Component<Props, any> {
+interface GeneratedProps {
+  project: Project;
+}
+
+class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> {
   private getAction(activity: Activity) {
     switch (activity.type) {
       case ActivityType.Comment:
@@ -36,17 +44,32 @@ class SingleActivity extends React.Component<Props, any> {
     }
   }
 
+  private getBranchAction(activity: Activity, branch: Branch) {
+    return (
+      <span>
+        {`${activity.author} ${this.getAction(activity)} `}
+        <Link to="#">{activity.deployment}</Link>
+        {' in '}
+        <Link to={`project/${branch.project}/${branch.name}`}>{branch.name}</Link>
+      </span>
+    );
+  }
+
+  private getProjectLabel(project: Project) {
+    return (
+      <span> in <Link to={`project/${project.id}`}>{project.name}</Link></span>
+    );
+  }
+
   public render() {
-    const { activity, branch } = this.props;
+    const { activity, branch, showProjectName, project } = this.props;
 
     return (
       <div className={styles.activity}>
         <div className={styles.metadata}>
           <div className={styles.action}>
-            {`${activity.author} ${this.getAction(activity)} `}
-            <Link to="#">{activity.deployment}</Link>
-            {' in '}
-            <Link to={`project/${branch.project}/${branch.name}`}>{branch.name}</Link>
+            {this.getBranchAction(activity, branch)}
+            {showProjectName && this.getProjectLabel(project)}
           </div>
           <div className={styles.timestamp}>
             {moment(activity.timestamp).fromNow()}
@@ -55,7 +78,7 @@ class SingleActivity extends React.Component<Props, any> {
         <div className="columns">
           <div className="column col-1">
             <figure className="avatar avatar-lg">
-              <img src={avatar} />
+              <Gravatar email={activity.author} https />
             </figure>
           </div>
           <div className="column col-11">
@@ -67,4 +90,8 @@ class SingleActivity extends React.Component<Props, any> {
   }
 }
 
-export default SingleActivity;
+const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
+  project: projects.selectors.getProject(state, ownProps.branch.project),
+});
+
+export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(SingleActivity);
