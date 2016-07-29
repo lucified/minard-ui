@@ -1,0 +1,122 @@
+{
+  "included": [
+    {
+      "type": "commits",
+      "id": "dasf9807f89asdsa897",
+      "attributes": {
+        "message": "Improve colors",
+        "author": {
+          "name": "Juho Ojala",
+          "email": "juho@lucify.com",
+          "timestamp": "2015-12-24T15:51:21.802Z"
+        },
+        "branch": "4"
+      }
+    },
+    {
+      "type": "commits",
+      "id": "9adfs87f90sa87f809as",
+      "attributes": {
+        "message": "Improve spacing",
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2015-14-24T15:51:21.802Z"
+        },
+        "branch": "4"
+      }
+    },
+    {
+      "type": "branches",
+      "id": "4",
+      "attributes": {
+        "name": "my-special-branch",
+        "project": 7
+      },
+      "relationships": {
+        "commits": {
+          "data": [
+            {
+              "type": "commits",
+              "id": "dasf9807f89asdsa897"
+            },
+            {
+              "type": "commits",
+              "id": "9adfs87f90sa87f809as"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "fda9s87f89sa7fdas",
+      "attributes": {
+        "message": "Fix problem with dropdown",
+        "author": {
+          "name": "Juho Ojala",
+          "email": "juho@lucify.com",
+          "timestamp": "2015-12-24T15:51:21.802Z"
+        },
+        "branch": "5"
+      }
+    },
+    {
+      "type": "commits",
+      "id": "d8a9s7f98asf7089sa",
+      "attributes": {
+        "message": "Adjust map projection",
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2015-14-24T15:51:21.802Z"
+        },
+        "branch": "5"
+      }
+    },
+    {
+      "type": "branches",
+      "id": "5",
+      "attributes": {
+        "name": "my-other-branch",
+        "project": 7
+      },
+      "relationships": {
+        "commits": {
+          "data": [
+            {
+              "type": "commits",
+              "id": "fda9s87f89sa7fdas"
+            },
+            {
+              "type": "commits",
+              "id": "d8a9s7f98asf7089sa"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "data": {
+    "type": "projects",
+    "id": "7",
+    "attributes": {
+      "name": "Cool project",
+      "description": "This is a really cool project"
+    },
+    "relationships": {
+      "branches": {
+        "data": [
+          {
+            "type": "branches",
+            "id": "4"
+          },
+          {
+            "type": "branches",
+            "id": "5"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "data": [
+    {
+      "type": "branches",
+      "id": "1",
+      "attributes": {
+        "name": "first-branch",
+        "description": "This is a branch description"
+      },
+      "relationships": {
+        "commits": {
+          "data": [{
+            "type": "commits",
+            "id": "aacceeff02"
+          },
+          {
+            "type": "commits",
+            "id": "12354124"
+          },
+          {
+            "type": "commits",
+            "id": "2543452"
+          },
+          {
+            "type": "commits",
+            "id": "098325343"
+          },
+          {
+            "type": "commits",
+            "id": "29832572fc1"
+          },
+          {
+            "type": "commits",
+            "id": "29752a385"
+          }]
+        },
+        "project": {
+          "type": "projects",
+          "id": "1"
+        }
+      }
+    },
+    {
+      "type": "branches",
+      "id": "2",
+      "attributes": {
+        "name": "second-branch"
+      },
+      "relationships": {
+        "commits": {
+          "data": [{
+            "type": "commits",
+            "id": "aacd00f02"
+          },
+          {
+            "type": "commits",
+            "id": "a998823423"
+          }]
+        },
+        "project": {
+          "type": "projects",
+          "id": "1"
+        }
+      }
+    },
+    {
+      "type": "branches",
+      "id": "3",
+      "attributes": {
+        "name": "third-long-name-branch"
+      },
+      "relationships": {
+        "commits": {
+          "data": []
+        },
+        "project": {
+          "type": "projects",
+          "id": "1"
+        }
+      }
+    }
+  ]
+}

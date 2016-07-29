@@ -1,0 +1,64 @@
+{
+  "data": [
+    {
+      "type": "deployments",
+      "id": "7",
+      "attributes": {
+        "last-updated-at": "2015-12-24T17:54:27.895Z",
+        "status": "failed"
+      },
+      "relationships": {
+        "commit": {
+          "data": {
+            "type": "commits",
+            "id": "0ff3ae198f8601a285adcf5c0fff204ee6fba5fd"
+          }
+        },
+        "user": {
+          "data": {
+            "type": "users",
+            "id": "ville.saarinen@gmail.com"
+          }
+        }
+      }
+    },
+    {
+      "type": "deployments",
+      "id": "6",
+      "attributes": {
+        "last-updated-at": "2015-12-24T17:54:24.921Z",
+        "status": "failed"
+      },
+      "relationships": {
+        "commit": {
+          "data": {
+            "type": "commits",
+            "id": "0ff3ae198f8601a285adcf5c0fff204ee6fba5fd"
+          }
+        },
+        "user": {
+          "data": {
+            "type": "users",
+            "id": "ville.saarinen@gmail.com"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "commits",
+      "id": "0ff3ae198f8601a285adcf5c0fff204ee6fba5fd",
+      "attributes": {
+        "message": "Test the CI integration."
+      }
+    },
+    {
+      "type": "users",
+      "id": "ville.saarinen@gmail.com",
+      "attributes": {
+        "username": "root"
+      }
+    }
+  ]
+}
