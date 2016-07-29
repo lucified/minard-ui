@@ -1,4 +1,4 @@
-import { Action } from './actions';
+import { Action } from 'redux';
 import { BranchState } from './types';
 
 const initialState: BranchState = {

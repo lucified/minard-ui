@@ -1,7 +1,8 @@
-import { Action } from './actions';
-import { ActivityState, ActivityType } from './types';
+import { Action } from 'redux';
 
-const initialState: ActivityState = {
+import { ActivityState } from './types';
+
+const initialState: ActivityState = {}; /*
   1: {
     id: '1',
     project: '1',
@@ -43,7 +44,7 @@ const initialState: ActivityState = {
     commitMessage: 'Deebooop dee',
   },
 };
-
+*/
 export default (state: ActivityState = initialState, _action: Action) => {
   return state;
 };

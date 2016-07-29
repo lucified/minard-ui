@@ -1,4 +1,4 @@
-import { Action } from './actions';
+import { Action } from 'redux';
 import { CommitState } from './types';
 
 const screenshot = require('../../../images/screenshot.png');
