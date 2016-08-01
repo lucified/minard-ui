@@ -22,8 +22,9 @@ function callApi(url: string) {
     );
 }
 
+// TODO: call actual endpoints
 export const fetchProjects = () => callApi(projectsJSON);
-export const fetchCommits = (_branch: string) => callApi(commitsJSON);
-export const fetchBranches = (_project: string) => callApi(branchesJSON);
-export const fetchDeployments = () => callApi(deploymentsJSON);
+export const fetchProject = (_id: string) => callApi(projectsJSON);
+export const fetchCommits = (_branch: string) => callApi(commitsJSON); // TODO: Remove?
+export const fetchBranch = (_project: string) => callApi(branchesJSON);
 export const fetchDeployment = () => callApi(deploymentsJSON);

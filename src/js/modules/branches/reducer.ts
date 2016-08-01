@@ -1,28 +1,36 @@
-import { Action } from 'redux';
-import { BranchState } from './types';
+import { merge } from 'lodash';
 
-const initialState: BranchState = {
-  1: {
-    id: '1',
-    name: 'first-branch',
-    project: '1',
-    description: 'This is a branch description',
-    commits: ['1-aacceeff02', '1-12354124', '1-2543452', '1-098325343', '1-29832572fc1', '1-29752a385'],
-  },
-  2: {
-    id: '2',
-    name: 'second-branch',
-    project: '1',
-    commits: ['2-aacd00f02', '2-a998823423'],
-  },
-  3: {
-    id: '3',
-    name: 'third-long-name-branch',
-    project: '1',
-    commits: [],
-  },
+import { BRANCH, STORE_BRANCHES } from './actions';
+import * as t from './types';
+
+const initialState: t.BranchState = {};
+
+const responseToStateShape = (branches: t.ApiResponse) => {
+  const branchObjects: t.BranchState = {};
+
+  branches.forEach(branch => {
+    branchObjects[branch.id] = {
+      id: branch.id,
+      name: branch.attributes.name,
+      description: branch.attributes.description,
+      project: branch.relationships.project.data.id,
+      deployments: branch.relationships.deployments.data.map(d => d.id),
+      commits: branch.relationships.commits.data.map(c => c.id),
+    };
+  });
+
+  return branchObjects;
 };
 
-export default (state: BranchState = initialState, _action: Action) => {
-  return state;
+export default (state: t.BranchState = initialState, action: any) => {
+  switch (action.type) {
+    case BRANCH.SUCCESS:
+      const branchResonse = (<t.LoadBranchAction> action).response;
+      return merge({}, state, responseToStateShape([branchResonse]));
+    case STORE_BRANCHES:
+      const branches = (<t.StoreBranchesAction> action).branches;
+      return merge({}, state, responseToStateShape(branches));
+    default:
+      return state;
+  }
 };

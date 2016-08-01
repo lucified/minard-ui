@@ -1,10 +1,10 @@
 import * as classNames from 'classnames';
-import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Branch } from '../../modules/branches';
 import commits, { Commit } from '../../modules/commits';
+import deployments, { Deployment } from '../../modules/deployments';
 import { StateTree } from '../../reducers';
 
 import CommitSummary from '../common/commit-summary';
@@ -18,15 +18,15 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  commits: Commit[];
+  deployments: Deployment[];
   latestDeployedCommit?: Commit;
 }
 
-const BranchSummary = ({ branch, commits, latestDeployedCommit }: PassedProps & GeneratedProps) => (
+const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProps & GeneratedProps) => (
   <div className={classNames('columns', styles.branch)}>
     <div className="column col-3">
       <MinardLink branch={branch}>
-        <ScreenshotPile commits={commits} />
+        <ScreenshotPile deployments={deployments} />
       </MinardLink>
     </div>
     <div className="column col-9">
@@ -37,8 +37,8 @@ const BranchSummary = ({ branch, commits, latestDeployedCommit }: PassedProps & 
         </div>
       </MinardLink>
       <div className="card">
-        {latestDeployedCommit ?
-          <CommitSummary commit={latestDeployedCommit} enableLink /> : (
+        {deployments.length > 0 ?
+          <CommitSummary commit={latestDeployedCommit} deployment={deployments[0]} /> : (
             <div className="card-header">
               <h4 className="card-title">No previews available</h4>
               <h6 className="card-meta">Make some commits to {branch.name} generate previews</h6>
@@ -51,16 +51,18 @@ const BranchSummary = ({ branch, commits, latestDeployedCommit }: PassedProps & 
 );
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
-  const branchCommits = ownProps.branch.commits.map(commitId => commits.selectors.getCommit(state, commitId));
-  const latestDeployedCommit = _.maxBy(
-    branchCommits.filter(commit => commit.hasDeployment),
-    commit => commit.timestamp
-  );
+  const { branch } = ownProps;
+  const branchDeployments = branch.deployments.map(id => deployments.selectors.getDeployment(state, id));
+  let latestDeployedCommit: Commit = undefined;
+
+  if (branchDeployments.length > 0) {
+    latestDeployedCommit = commits.selectors.getCommit(state, branchDeployments[0].commit);
+  }
 
   return {
-    commits: branchCommits,
+    deployments: branchDeployments,
     latestDeployedCommit,
-  };
+  }
 };
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(BranchSummary);

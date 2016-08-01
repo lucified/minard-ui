@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 interface RequestTypes {
   REQUEST: string;
   SUCCESS: string;
@@ -11,15 +9,3 @@ export const createRequestTypes = (base: string): RequestTypes => ({
   SUCCESS: `${base}/SUCCESS`,
   FAILURE: `${base}/FAILURE`,
 });
-
-
-export interface FetchEntityActionCreators {
-  request: (id: string) => Action;
-  success: (id: string, response: any) => RequestAction;
-  failure: (id: string, error: any) => RequestAction;
-};
-
-export interface RequestAction extends Action {
-  error?: any;
-  response?: any;
-}

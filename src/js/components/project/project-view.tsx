@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import activity, { Activity } from '../../modules/activity';
 import branches, { Branch } from '../../modules/branches';
@@ -17,13 +18,21 @@ interface PassedProps {
   };
 }
 
-interface GeneratedProps {
+interface GeneratedStateProps {
   project: Project;
   branches: Branch[];
   activities: Activity[];
 }
 
-class ProjectView extends React.Component<PassedProps & GeneratedProps, any> {
+interface GeneratedDispatchProps {
+  loadProject: (id: string) => void;
+}
+
+class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
+  public componentDidMount() {
+    this.props.loadProject(this.props.project.id);
+  }
+
   public render() {
     const { project } = this.props;
 
@@ -58,4 +67,11 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
   activities: activity.selectors.getActivityForProject(state, ownProps.params.id),
 });
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectView);
+const mapDispatchToProps = (dispatch: Dispatch<StateTree>) => ({
+  loadProject: (projectId: string) => { dispatch(projects.actions.loadProject(projectId)); },
+});
+
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProjectView);

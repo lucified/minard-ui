@@ -13,7 +13,6 @@ interface LoadActivityAction extends Action {
 }
 
 export const ACTIVITY = createRequestTypes('ACTIVITY');
-
 export const requestActionCreators: ActivityRequestActionObject = {
   request: (id) => ({ type: ACTIVITY.REQUEST, id }),
   success: (id, response) => ({ type: ACTIVITY.SUCCESS, id, response }),

@@ -6,7 +6,7 @@ import activity, { Activity } from '../../modules/activity';
 import projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
-import ActivitySection from './activity-section';
+// import ActivitySection from './activity-section';
 import ProjectsSection from './projects-section';
 
 interface GeneratedStateProps {
@@ -23,15 +23,14 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     this.props.loadProjects();
   }
 
-
   public render() {
-    const { projects, activities } = this.props;
+    const { projects } = this.props;
 
     return (
       <div>
         <ProjectsSection projects={projects} />
         <div className="divider" />
-        <ActivitySection activities={activities} />
+        {/*<ActivitySection activities={activities} />*/}
       </div>
     );
   }
@@ -45,7 +44,6 @@ const mapStateToProps = (state: StateTree) => ({
 const mapDispatchToProps = (dispatch: Dispatch<StateTree>) => ({
   loadProjects: () => { dispatch(projects.actions.loadProjects()); },
 });
-
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
   mapStateToProps,

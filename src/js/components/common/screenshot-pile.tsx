@@ -2,21 +2,20 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
-import { Commit } from '../../modules/commits';
+import { Deployment } from '../../modules/deployments';
 
 const styles = require('./screenshot-pile.scss');
 
 interface Props {
-  commits: Commit[];
+  deployments: Deployment[];
 }
 
 class ScreenshotPile extends React.Component<Props, any> {
   public render() {
-    const { commits } = this.props;
-    const latestDeployedCommits = commits.filter(commit => commit.hasDeployment)
-      .sort((a, b) => a.timestamp - b.timestamp);
+    const { deployments } = this.props;
+    const latestDeployments = deployments.sort((a, b) => a.creator.timestamp - b.creator.timestamp);
 
-    if (latestDeployedCommits.length === 0) {
+    if (latestDeployments.length === 0) {
       return (
         <div className={styles.pile}>
           <Icon className={styles.empty} name="times" size="4x" />
@@ -24,13 +23,15 @@ class ScreenshotPile extends React.Component<Props, any> {
       );
     }
 
+    debugger;
+
     return (
       <div className={styles.pile}>
-        {latestDeployedCommits.slice(0, 4).map((commit, i) =>
+        {latestDeployments.slice(0, 4).map((deployment, i) =>
           <img
-            key={commit.hash}
+            key={deployment.id}
             className={classNames('img-responsive', styles.screenshot, styles[`screenshot-${i}`])}
-            src={commit.screenshot}
+            src={deployment.screenshot}
           />
         )}
       </div>

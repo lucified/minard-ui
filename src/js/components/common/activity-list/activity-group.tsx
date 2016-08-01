@@ -45,7 +45,6 @@ class ActivityGroup extends React.Component<PassedProps & GeneratedProps, any> {
   }
 }
 
-
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
   branch: branches.selectors.getBranch(state, ownProps.activities[0].branch),
 });

@@ -1,5 +1,6 @@
-import { Action } from 'redux';
+import { Action, ActionCreator } from 'redux';
 
+// State
 export interface Project {
   id: string;
   name: string;
@@ -12,36 +13,53 @@ export interface ProjectState {
   [id: string]: Project;
 };
 
-export interface ProjectsRequestActionObject {
-  request: () => Action;
-  success: (response: any) => Action;
-  failure: (error: any) => Action;
-}
-
-export interface LoadProjectsAction extends Action {
+// Actions
+export interface LoadAllProjectsAction extends Action {
   error?: any;
-  response?: any;
+  response?: ResponseProjectElement[];
 }
 
-interface BranchReference {
+export interface FetchProjectsActionCreators {
+  request: ActionCreator<LoadAllProjectsAction>;
+  success: ActionCreator<LoadAllProjectsAction>;
+  failure: ActionCreator<LoadAllProjectsAction>;
+}
+
+export interface LoadProjectAction extends Action {
   id: string;
-  type: "branches";
+  error?: string;
+  response?: ResponseProjectElement;
 }
 
-interface ProjectElement {
+export interface FetchProjectActionCreators {
+  request: ActionCreator<LoadProjectAction>;
+  success: ActionCreator<LoadProjectAction>;
+  failure: ActionCreator<LoadProjectAction>;
+}
+
+export interface StoreProjectsAction extends Action {
+  projects: ResponseProjectElement[];
+}
+
+// API response
+interface ResponseBranchReference {
+  type: "branches";
+  id: string;
+}
+
+interface ResponseProjectElement {
   type: "projects";
   id: string;
   attributes: {
     name: string;
-    description: string;
+    description?: string;
+    activeCommiters: string[];
   };
   relationships: {
     branches: {
-      data: BranchReference[];
+      data: ResponseBranchReference[];
     };
   };
 }
 
-export interface ApiResponse {
-  data: ProjectElement[];
-}
+export type ApiResponse = ResponseProjectElement[];

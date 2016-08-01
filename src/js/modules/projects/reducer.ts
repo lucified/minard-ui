@@ -1,41 +1,37 @@
 import { merge } from 'lodash';
 
-import { PROJECTS } from './actions';
+import { PROJECT, PROJECTS, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
-const initialState: t.ProjectState = {}; /* {
-  1: {
-    id: '1',
-    name: 'First project',
-    description: 'This is the first project description. It might not be set.',
-    branches: ['1', '2', '3'],
-    activeUsers: ['ville.saarinen@lucify.com', 'juho@lucify.com']
-  },
-  2: {
-    id: '2',
-    name: 'Second project',
-    branches: [],
-    activeUsers: ['ville.saarinen@lucify.com']
-  },
-};*/
+const initialState: t.ProjectState = {};
 
-export default (state: t.ProjectState = initialState, action: t.LoadProjectsAction) => {
+const responseToStateShape = (projects: t.ApiResponse) => {
+  const projectObjects: t.ProjectState = {};
+
+  projects.forEach(project => {
+    projectObjects[project.id] = {
+      id: project.id,
+      name: project.attributes.name,
+      description: project.attributes.description,
+      branches: project.relationships.branches.data.map(({ id }) => id),
+      activeUsers: project.attributes.activeCommiters,
+    };
+  });
+
+  return projectObjects;
+};
+
+export default (state: t.ProjectState = initialState, action: any) => {
   switch (action.type) {
     case PROJECTS.SUCCESS:
-      const projects: t.ProjectState = {};
-      const response = <t.ApiResponse>action.response;
-
-      response.data.forEach(project => {
-        projects[project.id] = {
-          id: project.id,
-          name: project.attributes.name,
-          description: project.attributes.description,
-          branches: project.relationships.branches.data.map((b: { id: string, type: string }) => b.id),
-          activeUsers: [],
-        };
-      });
-
-      return merge({}, state, projects);
+      const projectsResponse = (<t.LoadAllProjectsAction> action).response;
+      return merge({}, state, responseToStateShape(projectsResponse));
+    case PROJECT.SUCCESS:
+      const projectResponse = (<t.LoadProjectAction> action).response;
+      return merge({}, state, responseToStateShape([projectResponse]));
+    case STORE_PROJECTS:
+      const projects = (<t.StoreProjectsAction> action).projects;
+      return merge({}, state, responseToStateShape(projects));
     default:
       return state;
   }

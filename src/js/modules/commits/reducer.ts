@@ -1,84 +1,49 @@
-import { Action } from 'redux';
-import { CommitState } from './types';
+import { merge } from 'lodash';
+import * as moment from 'moment';
 
-const screenshot = require('../../../images/screenshot.png');
+import { STORE_COMMITS } from './actions';
+import * as t from './types';
 
-const initialState: CommitState = {
-  '1-aacceeff02': {
-    hash: 'aacceeff02',
-    branch: '1',
-    author: 'ville.saarinen@lucify.com',
-    timestamp: 1469533301791,
-    message: 'Fix colors',
-    description: 'The previous colors didn\'t look nice. Now they\'re much prettier.',
-    hasDeployment: true,
-    screenshot: screenshot,
-  },
-  '1-12354124': {
-    hash: '12354124',
-    branch: '1',
-    author: 'ville.saarinen@lucify.com',
-    timestamp: 1469533291791,
-    message: 'Foobar is nice',
-    hasDeployment: true,
-    screenshot: screenshot,
-  },
-  '1-2543452': {
-    hash: '2543452',
-    branch: '1',
-    author: 'juho@lucify.com',
-    timestamp: 1469532291791,
-    message: 'Barbar barr barb aearr',
-    hasDeployment: true,
-    screenshot: screenshot,
-  },
-  '1-098325343': {
-    hash: '098325343',
-    branch: '1',
-    author: 'ville.saarinen@lucify.com',
-    timestamp: 1469531291791,
-    message: 'This is a commit message',
-    hasDeployment: true,
-    screenshot: screenshot,
-  },
-  '1-29832572fc1': {
-    hash: '29832572fc1',
-    branch: '1',
-    author: 'juho@lucify.com',
-    timestamp: 1469530291791,
-    message: 'And this is one as well',
-    hasDeployment: false,
-  },
-  '1-29752a385': {
-    hash: '29752a385',
-    branch: '1',
-    author: 'ville.saarinen@lucify.com',
-    timestamp: 1469529291791,
-    message: 'How about this?',
-    hasDeployment: true,
-    screenshot: screenshot,
-  },
-  '2-aacd00f02': {
-    hash: 'aacd00f02',
-    branch: '2',
-    author: 'ville.saarinen@lucify.com',
-    timestamp: 1469532301791,
-    message: 'Try to do something else',
-    hasDeployment: false,
-  },
-  '2-a998823423': {
-    hash: 'a998823423',
-    branch: '2',
-    author: 'juho@lucify.com',
-    timestamp: 1469531301791,
-    message: 'Try to do something',
-    description: 'This is a longer commit explanation for whatever was done to the commit. ' +
-      'It should be truncated in some cases',
-    hasDeployment: true,
-    screenshot: screenshot,
-  },
+//const screenshot = require('../../../images/screenshot.png');
+
+const initialState: t.CommitState = {};
+
+const responseToStateShape = (commits: t.ApiResponse) => {
+  const commitObjects: t.CommitState = {};
+
+  commits.forEach(commit => {
+    const commitMessageLines = commit.attributes.message.match(/[^\r\n]+/g);
+    const commitMessage = commitMessageLines[0];
+    const commitDescription = commitMessageLines.length > 1 ?
+      commitMessageLines.slice(1).join('\n') : undefined;
+
+    commitObjects[commit.id] = {
+      hash: commit.id,
+      message: commitMessage,
+      description: commitDescription,
+      branch: commit.relationships.branch.data.id,
+      commiter: {
+        name: commit.attributes.commiter.name,
+        email: commit.attributes.commiter.email,
+        timestamp: moment(commit.attributes.commiter.timestamp).milliseconds(),
+      },
+      author: {
+        name: commit.attributes.author.name,
+        email: commit.attributes.author.email,
+        timestamp: moment(commit.attributes.author.timestamp).milliseconds(),
+      },
+    };
+  });
+
+  return commitObjects;
 };
 
-export default (state: CommitState = initialState, _action: Action) => {
-  return state;
+export default (state: t.CommitState = initialState, action: any) => {
+  switch (action.type) {
+    case STORE_COMMITS:
+      const commits = (<t.StoreCommitsAction> action).commits;
+      return merge({}, state, responseToStateShape(commits));
+    default:
+      return state;
+  }
 };

@@ -1,10 +1,15 @@
-import * as _ from 'lodash';
+import { values } from 'lodash';
+import { createSelector } from 'reselect';
 
 import { StateTree } from '../../reducers';
-import * as t from './types';
+import { Activity } from './types';
 
 const selectActivityTree = (state: StateTree) => state.entities.activities;
-const getUnsortedActivities = (state: StateTree) => _.values<t.Activity>(selectActivityTree(state));
+
+const getUnsortedActivities = createSelector(
+  selectActivityTree,
+  activities => values<Activity>(activities)
+);
 
 export const getActivityForProject = (state: StateTree, projectId: string) =>
   getUnsortedActivities(state)

@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as Gravatar from 'react-gravatar';
 
 import { Commit } from '../../modules/commits';
+import { Deployment } from '../../modules/deployments';
 
 import MinardLink from './minard-link';
 
@@ -11,15 +12,15 @@ const styles = require('./commit-summary.scss');
 
 interface Props {
   commit: Commit;
-  enableLink?: boolean;
+  deployment: Deployment;
 }
 
-const CommitSummary = ({ enableLink, commit }: Props) => {
+const CommitSummary = ({ commit, deployment }: Props) => {
   const content = (
     <div className="container flex">
       <div className={styles.avatarBox}>
         <figure className="avatar avatar-lg">
-          <Gravatar email={commit.author} https />
+          <Gravatar email={commit.author.email} https />
         </figure>
       </div>
       <div className={styles.commitContent}>
@@ -40,15 +41,15 @@ const CommitSummary = ({ enableLink, commit }: Props) => {
             0 comments
           </span>
           <span className={classNames(styles.metadata, 'text-right')}>
-            {moment(commit.timestamp).fromNow()}
+            {moment(commit.author.timestamp).fromNow()}
           </span>
         </div>
       </div>
     </div>
   );
 
-  if (enableLink) {
-    return <MinardLink commit={commit}>{content}</MinardLink>;
+  if (deployment) {
+    return <MinardLink deployment={deployment}>{content}</MinardLink>;
   }
 
   return content;

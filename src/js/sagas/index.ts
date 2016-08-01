@@ -1,90 +1,127 @@
+import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
 import * as api from '../api';
 
-import branches, { Branch } from '../modules/branches';
+import branches from '../modules/branches';
 import commits from '../modules/commits';
-import { FetchEntityActionCreators } from '../modules/common';
-import projects, { Project } from '../modules/projects';
+import deployments from '../modules/deployments';
+import projects from '../modules/projects';
 
-interface ApiFunction {
-  (id?: string): Promise<{ response: any } | { error: any }>;
+interface IncludedEntity {
+  type: "commits" | "deployments" | "projects" | "branches";
+  id: string;
+  attributes: any;
 }
 
-// resuable fetch subroutine
-function* fetchEntity(
-  entity: FetchEntityActionCreators,
-  apiFunction: ApiFunction,
-  id: string
-): IterableIterator<Effect> {
-  yield put(entity.request(id));
-  const { response, error } = yield call(apiFunction, id);
-  if (response) {
-    yield put(entity.success(id, response));
-  } else {
-    yield put(entity.failure(id, error));
+function* storeIncludedEntities(entities: IncludedEntity[]): IterableIterator<Effect> {
+  const typeActionCreators: {[type: string]: ActionCreator<any>} = {
+    projects: projects.actions.StoreProjects,
+    deployments: deployments.actions.StoreDeployments,
+    commits: commits.actions.StoreCommits,
+    branches: branches.actions.StoreBranches,
+  };
+
+  // Can't use forEach because of generators
+  for (const type in typeActionCreators) {
+    if (typeActionCreators.hasOwnProperty(type)) {
+      const includedEntities = entities.filter(entity => entity.type === type);
+      if (includedEntities.length > 0) {
+        yield put(typeActionCreators[type](includedEntities));
+      }
+    }
   }
 }
 
-// yeah! we can also bind Generators
-export const fetchCommits    = fetchEntity.bind(null, commits.actions, api.fetchCommits);
-export const fetchBranches    = fetchEntity.bind(null, branches.actions, api.fetchBranches);
-
+// Fetchers: Fetch the data from the server and store it into actions.
 function* fetchProjects(): IterableIterator<Effect> {
-  yield put(projects.actions.requestActionCreators.request());
+  yield put(projects.actions.FetchProjects.request());
+
   const { response, error } = yield call(api.fetchProjects);
+
   if (response) {
-    yield put(projects.actions.requestActionCreators.success(response));
+    storeIncludedEntities(response.included);
+    yield put(projects.actions.FetchProjects.success(response.data));
   } else {
-    yield put(projects.actions.requestActionCreators.failure(error));
+    yield put(projects.actions.FetchProjects.failure(error));
   }
 }
 
+function* fetchProject(id: string): IterableIterator<Effect> {
+  yield put(projects.actions.FetchProject.request(id));
 
+  const { response, error } = yield call(api.fetchProject, id);
+
+  if (response) {
+    storeIncludedEntities(response.included);
+    yield put(projects.actions.FetchProject.success(id, response));
+  } else {
+    yield put(projects.actions.FetchProject.failure(id, error));
+  }
+}
+
+function* fetchBranch(id: string, projectId: string): IterableIterator<Effect> {
+  yield put(branches.actions.FetchBranch.request(id, projectId));
+
+  const { response, error } = yield call(api.fetchBranch, id);
+
+  if (response) {
+    storeIncludedEntities(response.included);
+    yield put(branches.actions.FetchBranch.success(id, response));
+  } else {
+    yield put(branches.actions.FetchBranch.failure(id, error));
+  }
+}
+
+function* fetchDeployment(id: string, projectId: string): IterableIterator<Effect> {
+  yield put(deployments.actions.FetchDeployment.request(id, projectId));
+
+  const { response, error } = yield call(api.fetchDeployment, id);
+
+  if (response) {
+    storeIncludedEntities(response.included);
+    yield put(deployments.actions.FetchDeployment.success(id, response));
+  } else {
+    yield put(deployments.actions.FetchDeployment.failure(id, error));
+  }
+}
+
+// Loaders: Check if resource already exists. If not, fetch it.
 function* loadProjects(): IterableIterator<Effect> {
-  const existingProjects = yield select(projects.selectors.getProjects);
-  if (!existingProjects || existingProjects.length === 0) {
-    yield call(fetchProjects);
+  yield call(fetchProjects);
+}
+
+function* loadProject(id: string): IterableIterator<Effect> {
+  const existingProject = yield select(projects.selectors.getProject, id);
+
+  if (!existingProject) {
+    yield call(fetchProject, id);
+  } else {
+    console.log('Project already exists', existingProject);
   }
 }
 
-function* loadCommitsForBranch(branch: Branch): IterableIterator<Effect> {
-  const commitsToCheck = branch.commits.slice();
-  let commitId: string;
-  let needToFetch = false;
+function* loadBranch(id: string, projectId: string): IterableIterator<Effect> {
+  const existingBranch = yield select(branches.selectors.getBranch, id);
 
-  while (commitId = commitsToCheck.shift()) {
-    const existingCommit = yield select(commits.selectors.getCommit, commitId);
-    if (!existingCommit) {
-      needToFetch = true;
-      break;
-    }
-  }
-
-  if (needToFetch) {
-    yield call(fetchCommits, branch.id);
+  if (!existingBranch) {
+    yield call(fetchBranch, id, projectId);
+  } else {
+    console.log('Branch already exists', existingBranch);
   }
 }
 
-function* loadBranchesForProject(project: Project): IterableIterator<Effect> {
-  const branchesToCheck = project.branches.slice();
-  let branchId: string;
-  let needToFetch = false;
+function* loadDeployment(id: string, projectId: string): IterableIterator<Effect> {
+  const existingDeployment = yield select(deployments.selectors.getDeployment, id);
 
-  while (branchId = branchesToCheck.shift()) {
-    const existingBranch = yield select(branches.selectors.getBranch, branchId);
-    if (!existingBranch) {
-      needToFetch = true;
-      break;
-    }
-  }
-
-  if (needToFetch) {
-    yield call(fetchBranches, project.id);
+  if (!existingDeployment) {
+    yield call(fetchDeployment, id, projectId);
+  } else {
+    console.log('Deployment already exists', existingDeployment);
   }
 }
 
-
+// Watchers: Watch for specific actions to begin async operations.
 function* watchForLoadProjects(): IterableIterator<Effect> {
   while (true) {
     yield take(projects.actions.LOAD_ALL_PROJECTS);
@@ -93,24 +130,35 @@ function* watchForLoadProjects(): IterableIterator<Effect> {
   }
 }
 
-function* watchForLoadCommits(): IterableIterator<Effect> {
+function* watchForLoadProject(): IterableIterator<Effect> {
   while (true) {
-    const { branch } = yield take(commits.actions.LOAD_COMMITS_FOR_BRANCH);
-    yield fork(loadCommitsForBranch, <Branch>branch);
+    const { id } = yield take(projects.actions.LOAD_PROJECT);
+
+    yield fork(loadProject, id);
   }
 }
 
-function* watchForLoadBranches(): IterableIterator<Effect> {
+function* watchForLoadBranch(): IterableIterator<Effect> {
   while (true) {
-    const { project } = yield take(branches.actions.LOAD_BRANCHES_FOR_PROJECT);
-    yield fork(loadBranchesForProject, <Project>project);
+    const { projectId, id } = yield take(branches.actions.LOAD_BRANCH);
+
+    yield fork(loadBranch, projectId, id);
+  }
+}
+
+function* watchForLoadDeployment(): IterableIterator<Effect> {
+  while (true) {
+    const { projectId, id } = yield take(deployments.actions.LOAD_DEPLOYMENT);
+
+    yield fork(loadDeployment, projectId, id);
   }
 }
 
 export default function* root() {
   yield [
     fork(watchForLoadProjects),
-    fork(watchForLoadBranches),
-    fork(watchForLoadCommits),
+    fork(watchForLoadProject),
+    fork(watchForLoadBranch),
+    fork(watchForLoadDeployment),
   ];
 }
