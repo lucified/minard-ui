@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 import activity, { ActivityState } from './modules/activity';
 import branches, { BranchState } from './modules/branches';
 import commits, { CommitState } from './modules/commits';
+import deployments, { DeploymentState } from './modules/deployments';
 import projects, { ProjectState } from './modules/projects';
 
 export default combineReducers({
@@ -12,6 +13,7 @@ export default combineReducers({
     branches: branches.reducer,
     commits: commits.reducer,
     projects: projects.reducer,
+    deployments: deployments.reducer,
   }),
   routing: routerReducer,
 });
@@ -22,6 +24,7 @@ export interface StateTree {
     branches: BranchState;
     commits: CommitState;
     projects: ProjectState;
+    deployments: DeploymentState;
   };
   routing: any;
 }
