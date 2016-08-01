@@ -5,7 +5,8 @@
       "id": "1",
       "attributes": {
         "name": "First project",
-        "description": "This is the first project description. It might not be set."
+        "description": "This is the first project description. It might not be set.",
+        "activeCommiters": ["ville.saarinen@lucify.com", "juho@lucify.com"]
       },
       "relationships": {
         "branches": {
@@ -28,7 +29,8 @@
       "type": "projects",
       "id": "2",
       "attributes": {
-        "name": "Second project"
+        "name": "Second project",
+        "activeCommiters": []
       },
       "relationships": {
         "branches": {

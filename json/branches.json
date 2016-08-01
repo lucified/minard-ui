@@ -8,6 +8,12 @@
         "description": "This is a branch description"
       },
       "relationships": {
+        "deployments": {
+          "data": [{
+            "type": "deployments",
+            "id": "7"
+          }]
+        },
         "commits": {
           "data": [{
             "type": "commits",
@@ -57,6 +63,12 @@
             "id": "a998823423"
           }]
         },
+        "deployments": {
+          "data": [{
+            "type": "deployments",
+            "id": "7"
+          }]
+        },
         "project": {
           "type": "projects",
           "id": "1"
@@ -71,6 +83,9 @@
       },
       "relationships": {
         "commits": {
+          "data": []
+        },
+        "deployments": {
           "data": []
         },
         "project": {
