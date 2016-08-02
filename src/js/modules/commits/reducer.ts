@@ -4,8 +4,6 @@ import * as moment from 'moment';
 import { STORE_COMMITS } from './actions';
 import * as t from './types';
 
-//const screenshot = require('../../../images/screenshot.png');
-
 const initialState: t.CommitState = {};
 
 const responseToStateShape = (commits: t.ApiResponse) => {
@@ -25,12 +23,12 @@ const responseToStateShape = (commits: t.ApiResponse) => {
       commiter: {
         name: commit.attributes.commiter.name,
         email: commit.attributes.commiter.email,
-        timestamp: moment(commit.attributes.commiter.timestamp).milliseconds(),
+        timestamp: moment(commit.attributes.commiter.timestamp).valueOf(),
       },
       author: {
         name: commit.attributes.author.name,
         email: commit.attributes.author.email,
-        timestamp: moment(commit.attributes.author.timestamp).milliseconds(),
+        timestamp: moment(commit.attributes.author.timestamp).valueOf(),
       },
     };
   });

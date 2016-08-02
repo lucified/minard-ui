@@ -20,7 +20,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
       creator: {
         name: deployment.attributes.creator.name,
         email: deployment.attributes.creator.email,
-        timestamp: moment(deployment.attributes.creator.timestamp).milliseconds(),
+        timestamp: moment(deployment.attributes.creator.timestamp).valueOf(),
       },
     };
   });
