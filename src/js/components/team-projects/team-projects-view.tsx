@@ -19,7 +19,7 @@ interface GeneratedDispatchProps {
 }
 
 class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDispatchProps, any> {
-  public componentDidMount() {
+  public componentWillMount() {
     this.props.loadProjects();
   }
 
