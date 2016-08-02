@@ -1,0 +1,49 @@
+{
+  "data": {
+    "type": "deployments",
+    "id": "8",
+    "attributes": {
+      "url": "#",
+      "screenshot": "#",
+      "creator": {
+        "name": "Ville Saarinen",
+        "email": "ville.saarinen@lucify.com",
+        "timestamp": "2015-08-01T09:51:21.802Z"
+      }
+    },
+    "relationships": {
+      "commit": {
+        "data": {
+          "type": "commits",
+          "id": "a998823423"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "type": "commits",
+      "id": "a998823423",
+      "attributes": {
+        "author": "juho@lucify.com",
+        "timestamp": "2016-07-27T15:51:21.802Z",
+        "message": "Try to do something",
+        "description": "This is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases"
+      },
+      "relationships": {
+        "deployments": {
+          "data": [{
+            "type": "deployments",
+            "id": "8"
+          }]
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "2"
+          }
+        }
+      }
+    }
+  ]
+}

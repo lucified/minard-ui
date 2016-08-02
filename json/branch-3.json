@@ -1,0 +1,29 @@
+{
+  "data": {
+    "type": "branches",
+    "id": "3",
+    "attributes": {
+      "name": "third-long-name-branch"
+    },
+    "relationships": {
+      "commits": {
+        "data": []
+      },
+      "deployments": {
+        "data": []
+      },
+      "project": {
+        "type": "projects",
+        "id": "1"
+      }
+    }
+  },
+  "includes": {
+    "commits": {
+      "data": []
+    },
+    "deployments": {
+      "data": []
+    }
+  }
+}

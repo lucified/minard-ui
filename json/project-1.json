@@ -1,5 +1,30 @@
 {
-  "data": [
+  "data": {
+    "type": "projects",
+    "id": "1",
+    "attributes": {
+      "name": "First project",
+      "description": "This is the first project description. It might not be set.",
+      "activeCommiters": ["ville.saarinen@lucify.com", "juho@lucify.com"]
+    },
+    "relationships": {
+      "branches": {
+        "data": [{
+          "type": "branches",
+          "id": "1"
+        },
+        {
+          "type": "branches",
+          "id": "2"
+        },
+        {
+          "type": "branches",
+          "id": "3"
+        }]
+      }
+    }
+  },
+  "included": [
     {
       "type": "branches",
       "id": "1",
@@ -41,8 +66,10 @@
           }]
         },
         "project": {
-          "type": "projects",
-          "id": "1"
+          "data": {
+            "type": "projects",
+            "id": "1"
+          }
         }
       }
     },
@@ -70,8 +97,10 @@
           }]
         },
         "project": {
-          "type": "projects",
-          "id": "1"
+          "data": {
+            "type": "projects",
+            "id": "1"
+          }
         }
       }
     },
@@ -89,8 +118,10 @@
           "data": []
         },
         "project": {
-          "type": "projects",
-          "id": "1"
+          "data": {
+            "type": "projects",
+            "id": "1"
+          }
         }
       }
     }

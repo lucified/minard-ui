@@ -5,7 +5,7 @@
       "id": "aacceeff02",
       "attributes": {
         "author": "ville.saarinen@lucify.com",
-        "timestamp": 1469533301791,
+        "timestamp": "2016-08-01T15:51:21.802Z",
         "message": "Fix colors",
         "description": "The previous colors didn't look nice. Now they're much prettier."
       },
@@ -29,7 +29,7 @@
       "id": "12354124",
       "attributes": {
         "author": "ville.saarinen@lucify.com",
-        "timestamp": 1469533291791,
+        "timestamp": "2016-08-01T15:41:21.802Z",
         "message": "Foobar is nice"
       },
       "relationships": {
@@ -52,7 +52,7 @@
       "id": "2543452",
       "attributes": {
         "author": "juho@lucify.com",
-        "timestamp": 1469532291791,
+        "timestamp": "2016-08-01T12:51:21.802Z",
         "message": "Barbar barr barb aearr"
       },
       "relationships": {
@@ -72,7 +72,7 @@
       "id": "098325343",
       "attributes": {
         "author": "ville.saarinen@lucify.com",
-        "timestamp": 1469531291791,
+        "timestamp": "2016-07-29T15:51:21.802Z",
         "message": "This is a commit message"
       },
       "relationships": {
@@ -95,7 +95,7 @@
       "id": "29832572fc1",
       "attributes": {
         "author": "juho@lucify.com",
-        "timestamp": 1469530291791,
+        "timestamp": "2016-07-29T15:50:21.802Z",
         "message": "And this is one as well"
       },
       "relationships": {
@@ -118,7 +118,7 @@
       "id": "29752a385",
       "attributes": {
         "author": "ville.saarinen@lucify.com",
-        "timestamp": 1469529291791,
+        "timestamp": "2016-07-28T15:51:21.802Z",
         "message": "How about this?"
       },
       "relationships": {
@@ -141,7 +141,7 @@
       "id": "aacd00f02",
       "attributes": {
         "author": "ville.saarinen@lucify.com",
-        "timestamp": 1469532301791,
+        "timestamp": "2016-07-28T13:51:21.802Z",
         "message": "Try to do something else"
       },
       "relationships": {
@@ -161,7 +161,7 @@
       "id": "a998823423",
       "attributes": {
         "author": "juho@lucify.com",
-        "timestamp": 1469531301791,
+        "timestamp": "2016-07-27T15:51:21.802Z",
         "message": "Try to do something",
         "description": "This is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases"
       },
@@ -169,7 +169,7 @@
         "deployments": {
           "data": [{
             "type": "deployments",
-            "id": "7"
+            "id": "8"
           }]
         },
         "branch": {
