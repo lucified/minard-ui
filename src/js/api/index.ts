@@ -1,20 +1,15 @@
 import 'isomorphic-fetch';
 
 const projectsJSON = require('file!../../../json/projects.json');
-const commitsJSON = require('file!../../../json/commits.json');
-const deploymentsJSON = require('file!../../../json/deployments.json');
-
 const projectJSON: { [id: string]: string } = {
   1: require('file!../../../json/project-1.json'),
   2: require('file!../../../json/project-2.json'),
 };
-
 const branchJSON: { [id: string]: string } = {
   1: require('file!../../../json/branch-1.json'),
   2: require('file!../../../json/branch-2.json'),
   3: require('file!../../../json/branch-3.json'),
 };
-
 const deploymentJSON: { [id: string]: string } = {
   7: require('file!../../../json/deployment-7.json'),
   8: require('file!../../../json/deployment-8.json'),
@@ -42,6 +37,3 @@ export const fetchProjects = () => callApi(projectsJSON);
 export const fetchProject = (id: string) => callApi(projectJSON[id]);
 export const fetchBranch = (id: string) => callApi(branchJSON[id]);
 export const fetchDeployment = (id: string) => callApi(deploymentJSON[id]);
-
-export const fetchCommits = (_branch: string) => callApi(commitsJSON); // TODO: Remove?
-export const fetchDeployments = (_branch: string) => callApi(deploymentsJSON); // TODO: Remove?
