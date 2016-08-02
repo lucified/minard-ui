@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Activity } from '../../../modules/activity';
-import branches, { Branch } from '../../../modules/branches';
+import Branches, { Branch } from '../../../modules/branches';
 import { StateTree } from '../../../reducers';
 
 import MinardLink from '../minard-link';
@@ -46,7 +46,7 @@ class ActivityGroup extends React.Component<PassedProps & GeneratedProps, any> {
 }
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
-  branch: branches.selectors.getBranch(state, ownProps.activities[0].branch),
+  branch: Branches.selectors.getBranch(state, ownProps.activities[0].branch),
 });
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ActivityGroup);

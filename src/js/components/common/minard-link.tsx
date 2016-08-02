@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import branches, { Branch } from '../../modules/branches';
-import commits from '../../modules/commits';
+import Branches, { Branch } from '../../modules/branches';
+import Commits from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
@@ -47,10 +47,10 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   const { deployment } = ownProps;
 
   if (deployment) {
-    const commit = commits.selectors.getCommit(state, deployment.commit);
+    const commit = Commits.selectors.getCommit(state, deployment.commit);
 
     return {
-      deploymentBranch: branches.selectors.getBranch(state, commit.branch),
+      deploymentBranch: Branches.selectors.getBranch(state, commit.branch),
     };
   }
 

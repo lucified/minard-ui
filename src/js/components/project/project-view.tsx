@@ -3,9 +3,9 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
-import activity, { Activity } from '../../modules/activity';
-import branches, { Branch } from '../../modules/branches';
-import projects, { Project } from '../../modules/projects';
+import Activities, { Activity } from '../../modules/activities';
+import Branches, { Branch } from '../../modules/branches';
+import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 import ProjectActivity from './project-activity';
@@ -62,16 +62,16 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   const { id: projectId } = ownProps.params;
-  const project = projects.selectors.getProject(state, projectId);
+  const project = Projects.selectors.getProject(state, projectId);
 
   return {
     project,
-    branches: project && compact(project.branches.map(branchId => branches.selectors.getBranch(state, branchId))),
-    activities: activity.selectors.getActivityForProject(state, projectId),
+    branches: project && compact(project.branches.map(branchId => Branches.selectors.getBranch(state, branchId))),
+    activities: Activities.selectors.getActivityForProject(state, projectId),
   };
 };
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  { loadProject: projects.actions.loadProject },
+  { loadProject: Projects.actions.loadProject },
 )(ProjectView);

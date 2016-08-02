@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Commit } from '../../modules/commits';
-import deployments, { Deployment } from '../../modules/deployments';
+import Deployments, { Deployment } from '../../modules/deployments';
 import { StateTree } from '../../reducers';
 
 import CommitSummary from '../common/commit-summary';
@@ -35,7 +35,7 @@ const SingleCommit = ({ commit, deployment }: PassedProps & GeneratedProps) => (
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   if (ownProps.commit.deployment) {
     return {
-      deployment: deployments.selectors.getDeployment(state, ownProps.commit.deployment),
+      deployment: Deployments.selectors.getDeployment(state, ownProps.commit.deployment),
     };
   }
 

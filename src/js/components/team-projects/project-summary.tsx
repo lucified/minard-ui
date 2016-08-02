@@ -6,8 +6,8 @@ import * as Icon from 'react-fontawesome';
 import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
 
-import branches from '../../modules/branches';
-import deployments, { Deployment } from '../../modules/deployments';
+import Branches from '../../modules/branches';
+import Deployments, { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -62,19 +62,19 @@ const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps 
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   // TODO: Make this more efficient
-  const projectDeployments = compact(flatMap(ownProps.project.branches, branchId => {
-    const branch = branches.selectors.getBranch(state, branchId);
+  const projectDeployments = flatMap(ownProps.project.branches, branchId => {
+    const branch = Branches.selectors.getBranch(state, branchId);
 
     if (branch) {
       return branch.deployments.map(deploymentId =>
-        deployments.selectors.getDeployment(state, deploymentId)
+        Deployments.selectors.getDeployment(state, deploymentId)
       );
     }
 
     return undefined;
-  }));
+  });
 
-  const latestDeployment = projectDeployments.length > 0 && projectDeployments[0];
+  const latestDeployment = compact(projectDeployments).length > 0 && projectDeployments[0];
 
   return {
     deployments: projectDeployments,

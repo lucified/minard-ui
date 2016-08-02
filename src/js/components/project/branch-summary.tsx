@@ -4,8 +4,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Branch } from '../../modules/branches';
-import commits, { Commit } from '../../modules/commits';
-import deployments, { Deployment } from '../../modules/deployments';
+import Commits, { Commit } from '../../modules/commits';
+import Deployments, { Deployment } from '../../modules/deployments';
 import { StateTree } from '../../reducers';
 
 import CommitSummary from '../common/commit-summary';
@@ -54,11 +54,11 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   const { branch } = ownProps;
   // TODO: fetch deployment info if missing
-  const branchDeployments = compact(branch.deployments.map(id => deployments.selectors.getDeployment(state, id)));
+  const branchDeployments = compact(branch.deployments.map(id => Deployments.selectors.getDeployment(state, id)));
   let latestDeployedCommit: Commit = undefined;
 
   if (branchDeployments.length > 0) {
-    latestDeployedCommit = commits.selectors.getCommit(state, branchDeployments[0].commit);
+    latestDeployedCommit = Commits.selectors.getCommit(state, branchDeployments[0].commit);
   }
 
   return {

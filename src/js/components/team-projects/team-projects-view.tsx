@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import activity, { Activity } from '../../modules/activity';
-import projects, { Project } from '../../modules/projects';
+import Activities, { Activity } from '../../modules/activities';
+import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 // import ActivitySection from './activity-section';
@@ -36,11 +36,11 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
 };
 
 const mapStateToProps = (state: StateTree) => ({
-  projects: projects.selectors.getProjects(state),
-  activities: activity.selectors.getActivities(state),
+  projects: Projects.selectors.getProjects(state),
+  activities: Activities.selectors.getActivities(state),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
   mapStateToProps,
-  { loadProjects: projects.actions.loadProjects }
+  { loadProjects: Projects.actions.loadProjects }
 )(TeamProjectsView);
