@@ -21,6 +21,9 @@ const CommitSummary = ({ commit, deployment }: Props) => {
       <div className={styles.avatarBox}>
         <figure className="avatar avatar-lg">
           <Gravatar email={commit.author.email} https />
+          {commit.commiter.email !== commit.author.email &&
+            <Gravatar email={commit.commiter.email} className="avatar-icon" https />
+          }
         </figure>
       </div>
       <div className={styles.commitContent}>
