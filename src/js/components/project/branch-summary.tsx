@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
-import { compact } from 'lodash';
 import * as React from 'react';
+import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import { Branch } from '../../modules/branches';
@@ -23,46 +23,61 @@ interface GeneratedProps {
   latestDeployedCommit?: Commit;
 }
 
-const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProps & GeneratedProps) => (
-  <div className={classNames('columns', styles.branch)}>
-    <div className="column col-3">
-      <MinardLink branch={branch}>
-        <ScreenshotPile deployments={deployments} />
-      </MinardLink>
+const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProps & GeneratedProps) => {
+  let cardContent = (
+    <div className="card-header">
+      <h4 className="card-title">No previews available</h4>
+      <h6 className="card-meta">Make some commits to {branch.name} generate previews</h6>
     </div>
-    <div className="column col-9">
-      <MinardLink branch={branch}>
-        <div className={styles.header}>
-          <h4 className={styles.title}>{branch.name}</h4>
-          <h6 className={styles.description}>{branch.description}</h6>
+  );
+
+  if (branch.deployments.length > 0) {
+    if (latestDeployedCommit) {
+      cardContent = <CommitSummary commit={latestDeployedCommit} deployment={deployments[0]} />;
+    } else {
+      cardContent = (
+        <div className="empty">
+          <Icon name="circle-o-notch" spin fixedWidth size="3x" />
+          <p className="empty-title">Loading deployment</p>
+          <p className="empty-meta">Hold on a sec…</p>
         </div>
-      </MinardLink>
-      <div className="card">
-        {deployments.length > 0 ?
-          <CommitSummary commit={latestDeployedCommit} deployment={deployments[0]} /> : (
-            <div className="card-header">
-              <h4 className="card-title">No previews available</h4>
-              <h6 className="card-meta">Make some commits to {branch.name} generate previews</h6>
-            </div>
-          )
-        }
+      );
+    }
+  }
+
+  return (
+    <div className={classNames('columns', styles.branch)}>
+      <div className="column col-3">
+        <MinardLink branch={branch}>
+          <ScreenshotPile deployments={deployments} />
+        </MinardLink>
+      </div>
+      <div className="column col-9">
+        <MinardLink branch={branch}>
+          <div className={styles.header}>
+            <h4 className={styles.title}>{branch.name}</h4>
+            <h6 className={styles.description}>{branch.description}</h6>
+          </div>
+        </MinardLink>
+        <div className="card">
+          {cardContent}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   const { branch } = ownProps;
-  // TODO: fetch deployment info if missing
-  const branchDeployments = compact(branch.deployments.map(id => Deployments.selectors.getDeployment(state, id)));
+  const deployments = branch.deployments.map(id => Deployments.selectors.getDeployment(state, id));
   let latestDeployedCommit: Commit = undefined;
 
-  if (branchDeployments.length > 0) {
-    latestDeployedCommit = Commits.selectors.getCommit(state, branchDeployments[0].commit);
+  if (deployments.length > 0 && deployments[0]) {
+    latestDeployedCommit = Commits.selectors.getCommit(state, deployments[0].commit);
   }
 
   return {
-    deployments: branchDeployments,
+    deployments,
     latestDeployedCommit,
   };
 };
