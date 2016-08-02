@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
 
-import { Activity, ActivityType } from '../../../modules/activity';
+import { Activity, ActivityType } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
 import Projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';

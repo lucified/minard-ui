@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
-import { Activity } from '../../modules/activity';
+import { Activity } from '../../modules/activities';
 
 import ActivityList from '../common/activity-list';
 import SectionTitle from '../common/section-title';
