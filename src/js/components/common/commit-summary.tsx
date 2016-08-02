@@ -12,7 +12,7 @@ const styles = require('./commit-summary.scss');
 
 interface Props {
   commit: Commit;
-  deployment: Deployment;
+  deployment?: Deployment;
 }
 
 const CommitSummary = ({ commit, deployment }: Props) => {
