@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import { isNil, some } from 'lodash';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
@@ -13,17 +14,24 @@ interface Props {
 class ScreenshotPile extends React.Component<Props, any> {
   public render() {
     const { deployments } = this.props;
-    const latestDeployments = deployments.sort((a, b) => a.creator.timestamp - b.creator.timestamp);
 
-    if (latestDeployments.length === 0) {
+    if (deployments.length === 0) {
       return (
-        <div className={styles.pile}>
-          <Icon className={styles.empty} name="times" size="4x" />
+        <div className={classNames(styles.pile, styles.empty)}>
+          <Icon name="times" size="3x" />
         </div>
       );
     }
 
-    debugger;
+    if (some(deployments, isNil)) {
+      return (
+        <div className={classNames(styles.pile, styles.empty)}>
+           <Icon name="circle-o-notch" spin fixedWidth size="3x" />
+        </div>
+      );
+    }
+
+    const latestDeployments = deployments.sort((a, b) => a.creator.timestamp - b.creator.timestamp);
 
     return (
       <div className={styles.pile}>
