@@ -26,9 +26,9 @@ class MinardLink extends React.Component<PassedProps & GeneratedProps, any> {
     let path = '/';
 
     if (deployment) {
-      path = `/project/${deploymentBranch.project}/${deploymentBranch.name}/${deployment.id}`;
+      path = `/project/${deploymentBranch.project}/${deploymentBranch.id}/${deployment.id}`;
     } else if (branch) {
-      path = `/project/${branch.project}/${branch.name}`;
+      path = `/project/${branch.project}/${branch.id}`;
     } else if (project) {
       path = `/project/${project.id}`;
     } else {
