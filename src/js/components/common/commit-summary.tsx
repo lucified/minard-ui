@@ -35,7 +35,7 @@ const CommitSummary = ({ commit, deployment }: Props) => {
         </div>
         <div className="flex">
           <span className={classNames(styles.metadata, 'text-left')}>
-            {commit.author}
+            {commit.author.name || commit.author.email}
           </span>
           <span className={classNames(styles.metadata, 'text-center')}>
             0 comments
