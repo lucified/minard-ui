@@ -31,9 +31,8 @@
           "timestamp": "2016-08-01T15:51:21.802Z"
         },
         "commiter": {
-          "name": "Ville Saarinen",
-          "email": "ville.saarinen@lucify.com",
-          "timestamp": "2016-08-01T15:51:21.802Z"
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T13:51:21.802Z"
         },
         "message": "Fix colors",
         "description": "The previous colors didn't look nice. Now they're much prettier."

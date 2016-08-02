@@ -13,17 +13,12 @@
         "data": []
       },
       "project": {
-        "type": "projects",
-        "id": "1"
+        "data": {
+          "type": "projects",
+          "id": "1"
+        }
       }
     }
   },
-  "includes": {
-    "commits": {
-      "data": []
-    },
-    "deployments": {
-      "data": []
-    }
-  }
+  "included": []
 }
