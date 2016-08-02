@@ -40,7 +40,9 @@ function* fetchProjects(): IterableIterator<Effect> {
   const { response, error } = yield call(api.fetchProjects);
 
   if (response) {
-    yield call(storeIncludedEntities, response.included);
+    if (response.included) {
+      yield call(storeIncludedEntities, response.included);
+    }
     yield put(Projects.actions.FetchProjects.success(response.data));
 
     // Make sure the latest deployment from each branch of each project is loaded
@@ -71,7 +73,10 @@ function* fetchProject(id: string): IterableIterator<Effect> {
   const { response, error } = yield call(api.fetchProject, id);
 
   if (response) {
-    yield call(storeIncludedEntities, response.included);
+    if (response.included) {
+      yield call(storeIncludedEntities, response.included);
+    }
+
     yield put(Projects.actions.FetchProject.success(id, response.data));
   } else {
     yield put(Projects.actions.FetchProject.failure(id, error));
@@ -84,7 +89,10 @@ function* fetchBranch(id: string, projectId: string): IterableIterator<Effect> {
   const { response, error } = yield call(api.fetchBranch, id);
 
   if (response) {
-    yield call(storeIncludedEntities, response.included);
+    if (response.included) {
+      yield call(storeIncludedEntities, response.included);
+    }
+
     yield put(Branches.actions.FetchBranch.success(id, projectId, response.data));
   } else {
     yield put(Branches.actions.FetchBranch.failure(id, projectId, error));
@@ -97,7 +105,10 @@ function* fetchDeployment(id: string, projectId: string): IterableIterator<Effec
   const { response, error } = yield call(api.fetchDeployment, id);
 
   if (response) {
-    yield call(storeIncludedEntities, response.included);
+    if (response.included) {
+      yield call(storeIncludedEntities, response.included);
+    }
+
     yield put(Deployments.actions.FetchDeployment.success(id, projectId, response.data));
   } else {
     yield put(Deployments.actions.FetchDeployment.failure(id, projectId, error));
