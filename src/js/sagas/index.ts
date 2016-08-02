@@ -54,13 +54,17 @@ function* fetchProjects(): IterableIterator<Effect> {
 
         for (let j = 0; j < branches.length; j++) {
           const branch = <Branch>(yield select(Branches.selectors.getBranch, branches[j]));
-          if (branch.deployments.length > 0) {
-            yield call(loadDeployment, branch.deployments[0], project.id);
+          const deploymentId = branch.deployments[0];
+          if (deploymentId) {
+            const deployment = yield select(Deployments.selectors.getDeployment, deploymentId);
+            if (!deployment) {
+              yield call(fetchDeployment, deploymentId, project.id);
+            }
           }
         }
       }
     } else {
-      console.log('projects not fetched!');
+      throw new Error('No projects found!');
     }
   } else {
     yield put(Projects.actions.FetchProjects.failure(error));
@@ -78,6 +82,21 @@ function* fetchProject(id: string): IterableIterator<Effect> {
     }
 
     yield put(Projects.actions.FetchProject.success(id, response.data));
+
+    // Load the deployments from each branch
+    const { branches } = yield select(Projects.selectors.getProject, id);
+
+    for (let i = 0; i < branches.length; i++) {
+      const branch = <Branch>(yield select(Branches.selectors.getBranch, branches[i]));
+
+      for (let j = 0; j < branch.deployments.length; j++) {
+        const deploymentId = branch.deployments[j];
+        const deployment = yield select(Deployments.selectors.getDeployment, deploymentId);
+        if (!deployment) {
+          yield call(fetchDeployment, deploymentId, id);
+        }
+      }
+    }
   } else {
     yield put(Projects.actions.FetchProject.failure(id, error));
   }
