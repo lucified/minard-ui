@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
 import * as t from './types';
 
-//const screenshot = require('../../../images/screenshot.png');
+const screenshot = require('../../../images/screenshot.png');
 
 const initialState: t.DeploymentState = {};
 
@@ -15,7 +15,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
     deploymentObjects[deployment.id] = {
       id: deployment.id,
       url: deployment.attributes.url,
-      screenshot: deployment.attributes.screenshot,
+      screenshot: screenshot, // deployment.attributes.screenshot,
       commit: deployment.relationships.commit.data.id,
       creator: {
         name: deployment.attributes.creator.name,
