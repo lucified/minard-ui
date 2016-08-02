@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { compact, flatMap } from 'lodash';
+import { compact, flatMap, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
@@ -62,7 +62,7 @@ const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps 
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   // TODO: Make this more efficient
-  const projectDeployments = flatMap(ownProps.project.branches, branchId => {
+  const deployments = flatMap(ownProps.project.branches, branchId => {
     const branch = Branches.selectors.getBranch(state, branchId);
 
     if (branch) {
@@ -74,10 +74,14 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
     return undefined;
   });
 
-  const latestDeployment = compact(projectDeployments).length > 0 && projectDeployments[0];
+  let latestDeployment: Deployment;
+  const loadedDeployments = compact(deployments);
+  if (loadedDeployments.length > 0) {
+    latestDeployment = maxBy(loadedDeployments, deployment => deployment.creator.timestamp);
+  }
 
   return {
-    deployments: projectDeployments,
+    deployments,
     latestDeployment,
   };
 };
