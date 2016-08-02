@@ -9,11 +9,15 @@ const responseToStateShape = (projects: t.ApiResponse) => {
   const projectObjects: t.ProjectState = {};
 
   projects.forEach(project => {
+    const branches =  project.relationships.branches &&
+       project.relationships.branches.data &&
+       project.relationships.branches.data.map(({ id }) => id);
+
     projectObjects[project.id] = {
       id: project.id,
       name: project.attributes.name,
       description: project.attributes.description,
-      branches: project.relationships.branches.data.map(({ id }) => id),
+      branches,
       activeUsers: project.attributes.activeCommiters,
     };
   });

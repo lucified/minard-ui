@@ -9,13 +9,20 @@ const responseToStateShape = (branches: t.ApiResponse) => {
   const branchObjects: t.BranchState = {};
 
   branches.forEach(branch => {
+    const deployments = branch.relationships.deployments &&
+      branch.relationships.deployments.data &&
+      branch.relationships.deployments.data.map(d => d.id);
+    const commits = branch.relationships.commits &&
+      branch.relationships.commits.data &&
+      branch.relationships.commits.data.map(c => c.id);
+
     branchObjects[branch.id] = {
       id: branch.id,
       name: branch.attributes.name,
       description: branch.attributes.description,
       project: branch.relationships.project.data.id,
-      deployments: branch.relationships.deployments.data.map(d => d.id),
-      commits: branch.relationships.commits.data.map(c => c.id),
+      deployments,
+      commits,
     };
   });
 
