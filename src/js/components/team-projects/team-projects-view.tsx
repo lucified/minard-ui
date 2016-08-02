@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import activity, { Activity } from '../../modules/activity';
 import projects, { Project } from '../../modules/projects';
@@ -41,11 +40,7 @@ const mapStateToProps = (state: StateTree) => ({
   activities: activity.selectors.getActivities(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<StateTree>) => ({
-  loadProjects: () => { dispatch(projects.actions.loadProjects()); },
-});
-
 export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
   mapStateToProps,
-  mapDispatchToProps
+  { loadProjects: projects.actions.loadProjects }
 )(TeamProjectsView);

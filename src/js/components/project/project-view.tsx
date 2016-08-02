@@ -2,7 +2,6 @@ import { compact } from 'lodash';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import activity, { Activity } from '../../modules/activity';
 import branches, { Branch } from '../../modules/branches';
@@ -72,11 +71,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<StateTree>) => ({
-  loadProject: (projectId: string) => { dispatch(projects.actions.loadProject(projectId)); },
-});
-
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  mapDispatchToProps,
+  { loadProject: projects.actions.loadProject },
 )(ProjectView);
