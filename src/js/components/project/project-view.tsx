@@ -1,4 +1,3 @@
-import { compact } from 'lodash';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
@@ -66,12 +65,14 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
 
   return {
     project,
-    branches: project && compact(project.branches.map(branchId => Branches.selectors.getBranch(state, branchId))),
+    branches: project && project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
     activities: Activities.selectors.getActivityForProject(state, projectId),
   };
 };
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  { loadProject: Projects.actions.loadProject },
+  {
+    loadProject: Projects.actions.loadProject
+  },
 )(ProjectView);
