@@ -188,17 +188,17 @@ function* watchForLoadProject(): IterableIterator<Effect> {
 
 function* watchForLoadBranch(): IterableIterator<Effect> {
   while (true) {
-    const { projectId, id } = yield take(Branches.actions.LOAD_BRANCH);
+    const { id, projectId } = yield take(Branches.actions.LOAD_BRANCH);
 
-    yield fork(loadBranch, projectId, id);
+    yield fork(fetchBranch, id, projectId);
   }
 }
 
 function* watchForLoadDeployment(): IterableIterator<Effect> {
   while (true) {
-    const { projectId, id } = yield take(Deployments.actions.LOAD_DEPLOYMENT);
+    const { id, projectId } = yield take(Deployments.actions.LOAD_DEPLOYMENT);
 
-    yield fork(loadDeployment, projectId, id);
+    yield fork(fetchDeployment, id, projectId);
   }
 }
 
