@@ -3,10 +3,10 @@ import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
 import * as api from '../api';
 
-import Branches from '../modules/branches';
+import Branches, { Branch } from '../modules/branches';
 import Commits from '../modules/commits';
 import Deployments from '../modules/deployments';
-import Projects from '../modules/projects';
+import Projects, { Project } from '../modules/projects';
 
 interface IncludedEntity {
   type: "commits" | "deployments" | "projects" | "branches";
@@ -42,6 +42,24 @@ function* fetchProjects(): IterableIterator<Effect> {
   if (response) {
     yield call(storeIncludedEntities, response.included);
     yield put(Projects.actions.FetchProjects.success(response.data));
+
+    // Make sure the latest deployment from each branch of each project is loaded
+    const projects = <Project[]>(yield select(Projects.selectors.getProjects));
+    if (projects) {
+      for (let i = 0; i < projects.length; i++) {
+        const project = projects[i];
+        const { branches } = project;
+
+        for (let j = 0; j < branches.length; j++) {
+          const branch = <Branch>(yield select(Branches.selectors.getBranch, branches[j]));
+          if (branch.deployments.length > 0) {
+            yield call(loadDeployment, branch.deployments[0], project.id);
+          }
+        }
+      }
+    } else {
+      console.log('projects not fetched!');
+    }
   } else {
     yield put(Projects.actions.FetchProjects.failure(error));
   }
