@@ -34,6 +34,7 @@ function* storeIncludedEntities(entities: IncludedEntity[]): IterableIterator<Ef
 }
 
 // Fetchers: Fetch the data from the server and store it into actions.
+// TODO: Don't fetch when already exists?
 function* fetchProjects(): IterableIterator<Effect> {
   yield put(Projects.actions.FetchProjects.request());
 
@@ -134,47 +135,12 @@ function* fetchDeployment(id: string, projectId: string): IterableIterator<Effec
   }
 }
 
-// Loaders: Check if resource already exists. If not, fetch it.
-function* loadProjects(): IterableIterator<Effect> {
-  yield call(fetchProjects);
-}
-
-function* loadProject(id: string): IterableIterator<Effect> {
-  const existingProject = yield select(Projects.selectors.getProject, id);
-
-  if (!existingProject) {
-    yield call(fetchProject, id);
-  } else {
-    console.log('Project already exists', existingProject);
-  }
-}
-
-function* loadBranch(id: string, projectId: string): IterableIterator<Effect> {
-  const existingBranch = yield select(Branches.selectors.getBranch, id);
-
-  if (!existingBranch) {
-    yield call(fetchBranch, id, projectId);
-  } else {
-    console.log('Branch already exists', existingBranch);
-  }
-}
-
-function* loadDeployment(id: string, projectId: string): IterableIterator<Effect> {
-  const existingDeployment = yield select(Deployments.selectors.getDeployment, id);
-
-  if (!existingDeployment) {
-    yield call(fetchDeployment, id, projectId);
-  } else {
-    console.log('Deployment already exists', existingDeployment);
-  }
-}
-
 // Watchers: Watch for specific actions to begin async operations.
 function* watchForLoadProjects(): IterableIterator<Effect> {
   while (true) {
     yield take(Projects.actions.LOAD_ALL_PROJECTS);
 
-    yield fork(loadProjects);
+    yield fork(fetchProjects);
   }
 }
 
@@ -182,7 +148,7 @@ function* watchForLoadProject(): IterableIterator<Effect> {
   while (true) {
     const { id } = yield take(Projects.actions.LOAD_PROJECT);
 
-    yield fork(loadProject, id);
+    yield fork(fetchProject, id);
   }
 }
 
