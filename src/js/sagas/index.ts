@@ -40,7 +40,7 @@ function* fetchProjects(): IterableIterator<Effect> {
   const { response, error } = yield call(api.fetchProjects);
 
   if (response) {
-    storeIncludedEntities(response.included);
+    yield call(storeIncludedEntities, response.included);
     yield put(projects.actions.FetchProjects.success(response.data));
   } else {
     yield put(projects.actions.FetchProjects.failure(error));
@@ -53,8 +53,8 @@ function* fetchProject(id: string): IterableIterator<Effect> {
   const { response, error } = yield call(api.fetchProject, id);
 
   if (response) {
-    storeIncludedEntities(response.included);
-    yield put(projects.actions.FetchProject.success(id, response));
+    yield call(storeIncludedEntities, response.included);
+    yield put(projects.actions.FetchProject.success(id, response.data));
   } else {
     yield put(projects.actions.FetchProject.failure(id, error));
   }
@@ -66,8 +66,8 @@ function* fetchBranch(id: string, projectId: string): IterableIterator<Effect> {
   const { response, error } = yield call(api.fetchBranch, id);
 
   if (response) {
-    storeIncludedEntities(response.included);
-    yield put(branches.actions.FetchBranch.success(id, response));
+    yield call(storeIncludedEntities, response.included);
+    yield put(branches.actions.FetchBranch.success(id, response.data));
   } else {
     yield put(branches.actions.FetchBranch.failure(id, error));
   }
@@ -79,8 +79,8 @@ function* fetchDeployment(id: string, projectId: string): IterableIterator<Effec
   const { response, error } = yield call(api.fetchDeployment, id);
 
   if (response) {
-    storeIncludedEntities(response.included);
-    yield put(deployments.actions.FetchDeployment.success(id, response));
+    yield call(storeIncludedEntities, response.included);
+    yield put(deployments.actions.FetchDeployment.success(id, response.data));
   } else {
     yield put(deployments.actions.FetchDeployment.failure(id, error));
   }
