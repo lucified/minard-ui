@@ -1,3 +1,4 @@
+import { compact } from 'lodash';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
@@ -60,12 +61,16 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
-  project: projects.selectors.getProject(state, ownProps.params.id),
-  branches: projects.selectors.getBranches(state, ownProps.params.id)
-    .map(branchId => branches.selectors.getBranch(state, branchId)),
-  activities: activity.selectors.getActivityForProject(state, ownProps.params.id),
-});
+const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
+  const { id: projectId } = ownProps.params;
+  const project = projects.selectors.getProject(state, projectId);
+
+  return {
+    project,
+    branches: project && compact(project.branches.map(branchId => branches.selectors.getBranch(state, branchId))),
+    activities: activity.selectors.getActivityForProject(state, projectId),
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<StateTree>) => ({
   loadProject: (projectId: string) => { dispatch(projects.actions.loadProject(projectId)); },

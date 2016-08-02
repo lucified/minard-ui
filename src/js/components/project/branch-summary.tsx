@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import { compact } from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -52,7 +53,8 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   const { branch } = ownProps;
-  const branchDeployments = branch.deployments.map(id => deployments.selectors.getDeployment(state, id));
+  // TODO: fetch deployment info if missing
+  const branchDeployments = compact(branch.deployments.map(id => deployments.selectors.getDeployment(state, id)));
   let latestDeployedCommit: Commit = undefined;
 
   if (branchDeployments.length > 0) {
@@ -62,7 +64,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   return {
     deployments: branchDeployments,
     latestDeployedCommit,
-  }
+  };
 };
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(BranchSummary);
