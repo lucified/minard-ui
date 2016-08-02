@@ -1,5 +1,4 @@
 import { applyMiddleware, compose, createStore } from 'redux';
-import createLogger = require('redux-logger'); // https://github.com/Microsoft/TypeScript/issues/5565
 import createSagaMiddleware, { END } from 'redux-saga';
 
 import rootReducer from './reducers';
@@ -10,17 +9,13 @@ declare var window: { devToolsExtension: any };
 function configureStore(initialState: Object) {
   // create the saga middleware
   const sagaMiddleware = createSagaMiddleware();
-  const loggerMiddleware = createLogger();
 
   const store = createStore(
     rootReducer,
     initialState,
     // TODO: remove logger for production
     compose(
-      applyMiddleware(
-        sagaMiddleware,
-        loggerMiddleware, // logggerMiddleware must be last
-      ),
+      applyMiddleware(sagaMiddleware),
       window.devToolsExtension ? window.devToolsExtension() : (f: any) => f
     )
   );
