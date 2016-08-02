@@ -35,8 +35,16 @@
           "type": "commits",
           "id": "aacd00f02",
           "attributes": {
-            "author": "ville.saarinen@lucify.com",
-            "timestamp": "2016-07-28T13:51:21.802Z",
+            "author": {
+              "name": "Ville Saarinen",
+              "email": "ville.saarinen@lucify.com",
+              "timestamp": "2016-07-28T13:51:21.802Z"
+            },
+            "commiter": {
+              "name": "Ville Saarinen",
+              "email": "ville.saarinen@lucify.com",
+              "timestamp": "2016-07-28T13:51:21.802Z"
+            },
             "message": "Try to do something else"
           },
           "relationships": {
@@ -55,8 +63,14 @@
           "type": "commits",
           "id": "a998823423",
           "attributes": {
-            "author": "juho@lucify.com",
-            "timestamp": "2016-07-27T15:51:21.802Z",
+            "author": {
+              "email": "juho@lucify.com",
+              "timestamp": "2016-07-27T15:51:21.802Z"
+            },
+            "commiter": {
+              "email": "juho@lucify.com",
+              "timestamp": "2016-07-27T15:51:21.802Z"
+            },
             "message": "Try to do something",
             "description": "This is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases"
           },
