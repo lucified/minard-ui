@@ -82,10 +82,7 @@
           },
           "relationships": {
             "deployments": {
-              "data": [{
-                "type": "deployments",
-                "id": "7"
-              }]
+              "data": []
             },
             "branch": {
               "data": {
@@ -125,10 +122,7 @@
           },
           "relationships": {
             "deployments": {
-              "data": [{
-                "type": "deployments",
-                "id": "7"
-              }]
+              "data": []
             },
             "branch": {
               "data": {
@@ -148,10 +142,7 @@
           },
           "relationships": {
             "deployments": {
-              "data": [{
-                "type": "deployments",
-                "id": "7"
-              }]
+              "data": []
             },
             "branch": {
               "data": {
@@ -171,10 +162,7 @@
           },
           "relationships": {
             "deployments": {
-              "data": [{
-                "type": "deployments",
-                "id": "7"
-              }]
+              "data": []
             },
             "branch": {
               "data": {
@@ -187,29 +175,27 @@
       ]
     },
     "deployments": {
-      "data": [
-        {
-          "type": "deployments",
-          "id": "7",
-          "attributes": {
-            "url": "#",
-            "screenshot": "#",
-            "creator": {
-              "name": "Ville Saarinen",
-              "email": "ville.saarinen@lucify.com",
-              "timestamp": "2015-08-02T09:51:21.802Z"
-            }
-          },
-          "relationships": {
-            "commit": {
-              "data": {
-                "type": "commits",
-                "id": "aacceeff02"
-              }
+      "data": [{
+        "type": "deployments",
+        "id": "7",
+        "attributes": {
+          "url": "#",
+          "screenshot": "#",
+          "creator": {
+            "name": "Ville Saarinen",
+            "email": "ville.saarinen@lucify.com",
+            "timestamp": "2016-08-02T09:51:21.802Z"
+          }
+        },
+        "relationships": {
+          "commit": {
+            "data": {
+              "type": "commits",
+              "id": "aacceeff02"
             }
           }
         }
-      ]
+      }]
     }
   }
 }
