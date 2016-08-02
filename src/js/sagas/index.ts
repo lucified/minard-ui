@@ -67,9 +67,9 @@ function* fetchBranch(id: string, projectId: string): IterableIterator<Effect> {
 
   if (response) {
     yield call(storeIncludedEntities, response.included);
-    yield put(Branches.actions.FetchBranch.success(id, response.data));
+    yield put(Branches.actions.FetchBranch.success(id, projectId, response.data));
   } else {
-    yield put(Branches.actions.FetchBranch.failure(id, error));
+    yield put(Branches.actions.FetchBranch.failure(id, projectId, error));
   }
 }
 
@@ -80,9 +80,9 @@ function* fetchDeployment(id: string, projectId: string): IterableIterator<Effec
 
   if (response) {
     yield call(storeIncludedEntities, response.included);
-    yield put(Deployments.actions.FetchDeployment.success(id, response.data));
+    yield put(Deployments.actions.FetchDeployment.success(id, projectId, response.data));
   } else {
-    yield put(Deployments.actions.FetchDeployment.failure(id, error));
+    yield put(Deployments.actions.FetchDeployment.failure(id, projectId, error));
   }
 }
 
