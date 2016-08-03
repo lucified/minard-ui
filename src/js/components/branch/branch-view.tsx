@@ -25,7 +25,7 @@ interface GeneratedProps {
 
 interface GeneratedDispatchProps {
   loadProject: (id: string) => void;
-  loadBranch: (id: string, projectId: string) => void;
+  loadBranch: (id: string) => void;
 }
 
 class BranchView extends React.Component<GeneratedProps & PassedProps & GeneratedDispatchProps, StateTree> {
@@ -34,7 +34,7 @@ class BranchView extends React.Component<GeneratedProps & PassedProps & Generate
     const { projectId, id } = this.props.params;
 
     loadProject(projectId);
-    loadBranch(id, projectId);
+    loadBranch(id);
   }
 
   private getLoadingContent() {

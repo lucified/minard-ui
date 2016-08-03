@@ -5,16 +5,15 @@ import * as t from './types';
 
 export const DEPLOYMENT = createRequestTypes('DEPLOYMENTS/DEPLOYMENT');
 export const FetchDeployment: t.DeploymentsRequestActionCreators = {
-  request: (id, projectId) => ({ type: DEPLOYMENT.REQUEST, id, projectId }),
-  success: (id, projectId, response) => ({ type: DEPLOYMENT.SUCCESS, id, projectId, response }),
-  failure: (id, projectId, error) => ({ type: DEPLOYMENT.FAILURE, id, projectId, error }),
+  request: (id) => ({ type: DEPLOYMENT.REQUEST, id }),
+  success: (id, response) => ({ type: DEPLOYMENT.SUCCESS, id, response }),
+  failure: (id, error) => ({ type: DEPLOYMENT.FAILURE, id, error }),
 };
 
 export const LOAD_DEPLOYMENT = 'DEPLOYMENTS/LOAD_DEPLOYMENT';
-export const loadDeployment: ActionCreator<t.LoadDeploymentAction> = (id, projectId) => ({
+export const loadDeployment: ActionCreator<t.LoadDeploymentAction> = (id) => ({
   type: LOAD_DEPLOYMENT,
   id,
-  projectId,
 });
 
 export const STORE_DEPLOYMENTS = 'DEPLOYMENTS/STORE_DEPLOYMENTS';

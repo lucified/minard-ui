@@ -17,7 +17,6 @@ export interface BranchState {
 // Actions
 export interface LoadBranchAction extends Action {
   id: string;
-  projectId: string;
   error?: any;
   response?: ResponseBranchElement;
 }

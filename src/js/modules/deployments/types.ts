@@ -20,7 +20,6 @@ export interface DeploymentState {
 // Actions
 export interface LoadDeploymentAction extends Action {
   id: string;
-  projectId: string;
   error?: any;
   response?: ResponseDeploymentElement;
 }

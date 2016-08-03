@@ -98,8 +98,8 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchBranch(id: string, projectId: string): IterableIterator<Effect> {
-    yield put(Branches.actions.FetchBranch.request(id, projectId));
+  function* fetchBranch(id: string): IterableIterator<Effect> {
+    yield put(Branches.actions.FetchBranch.request(id));
 
     const { response, error } = yield call(api.fetchBranch, id);
 
@@ -108,14 +108,14 @@ export default function createSagas(api: Api) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      yield put(Branches.actions.FetchBranch.success(id, projectId, response.data));
+      yield put(Branches.actions.FetchBranch.success(id, response.data));
     } else {
-      yield put(Branches.actions.FetchBranch.failure(id, projectId, error));
+      yield put(Branches.actions.FetchBranch.failure(id, error));
     }
   }
 
-  function* fetchDeployment(id: string, projectId: string): IterableIterator<Effect> {
-    yield put(Deployments.actions.FetchDeployment.request(id, projectId));
+  function* fetchDeployment(id: string): IterableIterator<Effect> {
+    yield put(Deployments.actions.FetchDeployment.request(id));
 
     const { response, error } = yield call(api.fetchDeployment, id);
 
@@ -124,9 +124,9 @@ export default function createSagas(api: Api) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      yield put(Deployments.actions.FetchDeployment.success(id, projectId, response.data));
+      yield put(Deployments.actions.FetchDeployment.success(id, response.data));
     } else {
-      yield put(Deployments.actions.FetchDeployment.failure(id, projectId, error));
+      yield put(Deployments.actions.FetchDeployment.failure(id, error));
     }
   }
 
@@ -149,17 +149,17 @@ export default function createSagas(api: Api) {
 
   function* watchForLoadBranch(): IterableIterator<Effect> {
     while (true) {
-      const { id, projectId } = yield take(Branches.actions.LOAD_BRANCH);
+      const { id } = yield take(Branches.actions.LOAD_BRANCH);
 
-      yield fork(fetchBranch, id, projectId);
+      yield fork(fetchBranch, id);
     }
   }
 
   function* watchForLoadDeployment(): IterableIterator<Effect> {
     while (true) {
-      const { id, projectId } = yield take(Deployments.actions.LOAD_DEPLOYMENT);
+      const { id } = yield take(Deployments.actions.LOAD_DEPLOYMENT);
 
-      yield fork(fetchDeployment, id, projectId);
+      yield fork(fetchDeployment, id);
     }
   }
 
