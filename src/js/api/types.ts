@@ -17,4 +17,5 @@ export interface Api {
   fetchProject: (id: string) => ApiPromise;
   fetchDeployment: (id: string) => ApiPromise;
   fetchBranch: (id: string) => ApiPromise;
+  fetchCommit: (id: string) => ApiPromise;
 }

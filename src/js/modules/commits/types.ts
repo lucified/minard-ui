@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action, ActionCreator } from 'redux';
 
 // State
 export interface Commit {
@@ -24,6 +24,18 @@ export interface CommitState {
 };
 
 // Actions
+export interface LoadCommitAction extends Action {
+  id: string;
+  error?: any;
+  response?: ResponseCommitElement;
+}
+
+export interface CommitsRequestActionCreators {
+  request: ActionCreator<LoadCommitAction>;
+  success: ActionCreator<LoadCommitAction>;
+  failure: ActionCreator<LoadCommitAction>;
+}
+
 export interface StoreCommitsAction extends Action {
   commits: ResponseCommitElement[];
 }
