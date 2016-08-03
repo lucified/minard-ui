@@ -16,7 +16,7 @@ const deploymentJSON: { [id: string]: string } = {
 };
 
 function callApi(url: string) {
-  return fetch(url)
+  return fetch(url, { credentials: 'same-origin' })
     .then(response =>
       response.json().then(json => ({ json, response }))
     ).then(({ json, response }) => {
