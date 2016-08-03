@@ -95,7 +95,7 @@ describe('sagas', () => {
   });
 
   describe('watchForLoadCommit', () => {
-    it(`forks a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
+    it(`forks a new saga on ${Commits.actions.LOAD_COMMIT}`, () => {
       const id = 'id';
       const generator = sagas.watchForLoadCommit();
 
