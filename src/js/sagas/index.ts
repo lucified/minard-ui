@@ -115,7 +115,7 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* ensureProjectRelatedDataLoaded(id: string): Iterable<Effect | Effect[]> {
+  function* ensureProjectRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
     const project = <Project> (yield select(Projects.selectors.getProject, id));
     if (!project) {
       throw new Error('No project found!');
