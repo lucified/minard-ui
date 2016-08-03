@@ -678,62 +678,8 @@ describe('sagas', () => {
     it('stores passed entities', () => {
       const response = testData.branchResponse;
       const generator = sagas.storeIncludedEntities(response.included);
-      const deploymentsEntities = [
-        {
-          'type': 'deployments',
-          'id': '7',
-          'attributes': {
-            'url': '#',
-            'screenshot': '#',
-            'creator': {
-              'name': 'Ville Saarinen',
-              'email': 'ville.saarinen@lucify.com',
-              'timestamp': '2016-08-02T09:51:21.802Z',
-            },
-          },
-          'relationships': {
-            'commit': {
-              'data': {
-                'type': 'commits',
-                'id': 'aacceeff02',
-              },
-            },
-          },
-        },
-      ];
-      const commitsEntities = [
-        {
-          'type': 'commits',
-          'id': 'aacceeff02',
-          'attributes': {
-            'author': {
-              'name': 'Ville Saarinen',
-              'email': 'ville.saarinen@lucify.com',
-              'timestamp': '2016-08-01T15:51:21.802Z',
-            },
-            'commiter': {
-              'email': 'juho@lucify.com',
-              'timestamp': '2016-07-29T13:51:21.802Z',
-            },
-            'message': 'Fix colors',
-            'description': "The previous colors didn't look nice. Now they're much prettier.",
-          },
-          'relationships': {
-            'deployments': {
-              'data': [{
-                'type': 'deployments',
-                'id': '7',
-              }],
-            },
-            'branch': {
-              'data': {
-                'type': 'branches',
-                'id': '1',
-              },
-            },
-          },
-        },
-      ];
+      const deploymentsEntities = response.included.filter(entity => entity.type === 'deployments');
+      const commitsEntities = response.included.filter(entity => entity.type === 'commits');
 
       expect(generator.next().value).to.deep.equal(
         put(Deployments.actions.StoreDeployments(deploymentsEntities))
