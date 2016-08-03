@@ -4,7 +4,7 @@ import { call, fork, put, select, take } from 'redux-saga/effects';
 
 import { Api, ApiPromise } from '../src/js/api/types';
 import Branches, { Branch } from '../src/js/modules/branches';
-import Commits from '../src/js/modules/commits';
+import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
 import Projects, { Project } from '../src/js/modules/projects';
 import sagaCreator from '../src/js/sagas';
@@ -12,6 +12,7 @@ import sagaCreator from '../src/js/sagas';
 import * as testData from './test-data';
 
 interface CreateApiParameter {
+  fetchCommit?: (id: string) => ApiPromise;
   fetchBranch?: (id: string) => ApiPromise;
   fetchDeployment?: (id: string) => ApiPromise;
   fetchProject?: (id: string) => ApiPromise;
@@ -20,6 +21,7 @@ interface CreateApiParameter {
 
 const createApi = (functionsToReplace?: CreateApiParameter): Api => {
   const defaultFunctions: Api = {
+    fetchCommit: (_) => Promise.resolve({ response: {} }),
     fetchBranch: (_) => Promise.resolve({ response: {} }),
     fetchDeployment: (_) => Promise.resolve({ response: {} }),
     fetchProject: (_) => Promise.resolve({ response: {} }),
@@ -43,7 +45,7 @@ describe('sagas', () => {
       );
 
       expect(generator.next({ id }).value).to.deep.equal(
-        fork(sagas.fetchDeployment, id)
+        fork(sagas.loadDeployment, id)
       );
     });
   });
@@ -58,7 +60,7 @@ describe('sagas', () => {
       );
 
       expect(generator.next({ id }).value).to.deep.equal(
-        fork(sagas.fetchBranch, id)
+        fork(sagas.loadBranch, id)
       );
     });
   });
@@ -73,7 +75,7 @@ describe('sagas', () => {
       );
 
       expect(generator.next({ id }).value).to.deep.equal(
-        fork(sagas.fetchProject, id)
+        fork(sagas.loadProject, id)
       );
     });
   });
@@ -89,6 +91,225 @@ describe('sagas', () => {
       expect(generator.next().value).to.deep.equal(
         fork(sagas.fetchProjects)
       );
+    });
+  });
+
+  describe('watchForLoadCommit', () => {
+    it(`forks a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
+      const id = 'id';
+      const generator = sagas.watchForLoadCommit();
+
+      expect(generator.next().value).to.deep.equal(
+        take(Commits.actions.LOAD_COMMIT)
+      );
+
+      expect(generator.next({ id }).value).to.deep.equal(
+        fork(sagas.loadCommit, id)
+      );
+    });
+  });
+
+  describe('loadBranch', () => {
+    it('fetches the branch and ensures data if it does not exist', () => {
+      const id = 'b';
+      const generator = sagas.loadBranch(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchBranch, id)
+      );
+
+      expect(generator.next(true).value).to.deep.equal(
+        fork(sagas.ensureBranchRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+
+    it('does not ensure data if fetching fails', () => {
+      const id = 'b';
+      const generator = sagas.loadBranch(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchBranch, id)
+      );
+
+      expect(generator.next(false).done).to.equal(true);
+    });
+
+    it('it only ensures data if branch already exists', () => {
+      const id = 'b';
+      const generator = sagas.loadBranch(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, id)
+      );
+
+      expect(generator.next({ id }).value).to.deep.equal(
+        fork(sagas.ensureBranchRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+  });
+
+  describe('loadDeployment', () => {
+    it('fetches the Deployment and ensures data if it does not exist', () => {
+      const id = 'b';
+      const generator = sagas.loadDeployment(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Deployments.selectors.getDeployment, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchDeployment, id)
+      );
+
+      expect(generator.next(true).value).to.deep.equal(
+        fork(sagas.ensureDeploymentRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+
+    it('does not ensure data if fetching fails', () => {
+      const id = 'b';
+      const generator = sagas.loadDeployment(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Deployments.selectors.getDeployment, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchDeployment, id)
+      );
+
+      expect(generator.next(false).done).to.equal(true);
+    });
+
+    it('it only ensures data if Deployment already exists', () => {
+      const id = 'b';
+      const generator = sagas.loadDeployment(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Deployments.selectors.getDeployment, id)
+      );
+
+      expect(generator.next({ id }).value).to.deep.equal(
+        fork(sagas.ensureDeploymentRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+  });
+
+  describe('loadBranch', () => {
+    it('fetches the Branch and ensures data if it does not exist', () => {
+      const id = 'b';
+      const generator = sagas.loadBranch(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchBranch, id)
+      );
+
+      expect(generator.next(true).value).to.deep.equal(
+        fork(sagas.ensureBranchRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+
+    it('does not ensure data if fetching fails', () => {
+      const id = 'b';
+      const generator = sagas.loadBranch(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchBranch, id)
+      );
+
+      expect(generator.next(false).done).to.equal(true);
+    });
+
+    it('it only ensures data if Branch already exists', () => {
+      const id = 'b';
+      const generator = sagas.loadBranch(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, id)
+      );
+
+      expect(generator.next({ id }).value).to.deep.equal(
+        fork(sagas.ensureBranchRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+  });
+
+  describe('loadProject', () => {
+    it('fetches the Project and ensures data if it does not exist', () => {
+      const id = 'b';
+      const generator = sagas.loadProject(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Projects.selectors.getProject, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchProject, id)
+      );
+
+      expect(generator.next(true).value).to.deep.equal(
+        fork(sagas.ensureProjectRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+
+    it('does not ensure data if fetching fails', () => {
+      const id = 'b';
+      const generator = sagas.loadProject(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Projects.selectors.getProject, id)
+      );
+
+      expect(generator.next().value).to.deep.equal(
+        call(sagas.fetchProject, id)
+      );
+
+      expect(generator.next(false).done).to.equal(true);
+    });
+
+    it('it only ensures data if Project already exists', () => {
+      const id = 'b';
+      const generator = sagas.loadProject(id);
+
+      expect(generator.next().value).to.deep.equal(
+        select(Projects.selectors.getProject, id)
+      );
+
+      expect(generator.next({ id }).value).to.deep.equal(
+        fork(sagas.ensureProjectRelatedDataLoaded, id)
+      );
+
+      expect(generator.next().done).to.equal(true);
     });
   });
 
@@ -108,10 +329,6 @@ describe('sagas', () => {
 
       expect(generator.next({ response: response }).value).to.deep.equal(
         put(Deployments.actions.FetchDeployment.success(id, response.data))
-      );
-
-      expect(generator.next().value).to.deep.equal(
-        fork(sagas.ensureDeploymentRelatedDataLoaded, id)
       );
 
       expect(generator.next().done).to.equal(true);
@@ -136,10 +353,6 @@ describe('sagas', () => {
 
       expect(generator.next().value).to.deep.equal(
         put(Deployments.actions.FetchDeployment.success(id, response.data))
-      );
-
-      expect(generator.next().value).to.deep.equal(
-        fork(sagas.ensureDeploymentRelatedDataLoaded, id)
       );
 
       expect(generator.next().done).to.equal(true);
@@ -185,10 +398,6 @@ describe('sagas', () => {
         put(Branches.actions.FetchBranch.success(id, response.data))
       );
 
-      expect(generator.next().value).to.deep.equal(
-        fork(sagas.ensureBranchRelatedDataLoaded, id)
-      );
-
       expect(generator.next().done).to.equal(true);
     });
 
@@ -211,10 +420,6 @@ describe('sagas', () => {
 
       expect(generator.next().value).to.deep.equal(
         put(Branches.actions.FetchBranch.success(id, response.data))
-      );
-
-      expect(generator.next().value).to.deep.equal(
-        fork(sagas.ensureBranchRelatedDataLoaded, id)
       );
 
       expect(generator.next().done).to.equal(true);
@@ -260,10 +465,6 @@ describe('sagas', () => {
         put(Projects.actions.FetchProject.success(id, response.data))
       );
 
-      expect(generator.next().value).to.deep.equal(
-        fork(sagas.ensureProjectRelatedDataLoaded, id)
-      );
-
       expect(generator.next().done).to.equal(true);
     });
 
@@ -286,10 +487,6 @@ describe('sagas', () => {
 
       expect(generator.next().value).to.deep.equal(
         put(Projects.actions.FetchProject.success(id, response.data))
-      );
-
-      expect(generator.next().value).to.deep.equal(
-        fork(sagas.ensureProjectRelatedDataLoaded, id)
       );
 
       expect(generator.next().done).to.equal(true);
@@ -595,6 +792,37 @@ describe('sagas', () => {
 
       expect(generator.next(deployment).value).to.deep.equal(
         call(sagas.fetchIfMissing, 'commits', 'c1')
+      );
+
+      expect(generator.next().done).to.equal(true);
+    });
+  });
+
+  describe('ensureCommitRelatedDataLoaded', () => {
+    it('makes sure commit exists for the Commit', () => {
+      const id = '1';
+      const generator = sagas.ensureCommitRelatedDataLoaded(id);
+      const commit: Commit = {
+        hash: 'a',
+        deployment: 'd1',
+        branch: 'b1',
+        message: '',
+        author: {
+          email: '',
+          timestamp: 1,
+        },
+        commiter: {
+          email: '',
+          timestamp: 1,
+        },
+      };
+
+      expect(generator.next().value).to.deep.equal(
+        select(Commits.selectors.getCommit, id)
+      );
+
+      expect(generator.next(commit).value).to.deep.equal(
+        call(sagas.fetchIfMissing, 'deployments', 'd1')
       );
 
       expect(generator.next().done).to.equal(true);

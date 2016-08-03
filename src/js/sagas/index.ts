@@ -1,37 +1,19 @@
 import { compact } from 'lodash';
-import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
+import { Api } from '../api/types';
 import Branches, { Branch } from '../modules/branches';
-import Commits from '../modules/commits';
+import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import Projects, { Project } from '../modules/projects';
 
-import { Api, ApiEntity } from '../api/types';
+// Loaders check whether an entity exists. If not, fetch it with a fetcher.
+// Afterwards, the loader also ensures that other needed data exists.
+import { createFetcher, createLoader, storeIncludedEntities } from './utils';
 
 type EntityTypeString = "commits" | "projects" | "deployments" | "branches";
 
 export default function createSagas(api: Api) {
-  function* storeIncludedEntities(entities: ApiEntity[]): IterableIterator<Effect> {
-    const types: { type: EntityTypeString, actionCreator: ActionCreator<any> }[] = [
-      { type: 'projects', actionCreator: Projects.actions.StoreProjects },
-      { type: 'deployments', actionCreator: Deployments.actions.StoreDeployments },
-      { type: 'commits', actionCreator: Commits.actions.StoreCommits },
-      { type: 'branches', actionCreator: Branches.actions.StoreBranches },
-    ];
-
-    if (entities && entities.length > 0) {
-      // Can't use forEach because of generators
-      for (let i = 0; i < types.length; i++) {
-        const currentType = types[i];
-        const includedEntities = entities.filter(entity => entity.type === currentType.type);
-        if (includedEntities.length > 0) {
-          yield put(currentType.actionCreator(includedEntities));
-        }
-      }
-    }
-  }
-
   function* fetchIfMissing(type: EntityTypeString, id: string): IterableIterator<Effect> {
     const selectors = {
       commits: Commits.selectors.getCommit,
@@ -52,8 +34,7 @@ export default function createSagas(api: Api) {
     }
   }
 
-  // Fetchers: Fetch the data from the server and store it into actions.
-  // TODO: Don't fetch when already exists?
+  // ALL PROJECTS
   function* fetchProjects(): IterableIterator<Effect | Effect[]> {
     yield put(Projects.actions.FetchProjects.request());
 
@@ -95,22 +76,9 @@ export default function createSagas(api: Api) {
     yield compact(deploymentIdsToCheck).map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
   }
 
-  function* fetchProject(id: string): IterableIterator<Effect> {
-    yield put(Projects.actions.FetchProject.request(id));
-
-    const { response, error } = yield call(api.fetchProject, id);
-
-    if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      yield put(Projects.actions.FetchProject.success(id, response.data));
-      yield fork(ensureProjectRelatedDataLoaded, id);
-    } else {
-      yield put(Projects.actions.FetchProject.failure(id, error));
-    }
-  }
+  // PROJECT
+  const fetchProject = createFetcher(Projects.actions.FetchProject, api.fetchProject);
+  const loadProject = createLoader(Projects.selectors.getProject, fetchProject, ensureProjectRelatedDataLoaded);
 
   function* ensureProjectRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
     const project = <Project> (yield select(Projects.selectors.getProject, id));
@@ -133,22 +101,9 @@ export default function createSagas(api: Api) {
     yield compact(deploymentIdsToCheck).map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
   }
 
-  function* fetchBranch(id: string): IterableIterator<Effect> {
-    yield put(Branches.actions.FetchBranch.request(id));
-
-    const { response, error } = yield call(api.fetchBranch, id);
-
-    if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      yield put(Branches.actions.FetchBranch.success(id, response.data));
-      yield fork(ensureBranchRelatedDataLoaded, id);
-    } else {
-      yield put(Branches.actions.FetchBranch.failure(id, error));
-    }
-  }
+  // BRANCH
+  const fetchBranch = createFetcher(Branches.actions.FetchBranch, api.fetchBranch);
+  const loadBranch = createLoader(Branches.selectors.getBranch, fetchBranch, ensureBranchRelatedDataLoaded);
 
   function* ensureBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
     const branch = <Branch> (yield select(Branches.selectors.getBranch, id));
@@ -157,22 +112,10 @@ export default function createSagas(api: Api) {
     yield branch.commits.map(commitId => call(fetchIfMissing, 'commits', commitId));
   }
 
-  function* fetchDeployment(id: string): IterableIterator<Effect> {
-    yield put(Deployments.actions.FetchDeployment.request(id));
-
-    const { response, error } = yield call(api.fetchDeployment, id);
-
-    if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      yield put(Deployments.actions.FetchDeployment.success(id, response.data));
-      yield fork(ensureDeploymentRelatedDataLoaded, id);
-    } else {
-      yield put(Deployments.actions.FetchDeployment.failure(id, error));
-    }
-  }
+  // DEPLOYMENT
+  const fetchDeployment = createFetcher(Deployments.actions.FetchDeployment, api.fetchDeployment);
+  const loadDeployment =
+    createLoader(Deployments.selectors.getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
 
   function* ensureDeploymentRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
     const deployment = <Deployment> (yield select(Deployments.selectors.getDeployment, id));
@@ -180,11 +123,18 @@ export default function createSagas(api: Api) {
     yield call(fetchIfMissing, 'commits', deployment.commit);
   }
 
-  function* fetchCommit(_: string): IterableIterator<Effect> {
-    throw new Error('fetchCommit: Not implemented');
+  // COMMIT
+  const fetchCommit = createFetcher(Commits.actions.FetchCommit, api.fetchCommit);
+  const loadCommit =
+    createLoader(Commits.selectors.getCommit, fetchCommit, ensureCommitRelatedDataLoaded);
+
+  function* ensureCommitRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
+    const commit = <Commit> (yield select(Commits.selectors.getCommit, id));
+
+    yield call(fetchIfMissing, 'deployments', commit.deployment);
   }
 
-  // Watchers: Watch for specific actions to begin async operations.
+  // WATCHERS: Watch for specific actions to begin async operations.
   function* watchForLoadProjects(): IterableIterator<Effect> {
     while (true) {
       yield take(Projects.actions.LOAD_ALL_PROJECTS);
@@ -197,7 +147,7 @@ export default function createSagas(api: Api) {
     while (true) {
       const { id } = yield take(Projects.actions.LOAD_PROJECT);
 
-      yield fork(fetchProject, id);
+      yield fork(loadProject, id);
     }
   }
 
@@ -205,7 +155,7 @@ export default function createSagas(api: Api) {
     while (true) {
       const { id } = yield take(Branches.actions.LOAD_BRANCH);
 
-      yield fork(fetchBranch, id);
+      yield fork(loadBranch, id);
     }
   }
 
@@ -213,7 +163,15 @@ export default function createSagas(api: Api) {
     while (true) {
       const { id } = yield take(Deployments.actions.LOAD_DEPLOYMENT);
 
-      yield fork(fetchDeployment, id);
+      yield fork(loadDeployment, id);
+    }
+  }
+
+  function* watchForLoadCommit(): IterableIterator<Effect> {
+    while (true) {
+      const { id } = yield take(Commits.actions.LOAD_COMMIT);
+
+      yield fork(loadCommit, id);
     }
   }
 
@@ -223,6 +181,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadProject),
       fork(watchForLoadBranch),
       fork(watchForLoadDeployment),
+      fork(watchForLoadCommit),
     ];
   }
 
@@ -232,14 +191,20 @@ export default function createSagas(api: Api) {
     watchForLoadBranch,
     watchForLoadProject,
     watchForLoadProjects,
+    watchForLoadCommit,
     fetchBranch,
     fetchDeployment,
     fetchProject,
     fetchProjects,
-    fetchCommit, // TODO: Not implemented
+    fetchCommit,
+    loadBranch,
+    loadDeployment,
+    loadProject,
+    loadCommit,
     ensureAllProjectsRelatedDataLoaded,
     ensureBranchRelatedDataLoaded,
     ensureDeploymentRelatedDataLoaded,
+    ensureCommitRelatedDataLoaded,
     ensureProjectRelatedDataLoaded,
     fetchIfMissing,
     storeIncludedEntities,
