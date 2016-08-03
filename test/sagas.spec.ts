@@ -691,5 +691,13 @@ describe('sagas', () => {
 
       expect(generator.next().done).to.equal(true);
     });
+
+    it('handles an empty included section', () => {
+      const generatorUndefined = sagas.storeIncludedEntities(undefined);
+      expect(generatorUndefined.next().done).to.equal(true);
+
+      const generatorEmpty = sagas.storeIncludedEntities([]);
+      expect(generatorEmpty.next().done).to.equal(true);
+    });
   });
 });

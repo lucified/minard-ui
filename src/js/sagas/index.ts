@@ -20,12 +20,14 @@ export default function createSagas(api: Api) {
       { type: 'branches', actionCreator: Branches.actions.StoreBranches },
     ];
 
-    // Can't use forEach because of generators
-    for (let i = 0; i < types.length; i++) {
-      const currentType = types[i];
-      const includedEntities = entities.filter(entity => entity.type === currentType.type);
-      if (includedEntities.length > 0) {
-        yield put(currentType.actionCreator(includedEntities));
+    if (entities && entities.length > 0) {
+      // Can't use forEach because of generators
+      for (let i = 0; i < types.length; i++) {
+        const currentType = types[i];
+        const includedEntities = entities.filter(entity => entity.type === currentType.type);
+        if (includedEntities.length > 0) {
+          yield put(currentType.actionCreator(includedEntities));
+        }
       }
     }
   }
