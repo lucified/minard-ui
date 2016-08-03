@@ -13,7 +13,7 @@ export interface ApiResponse {
 export type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; }>;
 
 export interface Api {
-  fetchProjects: () => ApiPromise;
+  fetchAllProjects: () => ApiPromise;
   fetchProject: (id: string) => ApiPromise;
   fetchDeployment: (id: string) => ApiPromise;
   fetchBranch: (id: string) => ApiPromise;

@@ -1,6 +1,6 @@
 import { merge } from 'lodash';
 
-import { PROJECT, PROJECTS, STORE_PROJECTS } from './actions';
+import { PROJECT, ALL_PROJECTS, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
 const initialState: t.ProjectState = {};
@@ -27,11 +27,11 @@ const responseToStateShape = (projects: t.ApiResponse) => {
 
 export default (state: t.ProjectState = initialState, action: any) => {
   switch (action.type) {
-    case PROJECTS.SUCCESS:
-      const projectsResponse = (<t.LoadAllProjectsAction> action).response;
+    case ALL_PROJECTS.SUCCESS:
+      const projectsResponse = (<t.RequestAllProjectsAction> action).response;
       return merge({}, state, responseToStateShape(projectsResponse));
     case PROJECT.SUCCESS:
-      const projectResponse = (<t.LoadProjectAction> action).response;
+      const projectResponse = (<t.RequestProjectAction> action).response;
       return merge({}, state, responseToStateShape([projectResponse]));
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).projects;

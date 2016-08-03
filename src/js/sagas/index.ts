@@ -35,20 +35,20 @@ export default function createSagas(api: Api) {
   }
 
   // ALL PROJECTS
-  function* fetchProjects(): IterableIterator<Effect | Effect[]> {
-    yield put(Projects.actions.FetchProjects.request());
+  function* fetchAllProjects(): IterableIterator<Effect | Effect[]> {
+    yield put(Projects.actions.FetchAllProjects.request());
 
-    const { response, error } = yield call(api.fetchProjects);
+    const { response, error } = yield call(api.fetchAllProjects);
 
     if (response) {
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      yield put(Projects.actions.FetchProjects.success(response.data));
+      yield put(Projects.actions.FetchAllProjects.success(response.data));
       yield fork(ensureAllProjectsRelatedDataLoaded);
     } else {
-      yield put(Projects.actions.FetchProjects.failure(error));
+      yield put(Projects.actions.FetchAllProjects.failure(error));
     }
   }
 
@@ -135,11 +135,11 @@ export default function createSagas(api: Api) {
   }
 
   // WATCHERS: Watch for specific actions to begin async operations.
-  function* watchForLoadProjects(): IterableIterator<Effect> {
+  function* watchForLoadAllProjects(): IterableIterator<Effect> {
     while (true) {
       yield take(Projects.actions.LOAD_ALL_PROJECTS);
 
-      yield fork(fetchProjects);
+      yield fork(fetchAllProjects);
     }
   }
 
@@ -177,7 +177,7 @@ export default function createSagas(api: Api) {
 
   function* root() {
     yield [
-      fork(watchForLoadProjects),
+      fork(watchForLoadAllProjects),
       fork(watchForLoadProject),
       fork(watchForLoadBranch),
       fork(watchForLoadDeployment),
@@ -190,12 +190,12 @@ export default function createSagas(api: Api) {
     watchForLoadDeployment,
     watchForLoadBranch,
     watchForLoadProject,
-    watchForLoadProjects,
+    watchForLoadAllProjects,
     watchForLoadCommit,
     fetchBranch,
     fetchDeployment,
     fetchProject,
-    fetchProjects,
+    fetchAllProjects,
     fetchCommit,
     loadBranch,
     loadDeployment,

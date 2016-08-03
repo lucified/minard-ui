@@ -16,7 +16,7 @@ interface CreateApiParameter {
   fetchBranch?: (id: string) => ApiPromise;
   fetchDeployment?: (id: string) => ApiPromise;
   fetchProject?: (id: string) => ApiPromise;
-  fetchProjects?: () => ApiPromise;
+  fetchAllProjects?: () => ApiPromise;
 }
 
 const createApi = (functionsToReplace?: CreateApiParameter): Api => {
@@ -25,7 +25,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchBranch: (_) => Promise.resolve({ response: {} }),
     fetchDeployment: (_) => Promise.resolve({ response: {} }),
     fetchProject: (_) => Promise.resolve({ response: {} }),
-    fetchProjects: () => Promise.resolve({ response: {} }),
+    fetchAllProjects: () => Promise.resolve({ response: {} }),
   };
 
   return merge(defaultFunctions, functionsToReplace);
@@ -80,16 +80,16 @@ describe('sagas', () => {
     });
   });
 
-  describe('watchForLoadProjects', () => {
+  describe('watchForLoadAllProjects', () => {
     it(`forks a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
-      const generator = sagas.watchForLoadProjects();
+      const generator = sagas.watchForLoadAllProjects();
 
       expect(generator.next().value).to.deep.equal(
         take(Projects.actions.LOAD_ALL_PROJECTS)
       );
 
       expect(generator.next().value).to.deep.equal(
-        fork(sagas.fetchProjects)
+        fork(sagas.fetchAllProjects)
       );
     });
   });
@@ -514,21 +514,21 @@ describe('sagas', () => {
     });
   });
 
-  describe('fetchProjects', () => {
+  describe('fetchAllProjects', () => {
     it('fetches and stores all projects', () => {
       const response = testData.projectsResponseNoInclude;
-      const generator = sagas.fetchProjects();
+      const generator = sagas.fetchAllProjects();
 
       expect(generator.next().value).to.deep.equal(
-        put(Projects.actions.FetchProjects.request())
+        put(Projects.actions.FetchAllProjects.request())
       );
 
       expect(generator.next().value).to.deep.equal(
-        call(api.fetchProjects)
+        call(api.fetchAllProjects)
       );
 
       expect(generator.next({ response: response }).value).to.deep.equal(
-        put(Projects.actions.FetchProjects.success(response.data))
+        put(Projects.actions.FetchAllProjects.success(response.data))
       );
 
       expect(generator.next().value).to.deep.equal(
@@ -540,14 +540,14 @@ describe('sagas', () => {
 
     it('fetches and stores included data', () => {
       const response = testData.projectsResponse;
-      const generator = sagas.fetchProjects();
+      const generator = sagas.fetchAllProjects();
 
       expect(generator.next().value).to.deep.equal(
-        put(Projects.actions.FetchProjects.request())
+        put(Projects.actions.FetchAllProjects.request())
       );
 
       expect(generator.next().value).to.deep.equal(
-        call(api.fetchProjects)
+        call(api.fetchAllProjects)
       );
 
       expect(generator.next({ response: response }).value).to.deep.equal(
@@ -555,7 +555,7 @@ describe('sagas', () => {
       );
 
       expect(generator.next().value).to.deep.equal(
-        put(Projects.actions.FetchProjects.success(response.data))
+        put(Projects.actions.FetchAllProjects.success(response.data))
       );
 
       expect(generator.next().value).to.deep.equal(
@@ -567,18 +567,18 @@ describe('sagas', () => {
 
     it('throws an error on failure', () => {
       const errorMessage = 'an error message';
-      const generator = sagas.fetchProjects();
+      const generator = sagas.fetchAllProjects();
 
       expect(generator.next().value).to.deep.equal(
-        put(Projects.actions.FetchProjects.request())
+        put(Projects.actions.FetchAllProjects.request())
       );
 
       expect(generator.next().value).to.deep.equal(
-        call(api.fetchProjects)
+        call(api.fetchAllProjects)
       );
 
       expect(generator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Projects.actions.FetchProjects.failure(errorMessage))
+        put(Projects.actions.FetchAllProjects.failure(errorMessage))
       );
 
       expect(generator.next().done).to.equal(true);

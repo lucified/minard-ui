@@ -14,27 +14,28 @@ export interface ProjectState {
 };
 
 // Actions
-export interface LoadAllProjectsAction extends Action {
+export interface RequestAllProjectsAction extends Action {
   error?: any;
   response?: ResponseProjectElement[];
 }
 
-export interface FetchProjectsActionCreators {
-  request: ActionCreator<LoadAllProjectsAction>;
-  success: ActionCreator<LoadAllProjectsAction>;
-  failure: ActionCreator<LoadAllProjectsAction>;
+// TODO: more specific types for these
+export interface RequestAllProjectsActionCreators {
+  request: ActionCreator<RequestAllProjectsAction>;
+  success: ActionCreator<RequestAllProjectsAction>
+  failure: ActionCreator<RequestAllProjectsAction>;
 }
 
-export interface LoadProjectAction extends Action {
+export interface RequestProjectAction extends Action {
   id: string;
   error?: string;
   response?: ResponseProjectElement;
 }
 
-export interface FetchProjectActionCreators {
-  request: ActionCreator<LoadProjectAction>;
-  success: ActionCreator<LoadProjectAction>;
-  failure: ActionCreator<LoadProjectAction>;
+export interface RequestProjectActionCreators {
+  request: ActionCreator<RequestProjectAction>;
+  success: ActionCreator<RequestProjectAction>;
+  failure: ActionCreator<RequestProjectAction>;
 }
 
 export interface StoreProjectsAction extends Action {

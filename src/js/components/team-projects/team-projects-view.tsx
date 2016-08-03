@@ -14,12 +14,12 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadProjects: () => void;
+  loadAllProjects: () => void;
 }
 
 class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
-    this.props.loadProjects();
+    this.props.loadAllProjects();
   }
 
   public render() {
@@ -42,5 +42,5 @@ const mapStateToProps = (state: StateTree) => ({
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
   mapStateToProps,
-  { loadProjects: Projects.actions.loadProjects }
+  { loadAllProjects: Projects.actions.loadAllProjects }
 )(TeamProjectsView);
