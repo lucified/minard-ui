@@ -13,6 +13,7 @@ const deployConfig = require('./deploy-config');
 const loaders = [
   {
     test: /\.tsx?$/,
+    exclude: /\.spec\.tsx?$/,
     loader: 'ts-loader',
   },
   {
