@@ -4,15 +4,16 @@ import { Provider } from 'react-redux';
 import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
+import * as api from './api';
 import configureStore from './configure-store';
 import routes from './routes';
-import rootSaga from './sagas';
+import sagaCreator from './sagas';
 
 require('es6-promise').polyfill();
 
 const initialState = {};
 const store = configureStore(initialState);
-(store as any).runSaga(rootSaga);
+(store as any).runSaga(sagaCreator(api).root);
 
 // hashHistory should be changed to browserHistory in production
 const history = syncHistoryWithStore(hashHistory, store);
