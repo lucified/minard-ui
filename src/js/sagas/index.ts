@@ -234,6 +234,12 @@ export default function createSagas(api: Api) {
     fetchDeployment,
     fetchProject,
     fetchProjects,
+    fetchCommit, // TODO: Not implemented
+    ensureAllProjectsRelatedDataLoaded,
+    ensureBranchRelatedDataLoaded,
+    ensureDeploymentRelatedDataLoaded,
+    ensureProjectRelatedDataLoaded,
+    fetchIfMissing,
     storeIncludedEntities,
   };
 }

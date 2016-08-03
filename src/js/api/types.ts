@@ -5,12 +5,12 @@ export interface ApiEntity {
   relationships?: any;
 }
 
-interface ApiResponse {
+export interface ApiResponse {
   data: ApiEntity | ApiEntity[];
   included?: ApiEntity[];
 }
 
-type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; }>;
+export type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; }>;
 
 export interface Api {
   fetchProjects: () => ApiPromise;
