@@ -8,6 +8,8 @@ import { StateTree } from '../../reducers';
 import CommitSummary from '../common/commit-summary';
 import MinardLink from '../common/minard-link';
 
+const screenshot = require('../../../images/screenshot.png');
+
 interface PassedProps {
   commit: Commit;
 }
@@ -21,7 +23,7 @@ const SingleCommit = ({ commit, deployment }: PassedProps & GeneratedProps) => (
     <div className="column col-3">
       {commit.deployment && (
         <MinardLink deployment={deployment}>
-          <img src={deployment.screenshot} className="img-responsive" />
+          <img src={screenshot /* TODO: deployment.screenshot*/} className="img-responsive" />
         </MinardLink>
       )}
     </div>

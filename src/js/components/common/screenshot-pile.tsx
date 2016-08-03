@@ -6,6 +6,7 @@ import * as Icon from 'react-fontawesome';
 import { Deployment } from '../../modules/deployments';
 
 const styles = require('./screenshot-pile.scss');
+const screenshot = require('../../../images/screenshot.png');
 
 interface Props {
   deployments: Deployment[];
@@ -39,7 +40,7 @@ class ScreenshotPile extends React.Component<Props, any> {
           <img
             key={deployment.id}
             className={classNames('img-responsive', styles.screenshot, styles[`screenshot-${i}`])}
-            src={deployment.screenshot}
+            src={screenshot /* TODO: deployment.screenshot */}
           />
         )}
       </div>
