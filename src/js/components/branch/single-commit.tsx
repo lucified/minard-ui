@@ -33,11 +33,12 @@ const SingleCommit = ({ commit, deployment }: PassedProps & GeneratedProps) => (
   </div>
 );
 
-
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
-  if (ownProps.commit.deployment) {
+  const { commit } = ownProps;
+
+  if (commit.deployment) {
     return {
-      deployment: Deployments.selectors.getDeployment(state, ownProps.commit.deployment),
+      deployment: Deployments.selectors.getDeployment(state, commit.deployment),
     };
   }
 

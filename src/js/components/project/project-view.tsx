@@ -73,6 +73,6 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   {
-    loadProject: Projects.actions.loadProject
+    loadProject: Projects.actions.loadProject,
   },
 )(ProjectView);
