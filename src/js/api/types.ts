@@ -5,14 +5,16 @@ export interface ApiEntity {
   relationships?: any;
 }
 
-export interface ApiResponse {
+interface ApiResponse {
   data: ApiEntity | ApiEntity[];
   included?: ApiEntity[];
 }
 
+type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; }>;
+
 export interface Api {
-  fetchProjects: () => Promise<{ response: ApiResponse; } | { error: string; }>;
-  fetchProject: (id: string) => Promise<{ response: ApiResponse; } | { error: string; }>;
-  fetchDeployment: (id: string) => Promise<{ response: ApiResponse; } | { error: string; }>;
-  fetchBranch: (id: string) => Promise<{ response: ApiResponse; } | { error: string; }>;
+  fetchProjects: () => ApiPromise;
+  fetchProject: (id: string) => ApiPromise;
+  fetchDeployment: (id: string) => ApiPromise;
+  fetchBranch: (id: string) => ApiPromise;
 }
