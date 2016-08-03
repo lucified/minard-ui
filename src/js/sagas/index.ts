@@ -13,7 +13,7 @@ type EntityTypeString = "commits" | "projects" | "deployments" | "branches";
 
 export default function createSagas(api: Api) {
   function* storeIncludedEntities(entities: ApiEntity[]): IterableIterator<Effect> {
-    const types: { type: string, actionCreator: ActionCreator<any> }[] = [
+    const types: { type: EntityTypeString, actionCreator: ActionCreator<any> }[] = [
       { type: 'projects', actionCreator: Projects.actions.StoreProjects },
       { type: 'deployments', actionCreator: Deployments.actions.StoreDeployments },
       { type: 'commits', actionCreator: Commits.actions.StoreCommits },
