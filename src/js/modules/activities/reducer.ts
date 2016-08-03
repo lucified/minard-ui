@@ -4,6 +4,6 @@ import { ActivityState } from './types';
 
 const initialState: ActivityState = {};
 
-export default (state: ActivityState = initialState, _action: Action) => {
+export default (state: ActivityState = initialState, _: Action) => {
   return state;
 };

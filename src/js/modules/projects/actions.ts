@@ -16,7 +16,6 @@ export const FetchProjects: t.FetchProjectsActionCreators = {
   failure: (error) => ({ type: PROJECTS.FAILURE, error }),
 };
 
-
 // Load a single project
 export const LOAD_PROJECT = 'PROJECTS/LOAD_PROJECT';
 export const loadProject: ActionCreator<t.LoadProjectAction> = (id) => ({
