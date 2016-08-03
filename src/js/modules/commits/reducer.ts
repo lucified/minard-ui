@@ -14,12 +14,15 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     const commitMessage = commitMessageLines[0];
     const commitDescription = commitMessageLines.length > 1 ?
       commitMessageLines.slice(1).join('\n') : undefined;
+    const deployments = commit.relationships.deployments;
+    const deployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
 
     commitObjects[commit.id] = {
       hash: commit.id,
       message: commitMessage,
       description: commitDescription,
       branch: commit.relationships.branch.data.id,
+      deployment,
       commiter: {
         name: commit.attributes.commiter.name,
         email: commit.attributes.commiter.email,
