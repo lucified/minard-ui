@@ -10,6 +10,7 @@
     "build": "npm run-script clean && webpack",
     "compiled-test": "npm run compile && mocha lib/test",
     "test": "mocha --opts mocha.opts",
+    "test:auto": "mocha --opts mocha.auto.opts --watch",
     "deploy": "npm run-script github-deploy-notify && npm run-script build && npm run-script circle-artifact && npm run-script atomic-s3 && npm run-script flowdock-deploy-notify",
     "atomic-s3": "atomic-s3 --verbose",
     "github-deploy-notify": "github-deploy-notify --verbose",
