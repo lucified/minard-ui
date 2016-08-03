@@ -13,20 +13,19 @@ type EntityTypeString = "commits" | "projects" | "deployments" | "branches";
 
 export default function createSagas(api: Api) {
   function* storeIncludedEntities(entities: ApiEntity[]): IterableIterator<Effect> {
-    const typeActionCreators: {[type: string]: ActionCreator<any>} = {
-      projects: Projects.actions.StoreProjects,
-      deployments: Deployments.actions.StoreDeployments,
-      commits: Commits.actions.StoreCommits,
-      branches: Branches.actions.StoreBranches,
-    };
+    const types: { type: string, actionCreator: ActionCreator<any> }[] = [
+      { type: 'projects', actionCreator: Projects.actions.StoreProjects },
+      { type: 'deployments', actionCreator: Deployments.actions.StoreDeployments },
+      { type: 'commits', actionCreator: Commits.actions.StoreCommits },
+      { type: 'branches', actionCreator: Branches.actions.StoreBranches },
+    ];
 
     // Can't use forEach because of generators
-    for (const type in typeActionCreators) {
-      if (typeActionCreators.hasOwnProperty(type)) {
-        const includedEntities = entities.filter(entity => entity.type === type);
-        if (includedEntities.length > 0) {
-          yield put(typeActionCreators[type](includedEntities));
-        }
+    for (let i = 0; i < types.length; i++) {
+      const currentType = types[i];
+      const includedEntities = entities.filter(entity => entity.type === currentType.type);
+      if (includedEntities.length > 0) {
+        yield put(currentType.actionCreator(includedEntities));
       }
     }
   }
