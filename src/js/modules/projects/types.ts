@@ -22,7 +22,7 @@ export interface RequestAllProjectsAction extends Action {
 // TODO: more specific types for these
 export interface RequestAllProjectsActionCreators {
   request: ActionCreator<RequestAllProjectsAction>;
-  success: ActionCreator<RequestAllProjectsAction>
+  success: ActionCreator<RequestAllProjectsAction>;
   failure: ActionCreator<RequestAllProjectsAction>;
 }
 

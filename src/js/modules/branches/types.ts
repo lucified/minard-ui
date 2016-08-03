@@ -15,16 +15,16 @@ export interface BranchState {
 };
 
 // Actions
-export interface LoadBranchAction extends Action {
+export interface RequestBranchAction extends Action {
   id: string;
   error?: any;
   response?: ResponseBranchElement;
 }
 
-export interface BranchesRequestActionCreators {
-  request: ActionCreator<LoadBranchAction>;
-  success: ActionCreator<LoadBranchAction>;
-  failure: ActionCreator<LoadBranchAction>;
+export interface RequestBranchActionCreators {
+  request: ActionCreator<RequestBranchAction>;
+  success: ActionCreator<RequestBranchAction>;
+  failure: ActionCreator<RequestBranchAction>;
 }
 
 export interface StoreBranchesAction extends Action {

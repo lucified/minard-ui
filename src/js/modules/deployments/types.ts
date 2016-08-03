@@ -18,16 +18,16 @@ export interface DeploymentState {
 };
 
 // Actions
-export interface LoadDeploymentAction extends Action {
+export interface RequestDeploymentAction extends Action {
   id: string;
   error?: any;
   response?: ResponseDeploymentElement;
 }
 
-export interface DeploymentsRequestActionCreators {
-  request: ActionCreator<LoadDeploymentAction>;
-  success: ActionCreator<LoadDeploymentAction>;
-  failure: ActionCreator<LoadDeploymentAction>;
+export interface RequestDeploymentActionCreators {
+  request: ActionCreator<RequestDeploymentAction>;
+  success: ActionCreator<RequestDeploymentAction>;
+  failure: ActionCreator<RequestDeploymentAction>;
 }
 
 export interface StoreDeploymentsAction extends Action {

@@ -29,7 +29,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
 export default (state: t.DeploymentState = initialState, action: any) => {
   switch (action.type) {
     case DEPLOYMENT.SUCCESS:
-      const deploymentResponse = (<t.LoadDeploymentAction> action).response;
+      const deploymentResponse = (<t.RequestDeploymentAction> action).response;
       return merge({}, state, responseToStateShape([deploymentResponse]));
     case STORE_DEPLOYMENTS:
       const deployments = (<t.StoreDeploymentsAction> action).deployments;

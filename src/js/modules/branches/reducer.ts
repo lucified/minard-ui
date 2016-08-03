@@ -32,7 +32,7 @@ const responseToStateShape = (branches: t.ApiResponse) => {
 export default (state: t.BranchState = initialState, action: any) => {
   switch (action.type) {
     case BRANCH.SUCCESS:
-      const branchResonse = (<t.LoadBranchAction> action).response;
+      const branchResonse = (<t.RequestBranchAction> action).response;
       return merge({}, state, responseToStateShape([branchResonse]));
     case STORE_BRANCHES:
       const branches = (<t.StoreBranchesAction> action).branches;
