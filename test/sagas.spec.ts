@@ -144,7 +144,7 @@ describe('sagas', () => {
       expect(generator.next(false).done).to.equal(true);
     });
 
-    it('it only ensures data if branch already exists', () => {
+    it('it still ensures data even if branch already exists', () => {
       const id = 'b';
       const generator = sagas.loadBranch(id);
 
@@ -195,7 +195,7 @@ describe('sagas', () => {
       expect(generator.next(false).done).to.equal(true);
     });
 
-    it('it only ensures data if Deployment already exists', () => {
+    it('it still ensures data even if Deployment already exists', () => {
       const id = 'b';
       const generator = sagas.loadDeployment(id);
 
@@ -246,7 +246,7 @@ describe('sagas', () => {
       expect(generator.next(false).done).to.equal(true);
     });
 
-    it('it only ensures data if Branch already exists', () => {
+    it('it still ensures data even if Branch already exists', () => {
       const id = 'b';
       const generator = sagas.loadBranch(id);
 
@@ -297,7 +297,7 @@ describe('sagas', () => {
       expect(generator.next(false).done).to.equal(true);
     });
 
-    it('it only ensures data if Project already exists', () => {
+    it('it still ensures data even if Project already exists', () => {
       const id = 'b';
       const generator = sagas.loadProject(id);
 
