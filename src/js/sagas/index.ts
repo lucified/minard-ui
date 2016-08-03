@@ -30,10 +30,6 @@ export default function createSagas(api: Api) {
     }
   }
 
-  // Give an array of entities (of the same type) and a relationship selector
-  // (e.g. 'deployments') along with the relationship's type to iterate over
-  // all the given entities and make sure that all of the relationship entities
-  // exist. If not, fetch them.
   function* fetchIfMissing(type: EntityTypeString, id: string): IterableIterator<Effect> {
     const selectors = {
       commits: Commits.selectors.getCommit,
