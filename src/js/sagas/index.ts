@@ -1,3 +1,4 @@
+import { compact } from 'lodash';
 import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
@@ -7,6 +8,8 @@ import Deployments from '../modules/deployments';
 import Projects, { Project } from '../modules/projects';
 
 import { Api, ApiEntity } from '../api/types';
+
+type EntityTypeString = "commits" | "projects" | "deployments" | "branches";
 
 export default function createSagas(api: Api) {
   function* storeIncludedEntities(entities: ApiEntity[]): IterableIterator<Effect> {
@@ -28,9 +31,33 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // Give an array of entities (of the same type) and a relationship selector
+  // (e.g. 'deployments') along with the relationship's type to iterate over
+  // all the given entities and make sure that all of the relationship entities
+  // exist. If not, fetch them.
+  function* fetchIfMissing(type: EntityTypeString, id: string): IterableIterator<Effect> {
+    const selectors = {
+      commits: Commits.selectors.getCommit,
+      branches: Branches.selectors.getBranch,
+      deployments: Deployments.selectors.getDeployment,
+      projects: Projects.selectors.getProject,
+    };
+    const fetchers = {
+      commits: fetchCommit,
+      branches: fetchBranch,
+      deployments: fetchDeployment,
+      projects: fetchProject,
+    };
+
+    const existingEntity = yield select((<any> selectors)[type], id);
+    if (!existingEntity) {
+      yield call((<any> fetchers)[type], id);
+    }
+  }
+
   // Fetchers: Fetch the data from the server and store it into actions.
   // TODO: Don't fetch when already exists?
-  function* fetchProjects(): IterableIterator<Effect> {
+  function* fetchProjects(): IterableIterator<Effect | Effect[]> {
     yield put(Projects.actions.FetchProjects.request());
 
     const { response, error } = yield call(api.fetchProjects);
@@ -41,24 +68,23 @@ export default function createSagas(api: Api) {
       }
       yield put(Projects.actions.FetchProjects.success(response.data));
 
-      // Make sure the latest deployment from each branch of each project is loaded
-      const projects = <Project[]>(yield select(Projects.selectors.getProjects));
+      // Make sure latest deployment from each branch of each project is loaded
+      const projects = <Project[]> (yield select(Projects.selectors.getProjects));
       if (projects) {
+        const deploymentIdsToCheck: string[] = [];
+
         for (let i = 0; i < projects.length; i++) {
           const project = projects[i];
           const { branches } = project;
 
           for (let j = 0; j < branches.length; j++) {
-            const branch = <Branch>(yield select(Branches.selectors.getBranch, branches[j]));
-            const deploymentId = branch.deployments[0];
-            if (deploymentId) {
-              const deployment = yield select(Deployments.selectors.getDeployment, deploymentId);
-              if (!deployment) {
-                yield call(fetchDeployment, deploymentId, project.id);
-              }
-            }
+            const branch = <Branch> (yield select(Branches.selectors.getBranch, branches[j]));
+            deploymentIdsToCheck.push(branch.deployments[0]);
           }
         }
+
+        // Starts calls in parallel
+        yield compact(deploymentIdsToCheck).map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
       } else {
         throw new Error('No projects found!');
       }
@@ -67,7 +93,7 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchProject(id: string): IterableIterator<Effect> {
+  function* fetchProject(id: string): IterableIterator<Effect | Effect[]> {
     yield put(Projects.actions.FetchProject.request(id));
 
     const { response, error } = yield call(api.fetchProject, id);
@@ -79,20 +105,17 @@ export default function createSagas(api: Api) {
 
       yield put(Projects.actions.FetchProject.success(id, response.data));
 
-      // Load the deployments from each branch
+      // Make sure all the deployments from each branch have been loaded
+      let deploymentIdsToCheck: string[] = [];
       const { branches } = yield select(Projects.selectors.getProject, id);
 
       for (let i = 0; i < branches.length; i++) {
-        const branch = <Branch>(yield select(Branches.selectors.getBranch, branches[i]));
-
-        for (let j = 0; j < branch.deployments.length; j++) {
-          const deploymentId = branch.deployments[j];
-          const deployment = yield select(Deployments.selectors.getDeployment, deploymentId);
-          if (!deployment) {
-            yield call(fetchDeployment, deploymentId, id);
-          }
-        }
+        const branch = <Branch> (yield select(Branches.selectors.getBranch, branches[i]));
+        deploymentIdsToCheck = deploymentIdsToCheck.concat(branch.deployments);
       }
+
+      // Starts calls in parallel
+      yield compact(deploymentIdsToCheck).map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
     } else {
       yield put(Projects.actions.FetchProject.failure(id, error));
     }
@@ -128,6 +151,10 @@ export default function createSagas(api: Api) {
     } else {
       yield put(Deployments.actions.FetchDeployment.failure(id, error));
     }
+  }
+
+  function* fetchCommit(_: string): IterableIterator<Effect> {
+    throw new Error('fetchCommit: Not implemented');
   }
 
   // Watchers: Watch for specific actions to begin async operations.
