@@ -61,8 +61,7 @@
           "email": "juho@lucify.com",
           "timestamp": "2016-07-29T13:51:21.802Z"
         },
-        "message": "Fix colors",
-        "description": "The previous colors didn't look nice. Now they're much prettier."
+        "message": "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier."
       },
       "relationships": {
         "deployments": {

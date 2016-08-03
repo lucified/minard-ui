@@ -70,8 +70,7 @@
           "email": "juho@lucify.com",
           "timestamp": "2016-07-27T15:51:21.802Z"
         },
-        "message": "Try to do something",
-        "description": "This is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases"
+        "message": "Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases"
       },
       "relationships": {
         "deployments": {
