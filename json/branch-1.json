@@ -57,6 +57,7 @@
           "email": "ville.saarinen@lucify.com",
           "timestamp": "2016-08-01T15:51:21.802Z"
         },
+        "hash": "0123456789abcdef",
         "commiter": {
           "email": "juho@lucify.com",
           "timestamp": "2016-07-29T13:51:21.802Z"
@@ -87,6 +88,7 @@
           "email": "ville.saarinen@lucify.com",
           "timestamp": "2016-08-01T15:41:21.802Z"
         },
+        "hash": "0123456789abcdef",
         "commiter": {
           "name": "Ville Saarinen",
           "email": "ville.saarinen@lucify.com",
@@ -114,6 +116,7 @@
           "email": "juho@lucify.com",
           "timestamp": "2016-08-01T12:51:21.802Z"
         },
+        "hash": "0123456789abcdef",
         "commiter": {
           "email": "juho@lucify.com",
           "timestamp": "2016-08-01T12:51:21.802Z"
@@ -141,6 +144,7 @@
           "email": "ville.saarinen@lucify.com",
           "timestamp": "2016-07-29T15:51:21.802Z"
         },
+        "hash": "0123456789abcdef",
         "commiter": {
           "name": "Ville Saarinen",
           "email": "ville.saarinen@lucify.com",
@@ -168,6 +172,7 @@
           "email": "juho@lucify.com",
           "timestamp": "2016-07-29T15:50:21.802Z"
         },
+        "hash": "0123456789abcdef",
         "commiter": {
           "email": "juho@lucify.com",
           "timestamp": "2016-07-29T15:50:21.802Z"
@@ -195,6 +200,7 @@
           "email": "ville.saarinen@lucify.com",
           "timestamp": "2016-07-28T15:51:21.802Z"
         },
+        "hash": "0123456789abcdef",
         "commiter": {
           "name": "Ville Saarinen",
           "email": "ville.saarinen@lucify.com",
