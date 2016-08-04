@@ -36,7 +36,7 @@ export default function createSagas(api: Api) {
   }
 
   // ALL PROJECTS
-  function* fetchAllProjects(): IterableIterator<Effect | Effect[]> {
+  function* fetchAllProjects(): IterableIterator<Effect> {
     yield put(Projects.actions.FetchAllProjects.request());
 
     const { response, error } = yield call(api.fetchAllProjects);
@@ -118,7 +118,7 @@ export default function createSagas(api: Api) {
   const loadDeployment =
     createLoader(Deployments.selectors.getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
 
-  function* ensureDeploymentRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
+  function* ensureDeploymentRelatedDataLoaded(id: string): IterableIterator<Effect> {
     const deployment = <Deployment> (yield select(Deployments.selectors.getDeployment, id));
 
     yield call(fetchIfMissing, 'commits', deployment.commit);
@@ -129,7 +129,7 @@ export default function createSagas(api: Api) {
   const loadCommit =
     createLoader(Commits.selectors.getCommit, fetchCommit, ensureCommitRelatedDataLoaded);
 
-  function* ensureCommitRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
+  function* ensureCommitRelatedDataLoaded(id: string): IterableIterator<Effect> {
     const commit = <Commit> (yield select(Commits.selectors.getCommit, id));
 
     if (commit.deployment) {
