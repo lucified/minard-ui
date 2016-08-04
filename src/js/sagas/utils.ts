@@ -50,9 +50,11 @@ export const createFetcher = (
       }
 
       yield put(requestActionCreators.success(id, response.data));
+
       return true;
     } else {
       yield put(requestActionCreators.failure(id, error));
+
       return false;
     }
   };

@@ -1,6 +1,6 @@
 import { merge } from 'lodash';
 
-import { PROJECT, ALL_PROJECTS, STORE_PROJECTS } from './actions';
+import { ALL_PROJECTS, PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
 const initialState: t.ProjectState = {};

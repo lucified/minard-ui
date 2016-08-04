@@ -14,6 +14,7 @@ import { createFetcher, createLoader, storeIncludedEntities } from './utils';
 type EntityTypeString = "commits" | "projects" | "deployments" | "branches";
 
 export default function createSagas(api: Api) {
+
   function* fetchIfMissing(type: EntityTypeString, id: string): IterableIterator<Effect> {
     const selectors = {
       commits: Commits.selectors.getCommit,

@@ -12,7 +12,3 @@ export const getProjects = createSelector(
 );
 
 export const getProject = (state: StateTree, id: string) => selectProjectTree(state)[id];
-export const getBranches = (state: StateTree, id: string) => {
-  const project = getProject(state, id);
-  return project && project.branches;
-};
