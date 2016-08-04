@@ -132,7 +132,9 @@ export default function createSagas(api: Api) {
   function* ensureCommitRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
     const commit = <Commit> (yield select(Commits.selectors.getCommit, id));
 
-    yield call(fetchIfMissing, 'deployments', commit.deployment);
+    if (commit.deployment) {
+      yield call(fetchIfMissing, 'deployments', commit.deployment);
+    }
   }
 
   // WATCHERS: Watch for specific actions to begin async operations.
