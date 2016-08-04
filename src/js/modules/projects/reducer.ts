@@ -6,23 +6,22 @@ import * as t from './types';
 const initialState: t.ProjectState = {};
 
 const responseToStateShape = (projects: t.ApiResponse) => {
-  const projectObjects: t.ProjectState = {};
-
-  projects.forEach(project => {
+  const createProjectObject = (project: t.ResponseProjectElement): t.Project => {
     const branches =  project.relationships.branches &&
        project.relationships.branches.data &&
        project.relationships.branches.data.map(({ id }) => id);
 
-    projectObjects[project.id] = {
+    return {
       id: project.id,
       name: project.attributes.name,
       description: project.attributes.description,
       branches,
       activeUsers: project.attributes.activeCommiters,
     };
-  });
+  };
 
-  return projectObjects;
+  return projects.reduce((obj, project) =>
+    merge(obj, { [project.id]: createProjectObject(project) }), {});
 };
 
 export default (state: t.ProjectState = initialState, action: any) => {

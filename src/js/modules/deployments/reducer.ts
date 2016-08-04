@@ -7,10 +7,8 @@ import * as t from './types';
 const initialState: t.DeploymentState = {};
 
 const responseToStateShape = (deployments: t.ApiResponse) => {
-  const deploymentObjects: t.DeploymentState = {};
-
-  deployments.forEach(deployment => {
-    deploymentObjects[deployment.id] = {
+  const createDeploymentObject = (deployment: t.ResponseDeploymentElement): t.Deployment => {
+    return {
       id: deployment.id,
       url: deployment.attributes.url,
       screenshot: deployment.attributes.screenshot,
@@ -21,9 +19,10 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
         timestamp: moment(deployment.attributes.creator.timestamp).valueOf(),
       },
     };
-  });
+  };
 
-  return deploymentObjects;
+  return deployments.reduce((obj, deployment) =>
+    merge(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
 };
 
 export default (state: t.DeploymentState = initialState, action: any) => {

@@ -6,9 +6,7 @@ import * as t from './types';
 const initialState: t.BranchState = {};
 
 const responseToStateShape = (branches: t.ApiResponse) => {
-  const branchObjects: t.BranchState = {};
-
-  branches.forEach(branch => {
+  const createBranchObject = (branch: t.ResponseBranchElement): t.Branch => {
     const deployments = branch.relationships.deployments &&
       branch.relationships.deployments.data &&
       branch.relationships.deployments.data.map(d => d.id);
@@ -16,7 +14,7 @@ const responseToStateShape = (branches: t.ApiResponse) => {
       branch.relationships.commits.data &&
       branch.relationships.commits.data.map(c => c.id);
 
-    branchObjects[branch.id] = {
+    return {
       id: branch.id,
       name: branch.attributes.name,
       description: branch.attributes.description,
@@ -24,9 +22,9 @@ const responseToStateShape = (branches: t.ApiResponse) => {
       deployments,
       commits,
     };
-  });
+  };
 
-  return branchObjects;
+  return branches.reduce((obj, branch) => merge(obj, { [branch.id]: createBranchObject(branch) }), {});
 };
 
 export default (state: t.BranchState = initialState, action: any) => {

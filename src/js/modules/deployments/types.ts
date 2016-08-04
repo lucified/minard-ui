@@ -40,7 +40,7 @@ interface ResponseCommitReference {
   id: string;
 }
 
-interface ResponseDeploymentElement {
+export interface ResponseDeploymentElement {
   type: "deployments";
   id: string;
   attributes: {

@@ -7,9 +7,7 @@ import * as t from './types';
 const initialState: t.CommitState = {};
 
 const responseToStateShape = (commits: t.ApiResponse) => {
-  const commitObjects: t.CommitState = {};
-
-  commits.forEach(commit => {
+  const createCommitObject = (commit: t.ResponseCommitElement): t.Commit => {
     const commitMessageLines = commit.attributes.message.match(/[^\r\n]+/g);
     const commitMessage = commitMessageLines[0];
     const commitDescription = commitMessageLines.length > 1 ?
@@ -17,7 +15,7 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     const deployments = commit.relationships.deployments;
     const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
 
-    commitObjects[commit.id] = {
+    return {
       hash: commit.id,
       message: commitMessage,
       description: commitDescription,
@@ -33,9 +31,9 @@ const responseToStateShape = (commits: t.ApiResponse) => {
         timestamp: moment(commit.attributes.author.timestamp).valueOf(),
       },
     };
-  });
+  };
 
-  return commitObjects;
+  return commits.reduce((obj, commit) => merge(obj, { [commit.id]: createCommitObject(commit) }), {});
 };
 
 export default (state: t.CommitState = initialState, action: any) => {

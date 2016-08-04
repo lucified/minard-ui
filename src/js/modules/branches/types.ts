@@ -47,7 +47,7 @@ interface ResponseProjectReference {
   id: string;
 }
 
-interface ResponseBranchElement {
+export interface ResponseBranchElement {
   type: "branches";
   id: string;
   attributes: {
