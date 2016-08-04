@@ -805,7 +805,6 @@ describe('sagas', () => {
       const commit: Commit = {
         hash: 'a',
         deployment: 'd1',
-        branch: 'b1',
         message: '',
         author: {
           email: '',

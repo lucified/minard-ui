@@ -1,32 +1,25 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import Branches, { Branch } from '../../modules/branches';
-import Commits from '../../modules/commits';
+import { Branch } from '../../modules/branches';
 import { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
-import { StateTree } from '../../reducers';
 
-interface PassedProps {
+interface Props {
   deployment?: Deployment;
   branch?: Branch;
   project?: Project;
   openInNewWindow?: boolean;
 }
 
-interface GeneratedProps {
-  deploymentBranch?: Branch;
-}
-
-class MinardLink extends React.Component<PassedProps & GeneratedProps, any> {
+class MinardLink extends React.Component<Props, any> {
   public render() {
-    const { children, deployment, deploymentBranch, branch, project, openInNewWindow } = this.props;
+    const { children, deployment, branch, project, openInNewWindow } = this.props;
     const target = openInNewWindow ? '_blank' : '_self';
     let path = '/';
 
     if (deployment) {
-      path = `/project/${deploymentBranch.project}/${deploymentBranch.id}/${deployment.id}`;
+      path = `/deployment/${deployment.id}`;
     } else if (branch) {
       path = `/project/${branch.project}/${branch.id}`;
     } else if (project) {
@@ -43,18 +36,4 @@ class MinardLink extends React.Component<PassedProps & GeneratedProps, any> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
-  const { deployment } = ownProps;
-
-  if (deployment) {
-    const commit = Commits.selectors.getCommit(state, deployment.commit);
-
-    return {
-      deploymentBranch: Branches.selectors.getBranch(state, commit.branch),
-    };
-  }
-
-  return {};
-};
-
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(MinardLink);
+export default MinardLink;

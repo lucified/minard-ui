@@ -3,7 +3,6 @@ import { Action, ActionCreator } from 'redux';
 // State
 export interface Commit {
   hash: string;
-  branch: string;
   message: string;
   description?: string;
   author: {
@@ -46,11 +45,6 @@ interface ResponseDeploymentReference {
   id: string;
 }
 
-interface ResponseBranchReference {
-  type: "branches";
-  id: string;
-}
-
 interface ResponseCommitElement {
   type: "commits";
   id: string;
@@ -68,9 +62,6 @@ interface ResponseCommitElement {
     };
   };
   relationships: {
-    branch: {
-      data: ResponseBranchReference;
-    };
     deployments: {
       data: ResponseDeploymentReference[];
     };
