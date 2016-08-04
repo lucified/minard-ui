@@ -28,7 +28,7 @@ const SingleCommit = ({ commit, deployment }: PassedProps & GeneratedProps) => (
       )}
     </div>
     <div className="column col-9">
-      <CommitSummary key={commit.hash} commit={commit} deployment={deployment} />
+      <CommitSummary key={commit.id} commit={commit} deployment={deployment} />
     </div>
   </div>
 );

@@ -2,6 +2,7 @@ import { Action, ActionCreator } from 'redux';
 
 // State
 export interface Commit {
+  id: string;
   hash: string;
   message: string;
   description?: string;
@@ -49,6 +50,7 @@ export interface ResponseCommitElement {
   type: "commits";
   id: string;
   attributes: {
+    hash: string;
     message?: string;
     author: {
       name?: string;

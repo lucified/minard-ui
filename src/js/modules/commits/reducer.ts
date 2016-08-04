@@ -16,7 +16,8 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
 
     return {
-      hash: commit.id,
+      id: commit.id,
+      hash: commit.attributes.hash,
       message: commitMessage,
       description: commitDescription,
       deployment: latestDeployment,

@@ -803,6 +803,7 @@ describe('sagas', () => {
       const id = '1';
       const iterator = sagas.ensureCommitRelatedDataLoaded(id);
       const commit: Commit = {
+        id: 'id',
         hash: 'a',
         deployment: 'd1',
         message: '',
