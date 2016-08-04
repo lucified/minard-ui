@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select } from 'redux-saga/effects';
 
-import { ApiEntity, ApiResponse } from '../api/types';
+import { ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
@@ -9,7 +9,6 @@ import Projects, { Project } from '../modules/projects';
 import { StateTree } from '../reducers';
 
 type EntityType = Commit | Project | Deployment | Branch;
-type EntityTypeString = "commits" | "projects" | "deployments" | "branches";
 interface RequestActionCreators {
   request: ActionCreator<any>;
   success: ActionCreator<any>;
@@ -61,7 +60,7 @@ export const createFetcher = (
 };
 
 export function* storeIncludedEntities(entities: ApiEntity[]): IterableIterator<Effect> {
-  const types: { type: EntityTypeString, actionCreator: ActionCreator<any> }[] = [
+  const types: { type: ApiEntityTypeString, actionCreator: ActionCreator<any> }[] = [
     { type: 'projects', actionCreator: Projects.actions.StoreProjects },
     { type: 'deployments', actionCreator: Deployments.actions.StoreDeployments },
     { type: 'commits', actionCreator: Commits.actions.StoreCommits },

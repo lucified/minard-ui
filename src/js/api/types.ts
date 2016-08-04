@@ -1,5 +1,7 @@
+export type ApiEntityTypeString = "commits" | "deployments" | "projects" | "branches"
+
 export interface ApiEntity {
-  type: "commits" | "deployments" | "projects" | "branches";
+  type: ApiEntityTypeString;
   id: string;
   attributes?: any;
   relationships?: any;

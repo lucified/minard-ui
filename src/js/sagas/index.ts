@@ -1,7 +1,7 @@
 import { compact } from 'lodash';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
-import { Api } from '../api/types';
+import { Api, ApiEntityTypeString } from '../api/types';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
@@ -11,11 +11,9 @@ import Projects, { Project } from '../modules/projects';
 // Afterwards, the loader also ensures that other needed data exists.
 import { createFetcher, createLoader, storeIncludedEntities } from './utils';
 
-type EntityTypeString = "commits" | "projects" | "deployments" | "branches";
-
 export default function createSagas(api: Api) {
 
-  function* fetchIfMissing(type: EntityTypeString, id: string): IterableIterator<Effect> {
+  function* fetchIfMissing(type: ApiEntityTypeString, id: string): IterableIterator<Effect> {
     const selectors = {
       commits: Commits.selectors.getCommit,
       branches: Branches.selectors.getBranch,
