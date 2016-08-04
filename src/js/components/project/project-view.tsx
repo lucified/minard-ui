@@ -18,9 +18,9 @@ interface PassedProps {
 }
 
 interface GeneratedStateProps {
-  project: Project;
-  branches: Branch[];
-  activities: Activity[];
+  project?: Project;
+  branches?: Branch[];
+  activities?: Activity[];
 }
 
 interface GeneratedDispatchProps {
