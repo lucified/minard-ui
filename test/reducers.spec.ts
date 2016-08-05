@@ -24,25 +24,25 @@ const testStoreEntities = (
   stateWithExistingEntity: any,
   expectedStateWithExistingEntity: any,
 ) => {
-  describe('store entities', () => {
-    it(`(${action.type}) with an empty initial state`, () => {
+  describe(`store entities (${action.type})`, () => {
+    it('with an empty initial state', () => {
       expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
     });
 
-    it(`(${action.type}) makes no changes with an empty list`, () => {
+    it('makes no changes with an empty list', () => {
       const emptyAction = { type: action.type, entities: <any[]>[] };
       const newState = reducer(stateWithoutExistingEntity, emptyAction);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
     });
 
-    it(`(${action.type}) with other entities in state`, () => {
+    it('with other entities in state', () => {
       const newState = reducer(stateWithoutExistingEntity, action);
       expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
-    it(`(${action.type}) by overwriting existing entities`, () => {
+    it('by overwriting existing entities', () => {
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(expectedStateWithExistingEntity);
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
