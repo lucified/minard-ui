@@ -287,6 +287,15 @@ describe('sagas', () => {
   );
 
   testFetcher(
+    'fetchCommit',
+    testData.commitResponse,
+    testData.commitResponseNoInclude,
+    Commits.actions.FetchCommit,
+    sagas.fetchCommit,
+    api.fetchCommit,
+  );
+
+  testFetcher(
     'fetchProject',
     testData.projectResponse,
     testData.projectResponseNoInclude,
