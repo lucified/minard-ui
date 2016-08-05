@@ -521,14 +521,29 @@ describe('reducers', () => {
     const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, allProjectsObjects);
     const expectedStateWithExistingEntity = merge(stateWithExistingEntity, allProjectsObjects);
 
-    testStoreEntities(
-      reducer,
-      successfulAllProjectsRequestAction,
-      allProjectsObjects,
-      stateWithoutExistingEntity,
-      expectedStateWithoutExistingEntity,
-      stateWithExistingEntity,
-      expectedStateWithExistingEntity
-    );
+    describe(`successful request all projects (${successfulAllProjectsRequestAction.type})`, () => {
+      it('with an empty initial state', () => {
+        expect(reducer(undefined, successfulAllProjectsRequestAction)).to.deep.equal(allProjectsObjects);
+      });
+
+      it('makes no changes with an empty list', () => {
+        const emptyAction = { type: successfulAllProjectsRequestAction.type, entities: <any[]>[] };
+        const newState = reducer(stateWithoutExistingEntity, emptyAction);
+        expect(newState).to.deep.equal(stateWithoutExistingEntity);
+        expect(newState).to.equal(stateWithoutExistingEntity);
+      });
+
+      it('with other entities in state', () => {
+        const newState = reducer(stateWithoutExistingEntity, successfulAllProjectsRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
+        expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
+      });
+
+      it('by overwriting existing entities', () => {
+        const newState = reducer(stateWithExistingEntity, successfulAllProjectsRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithExistingEntity);
+        expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      });
+    });
   });
 });
