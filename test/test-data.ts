@@ -258,12 +258,6 @@ export const deploymentResponse: ApiResponse = {
             'id': '7',
           }],
         },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '1',
-          },
-        },
       },
     },
   ],
@@ -352,12 +346,6 @@ export const branchResponse: ApiResponse = {
             'type': 'deployments',
             'id': '7',
           }],
-        },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '1',
-          },
         },
       },
     },
@@ -567,12 +555,6 @@ export const commitResponse: ApiResponse = {
           'id': '7',
         }],
       },
-      'branch': {
-        'data': {
-          'type': 'branches',
-          'id': '1',
-        },
-      },
     },
   },
   'included': [
@@ -597,12 +579,6 @@ export const commitResponse: ApiResponse = {
         'deployments': {
           'data': <any[]> [],
         },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '1',
-          },
-        },
       },
     },
     {
@@ -623,12 +599,6 @@ export const commitResponse: ApiResponse = {
       'relationships': {
         'deployments': {
           'data': [],
-        },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '1',
-          },
         },
       },
     },
@@ -653,12 +623,6 @@ export const commitResponse: ApiResponse = {
         'deployments': {
           'data': [],
         },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '1',
-          },
-        },
       },
     },
     {
@@ -679,12 +643,6 @@ export const commitResponse: ApiResponse = {
       'relationships': {
         'deployments': {
           'data': [],
-        },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '1',
-          },
         },
       },
     },
@@ -708,12 +666,6 @@ export const commitResponse: ApiResponse = {
       'relationships': {
         'deployments': {
           'data': [],
-        },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '1',
-          },
         },
       },
     },
@@ -758,12 +710,6 @@ export const commitResponse: ApiResponse = {
         'deployments': {
           'data': <any[]> [],
         },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '2',
-          },
-        },
       },
     },
     {
@@ -787,12 +733,6 @@ export const commitResponse: ApiResponse = {
             'type': 'deployments',
             'id': '8',
           }],
-        },
-        'branch': {
-          'data': {
-            'type': 'branches',
-            'id': '2',
-          },
         },
       },
     },
@@ -843,12 +783,6 @@ export const commitResponseNoInclude: ApiResponse = {
           'type': 'deployments',
           'id': '7',
         }],
-      },
-      'branch': {
-        'data': {
-          'type': 'branches',
-          'id': '1',
-        },
       },
     },
   }

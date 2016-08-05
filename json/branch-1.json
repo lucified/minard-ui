@@ -70,12 +70,6 @@
             "type": "deployments",
             "id": "7"
           }]
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "1"
-          }
         }
       }
     },
@@ -99,12 +93,6 @@
       "relationships": {
         "deployments": {
           "data": []
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "1"
-          }
         }
       }
     },
@@ -126,12 +114,6 @@
       "relationships": {
         "deployments": {
           "data": []
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "1"
-          }
         }
       }
     },
@@ -155,12 +137,6 @@
       "relationships": {
         "deployments": {
           "data": []
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "1"
-          }
         }
       }
     },
@@ -182,12 +158,6 @@
       "relationships": {
         "deployments": {
           "data": []
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "1"
-          }
         }
       }
     },
@@ -211,12 +181,6 @@
       "relationships": {
         "deployments": {
           "data": []
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "1"
-          }
         }
       }
     },
