@@ -511,5 +511,24 @@ describe('reducers', () => {
       successfulRequestAction,
       expectedSuccessfulRequestObject
     );
+
+    const successfulAllProjectsRequestAction = {
+      type: Projects.actions.ALL_PROJECTS.SUCCESS,
+      response: testData.projectsResponse.data,
+    };
+
+    const allProjectsObjects = expectedObjectsToStore;
+    const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, allProjectsObjects);
+    const expectedStateWithExistingEntity = merge(stateWithExistingEntity, allProjectsObjects);
+
+    testStoreEntities(
+      reducer,
+      successfulAllProjectsRequestAction,
+      allProjectsObjects,
+      stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
+      stateWithExistingEntity,
+      expectedStateWithExistingEntity
+    );
   });
 });
