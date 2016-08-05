@@ -1,0 +1,15 @@
+{
+  "data": {
+    "type": "projects",
+    "id": "2",
+    "attributes": {
+      "name": "Second project",
+      "activeCommiters": []
+    },
+    "relationships": {
+      "branches": {
+        "data": []
+      }
+    }
+  }
+}

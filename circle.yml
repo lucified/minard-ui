@@ -15,3 +15,7 @@ deployment:
     branch: /^(?!nodeploy-).*$/
     commands:
       - npm run-script deploy
+
+test:
+  override:
+    - npm run compiled-test

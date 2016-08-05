@@ -1,0 +1,276 @@
+{
+  "data": {
+    "type": "commits",
+    "id": "aacceeff02",
+    "attributes": {
+      "hash": "0123456789abcdef",
+      "author": {
+        "name": "Ville Saarinen",
+        "email": "ville.saarinen@lucify.com",
+        "timestamp": "2016-08-01T15:51:21.802Z"
+      },
+      "commiter": {
+        "email": "juho@lucify.com",
+        "timestamp": "2016-07-29T13:51:21.802Z"
+      },
+      "message": "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier."
+    },
+    "relationships": {
+      "deployments": {
+        "data": [{
+          "type": "deployments",
+          "id": "7"
+        }]
+      },
+      "branch": {
+        "data": {
+          "type": "branches",
+          "id": "1"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "type": "commits",
+      "id": "12354124",
+      "attributes": {
+        "hash": "0123456789abcdef",
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-01T15:41:21.802Z"
+        },
+        "commiter": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-01T15:41:21.802Z"
+        },
+        "message": "Foobar is nice"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "2543452",
+      "attributes": {
+        "hash": "0123456789abcdef",
+        "author": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-08-01T12:51:21.802Z"
+        },
+        "commiter": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-08-01T12:51:21.802Z"
+        },
+        "message": "Barbar barr barb aearr"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "098325343",
+      "attributes": {
+        "hash": "0123456789abcdef",
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-29T15:51:21.802Z"
+        },
+        "commiter": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-29T15:51:21.802Z"
+        },
+        "message": "This is a commit message"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "29832572fc1",
+      "attributes": {
+        "hash": "0123456789abcdef",
+        "author": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T15:50:21.802Z"
+        },
+        "commiter": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T15:50:21.802Z"
+        },
+        "message": "And this is one as well"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "29752a385",
+      "attributes": {
+        "hash": "0123456789abcdef",
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-28T15:51:21.802Z"
+        },
+        "commiter": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-28T15:51:21.802Z"
+        },
+        "message": "How about this?"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "type": "deployments",
+      "id": "7",
+      "attributes": {
+        "url": "#",
+        "screenshot": "#",
+        "creator": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-02T09:51:21.802Z"
+        }
+      },
+      "relationships": {
+        "commit": {
+          "data": {
+            "type": "commits",
+            "id": "aacceeff02"
+          }
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "aacd00f02",
+      "attributes": {
+        "hash": "0123456789abcdef",
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-28T13:51:21.802Z"
+        },
+        "commiter": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T13:51:21.802Z"
+        },
+        "message": "Try to do something else"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "2"
+          }
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "a998823423",
+      "attributes": {
+        "hash": "0123456789abcdef",
+        "author": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-27T15:51:21.802Z"
+        },
+        "commiter": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-27T15:51:21.802Z"
+        },
+        "message": "Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases"
+      },
+      "relationships": {
+        "deployments": {
+          "data": [{
+            "type": "deployments",
+            "id": "8"
+          }]
+        },
+        "branch": {
+          "data": {
+            "type": "branches",
+            "id": "2"
+          }
+        }
+      }
+    },
+    {
+      "type": "deployments",
+      "id": "8",
+      "attributes": {
+        "url": "#",
+        "screenshot": "#",
+        "creator": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-01T09:51:21.802Z"
+        }
+      },
+      "relationships": {
+        "commit": {
+          "data": {
+            "type": "commits",
+            "id": "a998823423"
+          }
+        }
+      }
+    }
+  ]
+}

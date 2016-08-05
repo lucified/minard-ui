@@ -3,9 +3,9 @@ import * as React from 'react';
 import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
 
-import { Activity, ActivityType } from '../../../modules/activity';
+import { Activity, ActivityType } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
-import projects, { Project } from '../../../modules/projects';
+import Projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
 import MinardLink from '../minard-link';
@@ -92,7 +92,7 @@ class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> 
 }
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
-  project: projects.selectors.getProject(state, ownProps.branch.project),
+  project: Projects.selectors.getProject(state, ownProps.branch.project),
 });
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(SingleActivity);

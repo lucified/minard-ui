@@ -54,7 +54,7 @@ notifications of local deployments to GitHub deployment API.
 
 # Test
 
-Run `npm test`
+Run `npm test`. To start a watcher, run `npm run test:auto`.
 
 ## Other commands
 

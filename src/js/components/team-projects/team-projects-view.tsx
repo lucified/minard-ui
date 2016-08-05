@@ -1,29 +1,46 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import activity, { Activity } from '../../modules/activity';
-import projects, { Project } from '../../modules/projects';
+import Activities, { Activity } from '../../modules/activities';
+import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
-import ActivitySection from './activity-section';
+// import ActivitySection from './activity-section';
 import ProjectsSection from './projects-section';
 
-interface Props {
+interface GeneratedStateProps {
   activities: Activity[];
   projects: Project[];
 }
 
-const TeamProjectsView = ({ projects, activities }: Props) => (
-  <div>
-    <ProjectsSection projects={projects} />
-    <div className="divider" />
-    <ActivitySection activities={activities} />
-  </div>
-);
+interface GeneratedDispatchProps {
+  loadAllProjects: () => void;
+}
+
+class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDispatchProps, any> {
+  public componentWillMount() {
+    this.props.loadAllProjects();
+  }
+
+  public render() {
+    const { projects } = this.props;
+
+    return (
+      <div>
+        <ProjectsSection projects={projects} />
+        <div className="divider" />
+        {/*<ActivitySection activities={activities} />*/}
+      </div>
+    );
+  }
+};
 
 const mapStateToProps = (state: StateTree) => ({
-  projects: projects.selectors.getProjects(state),
-  activities: activity.selectors.getActivities(state),
+  projects: Projects.selectors.getProjects(state),
+  activities: Activities.selectors.getActivities(state),
 });
 
-export default connect(mapStateToProps)(TeamProjectsView);
+export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
+  mapStateToProps,
+  { loadAllProjects: Projects.actions.loadAllProjects }
+)(TeamProjectsView);

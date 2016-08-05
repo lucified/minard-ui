@@ -21,6 +21,16 @@ class CommitList extends React.Component<Props, any> {
     );
   }
 
+  private getLoadingContent(key: number) {
+    return (
+      <div key={key} className="empty">
+        <Icon name="circle-o-notch" spin fixedWidth size="3x" />
+        <p className="empty-title">Loading commit</p>
+        <p className="empty-meta">Hold on a sec…</p>
+      </div>
+    );
+  }
+
   public render() {
     const { commits } = this.props;
 
@@ -31,7 +41,10 @@ class CommitList extends React.Component<Props, any> {
           <div className="columns">
             <div className="column col-2" />
             <div className="column col-8">
-              {commits.map(commit => <SingleCommit key={commit.hash} commit={commit} />)}
+              {commits.map((commit, i) => commit ?
+                <SingleCommit key={i} commit={commit} /> :
+                this.getLoadingContent(i)
+              )}
             </div>
             <div className="column col-2" />
           </div>

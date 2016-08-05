@@ -1,15 +1,73 @@
+import { Action, ActionCreator } from 'redux';
+
+// State
 export interface Commit {
+  id: string;
   hash: string;
-  branch: string;
-  timestamp: number;
   message: string;
-  author: string;
   description?: string;
-  hasDeployment: boolean;
+  author: {
+    name?: string;
+    email: string;
+    timestamp: number;
+  };
+  commiter: {
+    name?: string;
+    email: string;
+    timestamp: number;
+  };
   deployment?: string;
-  screenshot?: string;
 }
 
 export interface CommitState {
   [id: string]: Commit;
 };
+
+// Actions
+export interface RequestCommitAction extends Action {
+  id: string;
+  error?: any;
+  response?: ResponseCommitElement;
+}
+
+export interface RequestCommitActionCreators {
+  request: ActionCreator<RequestCommitAction>;
+  success: ActionCreator<RequestCommitAction>;
+  failure: ActionCreator<RequestCommitAction>;
+}
+
+export interface StoreCommitsAction extends Action {
+  commits: ResponseCommitElement[];
+}
+
+// API response
+interface ResponseDeploymentReference {
+  type: "deployments";
+  id: string;
+}
+
+export interface ResponseCommitElement {
+  type: "commits";
+  id: string;
+  attributes: {
+    hash: string;
+    message?: string;
+    author: {
+      name?: string;
+      email: string;
+      timestamp: string;
+    };
+    commiter: {
+      name?: string;
+      email: string;
+      timestamp: string;
+    };
+  };
+  relationships: {
+    deployments: {
+      data: ResponseDeploymentReference[];
+    };
+  };
+}
+
+export type ApiResponse = ResponseCommitElement[];

@@ -1,22 +1,41 @@
-import { Action } from './actions';
-import { ProjectState } from './types';
+import { merge } from 'lodash';
 
-const initialState: ProjectState = {
-  1: {
-    id: '1',
-    name: 'First project',
-    description: 'This is the first project description. It might not be set.',
-    branches: ['1', '2', '3'],
-    activeUsers: ['ville.saarinen@lucify.com', 'juho@lucify.com']
-  },
-  2: {
-    id: '2',
-    name: 'Second project',
-    branches: [],
-    activeUsers: ['ville.saarinen@lucify.com']
-  },
+import { ALL_PROJECTS, PROJECT, STORE_PROJECTS } from './actions';
+import * as t from './types';
+
+const initialState: t.ProjectState = {};
+
+const responseToStateShape = (projects: t.ApiResponse) => {
+  const createProjectObject = (project: t.ResponseProjectElement): t.Project => {
+    const branches =  project.relationships.branches &&
+       project.relationships.branches.data &&
+       project.relationships.branches.data.map(({ id }) => id);
+
+    return {
+      id: project.id,
+      name: project.attributes.name,
+      description: project.attributes.description,
+      branches,
+      activeUsers: project.attributes.activeCommiters,
+    };
+  };
+
+  return projects.reduce((obj, project) =>
+    merge(obj, { [project.id]: createProjectObject(project) }), {});
 };
 
-export default (state: ProjectState = initialState, _action: Action) => {
-  return state;
+export default (state: t.ProjectState = initialState, action: any) => {
+  switch (action.type) {
+    case ALL_PROJECTS.SUCCESS:
+      const projectsResponse = (<t.RequestAllProjectsAction> action).response;
+      return merge({}, state, responseToStateShape(projectsResponse));
+    case PROJECT.SUCCESS:
+      const projectResponse = (<t.RequestProjectAction> action).response;
+      return merge({}, state, responseToStateShape([projectResponse]));
+    case STORE_PROJECTS:
+      const projects = (<t.StoreProjectsAction> action).projects;
+      return merge({}, state, responseToStateShape(projects));
+    default:
+      return state;
+  }
 };

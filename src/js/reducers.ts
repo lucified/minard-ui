@@ -1,17 +1,19 @@
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 
-import activity, { ActivityState } from './modules/activity';
-import branches, { BranchState } from './modules/branches';
-import commits, { CommitState } from './modules/commits';
-import projects, { ProjectState } from './modules/projects';
+import Activities, { ActivityState } from './modules/activities';
+import Branches, { BranchState } from './modules/branches';
+import Commits, { CommitState } from './modules/commits';
+import Deployments, { DeploymentState } from './modules/deployments';
+import Projects, { ProjectState } from './modules/projects';
 
 export default combineReducers({
   entities: combineReducers({
-    activities: activity.reducer,
-    branches: branches.reducer,
-    commits: commits.reducer,
-    projects: projects.reducer,
+    activities: Activities.reducer,
+    branches: Branches.reducer,
+    commits: Commits.reducer,
+    projects: Projects.reducer,
+    deployments: Deployments.reducer,
   }),
   routing: routerReducer,
 });
@@ -22,6 +24,7 @@ export interface StateTree {
     branches: BranchState;
     commits: CommitState;
     projects: ProjectState;
+    deployments: DeploymentState;
   };
   routing: any;
 }

@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
-import activity, { Activity } from '../../modules/activity';
-import branches, { Branch } from '../../modules/branches';
-import projects, { Project } from '../../modules/projects';
+import Activities, { Activity } from '../../modules/activities';
+import Branches, { Branch } from '../../modules/branches';
+import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 import ProjectActivity from './project-activity';
@@ -17,13 +17,21 @@ interface PassedProps {
   };
 }
 
-interface GeneratedProps {
-  project: Project;
-  branches: Branch[];
-  activities: Activity[];
+interface GeneratedStateProps {
+  project?: Project;
+  branches?: Branch[];
+  activities?: Activity[];
 }
 
-class ProjectView extends React.Component<PassedProps & GeneratedProps, any> {
+interface GeneratedDispatchProps {
+  loadProject: (id: string) => void;
+}
+
+class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
+  public componentWillMount() {
+    this.props.loadProject(this.props.params.id);
+  }
+
   public render() {
     const { project } = this.props;
 
@@ -51,11 +59,20 @@ class ProjectView extends React.Component<PassedProps & GeneratedProps, any> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
-  project: projects.selectors.getProject(state, ownProps.params.id),
-  branches: projects.selectors.getBranches(state, ownProps.params.id)
-    .map(branchId => branches.selectors.getBranch(state, branchId)),
-  activities: activity.selectors.getActivityForProject(state, ownProps.params.id),
-});
+const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
+  const { id: projectId } = ownProps.params;
+  const project = Projects.selectors.getProject(state, projectId);
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectView);
+  return {
+    project,
+    branches: project && project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
+    activities: Activities.selectors.getActivityForProject(state, projectId),
+  };
+};
+
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+  mapStateToProps,
+  {
+    loadProject: Projects.actions.loadProject,
+  },
+)(ProjectView);

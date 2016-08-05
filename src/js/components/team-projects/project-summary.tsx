@@ -1,13 +1,13 @@
 import * as classNames from 'classnames';
-import * as _ from 'lodash';
+import { compact, flatMap, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
 
-import branches from '../../modules/branches';
-import commits, { Commit } from '../../modules/commits';
+import Branches from '../../modules/branches';
+import Deployments, { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -21,15 +21,15 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  projectCommits: Commit[];
-  latestDeployedCommit: Commit;
+  deployments: Deployment[];
+  latestDeployment: Deployment;
 }
 
-const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: PassedProps & GeneratedProps) => (
+const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps & GeneratedProps) => (
   <div className="columns">
     <div className={classNames('column', 'col-3', styles.screenshot)}>
       <MinardLink project={project}>
-        <ScreenshotPile commits={projectCommits} />
+        <ScreenshotPile deployments={deployments} />
       </MinardLink>
     </div>
     <div className="column col-9">
@@ -45,11 +45,12 @@ const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: Passe
             </figure>
           )}
         </div>
-        {latestDeployedCommit && (
+        {latestDeployment && (
           <div className={styles.latestActivity}>
-            {latestDeployedCommit.author} deployed a new preview {moment(latestDeployedCommit.timestamp).fromNow()}
+            {latestDeployment.creator.name ? latestDeployment.creator.name : latestDeployment.creator.email} deployed
+            a new preview {moment(latestDeployment.creator.timestamp).fromNow()}
             <br />
-            <MinardLink openInNewWindow commit={latestDeployedCommit}>
+            <MinardLink openInNewWindow deployment={latestDeployment}>
               Open latest preview <Icon name="external-link" />
             </MinardLink>
           </div>
@@ -61,19 +62,27 @@ const ProjectSummary = ({ project, projectCommits, latestDeployedCommit }: Passe
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   // TODO: Make this more efficient
-  const projectCommits = _.flatMap(ownProps.project.branches, branchId =>
-    branches.selectors.getBranch(state, branchId).commits.map(commitId =>
-      commits.selectors.getCommit(state, commitId)
-    )
-  );
-  const latestDeployedCommit = _.maxBy(
-    projectCommits.filter(commit => commit.hasDeployment),
-    commit => commit.timestamp
-  );
+  const deployments = flatMap(ownProps.project.branches, branchId => {
+    const branch = Branches.selectors.getBranch(state, branchId);
+
+    if (branch) {
+      return branch.deployments.map(deploymentId =>
+        Deployments.selectors.getDeployment(state, deploymentId)
+      );
+    }
+
+    return undefined;
+  });
+
+  let latestDeployment: Deployment;
+  const loadedDeployments = compact(deployments);
+  if (loadedDeployments.length > 0) {
+    latestDeployment = maxBy(loadedDeployments, deployment => deployment.creator.timestamp);
+  }
 
   return {
-    projectCommits,
-    latestDeployedCommit,
+    deployments,
+    latestDeployment,
   };
 };
 

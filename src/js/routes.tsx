@@ -11,6 +11,6 @@ export default (
     <IndexRedirect to="/projects" />
     <Route path="projects" component={TeamProjectsView} />
     <Route path="project/:id" component={ProjectView} />
-    <Route path="project/:projectId/:name" component={BranchView} />
+    <Route path="project/:projectId/:id" component={BranchView} />
   </Route>
 );

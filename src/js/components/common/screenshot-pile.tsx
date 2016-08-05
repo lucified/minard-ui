@@ -1,41 +1,47 @@
 import * as classNames from 'classnames';
+import { isNil, some } from 'lodash';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
-import { Commit } from '../../modules/commits';
+import { Deployment } from '../../modules/deployments';
 
 const styles = require('./screenshot-pile.scss');
+const screenshot = require('../../../images/screenshot.png');
 
 interface Props {
-  commits: Commit[];
+  deployments: Deployment[];
 }
 
-class ScreenshotPile extends React.Component<Props, any> {
-  public render() {
-    const { commits } = this.props;
-    const latestDeployedCommits = commits.filter(commit => commit.hasDeployment)
-      .sort((a, b) => a.timestamp - b.timestamp);
-
-    if (latestDeployedCommits.length === 0) {
-      return (
-        <div className={styles.pile}>
-          <Icon className={styles.empty} name="times" size="4x" />
-        </div>
-      );
-    }
-
+const ScreenshotPile = ({ deployments }: Props) => {
+  if (deployments.length === 0) {
     return (
-      <div className={styles.pile}>
-        {latestDeployedCommits.slice(0, 4).map((commit, i) =>
-          <img
-            key={commit.hash}
-            className={classNames('img-responsive', styles.screenshot, styles[`screenshot-${i}`])}
-            src={commit.screenshot}
-          />
-        )}
+      <div className={classNames(styles.pile, styles.empty)}>
+        <Icon name="times" size="3x" />
       </div>
     );
   }
+
+  if (some(deployments, isNil)) {
+    return (
+      <div className={classNames(styles.pile, styles.empty)}>
+          <Icon name="circle-o-notch" spin fixedWidth size="3x" />
+      </div>
+    );
+  }
+
+  const latestDeployments = deployments.sort((a, b) => a.creator.timestamp - b.creator.timestamp);
+
+  return (
+    <div className={styles.pile}>
+      {latestDeployments.slice(0, 4).map((deployment, i) =>
+        <img
+          key={deployment.id}
+          className={classNames('img-responsive', styles.screenshot, styles[`screenshot-${i}`])}
+          src={screenshot /* TODO: deployment.screenshot */}
+        />
+      )}
+    </div>
+  );
 }
 
 export default ScreenshotPile;
