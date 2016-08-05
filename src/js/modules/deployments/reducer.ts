@@ -30,10 +30,18 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
   switch (action.type) {
     case DEPLOYMENT.SUCCESS:
       const deploymentResponse = (<t.RequestDeploymentAction> action).response;
-      return merge({}, state, responseToStateShape([deploymentResponse]));
+      if (deploymentResponse) {
+        return merge({}, state, responseToStateShape([deploymentResponse]));
+      } else {
+        return state;
+      }
     case STORE_DEPLOYMENTS:
-      const deployments = (<t.StoreDeploymentsAction> action).deployments;
-      return merge({}, state, responseToStateShape(deployments));
+      const deployments = (<t.StoreDeploymentsAction> action).entities;
+      if (deployments && deployments.length > 0) {
+        return merge({}, state, responseToStateShape(deployments));
+      } else {
+        return state;
+      }
     default:
       return state;
   }

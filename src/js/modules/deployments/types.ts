@@ -31,7 +31,7 @@ export interface RequestDeploymentActionCreators {
 }
 
 export interface StoreDeploymentsAction extends Action {
-  deployments: ResponseDeploymentElement[];
+  entities: ResponseDeploymentElement[];
 }
 
 // API response

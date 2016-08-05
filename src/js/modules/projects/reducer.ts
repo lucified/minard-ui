@@ -29,13 +29,25 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
   switch (action.type) {
     case ALL_PROJECTS.SUCCESS:
       const projectsResponse = (<t.RequestAllProjectsAction> action).response;
-      return merge({}, state, responseToStateShape(projectsResponse));
+      if (projectsResponse && projectsResponse.length > 0) {
+        return merge({}, state, responseToStateShape(projectsResponse));
+      } else {
+        return state;
+      }
     case PROJECT.SUCCESS:
       const projectResponse = (<t.RequestProjectAction> action).response;
-      return merge({}, state, responseToStateShape([projectResponse]));
+      if (projectResponse) {
+        return merge({}, state, responseToStateShape([projectResponse]));
+      } else {
+        return state;
+      }
     case STORE_PROJECTS:
-      const projects = (<t.StoreProjectsAction> action).projects;
-      return merge({}, state, responseToStateShape(projects));
+      const projects = (<t.StoreProjectsAction> action).entities;
+      if (projects && projects.length > 0) {
+        return merge({}, state, responseToStateShape(projects));
+      } else {
+        return state;
+      }
     default:
       return state;
   }
