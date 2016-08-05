@@ -33,6 +33,8 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
   return merge(defaultFunctions, functionsToReplace);
 };
 
+// TODO: Test activitiy-related sagas
+
 describe('sagas', () => {
   const api = createApi();
   const sagas = sagaCreator(api);
