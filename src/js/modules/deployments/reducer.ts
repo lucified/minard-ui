@@ -1,5 +1,6 @@
 import { merge } from 'lodash';
 import * as moment from 'moment';
+import { Reducer } from 'redux';
 
 import { DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
 import * as t from './types';
@@ -25,7 +26,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
     merge(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
 };
 
-export default (state: t.DeploymentState = initialState, action: any) => {
+const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
   switch (action.type) {
     case DEPLOYMENT.SUCCESS:
       const deploymentResponse = (<t.RequestDeploymentAction> action).response;
@@ -37,3 +38,5 @@ export default (state: t.DeploymentState = initialState, action: any) => {
       return state;
   }
 };
+
+export default reducer;

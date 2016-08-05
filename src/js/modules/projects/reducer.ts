@@ -1,4 +1,5 @@
 import { merge } from 'lodash';
+import { Reducer } from 'redux';
 
 import { ALL_PROJECTS, PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
@@ -24,7 +25,7 @@ const responseToStateShape = (projects: t.ApiResponse) => {
     merge(obj, { [project.id]: createProjectObject(project) }), {});
 };
 
-export default (state: t.ProjectState = initialState, action: any) => {
+const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
   switch (action.type) {
     case ALL_PROJECTS.SUCCESS:
       const projectsResponse = (<t.RequestAllProjectsAction> action).response;
@@ -39,3 +40,5 @@ export default (state: t.ProjectState = initialState, action: any) => {
       return state;
   }
 };
+
+export default reducer;
