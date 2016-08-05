@@ -7,6 +7,7 @@ import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
 import Projects, { ProjectState } from '../src/js/modules/projects';
 
+
 import * as testData from './test-data';
 
 const testInitialState = (reducer: Reducer<any>, expectedState: any) => {
@@ -50,22 +51,97 @@ const testStoreEntities = (
   });
 };
 
-describe('reducers:', () => {
-  describe('activities:', () => {
+const testSuccessfulRequest = (
+  reducer: Reducer<any>,
+  action: any,
+  expectedStateFromEmpty: any,
+  stateWithoutExistingEntity: any,
+  expectedStateWithoutExistingEntity: any,
+  stateWithExistingEntity: any,
+  expectedStateWithExistingEntity: any,
+) => {
+  describe(`successful request (${action.type})`, () => {
+    it('with an empty initial state', () => {
+      expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
+    });
+
+    it('makes no changes with an empty result', () => {
+      const emptyAction: any = { type: action.type, response: undefined };
+      const newState = reducer(stateWithoutExistingEntity, emptyAction);
+      expect(newState).to.deep.equal(stateWithoutExistingEntity);
+      expect(newState).to.equal(stateWithoutExistingEntity);
+    });
+
+    it('with other entities in state', () => {
+      const newState = reducer(stateWithoutExistingEntity, action);
+      expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
+      expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
+    });
+
+    it('by overwriting existing entities', () => {
+      const newState = reducer(stateWithExistingEntity, action);
+      expect(newState).to.deep.equal(expectedStateWithExistingEntity);
+      expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+    });
+  });
+};
+
+type ModuleState = BranchState | CommitState | DeploymentState | ProjectState;
+
+const testReducer = (
+  reducer: Reducer<any>,
+  storeAction: { type: string, entities: any },
+  expectedObjectsToStore: ModuleState,
+  stateWithoutExistingEntity: ModuleState,
+  stateWithExistingEntity: ModuleState,
+  successfulRequestAction: { type: string, response: any },
+  expectedSuccessfulRequestObject: ModuleState,
+) => {
+  testInitialState(reducer, {});
+
+  let expectedStateFromEmpty = expectedObjectsToStore;
+  let expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedObjectsToStore);
+  let expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedObjectsToStore);
+
+  testStoreEntities(
+    reducer,
+    storeAction,
+    expectedStateFromEmpty,
+    stateWithoutExistingEntity,
+    expectedStateWithoutExistingEntity,
+    stateWithExistingEntity,
+    expectedStateWithExistingEntity
+  );
+
+  expectedStateFromEmpty = expectedSuccessfulRequestObject;
+  expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedSuccessfulRequestObject);
+
+  testSuccessfulRequest(
+    reducer,
+    successfulRequestAction,
+    expectedStateFromEmpty,
+    stateWithoutExistingEntity,
+    expectedStateWithoutExistingEntity,
+    stateWithExistingEntity,
+    expectedStateWithExistingEntity
+  );
+};
+
+describe('reducers', () => {
+  describe('activities', () => {
     // TODO
   });
 
-  describe('branches:', () => {
+  describe('branches', () => {
     const { reducer } = Branches;
 
-    testInitialState(reducer, {});
-
-    const action = {
+    const storeAction = {
       type: Branches.actions.STORE_BRANCHES,
       entities: testData.projectResponse.included.slice(0, 2),
     };
 
-    const expectedObjects: BranchState  = {
+    const expectedObjectsToStore: BranchState  = {
       1: {
         id: '1',
         'name': 'first-branch',
@@ -83,7 +159,7 @@ describe('reducers:', () => {
         'project': '1',
       },
     };
-    const expectedStateFromEmpty = expectedObjects;
+
     const stateWithoutExistingEntity: BranchState = {
       3: {
         id: '3',
@@ -94,7 +170,7 @@ describe('reducers:', () => {
         'project': '1',
       },
     };
-    const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedObjects);
+
     const stateWithExistingEntity: BranchState = {
       3: {
         id: '3',
@@ -104,39 +180,52 @@ describe('reducers:', () => {
         'deployments': <string[]> [],
         'project': '1',
       },
-      2: {
-        id: '2',
-        'name': 'second-branch-foo',
+      1: {
+        id: '1',
+        'name': 'first-branch-foo',
         'description': undefined,
         'commits': ['a998823423'],
         'deployments': ['8'],
         'project': '1',
       },
     };
-    const expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedObjects);
 
-    testStoreEntities(
+    const successfulRequestAction = {
+      type: Branches.actions.BRANCH.SUCCESS,
+      response: testData.branchResponseNoInclude.data,
+    };
+
+    const expectedSuccessfulRequestObject: BranchState = {
+      1: {
+        'id': '1',
+        'name': 'first-branch',
+        'description': 'This is a branch description',
+        'deployments': ['7'],
+        'commits': ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+        'project': '1',
+      },
+    };
+
+    testReducer(
       reducer,
-      action,
-      expectedStateFromEmpty,
+      storeAction,
+      expectedObjectsToStore,
       stateWithoutExistingEntity,
-      expectedStateWithoutExistingEntity,
       stateWithExistingEntity,
-      expectedStateWithExistingEntity
+      successfulRequestAction,
+      expectedSuccessfulRequestObject
     );
   });
 
-  describe('commits:', () => {
+  describe('commits', () => {
     const { reducer } = Commits;
 
-    testInitialState(reducer, {});
-
-    const action = {
+    const storeAction = {
       type: Commits.actions.STORE_COMMITS,
       entities: testData.commitResponse.included.slice(0, 2),
     };
 
-    const expectedObjects: CommitState  = {
+    const expectedObjectsToStore: CommitState  = {
       '12354124': {
         'id': '12354124',
         'hash': '0123456789abcdef',
@@ -172,7 +261,7 @@ describe('reducers:', () => {
         description: undefined,
       },
     };
-    const expectedStateFromEmpty = expectedObjects;
+
     const stateWithoutExistingEntity: CommitState = {
       '098325343': {
         'id': '098325343',
@@ -192,7 +281,7 @@ describe('reducers:', () => {
         description: undefined,
       },
     };
-    const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedObjects);
+
     const stateWithExistingEntity: CommitState = {
       '098325343': {
         'id': '098325343',
@@ -229,30 +318,52 @@ describe('reducers:', () => {
         description: undefined,
       },
     };
-    const expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedObjects);
 
-    testStoreEntities(
+    const successfulRequestAction = {
+      type: Commits.actions.COMMIT.SUCCESS,
+      response: testData.commitResponseNoInclude.data,
+    };
+
+    const expectedSuccessfulRequestObject: CommitState = {
+      'aacceeff02': {
+        'id': 'aacceeff02',
+        'hash': '0123456789abcdef',
+        'author': {
+          'name': 'Ville Saarinen',
+          'email': 'ville.saarinen@lucify.com',
+          'timestamp': 1470066681802,
+        },
+        'commiter': {
+          'name': undefined,
+          'email': 'juho@lucify.com',
+          'timestamp': 1469800281802,
+        },
+        'message': 'Fix colors',
+        'description': "The previous colors didn't look nice. Now they're much prettier.",
+        'deployment': '7',
+      },
+    };
+
+    testReducer(
       reducer,
-      action,
-      expectedStateFromEmpty,
+      storeAction,
+      expectedObjectsToStore,
       stateWithoutExistingEntity,
-      expectedStateWithoutExistingEntity,
       stateWithExistingEntity,
-      expectedStateWithExistingEntity
+      successfulRequestAction,
+      expectedSuccessfulRequestObject
     );
   });
 
-  describe('deployments:', () => {
+  describe('deployments', () => {
     const { reducer } = Deployments;
 
-    testInitialState(reducer, {});
-
-    const action = {
+    const storeAction = {
       type: Deployments.actions.STORE_DEPLOYMENTS,
       entities: testData.branchResponse.included.slice(1, 2),
     };
 
-    const expectedObjects: DeploymentState = {
+    const expectedObjectsToStore: DeploymentState = {
       '7': {
         'id': '7',
         'url': '#',
@@ -265,7 +376,7 @@ describe('reducers:', () => {
         'commit': 'aacceeff02',
       },
     };
-    const expectedStateFromEmpty = expectedObjects;
+
     const stateWithoutExistingEntity: DeploymentState = {
       '8': {
         'id': '8',
@@ -279,7 +390,7 @@ describe('reducers:', () => {
         'commit': '2543452',
       },
     };
-    const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedObjects);
+
     const stateWithExistingEntity: DeploymentState = {
       '7': {
         'id': '7',
@@ -293,30 +404,46 @@ describe('reducers:', () => {
         'commit': '123468594',
       },
     };
-    const expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedObjects);
 
-    testStoreEntities(
+    const successfulRequestAction = {
+      type: Deployments.actions.DEPLOYMENT.SUCCESS,
+      response: testData.deploymentResponseNoInclude.data,
+    };
+
+    const expectedSuccessfulRequestObject: DeploymentState = {
+      '7': {
+        'id': '7',
+        'url': '#',
+        'screenshot': '#',
+        'creator': {
+          'name': 'Ville Saarinen',
+          'email': 'ville.saarinen@lucify.com',
+          'timestamp': 1470131481802,
+        },
+        'commit': 'aacceeff02',
+      },
+    };
+
+    testReducer(
       reducer,
-      action,
-      expectedStateFromEmpty,
+      storeAction,
+      expectedObjectsToStore,
       stateWithoutExistingEntity,
-      expectedStateWithoutExistingEntity,
       stateWithExistingEntity,
-      expectedStateWithExistingEntity
+      successfulRequestAction,
+      expectedSuccessfulRequestObject
     );
   });
 
-  describe('projects:', () => {
+  describe('projects', () => {
     const { reducer } = Projects;
 
-    testInitialState(reducer, <ProjectState> {});
-
-    const action = {
+    const storeAction = {
       type: Projects.actions.STORE_PROJECTS,
       entities: testData.projectsResponse.data,
     };
 
-    const expectedObjects: ProjectState = {
+    const expectedObjectsToStore: ProjectState = {
       '1': {
         'id': '1',
         'name': 'First project',
@@ -332,7 +459,7 @@ describe('reducers:', () => {
         'branches': [],
       },
     };
-    const expectedStateFromEmpty = expectedObjects;
+
     const stateWithoutExistingEntity: ProjectState = {
       '3': {
         'id': '3',
@@ -342,7 +469,7 @@ describe('reducers:', () => {
         'branches': [],
       },
     };
-    const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedObjects);
+
     const stateWithExistingEntity: ProjectState = {
       '3': {
         'id': '3',
@@ -359,16 +486,30 @@ describe('reducers:', () => {
         'branches': [],
       },
     };
-    const expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedObjects);
 
-    testStoreEntities(
+    const successfulRequestAction = {
+      type: Projects.actions.PROJECT.SUCCESS,
+      response: testData.projectResponseNoInclude.data,
+    };
+
+    const expectedSuccessfulRequestObject: ProjectState = {
+      1: {
+        'id': '1',
+        'name': 'First project',
+        'description': 'This is the first project description. It might not be set.',
+        'activeUsers': ['ville.saarinen@lucify.com', 'juho@lucify.com'],
+        'branches': ['1', '2', '3'],
+      },
+    };
+
+    testReducer(
       reducer,
-      action,
-      expectedStateFromEmpty,
+      storeAction,
+      expectedObjectsToStore,
       stateWithoutExistingEntity,
-      expectedStateWithoutExistingEntity,
       stateWithExistingEntity,
-      expectedStateWithExistingEntity
+      successfulRequestAction,
+      expectedSuccessfulRequestObject
     );
   });
 });
