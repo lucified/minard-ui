@@ -53,11 +53,11 @@ const testStoreEntities = (
 const testSuccessfulRequest = (
   reducer: Reducer<any>,
   action: any,
-  expectedStateFromEmpty: any,
-  stateWithoutExistingEntity: any,
-  expectedStateWithoutExistingEntity: any,
-  stateWithExistingEntity: any,
-  expectedStateWithExistingEntity: any,
+  expectedStateFromEmpty: ModuleState,
+  stateWithoutExistingEntity: ModuleState,
+  expectedStateWithoutExistingEntity: ModuleState,
+  stateWithExistingEntity: ModuleState,
+  expectedStateWithExistingEntity: ModuleState,
 ) => {
   describe(`successful request (${action.type})`, () => {
     it('with an empty initial state', () => {
@@ -99,8 +99,10 @@ const testReducer = (
   testInitialState(reducer, {});
 
   let expectedStateFromEmpty = expectedObjectsToStore;
-  let expectedStateWithoutExistingEntity = assign(stateWithoutExistingEntity, expectedObjectsToStore);
-  let expectedStateWithExistingEntity = assign(stateWithExistingEntity, expectedObjectsToStore);
+  let expectedStateWithoutExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedObjectsToStore);
+  let expectedStateWithExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedObjectsToStore);
 
   testStoreEntities(
     reducer,
@@ -109,12 +111,16 @@ const testReducer = (
     stateWithoutExistingEntity,
     expectedStateWithoutExistingEntity,
     stateWithExistingEntity,
-    expectedStateWithExistingEntity
+    expectedStateWithExistingEntity,
   );
 
   expectedStateFromEmpty = expectedSuccessfulRequestObject;
-  expectedStateWithoutExistingEntity = assign(stateWithoutExistingEntity, expectedSuccessfulRequestObject);
-  expectedStateWithExistingEntity = assign(stateWithExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithoutExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+  console.log('expectedStateWithoutExistingEntity', expectedStateWithoutExistingEntity);
+  expectedStateWithExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedSuccessfulRequestObject);
+  console.log('expectedStateWithExistingEntity', expectedStateWithExistingEntity);
 
   testSuccessfulRequest(
     reducer,
@@ -123,7 +129,7 @@ const testReducer = (
     stateWithoutExistingEntity,
     expectedStateWithoutExistingEntity,
     stateWithExistingEntity,
-    expectedStateWithExistingEntity
+    expectedStateWithExistingEntity,
   );
 };
 
@@ -212,7 +218,7 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
     );
   });
 
@@ -350,7 +356,7 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
     );
   });
 
@@ -430,7 +436,7 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
     );
   });
 
@@ -508,7 +514,7 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
     );
 
     const successfulAllProjectsRequestAction = {
