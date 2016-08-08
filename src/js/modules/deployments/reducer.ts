@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
@@ -23,7 +23,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
   };
 
   return deployments.reduce((obj, deployment) =>
-    merge(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
+    assign(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
 };
 
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
@@ -31,14 +31,14 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
     case DEPLOYMENT.SUCCESS:
       const deploymentResponse = (<t.RequestDeploymentAction> action).response;
       if (deploymentResponse) {
-        return merge({}, state, responseToStateShape([deploymentResponse]));
+        return assign<t.DeploymentState, t.DeploymentState>({}, state, responseToStateShape([deploymentResponse]));
       } else {
         return state;
       }
     case STORE_DEPLOYMENTS:
       const deployments = (<t.StoreDeploymentsAction> action).entities;
       if (deployments && deployments.length > 0) {
-        return merge({}, state, responseToStateShape(deployments));
+        return assign<t.DeploymentState, t.DeploymentState>({}, state, responseToStateShape(deployments));
       } else {
         return state;
       }

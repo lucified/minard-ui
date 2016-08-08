@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
@@ -35,7 +35,7 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     };
   };
 
-  return commits.reduce((obj, commit) => merge(obj, { [commit.id]: createCommitObject(commit) }), {});
+  return commits.reduce((obj, commit) => assign(obj, { [commit.id]: createCommitObject(commit) }), {});
 };
 
 const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
@@ -43,14 +43,14 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
     case COMMIT.SUCCESS:
       const commitResonse = (<t.RequestCommitAction> action).response;
       if (commitResonse) {
-        return merge({}, state, responseToStateShape([commitResonse]));
+        return assign<t.CommitState, t.CommitState>({}, state, responseToStateShape([commitResonse]));
       } else {
         return state;
       }
     case STORE_COMMITS:
       const commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
-        return merge({}, state, responseToStateShape(commits));
+        return assign<t.CommitState, t.CommitState>({}, state, responseToStateShape(commits));
       } else {
         return state;
       }

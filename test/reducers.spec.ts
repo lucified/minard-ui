@@ -1,12 +1,11 @@
 import { expect } from 'chai';
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import { Reducer } from 'redux';
 
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
 import Projects, { ProjectState } from '../src/js/modules/projects';
-
 
 import * as testData from './test-data';
 
@@ -31,7 +30,7 @@ const testStoreEntities = (
     });
 
     it('makes no changes with an empty list', () => {
-      const emptyAction = { type: action.type, entities: <any[]>[] };
+      const emptyAction = { type: action.type, entities: <any[]> [] };
       const newState = reducer(stateWithoutExistingEntity, emptyAction);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
@@ -100,8 +99,8 @@ const testReducer = (
   testInitialState(reducer, {});
 
   let expectedStateFromEmpty = expectedObjectsToStore;
-  let expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedObjectsToStore);
-  let expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedObjectsToStore);
+  let expectedStateWithoutExistingEntity = assign(stateWithoutExistingEntity, expectedObjectsToStore);
+  let expectedStateWithExistingEntity = assign(stateWithExistingEntity, expectedObjectsToStore);
 
   testStoreEntities(
     reducer,
@@ -114,8 +113,8 @@ const testReducer = (
   );
 
   expectedStateFromEmpty = expectedSuccessfulRequestObject;
-  expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedSuccessfulRequestObject);
-  expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithoutExistingEntity = assign(stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithExistingEntity = assign(stateWithExistingEntity, expectedSuccessfulRequestObject);
 
   testSuccessfulRequest(
     reducer,
@@ -518,8 +517,8 @@ describe('reducers', () => {
     };
 
     const allProjectsObjects = expectedObjectsToStore;
-    const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, allProjectsObjects);
-    const expectedStateWithExistingEntity = merge(stateWithExistingEntity, allProjectsObjects);
+    const expectedStateWithoutExistingEntity = assign(stateWithoutExistingEntity, allProjectsObjects);
+    const expectedStateWithExistingEntity = assign(stateWithExistingEntity, allProjectsObjects);
 
     describe(`successful request all projects (${successfulAllProjectsRequestAction.type})`, () => {
       it('with an empty initial state', () => {
@@ -527,7 +526,7 @@ describe('reducers', () => {
       });
 
       it('makes no changes with an empty list', () => {
-        const emptyAction = { type: successfulAllProjectsRequestAction.type, entities: <any[]>[] };
+        const emptyAction = { type: successfulAllProjectsRequestAction.type, entities: <any[]> [] };
         const newState = reducer(stateWithoutExistingEntity, emptyAction);
         expect(newState).to.deep.equal(stateWithoutExistingEntity);
         expect(newState).to.equal(stateWithoutExistingEntity);

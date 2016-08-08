@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
@@ -30,7 +30,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchAllProjects: () => Promise.resolve({ response: {} }),
   };
 
-  return merge(defaultFunctions, functionsToReplace);
+  return assign<Api, Api>(defaultFunctions, functionsToReplace);
 };
 
 // TODO: Test activity-related sagas
@@ -408,7 +408,7 @@ describe('sagas', () => {
           project: '1',
           commits: [],
           deployments: [],
-        }
+        },
       ];
 
       const project2Branches: Branch[] = [

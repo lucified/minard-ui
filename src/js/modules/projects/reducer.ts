@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import { Reducer } from 'redux';
 
 import { ALL_PROJECTS, PROJECT, STORE_PROJECTS } from './actions';
@@ -22,7 +22,7 @@ const responseToStateShape = (projects: t.ApiResponse) => {
   };
 
   return projects.reduce((obj, project) =>
-    merge(obj, { [project.id]: createProjectObject(project) }), {});
+    assign(obj, { [project.id]: createProjectObject(project) }), {});
 };
 
 const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
@@ -30,21 +30,21 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
     case ALL_PROJECTS.SUCCESS:
       const projectsResponse = (<t.RequestAllProjectsAction> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
-        return merge({}, state, responseToStateShape(projectsResponse));
+        return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape(projectsResponse));
       } else {
         return state;
       }
     case PROJECT.SUCCESS:
       const projectResponse = (<t.RequestProjectAction> action).response;
       if (projectResponse) {
-        return merge({}, state, responseToStateShape([projectResponse]));
+        return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape([projectResponse]));
       } else {
         return state;
       }
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
-        return merge({}, state, responseToStateShape(projects));
+        return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape(projects));
       } else {
         return state;
       }
