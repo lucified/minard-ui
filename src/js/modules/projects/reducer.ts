@@ -1,6 +1,8 @@
 import { assign } from 'lodash';
 import { Reducer } from 'redux';
 
+import { FetchError } from '../errors';
+
 import { ALL_PROJECTS, PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
@@ -41,6 +43,9 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       } else {
         return state;
       }
+    case PROJECT.FAILURE:
+      const responseAction = <FetchError> action;
+      return assign<t.ProjectState, t.ProjectState>({}, state, { [responseAction.id]: responseAction });
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {

@@ -1,5 +1,7 @@
 import { Action, ActionCreator } from 'redux';
 
+import { FetchError } from '../errors';
+
 // State
 export interface Project {
   id: string;
@@ -10,7 +12,7 @@ export interface Project {
 }
 
 export interface ProjectState {
-  [id: string]: Project;
+  [id: string]: Project | FetchError;
 };
 
 // Actions

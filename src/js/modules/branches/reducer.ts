@@ -1,6 +1,8 @@
 import { assign } from 'lodash';
 import { Reducer } from 'redux';
 
+import { FetchError } from '../errors';
+
 import { BRANCH, STORE_BRANCHES } from './actions';
 import * as t from './types';
 
@@ -37,6 +39,9 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       } else {
         return state;
       }
+    case BRANCH.FAILURE:
+      const responseAction = <FetchError> action;
+      return assign<t.BranchState, t.BranchState>({}, state, { [responseAction.id]: responseAction });
     case STORE_BRANCHES:
       const branches = (<t.StoreBranchesAction> action).entities;
       if (branches && branches.length > 0) {

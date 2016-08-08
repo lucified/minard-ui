@@ -1,5 +1,7 @@
 import { Action, ActionCreator } from 'redux';
 
+import { FetchError } from '../errors';
+
 // State
 export interface Deployment {
   id: string;
@@ -14,7 +16,7 @@ export interface Deployment {
 }
 
 export interface DeploymentState {
-  [id: string]: Deployment;
+  [id: string]: Deployment | FetchError;
 };
 
 // Actions

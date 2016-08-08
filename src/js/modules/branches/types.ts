@@ -1,5 +1,7 @@
 import { Action, ActionCreator } from 'redux';
 
+import { FetchError } from '../errors';
+
 // State
 export interface Branch {
   id: string;
@@ -11,7 +13,7 @@ export interface Branch {
 }
 
 export interface BranchState {
-  [id: string]: Branch;
+  [id: string]: Branch | FetchError;
 };
 
 // Actions

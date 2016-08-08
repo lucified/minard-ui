@@ -1,5 +1,7 @@
 import { Action, ActionCreator } from 'redux';
 
+import { FetchError } from '../errors';
+
 // State
 export interface Commit {
   id: string;
@@ -20,7 +22,7 @@ export interface Commit {
 }
 
 export interface CommitState {
-  [id: string]: Commit;
+  [id: string]: Commit | FetchError;
 };
 
 // Actions

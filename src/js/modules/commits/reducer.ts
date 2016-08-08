@@ -2,7 +2,9 @@ import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { STORE_COMMITS, COMMIT } from './actions';
+import { FetchError } from '../errors';
+
+import { COMMIT, STORE_COMMITS } from './actions';
 import * as t from './types';
 
 const initialState: t.CommitState = {};
@@ -47,6 +49,9 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       } else {
         return state;
       }
+    case COMMIT.FAILURE:
+      const responseAction = <FetchError> action;
+      return assign<t.CommitState, t.CommitState>({}, state, { [responseAction.id]: responseAction });
     case STORE_COMMITS:
       const commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {

@@ -5,10 +5,11 @@ import { ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
+import { FetchError } from '../modules/errors';
 import Projects, { Project } from '../modules/projects';
 import { StateTree } from '../reducers';
 
-type EntityType = Commit | Project | Deployment | Branch;
+type EntityType = Commit | Project | Deployment | Branch | FetchError;
 interface RequestActionCreators {
   request: ActionCreator<any>;
   success: ActionCreator<any>;

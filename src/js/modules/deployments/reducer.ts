@@ -2,6 +2,8 @@ import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
+import { FetchError } from '../errors';
+
 import { DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
 import * as t from './types';
 
@@ -35,6 +37,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       } else {
         return state;
       }
+    case DEPLOYMENT.FAILURE:
+      const responseAction = <FetchError> action;
+      return assign<t.DeploymentState, t.DeploymentState>({}, state, { [responseAction.id]: responseAction });
     case STORE_DEPLOYMENTS:
       const deployments = (<t.StoreDeploymentsAction> action).entities;
       if (deployments && deployments.length > 0) {

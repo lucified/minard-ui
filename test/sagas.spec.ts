@@ -7,6 +7,7 @@ import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
+import { FetchError } from '../src/js/modules/errors';
 import Projects, { Project } from '../src/js/modules/projects';
 import { StateTree } from '../src/js/reducers';
 import sagaCreator from '../src/js/sagas';
@@ -105,7 +106,7 @@ describe('sagas', () => {
   const testLoader = (
     name: string,
     loader: (id: string) => IterableIterator<Effect>,
-    selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project,
+    selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
     fetcher: (id: string) => IterableIterator<Effect>,
     ensurer: (id: string) => IterableIterator<Effect | Effect[]>,
   ) => {
@@ -603,7 +604,7 @@ describe('sagas', () => {
   describe('fetchIfMissing', () => {
     const testFetchIfMissing = (
       type: ApiEntityTypeString,
-      selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project,
+      selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
       fetcher: (id: string) => IterableIterator<Effect>,
     ) => {
       it(`fetches missing ${type}`, () => {
