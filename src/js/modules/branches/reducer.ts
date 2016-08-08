@@ -1,7 +1,7 @@
 import { assign } from 'lodash';
 import { Reducer } from 'redux';
 
-import { FetchError } from '../errors';
+import { FetchError, isError } from '../errors';
 
 import { BRANCH, STORE_BRANCHES } from './actions';
 import * as t from './types';
@@ -41,7 +41,13 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
     case BRANCH.FAILURE:
       const responseAction = <FetchError> action;
-      return assign<t.BranchState, t.BranchState>({}, state, { [responseAction.id]: responseAction });
+      const existingEntity = state[responseAction.id];
+      if (!existingEntity || isError(existingEntity)) {
+        return assign<t.BranchState, t.BranchState>({}, state, { [responseAction.id]: responseAction });
+      }
+
+      console.log('Error: fetching failed! Not replacing existing entity.');
+      return state;
     case STORE_BRANCHES:
       const branches = (<t.StoreBranchesAction> action).entities;
       if (branches && branches.length > 0) {

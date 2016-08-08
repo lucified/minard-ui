@@ -2,7 +2,7 @@ import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { FetchError } from '../errors';
+import { FetchError, isError } from '../errors';
 
 import { COMMIT, STORE_COMMITS } from './actions';
 import * as t from './types';
@@ -51,7 +51,13 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       }
     case COMMIT.FAILURE:
       const responseAction = <FetchError> action;
-      return assign<t.CommitState, t.CommitState>({}, state, { [responseAction.id]: responseAction });
+      const existingEntity = state[responseAction.id];
+      if (!existingEntity || isError(existingEntity)) {
+        return assign<t.CommitState, t.CommitState>({}, state, { [responseAction.id]: responseAction });
+      }
+
+      console.log('Error: fetching failed! Not replacing existing entity.');
+      return state;
     case STORE_COMMITS:
       const commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
