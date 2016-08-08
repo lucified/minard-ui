@@ -1,9 +1,11 @@
-import { Action } from 'redux';
+import { Reducer } from 'redux';
 
 import { ActivityState } from './types';
 
 const initialState: ActivityState = {};
 
-export default (state: ActivityState = initialState, _: Action) => {
+const reducer: Reducer<ActivityState> = (state: ActivityState = initialState, _: any) => {
   return state;
 };
+
+export default reducer;

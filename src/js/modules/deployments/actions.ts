@@ -19,5 +19,5 @@ export const loadDeployment: ActionCreator<t.RequestDeploymentAction> = (id) => 
 export const STORE_DEPLOYMENTS = 'DEPLOYMENTS/STORE_DEPLOYMENTS';
 export const StoreDeployments: ActionCreator<t.StoreDeploymentsAction> = (deployments) => ({
   type: STORE_DEPLOYMENTS,
-  deployments,
+  entities: deployments,
 });

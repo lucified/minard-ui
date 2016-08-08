@@ -28,7 +28,7 @@ export interface RequestBranchActionCreators {
 }
 
 export interface StoreBranchesAction extends Action {
-  branches: ResponseBranchElement[];
+  entities: ResponseBranchElement[];
 }
 
 // API response

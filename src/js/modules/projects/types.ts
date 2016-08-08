@@ -39,7 +39,7 @@ export interface RequestProjectActionCreators {
 }
 
 export interface StoreProjectsAction extends Action {
-  projects: ResponseProjectElement[];
+  entities: ResponseProjectElement[];
 }
 
 // API response

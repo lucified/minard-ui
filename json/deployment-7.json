@@ -43,12 +43,6 @@
             "type": "deployments",
             "id": "7"
           }]
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "1"
-          }
         }
       }
     }

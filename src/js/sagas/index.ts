@@ -13,6 +13,7 @@ import { createFetcher, createLoader, storeIncludedEntities } from './utils';
 
 export default function createSagas(api: Api) {
 
+  // Returns the entity object
   function* fetchIfMissing(type: ApiEntityTypeString, id: string): IterableIterator<Effect> {
     const selectors = {
       commits: Commits.selectors.getCommit,
@@ -27,10 +28,17 @@ export default function createSagas(api: Api) {
       projects: fetchProject,
     };
 
-    const existingEntity = yield select((<any> selectors)[type], id);
+    const selector = (<any> selectors)[type];
+    const fetcher = (<any> fetchers)[type];
+
+    let existingEntity = yield select(selector, id);
+
     if (!existingEntity) {
-      yield call((<any> fetchers)[type], id);
+      yield call(fetcher, id);
+      existingEntity = yield select(selector, id);
     }
+
+    return existingEntity;
   }
 
   // ALL PROJECTS
@@ -62,12 +70,12 @@ export default function createSagas(api: Api) {
 
     for (let i = 0; i < projects.length; i++) {
       // Check all branches exist
-      const { branches } = projects[i];
-      yield branches.map(branchId => call(fetchIfMissing, 'branches', branchId));
+      const { branches: branchIds } = projects[i];
+      const branches = yield branchIds.map(branchId => call(fetchIfMissing, 'branches', branchId));
 
       // Make sure latest deployment from each branch of each project is loaded
       for (let j = 0; j < branches.length; j++) {
-        const branch = <Branch> (yield select(Branches.selectors.getBranch, branches[j]));
+        const branch = <Branch> branches[j];
         deploymentIdsToCheck.push(branch.deployments[0]);
       }
     }
@@ -86,14 +94,14 @@ export default function createSagas(api: Api) {
     }
 
     // Make sure all branches have been loaded
-    const { branches } = project;
-    yield branches.map(branchId => call(fetchIfMissing, 'branches', branchId));
+    const { branches: branchIds } = project;
+    const branches = yield branchIds.map(branchId => call(fetchIfMissing, 'branches', branchId));
 
     // Make sure all the deployments from each branch have been loaded
     let deploymentIdsToCheck: string[] = [];
 
     for (let i = 0; i < branches.length; i++) {
-      const branch = <Branch> (yield select(Branches.selectors.getBranch, branches[i]));
+      const branch = <Branch> branches[i];
       deploymentIdsToCheck = deploymentIdsToCheck.concat(branch.deployments);
     }
 

@@ -1,4 +1,5 @@
 import { merge } from 'lodash';
+import { Reducer } from 'redux';
 
 import { BRANCH, STORE_BRANCHES } from './actions';
 import * as t from './types';
@@ -27,15 +28,25 @@ const responseToStateShape = (branches: t.ApiResponse) => {
   return branches.reduce((obj, branch) => merge(obj, { [branch.id]: createBranchObject(branch) }), {});
 };
 
-export default (state: t.BranchState = initialState, action: any) => {
+const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
   switch (action.type) {
     case BRANCH.SUCCESS:
       const branchResonse = (<t.RequestBranchAction> action).response;
-      return merge({}, state, responseToStateShape([branchResonse]));
+      if (branchResonse) {
+        return merge({}, state, responseToStateShape([branchResonse]));
+      } else {
+        return state;
+      }
     case STORE_BRANCHES:
-      const branches = (<t.StoreBranchesAction> action).branches;
-      return merge({}, state, responseToStateShape(branches));
+      const branches = (<t.StoreBranchesAction> action).entities;
+      if (branches && branches.length > 0) {
+        return merge({}, state, responseToStateShape(branches));
+      } else {
+        return state;
+      }
     default:
       return state;
   }
 };
+
+export default reducer;

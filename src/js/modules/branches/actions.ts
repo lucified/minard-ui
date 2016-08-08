@@ -19,5 +19,5 @@ export const loadBranch: ActionCreator<t.RequestBranchAction> = (id) => ({
 export const STORE_BRANCHES = 'BRANCHES/STORE_BRANCHES';
 export const StoreBranches: ActionCreator<t.StoreBranchesAction> = (branches) => ({
   type: STORE_BRANCHES,
-  branches,
+  entities: branches,
 });

@@ -50,12 +50,6 @@
       "relationships": {
         "deployments": {
           "data": []
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "2"
-          }
         }
       }
     },
@@ -80,12 +74,6 @@
             "type": "deployments",
             "id": "8"
           }]
-        },
-        "branch": {
-          "data": {
-            "type": "branches",
-            "id": "2"
-          }
         }
       }
     },

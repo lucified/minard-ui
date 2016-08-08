@@ -19,5 +19,5 @@ export const loadCOMMIT: ActionCreator<t.RequestCommitAction> = (id) => ({
 export const STORE_COMMITS = 'COMMITS/STORE_COMMITS';
 export const StoreCommits: ActionCreator<t.StoreCommitsAction> = (commits) => ({
   type: STORE_COMMITS,
-  commits,
+  entities: commits,
 });

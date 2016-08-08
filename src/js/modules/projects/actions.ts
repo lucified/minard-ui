@@ -34,5 +34,5 @@ export const FetchProject: t.RequestProjectActionCreators = {
 export const STORE_PROJECTS = 'PROJECTS/STORE_PROJECTS';
 export const StoreProjects: ActionCreator<t.StoreProjectsAction> = (projects) => ({
   type: STORE_PROJECTS,
-  projects,
+  entities: projects,
 });

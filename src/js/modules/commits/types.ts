@@ -37,7 +37,7 @@ export interface RequestCommitActionCreators {
 }
 
 export interface StoreCommitsAction extends Action {
-  commits: ResponseCommitElement[];
+  entities: ResponseCommitElement[];
 }
 
 // API response
