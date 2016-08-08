@@ -5,6 +5,7 @@ import { Reducer } from 'redux';
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
+import { FetchError } from '../src/js/modules/errors';
 import Projects, { ProjectState } from '../src/js/modules/projects';
 
 import * as testData from './test-data';
@@ -52,23 +53,84 @@ const testStoreEntities = (
 
 const testSuccessfulRequest = (
   reducer: Reducer<any>,
-  action: any,
+  successfulRequestAction: any,
   expectedStateFromEmpty: ModuleState,
   stateWithoutExistingEntity: ModuleState,
   expectedStateWithoutExistingEntity: ModuleState,
   stateWithExistingEntity: ModuleState,
   expectedStateWithExistingEntity: ModuleState,
 ) => {
-  describe(`successful request (${action.type})`, () => {
+  if (successfulRequestAction.type === Projects.actions.PROJECT.SUCCESS) {
+    console.log('action', successfulRequestAction);
+    console.log('expectedStateFromEmpty', expectedStateFromEmpty);
+    console.log('stateWithoutExistingEntity', stateWithoutExistingEntity);
+    console.log('expectedStateWithoutExistingEntity', expectedStateWithoutExistingEntity);
+    console.log('stateWithExistingEntity', stateWithExistingEntity);
+    console.log('expectedStateWithExistingEntity', expectedStateWithExistingEntity);
+  }
+
+  describe(`successful request (${successfulRequestAction.type})`, () => {
     it('with an empty initial state', () => {
-      expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
+      const expected = expectedStateFromEmpty;
+      const action = successfulRequestAction;
+      expect(reducer(undefined, action)).to.deep.equal(expected);
     });
 
     it('makes no changes with an empty result', () => {
-      const emptyAction: any = { type: action.type, response: undefined };
-      const newState = reducer(stateWithoutExistingEntity, emptyAction);
-      expect(newState).to.deep.equal(stateWithoutExistingEntity);
-      expect(newState).to.equal(stateWithoutExistingEntity);
+      const emptyAction: any = {
+        type: successfulRequestAction.type,
+        response: undefined,
+      };
+      const oldState = stateWithoutExistingEntity;
+      const expected = stateWithoutExistingEntity;
+      if (successfulRequestAction.type === Projects.actions.PROJECT.SUCCESS) {
+         console.log('stateWithoutExistingEntity3', stateWithoutExistingEntity);
+       }
+      const newState = reducer(oldState, emptyAction);
+      if (successfulRequestAction.type === Projects.actions.PROJECT.SUCCESS) {
+         console.log('stateWithoutExistingEntity4', stateWithoutExistingEntity);
+         console.log('newState5', newState);
+       }
+      expect(newState).to.deep.equal(expected);
+      expect(newState).to.equal(expected);
+    });
+
+    it('with other entities in state', () => {
+      const oldState = stateWithoutExistingEntity;
+      const action = successfulRequestAction;
+      const expected = expectedStateWithoutExistingEntity;
+      const newState = reducer(oldState, action);
+      if (action.type === Projects.actions.PROJECT.SUCCESS) {
+         console.log('stateWithoutExistingEntity6', stateWithoutExistingEntity);
+         console.log('newState7', newState);
+       }
+      expect(newState).to.deep.equal(expected);
+      expect(newState).to.not.equal(oldState); // make sure not mutated
+    });
+
+    it('by overwriting existing entities', () => {
+      const action = successfulRequestAction;
+      const oldState = stateWithExistingEntity;
+      const expected = expectedStateWithExistingEntity;
+      const newState = reducer(oldState, action);
+
+      expect(newState).to.deep.equal(expected);
+      expect(newState).to.not.equal(oldState); // make sure not mutated
+    });
+  });
+};
+
+const testFailedRequest = (
+  reducer: Reducer<any>,
+  action: any,
+  expectedStateFromEmpty: ModuleState,
+  stateWithoutExistingEntity: ModuleState,
+  expectedStateWithoutExistingEntity: ModuleState,
+  stateWithExistingEntity: ModuleState,
+) => {
+  describe(`failed request (${action.type})`, () => {
+    it('with an empty initial state', () => {
+      expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
     });
 
     it('with other entities in state', () => {
@@ -77,10 +139,10 @@ const testSuccessfulRequest = (
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
-    it('by overwriting existing entities', () => {
+    it('by not overwriting existing entities', () => {
       const newState = reducer(stateWithExistingEntity, action);
-      expect(newState).to.deep.equal(expectedStateWithExistingEntity);
-      expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      expect(newState).to.deep.equal(stateWithExistingEntity);
+      expect(newState).to.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
 };
@@ -95,6 +157,7 @@ const testReducer = (
   stateWithExistingEntity: ModuleState,
   successfulRequestAction: { type: string, response: any },
   expectedSuccessfulRequestObject: ModuleState,
+  failedRequestAction: { type: string, id: string, error: string },
 ) => {
   testInitialState(reducer, {});
 
@@ -117,10 +180,8 @@ const testReducer = (
   expectedStateFromEmpty = expectedSuccessfulRequestObject;
   expectedStateWithoutExistingEntity =
     assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
-  console.log('expectedStateWithoutExistingEntity', expectedStateWithoutExistingEntity);
   expectedStateWithExistingEntity =
     assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedSuccessfulRequestObject);
-  console.log('expectedStateWithExistingEntity', expectedStateWithExistingEntity);
 
   testSuccessfulRequest(
     reducer,
@@ -130,6 +191,19 @@ const testReducer = (
     expectedStateWithoutExistingEntity,
     stateWithExistingEntity,
     expectedStateWithExistingEntity,
+  );
+
+  expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
+  expectedStateWithoutExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedStateFromEmpty);
+
+  testFailedRequest(
+    reducer,
+    failedRequestAction,
+    expectedStateFromEmpty,
+    stateWithoutExistingEntity,
+    expectedStateWithoutExistingEntity,
+    stateWithExistingEntity,
   );
 };
 
@@ -211,6 +285,12 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '1',
+      type: Branches.actions.BRANCH.FAILURE,
+      error: 'Error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -219,6 +299,7 @@ describe('reducers', () => {
       stateWithExistingEntity,
       successfulRequestAction,
       expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
   });
 
@@ -349,6 +430,12 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '2543452',
+      type: Commits.actions.COMMIT.FAILURE,
+      error: 'Error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -357,6 +444,7 @@ describe('reducers', () => {
       stateWithExistingEntity,
       successfulRequestAction,
       expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
   });
 
@@ -429,6 +517,12 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '7',
+      type: Deployments.actions.DEPLOYMENT.FAILURE,
+      error: 'Error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -437,6 +531,7 @@ describe('reducers', () => {
       stateWithExistingEntity,
       successfulRequestAction,
       expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
   });
 
@@ -483,9 +578,9 @@ describe('reducers', () => {
         'activeUsers': [],
         'branches': [],
       },
-      '2': {
-        'id': '2',
-        'name': 'Second project again',
+      '1': {
+        'id': '1',
+        'name': 'First project again',
         'description': 'foobar',
         'activeUsers': ['user@domain.com'],
         'branches': [],
@@ -507,6 +602,12 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '1',
+      type: Projects.actions.PROJECT.FAILURE,
+      error: 'Error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -515,6 +616,7 @@ describe('reducers', () => {
       stateWithExistingEntity,
       successfulRequestAction,
       expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
 
     const successfulAllProjectsRequestAction = {
