@@ -60,19 +60,11 @@ const testSuccessfulRequest = (
   stateWithExistingEntity: ModuleState,
   expectedStateWithExistingEntity: ModuleState,
 ) => {
-  if (successfulRequestAction.type === Projects.actions.PROJECT.SUCCESS) {
-    console.log('action', successfulRequestAction);
-    console.log('expectedStateFromEmpty', expectedStateFromEmpty);
-    console.log('stateWithoutExistingEntity', stateWithoutExistingEntity);
-    console.log('expectedStateWithoutExistingEntity', expectedStateWithoutExistingEntity);
-    console.log('stateWithExistingEntity', stateWithExistingEntity);
-    console.log('expectedStateWithExistingEntity', expectedStateWithExistingEntity);
-  }
-
   describe(`successful request (${successfulRequestAction.type})`, () => {
     it('with an empty initial state', () => {
       const expected = expectedStateFromEmpty;
       const action = successfulRequestAction;
+
       expect(reducer(undefined, action)).to.deep.equal(expected);
     });
 
@@ -83,14 +75,8 @@ const testSuccessfulRequest = (
       };
       const oldState = stateWithoutExistingEntity;
       const expected = stateWithoutExistingEntity;
-      if (successfulRequestAction.type === Projects.actions.PROJECT.SUCCESS) {
-         console.log('stateWithoutExistingEntity3', stateWithoutExistingEntity);
-       }
       const newState = reducer(oldState, emptyAction);
-      if (successfulRequestAction.type === Projects.actions.PROJECT.SUCCESS) {
-         console.log('stateWithoutExistingEntity4', stateWithoutExistingEntity);
-         console.log('newState5', newState);
-       }
+
       expect(newState).to.deep.equal(expected);
       expect(newState).to.equal(expected);
     });
@@ -100,10 +86,7 @@ const testSuccessfulRequest = (
       const action = successfulRequestAction;
       const expected = expectedStateWithoutExistingEntity;
       const newState = reducer(oldState, action);
-      if (action.type === Projects.actions.PROJECT.SUCCESS) {
-         console.log('stateWithoutExistingEntity6', stateWithoutExistingEntity);
-         console.log('newState7', newState);
-       }
+
       expect(newState).to.deep.equal(expected);
       expect(newState).to.not.equal(oldState); // make sure not mutated
     });
@@ -625,8 +608,10 @@ describe('reducers', () => {
     };
 
     const allProjectsObjects = expectedObjectsToStore;
-    const expectedStateWithoutExistingEntity = assign(stateWithoutExistingEntity, allProjectsObjects);
-    const expectedStateWithExistingEntity = assign(stateWithExistingEntity, allProjectsObjects);
+    const expectedStateWithoutExistingEntity =
+      assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, allProjectsObjects);
+    const expectedStateWithExistingEntity =
+      assign<ModuleState, ModuleState>({}, stateWithExistingEntity, allProjectsObjects);
 
     describe(`successful request all projects (${successfulAllProjectsRequestAction.type})`, () => {
       it('with an empty initial state', () => {
