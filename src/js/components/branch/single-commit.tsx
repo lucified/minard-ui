@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
+import { isError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
 import CommitSummary from '../common/commit-summary';
@@ -21,7 +22,7 @@ interface GeneratedProps {
 const SingleCommit = ({ commit, deployment }: PassedProps & GeneratedProps) => (
   <div className="columns">
     <div className="column col-3">
-      {commit.deployment && (
+      {deployment && (
         <MinardLink deployment={deployment}>
           <img src={screenshot /* TODO: deployment.screenshot*/} className="img-responsive" />
         </MinardLink>
@@ -37,8 +38,10 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   const { commit } = ownProps;
 
   if (commit.deployment) {
+    let deploymentOrError = Deployments.selectors.getDeployment(state, commit.deployment);
+
     return {
-      deployment: Deployments.selectors.getDeployment(state, commit.deployment),
+      deployment: isError(deploymentOrError) ? undefined : deploymentOrError,
     };
   }
 

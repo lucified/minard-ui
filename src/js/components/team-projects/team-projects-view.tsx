@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
+import { FetchError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -10,7 +11,7 @@ import ProjectsSection from './projects-section';
 
 interface GeneratedStateProps {
   activities: Activity[];
-  projects: Project[];
+  projects: (Project | FetchError)[];
 }
 
 interface GeneratedDispatchProps {
@@ -35,12 +36,14 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
   }
 };
 
-const mapStateToProps = (state: StateTree) => ({
+const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   projects: Projects.selectors.getProjects(state),
   activities: Activities.selectors.getActivities(state),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
   mapStateToProps,
-  { loadAllProjects: Projects.actions.loadAllProjects }
+  {
+    loadAllProjects: Projects.actions.loadAllProjects,
+  }
 )(TeamProjectsView);

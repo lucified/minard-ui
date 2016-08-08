@@ -1,13 +1,14 @@
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
+import { FetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 
 import SectionTitle from '../common/section-title';
 import ProjectSummary from './project-summary';
 
 interface Props {
-  projects?: Project[];
+  projects?: (Project | FetchError)[];
 }
 
 const loadingBanner = (
@@ -18,7 +19,7 @@ const loadingBanner = (
   </div>
 );
 
-const projectInfo = (projects: Project[]) =>
+const projectInfo = (projects: (Project | FetchError)[]) =>
   projects.map(project => <ProjectSummary key={project.id} project={project} />);
 
 const ProjectsSection = ({ projects }: Props) => (

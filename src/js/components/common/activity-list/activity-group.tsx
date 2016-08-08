@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { Activity } from '../../../modules/activities';
 import Branches, { Branch } from '../../../modules/branches';
+import { FetchError, isError } from '../../../modules/errors';
 import { StateTree } from '../../../reducers';
 
 import MinardLink from '../minard-link';
@@ -18,34 +19,52 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  branch: Branch;
+  branch: Branch | FetchError;
 }
 
-class ActivityGroup extends React.Component<PassedProps & GeneratedProps, any> {
-  public render() {
-    const { activities, branch, showProjectName } = this.props;
+const getLoadingContent = () => (
+  <div><h1>Loading...</h1></div>
+);
 
-    return (
-      <div className={classNames('columns', styles.activityGroup)}>
-        <div className={classNames('column', 'col-3', styles.activityScreenshot)}>
-          <MinardLink><img src={screenshot} className="img-responsive" /></MinardLink>
-        </div>
-        <div className={classNames('column', 'col-9', styles.activityContent)}>
-          {activities.map(activity =>
-            <SingleActivity
-              activity={activity}
-              branch={branch}
-              key={activity.id}
-              showProjectName={showProjectName}
-            />
-          )}
-        </div>
-      </div>
-    );
+const getErrorContent = (branch: FetchError) => (
+  <div>
+    <h1>Oh no, errors. :(</h1>
+    <p>{branch.error}</p>
+  </div>
+);
+
+const ActivityGroup = ({ activities, branch, showProjectName }: PassedProps & GeneratedProps) => {
+  if (!branch) {
+    return getLoadingContent();
   }
-}
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
+  if (isError(branch)) {
+    return getErrorContent(branch);
+  }
+
+  // Seems this is needed due to a bug in TypeScript?
+  let realBranch = branch;
+
+  return (
+    <div className={classNames('columns', styles.activityGroup)}>
+      <div className={classNames('column', 'col-3', styles.activityScreenshot)}>
+        <MinardLink><img src={screenshot} className="img-responsive" /></MinardLink>
+      </div>
+      <div className={classNames('column', 'col-9', styles.activityContent)}>
+        {activities.map(activity =>
+          <SingleActivity
+            activity={activity}
+            branch={realBranch}
+            key={activity.id}
+            showProjectName={showProjectName}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => ({
   branch: Branches.selectors.getBranch(state, ownProps.activities[0].branch),
 });
 

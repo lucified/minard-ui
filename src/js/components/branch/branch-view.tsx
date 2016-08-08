@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Branches, { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
+import { FetchError, isError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -17,10 +18,10 @@ interface PassedProps {
   };
 }
 
-interface GeneratedProps {
-  project: Project;
-  branch: Branch;
-  commits: Commit[];
+interface GeneratedStateProps {
+  project?: Project | FetchError;
+  branch?: Branch | FetchError;
+  commits?: (Commit | FetchError)[];
 }
 
 interface GeneratedDispatchProps {
@@ -28,7 +29,7 @@ interface GeneratedDispatchProps {
   loadBranch: (id: string) => void;
 }
 
-class BranchView extends React.Component<GeneratedProps & PassedProps & GeneratedDispatchProps, StateTree> {
+class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
   public componentWillMount() {
     const { loadProject, loadBranch } = this.props;
     const { projectId, id } = this.props.params;
@@ -47,10 +48,28 @@ class BranchView extends React.Component<GeneratedProps & PassedProps & Generate
     );
   }
 
+  private getErrorContent(error: FetchError) {
+    return (
+      <div className="empty">
+        <Icon name="exclamation" fixedWidth size="3x" />
+        <p className="empty-title">Error!</p>
+        <p className="empty-meta">{error.error}</p>
+      </div>
+    );
+  }
+
   public render() {
     const { branch, commits, project } = this.props;
     if (!project || !branch) {
       return this.getLoadingContent();
+    }
+
+    if (isError(project)) {
+      return this.getErrorContent(project);
+    }
+
+    if (isError(branch)) {
+      return this.getErrorContent(branch);
     }
 
     return (
@@ -63,13 +82,17 @@ class BranchView extends React.Component<GeneratedProps & PassedProps & Generate
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { projectId, id } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, id);
 
-  let commits: Commit[];
-  if (branch) {
+  if (!project || !branch) {
+    return {};
+  }
+
+  let commits: (Commit | FetchError)[];
+  if (!isError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));
   }
 
@@ -80,7 +103,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
   };
 };
 
-export default connect<GeneratedProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   {
     loadBranch: Branches.actions.loadBranch,
