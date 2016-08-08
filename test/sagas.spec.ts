@@ -394,29 +394,32 @@ describe('sagas', () => {
           activeUsers: [],
         },
       ];
-      const branches: {[id: string]: Branch} = {
-        '1': {
+      const project1Branches: Branch[] = [
+        {
           id: 'a',
           name: 'brancha',
           project: '1',
           commits: [],
           deployments: ['d1'],
         },
-        '2': {
+        {
           id: 'b',
           name: 'branchb',
           project: '1',
           commits: [],
           deployments: [],
-        },
-        '3': {
+        }
+      ];
+
+      const project2Branches: Branch[] = [
+        {
           id: 'c',
           name: 'branchc',
           project: '2',
           commits: [],
           deployments: ['d2', 'd3', 'd4'],
         },
-      };
+      ];
 
       expect(iterator.next().value).to.deep.equal(
         select(Projects.selectors.getProjects)
@@ -429,25 +432,13 @@ describe('sagas', () => {
         ]
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, '1')
-      );
-
-      expect(iterator.next(branches['1']).value).to.deep.equal(
-        select(Branches.selectors.getBranch, '2')
-      );
-
-      expect(iterator.next(branches['2']).value).to.deep.equal(
+      expect(iterator.next(project1Branches).value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'branches', '3'),
         ]
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, '3')
-      );
-
-      expect(iterator.next(branches['3']).value).to.deep.equal(
+      expect(iterator.next(project2Branches).value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'deployments', 'd1'),
           call(sagas.fetchIfMissing, 'deployments', 'd2'),
@@ -468,29 +459,29 @@ describe('sagas', () => {
         branches: ['1', '2', '3'],
         activeUsers: [],
       };
-      const branches: {[id: string]: Branch} = {
-        '1': {
+      const branches: Branch[] = [
+        {
           id: 'a',
           name: 'brancha',
           project: '1',
           commits: [],
           deployments: ['d1'],
         },
-        '2': {
+        {
           id: 'b',
           name: 'branchb',
           project: '1',
           commits: [],
           deployments: [],
         },
-        '3': {
+        {
           id: 'c',
           name: 'branchc',
           project: '1',
           commits: [],
           deployments: ['d2', 'd3', 'd4'],
         },
-      };
+      ];
 
       expect(iterator.next().value).to.deep.equal(
         select(Projects.selectors.getProject, id)
@@ -504,19 +495,7 @@ describe('sagas', () => {
         ]
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, '1')
-      );
-
-      expect(iterator.next(branches['1']).value).to.deep.equal(
-        select(Branches.selectors.getBranch, '2')
-      );
-
-      expect(iterator.next(branches['2']).value).to.deep.equal(
-        select(Branches.selectors.getBranch, '3')
-      );
-
-      expect(iterator.next(branches['3']).value).to.deep.equal(
+      expect(iterator.next(branches).value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'deployments', 'd1'),
           call(sagas.fetchIfMissing, 'deployments', 'd2'),
@@ -639,7 +618,15 @@ describe('sagas', () => {
           call(fetcher, id)
         );
 
-        expect(iterator.next().done).to.equal(true);
+        expect(iterator.next().value).to.deep.equal(
+          select(selector, id)
+        );
+
+        const obj = { id };
+        const next = iterator.next(obj);
+
+        expect(next.done).to.equal(true);
+        expect(next.value).to.equal(obj);
       });
     };
 
@@ -656,7 +643,11 @@ describe('sagas', () => {
         select(Commits.selectors.getCommit, id)
       );
 
-      expect(iterator.next({ id }).done).to.equal(true);
+      const obj = { id };
+      const next = iterator.next(obj);
+
+      expect(next.done).to.equal(true);
+      expect(next.value).to.equal(obj);
     });
   });
 
