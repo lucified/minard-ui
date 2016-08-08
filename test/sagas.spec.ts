@@ -309,7 +309,7 @@ describe('sagas', () => {
 
   describe('fetchAllProjects', () => {
     it('fetches and stores all projects', () => {
-      const response = testData.projectsResponseNoInclude;
+      const response = testData.allProjectsResponseNoInclude;
       const iterator = sagas.fetchAllProjects();
 
       expect(iterator.next().value).to.deep.equal(

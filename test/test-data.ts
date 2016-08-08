@@ -145,7 +145,7 @@ export const projectsResponse: ApiResponse = {
   ],
 };
 
-export const projectsResponseNoInclude: ApiResponse = {
+export const allProjectsResponseNoInclude: ApiResponse = {
   'data': [
     {
       'type': 'projects',
@@ -725,7 +725,9 @@ export const commitResponse: ApiResponse = {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-27T15:51:21.802Z',
         },
-        'message': 'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases',
+        'message': 'Try to do something\n\n' +
+          'This is a longer commit explanation for whatever was done to the commit. ' +
+          'It should be truncated in some cases',
       },
       'relationships': {
         'deployments': {
@@ -789,5 +791,5 @@ export const commitResponseNoInclude: ApiResponse = {
         }],
       },
     },
-  }
+  },
 };
