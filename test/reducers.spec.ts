@@ -210,12 +210,14 @@ describe('reducers', () => {
         id: '1',
         type: ActivityType.Deployment,
         deployment: '7',
+        branch: '1',
         timestamp: 1470131481802,
       },
       2: {
         id: '2',
         type: ActivityType.Deployment,
         deployment: '8',
+        branch: '2',
         timestamp: 1470045081802,
       },
     };
@@ -225,6 +227,7 @@ describe('reducers', () => {
         id: '3',
         type: ActivityType.Deployment,
         deployment: '1',
+        branch: '3',
         timestamp: 1469945081802,
       },
     };
@@ -234,12 +237,14 @@ describe('reducers', () => {
         id: '1',
         type: ActivityType.Deployment,
         deployment: '2',
+        branch: '1',
         timestamp: 1470101481802,
       },
       3: {
         id: '3',
         type: ActivityType.Deployment,
         deployment: '1',
+        branch: '3',
         timestamp: 1469945081802,
       },
     };

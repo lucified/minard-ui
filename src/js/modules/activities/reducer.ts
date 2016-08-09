@@ -24,6 +24,7 @@ const responseToStateShape = (activities: t.ApiResponse) => {
       id: activity.id,
       type: activityType(activity.attributes.activityType),
       deployment: activity.relationships.deployment.data.id,
+      branch: activity.relationships.branch.data.id,
       timestamp: moment(activity.attributes.timestamp).valueOf(),
     };
   };

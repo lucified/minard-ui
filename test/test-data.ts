@@ -810,6 +810,12 @@ export const activitiesResponse = {
             'id': '7',
           },
         },
+        'branch': {
+          'data': {
+            'type': 'branches',
+            'id': '1',
+          },
+        },
       },
     },
     {
@@ -824,6 +830,12 @@ export const activitiesResponse = {
           'data': {
             'type': 'deployments',
             'id': '8',
+          },
+        },
+        'branch': {
+          'data': {
+            'type': 'branches',
+            'id': '2',
           },
         },
       },
