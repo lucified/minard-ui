@@ -140,7 +140,7 @@ const testReducer = (
   stateWithExistingEntity: ModuleState,
   successfulRequestAction: { type: string, response: any },
   expectedSuccessfulRequestObject: ModuleState,
-  failedRequestAction: { type: string, id: string, error: string },
+  failedRequestAction: FetchError,
 ) => {
   testInitialState(reducer, {});
 
@@ -272,6 +272,7 @@ describe('reducers', () => {
       id: '1',
       type: Branches.actions.BRANCH.FAILURE,
       error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
     };
 
     testReducer(
@@ -417,6 +418,7 @@ describe('reducers', () => {
       id: '2543452',
       type: Commits.actions.COMMIT.FAILURE,
       error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
     };
 
     testReducer(
@@ -504,6 +506,7 @@ describe('reducers', () => {
       id: '7',
       type: Deployments.actions.DEPLOYMENT.FAILURE,
       error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
     };
 
     testReducer(
@@ -589,6 +592,7 @@ describe('reducers', () => {
       id: '1',
       type: Projects.actions.PROJECT.FAILURE,
       error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
     };
 
     testReducer(
