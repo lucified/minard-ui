@@ -526,6 +526,10 @@ describe('sagas', () => {
       );
 
       expect(iterator.next(branch).value).to.deep.equal(
+        call(sagas.fetchIfMissing, 'projects', '1')
+      );
+
+      expect(iterator.next().value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'deployments', 'd1'),
         ]

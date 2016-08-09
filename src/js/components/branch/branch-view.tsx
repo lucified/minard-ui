@@ -25,16 +25,14 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadProject: (id: string) => void;
   loadBranch: (id: string) => void;
 }
 
 class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
   public componentWillMount() {
-    const { loadProject, loadBranch } = this.props;
-    const { projectId, id } = this.props.params;
+    const { loadBranch } = this.props;
+    const { id } = this.props.params;
 
-    loadProject(projectId);
     loadBranch(id);
   }
 
@@ -60,16 +58,20 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 
   public render() {
     const { branch, commits, project } = this.props;
-    if (!project || !branch) {
+    if (!branch) {
+      return this.getLoadingContent();
+    }
+
+    if (isError(branch)) {
+      return this.getErrorContent(branch);
+    }
+
+    if (!project) {
       return this.getLoadingContent();
     }
 
     if (isError(project)) {
       return this.getErrorContent(project);
-    }
-
-    if (isError(branch)) {
-      return this.getErrorContent(branch);
     }
 
     return (
@@ -88,7 +90,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const branch = Branches.selectors.getBranch(state, id);
   let commits: (Commit | FetchError)[];
 
-  if (project && branch && !isError(branch)) {
+  if (branch && !isError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));
   }
 
@@ -103,6 +105,5 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>
   mapStateToProps,
   {
     loadBranch: Branches.actions.loadBranch,
-    loadProject: Projects.actions.loadProject,
   }
 )(BranchView);
