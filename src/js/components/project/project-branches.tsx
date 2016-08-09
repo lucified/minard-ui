@@ -2,12 +2,13 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
 import { Branch } from '../../modules/branches';
+import { FetchError, isError } from '../../modules/errors';
 
 import SectionTitle from '../common/section-title';
 import BranchSummary from './branch-summary';
 
 interface Props {
-  branches: Branch[];
+  branches: (Branch | FetchError)[];
 }
 
 class ProjectBranches extends React.Component<Props, any> {
@@ -31,6 +32,16 @@ class ProjectBranches extends React.Component<Props, any> {
     );
   }
 
+  private getErrorMessage(branch: FetchError) {
+    return (
+      <div key={branch.id} className="empty">
+        <Icon name="exclamation" fixedWidth size="3x" />
+        <p className="empty-title">Uhhoh. Unable to get branch information</p>
+        <p className="empty-meta">{branch.prettyError}</p>
+      </div>
+    );
+  }
+
   public render() {
     const { branches } = this.props;
 
@@ -41,10 +52,15 @@ class ProjectBranches extends React.Component<Props, any> {
           <div className="columns">
             <div className="column col-1" />
             <div className="column col-10">
-              {branches.map((branch, i) => branch ?
-                <BranchSummary key={branch.id} branch={branch} /> :
-                this.getLoadingContent(i)
-              )}
+              {branches.map((branch, i) => {
+                if (!branch) {
+                  return this.getLoadingContent(i);
+                } else if (isError(branch)) {
+                  return this.getErrorMessage(branch);
+                }
+
+                return <BranchSummary key={branch.id} branch={branch} />;
+              })}
             </div>
             <div className="column col-1" />
           </div>

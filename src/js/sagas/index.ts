@@ -115,6 +115,7 @@ export default function createSagas(api: Api) {
   function* ensureBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
     const branch = <Branch> (yield select(Branches.selectors.getBranch, id));
 
+    yield call(fetchIfMissing, 'projects', branch.project);
     yield branch.deployments.map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
     yield branch.commits.map(commitId => call(fetchIfMissing, 'commits', commitId));
   }

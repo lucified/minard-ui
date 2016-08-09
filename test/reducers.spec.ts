@@ -1,12 +1,12 @@
 import { expect } from 'chai';
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import { Reducer } from 'redux';
 
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
+import { FetchError } from '../src/js/modules/errors';
 import Projects, { ProjectState } from '../src/js/modules/projects';
-
 
 import * as testData from './test-data';
 
@@ -31,7 +31,7 @@ const testStoreEntities = (
     });
 
     it('makes no changes with an empty list', () => {
-      const emptyAction = { type: action.type, entities: <any[]>[] };
+      const emptyAction = { type: action.type, entities: <any[]> [] };
       const newState = reducer(stateWithoutExistingEntity, emptyAction);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
@@ -53,23 +53,67 @@ const testStoreEntities = (
 
 const testSuccessfulRequest = (
   reducer: Reducer<any>,
-  action: any,
-  expectedStateFromEmpty: any,
-  stateWithoutExistingEntity: any,
-  expectedStateWithoutExistingEntity: any,
-  stateWithExistingEntity: any,
-  expectedStateWithExistingEntity: any,
+  successfulRequestAction: any,
+  expectedStateFromEmpty: ModuleState,
+  stateWithoutExistingEntity: ModuleState,
+  expectedStateWithoutExistingEntity: ModuleState,
+  stateWithExistingEntity: ModuleState,
+  expectedStateWithExistingEntity: ModuleState,
 ) => {
-  describe(`successful request (${action.type})`, () => {
+  describe(`successful request (${successfulRequestAction.type})`, () => {
     it('with an empty initial state', () => {
-      expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
+      const expected = expectedStateFromEmpty;
+      const action = successfulRequestAction;
+
+      expect(reducer(undefined, action)).to.deep.equal(expected);
     });
 
     it('makes no changes with an empty result', () => {
-      const emptyAction: any = { type: action.type, response: undefined };
-      const newState = reducer(stateWithoutExistingEntity, emptyAction);
-      expect(newState).to.deep.equal(stateWithoutExistingEntity);
-      expect(newState).to.equal(stateWithoutExistingEntity);
+      const emptyAction: any = {
+        type: successfulRequestAction.type,
+        response: undefined,
+      };
+      const oldState = stateWithoutExistingEntity;
+      const expected = stateWithoutExistingEntity;
+      const newState = reducer(oldState, emptyAction);
+
+      expect(newState).to.deep.equal(expected);
+      expect(newState).to.equal(expected);
+    });
+
+    it('with other entities in state', () => {
+      const oldState = stateWithoutExistingEntity;
+      const action = successfulRequestAction;
+      const expected = expectedStateWithoutExistingEntity;
+      const newState = reducer(oldState, action);
+
+      expect(newState).to.deep.equal(expected);
+      expect(newState).to.not.equal(oldState); // make sure not mutated
+    });
+
+    it('by overwriting existing entities', () => {
+      const action = successfulRequestAction;
+      const oldState = stateWithExistingEntity;
+      const expected = expectedStateWithExistingEntity;
+      const newState = reducer(oldState, action);
+
+      expect(newState).to.deep.equal(expected);
+      expect(newState).to.not.equal(oldState); // make sure not mutated
+    });
+  });
+};
+
+const testFailedRequest = (
+  reducer: Reducer<any>,
+  action: any,
+  expectedStateFromEmpty: ModuleState,
+  stateWithoutExistingEntity: ModuleState,
+  expectedStateWithoutExistingEntity: ModuleState,
+  stateWithExistingEntity: ModuleState,
+) => {
+  describe(`failed request (${action.type})`, () => {
+    it('with an empty initial state', () => {
+      expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
     });
 
     it('with other entities in state', () => {
@@ -78,10 +122,10 @@ const testSuccessfulRequest = (
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
-    it('by overwriting existing entities', () => {
+    it('by not overwriting existing entities', () => {
       const newState = reducer(stateWithExistingEntity, action);
-      expect(newState).to.deep.equal(expectedStateWithExistingEntity);
-      expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      expect(newState).to.deep.equal(stateWithExistingEntity);
+      expect(newState).to.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
 };
@@ -96,12 +140,15 @@ const testReducer = (
   stateWithExistingEntity: ModuleState,
   successfulRequestAction: { type: string, response: any },
   expectedSuccessfulRequestObject: ModuleState,
+  failedRequestAction: FetchError,
 ) => {
   testInitialState(reducer, {});
 
   let expectedStateFromEmpty = expectedObjectsToStore;
-  let expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedObjectsToStore);
-  let expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedObjectsToStore);
+  let expectedStateWithoutExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedObjectsToStore);
+  let expectedStateWithExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedObjectsToStore);
 
   testStoreEntities(
     reducer,
@@ -110,12 +157,14 @@ const testReducer = (
     stateWithoutExistingEntity,
     expectedStateWithoutExistingEntity,
     stateWithExistingEntity,
-    expectedStateWithExistingEntity
+    expectedStateWithExistingEntity,
   );
 
   expectedStateFromEmpty = expectedSuccessfulRequestObject;
-  expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, expectedSuccessfulRequestObject);
-  expectedStateWithExistingEntity = merge(stateWithExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithoutExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedSuccessfulRequestObject);
 
   testSuccessfulRequest(
     reducer,
@@ -124,7 +173,20 @@ const testReducer = (
     stateWithoutExistingEntity,
     expectedStateWithoutExistingEntity,
     stateWithExistingEntity,
-    expectedStateWithExistingEntity
+    expectedStateWithExistingEntity,
+  );
+
+  expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
+  expectedStateWithoutExistingEntity =
+    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedStateFromEmpty);
+
+  testFailedRequest(
+    reducer,
+    failedRequestAction,
+    expectedStateFromEmpty,
+    stateWithoutExistingEntity,
+    expectedStateWithoutExistingEntity,
+    stateWithExistingEntity,
   );
 };
 
@@ -206,6 +268,13 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '1',
+      type: Branches.actions.BRANCH.FAILURE,
+      error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -213,7 +282,8 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
   });
 
@@ -344,6 +414,13 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '2543452',
+      type: Commits.actions.COMMIT.FAILURE,
+      error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -351,7 +428,8 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
   });
 
@@ -424,6 +502,13 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '7',
+      type: Deployments.actions.DEPLOYMENT.FAILURE,
+      error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -431,7 +516,8 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
   });
 
@@ -478,9 +564,9 @@ describe('reducers', () => {
         'activeUsers': [],
         'branches': [],
       },
-      '2': {
-        'id': '2',
-        'name': 'Second project again',
+      '1': {
+        'id': '1',
+        'name': 'First project again',
         'description': 'foobar',
         'activeUsers': ['user@domain.com'],
         'branches': [],
@@ -502,6 +588,13 @@ describe('reducers', () => {
       },
     };
 
+    const failedRequestObject: FetchError = {
+      id: '1',
+      type: Projects.actions.PROJECT.FAILURE,
+      error: 'Error message in testing',
+      prettyError: 'Pretty error message in testing',
+    };
+
     testReducer(
       reducer,
       storeAction,
@@ -509,7 +602,8 @@ describe('reducers', () => {
       stateWithoutExistingEntity,
       stateWithExistingEntity,
       successfulRequestAction,
-      expectedSuccessfulRequestObject
+      expectedSuccessfulRequestObject,
+      failedRequestObject,
     );
 
     const successfulAllProjectsRequestAction = {
@@ -518,8 +612,10 @@ describe('reducers', () => {
     };
 
     const allProjectsObjects = expectedObjectsToStore;
-    const expectedStateWithoutExistingEntity = merge(stateWithoutExistingEntity, allProjectsObjects);
-    const expectedStateWithExistingEntity = merge(stateWithExistingEntity, allProjectsObjects);
+    const expectedStateWithoutExistingEntity =
+      assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, allProjectsObjects);
+    const expectedStateWithExistingEntity =
+      assign<ModuleState, ModuleState>({}, stateWithExistingEntity, allProjectsObjects);
 
     describe(`successful request all projects (${successfulAllProjectsRequestAction.type})`, () => {
       it('with an empty initial state', () => {
@@ -527,7 +623,7 @@ describe('reducers', () => {
       });
 
       it('makes no changes with an empty list', () => {
-        const emptyAction = { type: successfulAllProjectsRequestAction.type, entities: <any[]>[] };
+        const emptyAction = { type: successfulAllProjectsRequestAction.type, entities: <any[]> [] };
         const newState = reducer(stateWithoutExistingEntity, emptyAction);
         expect(newState).to.deep.equal(stateWithoutExistingEntity);
         expect(newState).to.equal(stateWithoutExistingEntity);

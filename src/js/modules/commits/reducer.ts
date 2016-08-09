@@ -1,8 +1,10 @@
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { STORE_COMMITS, COMMIT } from './actions';
+import { FetchError, isError } from '../errors';
+
+import { COMMIT, STORE_COMMITS } from './actions';
 import * as t from './types';
 
 const initialState: t.CommitState = {};
@@ -35,22 +37,31 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     };
   };
 
-  return commits.reduce((obj, commit) => merge(obj, { [commit.id]: createCommitObject(commit) }), {});
+  return commits.reduce((obj, commit) => assign(obj, { [commit.id]: createCommitObject(commit) }), {});
 };
 
 const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
   switch (action.type) {
     case COMMIT.SUCCESS:
-      const commitResonse = (<t.RequestCommitAction> action).response;
+      const commitResonse = (<t.RequestCommitRequestAction> action).response;
       if (commitResonse) {
-        return merge({}, state, responseToStateShape([commitResonse]));
+        return assign<t.CommitState, t.CommitState>({}, state, responseToStateShape([commitResonse]));
       } else {
         return state;
       }
+    case COMMIT.FAILURE:
+      const responseAction = <FetchError> action;
+      const existingEntity = state[responseAction.id];
+      if (!existingEntity || isError(existingEntity)) {
+        return assign<t.CommitState, t.CommitState>({}, state, { [responseAction.id]: responseAction });
+      }
+
+      console.log('Error: fetching failed! Not replacing existing entity.');
+      return state;
     case STORE_COMMITS:
       const commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
-        return merge({}, state, responseToStateShape(commits));
+        return assign<t.CommitState, t.CommitState>({}, state, responseToStateShape(commits));
       } else {
         return state;
       }

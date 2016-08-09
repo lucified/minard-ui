@@ -19,18 +19,18 @@ const commitJSON = require('file!../../../json/commit.json');
 function callApi(url: string) {
   return fetch(url, { credentials: 'same-origin' })
     .then(response =>
-      response.json().then(json => ({ json, response }))
-    ).then(({ json, response }) => {
-      if (!response.ok) {
-        return Promise.reject(json);
-      }
-
-      return json;
-    })
-    .then(
-      response => ({ response }),
-      error => ({ error: error.message || 'Something bad happened' }),
-    );
+      response.json().then(json => ({
+        json,
+        response,
+      }))
+    ).then(({ json, response }) =>
+      response.ok ? json : Promise.reject(json)
+    ).then(json => ({
+      response: json,
+    }))
+    .catch(error => ({
+      error: error.message || 'Something bad happened',
+    }));
 }
 
 // TODO: call actual endpoints

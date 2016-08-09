@@ -5,7 +5,9 @@ import Activities, { ActivityState } from './modules/activities';
 import Branches, { BranchState } from './modules/branches';
 import Commits, { CommitState } from './modules/commits';
 import Deployments, { DeploymentState } from './modules/deployments';
+import Errors, { ErrorState } from './modules/errors';
 import Projects, { ProjectState } from './modules/projects';
+
 
 export default combineReducers({
   entities: combineReducers({
@@ -15,6 +17,7 @@ export default combineReducers({
     projects: Projects.reducer,
     deployments: Deployments.reducer,
   }),
+  errors: Errors.reducer,
   routing: routerReducer,
 });
 
@@ -26,5 +29,6 @@ export interface StateTree {
     projects: ProjectState;
     deployments: DeploymentState;
   };
+  errors: ErrorState;
   routing: any;
 }

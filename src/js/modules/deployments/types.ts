@@ -1,5 +1,7 @@
 import { Action, ActionCreator } from 'redux';
 
+import { FetchError } from '../errors';
+
 // State
 export interface Deployment {
   id: string;
@@ -14,22 +16,27 @@ export interface Deployment {
 }
 
 export interface DeploymentState {
-  [id: string]: Deployment;
+  [id: string]: Deployment | FetchError;
 };
 
 // Actions
-export interface RequestDeploymentAction extends Action {
+// DEPLOYMENT
+export interface RequestDeploymentRequestAction extends Action {
   id: string;
-  error?: any;
-  response?: ResponseDeploymentElement;
+}
+
+export interface RequestDeploymentSuccessAction extends Action {
+  id: string;
+  response: ResponseDeploymentElement;
 }
 
 export interface RequestDeploymentActionCreators {
-  request: ActionCreator<RequestDeploymentAction>;
-  success: ActionCreator<RequestDeploymentAction>;
-  failure: ActionCreator<RequestDeploymentAction>;
+  request: ActionCreator<RequestDeploymentRequestAction>;
+  success: ActionCreator<RequestDeploymentSuccessAction>;
+  failure: ActionCreator<FetchError>;
 }
 
+// STORE_DEPLOYMENTS
 export interface StoreDeploymentsAction extends Action {
   entities: ResponseDeploymentElement[];
 }

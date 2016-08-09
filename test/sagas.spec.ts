@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
@@ -7,6 +7,7 @@ import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
+import { FetchError } from '../src/js/modules/errors';
 import Projects, { Project } from '../src/js/modules/projects';
 import { StateTree } from '../src/js/reducers';
 import sagaCreator from '../src/js/sagas';
@@ -30,7 +31,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchAllProjects: () => Promise.resolve({ response: {} }),
   };
 
-  return merge(defaultFunctions, functionsToReplace);
+  return assign<Api, Api>(defaultFunctions, functionsToReplace);
 };
 
 // TODO: Test activity-related sagas
@@ -105,7 +106,7 @@ describe('sagas', () => {
   const testLoader = (
     name: string,
     loader: (id: string) => IterableIterator<Effect>,
-    selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project,
+    selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
     fetcher: (id: string) => IterableIterator<Effect>,
     ensurer: (id: string) => IterableIterator<Effect | Effect[]>,
   ) => {
@@ -308,7 +309,7 @@ describe('sagas', () => {
 
   describe('fetchAllProjects', () => {
     it('fetches and stores all projects', () => {
-      const response = testData.projectsResponseNoInclude;
+      const response = testData.allProjectsResponseNoInclude;
       const iterator = sagas.fetchAllProjects();
 
       expect(iterator.next().value).to.deep.equal(
@@ -408,7 +409,7 @@ describe('sagas', () => {
           project: '1',
           commits: [],
           deployments: [],
-        }
+        },
       ];
 
       const project2Branches: Branch[] = [
@@ -525,6 +526,10 @@ describe('sagas', () => {
       );
 
       expect(iterator.next(branch).value).to.deep.equal(
+        call(sagas.fetchIfMissing, 'projects', '1')
+      );
+
+      expect(iterator.next().value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'deployments', 'd1'),
         ]
@@ -603,7 +608,7 @@ describe('sagas', () => {
   describe('fetchIfMissing', () => {
     const testFetchIfMissing = (
       type: ApiEntityTypeString,
-      selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project,
+      selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
       fetcher: (id: string) => IterableIterator<Effect>,
     ) => {
       it(`fetches missing ${type}`, () => {

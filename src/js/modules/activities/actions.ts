@@ -1,6 +1,6 @@
 import { Action, ActionCreator } from 'redux';
 
-import { createRequestTypes } from '../common';
+import { createRequestTypes, prettyErrorMessage } from '../common';
 
 interface ActivityRequestActionObject {
   request: (branchId: string) => Action;
@@ -16,7 +16,7 @@ export const ACTIVITY = createRequestTypes('ACTIVITY');
 export const requestActionCreators: ActivityRequestActionObject = {
   request: (id) => ({ type: ACTIVITY.REQUEST, id }),
   success: (id, response) => ({ type: ACTIVITY.SUCCESS, id, response }),
-  failure: (id, error) => ({ type: ACTIVITY.FAILURE, id, error }),
+  failure: (id, error) => ({ type: ACTIVITY.FAILURE, id, error, prettyError: prettyErrorMessage(error) }),
 };
 
 export const LOAD_ACTIVITY = 'ACTIVITY/LOAD_ACTIVITY';

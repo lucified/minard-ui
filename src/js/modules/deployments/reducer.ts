@@ -1,6 +1,8 @@
-import { merge } from 'lodash';
+import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
+
+import { FetchError, isError } from '../errors';
 
 import { DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
 import * as t from './types';
@@ -23,22 +25,31 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
   };
 
   return deployments.reduce((obj, deployment) =>
-    merge(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
+    assign(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
 };
 
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
   switch (action.type) {
     case DEPLOYMENT.SUCCESS:
-      const deploymentResponse = (<t.RequestDeploymentAction> action).response;
+      const deploymentResponse = (<t.RequestDeploymentSuccessAction> action).response;
       if (deploymentResponse) {
-        return merge({}, state, responseToStateShape([deploymentResponse]));
+        return assign<t.DeploymentState, t.DeploymentState>({}, state, responseToStateShape([deploymentResponse]));
       } else {
         return state;
       }
+    case DEPLOYMENT.FAILURE:
+      const responseAction = <FetchError> action;
+      const existingEntity = state[responseAction.id];
+      if (!existingEntity || isError(existingEntity)) {
+        return assign<t.DeploymentState, t.DeploymentState>({}, state, { [responseAction.id]: responseAction });
+      }
+
+      console.log('Error: fetching failed! Not replacing existing entity.');
+      return state;
     case STORE_DEPLOYMENTS:
       const deployments = (<t.StoreDeploymentsAction> action).entities;
       if (deployments && deployments.length > 0) {
-        return merge({}, state, responseToStateShape(deployments));
+        return assign<t.DeploymentState, t.DeploymentState>({}, state, responseToStateShape(deployments));
       } else {
         return state;
       }

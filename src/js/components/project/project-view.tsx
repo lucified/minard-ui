@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
+import { FetchError, isError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -18,8 +19,8 @@ interface PassedProps {
 }
 
 interface GeneratedStateProps {
-  project?: Project;
-  branches?: Branch[];
+  project?: Project | FetchError;
+  branches?: (Branch | FetchError)[];
   activities?: Activity[];
 }
 
@@ -45,6 +46,16 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       );
     }
 
+    if (isError(project)) {
+      return (
+        <div className="empty">
+          <Icon name="exclamation" fixedWidth size="3x" />
+          <p className="empty-title">Error loading project</p>
+          <p className="empty-meta">{project.prettyError}</p>
+        </div>
+      );
+    }
+
     const { branches, activities } = this.props;
 
     return (
@@ -59,13 +70,17 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps) => {
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { id: projectId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
 
+  if (!project || isError(project)) {
+    return { project };
+  }
+
   return {
     project,
-    branches: project && project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
+    branches: project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
     activities: Activities.selectors.getActivityForProject(state, projectId),
   };
 };

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { Activity, ActivityType } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
+import { isError } from '../../../modules/errors';
 import Projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
@@ -19,7 +20,7 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  project: Project;
+  project?: Project;
 }
 
 class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> {
@@ -70,7 +71,7 @@ class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> 
         <div className={styles.metadata}>
           <div className={styles.action}>
             {this.getBranchAction(activity, branch)}
-            {showProjectName && this.getProjectLabel(project)}
+            {showProjectName && project && this.getProjectLabel(project)}
           </div>
           <div className={styles.timestamp}>
             {moment(activity.timestamp).fromNow()}
@@ -91,8 +92,16 @@ class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> 
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
-  project: Projects.selectors.getProject(state, ownProps.branch.project),
-});
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
+  const project = Projects.selectors.getProject(state, ownProps.branch.project);
+
+  if (!project || isError(project)) {
+    return {};
+  }
+
+  return {
+    project,
+  };
+};
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(SingleActivity);

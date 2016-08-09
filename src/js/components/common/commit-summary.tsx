@@ -5,17 +5,27 @@ import * as Gravatar from 'react-gravatar';
 
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
+import { FetchError, isError } from '../../modules/errors';
 
 import MinardLink from './minard-link';
 
 const styles = require('./commit-summary.scss');
 
 interface Props {
-  commit: Commit;
-  deployment?: Deployment;
+  commit: Commit | FetchError;
+  deployment?: Deployment | FetchError;
 }
 
 const CommitSummary = ({ commit, deployment }: Props) => {
+  if (isError(commit)) {
+    return (
+      <div>
+        <h3>Oh no. Something went wrong.</h3>
+        <p>{commit.prettyError}</p>
+      </div>
+    );
+  }
+
   const content = (
     <div className="container flex">
       <div className={styles.avatarBox}>
@@ -51,7 +61,7 @@ const CommitSummary = ({ commit, deployment }: Props) => {
     </div>
   );
 
-  if (deployment) {
+  if (deployment && !isError(deployment)) {
     return <MinardLink deployment={deployment}>{content}</MinardLink>;
   }
 
