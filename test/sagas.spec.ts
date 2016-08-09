@@ -4,6 +4,7 @@ import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
+import Activities, { Activity } from '../src/js/modules/activities';
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
@@ -24,6 +25,7 @@ interface CreateApiParameter {
 
 const createApi = (functionsToReplace?: CreateApiParameter): Api => {
   const defaultFunctions: Api = {
+    fetchActivities: () => Promise.resolve({ response: {} }),
     fetchCommit: (_) => Promise.resolve({ response: {} }),
     fetchBranch: (_) => Promise.resolve({ response: {} }),
     fetchDeployment: (_) => Promise.resolve({ response: {} }),
@@ -99,6 +101,20 @@ describe('sagas', () => {
 
       expect(iterator.next().value).to.deep.equal(
         fork(sagas.fetchAllProjects)
+      );
+    });
+  });
+
+  describe('watchForLoadActivities', () => {
+    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
+      const iterator = sagas.watchForLoadActivities();
+
+      expect(iterator.next().value).to.deep.equal(
+        take(Activities.actions.LOAD_ACTIVITIES)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        fork(sagas.fetchActivities)
       );
     });
   });
@@ -306,6 +322,50 @@ describe('sagas', () => {
     sagas.fetchProject,
     api.fetchProject,
   );
+
+  describe('fetchActivities', () => {
+    it('fetches and stores all activities', () => {
+      const response = testData.activitiesResponse;
+      const iterator = sagas.fetchActivities();
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Activities.actions.FetchActivities.request())
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.fetchActivities)
+      );
+
+      expect(iterator.next({ response: response }).value).to.deep.equal(
+        put(Activities.actions.FetchActivities.success(response.data))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        fork(sagas.ensureActivitiesRelatedDataLoaded)
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('throws an error on failure', () => {
+      const errorMessage = 'an error message';
+      const iterator = sagas.fetchActivities();
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Activities.actions.FetchActivities.request())
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.fetchActivities)
+      );
+
+      expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
+        put(Activities.actions.FetchActivities.failure(errorMessage))
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+  });
 
   describe('fetchAllProjects', () => {
     it('fetches and stores all projects', () => {

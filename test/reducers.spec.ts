@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { assign } from 'lodash';
 import { Action, Reducer } from 'redux';
 
+import Activities, { ActivityState, ActivityType } from '../src/js/modules/activities';
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
@@ -192,7 +193,96 @@ const testReducer = (
 
 describe('reducers', () => {
   describe('activities', () => {
-    // TODO
+    const { reducer } = Activities;
+
+    const storeAction = {
+      type: Activities.actions.STORE_ACTIVITIES,
+      entities: testData.activitiesResponse.data,
+    };
+
+    const successfulActivitiesRequestAction = {
+      type: Activities.actions.ACTIVITIES.SUCCESS,
+      response: testData.activitiesResponse.data,
+    };
+
+    const expectedObjectsToStore: ActivityState = {
+      1: {
+        id: '1',
+        type: ActivityType.Deployment,
+        deployment: '7',
+        timestamp: 1470131481802,
+      },
+      2: {
+        id: '2',
+        type: ActivityType.Deployment,
+        deployment: '8',
+        timestamp: 1470045081802,
+      },
+    };
+
+    const stateWithoutExistingEntity: ActivityState = {
+      3: {
+        id: '3',
+        type: ActivityType.Deployment,
+        deployment: '1',
+        timestamp: 1469945081802,
+      },
+    };
+
+    const stateWithExistingEntity: ActivityState = {
+      1: {
+        id: '1',
+        type: ActivityType.Deployment,
+        deployment: '2',
+        timestamp: 1470101481802,
+      },
+      3: {
+        id: '3',
+        type: ActivityType.Deployment,
+        deployment: '1',
+        timestamp: 1469945081802,
+      },
+    };
+
+    const expectedStateWithoutExistingEntity =
+      assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedObjectsToStore);
+    const expectedStateWithExistingEntity =
+      assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedObjectsToStore);
+
+    testStoreEntities(
+      reducer,
+      storeAction,
+      expectedObjectsToStore,
+      stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
+      stateWithExistingEntity,
+      expectedStateWithExistingEntity
+    );
+
+    describe(`successful request all activities (${successfulActivitiesRequestAction.type})`, () => {
+      it('with an empty initial state', () => {
+        expect(reducer(undefined, successfulActivitiesRequestAction)).to.deep.equal(expectedObjectsToStore);
+      });
+
+      it('makes no changes with an empty list', () => {
+        const emptyAction = { type: successfulActivitiesRequestAction.type, entities: <any[]> [] };
+        const newState = reducer(stateWithoutExistingEntity, emptyAction);
+        expect(newState).to.deep.equal(stateWithoutExistingEntity);
+        expect(newState).to.equal(stateWithoutExistingEntity);
+      });
+
+      it('with other entities in state', () => {
+        const newState = reducer(stateWithoutExistingEntity, successfulActivitiesRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
+        expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
+      });
+
+      it('by overwriting existing entities', () => {
+        const newState = reducer(stateWithExistingEntity, successfulActivitiesRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithExistingEntity);
+        expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      });
+    });
   });
 
   describe('branches', () => {

@@ -793,3 +793,40 @@ export const commitResponseNoInclude: ApiResponse = {
     },
   },
 };
+
+export const activitiesResponse = {
+  'data': [
+    {
+      'type': 'activities',
+      'id': '1',
+      'attributes': {
+        'timestamp': '2016-08-02T09:51:21.802Z',
+        'activityType': 'Deployment',
+      },
+      'relationships': {
+        'deployment': {
+          'data': {
+            'type': 'deployments',
+            'id': '7',
+          },
+        },
+      },
+    },
+    {
+      'type': 'activities',
+      'id': '2',
+      'attributes': {
+        'timestamp': '2016-08-01T09:51:21.802Z',
+        'activityType': 'Deployment',
+      },
+      'relationships': {
+        'deployment': {
+          'data': {
+            'type': 'deployments',
+            'id': '8',
+          },
+        },
+      },
+    },
+  ],
+};
