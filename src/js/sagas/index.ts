@@ -60,10 +60,9 @@ export default function createSagas(api: Api) {
     const activities = <Activity[]> (yield select(Activities.selectors.getActivities));
     const deployments =
       <Deployment[]> (yield activities.map(activity => call(fetchIfMissing, 'deployments', activity.deployment)));
-    const commits =
-      <Commit[]> (yield compact(deployments).map(deployment => call(fetchIfMissing, 'commits', deployment.commit)));
-
-    // TODO: ensure branches and projects exist
+    yield deployments.map(deployment => call(fetchIfMissing, 'commits', deployment.commit));
+    yield activities.map(activity => call(fetchIfMissing, 'projects', activity.project));
+    yield activities.map(activity => call(fetchIfMissing, 'branches', activity.branch));
   }
 
   // ALL PROJECTS
