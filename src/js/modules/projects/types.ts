@@ -16,30 +16,38 @@ export interface ProjectState {
 };
 
 // Actions
-export interface RequestAllProjectsAction extends Action {
-  error?: string;
-  response?: ResponseProjectElement[];
+// ALL_PROJECTS
+export interface RequestAllProjectsRequestAction extends Action {
+
 }
 
-// TODO: more specific types for these
+export interface RequestAllProjectsSuccessAction extends Action {
+  response: ResponseProjectElement[];
+}
+
 export interface RequestAllProjectsActionCreators {
-  request: ActionCreator<RequestAllProjectsAction>;
-  success: ActionCreator<RequestAllProjectsAction>;
-  failure: ActionCreator<RequestAllProjectsAction>;
+  request: ActionCreator<RequestAllProjectsRequestAction>;
+  success: ActionCreator<RequestAllProjectsSuccessAction>;
+  failure: ActionCreator<FetchError>;
 }
 
-export interface RequestProjectAction extends Action {
+// PROJECT
+export interface RequestProjectRequestAction extends Action {
   id: string;
-  error?: string;
-  response?: ResponseProjectElement;
+}
+
+export interface RequestProjectSuccessAction extends Action {
+  id: string;
+  response: ResponseProjectElement;
 }
 
 export interface RequestProjectActionCreators {
-  request: ActionCreator<RequestProjectAction>;
-  success: ActionCreator<RequestProjectAction>;
-  failure: ActionCreator<RequestProjectAction>;
+  request: ActionCreator<RequestProjectRequestAction>;
+  success: ActionCreator<RequestProjectSuccessAction>;
+  failure: ActionCreator<FetchError>;
 }
 
+// STORE_PROJECTS
 export interface StoreProjectsAction extends Action {
   entities: ResponseProjectElement[];
 }

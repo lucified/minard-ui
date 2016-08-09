@@ -33,7 +33,7 @@ const responseToStateShape = (branches: t.ApiResponse) => {
 const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
   switch (action.type) {
     case BRANCH.SUCCESS:
-      const branchResonse = (<t.RequestBranchAction> action).response;
+      const branchResonse = (<t.RequestBranchSuccessAction> action).response;
       if (branchResonse) {
         return assign<t.BranchState, t.BranchState>({}, state, responseToStateShape([branchResonse]));
       } else {

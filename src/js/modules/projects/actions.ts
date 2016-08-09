@@ -5,7 +5,7 @@ import * as t from './types';
 
 // Load multiple projects
 export const LOAD_ALL_PROJECTS = 'PROJECTS/LOAD_ALL_PROJECTS';
-export const loadAllProjects: ActionCreator<t.RequestAllProjectsAction> = () => ({
+export const loadAllProjects: ActionCreator<t.RequestAllProjectsRequestAction> = () => ({
   type: LOAD_ALL_PROJECTS,
 });
 
@@ -13,12 +13,12 @@ export const ALL_PROJECTS = createRequestTypes('PROJECTS/ALL_PROJECTS');
 export const FetchAllProjects: t.RequestAllProjectsActionCreators = {
   request: () => ({ type: ALL_PROJECTS.REQUEST }),
   success: (response) => ({ type: ALL_PROJECTS.SUCCESS, response }),
-  failure: (error) => ({ type: ALL_PROJECTS.FAILURE, error, prettyError: prettyErrorMessage(error) }),
+  failure: (error) => ({ type: ALL_PROJECTS.FAILURE, id: null, error, prettyError: prettyErrorMessage(error) }),
 };
 
 // Load a single project
 export const LOAD_PROJECT = 'PROJECTS/LOAD_PROJECT';
-export const loadProject: ActionCreator<t.RequestProjectAction> = (id) => ({
+export const loadProject: ActionCreator<t.RequestProjectRequestAction> = (id) => ({
   type: LOAD_PROJECT,
   id,
 });

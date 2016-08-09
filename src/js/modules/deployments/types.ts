@@ -20,18 +20,23 @@ export interface DeploymentState {
 };
 
 // Actions
-export interface RequestDeploymentAction extends Action {
+// DEPLOYMENT
+export interface RequestDeploymentRequestAction extends Action {
   id: string;
-  error?: string;
-  response?: ResponseDeploymentElement;
+}
+
+export interface RequestDeploymentSuccessAction extends Action {
+  id: string;
+  response: ResponseDeploymentElement;
 }
 
 export interface RequestDeploymentActionCreators {
-  request: ActionCreator<RequestDeploymentAction>;
-  success: ActionCreator<RequestDeploymentAction>;
-  failure: ActionCreator<RequestDeploymentAction>;
+  request: ActionCreator<RequestDeploymentRequestAction>;
+  success: ActionCreator<RequestDeploymentSuccessAction>;
+  failure: ActionCreator<FetchError>;
 }
 
+// STORE_DEPLOYMENTS
 export interface StoreDeploymentsAction extends Action {
   entities: ResponseDeploymentElement[];
 }

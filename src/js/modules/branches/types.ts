@@ -17,18 +17,23 @@ export interface BranchState {
 };
 
 // Actions
-export interface RequestBranchAction extends Action {
+// BRANCH
+export interface RequestBranchRequestAction extends Action {
   id: string;
-  error?: string;
-  response?: ResponseBranchElement;
+}
+
+export interface RequestBranchSuccessAction extends Action {
+  id: string;
+  response: ResponseBranchElement;
 }
 
 export interface RequestBranchActionCreators {
-  request: ActionCreator<RequestBranchAction>;
-  success: ActionCreator<RequestBranchAction>;
-  failure: ActionCreator<RequestBranchAction>;
+  request: ActionCreator<RequestBranchRequestAction>;
+  success: ActionCreator<RequestBranchSuccessAction>;
+  failure: ActionCreator<FetchError>;
 }
 
+// STORE_BRANCHES
 export interface StoreBranchesAction extends Action {
   entities: ResponseBranchElement[];
 }

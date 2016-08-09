@@ -30,14 +30,14 @@ const responseToStateShape = (projects: t.ApiResponse) => {
 const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
   switch (action.type) {
     case ALL_PROJECTS.SUCCESS:
-      const projectsResponse = (<t.RequestAllProjectsAction> action).response;
+      const projectsResponse = (<t.RequestAllProjectsSuccessAction> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
         return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape(projectsResponse));
       } else {
         return state;
       }
     case PROJECT.SUCCESS:
-      const projectResponse = (<t.RequestProjectAction> action).response;
+      const projectResponse = (<t.RequestProjectSuccessAction> action).response;
       if (projectResponse) {
         return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape([projectResponse]));
       } else {

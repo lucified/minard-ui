@@ -11,7 +11,7 @@ export const FetchBranch: t.RequestBranchActionCreators = {
 };
 
 export const LOAD_BRANCH = 'BRANCHES/LOAD_BRANCH';
-export const loadBranch: ActionCreator<t.RequestBranchAction> = (id) => ({
+export const loadBranch: ActionCreator<t.RequestBranchRequestAction> = (id) => ({
   type: LOAD_BRANCH,
   id,
 });

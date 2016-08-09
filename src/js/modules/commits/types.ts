@@ -26,18 +26,24 @@ export interface CommitState {
 };
 
 // Actions
-export interface RequestCommitAction extends Action {
+// COMMIT
+export interface RequestCommitRequestAction extends Action {
   id: string;
-  error?: any;
+  response?: ResponseCommitElement;
+}
+
+export interface RequestCommitSuccessAction extends Action {
+  id: string;
   response?: ResponseCommitElement;
 }
 
 export interface RequestCommitActionCreators {
-  request: ActionCreator<RequestCommitAction>;
-  success: ActionCreator<RequestCommitAction>;
-  failure: ActionCreator<RequestCommitAction>;
+  request: ActionCreator<RequestCommitRequestAction>;
+  success: ActionCreator<RequestCommitSuccessAction>;
+  failure: ActionCreator<FetchError>;
 }
 
+// STORE_COMMITS
 export interface StoreCommitsAction extends Action {
   entities: ResponseCommitElement[];
 }

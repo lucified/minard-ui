@@ -11,7 +11,7 @@ export const FetchCommit: t.RequestCommitActionCreators = {
 };
 
 export const LOAD_COMMIT = 'COMMITS/LOAD_COMMIT';
-export const loadCOMMIT: ActionCreator<t.RequestCommitAction> = (id) => ({
+export const loadCOMMIT: ActionCreator<t.RequestCommitRequestAction> = (id) => ({
   type: LOAD_COMMIT,
   id,
 });

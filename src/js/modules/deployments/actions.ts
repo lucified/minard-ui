@@ -11,7 +11,7 @@ export const FetchDeployment: t.RequestDeploymentActionCreators = {
 };
 
 export const LOAD_DEPLOYMENT = 'DEPLOYMENTS/LOAD_DEPLOYMENT';
-export const loadDeployment: ActionCreator<t.RequestDeploymentAction> = (id) => ({
+export const loadDeployment: ActionCreator<t.RequestDeploymentRequestAction> = (id) => ({
   type: LOAD_DEPLOYMENT,
   id,
 });

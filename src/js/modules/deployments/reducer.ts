@@ -31,7 +31,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
   switch (action.type) {
     case DEPLOYMENT.SUCCESS:
-      const deploymentResponse = (<t.RequestDeploymentAction> action).response;
+      const deploymentResponse = (<t.RequestDeploymentSuccessAction> action).response;
       if (deploymentResponse) {
         return assign<t.DeploymentState, t.DeploymentState>({}, state, responseToStateShape([deploymentResponse]));
       } else {
