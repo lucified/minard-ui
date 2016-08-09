@@ -6,7 +6,7 @@ import { FetchError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
-// import ActivitySection from './activity-section';
+import ActivitySection from './activity-section';
 import ProjectsSection from './projects-section';
 
 interface GeneratedStateProps {
@@ -16,21 +16,25 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadAllProjects: () => void;
+  loadActivities: () => void;
 }
 
 class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
-    this.props.loadAllProjects();
+    const { loadAllProjects, loadActivities } = this.props;
+
+    loadAllProjects();
+    loadActivities();
   }
 
   public render() {
-    const { projects } = this.props;
+    const { projects, activities } = this.props;
 
     return (
       <div>
         <ProjectsSection projects={projects} />
         <div className="divider" />
-        {/*<ActivitySection activities={activities} />*/}
+        <ActivitySection activities={activities} />
       </div>
     );
   }
@@ -45,5 +49,6 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
   mapStateToProps,
   {
     loadAllProjects: Projects.actions.loadAllProjects,
+    loadActivities: Activities.actions.loadActivities,
   }
 )(TeamProjectsView);

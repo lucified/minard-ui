@@ -9,35 +9,32 @@ interface Props {
   showProjectName: boolean;
 }
 
-class ActivityList extends React.Component<Props, any> {
-  private generateDeploymentGroups(activities: Activity[]): Activity[][] {
-    let lastGroup = [activities[0]];
-    const groupedActivities = [lastGroup];
+const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
+  let lastGroup = [activities[0]];
+  const groupedActivities = [lastGroup];
 
-    activities.slice(1).forEach(activity => {
-      if (activity.deployment !== lastGroup[0].deployment) {
-        lastGroup = [activity];
-        groupedActivities.push(lastGroup);
-      } else {
-        lastGroup.push(activity);
-      }
-    });
+  activities.slice(1).forEach(activity => {
+    if (activity.deployment !== lastGroup[0].deployment) {
+      lastGroup = [activity];
+      groupedActivities.push(lastGroup);
+    } else {
+      lastGroup.push(activity);
+    }
+  });
 
-    return groupedActivities;
-  }
+  return groupedActivities;
+};
 
-  public render() {
-    const { activities, showProjectName } = this.props;
-    const groupedActivities = this.generateDeploymentGroups(activities);
+const ActivityList = ({ activities, showProjectName }: Props) => {
+  const groupedActivities = generateDeploymentGroups(activities);
 
-    return (
-      <div>
-        {groupedActivities.map((activityGroup, i) =>
-          <ActivityGroup key={i} activities={activityGroup} showProjectName={showProjectName} />
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      {groupedActivities.map((activityGroup, i) =>
+        <ActivityGroup key={i} activities={activityGroup} showProjectName={showProjectName} />
+      )}
+    </div>
+  );
+};
 
 export default ActivityList;

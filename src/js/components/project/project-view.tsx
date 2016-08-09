@@ -26,11 +26,15 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadProject: (id: string) => void;
+  loadActivity: () => void; // TODO: get only project-related activity
 }
 
 class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
-    this.props.loadProject(this.props.params.id);
+    const { loadProject, loadActivity } = this.props;
+
+    loadProject(this.props.params.id);
+    loadActivity();
   }
 
   public render() {
@@ -81,7 +85,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   return {
     project,
     branches: project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
-    activities: Activities.selectors.getActivityForProject(state, projectId),
+    activities: Activities.selectors.getActivities(state), // TODO: get only project-specific activity
   };
 };
 
@@ -89,5 +93,6 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>
   mapStateToProps,
   {
     loadProject: Projects.actions.loadProject,
+    loadActivity: Activities.actions.loadActivities, // TODO: get only project-related activity
   },
 )(ProjectView);
