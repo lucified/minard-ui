@@ -14,6 +14,7 @@ export interface Activity {
   timestamp: number;
   deployment: string;
   branch: string;
+  project: string;
 }
 
 export interface ActivityState {
@@ -55,6 +56,11 @@ interface ResponseBranchReference {
   id: string;
 }
 
+interface ResponseProjectReference {
+  type: "projects";
+  id: string;
+}
+
 export interface ResponseActivityElement {
   type: "activities";
   id: string;
@@ -68,6 +74,9 @@ export interface ResponseActivityElement {
     };
     branch: {
       data: ResponseBranchReference;
+    };
+    project: {
+      data: ResponseProjectReference;
     };
   };
 }

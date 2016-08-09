@@ -816,6 +816,12 @@ export const activitiesResponse = {
             'id': '1',
           },
         },
+        'project': {
+          'data': {
+            'type': 'projects',
+            'id': '1',
+          },
+        },
       },
     },
     {
@@ -836,6 +842,12 @@ export const activitiesResponse = {
           'data': {
             'type': 'branches',
             'id': '2',
+          },
+        },
+        'project': {
+          'data': {
+            'type': 'projects',
+            'id': '1',
           },
         },
       },

@@ -19,6 +19,12 @@
             "type": "branches",
             "id": "1"
           }
+        },
+        "project": {
+          "data": {
+            "type": "projects",
+            "id": "1"
+          }
         }
       }
     },
@@ -40,6 +46,12 @@
           "data": {
             "type": "branches",
             "id": "2"
+          }
+        },
+        "project": {
+          "data": {
+            "type": "projects",
+            "id": "1"
           }
         }
       }

@@ -213,6 +213,7 @@ describe('reducers', () => {
         type: ActivityType.Deployment,
         deployment: '7',
         branch: '1',
+        project: '1',
         timestamp: 1470131481802,
       },
       2: {
@@ -220,6 +221,7 @@ describe('reducers', () => {
         type: ActivityType.Deployment,
         deployment: '8',
         branch: '2',
+        project: '1',
         timestamp: 1470045081802,
       },
     };
@@ -230,6 +232,7 @@ describe('reducers', () => {
         type: ActivityType.Deployment,
         deployment: '1',
         branch: '3',
+        project: '2',
         timestamp: 1469945081802,
       },
     };
@@ -240,6 +243,7 @@ describe('reducers', () => {
         type: ActivityType.Deployment,
         deployment: '2',
         branch: '1',
+        project: '3',
         timestamp: 1470101481802,
       },
       3: {
@@ -247,6 +251,7 @@ describe('reducers', () => {
         type: ActivityType.Deployment,
         deployment: '1',
         branch: '3',
+        project: '2',
         timestamp: 1469945081802,
       },
     };
