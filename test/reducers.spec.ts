@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { assign } from 'lodash';
-import { Reducer } from 'redux';
+import { Action, Reducer } from 'redux';
 
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
@@ -10,20 +10,25 @@ import Projects, { ProjectState } from '../src/js/modules/projects';
 
 import * as testData from './test-data';
 
-const testInitialState = (reducer: Reducer<any>, expectedState: any) => {
+type ModuleState = BranchState | CommitState | DeploymentState | ProjectState | ActivityState;
+interface AnyAction extends Action {
+  [field: string]: any;
+};
+
+const testInitialState = (reducer: Reducer<ModuleState>, expectedState: ModuleState) => {
   it('returns the correct default state', () => {
     expect(reducer(undefined, { type: 'foobar' })).to.deep.equal(expectedState);
   });
 };
 
 const testStoreEntities = (
-  reducer: Reducer<any>,
-  action: any,
-  expectedStateFromEmpty: any,
-  stateWithoutExistingEntity: any,
-  expectedStateWithoutExistingEntity: any,
-  stateWithExistingEntity: any,
-  expectedStateWithExistingEntity: any,
+  reducer: Reducer<ModuleState>,
+  action: AnyAction,
+  expectedStateFromEmpty: ModuleState,
+  stateWithoutExistingEntity: ModuleState,
+  expectedStateWithoutExistingEntity: ModuleState,
+  stateWithExistingEntity: ModuleState,
+  expectedStateWithExistingEntity: ModuleState,
 ) => {
   describe(`store entities (${action.type})`, () => {
     it('with an empty initial state', () => {
@@ -52,25 +57,24 @@ const testStoreEntities = (
 };
 
 const testSuccessfulRequest = (
-  reducer: Reducer<any>,
-  successfulRequestAction: any,
+  reducer: Reducer<ModuleState>,
+  action: AnyAction,
   expectedStateFromEmpty: ModuleState,
   stateWithoutExistingEntity: ModuleState,
   expectedStateWithoutExistingEntity: ModuleState,
   stateWithExistingEntity: ModuleState,
   expectedStateWithExistingEntity: ModuleState,
 ) => {
-  describe(`successful request (${successfulRequestAction.type})`, () => {
+  describe(`successful request (${action.type})`, () => {
     it('with an empty initial state', () => {
       const expected = expectedStateFromEmpty;
-      const action = successfulRequestAction;
 
       expect(reducer(undefined, action)).to.deep.equal(expected);
     });
 
     it('makes no changes with an empty result', () => {
-      const emptyAction: any = {
-        type: successfulRequestAction.type,
+      const emptyAction: AnyAction = {
+        type: action.type,
         response: undefined,
       };
       const oldState = stateWithoutExistingEntity;
@@ -83,7 +87,6 @@ const testSuccessfulRequest = (
 
     it('with other entities in state', () => {
       const oldState = stateWithoutExistingEntity;
-      const action = successfulRequestAction;
       const expected = expectedStateWithoutExistingEntity;
       const newState = reducer(oldState, action);
 
@@ -92,7 +95,6 @@ const testSuccessfulRequest = (
     });
 
     it('by overwriting existing entities', () => {
-      const action = successfulRequestAction;
       const oldState = stateWithExistingEntity;
       const expected = expectedStateWithExistingEntity;
       const newState = reducer(oldState, action);
@@ -104,8 +106,8 @@ const testSuccessfulRequest = (
 };
 
 const testFailedRequest = (
-  reducer: Reducer<any>,
-  action: any,
+  reducer: Reducer<ModuleState>,
+  action: AnyAction,
   expectedStateFromEmpty: ModuleState,
   stateWithoutExistingEntity: ModuleState,
   expectedStateWithoutExistingEntity: ModuleState,
@@ -130,10 +132,8 @@ const testFailedRequest = (
   });
 };
 
-type ModuleState = BranchState | CommitState | DeploymentState | ProjectState;
-
 const testReducer = (
-  reducer: Reducer<any>,
+  reducer: Reducer<ModuleState>,
   storeAction: { type: string, entities: any },
   expectedObjectsToStore: ModuleState,
   stateWithoutExistingEntity: ModuleState,
@@ -203,7 +203,7 @@ describe('reducers', () => {
       entities: testData.projectResponse.included.slice(0, 2),
     };
 
-    const expectedObjectsToStore: BranchState  = {
+    const expectedObjectsToStore: BranchState = {
       1: {
         id: '1',
         'name': 'first-branch',
@@ -295,7 +295,7 @@ describe('reducers', () => {
       entities: testData.commitResponse.included.slice(0, 2),
     };
 
-    const expectedObjectsToStore: CommitState  = {
+    const expectedObjectsToStore: CommitState = {
       '12354124': {
         'id': '12354124',
         'hash': '0123456789abcdef',

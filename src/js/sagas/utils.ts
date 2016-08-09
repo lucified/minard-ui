@@ -62,10 +62,10 @@ export const createFetcher = (
 
 export function* storeIncludedEntities(entities: ApiEntity[]): IterableIterator<Effect> {
   const types: { type: ApiEntityTypeString, actionCreator: ActionCreator<any> }[] = [
-    { type: 'projects', actionCreator: Projects.actions.StoreProjects },
-    { type: 'deployments', actionCreator: Deployments.actions.StoreDeployments },
-    { type: 'commits', actionCreator: Commits.actions.StoreCommits },
-    { type: 'branches', actionCreator: Branches.actions.StoreBranches },
+    { type: 'projects', actionCreator: Projects.actions.storeProjects },
+    { type: 'deployments', actionCreator: Deployments.actions.storeDeployments },
+    { type: 'commits', actionCreator: Commits.actions.storeCommits },
+    { type: 'branches', actionCreator: Branches.actions.storeBranches },
   ];
 
   if (entities && entities.length > 0) {

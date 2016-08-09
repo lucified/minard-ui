@@ -11,13 +11,13 @@ export const FetchCommit: t.RequestCommitActionCreators = {
 };
 
 export const LOAD_COMMIT = 'COMMITS/LOAD_COMMIT';
-export const loadCOMMIT: ActionCreator<t.RequestCommitRequestAction> = (id) => ({
+export const loadCOMMIT: ActionCreator<t.LoadCommitAction> = (id) => ({
   type: LOAD_COMMIT,
   id,
 });
 
 export const STORE_COMMITS = 'COMMITS/STORE_COMMITS';
-export const StoreCommits: ActionCreator<t.StoreCommitsAction> = (commits) => ({
+export const storeCommits: ActionCreator<t.StoreCommitsAction> = (commits) => ({
   type: STORE_COMMITS,
   entities: commits,
 });

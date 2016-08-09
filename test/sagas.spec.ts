@@ -664,11 +664,11 @@ describe('sagas', () => {
       const commitsEntities = response.included.filter(entity => entity.type === 'commits');
 
       expect(iterator.next().value).to.deep.equal(
-        put(Deployments.actions.StoreDeployments(deploymentsEntities))
+        put(Deployments.actions.storeDeployments(deploymentsEntities))
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Commits.actions.StoreCommits(commitsEntities))
+        put(Commits.actions.storeCommits(commitsEntities))
       );
 
       expect(iterator.next().done).to.equal(true);

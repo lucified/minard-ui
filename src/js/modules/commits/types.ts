@@ -26,6 +26,11 @@ export interface CommitState {
 };
 
 // Actions
+// LOAD_COMMIT
+export interface LoadCommitAction extends Action {
+  id: string;
+}
+
 // COMMIT
 export interface RequestCommitRequestAction extends Action {
   id: string;

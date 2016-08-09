@@ -20,6 +20,11 @@ export interface DeploymentState {
 };
 
 // Actions
+// LOAD_DEPLOYMENT
+export interface LoadDeploymentAction extends Action {
+  id: string;
+}
+
 // DEPLOYMENT
 export interface RequestDeploymentRequestAction extends Action {
   id: string;

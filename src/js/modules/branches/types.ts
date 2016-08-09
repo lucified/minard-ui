@@ -17,6 +17,11 @@ export interface BranchState {
 };
 
 // Actions
+// LOAD_BRANCH
+export interface LoadBranchAction extends Action {
+  id: string;
+}
+
 // BRANCH
 export interface RequestBranchRequestAction extends Action {
   id: string;

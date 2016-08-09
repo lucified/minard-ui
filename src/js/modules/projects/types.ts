@@ -16,6 +16,11 @@ export interface ProjectState {
 };
 
 // Actions
+// LOAD_ALL_PROJECTS
+export interface LoadAllProjectsAction extends Action {
+
+}
+
 // ALL_PROJECTS
 export interface RequestAllProjectsRequestAction extends Action {
 
@@ -29,6 +34,11 @@ export interface RequestAllProjectsActionCreators {
   request: ActionCreator<RequestAllProjectsRequestAction>;
   success: ActionCreator<RequestAllProjectsSuccessAction>;
   failure: ActionCreator<FetchError>;
+}
+
+// LOAD_PROJECT
+export interface LoadProjectAction extends Action {
+  id: string;
 }
 
 // PROJECT
