@@ -438,18 +438,18 @@ describe('sagas', () => {
     });
   });
 
-  describe('ensureAllProjectsRelatedDataLoaded', () => {
+  describe('ensureActivitiesRelatedDataLoaded', () => {
     it('makes sure branches and first deployments exist for all projects', () => {
-      const iterator = sagas.ensureAllProjectsRelatedDataLoaded();
+      const iterator = sagas.ensureActivitiesRelatedDataLoaded();
 
       // TODO
       expect(false).to.equal(true);
     });
   });
 
-  describe('ensureActivitiesRelatedDataLoaded', () => {
+  describe('ensureAllProjectsRelatedDataLoaded', () => {
     it('makes sure deployments, commits, branches and projects exist for all activities', () => {
-      const iterator = sagas.ensureActivitiesRelatedDataLoaded();
+      const iterator = sagas.ensureAllProjectsRelatedDataLoaded();
       const projects: Project[] = [
         {
           id: '1',
