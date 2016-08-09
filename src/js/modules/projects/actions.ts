@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux';
 
-import { createRequestTypes } from '../common';
+import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
 
 // Load multiple projects
@@ -13,7 +13,7 @@ export const ALL_PROJECTS = createRequestTypes('PROJECTS/ALL_PROJECTS');
 export const FetchAllProjects: t.RequestAllProjectsActionCreators = {
   request: () => ({ type: ALL_PROJECTS.REQUEST }),
   success: (response) => ({ type: ALL_PROJECTS.SUCCESS, response }),
-  failure: (error) => ({ type: ALL_PROJECTS.FAILURE, error }),
+  failure: (error) => ({ type: ALL_PROJECTS.FAILURE, error, prettyError: prettyErrorMessage(error) }),
 };
 
 // Load a single project
@@ -27,7 +27,7 @@ export const PROJECT = createRequestTypes('PROJECTS/PROJECT');
 export const FetchProject: t.RequestProjectActionCreators = {
   request: (id) => ({ type: PROJECT.REQUEST, id }),
   success: (id, response) => ({ type: PROJECT.SUCCESS, id, response }),
-  failure: (id, error) => ({ type: PROJECT.FAILURE, id, error }),
+  failure: (id, error) => ({ type: PROJECT.FAILURE, id, error, prettyError: prettyErrorMessage(error) }),
 };
 
 // Store included projects

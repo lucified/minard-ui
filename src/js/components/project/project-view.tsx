@@ -51,7 +51,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
         <div className="empty">
           <Icon name="exclamation" fixedWidth size="3x" />
           <p className="empty-title">Error loading project</p>
-          <p className="empty-meta">{project.error}</p>
+          <p className="empty-meta">{project.prettyError}</p>
         </div>
       );
     }

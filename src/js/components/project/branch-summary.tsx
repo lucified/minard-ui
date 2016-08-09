@@ -45,7 +45,7 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
         <div className="empty">
           <Icon name="exclamation" fixedWidth size="3x" />
           <p className="empty-title">Error loading deployment</p>
-          <p className="empty-meta">{latestDeployment.error}</p>
+          <p className="empty-meta">{latestDeployment.prettyError}</p>
         </div>
       );
     } else {

@@ -21,7 +21,7 @@ const CommitSummary = ({ commit, deployment }: Props) => {
     return (
       <div>
         <h3>Oh no. Something went wrong.</h3>
-        <p>{commit.error}</p>
+        <p>{commit.prettyError}</p>
       </div>
     );
   }

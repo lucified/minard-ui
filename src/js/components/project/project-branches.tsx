@@ -37,7 +37,7 @@ class ProjectBranches extends React.Component<Props, any> {
       <div key={branch.id} className="empty">
         <Icon name="exclamation" fixedWidth size="3x" />
         <p className="empty-title">Uhhoh. Unable to get branch information</p>
-        <p className="empty-meta">{branch.error}</p>
+        <p className="empty-meta">{branch.prettyError}</p>
       </div>
     );
   }

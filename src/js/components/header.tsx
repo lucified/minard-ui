@@ -18,7 +18,7 @@ const getErrorToast = (error: FetchError) => (
   <div className="toast toast-danger">
     <button className="btn btn-clear float-right" />
     <span className="icon icon-error_outline" />
-    {error.error}
+    {error.prettyError}
   </div>
 );
 

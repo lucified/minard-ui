@@ -32,7 +32,7 @@ const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps 
       <div key={project.id} className="empty">
         <Icon name="exclamation" fixedWidth size="3x" />
         <p className="empty-title">Error fetching project</p>
-        <p className="empty-meta">{project.error}</p>
+        <p className="empty-meta">{project.prettyError}</p>
       </div>
     );
   }

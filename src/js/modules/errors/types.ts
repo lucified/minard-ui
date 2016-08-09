@@ -4,8 +4,10 @@ export interface FetchError {
   type: string;
   // If the error concerns a specific entity, the id of that entity
   id: string;
-  // The error message
+  // The original error message
   error: string;
+  // The error to display to the user
+  prettyError: string;
 }
 
 export type ErrorState = FetchError[];

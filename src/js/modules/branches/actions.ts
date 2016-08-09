@@ -1,13 +1,13 @@
 import { ActionCreator } from 'redux';
 
-import { createRequestTypes } from '../common';
+import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
 
 export const BRANCH = createRequestTypes('BRANCHES/BRANCH');
 export const FetchBranch: t.RequestBranchActionCreators = {
   request: (id) => ({ type: BRANCH.REQUEST, id }),
   success: (id, response) => ({ type: BRANCH.SUCCESS, id, response }),
-  failure: (id, error) => ({ type: BRANCH.FAILURE, id, error }),
+  failure: (id, error) => ({ type: BRANCH.FAILURE, id, error, prettyError: prettyErrorMessage(error) }),
 };
 
 export const LOAD_BRANCH = 'BRANCHES/LOAD_BRANCH';

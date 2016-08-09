@@ -27,7 +27,7 @@ const getErrorContent = (commit: FetchError) => (
   <div key={commit.id} className="empty">
     <Icon name="exclamation" fixedWidth size="3x" />
     <p className="empty-title">Error :(</p>
-    <p className="empty-meta">{commit.error}</p>
+    <p className="empty-meta">{commit.prettyError}</p>
   </div>
 );
 

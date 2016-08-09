@@ -29,7 +29,7 @@ const getLoadingContent = () => (
 const getErrorContent = (branch: FetchError) => (
   <div>
     <h1>Oh no, errors. :(</h1>
-    <p>{branch.error}</p>
+    <p>{branch.prettyError}</p>
   </div>
 );
 

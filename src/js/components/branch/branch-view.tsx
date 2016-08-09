@@ -51,7 +51,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
       <div className="empty">
         <Icon name="exclamation" fixedWidth size="3x" />
         <p className="empty-title">Error!</p>
-        <p className="empty-meta">{error.error}</p>
+        <p className="empty-meta">{error.prettyError}</p>
       </div>
     );
   }
