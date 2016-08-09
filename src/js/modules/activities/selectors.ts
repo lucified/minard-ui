@@ -11,11 +11,7 @@ const getUnsortedActivities = createSelector(
   activities => values<Activity>(activities)
 );
 
-export const getActivityForProject = (state: StateTree, projectId: string) =>
-  getUnsortedActivities(state)
-    .filter(activity => activity.project === projectId)
-    .sort((a, b) => b.timestamp - a.timestamp);
-
-export const getActivities = (state: StateTree) =>
-  getUnsortedActivities(state)
-    .sort((a, b) => b.timestamp - a.timestamp);
+export const getActivities = createSelector(
+  getUnsortedActivities,
+  activities => activities.sort((a, b) => b.timestamp - a.timestamp)
+);

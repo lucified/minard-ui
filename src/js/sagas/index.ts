@@ -2,6 +2,7 @@ import { compact } from 'lodash';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString } from '../api/types';
+import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
@@ -39,6 +40,30 @@ export default function createSagas(api: Api) {
     }
 
     return existingEntity;
+  }
+
+  // ACTIVITIES
+  function* fetchActivities(): IterableIterator<Effect> {
+    yield put(Activities.actions.FetchActivities.request());
+
+    const { response, error } = yield call(api.fetchActivities);
+
+    if (response) {
+      yield put(Activities.actions.FetchActivities.success(response.data));
+      yield fork(ensureActivitiesRelatedDataLoaded);
+    } else {
+      yield put(Activities.actions.FetchActivities.failure(error));
+    }
+  }
+
+  function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
+    const activities = <Activity[]> (yield select(Activities.selectors.getActivities));
+    const deployments =
+      <Deployment[]> (yield activities.map(activity => call(fetchIfMissing, 'deployments', activity.deployment)));
+    const commits =
+      <Commit[]> (yield compact(deployments).map(deployment => call(fetchIfMissing, 'commits', deployment.commit)));
+
+    // TODO: ensure branches and projects exist
   }
 
   // ALL PROJECTS
@@ -145,6 +170,14 @@ export default function createSagas(api: Api) {
   }
 
   // WATCHERS: Watch for specific actions to begin async operations.
+  function* watchForLoadActivities(): IterableIterator<Effect> {
+    while (true) {
+      yield take(Activities.actions.LOAD_ACTIVITIES);
+
+      yield fork(fetchActivities);
+    }
+  }
+
   function* watchForLoadAllProjects(): IterableIterator<Effect> {
     while (true) {
       yield take(Projects.actions.LOAD_ALL_PROJECTS);
@@ -192,6 +225,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadBranch),
       fork(watchForLoadDeployment),
       fork(watchForLoadCommit),
+      fork(watchForLoadActivities),
     ];
   }
 
@@ -202,6 +236,8 @@ export default function createSagas(api: Api) {
     watchForLoadProject,
     watchForLoadAllProjects,
     watchForLoadCommit,
+    watchForLoadActivities,
+    fetchActivities,
     fetchBranch,
     fetchDeployment,
     fetchProject,
@@ -211,6 +247,7 @@ export default function createSagas(api: Api) {
     loadDeployment,
     loadProject,
     loadCommit,
+    ensureActivitiesRelatedDataLoaded,
     ensureAllProjectsRelatedDataLoaded,
     ensureBranchRelatedDataLoaded,
     ensureDeploymentRelatedDataLoaded,

@@ -15,6 +15,7 @@ export interface ApiResponse {
 export type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; }>;
 
 export interface Api {
+  fetchActivities: () => ApiPromise;
   fetchAllProjects: () => ApiPromise;
   fetchProject: (id: string) => ApiPromise;
   fetchDeployment: (id: string) => ApiPromise;
