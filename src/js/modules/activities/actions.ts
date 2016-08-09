@@ -16,7 +16,7 @@ export const FetchActivities: t.RequestActivitiesActionCreators = {
 };
 
 export const LOAD_ACTIVITIES = 'ACTIVITIES/LOAD_ACTIVITIES';
-export const loadActivity: ActionCreator<t.LoadActivitiesAction> = () => ({
+export const loadActivities: ActionCreator<t.LoadActivitiesAction> = () => ({
   type: LOAD_ACTIVITIES,
 });
 
