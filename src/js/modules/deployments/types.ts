@@ -22,7 +22,7 @@ export interface DeploymentState {
 // Actions
 export interface RequestDeploymentAction extends Action {
   id: string;
-  error?: any;
+  error?: string;
   response?: ResponseDeploymentElement;
 }
 

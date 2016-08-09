@@ -17,7 +17,7 @@ export interface ProjectState {
 
 // Actions
 export interface RequestAllProjectsAction extends Action {
-  error?: any;
+  error?: string;
   response?: ResponseProjectElement[];
 }
 

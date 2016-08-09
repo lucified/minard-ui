@@ -19,7 +19,7 @@ export interface BranchState {
 // Actions
 export interface RequestBranchAction extends Action {
   id: string;
-  error?: any;
+  error?: string;
   response?: ResponseBranchElement;
 }
 
