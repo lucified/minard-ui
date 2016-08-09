@@ -1,3 +1,5 @@
+import { Action } from 'redux';
+
 // State
 export interface FetchError {
   // The type of action that produced the error
@@ -16,3 +18,7 @@ export const isError = (obj: any): obj is FetchError => {
   const possiblyError = (<FetchError> obj);
   return possiblyError && possiblyError.type !== undefined && possiblyError.error !== undefined;
 };
+
+export interface ClearErrorAction extends Action {
+  id?: string;
+}
