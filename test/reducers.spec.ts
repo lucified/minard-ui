@@ -16,6 +16,8 @@ interface AnyAction extends Action {
   [field: string]: any;
 };
 
+// TODO: test Errors reducer
+
 const testInitialState = (reducer: Reducer<ModuleState>, expectedState: ModuleState) => {
   it('returns the correct default state', () => {
     expect(reducer(undefined, { type: 'foobar' })).to.deep.equal(expectedState);
