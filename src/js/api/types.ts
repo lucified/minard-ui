@@ -1,4 +1,4 @@
-export type ApiEntityTypeString = "commits" | "deployments" | "projects" | "branches"
+export type ApiEntityTypeString = "commits" | "deployments" | "projects" | "branches" | "activities";
 
 export interface ApiEntity {
   type: ApiEntityTypeString;
