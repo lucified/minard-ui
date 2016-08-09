@@ -19,7 +19,7 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  branch: Branch | FetchError;
+  branch?: Branch | FetchError;
 }
 
 const getLoadingContent = () => (
@@ -65,7 +65,7 @@ const ActivityGroup = ({ activities, branch, showProjectName }: PassedProps & Ge
 };
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => ({
-  branch: Branches.selectors.getBranch(state, ownProps.activities[0].branch),
+  branch: ownProps.activities[0] && Branches.selectors.getBranch(state, ownProps.activities[0].branch),
 });
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ActivityGroup);
