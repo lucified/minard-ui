@@ -19,7 +19,7 @@ interface PassedProps {
 }
 
 interface GeneratedStateProps {
-  project?: Project;
+  project?: Project | FetchError;
   branches?: (Branch | FetchError)[];
   activities?: Activity[];
 }
@@ -46,6 +46,16 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       );
     }
 
+    if (isError(project)) {
+      return (
+        <div className="empty">
+          <Icon name="exclamation" fixedWidth size="3x" />
+          <p className="empty-title">Error loading project</p>
+          <p className="empty-meta">{project.error}</p>
+        </div>
+      );
+    }
+
     const { branches, activities } = this.props;
 
     return (
@@ -65,7 +75,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const project = Projects.selectors.getProject(state, projectId);
 
   if (!project || isError(project)) {
-    return {};
+    return { project };
   }
 
   return {
