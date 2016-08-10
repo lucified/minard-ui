@@ -411,6 +411,11 @@ describe('reducers', () => {
       response: testData.activitiesResponse.data,
     };
 
+    const successfulActivitiesForProjectRequestAction = {
+      type: Activities.actions.ACTIVITIES_FOR_PROJECT.SUCCESS,
+      response: testData.activitiesResponse.data,
+    };
+
     const expectedObjectsToStore: ActivityState = {
       1: {
         id: '1',
@@ -495,6 +500,31 @@ describe('reducers', () => {
 
       it('by overwriting existing entities', () => {
         const newState = reducer(stateWithExistingEntity, successfulActivitiesRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithExistingEntity);
+        expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      });
+    });
+
+    describe(`successful request activities for project (${successfulActivitiesForProjectRequestAction.type})`, () => {
+      it('with an empty initial state', () => {
+        expect(reducer(undefined, successfulActivitiesForProjectRequestAction)).to.deep.equal(expectedObjectsToStore);
+      });
+
+      it('makes no changes with an empty list', () => {
+        const emptyAction = { type: successfulActivitiesForProjectRequestAction.type, entities: <any[]> [] };
+        const newState = reducer(stateWithoutExistingEntity, emptyAction);
+        expect(newState).to.deep.equal(stateWithoutExistingEntity);
+        expect(newState).to.equal(stateWithoutExistingEntity);
+      });
+
+      it('with other entities in state', () => {
+        const newState = reducer(stateWithoutExistingEntity, successfulActivitiesForProjectRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
+        expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
+      });
+
+      it('by overwriting existing entities', () => {
+        const newState = reducer(stateWithExistingEntity, successfulActivitiesForProjectRequestAction);
         expect(newState).to.deep.equal(expectedStateWithExistingEntity);
         expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
       });

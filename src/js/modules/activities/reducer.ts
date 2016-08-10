@@ -2,7 +2,7 @@ import { assign } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { ACTIVITIES, STORE_ACTIVITIES } from './actions';
+import { ACTIVITIES, ACTIVITIES_FOR_PROJECT, STORE_ACTIVITIES } from './actions';
 import * as t from './types';
 
 const initialState: t.ActivityState = {};
@@ -36,6 +36,7 @@ const responseToStateShape = (activities: t.ApiResponse) => {
 
 const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
   switch (action.type) {
+    case ACTIVITIES_FOR_PROJECT.SUCCESS:
     case ACTIVITIES.SUCCESS:
       const activitiesResponse = (<t.RequestActivitiesSuccessAction> action).response;
       if (activitiesResponse && activitiesResponse.length > 0) {

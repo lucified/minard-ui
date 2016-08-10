@@ -22,6 +22,7 @@ export interface ActivityState {
 };
 
 // Actions
+// ACTIVITIES
 export interface LoadActivitiesAction extends Action {
 
 }
@@ -37,6 +38,26 @@ export interface RequestActivitiesSuccessAction extends Action {
 export interface RequestActivitiesActionCreators {
   request: ActionCreator<RequestActivitiesRequestAction>;
   success: ActionCreator<RequestActivitiesSuccessAction>;
+  failure: ActionCreator<FetchError>;
+}
+
+// ACTIVITIES_FOR_PROJECT
+export interface LoadActivitiesForProjectAction extends Action {
+  id: string;
+}
+
+export interface RequestActivitiesForProjectRequestAction extends Action {
+  id: string;
+}
+
+export interface RequestActivitiesForProjectSuccessAction extends Action {
+  id: string;
+  response: ResponseActivityElement[];
+}
+
+export interface RequestActivitiesForProjectActionCreators {
+  request: ActionCreator<RequestActivitiesForProjectRequestAction>;
+  success: ActionCreator<RequestActivitiesForProjectSuccessAction>;
   failure: ActionCreator<FetchError>;
 }
 

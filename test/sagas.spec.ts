@@ -26,6 +26,7 @@ interface CreateApiParameter {
 const createApi = (functionsToReplace?: CreateApiParameter): Api => {
   const defaultFunctions: Api = {
     fetchActivities: () => Promise.resolve({ response: {} }),
+    fetchActivitiesForProject: (_) => Promise.resolve({ response: {} }),
     fetchCommit: (_) => Promise.resolve({ response: {} }),
     fetchBranch: (_) => Promise.resolve({ response: {} }),
     fetchDeployment: (_) => Promise.resolve({ response: {} }),
@@ -100,7 +101,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        fork(sagas.fetchAllProjects)
+        fork(sagas.loadAllProjects)
       );
     });
   });
@@ -114,7 +115,22 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        fork(sagas.fetchActivities)
+        fork(sagas.loadActivities)
+      );
+    });
+  });
+
+  describe('watchForLoadActivitiesForProject', () => {
+    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
+      const iterator = sagas.watchForLoadActivitiesForProject();
+      const id = 'id';
+
+      expect(iterator.next().value).to.deep.equal(
+        take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT)
+      );
+
+      expect(iterator.next({ id }).value).to.deep.equal(
+        fork(sagas.loadActivitiesForProject, id)
       );
     });
   });
@@ -208,6 +224,86 @@ describe('sagas', () => {
     sagas.fetchProject,
     sagas.ensureProjectRelatedDataLoaded,
   );
+
+  describe('loadAllProjects', () => {
+    it('fetches projects and ensures data', () => {
+      const iterator = sagas.loadAllProjects();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(sagas.fetchAllProjects)
+      );
+
+      expect(iterator.next(true).value).to.deep.equal(
+        fork(sagas.ensureAllProjectsRelatedDataLoaded)
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('does not ensure data if fetching fails', () => {
+      const iterator = sagas.loadAllProjects();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(sagas.fetchAllProjects)
+      );
+
+      expect(iterator.next(false).done).to.equal(true);
+    });
+  });
+
+  describe('loadActivities', () => {
+    it('fetches activities and ensures data', () => {
+      const iterator = sagas.loadActivities();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(sagas.fetchActivities)
+      );
+
+      expect(iterator.next(true).value).to.deep.equal(
+        fork(sagas.ensureActivitiesRelatedDataLoaded)
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('does not ensure data if fetching fails', () => {
+      const iterator = sagas.loadActivities();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(sagas.fetchActivities)
+      );
+
+      expect(iterator.next(false).done).to.equal(true);
+    });
+  });
+
+  describe('loadActivitiesForProject', () => {
+    const id = 'id';
+
+    it('fetches projects and ensures data', () => {
+      const iterator = sagas.loadActivitiesForProject(id);
+
+      expect(iterator.next().value).to.deep.equal(
+        call(sagas.fetchActivitiesForProject, id)
+      );
+
+      expect(iterator.next(true).value).to.deep.equal(
+        fork(sagas.ensureActivitiesRelatedDataLoaded)
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('does not ensure data if fetching fails', () => {
+      const iterator = sagas.loadActivitiesForProject(id);
+
+      expect(iterator.next().value).to.deep.equal(
+        call(sagas.fetchActivitiesForProject, id)
+      );
+
+      expect(iterator.next(false).done).to.equal(true);
+    });
+  });
 
   interface RequestActionCreators {
     request: ActionCreator<any>;
@@ -340,11 +436,10 @@ describe('sagas', () => {
         put(Activities.actions.FetchActivities.success(response.data))
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.ensureActivitiesRelatedDataLoaded)
-      );
+      const result = iterator.next();
 
-      expect(iterator.next().done).to.equal(true);
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
     });
 
     it('fetches and stores included data', () => {
@@ -367,11 +462,10 @@ describe('sagas', () => {
         put(Activities.actions.FetchActivities.success(response.data))
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.ensureActivitiesRelatedDataLoaded)
-      );
+      const result = iterator.next();
 
-      expect(iterator.next().done).to.equal(true);
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
     });
 
     it('throws an error on failure', () => {
@@ -390,7 +484,84 @@ describe('sagas', () => {
         put(Activities.actions.FetchActivities.failure(errorMessage))
       );
 
-      expect(iterator.next().done).to.equal(true);
+      const result = iterator.next();
+
+      expect(result.value).to.equal(false);
+      expect(result.done).to.equal(true);
+    });
+  });
+
+  describe('fetchActivitiesForProject', () => {
+    const id = 'id';
+
+    it('fetches and stores activities', () => {
+      const response = { data: testData.activitiesResponse.data };
+      const iterator = sagas.fetchActivitiesForProject(id);
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Activities.actions.FetchActivitiesForProject.request(id))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.fetchActivitiesForProject, id)
+      );
+
+      expect(iterator.next({ response: response }).value).to.deep.equal(
+        put(Activities.actions.FetchActivitiesForProject.success(id, response.data))
+      );
+
+      const result = iterator.next();
+
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
+    });
+
+    it('fetches and stores included data', () => {
+      const response = testData.activitiesResponse;
+      const iterator = sagas.fetchActivitiesForProject(id);
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Activities.actions.FetchActivitiesForProject.request(id))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.fetchActivitiesForProject, id)
+      );
+
+      expect(iterator.next({ response: response }).value).to.deep.equal(
+        call(sagas.storeIncludedEntities, response.included)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Activities.actions.FetchActivitiesForProject.success(id, response.data))
+      );
+
+      const result = iterator.next();
+
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
+    });
+
+    it('throws an error on failure', () => {
+      const errorMessage = 'an error message';
+      const iterator = sagas.fetchActivitiesForProject(id);
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Activities.actions.FetchActivitiesForProject.request(id))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.fetchActivitiesForProject, id)
+      );
+
+      expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
+        put(Activities.actions.FetchActivitiesForProject.failure(id, errorMessage))
+      );
+
+      const result = iterator.next();
+
+      expect(result.value).to.equal(false);
+      expect(result.done).to.equal(true);
     });
   });
 
@@ -411,11 +582,10 @@ describe('sagas', () => {
         put(Projects.actions.FetchAllProjects.success(response.data))
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.ensureAllProjectsRelatedDataLoaded)
-      );
+      const result = iterator.next();
 
-      expect(iterator.next().done).to.equal(true);
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
     });
 
     it('fetches and stores included data', () => {
@@ -438,11 +608,10 @@ describe('sagas', () => {
         put(Projects.actions.FetchAllProjects.success(response.data))
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.ensureAllProjectsRelatedDataLoaded)
-      );
+      const result = iterator.next();
 
-      expect(iterator.next().done).to.equal(true);
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
     });
 
     it('throws an error on failure', () => {
@@ -461,7 +630,10 @@ describe('sagas', () => {
         put(Projects.actions.FetchAllProjects.failure(errorMessage))
       );
 
-      expect(iterator.next().done).to.equal(true);
+      const result = iterator.next();
+
+      expect(result.value).to.equal(false);
+      expect(result.done).to.equal(true);
     });
   });
 

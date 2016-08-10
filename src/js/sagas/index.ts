@@ -42,7 +42,14 @@ export default function createSagas(api: Api) {
     return existingEntity;
   }
 
-  // ACTIVITIES
+  // ALL ACTIVITIES
+  function* loadActivities(): IterableIterator<Effect> {
+    const fetchSuccess = yield call(fetchActivities);
+    if (fetchSuccess) {
+      yield fork(ensureActivitiesRelatedDataLoaded);
+    }
+  }
+
   function* fetchActivities(): IterableIterator<Effect> {
     yield put(Activities.actions.FetchActivities.request());
 
@@ -54,9 +61,12 @@ export default function createSagas(api: Api) {
       }
 
       yield put(Activities.actions.FetchActivities.success(response.data));
-      yield fork(ensureActivitiesRelatedDataLoaded);
+
+      return true;
     } else {
       yield put(Activities.actions.FetchActivities.failure(error));
+
+      return false;
     }
   }
 
@@ -70,7 +80,42 @@ export default function createSagas(api: Api) {
     yield uniq(activities.map(activity => activity.branch)).map(branch => call(fetchIfMissing, 'branches', branch));
   }
 
+  // PROJECT ACTIVITIES
+  function* loadActivitiesForProject(id: string): IterableIterator<Effect> {
+    const fetchSuccess = yield call(fetchActivitiesForProject, id);
+    if (fetchSuccess) {
+      yield fork(ensureActivitiesRelatedDataLoaded);
+    }
+  }
+
+  function* fetchActivitiesForProject(id: string): IterableIterator<Effect> {
+    yield put(Activities.actions.FetchActivitiesForProject.request(id));
+
+    const { response, error } = yield call(api.fetchActivitiesForProject, id);
+
+    if (response) {
+      if (response.included) {
+        yield call(storeIncludedEntities, response.included);
+      }
+
+      yield put(Activities.actions.FetchActivitiesForProject.success(id, response.data));
+
+      return true;
+    } else {
+      yield put(Activities.actions.FetchActivitiesForProject.failure(id, error));
+
+      return false;
+    }
+  }
+
   // ALL PROJECTS
+  function* loadAllProjects(): IterableIterator<Effect> {
+    const fetchSuccess = yield call(fetchAllProjects);
+    if (fetchSuccess) {
+      yield fork(ensureAllProjectsRelatedDataLoaded);
+    }
+  }
+
   function* fetchAllProjects(): IterableIterator<Effect> {
     yield put(Projects.actions.FetchAllProjects.request());
 
@@ -82,9 +127,12 @@ export default function createSagas(api: Api) {
       }
 
       yield put(Projects.actions.FetchAllProjects.success(response.data));
-      yield fork(ensureAllProjectsRelatedDataLoaded);
+
+      return true;
     } else {
       yield put(Projects.actions.FetchAllProjects.failure(error));
+
+      return false;
     }
   }
 
@@ -178,7 +226,15 @@ export default function createSagas(api: Api) {
     while (true) {
       yield take(Activities.actions.LOAD_ACTIVITIES);
 
-      yield fork(fetchActivities);
+      yield fork(loadActivities);
+    }
+  }
+
+  function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
+    while (true) {
+      const { id } = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
+
+      yield fork(loadActivitiesForProject, id);
     }
   }
 
@@ -186,7 +242,7 @@ export default function createSagas(api: Api) {
     while (true) {
       yield take(Projects.actions.LOAD_ALL_PROJECTS);
 
-      yield fork(fetchAllProjects);
+      yield fork(loadAllProjects);
     }
   }
 
@@ -230,6 +286,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadDeployment),
       fork(watchForLoadCommit),
       fork(watchForLoadActivities),
+      fork(watchForLoadActivitiesForProject),
     ];
   }
 
@@ -241,12 +298,17 @@ export default function createSagas(api: Api) {
     watchForLoadAllProjects,
     watchForLoadCommit,
     watchForLoadActivities,
+    watchForLoadActivitiesForProject,
     fetchActivities,
+    fetchActivitiesForProject,
     fetchBranch,
     fetchDeployment,
     fetchProject,
     fetchAllProjects,
     fetchCommit,
+    loadActivities,
+    loadActivitiesForProject,
+    loadAllProjects,
     loadBranch,
     loadDeployment,
     loadProject,
