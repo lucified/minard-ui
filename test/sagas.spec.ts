@@ -325,6 +325,29 @@ describe('sagas', () => {
 
   describe('fetchActivities', () => {
     it('fetches and stores all activities', () => {
+      const response = testData.activitiesResponseNoInclude;
+      const iterator = sagas.fetchActivities();
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Activities.actions.FetchActivities.request())
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.fetchActivities)
+      );
+
+      expect(iterator.next({ response: response }).value).to.deep.equal(
+        put(Activities.actions.FetchActivities.success(response.data))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        fork(sagas.ensureActivitiesRelatedDataLoaded)
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('fetches and stores included data', () => {
       const response = testData.activitiesResponse;
       const iterator = sagas.fetchActivities();
 
@@ -337,6 +360,10 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ response: response }).value).to.deep.equal(
+        call(sagas.storeIncludedEntities, response.included)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
         put(Activities.actions.FetchActivities.success(response.data))
       );
 

@@ -199,12 +199,12 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Activities.actions.STORE_ACTIVITIES,
-      entities: testData.activitiesResponse.data,
+      entities: testData.activitiesResponseNoInclude.data,
     };
 
     const successfulActivitiesRequestAction = {
       type: Activities.actions.ACTIVITIES.SUCCESS,
-      response: testData.activitiesResponse.data,
+      response: testData.activitiesResponseNoInclude.data,
     };
 
     const expectedObjectsToStore: ActivityState = {

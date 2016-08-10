@@ -49,6 +49,10 @@ export default function createSagas(api: Api) {
     const { response, error } = yield call(api.fetchActivities);
 
     if (response) {
+      if (response.included) {
+        yield call(storeIncludedEntities, response.included);
+      }
+
       yield put(Activities.actions.FetchActivities.success(response.data));
       yield fork(ensureActivitiesRelatedDataLoaded);
     } else {
