@@ -32,9 +32,10 @@ interface GeneratedDispatchProps {
 class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
     const { loadProject, loadActivity } = this.props;
+    const { id } = this.props.params;
 
-    loadProject(this.props.params.id);
-    loadActivity(this.props.params.id);
+    loadProject(id);
+    loadActivity(id);
   }
 
   public render() {
