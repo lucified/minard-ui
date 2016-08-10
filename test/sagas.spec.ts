@@ -4,7 +4,7 @@ import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
-import Activities from '../src/js/modules/activities';
+import Activities, { ActivityType } from '../src/js/modules/activities';
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
@@ -441,9 +441,82 @@ describe('sagas', () => {
   describe('ensureActivitiesRelatedDataLoaded', () => {
     it('makes sure branches and first deployments exist for all projects', () => {
       const iterator = sagas.ensureActivitiesRelatedDataLoaded();
+      const activities = [
+        {
+          id: '1',
+          type: ActivityType.Deployment,
+          deployment: '7',
+          branch: '1',
+          project: '1',
+          timestamp: 1470131481802,
+        },
+        {
+          id: '2',
+          type: ActivityType.Deployment,
+          deployment: '8',
+          branch: '2',
+          project: '1',
+          timestamp: 1470045081802,
+        },
+      ];
 
-      // TODO
-      expect(false).to.equal(true);
+      const deployments = [
+        {
+          'id': '7',
+          'url': '#',
+          'screenshot': '#',
+          'creator': {
+            'name': 'Ville Saarinen',
+            'email': 'ville.saarinen@lucify.com',
+            'timestamp': 1470131481802,
+          },
+          'commit': 'aacceeff02',
+        },
+        {
+          'id': '8',
+          'url': '#',
+          'screenshot': '#',
+          'creator': {
+            'name': undefined,
+            'email': 'juho@lucify.com',
+            'timestamp': 1470131481902,
+          },
+          'commit': 'aacceeff03',
+        },
+      ];
+
+      expect(iterator.next().value).to.deep.equal(
+        select(Activities.selectors.getActivities)
+      );
+
+      expect(iterator.next(activities).value).to.deep.equal(
+        [
+          call(sagas.fetchIfMissing, 'deployments', '7'),
+          call(sagas.fetchIfMissing, 'deployments', '8'),
+        ]
+      );
+
+      expect(iterator.next(deployments).value).to.deep.equal(
+        [
+          call(sagas.fetchIfMissing, 'commits', 'aacceeff02'),
+          call(sagas.fetchIfMissing, 'commits', 'aacceeff03'),
+        ]
+      );
+
+      expect(iterator.next([]).value).to.deep.equal(
+        [
+          call(sagas.fetchIfMissing, 'projects', '1'),
+        ]
+      );
+
+      expect(iterator.next([]).value).to.deep.equal(
+        [
+          call(sagas.fetchIfMissing, 'branches', '1'),
+          call(sagas.fetchIfMissing, 'branches', '2'),
+        ]
+      );
+
+      expect(iterator.next().done).to.equal(true);
     });
   });
 
