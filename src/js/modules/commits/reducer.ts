@@ -12,8 +12,8 @@ const initialState: t.CommitState = {};
 const responseToStateShape = (commits: t.ApiResponse) => {
   const createCommitObject = (commit: t.ResponseCommitElement): t.Commit => {
     const commitMessageLines = commit.attributes.message.match(/[^\r\n]+/g);
-    const commitMessage = commitMessageLines[0];
-    const commitDescription = commitMessageLines.length > 1 ?
+    const commitMessage = commitMessageLines ? commitMessageLines[0] : '';
+    const commitDescription = commitMessageLines && commitMessageLines.length > 1 ?
       commitMessageLines.slice(1).join('\n') : undefined;
     const deployments = commit.relationships.deployments;
     const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
@@ -51,9 +51,9 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       }
     case COMMIT.FAILURE:
       const responseAction = <FetchError> action;
-      const existingEntity = state[responseAction.id];
+      const existingEntity = state[responseAction.id!];
       if (!existingEntity || isError(existingEntity)) {
-        return assign<t.CommitState, t.CommitState>({}, state, { [responseAction.id]: responseAction });
+        return assign<t.CommitState, t.CommitState>({}, state, { [responseAction.id!]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');

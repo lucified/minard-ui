@@ -88,8 +88,8 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
 
   const deployment = Deployments.selectors.getDeployment(state, activity.deployment);
   const branch = Branches.selectors.getBranch(state, activity.branch);
-  let project: Project | FetchError;
-  let commit: Commit | FetchError;
+  let project: Project | FetchError | undefined;
+  let commit: Commit | FetchError | undefined;
 
   if (branch && !isError(branch)) {
     project = Projects.selectors.getProject(state, branch.project);
@@ -100,10 +100,10 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   }
 
   return {
-    project,
     deployment,
-    commit,
     branch,
+    commit,
+    project,
   };
 };
 

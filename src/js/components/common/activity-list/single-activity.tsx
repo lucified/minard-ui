@@ -33,14 +33,19 @@ const getAction = (activity: Activity): string => {
   }
 };
 
-const getActivityBody = (activity: Activity, activityContent: Commit | FetchError): string => {
+const getActivityBody = (activity: Activity, activityContent: Commit | FetchError | undefined): string => {
+  if (!activityContent) {
+    return 'Loading...';
+  }
+
+  if (isError(activityContent)) {
+    return `Error: ${activityContent.prettyError}`;
+  }
+
   switch (activity.type) {
     case ActivityType.Comment:
       return ''; // TODO
     case ActivityType.Deployment:
-      if (isError(activityContent)) {
-        return `Error: ${activityContent.prettyError}`;
-      }
       const commit = activityContent as Commit;
       return commit.message;
     default:

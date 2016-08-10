@@ -179,7 +179,7 @@ const testReducer = (
     expectedStateWithExistingEntity,
   );
 
-  expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
+  expectedStateFromEmpty = { [failedRequestAction.id!]: failedRequestAction };
   expectedStateWithoutExistingEntity =
     assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedStateFromEmpty);
 
@@ -236,8 +236,6 @@ describe('reducers', () => {
       expect(endState).to.deep.equal(expectedState);
       expect(endState).to.not.equal(initialState);
     });
-
-
 
     it('it clears existing selections', () => {
       const action: any = {
@@ -606,7 +604,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Branches.actions.STORE_BRANCHES,
-      entities: testData.projectResponse.included.slice(0, 2),
+      entities: testData.projectResponse.included!.slice(0, 2),
     };
 
     const expectedObjectsToStore: BranchState = {
@@ -698,7 +696,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Commits.actions.STORE_COMMITS,
-      entities: testData.commitResponse.included.slice(0, 2),
+      entities: testData.commitResponse.included!.slice(0, 2),
     };
 
     const expectedObjectsToStore: CommitState = {
@@ -844,7 +842,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Deployments.actions.STORE_DEPLOYMENTS,
-      entities: testData.branchResponse.included.slice(1, 2),
+      entities: testData.branchResponse.included!.slice(1, 2),
     };
 
     const expectedObjectsToStore: DeploymentState = {

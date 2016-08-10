@@ -85,7 +85,7 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { branch } = ownProps;
   const deployments = branch.deployments.map(id => Deployments.selectors.getDeployment(state, id));
-  let latestDeployedCommit: Commit | FetchError = undefined;
+  let latestDeployedCommit: Commit | FetchError | undefined = undefined;
 
   if (deployments.length > 0) {
     const latestDeployment = deployments[0];

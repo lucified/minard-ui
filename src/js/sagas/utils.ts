@@ -23,7 +23,7 @@ export const createLoader = (
 ) => {
   return function* (id: string): IterableIterator<Effect> {
     const existingEntity = yield select(selector, id);
-    let fetchSucceeded: boolean;
+    let fetchSucceeded: boolean = false;
 
     if (!existingEntity) {
       fetchSucceeded = yield call(fetcher, id);
@@ -60,7 +60,7 @@ export const createFetcher = (
   };
 };
 
-export function* storeIncludedEntities(entities: ApiEntity[]): IterableIterator<Effect> {
+export function* storeIncludedEntities(entities: ApiEntity[] | undefined): IterableIterator<Effect> {
   const types: { type: ApiEntityTypeString, actionCreator: ActionCreator<any> }[] = [
     { type: 'projects', actionCreator: Projects.actions.storeProjects },
     { type: 'deployments', actionCreator: Deployments.actions.storeDeployments },

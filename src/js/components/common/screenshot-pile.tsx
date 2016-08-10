@@ -9,10 +9,10 @@ const styles = require('./screenshot-pile.scss');
 const screenshot = require('../../../images/screenshot.png');
 
 interface Props {
-  deployments: (Deployment | FetchError)[];
+  deployments: (Deployment | FetchError | undefined)[];
 }
 
-const getScreenshot = (deployment: Deployment | FetchError, i: number) => {
+const getScreenshot = (deployment: Deployment | FetchError | undefined, i: number) => {
   if (!deployment) {
     return (
       <div
