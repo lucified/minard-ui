@@ -29,7 +29,7 @@ interface GeneratedProps {
 const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
-      <div key={project.id} className="empty">
+      <div key={project.id!} className="empty">
         <Icon name="exclamation" fixedWidth size="3x" />
         <p className="empty-title">Error fetching project</p>
         <p className="empty-meta">{project.prettyError}</p>

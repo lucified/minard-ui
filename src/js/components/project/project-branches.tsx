@@ -34,7 +34,7 @@ class ProjectBranches extends React.Component<Props, any> {
 
   private getErrorMessage(branch: FetchError) {
     return (
-      <div key={branch.id} className="empty">
+      <div key={branch.id!} className="empty">
         <Icon name="exclamation" fixedWidth size="3x" />
         <p className="empty-title">Uhhoh. Unable to get branch information</p>
         <p className="empty-meta">{branch.prettyError}</p>

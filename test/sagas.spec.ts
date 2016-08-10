@@ -997,10 +997,10 @@ describe('sagas', () => {
 
   describe('storeIncludedEntities', () => {
     it('stores passed entities', () => {
-      const response = testData.branchResponse;
-      const iterator = sagas.storeIncludedEntities(response.included);
-      const deploymentsEntities = response.included.filter(entity => entity.type === 'deployments');
-      const commitsEntities = response.included.filter(entity => entity.type === 'commits');
+      const includedData = testData.branchResponse.included!;
+      const iterator = sagas.storeIncludedEntities(includedData);
+      const deploymentsEntities = includedData.filter(entity => entity.type === 'deployments');
+      const commitsEntities = includedData.filter(entity => entity.type === 'commits');
 
       expect(iterator.next().value).to.deep.equal(
         put(Deployments.actions.storeDeployments(deploymentsEntities))

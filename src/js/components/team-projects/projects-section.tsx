@@ -20,7 +20,7 @@ const loadingBanner = (
 );
 
 const projectInfo = (projects: (Project | FetchError)[]) =>
-  projects.map(project => <ProjectSummary key={project.id} project={project} />);
+  projects.map(project => <ProjectSummary key={project.id!} project={project} />);
 
 const ProjectsSection = ({ projects }: Props) => (
   <div>

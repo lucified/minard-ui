@@ -45,9 +45,10 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       }
     case PROJECT.FAILURE:
       const responseAction = <FetchError> action;
-      const existingEntity = state[responseAction.id];
+      const id = responseAction.id!;
+      const existingEntity = state[id];
       if (!existingEntity || isError(existingEntity)) {
-        return assign<t.ProjectState, t.ProjectState>({}, state, { [responseAction.id]: responseAction });
+        return assign<t.ProjectState, t.ProjectState>({}, state, { [id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');

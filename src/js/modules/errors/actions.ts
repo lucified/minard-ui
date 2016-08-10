@@ -23,7 +23,7 @@ export const clearError: ActionCreator<t.ClearErrorAction> = (error: t.FetchErro
       // TODO: clear different types of errors?
       return {
         type: CLEAR_ERROR,
-        id: error.id,
+        id: error.id!,
       };
   }
 };

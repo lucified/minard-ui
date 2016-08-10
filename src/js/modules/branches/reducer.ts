@@ -41,9 +41,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
     case BRANCH.FAILURE:
       const responseAction = <FetchError> action;
-      const existingEntity = state[responseAction.id];
+      const id = responseAction.id!;
+      const existingEntity = state[id];
       if (!existingEntity || isError(existingEntity)) {
-        return assign<t.BranchState, t.BranchState>({}, state, { [responseAction.id]: responseAction });
+        return assign<t.BranchState, t.BranchState>({}, state, { [id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');
