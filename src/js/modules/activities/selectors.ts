@@ -2,16 +2,19 @@ import { values } from 'lodash';
 import { createSelector } from 'reselect';
 
 import { StateTree } from '../../reducers';
+import Selected from '../selected';
 import { Activity } from './types';
+
 
 const selectActivityTree = (state: StateTree) => state.entities.activities;
 
-const getUnsortedActivities = createSelector(
+export const getActivities = createSelector(
   selectActivityTree,
-  activities => values<Activity>(activities)
+  activities => values<Activity>(activities).sort((a, b) => b.timestamp - a.timestamp)
 );
 
-export const getActivities = createSelector(
-  getUnsortedActivities,
-  activities => activities.sort((a, b) => b.timestamp - a.timestamp)
+export const getActivitiesForProject = createSelector(
+  getActivities,
+  Selected.selectors.getSelectedProject,
+  (activities, project) => activities.filter(activity => activity.project === project)
 );

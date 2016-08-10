@@ -9,6 +9,7 @@ import Deployments, { DeploymentState } from '../src/js/modules/deployments';
 import Errors, { ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
 import Projects, { ProjectState } from '../src/js/modules/projects';
+import Selected, { SelectedState } from '../src/js/modules/selected';
 
 import * as testData from './test-data';
 
@@ -193,6 +194,75 @@ const testReducer = (
 };
 
 describe('reducers', () => {
+  describe('selected', () => {
+    const { reducer } = Selected;
+
+    it('adds selected project and branch to empty state', () => {
+      const action: any = {
+        type: Selected.actions.SET_SELECTED,
+        project: 'p',
+        branch: 'b',
+      };
+
+      const expectedState: SelectedState = {
+        project: 'p',
+        branch: 'b',
+      };
+
+      const endState: SelectedState = reducer(undefined, action);
+
+      expect(endState).to.deep.equal(expectedState);
+    });
+
+    it('it replaces existing selections', () => {
+      const action: any = {
+        type: Selected.actions.SET_SELECTED,
+        project: 'p',
+        branch: 'b',
+      };
+
+      const initialState: SelectedState = {
+        project: 'p2',
+        branch: 'b2',
+      };
+
+      const expectedState: SelectedState = {
+        project: 'p',
+        branch: 'b',
+      };
+
+      const endState: SelectedState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+
+
+    it('it clears existing selections', () => {
+      const action: any = {
+        type: Selected.actions.SET_SELECTED,
+        project: null,
+        branch: null,
+      };
+
+      const initialState: SelectedState = {
+        project: 'p2',
+        branch: 'b',
+      };
+
+      const expectedState: SelectedState = {
+        project: null,
+        branch: null,
+      };
+
+      const endState: SelectedState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+  });
+
   describe('errors', () => {
     const { reducer } = Errors;
 

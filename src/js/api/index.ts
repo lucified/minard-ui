@@ -34,6 +34,9 @@ function callApi(url: string) {
     }));
 }
 
+function simulateFailure() {
+  return Promise.resolve({ error: 'The reason why this fails is because of testing' });
+}
 // TODO: call actual endpoints
 export const fetchActivities = () => callApi(activitiesJSON);
 export const fetchActivitiesForProject = (id: string) => callApi(activitiesJSON);
