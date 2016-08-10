@@ -1,5 +1,7 @@
 import 'isomorphic-fetch';
 
+console.log(`BACKEND: ${process.env.CHARLES}`);
+
 const activitiesJSON = require('file!../../../json/activities.json');
 const allProjectsJSON = require('file!../../../json/projects.json');
 const projectJSON: { [id: string]: string } = {

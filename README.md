@@ -29,6 +29,11 @@ npm link typescript
 ```shell
 npm start # then open http://localhost:3000/ in a browser
 ```
+## Development with Charles running at e.g. `http://localhost:8000`
+
+```shell
+npm start -- http://localhost:8000
+```
 
 ## Local deployment
 
