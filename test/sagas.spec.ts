@@ -37,8 +37,6 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
   return assign<Api, Api>(defaultFunctions, functionsToReplace);
 };
 
-// TODO: Test activity-related sagas
-
 describe('sagas', () => {
   const api = createApi();
   const sagas = sagaCreator(api);
