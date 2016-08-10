@@ -1,4 +1,4 @@
-import { compact } from 'lodash';
+import { compact, uniq } from 'lodash';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString } from '../api/types';
@@ -61,8 +61,8 @@ export default function createSagas(api: Api) {
     const deployments =
       <Deployment[]> (yield activities.map(activity => call(fetchIfMissing, 'deployments', activity.deployment)));
     yield deployments.map(deployment => call(fetchIfMissing, 'commits', deployment.commit));
-    yield activities.map(activity => call(fetchIfMissing, 'projects', activity.project));
-    yield activities.map(activity => call(fetchIfMissing, 'branches', activity.branch));
+    yield uniq(activities.map(activity => activity.project)).map(project => call(fetchIfMissing, 'projects', project));
+    yield uniq(activities.map(activity => activity.branch)).map(branch => call(fetchIfMissing, 'branches', branch));
   }
 
   // ALL PROJECTS
