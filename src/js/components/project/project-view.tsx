@@ -85,7 +85,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   return {
     project,
     branches: project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
-    activities: Activities.selectors.getActivitiesForProject(state, projectId),
+    activities: Activities.selectors.getActivitiesForProject(state),
   };
 };
 
