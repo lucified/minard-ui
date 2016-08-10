@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { assign } from 'lodash';
+import * as assign from 'lodash/assign';
 import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
@@ -16,6 +16,8 @@ import sagaCreator from '../src/js/sagas';
 import * as testData from './test-data';
 
 interface CreateApiParameter {
+  fetchActivities?: () => ApiPromise;
+  FetchActivitiesForProject?: (id: string) => ApiPromise;
   fetchCommit?: (id: string) => ApiPromise;
   fetchBranch?: (id: string) => ApiPromise;
   fetchDeployment?: (id: string) => ApiPromise;
@@ -34,7 +36,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchAllProjects: () => Promise.resolve({ response: {} }),
   };
 
-  return assign<Api, Api>(defaultFunctions, functionsToReplace);
+  return assign(defaultFunctions, functionsToReplace);
 };
 
 describe('sagas', () => {

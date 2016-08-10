@@ -1,10 +1,9 @@
-import { values } from 'lodash';
+import * as values from 'lodash/values';
 import { createSelector } from 'reselect';
 
 import { StateTree } from '../../reducers';
 import Selected from '../selected';
 import { Activity } from './types';
-
 
 const selectActivityTree = (state: StateTree) => state.entities.activities;
 
