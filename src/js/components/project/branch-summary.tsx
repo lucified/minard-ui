@@ -31,8 +31,18 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
     const latestDeployment = deployments[0];
 
     if (latestDeployedCommit) {
-      cardContent = <CommitSummary commit={latestDeployedCommit} deployment={latestDeployment} />;
-    } else if (!latestDeployment) {
+      if (isError(latestDeployment)) {
+        cardContent = (
+          <div className="empty">
+            <Icon name="exclamation" fixedWidth size="3x" />
+            <p className="empty-title">Error loading deployment</p>
+            <p className="empty-meta">{latestDeployment.prettyError}</p>
+          </div>
+        );
+      } else {
+        cardContent = <CommitSummary commit={latestDeployedCommit} deployment={latestDeployment} />;
+      }
+    } else {
       cardContent = (
         <div className="empty">
           <Icon name="circle-o-notch" spin fixedWidth size="3x" />
@@ -40,16 +50,6 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
           <p className="empty-meta">Hold on a sec…</p>
         </div>
       );
-    } else if (isError(latestDeployment)) {
-      cardContent = (
-        <div className="empty">
-          <Icon name="exclamation" fixedWidth size="3x" />
-          <p className="empty-title">Error loading deployment</p>
-          <p className="empty-meta">{latestDeployment.prettyError}</p>
-        </div>
-      );
-    } else {
-      console.log('Branch summary: You shouldn\'t be here');
     }
   } else {
     cardContent = (
@@ -85,7 +85,7 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { branch } = ownProps;
   const deployments = branch.deployments.map(id => Deployments.selectors.getDeployment(state, id));
-  let latestDeployedCommit: Commit | FetchError = undefined;
+  let latestDeployedCommit: Commit | FetchError | undefined = undefined;
 
   if (deployments.length > 0) {
     const latestDeployment = deployments[0];

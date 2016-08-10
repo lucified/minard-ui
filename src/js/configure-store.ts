@@ -13,9 +13,9 @@ function configureStore(initialState: Object) {
   const store = createStore(
     rootReducer,
     initialState,
-    // TODO: remove logger for production
     compose(
       applyMiddleware(sagaMiddleware),
+      // TODO: remove devTools for production
       window.devToolsExtension ? window.devToolsExtension() : (f: any) => f
     )
   );

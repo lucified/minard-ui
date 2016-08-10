@@ -22,14 +22,14 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  deployments?: (Deployment | FetchError)[];
+  deployments?: (Deployment | FetchError | undefined)[];
   latestDeployment?: Deployment;
 }
 
 const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
-      <div key={project.id} className="empty">
+      <div key={project.id!} className="empty">
         <Icon name="exclamation" fixedWidth size="3x" />
         <p className="empty-title">Error fetching project</p>
         <p className="empty-meta">{project.prettyError}</p>
@@ -41,7 +41,7 @@ const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps 
     <div className="columns">
       <div className={classNames('column', 'col-3', styles.screenshot)}>
         <MinardLink project={project}>
-          <ScreenshotPile deployments={deployments} />
+          <ScreenshotPile deployments={deployments!} />
         </MinardLink>
       </div>
       <div className="column col-9">
@@ -81,7 +81,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   }
 
   // TODO: Make this more efficient
-  const deployments = flatMap(project.branches, branchId => {
+  const deployments = flatMap<Deployment | FetchError | undefined>(project.branches, branchId => {
     const branch = Branches.selectors.getBranch(state, branchId);
 
     if (!branch || isError(branch)) {
@@ -91,9 +91,10 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     return branch.deployments.map(deploymentId => Deployments.selectors.getDeployment(state, deploymentId));
   });
 
-  let latestDeployment: Deployment;
-  const loadedDeployments =
-    compact(deployments.map(deploymentOrError => isError(deploymentOrError) ? undefined : deploymentOrError));
+  let latestDeployment: Deployment | undefined;
+  const loadedDeployments = compact(
+    deployments.map(deploymentOrError => isError(deploymentOrError) ? undefined : deploymentOrError)
+  ) as Deployment[];
   if (loadedDeployments.length > 0) {
     latestDeployment = maxBy(loadedDeployments, deployment => deployment.creator.timestamp);
   }

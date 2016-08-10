@@ -1,7 +1,8 @@
-import { compact } from 'lodash';
+import { compact, uniq } from 'lodash';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString } from '../api/types';
+import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
@@ -41,7 +42,80 @@ export default function createSagas(api: Api) {
     return existingEntity;
   }
 
+  // ALL ACTIVITIES
+  function* loadActivities(): IterableIterator<Effect> {
+    const fetchSuccess = yield call(fetchActivities);
+    if (fetchSuccess) {
+      yield fork(ensureActivitiesRelatedDataLoaded);
+    }
+  }
+
+  function* fetchActivities(): IterableIterator<Effect> {
+    yield put(Activities.actions.FetchActivities.request());
+
+    const { response, error } = yield call(api.fetchActivities);
+
+    if (response) {
+      if (response.included) {
+        yield call(storeIncludedEntities, response.included);
+      }
+
+      yield put(Activities.actions.FetchActivities.success(response.data));
+
+      return true;
+    } else {
+      yield put(Activities.actions.FetchActivities.failure(error));
+
+      return false;
+    }
+  }
+
+  function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
+    const activities = <Activity[]> (yield select(Activities.selectors.getActivities));
+    const deployments =
+      <Deployment[]> (yield activities.map(activity => call(fetchIfMissing, 'deployments', activity.deployment)));
+    // TODO: check activity type and fetch e.g. comments
+    yield deployments.map(deployment => call(fetchIfMissing, 'commits', deployment.commit));
+    yield uniq(activities.map(activity => activity.project)).map(project => call(fetchIfMissing, 'projects', project));
+    yield uniq(activities.map(activity => activity.branch)).map(branch => call(fetchIfMissing, 'branches', branch));
+  }
+
+  // PROJECT ACTIVITIES
+  function* loadActivitiesForProject(id: string): IterableIterator<Effect> {
+    const fetchSuccess = yield call(fetchActivitiesForProject, id);
+    if (fetchSuccess) {
+      yield fork(ensureActivitiesRelatedDataLoaded);
+    }
+  }
+
+  function* fetchActivitiesForProject(id: string): IterableIterator<Effect> {
+    yield put(Activities.actions.FetchActivitiesForProject.request(id));
+
+    const { response, error } = yield call(api.fetchActivitiesForProject, id);
+
+    if (response) {
+      if (response.included) {
+        yield call(storeIncludedEntities, response.included);
+      }
+
+      yield put(Activities.actions.FetchActivitiesForProject.success(id, response.data));
+
+      return true;
+    } else {
+      yield put(Activities.actions.FetchActivitiesForProject.failure(id, error));
+
+      return false;
+    }
+  }
+
   // ALL PROJECTS
+  function* loadAllProjects(): IterableIterator<Effect> {
+    const fetchSuccess = yield call(fetchAllProjects);
+    if (fetchSuccess) {
+      yield fork(ensureAllProjectsRelatedDataLoaded);
+    }
+  }
+
   function* fetchAllProjects(): IterableIterator<Effect> {
     yield put(Projects.actions.FetchAllProjects.request());
 
@@ -53,9 +127,12 @@ export default function createSagas(api: Api) {
       }
 
       yield put(Projects.actions.FetchAllProjects.success(response.data));
-      yield fork(ensureAllProjectsRelatedDataLoaded);
+
+      return true;
     } else {
       yield put(Projects.actions.FetchAllProjects.failure(error));
+
+      return false;
     }
   }
 
@@ -145,11 +222,27 @@ export default function createSagas(api: Api) {
   }
 
   // WATCHERS: Watch for specific actions to begin async operations.
+  function* watchForLoadActivities(): IterableIterator<Effect> {
+    while (true) {
+      yield take(Activities.actions.LOAD_ACTIVITIES);
+
+      yield fork(loadActivities);
+    }
+  }
+
+  function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
+    while (true) {
+      const { id } = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
+
+      yield fork(loadActivitiesForProject, id);
+    }
+  }
+
   function* watchForLoadAllProjects(): IterableIterator<Effect> {
     while (true) {
       yield take(Projects.actions.LOAD_ALL_PROJECTS);
 
-      yield fork(fetchAllProjects);
+      yield fork(loadAllProjects);
     }
   }
 
@@ -192,6 +285,8 @@ export default function createSagas(api: Api) {
       fork(watchForLoadBranch),
       fork(watchForLoadDeployment),
       fork(watchForLoadCommit),
+      fork(watchForLoadActivities),
+      fork(watchForLoadActivitiesForProject),
     ];
   }
 
@@ -202,15 +297,23 @@ export default function createSagas(api: Api) {
     watchForLoadProject,
     watchForLoadAllProjects,
     watchForLoadCommit,
+    watchForLoadActivities,
+    watchForLoadActivitiesForProject,
+    fetchActivities,
+    fetchActivitiesForProject,
     fetchBranch,
     fetchDeployment,
     fetchProject,
     fetchAllProjects,
     fetchCommit,
+    loadActivities,
+    loadActivitiesForProject,
+    loadAllProjects,
     loadBranch,
     loadDeployment,
     loadProject,
     loadCommit,
+    ensureActivitiesRelatedDataLoaded,
     ensureAllProjectsRelatedDataLoaded,
     ensureBranchRelatedDataLoaded,
     ensureDeploymentRelatedDataLoaded,

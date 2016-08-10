@@ -64,7 +64,7 @@ export interface ResponseCommitElement {
   id: string;
   attributes: {
     hash: string;
-    message?: string;
+    message: string;
     author: {
       name?: string;
       email: string;

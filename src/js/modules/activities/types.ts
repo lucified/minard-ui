@@ -1,3 +1,8 @@
+import { Action, ActionCreator } from 'redux';
+
+import { FetchError } from '../errors';
+
+// State
 export enum ActivityType {
   Comment,
   Deployment,
@@ -5,16 +10,96 @@ export enum ActivityType {
 
 export interface Activity {
   id: string;
-  project: string;
-  branch: string;
   type: ActivityType;
   timestamp: number;
-  author: string;
   deployment: string;
-  comment?: string;
-  commitMessage?: string;
+  branch: string;
+  project: string;
 }
 
 export interface ActivityState {
   [id: string]: Activity;
 };
+
+// Actions
+// ACTIVITIES
+export interface LoadActivitiesAction extends Action {
+
+}
+
+export interface RequestActivitiesRequestAction extends Action {
+
+}
+
+export interface RequestActivitiesSuccessAction extends Action {
+  response: ResponseActivityElement[];
+}
+
+export interface RequestActivitiesActionCreators {
+  request: ActionCreator<RequestActivitiesRequestAction>;
+  success: ActionCreator<RequestActivitiesSuccessAction>;
+  failure: ActionCreator<FetchError>;
+}
+
+// ACTIVITIES_FOR_PROJECT
+export interface LoadActivitiesForProjectAction extends Action {
+  id: string;
+}
+
+export interface RequestActivitiesForProjectRequestAction extends Action {
+  id: string;
+}
+
+export interface RequestActivitiesForProjectSuccessAction extends Action {
+  id: string;
+  response: ResponseActivityElement[];
+}
+
+export interface RequestActivitiesForProjectActionCreators {
+  request: ActionCreator<RequestActivitiesForProjectRequestAction>;
+  success: ActionCreator<RequestActivitiesForProjectSuccessAction>;
+  failure: ActionCreator<FetchError>;
+}
+
+// STORE_PROJECTS
+export interface StoreActivitiesAction extends Action {
+  entities: ResponseActivityElement[];
+}
+
+// API response
+interface ResponseDeploymentReference {
+  type: "deployments";
+  id: string;
+}
+
+interface ResponseBranchReference {
+  type: "branches";
+  id: string;
+}
+
+interface ResponseProjectReference {
+  type: "projects";
+  id: string;
+}
+
+export interface ResponseActivityElement {
+  type: "activities";
+  id: string;
+  attributes: {
+    activityType: string;
+    timestamp: string;
+  };
+  relationships: {
+    deployment: {
+      data: ResponseDeploymentReference;
+    };
+    branch: {
+      data: ResponseBranchReference;
+    };
+    project: {
+      data: ResponseProjectReference;
+    };
+  };
+}
+
+export type ApiResponse = ResponseActivityElement[];

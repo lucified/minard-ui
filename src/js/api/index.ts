@@ -1,5 +1,6 @@
 import 'isomorphic-fetch';
 
+const activitiesJSON = require('file!../../../json/activities.json');
 const allProjectsJSON = require('file!../../../json/projects.json');
 const projectJSON: { [id: string]: string } = {
   1: require('file!../../../json/project-1.json'),
@@ -34,8 +35,10 @@ function callApi(url: string) {
 }
 
 // TODO: call actual endpoints
+export const fetchActivities = () => callApi(activitiesJSON);
+export const fetchActivitiesForProject = (id: string) => callApi(activitiesJSON);
 export const fetchAllProjects = () => callApi(allProjectsJSON);
 export const fetchProject = (id: string) => callApi(projectJSON[id]);
 export const fetchBranch = (id: string) => callApi(branchJSON[id]);
 export const fetchDeployment = (id: string) => callApi(deploymentJSON[id]);
-export const fetchCommit = (_: string) => callApi(commitJSON);
+export const fetchCommit = (id: string) => callApi(commitJSON);

@@ -1,107 +1,112 @@
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Gravatar from 'react-gravatar';
-import { connect } from 'react-redux';
 
 import { Activity, ActivityType } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
-import { isError } from '../../../modules/errors';
-import Projects, { Project } from '../../../modules/projects';
-import { StateTree } from '../../../reducers';
+import { Commit } from '../../../modules/commits';
+import { Deployment } from '../../../modules/deployments';
+import { FetchError, isError } from '../../../modules/errors';
+import { Project } from '../../../modules/projects';
 
 import MinardLink from '../minard-link';
 
 const styles = require('./single-activity.scss');
 
-interface PassedProps {
+interface Props {
   activity: Activity;
   branch: Branch;
   showProjectName: boolean;
+  deployment: Deployment;
+  project: Project | FetchError;
+  commit?: Commit | FetchError;
 }
 
-interface GeneratedProps {
-  project?: Project;
-}
-
-class SingleActivity extends React.Component<PassedProps & GeneratedProps, any> {
-  private getAction(activity: Activity) {
-    switch (activity.type) {
-      case ActivityType.Comment:
-        return 'commented on';
-      case ActivityType.Deployment:
-        return 'generated preview';
-      default:
-        return 'did an unknown action';
-    }
+const getAction = (activity: Activity): string => {
+  switch (activity.type) {
+    case ActivityType.Comment:
+      return 'commented on';
+    case ActivityType.Deployment:
+      return 'generated preview';
+    default:
+      return 'did an unknown action';
   }
-
-  private getActivityBody(activity: Activity) {
-    switch (activity.type) {
-      case ActivityType.Comment:
-        return activity.comment;
-      case ActivityType.Deployment:
-        return activity.commitMessage;
-      default:
-        return 'Unknown action type';
-    }
-  }
-
-  private getBranchAction(activity: Activity, branch: Branch) {
-    return (
-      <span>
-        {`${activity.author} ${this.getAction(activity)} `}
-        <MinardLink>{activity.deployment}</MinardLink>
-        {' in '}
-        <MinardLink branch={branch}>{branch.name}</MinardLink>
-      </span>
-    );
-  }
-
-  private getProjectLabel(project: Project) {
-    return (
-      <span> in <MinardLink project={project}>{project.name}</MinardLink></span>
-    );
-  }
-
-  public render() {
-    const { activity, branch, showProjectName, project } = this.props;
-
-    return (
-      <div className={styles.activity}>
-        <div className={styles.metadata}>
-          <div className={styles.action}>
-            {this.getBranchAction(activity, branch)}
-            {showProjectName && project && this.getProjectLabel(project)}
-          </div>
-          <div className={styles.timestamp}>
-            {moment(activity.timestamp).fromNow()}
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column col-1">
-            <figure className="avatar avatar-lg">
-              <Gravatar email={activity.author} https />
-            </figure>
-          </div>
-          <div className="column col-11">
-            {this.getActivityBody(activity)}
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
-  const project = Projects.selectors.getProject(state, ownProps.branch.project);
-
-  if (!project || isError(project)) {
-    return {};
-  }
-
-  return {
-    project,
-  };
 };
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(SingleActivity);
+const getActivityBody = (activity: Activity, activityContent: Commit | FetchError | undefined): string => {
+  if (!activityContent) {
+    return 'Loading...';
+  }
+
+  if (isError(activityContent)) {
+    return `Error: ${activityContent.prettyError}`;
+  }
+
+  switch (activity.type) {
+    case ActivityType.Comment:
+      return ''; // TODO
+    case ActivityType.Deployment:
+      const commit = activityContent as Commit;
+      return commit.message;
+    default:
+      return 'Unknown activity type';
+  }
+};
+
+const getAuthor = (activity: Activity, activityContent: Deployment): string => {
+  switch (activity.type) {
+    case ActivityType.Comment:
+      return ''; // TODO
+    case ActivityType.Deployment:
+      return activityContent.creator.name || activityContent.creator.email;
+    default:
+      return 'Unknown activity type';
+  }
+};
+
+const getBranchAction = (activity: Activity, branch: Branch, deployment: Deployment) => {
+  return (
+    <span>
+      {`${getAuthor(activity, deployment)} ${getAction(activity)} `}
+      <MinardLink deployment={deployment}>{activity.deployment}</MinardLink>
+      {' in '}
+      <MinardLink branch={branch}>{branch.name}</MinardLink>
+    </span>
+  );
+};
+
+const getProjectLabel = (project: Project) => {
+  return (
+    <span> in <MinardLink project={project}>{project.name}</MinardLink></span>
+  );
+};
+
+const SingleActivity = (props: Props) => {
+  const { activity, branch, commit, deployment, showProjectName, project } = props;
+
+  return (
+    <div className={styles.activity}>
+      <div className={styles.metadata}>
+        <div className={styles.action}>
+          {getBranchAction(activity, branch, deployment)}
+          {showProjectName && project && !isError(project) && getProjectLabel(project)}
+        </div>
+        <div className={styles.timestamp}>
+          {moment(activity.timestamp).fromNow()}
+        </div>
+      </div>
+      <div className="columns">
+        <div className="column col-1">
+          <figure className="avatar avatar-lg">
+            <Gravatar email={deployment.creator.email} https />
+          </figure>
+        </div>
+        <div className="column col-11">
+          {getActivityBody(activity, commit)}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SingleActivity;

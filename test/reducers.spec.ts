@@ -1,12 +1,15 @@
 import { expect } from 'chai';
-import { assign } from 'lodash';
+import * as assign from 'lodash/assign';
 import { Action, Reducer } from 'redux';
 
+import Activities, { ActivityState, ActivityType } from '../src/js/modules/activities';
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
+import Errors, { ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
 import Projects, { ProjectState } from '../src/js/modules/projects';
+import Selected, { SelectedState } from '../src/js/modules/selected';
 
 import * as testData from './test-data';
 
@@ -145,10 +148,8 @@ const testReducer = (
   testInitialState(reducer, {});
 
   let expectedStateFromEmpty = expectedObjectsToStore;
-  let expectedStateWithoutExistingEntity =
-    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedObjectsToStore);
-  let expectedStateWithExistingEntity =
-    assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedObjectsToStore);
+  let expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
+  let expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, expectedObjectsToStore);
 
   testStoreEntities(
     reducer,
@@ -161,10 +162,8 @@ const testReducer = (
   );
 
   expectedStateFromEmpty = expectedSuccessfulRequestObject;
-  expectedStateWithoutExistingEntity =
-    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
-  expectedStateWithExistingEntity =
-    assign<ModuleState, ModuleState>({}, stateWithExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, expectedSuccessfulRequestObject);
 
   testSuccessfulRequest(
     reducer,
@@ -176,9 +175,8 @@ const testReducer = (
     expectedStateWithExistingEntity,
   );
 
-  expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
-  expectedStateWithoutExistingEntity =
-    assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, expectedStateFromEmpty);
+  expectedStateFromEmpty = { [failedRequestAction.id!]: failedRequestAction };
+  expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedStateFromEmpty);
 
   testFailedRequest(
     reducer,
@@ -191,8 +189,407 @@ const testReducer = (
 };
 
 describe('reducers', () => {
+  describe('selected', () => {
+    const { reducer } = Selected;
+
+    it('adds selected project and branch to empty state', () => {
+      const action: any = {
+        type: Selected.actions.SET_SELECTED,
+        project: 'p',
+        branch: 'b',
+      };
+
+      const expectedState: SelectedState = {
+        project: 'p',
+        branch: 'b',
+      };
+
+      const endState: SelectedState = reducer(undefined, action);
+
+      expect(endState).to.deep.equal(expectedState);
+    });
+
+    it('it replaces existing selections', () => {
+      const action: any = {
+        type: Selected.actions.SET_SELECTED,
+        project: 'p',
+        branch: 'b',
+      };
+
+      const initialState: SelectedState = {
+        project: 'p2',
+        branch: 'b2',
+      };
+
+      const expectedState: SelectedState = {
+        project: 'p',
+        branch: 'b',
+      };
+
+      const endState: SelectedState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it('it clears existing selections', () => {
+      const action: any = {
+        type: Selected.actions.SET_SELECTED,
+        project: null,
+        branch: null,
+      };
+
+      const initialState: SelectedState = {
+        project: 'p2',
+        branch: 'b',
+      };
+
+      const expectedState: SelectedState = {
+        project: null,
+        branch: null,
+      };
+
+      const endState: SelectedState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+  });
+
+  describe('errors', () => {
+    const { reducer } = Errors;
+
+    it('adds error to an empty initial state', () => {
+      const action: any = {
+        type: Projects.actions.ALL_PROJECTS.FAILURE,
+        id: null,
+        error: 'projects fetch error',
+        prettyError: 'pretty error',
+      };
+
+      const expectedState = [action];
+
+      const endState = reducer(undefined, action);
+
+      expect(endState).to.deep.equal(expectedState);
+    });
+
+    it('adds error when requesting all projects fails', () => {
+      const initialState: ErrorState = [
+        {
+          id: null,
+          type: Activities.actions.ACTIVITIES.FAILURE,
+          error: 'foobar error',
+          prettyError: 'pretty foobar error',
+        },
+      ];
+
+      const action: any = {
+        type: Projects.actions.ALL_PROJECTS.FAILURE,
+        id: null,
+        error: 'projects fetch error',
+        prettyError: 'pretty error',
+      };
+
+      const expectedState = initialState.concat(action);
+
+      const endState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it('adds error when requesting activities fails', () => {
+      const initialState: ErrorState = [
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'projects fetch error',
+          prettyError: 'pretty error',
+        },
+      ];
+
+      const action: any = {
+        id: null,
+        type: Activities.actions.ACTIVITIES.FAILURE,
+        error: 'foobar error',
+        prettyError: 'pretty foobar error',
+      };
+
+      const expectedState = initialState.concat(action);
+
+      const endState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it('clears all projects fetching error when starting new request', () => {
+      const initialState: ErrorState = [
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'projects fetch error',
+          prettyError: 'pretty error',
+        },
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'another projects fetch error',
+          prettyError: 'another pretty error',
+        },
+        {
+          id: null,
+          type: Activities.actions.ACTIVITIES.FAILURE,
+          error: 'foobar error',
+          prettyError: 'pretty foobar error',
+        },
+      ];
+
+      const action: any = {
+        type: Projects.actions.ALL_PROJECTS.REQUEST,
+      };
+
+      const expectedState = initialState.slice(2);
+
+      const endState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it(`clears all projects fetching error with ${Errors.actions.CLEAR_FETCH_ALL_PROJECTS_ERRORS}`, () => {
+      const initialState: ErrorState = [
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'projects fetch error',
+          prettyError: 'pretty error',
+        },
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'another projects fetch error',
+          prettyError: 'another pretty error',
+        },
+        {
+          id: null,
+          type: Activities.actions.ACTIVITIES.FAILURE,
+          error: 'foobar error',
+          prettyError: 'pretty foobar error',
+        },
+      ];
+
+      const action: any = {
+        type: Errors.actions.CLEAR_FETCH_ALL_PROJECTS_ERRORS,
+      };
+
+      const expectedState = initialState.slice(2);
+
+      const endState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it('clears activity fetching error when starting new request', () => {
+      const initialState: ErrorState = [
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'projects fetch error',
+          prettyError: 'pretty error',
+        },
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'another projects fetch error',
+          prettyError: 'another pretty error',
+        },
+        {
+          id: null,
+          type: Activities.actions.ACTIVITIES.FAILURE,
+          error: 'foobar error',
+          prettyError: 'pretty foobar error',
+        },
+      ];
+
+      const action: any = {
+        type: Activities.actions.ACTIVITIES.REQUEST,
+      };
+
+      const expectedState = initialState.slice(0, 2);
+
+      const endState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it(`clears all projects fetching error with ${Errors.actions.CLEAR_ACTIVITIES_ERRORS}`, () => {
+      const initialState: ErrorState = [
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'projects fetch error',
+          prettyError: 'pretty error',
+        },
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'another projects fetch error',
+          prettyError: 'another pretty error',
+        },
+        {
+          id: null,
+          type: Activities.actions.ACTIVITIES.FAILURE,
+          error: 'foobar error',
+          prettyError: 'pretty foobar error',
+        },
+      ];
+
+      const action: any = {
+        type: Errors.actions.CLEAR_ACTIVITIES_ERRORS,
+      };
+
+      const expectedState = initialState.slice(0, 2);
+
+      const endState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+  });
+
   describe('activities', () => {
-    // TODO
+    const { reducer } = Activities;
+
+    const storeAction = {
+      type: Activities.actions.STORE_ACTIVITIES,
+      entities: testData.activitiesResponse.data,
+    };
+
+    const successfulActivitiesRequestAction = {
+      type: Activities.actions.ACTIVITIES.SUCCESS,
+      response: testData.activitiesResponse.data,
+    };
+
+    const successfulActivitiesForProjectRequestAction = {
+      type: Activities.actions.ACTIVITIES_FOR_PROJECT.SUCCESS,
+      response: testData.activitiesResponse.data,
+    };
+
+    const expectedObjectsToStore: ActivityState = {
+      1: {
+        id: '1',
+        type: ActivityType.Deployment,
+        deployment: '7',
+        branch: '1',
+        project: '1',
+        timestamp: 1470131481802,
+      },
+      2: {
+        id: '2',
+        type: ActivityType.Deployment,
+        deployment: '8',
+        branch: '2',
+        project: '1',
+        timestamp: 1470045081802,
+      },
+    };
+
+    const stateWithoutExistingEntity: ActivityState = {
+      3: {
+        id: '3',
+        type: ActivityType.Deployment,
+        deployment: '1',
+        branch: '3',
+        project: '2',
+        timestamp: 1469945081802,
+      },
+    };
+
+    const stateWithExistingEntity: ActivityState = {
+      1: {
+        id: '1',
+        type: ActivityType.Deployment,
+        deployment: '2',
+        branch: '1',
+        project: '3',
+        timestamp: 1470101481802,
+      },
+      3: {
+        id: '3',
+        type: ActivityType.Deployment,
+        deployment: '1',
+        branch: '3',
+        project: '2',
+        timestamp: 1469945081802,
+      },
+    };
+
+    const expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
+    const expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, expectedObjectsToStore);
+
+    testStoreEntities(
+      reducer,
+      storeAction,
+      expectedObjectsToStore,
+      stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
+      stateWithExistingEntity,
+      expectedStateWithExistingEntity
+    );
+
+    describe(`successful request all activities (${successfulActivitiesRequestAction.type})`, () => {
+      it('with an empty initial state', () => {
+        expect(reducer(undefined, successfulActivitiesRequestAction)).to.deep.equal(expectedObjectsToStore);
+      });
+
+      it('makes no changes with an empty list', () => {
+        const emptyAction = { type: successfulActivitiesRequestAction.type, entities: <any[]> [] };
+        const newState = reducer(stateWithoutExistingEntity, emptyAction);
+        expect(newState).to.deep.equal(stateWithoutExistingEntity);
+        expect(newState).to.equal(stateWithoutExistingEntity);
+      });
+
+      it('with other entities in state', () => {
+        const newState = reducer(stateWithoutExistingEntity, successfulActivitiesRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
+        expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
+      });
+
+      it('by overwriting existing entities', () => {
+        const newState = reducer(stateWithExistingEntity, successfulActivitiesRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithExistingEntity);
+        expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      });
+    });
+
+    describe(`successful request activities for project (${successfulActivitiesForProjectRequestAction.type})`, () => {
+      it('with an empty initial state', () => {
+        expect(reducer(undefined, successfulActivitiesForProjectRequestAction)).to.deep.equal(expectedObjectsToStore);
+      });
+
+      it('makes no changes with an empty list', () => {
+        const emptyAction = { type: successfulActivitiesForProjectRequestAction.type, entities: <any[]> [] };
+        const newState = reducer(stateWithoutExistingEntity, emptyAction);
+        expect(newState).to.deep.equal(stateWithoutExistingEntity);
+        expect(newState).to.equal(stateWithoutExistingEntity);
+      });
+
+      it('with other entities in state', () => {
+        const newState = reducer(stateWithoutExistingEntity, successfulActivitiesForProjectRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
+        expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
+      });
+
+      it('by overwriting existing entities', () => {
+        const newState = reducer(stateWithExistingEntity, successfulActivitiesForProjectRequestAction);
+        expect(newState).to.deep.equal(expectedStateWithExistingEntity);
+        expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      });
+    });
   });
 
   describe('branches', () => {
@@ -200,7 +597,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Branches.actions.STORE_BRANCHES,
-      entities: testData.projectResponse.included.slice(0, 2),
+      entities: testData.projectResponse.included!.slice(0, 2),
     };
 
     const expectedObjectsToStore: BranchState = {
@@ -254,7 +651,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Branches.actions.BRANCH.SUCCESS,
-      response: testData.branchResponseNoInclude.data,
+      response: testData.branchResponse.data,
     };
 
     const expectedSuccessfulRequestObject: BranchState = {
@@ -292,7 +689,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Commits.actions.STORE_COMMITS,
-      entities: testData.commitResponse.included.slice(0, 2),
+      entities: testData.commitResponse.included!.slice(0, 2),
     };
 
     const expectedObjectsToStore: CommitState = {
@@ -391,7 +788,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Commits.actions.COMMIT.SUCCESS,
-      response: testData.commitResponseNoInclude.data,
+      response: testData.commitResponse.data,
     };
 
     const expectedSuccessfulRequestObject: CommitState = {
@@ -438,7 +835,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Deployments.actions.STORE_DEPLOYMENTS,
-      entities: testData.branchResponse.included.slice(1, 2),
+      entities: testData.branchResponse.included!.slice(1, 2),
     };
 
     const expectedObjectsToStore: DeploymentState = {
@@ -485,7 +882,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Deployments.actions.DEPLOYMENT.SUCCESS,
-      response: testData.deploymentResponseNoInclude.data,
+      response: testData.deploymentResponse.data,
     };
 
     const expectedSuccessfulRequestObject: DeploymentState = {
@@ -526,7 +923,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Projects.actions.STORE_PROJECTS,
-      entities: testData.projectsResponse.data,
+      entities: testData.allProjectsResponse.data,
     };
 
     const expectedObjectsToStore: ProjectState = {
@@ -575,7 +972,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Projects.actions.PROJECT.SUCCESS,
-      response: testData.projectResponseNoInclude.data,
+      response: testData.projectResponse.data,
     };
 
     const expectedSuccessfulRequestObject: ProjectState = {
@@ -608,14 +1005,12 @@ describe('reducers', () => {
 
     const successfulAllProjectsRequestAction = {
       type: Projects.actions.ALL_PROJECTS.SUCCESS,
-      response: testData.projectsResponse.data,
+      response: testData.allProjectsResponse.data,
     };
 
     const allProjectsObjects = expectedObjectsToStore;
-    const expectedStateWithoutExistingEntity =
-      assign<ModuleState, ModuleState>({}, stateWithoutExistingEntity, allProjectsObjects);
-    const expectedStateWithExistingEntity =
-      assign<ModuleState, ModuleState>({}, stateWithExistingEntity, allProjectsObjects);
+    const expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, allProjectsObjects);
+    const expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, allProjectsObjects);
 
     describe(`successful request all projects (${successfulAllProjectsRequestAction.type})`, () => {
       it('with an empty initial state', () => {

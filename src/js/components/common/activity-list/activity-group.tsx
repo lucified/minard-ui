@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 
 import { Activity } from '../../../modules/activities';
 import Branches, { Branch } from '../../../modules/branches';
+import Commits, { Commit } from '../../../modules/commits';
+import Deployments, { Deployment } from '../../../modules/deployments';
 import { FetchError, isError } from '../../../modules/errors';
+import Projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
 import MinardLink from '../minard-link';
@@ -19,11 +22,14 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  branch: Branch | FetchError;
+  branch?: Branch | FetchError;
+  deployment?: Deployment | FetchError;
+  project?: Project | FetchError;
+  commit?: Commit | FetchError;
 }
 
 const getLoadingContent = () => (
-  <div><h1>Loading...</h1></div>
+  <div><h3>Loading...</h3></div>
 );
 
 const getErrorContent = (branch: FetchError) => (
@@ -33,13 +39,19 @@ const getErrorContent = (branch: FetchError) => (
   </div>
 );
 
-const ActivityGroup = ({ activities, branch, showProjectName }: PassedProps & GeneratedProps) => {
-  if (!branch) {
+const ActivityGroup = (props: PassedProps & GeneratedProps) => {
+  const { activities, branch, commit, deployment, project, showProjectName } = props;
+
+  if (!deployment || !project || !branch) {
     return getLoadingContent();
   }
 
   if (isError(branch)) {
     return getErrorContent(branch);
+  }
+
+  if (isError(deployment)) {
+    return getErrorContent(deployment);
   }
 
   // Seems this is needed due to a bug in TypeScript?
@@ -48,14 +60,17 @@ const ActivityGroup = ({ activities, branch, showProjectName }: PassedProps & Ge
   return (
     <div className={classNames('columns', styles.activityGroup)}>
       <div className={classNames('column', 'col-3', styles.activityScreenshot)}>
-        <MinardLink><img src={screenshot} className="img-responsive" /></MinardLink>
+        <MinardLink deployment={deployment}><img src={screenshot} className="img-responsive" /></MinardLink>
       </div>
       <div className={classNames('column', 'col-9', styles.activityContent)}>
         {activities.map(activity =>
           <SingleActivity
             activity={activity}
+            deployment={deployment}
+            commit={commit}
             branch={realBranch}
             key={activity.id}
+            project={project}
             showProjectName={showProjectName}
           />
         )}
@@ -64,8 +79,32 @@ const ActivityGroup = ({ activities, branch, showProjectName }: PassedProps & Ge
   );
 };
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => ({
-  branch: Branches.selectors.getBranch(state, ownProps.activities[0].branch),
-});
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
+  const activity = ownProps.activities[0];
+
+  if (!activity) {
+    return {};
+  }
+
+  const deployment = Deployments.selectors.getDeployment(state, activity.deployment);
+  const branch = Branches.selectors.getBranch(state, activity.branch);
+  let project: Project | FetchError | undefined;
+  let commit: Commit | FetchError | undefined;
+
+  if (branch && !isError(branch)) {
+    project = Projects.selectors.getProject(state, branch.project);
+  }
+
+  if (deployment && !isError(deployment)) {
+    commit = Commits.selectors.getCommit(state, deployment.commit);
+  }
+
+  return {
+    deployment,
+    branch,
+    commit,
+    project,
+  };
+};
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ActivityGroup);

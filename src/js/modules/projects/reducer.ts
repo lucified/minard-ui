@@ -1,4 +1,4 @@
-import { assign } from 'lodash';
+import * as assign from 'lodash/assign';
 import { Reducer } from 'redux';
 
 import { FetchError, isError } from '../errors';
@@ -32,22 +32,23 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
     case ALL_PROJECTS.SUCCESS:
       const projectsResponse = (<t.RequestAllProjectsSuccessAction> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
-        return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape(projectsResponse));
+        return assign({}, state, responseToStateShape(projectsResponse));
       } else {
         return state;
       }
     case PROJECT.SUCCESS:
       const projectResponse = (<t.RequestProjectSuccessAction> action).response;
       if (projectResponse) {
-        return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape([projectResponse]));
+        return assign({}, state, responseToStateShape([projectResponse]));
       } else {
         return state;
       }
     case PROJECT.FAILURE:
       const responseAction = <FetchError> action;
-      const existingEntity = state[responseAction.id];
+      const id = responseAction.id!;
+      const existingEntity = state[id];
       if (!existingEntity || isError(existingEntity)) {
-        return assign<t.ProjectState, t.ProjectState>({}, state, { [responseAction.id]: responseAction });
+        return assign({}, state, { [id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');
@@ -55,7 +56,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
-        return assign<t.ProjectState, t.ProjectState>({}, state, responseToStateShape(projects));
+        return assign({}, state, responseToStateShape(projects));
       } else {
         return state;
       }

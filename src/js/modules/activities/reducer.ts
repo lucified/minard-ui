@@ -1,11 +1,59 @@
+import * as assign from 'lodash/assign';
+import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { ActivityState } from './types';
+import { ACTIVITIES, ACTIVITIES_FOR_PROJECT, STORE_ACTIVITIES } from './actions';
+import * as t from './types';
 
-const initialState: ActivityState = {};
+const initialState: t.ActivityState = {};
 
-const reducer: Reducer<ActivityState> = (state: ActivityState = initialState, _: any) => {
-  return state;
+const responseToStateShape = (activities: t.ApiResponse) => {
+  const activityType = (activityString: string): t.ActivityType => {
+    switch (activityString) {
+      case 'Deployment':
+        return t.ActivityType.Deployment;
+      case 'Comment':
+        return t.ActivityType.Comment;
+      default:
+        throw new Error('Unknown activity type!');
+    }
+  };
+
+  const createActivityObject = (activity: t.ResponseActivityElement): t.Activity => {
+    return {
+      id: activity.id,
+      type: activityType(activity.attributes.activityType),
+      deployment: activity.relationships.deployment.data.id,
+      branch: activity.relationships.branch.data.id,
+      project: activity.relationships.project.data.id,
+      timestamp: moment(activity.attributes.timestamp).valueOf(),
+    };
+  };
+
+  return activities.reduce((obj, activity) =>
+    assign(obj, { [activity.id]: createActivityObject(activity) }), {});
+};
+
+const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
+  switch (action.type) {
+    case ACTIVITIES_FOR_PROJECT.SUCCESS:
+    case ACTIVITIES.SUCCESS:
+      const activitiesResponse = (<t.RequestActivitiesSuccessAction> action).response;
+      if (activitiesResponse && activitiesResponse.length > 0) {
+        return assign({}, state, responseToStateShape(activitiesResponse));
+      } else {
+        return state;
+      }
+    case STORE_ACTIVITIES:
+      const projects = (<t.StoreActivitiesAction> action).entities;
+      if (projects && projects.length > 0) {
+        return assign({}, state, responseToStateShape(projects));
+      } else {
+        return state;
+      }
+    default:
+      return state;
+  }
 };
 
 export default reducer;

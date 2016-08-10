@@ -5,7 +5,7 @@ export interface FetchError {
   // The type of action that produced the error
   type: string;
   // If the error concerns a specific entity, the id of that entity
-  id: string;
+  id: string | null;
   // The original error message
   error: string;
   // The error to display to the user
