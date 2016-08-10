@@ -199,12 +199,12 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Activities.actions.STORE_ACTIVITIES,
-      entities: testData.activitiesResponseNoInclude.data,
+      entities: testData.activitiesResponse.data,
     };
 
     const successfulActivitiesRequestAction = {
       type: Activities.actions.ACTIVITIES.SUCCESS,
-      response: testData.activitiesResponseNoInclude.data,
+      response: testData.activitiesResponse.data,
     };
 
     const expectedObjectsToStore: ActivityState = {
@@ -356,7 +356,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Branches.actions.BRANCH.SUCCESS,
-      response: testData.branchResponseNoInclude.data,
+      response: testData.branchResponse.data,
     };
 
     const expectedSuccessfulRequestObject: BranchState = {
@@ -493,7 +493,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Commits.actions.COMMIT.SUCCESS,
-      response: testData.commitResponseNoInclude.data,
+      response: testData.commitResponse.data,
     };
 
     const expectedSuccessfulRequestObject: CommitState = {
@@ -587,7 +587,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Deployments.actions.DEPLOYMENT.SUCCESS,
-      response: testData.deploymentResponseNoInclude.data,
+      response: testData.deploymentResponse.data,
     };
 
     const expectedSuccessfulRequestObject: DeploymentState = {
@@ -628,7 +628,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Projects.actions.STORE_PROJECTS,
-      entities: testData.projectsResponse.data,
+      entities: testData.allProjectsResponse.data,
     };
 
     const expectedObjectsToStore: ProjectState = {
@@ -677,7 +677,7 @@ describe('reducers', () => {
 
     const successfulRequestAction = {
       type: Projects.actions.PROJECT.SUCCESS,
-      response: testData.projectResponseNoInclude.data,
+      response: testData.projectResponse.data,
     };
 
     const expectedSuccessfulRequestObject: ProjectState = {
@@ -710,7 +710,7 @@ describe('reducers', () => {
 
     const successfulAllProjectsRequestAction = {
       type: Projects.actions.ALL_PROJECTS.SUCCESS,
-      response: testData.projectsResponse.data,
+      response: testData.allProjectsResponse.data,
     };
 
     const allProjectsObjects = expectedObjectsToStore;

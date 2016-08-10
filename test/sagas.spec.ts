@@ -290,7 +290,7 @@ describe('sagas', () => {
   testFetcher(
     'fetchDeployment',
     testData.deploymentResponse,
-    testData.deploymentResponseNoInclude,
+    { data: testData.deploymentResponse.data },
     Deployments.actions.FetchDeployment,
     sagas.fetchDeployment,
     api.fetchDeployment
@@ -299,7 +299,7 @@ describe('sagas', () => {
   testFetcher(
     'fetchBranch',
     testData.branchResponse,
-    testData.branchResponseNoInclude,
+    { data: testData.branchResponse.data },
     Branches.actions.FetchBranch,
     sagas.fetchBranch,
     api.fetchBranch,
@@ -308,7 +308,7 @@ describe('sagas', () => {
   testFetcher(
     'fetchCommit',
     testData.commitResponse,
-    testData.commitResponseNoInclude,
+    { data: testData.commitResponse.data },
     Commits.actions.FetchCommit,
     sagas.fetchCommit,
     api.fetchCommit,
@@ -317,7 +317,7 @@ describe('sagas', () => {
   testFetcher(
     'fetchProject',
     testData.projectResponse,
-    testData.projectResponseNoInclude,
+    { data: testData.projectResponse.data },
     Projects.actions.FetchProject,
     sagas.fetchProject,
     api.fetchProject,
@@ -325,7 +325,7 @@ describe('sagas', () => {
 
   describe('fetchActivities', () => {
     it('fetches and stores all activities', () => {
-      const response = testData.activitiesResponseNoInclude;
+      const response = { data: testData.activitiesResponse.data };
       const iterator = sagas.fetchActivities();
 
       expect(iterator.next().value).to.deep.equal(
@@ -396,7 +396,7 @@ describe('sagas', () => {
 
   describe('fetchAllProjects', () => {
     it('fetches and stores all projects', () => {
-      const response = testData.allProjectsResponseNoInclude;
+      const response = { data: testData.allProjectsResponse };
       const iterator = sagas.fetchAllProjects();
 
       expect(iterator.next().value).to.deep.equal(
@@ -419,7 +419,7 @@ describe('sagas', () => {
     });
 
     it('fetches and stores included data', () => {
-      const response = testData.projectsResponse;
+      const response = testData.allProjectsResponse;
       const iterator = sagas.fetchAllProjects();
 
       expect(iterator.next().value).to.deep.equal(
