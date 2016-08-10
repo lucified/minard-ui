@@ -60,6 +60,7 @@ export default function createSagas(api: Api) {
     const activities = <Activity[]> (yield select(Activities.selectors.getActivities));
     const deployments =
       <Deployment[]> (yield activities.map(activity => call(fetchIfMissing, 'deployments', activity.deployment)));
+    // TODO: check activity type and fetch e.g. comments
     yield deployments.map(deployment => call(fetchIfMissing, 'commits', deployment.commit));
     yield uniq(activities.map(activity => activity.project)).map(project => call(fetchIfMissing, 'projects', project));
     yield uniq(activities.map(activity => activity.branch)).map(branch => call(fetchIfMissing, 'branches', branch));
