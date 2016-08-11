@@ -7,6 +7,22 @@ const postcssReporter = require('postcss-reporter');
 
 const deployConfig = require('./deploy-config');
 
+const environments = [
+  'testing',
+  'development',
+  'staging',
+  'production',
+];
+
+const getEntrypoint = (env) => {
+  const segments = ['./src/js/entrypoint'];
+  if (env && environments.find(env) && env !== 'testing' && env !== 'development') {
+    segments.push(env);
+  }
+  segments.push('tsx');
+  return segments.join('.');
+};
+
 /*
  * Get the webpack loaders object for the webpack configuration
  */
@@ -96,7 +112,7 @@ const config = {
       postcssReporter,
     ];
   },
-  entry: ['babel-polyfill', './src/js/entrypoint.tsx'],
+  entry: ['babel-polyfill', getEntrypoint(process.env.LUCIFY_ENV || process.env.NODE_ENV)],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
   ],
