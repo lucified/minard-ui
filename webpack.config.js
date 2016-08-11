@@ -14,13 +14,17 @@ const environments = [
   'production',
 ];
 
-const getEntrypoint = (env) => {
-  const segments = ['./src/js/entrypoint'];
-  if (env && environments.indexOf(env) >= 0 && env !== 'test' && env !== 'development') {
-    segments.push(env);
+const getEntrypoint = (env, charles) => {
+  let middle = env;
+  if (env === 'test' || !charles) {
+    // No remote backend
+    middle = 'local-json';
+  } else if (!env || environments.indexOf(env) < 0) {
+     // Default to development if env is not one
+     // of the allowed values
+    middle = 'development';
   }
-  segments.push('tsx');
-  return segments.join('.');
+  return `./src/js/entrypoint.${middle}.tsx`;
 };
 
 /*
@@ -112,7 +116,10 @@ const config = {
       postcssReporter,
     ];
   },
-  entry: ['babel-polyfill', getEntrypoint(process.env.LUCIFY_ENV || process.env.NODE_ENV)],
+  entry: [
+    'babel-polyfill',
+    getEntrypoint(process.env.LUCIFY_ENV || process.env.NODE_ENV, process.env.CHARLES),
+  ],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
   ],
