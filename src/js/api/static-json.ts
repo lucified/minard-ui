@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-console.log(`BACKEND: ${process.env.CHARLES}`);
+console.log('Using bundled JSON files');
 
 const activitiesJSON = require('file!../../../json/activities.json');
 const allProjectsJSON = require('file!../../../json/projects.json');
