@@ -1,4 +1,3 @@
-import * as assign from 'lodash/assign';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
@@ -37,7 +36,7 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     };
   };
 
-  return commits.reduce((obj, commit) => assign(obj, { [commit.id]: createCommitObject(commit) }), {});
+  return commits.reduce((obj, commit) => Object.assign(obj, { [commit.id]: createCommitObject(commit) }), {});
 };
 
 const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
@@ -45,7 +44,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
     case COMMIT.SUCCESS:
       const commitResonse = (<t.RequestCommitRequestAction> action).response;
       if (commitResonse) {
-        return assign({}, state, responseToStateShape([commitResonse]));
+        return Object.assign({}, state, responseToStateShape([commitResonse]));
       } else {
         return state;
       }
@@ -53,7 +52,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       const responseAction = <FetchError> action;
       const existingEntity = state[responseAction.id!];
       if (!existingEntity || isError(existingEntity)) {
-        return assign({}, state, { [responseAction.id!]: responseAction });
+        return Object.assign({}, state, { [responseAction.id!]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');
@@ -61,7 +60,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
     case STORE_COMMITS:
       const commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
-        return assign({}, state, responseToStateShape(commits));
+        return Object.assign({}, state, responseToStateShape(commits));
       } else {
         return state;
       }

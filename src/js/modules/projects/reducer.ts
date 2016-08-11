@@ -1,4 +1,3 @@
-import * as assign from 'lodash/assign';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
@@ -29,7 +28,7 @@ const responseToStateShape = (projects: t.ApiResponse) => {
   };
 
   return projects.reduce((obj, project) =>
-    assign(obj, { [project.id]: createProjectObject(project) }), {});
+    Object.assign(obj, { [project.id]: createProjectObject(project) }), {});
 };
 
 const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
@@ -37,14 +36,14 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
     case ALL_PROJECTS.SUCCESS:
       const projectsResponse = (<t.RequestAllProjectsSuccessAction> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
-        return assign({}, state, responseToStateShape(projectsResponse));
+        return Object.assign({}, state, responseToStateShape(projectsResponse));
       } else {
         return state;
       }
     case PROJECT.SUCCESS:
       const projectResponse = (<t.RequestProjectSuccessAction> action).response;
       if (projectResponse) {
-        return assign({}, state, responseToStateShape([projectResponse]));
+        return Object.assign({}, state, responseToStateShape([projectResponse]));
       } else {
         return state;
       }
@@ -53,7 +52,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       const id = responseAction.id!;
       const existingEntity = state[id];
       if (!existingEntity || isError(existingEntity)) {
-        return assign({}, state, { [id]: responseAction });
+        return Object.assign({}, state, { [id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');
@@ -61,7 +60,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
-        return assign({}, state, responseToStateShape(projects));
+        return Object.assign({}, state, responseToStateShape(projects));
       } else {
         return state;
       }
