@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import * as api from './api';
+import * as api from './api/static-json';
 import configureStore from './configure-store';
 import Selected from './modules/selected';
 import routes from './routes';
