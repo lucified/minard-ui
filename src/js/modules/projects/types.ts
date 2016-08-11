@@ -1,5 +1,6 @@
 import { Action, ActionCreator } from 'redux';
 
+import { ApiUser, User } from '../common';
 import { FetchError } from '../errors';
 
 // State
@@ -8,7 +9,7 @@ export interface Project {
   name: string;
   description?: string;
   branches: string[];
-  activeUsers: string[];
+  activeUsers: User[];
 }
 
 export interface ProjectState {
@@ -74,7 +75,7 @@ export interface ResponseProjectElement {
   attributes: {
     name: string;
     description?: string;
-    activeCommiters: string[];
+    activeCommiters: ApiUser[];
   };
   relationships: {
     branches: {

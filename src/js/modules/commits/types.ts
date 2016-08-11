@@ -1,5 +1,6 @@
 import { Action, ActionCreator } from 'redux';
 
+import { ApiUser, User } from '../common';
 import { FetchError } from '../errors';
 
 // State
@@ -8,16 +9,8 @@ export interface Commit {
   hash: string;
   message: string;
   description?: string;
-  author: {
-    name?: string;
-    email: string;
-    timestamp: number;
-  };
-  commiter: {
-    name?: string;
-    email: string;
-    timestamp: number;
-  };
+  author: User;
+  commiter: User;
   deployment?: string;
 }
 
@@ -65,16 +58,8 @@ export interface ResponseCommitElement {
   attributes: {
     hash: string;
     message: string;
-    author: {
-      name?: string;
-      email: string;
-      timestamp: string;
-    };
-    commiter: {
-      name?: string;
-      email: string;
-      timestamp: string;
-    };
+    author: ApiUser;
+    commiter: ApiUser;
   };
   relationships: {
     deployments: {
