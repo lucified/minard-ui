@@ -102,6 +102,12 @@ const config = {
   },
 };
 
+config.plugins = config.plugins.concat([
+  new webpack.DefinePlugin({
+    'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
+  }),
+]);
+
 if (process.env.NODE_ENV === 'production' || process.env.LUCIFY_ENV === 'production') {
   config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
