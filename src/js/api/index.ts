@@ -24,7 +24,7 @@ function callApi(url: string) {
 }
 
 export const fetchActivities = () => callApi(`${host}/activity`);
-export const fetchActivitiesForProject = (id: string) => callApi(`${host}/activity?filter=[${id}]`);
+export const fetchActivitiesForProject = (id: string) => callApi(`${host}/activity?filter=project[${id}]`);
 export const fetchAllProjects = () => callApi(`${host}/teams/1/projects`); // TODO: add actual team ID
 export const fetchProject = (id: string) => callApi(`${host}/projects/${id}`);
 export const fetchBranch = (id: string) => callApi(`${host}/branches/${id}`);
