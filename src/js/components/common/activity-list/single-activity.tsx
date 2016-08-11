@@ -83,6 +83,7 @@ const getProjectLabel = (project: Project) => {
 
 const SingleActivity = (props: Props) => {
   const { activity, branch, commit, deployment, showProjectName, project } = props;
+  const { creator } = deployment;
 
   return (
     <div className={styles.activity}>
@@ -97,8 +98,8 @@ const SingleActivity = (props: Props) => {
       </div>
       <div className="columns">
         <div className="column col-1">
-          <figure className="avatar avatar-lg">
-            <Gravatar email={deployment.creator.email} https />
+          <figure title={creator.name || creator.email} className="avatar avatar-lg">
+            <Gravatar rating="pg" email={creator.email} https />
           </figure>
         </div>
         <div className="column col-11">
