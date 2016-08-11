@@ -23,7 +23,10 @@ const getEntrypoint = (env, charles) => {
      // Default to development if env is not one
      // of the allowed values
     middle = 'development';
+  } else if (env === 'staging') {
+    middle = 'production'; // Use production configuration in staging
   }
+
   return `./src/js/entrypoint.${middle}.tsx`;
 };
 
@@ -128,7 +131,8 @@ const config = {
   },
 };
 
-if (process.env.NODE_ENV === 'production' || process.env.LUCIFY_ENV === 'production') {
+if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1 ||
+  ['production', 'staging'].indexOf(process.env.LUCIFY_ENV) > -1) {
   config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {
