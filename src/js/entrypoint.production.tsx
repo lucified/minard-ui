@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, hashHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import * as api from './api/static-json';
-import configureStore from './configure-store';
+import * as api from './api';
+import configureStore from './configure-store.production';
 import Selected from './modules/selected';
 import routes from './routes';
 import sagaCreator from './sagas';
@@ -14,8 +14,7 @@ const initialState = {};
 const store = configureStore(initialState);
 (store as any).runSaga(sagaCreator(api).root);
 
-// TODO: hashHistory should be changed to browserHistory in production
-const history = syncHistoryWithStore(hashHistory, store);
+const history = syncHistoryWithStore(browserHistory, store);
 
 // Store current open project + branch into state
 history.listen(location => {

@@ -1,4 +1,3 @@
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
@@ -7,21 +6,41 @@ const postcssReporter = require('postcss-reporter');
 
 const deployConfig = require('./deploy-config');
 
+const environments = [
+  'test',
+  'development',
+  'staging',
+  'production',
+];
+
+const getEntrypoint = (env, charles) => {
+  let middle = env;
+  if (env === 'test' || !charles) {
+    // No remote backend
+    middle = 'local-json';
+  } else if (env === 'staging') {
+    // Use production configuration in staging
+    middle = 'production';
+  } else if (!env || environments.indexOf(env) < 0) {
+    // Default to development if env is not one
+    // of the allowed values
+    middle = 'development';
+  }
+
+  return `./src/js/entrypoint.${middle}.tsx`;
+};
+
 /*
  * Get the webpack loaders object for the webpack configuration
  */
 const loaders = [
-  {
+  { // NOTE: babel-loader + ts-loader needs to be first in the array. See webpack.config.dev.js
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
     loaders: [
       'babel-loader?presets[]=es2015&plugins[]=transform-regenerator',
       'ts-loader',
     ],
-  },
-  {
-    test: /\.svg$/,
-    loader: 'url-loader?limit=10000&mimetype=image/svg+xml',
   },
   {
     test: /\.(jpeg|jpg|gif|png)$/,
@@ -80,7 +99,7 @@ const config = {
   },
   module: {
     loaders,
-    preloaders: [{ test: /\.js$/, loader: 'source-map-loader' }],
+    preloaders: [],
   },
   resolveLoader: {
     root: [path.resolve(__dirname, '../node_modules')],
@@ -96,22 +115,20 @@ const config = {
       postcssReporter,
     ];
   },
-  entry: ['babel-polyfill', './src/js/entrypoint.tsx'],
+  entry: [
+    'babel-polyfill',
+    getEntrypoint(process.env.LUCIFY_ENV || process.env.NODE_ENV, process.env.CHARLES),
+  ],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
+    new webpack.DefinePlugin({
+      'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
+    }),
   ],
-  devServer: {
-    publicPath: '/',
-  },
 };
 
-config.plugins = config.plugins.concat([
-  new webpack.DefinePlugin({
-    'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
-  }),
-]);
-
-if (process.env.NODE_ENV === 'production' || process.env.LUCIFY_ENV === 'production') {
+if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1 ||
+  ['production', 'staging'].indexOf(process.env.LUCIFY_ENV) > -1) {
   config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {

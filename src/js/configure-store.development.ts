@@ -7,7 +7,6 @@ declare var module: { hot: any }; // An ugly hack
 declare var window: { devToolsExtension: any };
 
 function configureStore(initialState: Object) {
-  // create the saga middleware
   const sagaMiddleware = createSagaMiddleware();
 
   const store = createStore(
@@ -15,7 +14,6 @@ function configureStore(initialState: Object) {
     initialState,
     compose(
       applyMiddleware(sagaMiddleware),
-      // TODO: remove devTools for production
       window.devToolsExtension ? window.devToolsExtension() : (f: any) => f
     )
   );
