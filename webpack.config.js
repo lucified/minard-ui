@@ -14,7 +14,10 @@ const loaders = [
   {
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
-    loader: 'ts-loader',
+    loaders: [
+      'babel-loader?presets[]=es2015&plugins[]=transform-regenerator',
+      'ts-loader',
+    ],
   },
   {
     test: /\.svg$/,
@@ -93,7 +96,7 @@ const config = {
       postcssReporter,
     ];
   },
-  entry: './src/js/entrypoint.tsx',
+  entry: ['babel-polyfill', './src/js/entrypoint.tsx'],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
   ],
