@@ -1,4 +1,3 @@
-import * as assign from 'lodash/assign';
 import { Reducer } from 'redux';
 
 import { FetchError, isError } from '../errors';
@@ -27,7 +26,7 @@ const responseToStateShape = (branches: t.ApiResponse) => {
     };
   };
 
-  return branches.reduce((obj, branch) => assign(obj, { [branch.id]: createBranchObject(branch) }), {});
+  return branches.reduce((obj, branch) => Object.assign(obj, { [branch.id]: createBranchObject(branch) }), {});
 };
 
 const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
@@ -35,7 +34,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
     case BRANCH.SUCCESS:
       const branchResonse = (<t.RequestBranchSuccessAction> action).response;
       if (branchResonse) {
-        return assign({}, state, responseToStateShape([branchResonse]));
+        return Object.assign({}, state, responseToStateShape([branchResonse]));
       } else {
         return state;
       }
@@ -44,7 +43,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       const id = responseAction.id!;
       const existingEntity = state[id];
       if (!existingEntity || isError(existingEntity)) {
-        return assign({}, state, { [id]: responseAction });
+        return Object.assign({}, state, { [id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');
@@ -52,7 +51,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
     case STORE_BRANCHES:
       const branches = (<t.StoreBranchesAction> action).entities;
       if (branches && branches.length > 0) {
-        return assign({}, state, responseToStateShape(branches));
+        return Object.assign({}, state, responseToStateShape(branches));
       } else {
         return state;
       }

@@ -1,4 +1,3 @@
-import * as assign from 'lodash/assign';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
@@ -31,7 +30,7 @@ const responseToStateShape = (activities: t.ApiResponse) => {
   };
 
   return activities.reduce((obj, activity) =>
-    assign(obj, { [activity.id]: createActivityObject(activity) }), {});
+    Object.assign(obj, { [activity.id]: createActivityObject(activity) }), {});
 };
 
 const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
@@ -40,14 +39,14 @@ const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState
     case ACTIVITIES.SUCCESS:
       const activitiesResponse = (<t.RequestActivitiesSuccessAction> action).response;
       if (activitiesResponse && activitiesResponse.length > 0) {
-        return assign({}, state, responseToStateShape(activitiesResponse));
+        return Object.assign({}, state, responseToStateShape(activitiesResponse));
       } else {
         return state;
       }
     case STORE_ACTIVITIES:
       const projects = (<t.StoreActivitiesAction> action).entities;
       if (projects && projects.length > 0) {
-        return assign({}, state, responseToStateShape(projects));
+        return Object.assign({}, state, responseToStateShape(projects));
       } else {
         return state;
       }

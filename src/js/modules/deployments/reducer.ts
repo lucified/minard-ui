@@ -1,4 +1,3 @@
-import * as assign from 'lodash/assign';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
@@ -25,7 +24,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
   };
 
   return deployments.reduce((obj, deployment) =>
-    assign(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
+    Object.assign(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
 };
 
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
@@ -33,7 +32,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
     case DEPLOYMENT.SUCCESS:
       const deploymentResponse = (<t.RequestDeploymentSuccessAction> action).response;
       if (deploymentResponse) {
-        return assign({}, state, responseToStateShape([deploymentResponse]));
+        return Object.assign({}, state, responseToStateShape([deploymentResponse]));
       } else {
         return state;
       }
@@ -42,7 +41,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       const id = responseAction.id!;
       const existingEntity = state[id];
       if (!existingEntity || isError(existingEntity)) {
-        return assign({}, state, { [id]: responseAction });
+        return Object.assign({}, state, { [id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.');
@@ -50,7 +49,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
     case STORE_DEPLOYMENTS:
       const deployments = (<t.StoreDeploymentsAction> action).entities;
       if (deployments && deployments.length > 0) {
-        return assign({}, state, responseToStateShape(deployments));
+        return Object.assign({}, state, responseToStateShape(deployments));
       } else {
         return state;
       }

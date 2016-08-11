@@ -44,7 +44,6 @@
   "devDependencies": {
     "@types/chai": "^3.4.30",
     "@types/classnames": "^0.0.28",
-    "@types/es6-promise": "^0.0.28",
     "@types/isomorphic-fetch": "^0.0.27",
     "@types/lodash": "^4.14.0",
     "@types/mocha": "^2.2.29",
@@ -82,7 +81,6 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "es6-promise": "^3.2.1",
     "font-awesome": "^4.6.3",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.14.1",

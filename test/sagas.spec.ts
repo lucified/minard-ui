@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import * as assign from 'lodash/assign';
 import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
 
@@ -36,7 +35,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchAllProjects: () => Promise.resolve({ response: {} }),
   };
 
-  return assign(defaultFunctions, functionsToReplace);
+  return Object.assign(defaultFunctions, functionsToReplace);
 };
 
 describe('sagas', () => {

@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import * as assign from 'lodash/assign';
 import { Action, Reducer } from 'redux';
 
 import Activities, { ActivityState, ActivityType } from '../src/js/modules/activities';
@@ -148,8 +147,8 @@ const testReducer = (
   testInitialState(reducer, {});
 
   let expectedStateFromEmpty = expectedObjectsToStore;
-  let expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
-  let expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, expectedObjectsToStore);
+  let expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
+  let expectedStateWithExistingEntity = Object.assign({}, stateWithExistingEntity, expectedObjectsToStore);
 
   testStoreEntities(
     reducer,
@@ -162,8 +161,8 @@ const testReducer = (
   );
 
   expectedStateFromEmpty = expectedSuccessfulRequestObject;
-  expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
-  expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+  expectedStateWithExistingEntity = Object.assign({}, stateWithExistingEntity, expectedSuccessfulRequestObject);
 
   testSuccessfulRequest(
     reducer,
@@ -176,7 +175,7 @@ const testReducer = (
   );
 
   expectedStateFromEmpty = { [failedRequestAction.id!]: failedRequestAction };
-  expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedStateFromEmpty);
+  expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedStateFromEmpty);
 
   testFailedRequest(
     reducer,
@@ -528,8 +527,8 @@ describe('reducers', () => {
       },
     };
 
-    const expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
-    const expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, expectedObjectsToStore);
+    const expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
+    const expectedStateWithExistingEntity = Object.assign({}, stateWithExistingEntity, expectedObjectsToStore);
 
     testStoreEntities(
       reducer,
@@ -1041,8 +1040,8 @@ describe('reducers', () => {
     };
 
     const allProjectsObjects = expectedObjectsToStore;
-    const expectedStateWithoutExistingEntity = assign({}, stateWithoutExistingEntity, allProjectsObjects);
-    const expectedStateWithExistingEntity = assign({}, stateWithExistingEntity, allProjectsObjects);
+    const expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, allProjectsObjects);
+    const expectedStateWithExistingEntity = Object.assign({}, stateWithExistingEntity, allProjectsObjects);
 
     describe(`successful request all projects (${successfulAllProjectsRequestAction.type})`, () => {
       it('with an empty initial state', () => {

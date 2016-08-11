@@ -10,8 +10,6 @@ import Selected from './modules/selected';
 import routes from './routes';
 import sagaCreator from './sagas';
 
-require('es6-promise').polyfill();
-
 const initialState = {};
 const store = configureStore(initialState);
 (store as any).runSaga(sagaCreator(api).root);
