@@ -86,7 +86,7 @@ export interface ResponseActivityElement {
   type: "activities";
   id: string;
   attributes: {
-    activityType: string;
+    'activity-type': 'deployment' | 'comment';
     timestamp: string;
   };
   relationships: {

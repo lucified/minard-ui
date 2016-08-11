@@ -61,8 +61,8 @@ export interface ResponseCommitElement {
     author: ApiUser;
     commiter: ApiUser;
   };
-  relationships: {
-    deployments: {
+  relationships?: {
+    deployments?: {
       data: ResponseDeploymentReference[];
     };
   };

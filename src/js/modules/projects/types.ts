@@ -75,7 +75,7 @@ export interface ResponseProjectElement {
   attributes: {
     name: string;
     description?: string;
-    activeCommiters: ApiUser[];
+    'active-commiters': ApiUser[];
   };
   relationships: {
     branches: {

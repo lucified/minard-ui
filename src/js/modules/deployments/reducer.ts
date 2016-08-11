@@ -12,6 +12,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
   const createDeploymentObject = (deployment: t.ResponseDeploymentElement): t.Deployment => {
     return {
       id: deployment.id,
+      status: deployment.attributes.status,
       url: deployment.attributes.url,
       screenshot: deployment.attributes.screenshot,
       commit: deployment.relationships.commit.data.id,

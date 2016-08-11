@@ -14,8 +14,9 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     const commitMessage = commitMessageLines ? commitMessageLines[0] : '';
     const commitDescription = commitMessageLines && commitMessageLines.length > 1 ?
       commitMessageLines.slice(1).join('\n') : undefined;
-    const deployments = commit.relationships.deployments;
+    const deployments = commit.relationships && commit.relationships.deployments;
     const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
+    const commiter = commit.attributes.commiter;
 
     return {
       id: commit.id,
@@ -24,9 +25,9 @@ const responseToStateShape = (commits: t.ApiResponse) => {
       description: commitDescription,
       deployment: latestDeployment,
       commiter: {
-        name: commit.attributes.commiter.name,
-        email: commit.attributes.commiter.email,
-        timestamp: moment(commit.attributes.commiter.timestamp).valueOf(),
+        name: commiter.name,
+        email: commiter.email,
+        timestamp: moment(commiter.timestamp).valueOf(),
       },
       author: {
         name: commit.attributes.author.name,

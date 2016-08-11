@@ -19,7 +19,7 @@ const responseToStateShape = (projects: t.ApiResponse) => {
       name: project.attributes.name,
       description: project.attributes.description,
       branches,
-      activeUsers: project.attributes.activeCommiters.map(user => ({
+      activeUsers: project.attributes['active-commiters'].map(user => ({
         name: user.name,
         email: user.email,
         timestamp: moment(user.timestamp).valueOf(),
