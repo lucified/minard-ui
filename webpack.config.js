@@ -40,10 +40,6 @@ const loaders = [
     ],
   },
   {
-    test: /\.svg$/,
-    loader: 'url-loader?limit=10000&mimetype=image/svg+xml',
-  },
-  {
     test: /\.(jpeg|jpg|gif|png)$/,
     loader: 'file-loader?name=[name]-[hash:12].[ext]',
   },
