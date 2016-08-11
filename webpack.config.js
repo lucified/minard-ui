@@ -34,7 +34,7 @@ const getEntrypoint = (env, charles) => {
  * Get the webpack loaders object for the webpack configuration
  */
 const loaders = [
-  {
+  { // NOTE: babel-loader + ts-loader needs to be first in the array. See webpack.config.dev.js
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
     loaders: [
