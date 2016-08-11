@@ -1,4 +1,3 @@
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
@@ -19,12 +18,13 @@ const getEntrypoint = (env, charles) => {
   if (env === 'test' || !charles) {
     // No remote backend
     middle = 'local-json';
-  } else if (!env || environments.indexOf(env) < 0) {
-     // Default to development if env is not one
-     // of the allowed values
-    middle = 'development';
   } else if (env === 'staging') {
-    middle = 'production'; // Use production configuration in staging
+    // Use production configuration in staging
+    middle = 'production';
+  } else if (!env || environments.indexOf(env) < 0) {
+    // Default to development if env is not one
+    // of the allowed values
+    middle = 'development';
   }
 
   return `./src/js/entrypoint.${middle}.tsx`;
@@ -99,7 +99,7 @@ const config = {
   },
   module: {
     loaders,
-    preloaders: [{ test: /\.js$/, loader: 'source-map-loader' }],
+    preloaders: [],
   },
   resolveLoader: {
     root: [path.resolve(__dirname, '../node_modules')],
@@ -125,10 +125,6 @@ const config = {
       'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
     }),
   ],
-  devtool: 'source-map',
-  devServer: {
-    publicPath: '/',
-  },
 };
 
 if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1 ||
