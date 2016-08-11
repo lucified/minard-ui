@@ -1,4 +1,5 @@
 import * as assign from 'lodash/assign';
+import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isError } from '../errors';
@@ -19,7 +20,11 @@ const responseToStateShape = (projects: t.ApiResponse) => {
       name: project.attributes.name,
       description: project.attributes.description,
       branches,
-      activeUsers: project.attributes.activeCommiters,
+      activeUsers: project.attributes.activeCommiters.map(user => ({
+        name: user.name,
+        email: user.email,
+        timestamp: moment(user.timestamp).valueOf(),
+      })),
     };
   };
 

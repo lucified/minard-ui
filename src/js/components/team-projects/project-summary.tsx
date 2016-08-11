@@ -52,8 +52,12 @@ const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps 
         <div className="flex">
           <div className={styles.activeUsers}>
             {project.activeUsers.map(user => // TODO: have an upper range for this
-              <figure key={`avatar-${user}`} className={classNames('avatar', styles.avatar)}>
-                <Gravatar email={user} https />
+              <figure
+                key={`avatar-${user.email}`}
+                title={user.name || user.email}
+                className={classNames('avatar', styles.avatar)}
+              >
+                <Gravatar rating="pg" email={user.email} https />
               </figure>
             )}
           </div>

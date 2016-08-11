@@ -26,13 +26,15 @@ const CommitSummary = ({ commit, deployment }: Props) => {
     );
   }
 
+  const { author, commiter } = commit;
+
   const content = (
     <div className="container flex">
       <div className={styles.avatarBox}>
-        <figure className="avatar avatar-lg">
-          <Gravatar email={commit.author.email} https />
-          {commit.commiter.email !== commit.author.email &&
-            <Gravatar email={commit.commiter.email} className="avatar-icon" https />
+        <figure title={author.name || author.email} className="avatar avatar-lg">
+          <Gravatar rating="pg" email={author.email} https />
+          {commiter.email !== author.email &&
+            <Gravatar rating="pg" email={commiter.email} className="avatar-icon" https />
           }
         </figure>
       </div>
@@ -48,13 +50,13 @@ const CommitSummary = ({ commit, deployment }: Props) => {
         </div>
         <div className="flex">
           <span className={classNames(styles.metadata, 'text-left')}>
-            {commit.author.name || commit.author.email}
+            {author.name || author.email}
           </span>
           <span className={classNames(styles.metadata, 'text-center')}>
             0 comments
           </span>
           <span className={classNames(styles.metadata, 'text-right')}>
-            {moment(commit.author.timestamp).fromNow()}
+            {moment(author.timestamp).fromNow()}
           </span>
         </div>
       </div>

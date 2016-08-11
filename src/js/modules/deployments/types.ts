@@ -1,5 +1,6 @@
 import { Action, ActionCreator } from 'redux';
 
+import { ApiUser, User } from '../common';
 import { FetchError } from '../errors';
 
 // State
@@ -7,11 +8,7 @@ export interface Deployment {
   id: string;
   url: string;
   commit: string;
-  creator: {
-    name?: string;
-    email: string;
-    timestamp: number;
-  };
+  creator: User;
   screenshot?: string;
 }
 
@@ -56,11 +53,7 @@ export interface ResponseDeploymentElement {
   type: "deployments";
   id: string;
   attributes: {
-    creator: {
-      name?: string;
-      email: string;
-      timestamp: string;
-    };
+    creator: ApiUser;
     url: string;
     screenshot?: string;
   };

@@ -8,7 +8,17 @@ export const allProjectsResponse: ApiResponse = {
       'attributes': {
         'name': 'First project',
         'description': 'This is the first project description. It might not be set.',
-        'activeCommiters': ['ville.saarinen@lucify.com', 'juho@lucify.com'],
+        'activeCommiters': [
+          {
+            'name': 'Ville Saarinen',
+            'email': 'ville.saarinen@lucify.com',
+            'timestamp': '2016-08-01T15:51:21.802Z',
+          },
+          {
+            'email': 'juho@lucify.com',
+            'timestamp': '2016-07-29T13:51:21.802Z',
+          },
+        ],
       },
       'relationships': {
         'branches': {
@@ -32,7 +42,7 @@ export const allProjectsResponse: ApiResponse = {
       'id': '2',
       'attributes': {
         'name': 'Second project',
-        'activeCommiters': <string[]> [],
+        'activeCommiters': <any[]> [],
       },
       'relationships': {
         'branches': {
@@ -302,7 +312,17 @@ export const projectResponse: ApiResponse = {
     'attributes': {
       'name': 'First project',
       'description': 'This is the first project description. It might not be set.',
-      'activeCommiters': ['ville.saarinen@lucify.com', 'juho@lucify.com'],
+      'activeCommiters': [
+        {
+          'name': 'Ville Saarinen',
+          'email': 'ville.saarinen@lucify.com',
+          'timestamp': '2016-08-01T15:51:21.802Z',
+        },
+        {
+          'email': 'juho@lucify.com',
+          'timestamp': '2016-07-29T13:51:21.802Z',
+        },
+      ],
     },
     'relationships': {
       'branches': {

@@ -931,7 +931,18 @@ describe('reducers', () => {
         'id': '1',
         'name': 'First project',
         'description': 'This is the first project description. It might not be set.',
-        'activeUsers': ['ville.saarinen@lucify.com', 'juho@lucify.com'],
+        'activeUsers': [
+          {
+            'name': 'Ville Saarinen',
+            'email': 'ville.saarinen@lucify.com',
+            'timestamp': 1470066681802,
+          },
+          {
+            'email': 'juho@lucify.com',
+            'name': undefined,
+            'timestamp': 1469800281802,
+          },
+        ],
         'branches': ['1', '2', '3'],
       },
       '2': {
@@ -958,14 +969,24 @@ describe('reducers', () => {
         'id': '3',
         'name': 'Third project a',
         'description': undefined,
-        'activeUsers': [],
+        'activeUsers': [
+          {
+            'email': 'foo@bar.com',
+            'timestamp': 147001234532,
+          },
+        ],
         'branches': [],
       },
       '1': {
         'id': '1',
         'name': 'First project again',
         'description': 'foobar',
-        'activeUsers': ['user@domain.com'],
+        'activeUsers': [
+          {
+            'email': 'foo@bar.com',
+            'timestamp': 147001334532,
+          },
+        ],
         'branches': [],
       },
     };
@@ -980,7 +1001,18 @@ describe('reducers', () => {
         'id': '1',
         'name': 'First project',
         'description': 'This is the first project description. It might not be set.',
-        'activeUsers': ['ville.saarinen@lucify.com', 'juho@lucify.com'],
+        'activeUsers': [
+          {
+            'name': 'Ville Saarinen',
+            'email': 'ville.saarinen@lucify.com',
+            'timestamp': 1470066681802,
+          },
+          {
+            'email': 'juho@lucify.com',
+            'name': undefined,
+            'timestamp': 1469800281802,
+          },
+        ],
         'branches': ['1', '2', '3'],
       },
     };
