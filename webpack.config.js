@@ -123,6 +123,7 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
   ],
+  devtool: 'source-map',
   devServer: {
     publicPath: '/',
   },
