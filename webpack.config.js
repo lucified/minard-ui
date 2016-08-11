@@ -8,7 +8,7 @@ const postcssReporter = require('postcss-reporter');
 const deployConfig = require('./deploy-config');
 
 const environments = [
-  'testing',
+  'test',
   'development',
   'staging',
   'production',
@@ -16,7 +16,7 @@ const environments = [
 
 const getEntrypoint = (env) => {
   const segments = ['./src/js/entrypoint'];
-  if (env && environments.find(env) && env !== 'testing' && env !== 'development') {
+  if (env && environments.indexOf(env) >= 0 && env !== 'test' && env !== 'development') {
     segments.push(env);
   }
   segments.push('tsx');
