@@ -1,7 +1,8 @@
-import { Action, ActionCreator } from 'redux';
+import { Action } from 'redux';
 
-import { ApiUser, User } from '../common';
 import { FetchError } from '../errors';
+import { ApiUser, RequestActionCreators, User } from '../types';
+
 
 // State
 export interface Deployment {
@@ -33,11 +34,8 @@ export interface RequestDeploymentSuccessAction extends Action {
   response: ResponseDeploymentElement;
 }
 
-export interface RequestDeploymentActionCreators {
-  request: ActionCreator<RequestDeploymentRequestAction>;
-  success: ActionCreator<RequestDeploymentSuccessAction>;
-  failure: ActionCreator<FetchError>;
-}
+export type RequestDeploymentActionCreators =
+  RequestActionCreators<RequestDeploymentRequestAction, RequestDeploymentSuccessAction, FetchError>;
 
 // STORE_DEPLOYMENTS
 export interface StoreDeploymentsAction extends Action {

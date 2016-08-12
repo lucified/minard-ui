@@ -1,6 +1,7 @@
-import { Action, ActionCreator } from 'redux';
+import { Action } from 'redux';
 
 import { FetchError } from '../errors';
+import { RequestActionCreators } from '../types';
 
 // State
 export interface Branch {
@@ -32,11 +33,8 @@ export interface RequestBranchSuccessAction extends Action {
   response: ResponseBranchElement;
 }
 
-export interface RequestBranchActionCreators {
-  request: ActionCreator<RequestBranchRequestAction>;
-  success: ActionCreator<RequestBranchSuccessAction>;
-  failure: ActionCreator<FetchError>;
-}
+export type RequestBranchActionCreators =
+  RequestActionCreators<RequestBranchRequestAction, RequestBranchSuccessAction, FetchError>;
 
 // STORE_BRANCHES
 export interface StoreBranchesAction extends Action {
