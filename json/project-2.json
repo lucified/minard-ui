@@ -4,7 +4,7 @@
     "id": "2",
     "attributes": {
       "name": "Second project",
-      "activeCommiters": []
+      "active-committers": []
     },
     "relationships": {
       "branches": {

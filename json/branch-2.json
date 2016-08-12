@@ -41,7 +41,7 @@
           "timestamp": "2016-07-28T13:51:21.802Z"
         },
         "hash": "0123456789abcdef",
-        "commiter": {
+        "committer": {
           "email": "juho@lucify.com",
           "timestamp": "2016-07-29T13:51:21.802Z"
         },
@@ -62,7 +62,7 @@
           "timestamp": "2016-07-27T15:51:21.802Z"
         },
         "hash": "0123456789abcdef",
-        "commiter": {
+        "committer": {
           "email": "juho@lucify.com",
           "timestamp": "2016-07-27T15:51:21.802Z"
         },
@@ -83,6 +83,7 @@
       "attributes": {
         "url": "#",
         "screenshot": "#",
+        "status": "success",
         "creator": {
           "name": "Ville Saarinen",
           "email": "ville.saarinen@lucify.com",

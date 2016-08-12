@@ -9,9 +9,9 @@ const initialState: t.ActivityState = {};
 const responseToStateShape = (activities: t.ApiResponse) => {
   const activityType = (activityString: string): t.ActivityType => {
     switch (activityString) {
-      case 'Deployment':
+      case 'deployment':
         return t.ActivityType.Deployment;
-      case 'Comment':
+      case 'comment':
         return t.ActivityType.Comment;
       default:
         throw new Error('Unknown activity type!');
@@ -21,7 +21,7 @@ const responseToStateShape = (activities: t.ApiResponse) => {
   const createActivityObject = (activity: t.ResponseActivityElement): t.Activity => {
     return {
       id: activity.id,
-      type: activityType(activity.attributes.activityType),
+      type: activityType(activity.attributes['activity-type']),
       deployment: activity.relationships.deployment.data.id,
       branch: activity.relationships.branch.data.id,
       project: activity.relationships.project.data.id,

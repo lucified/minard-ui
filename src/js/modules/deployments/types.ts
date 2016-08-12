@@ -6,10 +6,11 @@ import { FetchError } from '../errors';
 // State
 export interface Deployment {
   id: string;
-  url: string;
   commit: string;
   creator: User;
+  url?: string;
   screenshot?: string;
+  status: 'success' | 'failed' | 'running';
 }
 
 export interface DeploymentState {
@@ -54,8 +55,9 @@ export interface ResponseDeploymentElement {
   id: string;
   attributes: {
     creator: ApiUser;
-    url: string;
+    url?: string;
     screenshot?: string;
+    status: 'success' | 'failed' | 'running';
   };
   relationships: {
     commit: {
