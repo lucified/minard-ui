@@ -8,7 +8,7 @@ export const allProjectsResponse: ApiResponse = {
       'attributes': {
         'name': 'First project',
         'description': 'This is the first project description. It might not be set.',
-        'activeCommiters': [
+        'active-committers': [
           {
             'name': 'Ville Saarinen',
             'email': 'ville.saarinen@lucify.com',
@@ -42,7 +42,7 @@ export const allProjectsResponse: ApiResponse = {
       'id': '2',
       'attributes': {
         'name': 'Second project',
-        'activeCommiters': <any[]> [],
+        'active-committers': <any[]> [],
       },
       'relationships': {
         'branches': {
@@ -162,6 +162,7 @@ export const deploymentResponse: ApiResponse = {
     'attributes': {
       'url': '#',
       'screenshot': '#',
+      'status': 'success',
       'creator': {
         'name': 'Ville Saarinen',
         'email': 'ville.saarinen@lucify.com',
@@ -187,7 +188,7 @@ export const deploymentResponse: ApiResponse = {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-08-01T15:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-29T13:51:21.802Z',
         },
@@ -265,7 +266,7 @@ export const branchResponse: ApiResponse = {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-08-01T15:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-29T13:51:21.802Z',
         },
@@ -287,6 +288,7 @@ export const branchResponse: ApiResponse = {
       'attributes': {
         'url': '#',
         'screenshot': '#',
+        'status': 'success',
         'creator': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
@@ -312,7 +314,7 @@ export const projectResponse: ApiResponse = {
     'attributes': {
       'name': 'First project',
       'description': 'This is the first project description. It might not be set.',
-      'activeCommiters': [
+      'active-committers': [
         {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
@@ -456,7 +458,7 @@ export const commitResponse: ApiResponse = {
         'email': 'ville.saarinen@lucify.com',
         'timestamp': '2016-08-01T15:51:21.802Z',
       },
-      'commiter': {
+      'committer': {
         'email': 'juho@lucify.com',
         'timestamp': '2016-07-29T13:51:21.802Z',
       },
@@ -482,7 +484,7 @@ export const commitResponse: ApiResponse = {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-08-01T15:41:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-08-01T15:41:21.802Z',
@@ -504,7 +506,7 @@ export const commitResponse: ApiResponse = {
           'email': 'juho@lucify.com',
           'timestamp': '2016-08-01T12:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-08-01T12:51:21.802Z',
         },
@@ -526,7 +528,7 @@ export const commitResponse: ApiResponse = {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-07-29T15:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-07-29T15:51:21.802Z',
@@ -548,7 +550,7 @@ export const commitResponse: ApiResponse = {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-29T15:50:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-29T15:50:21.802Z',
         },
@@ -570,7 +572,7 @@ export const commitResponse: ApiResponse = {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-07-28T15:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-07-28T15:51:21.802Z',
@@ -589,6 +591,7 @@ export const commitResponse: ApiResponse = {
       'attributes': {
         'url': '#',
         'screenshot': '#',
+        'status': 'success',
         'creator': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
@@ -614,7 +617,7 @@ export const commitResponse: ApiResponse = {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-07-28T13:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-29T13:51:21.802Z',
         },
@@ -635,7 +638,7 @@ export const commitResponse: ApiResponse = {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-27T15:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-27T15:51:21.802Z',
         },
@@ -658,6 +661,7 @@ export const commitResponse: ApiResponse = {
       'attributes': {
         'url': '#',
         'screenshot': '#',
+        'status': 'success',
         'creator': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
@@ -683,7 +687,7 @@ export const activitiesResponse = {
       'id': '1',
       'attributes': {
         'timestamp': '2016-08-02T09:51:21.802Z',
-        'activityType': 'Deployment',
+        'activity-type': 'deployment',
       },
       'relationships': {
         'deployment': {
@@ -711,7 +715,7 @@ export const activitiesResponse = {
       'id': '2',
       'attributes': {
         'timestamp': '2016-08-01T09:51:21.802Z',
-        'activityType': 'Deployment',
+        'activity-type': 'deployment',
       },
       'relationships': {
         'deployment': {
@@ -742,6 +746,7 @@ export const activitiesResponse = {
       'attributes': {
         'url': '#',
         'screenshot': '#',
+        'status': 'success',
         'creator': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
@@ -763,6 +768,7 @@ export const activitiesResponse = {
       'attributes': {
         'url': '#',
         'screenshot': '#',
+        'status': 'success',
         'creator': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
@@ -787,7 +793,7 @@ export const activitiesResponse = {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': '2016-08-01T15:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-29T13:51:21.802Z',
         },
@@ -812,7 +818,7 @@ export const activitiesResponse = {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-27T15:51:21.802Z',
         },
-        'commiter': {
+        'committer': {
           'email': 'juho@lucify.com',
           'timestamp': '2016-07-27T15:51:21.802Z',
         },

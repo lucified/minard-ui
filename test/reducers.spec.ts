@@ -700,7 +700,7 @@ describe('reducers', () => {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': 1470066081802,
         },
-        'commiter': {
+        'committer': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
           'timestamp': 1470066081802,
@@ -717,7 +717,7 @@ describe('reducers', () => {
           'email': 'juho@lucify.com',
           'timestamp': 1470055881802,
         },
-        'commiter': {
+        'committer': {
           name: undefined,
           'email': 'juho@lucify.com',
           'timestamp': 1470055881802,
@@ -737,7 +737,7 @@ describe('reducers', () => {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': 1470055881801,
         },
-        'commiter': {
+        'committer': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
           'timestamp': 1470055881801,
@@ -757,7 +757,7 @@ describe('reducers', () => {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': 1470055881801,
         },
-        'commiter': {
+        'committer': {
           'name': 'Ville Saarinen',
           'email': 'ville.saarinen@lucify.com',
           'timestamp': 1470055881801,
@@ -774,7 +774,7 @@ describe('reducers', () => {
           'email': 'juho@lucify.com',
           'timestamp': 1470055881812,
         },
-        'commiter': {
+        'committer': {
           name: undefined,
           'email': 'juho@lucify.com',
           'timestamp': 1470055881812,
@@ -799,7 +799,7 @@ describe('reducers', () => {
           'email': 'ville.saarinen@lucify.com',
           'timestamp': 1470066681802,
         },
-        'commiter': {
+        'committer': {
           'name': undefined,
           'email': 'juho@lucify.com',
           'timestamp': 1469800281802,
@@ -840,6 +840,7 @@ describe('reducers', () => {
     const expectedObjectsToStore: DeploymentState = {
       '7': {
         'id': '7',
+        'status': 'success',
         'url': '#',
         'screenshot': '#',
         'creator': {
@@ -854,6 +855,7 @@ describe('reducers', () => {
     const stateWithoutExistingEntity: DeploymentState = {
       '8': {
         'id': '8',
+        'status': 'success',
         'url': '#',
         'screenshot': '#',
         'creator': {
@@ -868,6 +870,7 @@ describe('reducers', () => {
     const stateWithExistingEntity: DeploymentState = {
       '7': {
         'id': '7',
+        'status': 'success',
         'url': 'foo#',
         'screenshot': 'bar#',
         'creator': {
@@ -887,6 +890,7 @@ describe('reducers', () => {
     const expectedSuccessfulRequestObject: DeploymentState = {
       '7': {
         'id': '7',
+        'status': 'success',
         'url': '#',
         'screenshot': '#',
         'creator': {

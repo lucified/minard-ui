@@ -893,6 +893,7 @@ describe('sagas', () => {
       const iterator = sagas.ensureDeploymentRelatedDataLoaded(id);
       const deployment: Deployment = {
         id: 'a',
+        status: 'success',
         commit: 'c1',
         url: '',
         screenshot: '',
@@ -927,7 +928,7 @@ describe('sagas', () => {
           email: '',
           timestamp: 1,
         },
-        commiter: {
+        committer: {
           email: '',
           timestamp: 1,
         },

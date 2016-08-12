@@ -5,7 +5,7 @@
     "attributes": {
       "name": "First project",
       "description": "This is the first project description. It might not be set.",
-      "activeCommiters": [
+      "active-committers": [
         {
           "name": "Ville Saarinen",
           "email": "ville.saarinen@lucify.com",
