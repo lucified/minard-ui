@@ -10,8 +10,7 @@ import Selected from './modules/selected';
 import routes from './routes';
 import sagaCreator from './sagas';
 
-const appEntry = (options?: any): void => {
-  const api: Api = (options && options.api) || require('./api');
+const appEntry = (api: Api): void => {
   const initialState = {};
   const store = configureStore(initialState);
   (store as any).runSaga(sagaCreator(api).root);
@@ -35,7 +34,5 @@ const appEntry = (options?: any): void => {
     document.getElementById('content')
   );
 };
-
-appEntry();
 
 export default appEntry;

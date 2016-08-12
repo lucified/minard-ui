@@ -17,17 +17,20 @@ const getEntrypoint = (env, charles) => {
   let middle = env;
   if (env === 'test' || !charles) {
     // No remote backend
-    middle = 'local-json';
+    middle = 'development.local-json';
   } else if (env === 'staging') {
     // Use production configuration in staging
     middle = 'production';
   } else if (!env || environments.indexOf(env) < 0) {
     // Default to development if env is not one
     // of the allowed values
-    middle = 'development';
+    middle = 'development.server';
   }
 
-  return `./src/js/entrypoint.${middle}.tsx`;
+  const entrypoint = `./src/js/entrypoint.${middle}.tsx`;
+  console.log(`minard-ui: Using entrypoint ${entrypoint}`);
+
+  return entrypoint;
 };
 
 /*
