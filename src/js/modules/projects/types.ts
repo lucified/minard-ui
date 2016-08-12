@@ -1,7 +1,7 @@
-import { Action, ActionCreator } from 'redux';
+import { Action } from 'redux';
 
-import { ApiUser, User } from '../common';
 import { FetchError } from '../errors';
+import { ApiUser, RequestActionCreators, User } from '../types';
 
 // State
 export interface Project {
@@ -31,11 +31,8 @@ export interface RequestAllProjectsSuccessAction extends Action {
   response: ResponseProjectElement[];
 }
 
-export interface RequestAllProjectsActionCreators {
-  request: ActionCreator<RequestAllProjectsRequestAction>;
-  success: ActionCreator<RequestAllProjectsSuccessAction>;
-  failure: ActionCreator<FetchError>;
-}
+export type RequestAllProjectsActionCreators =
+  RequestActionCreators<RequestAllProjectsRequestAction, RequestAllProjectsSuccessAction, FetchError>;
 
 // LOAD_PROJECT
 export interface LoadProjectAction extends Action {
@@ -52,11 +49,8 @@ export interface RequestProjectSuccessAction extends Action {
   response: ResponseProjectElement;
 }
 
-export interface RequestProjectActionCreators {
-  request: ActionCreator<RequestProjectRequestAction>;
-  success: ActionCreator<RequestProjectSuccessAction>;
-  failure: ActionCreator<FetchError>;
-}
+export type RequestProjectActionCreators =
+  RequestActionCreators<RequestProjectRequestAction, RequestProjectSuccessAction, FetchError>;
 
 // STORE_PROJECTS
 export interface StoreProjectsAction extends Action {

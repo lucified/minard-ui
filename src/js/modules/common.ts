@@ -23,15 +23,3 @@ export const prettyErrorMessage = (error: string): string => {
 
   return error;
 };
-
-export interface User {
-  name?: string;
-  email: string;
-  timestamp: number;
-}
-
-export interface ApiUser {
-  name?: string;
-  email: string;
-  timestamp: string;
-}

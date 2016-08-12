@@ -1,7 +1,7 @@
-import { Action, ActionCreator } from 'redux';
+import { Action } from 'redux';
 
-import { ApiUser, User } from '../common';
 import { FetchError } from '../errors';
+import { ApiUser, RequestActionCreators, User } from '../types';
 
 // State
 export interface Commit {
@@ -35,11 +35,8 @@ export interface RequestCommitSuccessAction extends Action {
   response?: ResponseCommitElement;
 }
 
-export interface RequestCommitActionCreators {
-  request: ActionCreator<RequestCommitRequestAction>;
-  success: ActionCreator<RequestCommitSuccessAction>;
-  failure: ActionCreator<FetchError>;
-}
+export type RequestCommitActionCreators =
+  RequestActionCreators<RequestCommitRequestAction, RequestCommitSuccessAction, FetchError>;
 
 // STORE_COMMITS
 export interface StoreCommitsAction extends Action {
