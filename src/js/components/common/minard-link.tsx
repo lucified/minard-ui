@@ -19,7 +19,22 @@ class MinardLink extends React.Component<Props, any> {
     let path = '/';
 
     if (deployment) {
-      path = `/deployment/${deployment.id}`;
+      // path = `/deployment/${deployment.id}`;
+
+      // TODO: link to deployment view instead of actual deployment
+      path = deployment.url;
+
+      if (path) {
+        return (
+          <a href={path} target={target}>
+            {children}
+          </a>
+        );
+      }
+
+      return (
+        <span>{children}</span>
+      );
     } else if (branch) {
       path = `/project/${branch.project}/${branch.id}`;
     } else if (project) {

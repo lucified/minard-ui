@@ -68,7 +68,7 @@ const getBranchAction = (activity: Activity, branch: Branch, deployment: Deploym
   return (
     <span>
       {`${getAuthor(activity, deployment)} ${getAction(activity)} `}
-      <MinardLink deployment={deployment}>{activity.deployment}</MinardLink>
+      <MinardLink deployment={deployment} openInNewWindow>{activity.deployment}</MinardLink>
       {' in '}
       <MinardLink branch={branch}>{branch.name}</MinardLink>
     </span>

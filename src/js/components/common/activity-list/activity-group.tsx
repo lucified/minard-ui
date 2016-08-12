@@ -60,7 +60,9 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
   return (
     <div className={classNames('columns', styles.activityGroup)}>
       <div className={classNames('column', 'col-3', styles.activityScreenshot)}>
-        <MinardLink deployment={deployment}><img src={screenshot} className="img-responsive" /></MinardLink>
+        <MinardLink deployment={deployment} openInNewWindow>
+          <img src={screenshot} className="img-responsive" />
+        </MinardLink>
       </div>
       <div className={classNames('column', 'col-9', styles.activityContent)}>
         {activities.map(activity =>
