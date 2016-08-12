@@ -19,14 +19,22 @@ interface GeneratedProps {
   deployment?: Deployment;
 }
 
+const getDeploymentScreenshot = (deployment: Deployment) => {
+  if (!deployment || !deployment.screenshot) {
+    return null;
+  }
+
+  return (
+    <MinardLink deployment={deployment} openInNewWindow>
+      <img src={screenshot /* TODO: deployment.screenshot*/} className="img-responsive" />
+    </MinardLink>
+  );
+};
+
 const SingleCommit = ({ commit, deployment }: PassedProps & GeneratedProps) => (
   <div className="columns">
     <div className="column col-3">
-      {deployment && (
-        <MinardLink deployment={deployment}>
-          <img src={screenshot /* TODO: deployment.screenshot*/} className="img-responsive" />
-        </MinardLink>
-      )}
+      {getDeploymentScreenshot(deployment)}
     </div>
     <div className="column col-9">
       <CommitSummary key={commit.id} commit={commit} deployment={deployment} />
