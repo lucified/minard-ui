@@ -24,15 +24,37 @@ npm install -g typescript tslint tslint-react
 npm install
 npm link typescript
 ```
-## Development
+
+## Development with bundled JSON files
 
 ```shell
 npm start # then open http://localhost:3000/ in a browser
 ```
-## Development with Charles running at e.g. `http://localhost:8000`
+
+## Development with backend
 
 ```shell
-npm start -- http://localhost:8000
+npm start -- <API URL>
+```
+
+By default, the minard-backed (charles) API runs on `http://localhost:8000`:
+
+```shell
+npm start -- <API URL>
+```
+
+## Building for production
+
+You can build the project into `dist/` by running:
+
+```shell
+NODE_ENV=production CHARLES=<API URL> npm run build
+```
+
+To have it watch for changes and update the build accordingly, run:
+
+```shell
+NODE_ENV=production CHARLES=<API URL> npm run watch
 ```
 
 ## Local deployment
@@ -46,7 +68,7 @@ LUCIFY_ENV=production \
 AWS_PROFILE=lucify-protected \
 GITHUB_TOKEN='' \
 FLOW_TOKEN=$FLOW_TOKEN_MAIN \
-npm run-script deploy
+npm run deploy
 ```
 
 Where `$FLOW_TOKEN_MAIN` is the [Flow token](https://www.flowdock.com/account/tokens)
@@ -63,4 +85,4 @@ Run `npm test`. To start a watcher, run `npm run test:auto`.
 
 ## Other commands
 
-Run `npm run-script` to see other available commands.
+Run `npm run` to see other available commands.
