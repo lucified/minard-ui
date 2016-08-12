@@ -36,7 +36,6 @@ function callApi(url: string) {
     }));
 }
 
-// TODO: call actual endpoints
 export const fetchActivities = () => callApi(activitiesJSON);
 export const fetchActivitiesForProject = (id: string) => callApi(activitiesJSON);
 export const fetchAllProjects = () => callApi(allProjectsJSON);
