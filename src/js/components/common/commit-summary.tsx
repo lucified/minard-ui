@@ -26,15 +26,15 @@ const CommitSummary = ({ commit, deployment }: Props) => {
     );
   }
 
-  const { author, commiter } = commit;
+  const { author, committer } = commit;
 
   const content = (
     <div className="container flex">
       <div className={styles.avatarBox}>
         <figure title={author.name || author.email} className="avatar avatar-lg">
           <Gravatar rating="pg" email={author.email} https />
-          {commiter.email !== author.email &&
-            <Gravatar rating="pg" email={commiter.email} className="avatar-icon" https />
+          {committer.email !== author.email &&
+            <Gravatar rating="pg" email={committer.email} className="avatar-icon" https />
           }
         </figure>
       </div>

@@ -10,7 +10,7 @@ export interface Commit {
   message: string;
   description?: string;
   author: User;
-  commiter: User;
+  committer: User;
   deployment?: string;
 }
 
@@ -59,7 +59,7 @@ export interface ResponseCommitElement {
     hash: string;
     message: string;
     author: ApiUser;
-    commiter: ApiUser;
+    committer: ApiUser;
   };
   relationships?: {
     deployments?: {
