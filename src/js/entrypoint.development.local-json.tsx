@@ -1,4 +1,7 @@
-import * as api from './api/static-json';
-import appEntry from './entrypoint.development';
+import { hashHistory } from 'react-router';
 
-appEntry(api);
+import * as api from './api/static-json';
+import configureStore from './configure-store.development';
+import { createStoreAndRender } from './entrypoint';
+
+createStoreAndRender(configureStore, api, hashHistory);
