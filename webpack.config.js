@@ -28,7 +28,7 @@ const getEntrypoint = (env, charles) => {
   }
 
   const entrypoint = `./src/js/entrypoint.${middle}.tsx`;
-  console.log(`minard-ui: Using entrypoint ${entrypoint}`);
+  console.log(`Using entrypoint ${entrypoint}`);
 
   return entrypoint;
 };
