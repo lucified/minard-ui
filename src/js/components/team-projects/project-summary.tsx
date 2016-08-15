@@ -38,34 +38,36 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
   return (
     <div className={styles.card}>
       <div className={styles['card-top']}>
-        <img src={screenshot} className={styles.screenshot} />
+        <MinardLink project={project}>
+          <img src={screenshot} className={styles.screenshot} />
+        </MinardLink>
       </div>
       <div className={styles['card-middle']}>
-        <h3 className={styles.title}>{project.name}</h3>
+        <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>
         <p className={styles.description}>{project.description}</p>
       </div>
       <div className={styles['card-bottom']}>
         {latestDeployment && (
-          <div className={styles.spread}>
-            <div className="flex">
-              <div className={styles['preview-icon']}>
-                <Icon name="eye" />
-              </div>
-              <div>
-                <div className={styles.action}>
-                  {latestDeployment.creator.name || latestDeployment.creator.email} generated a new preview
+          <MinardLink openInNewWindow deployment={latestDeployment}>
+            <div className={styles.spread}>
+              <div className="flex">
+                <div className={styles['preview-icon']}>
+                  <Icon name="eye" />
                 </div>
-                <div className={styles.timestamp}>
-                  {moment(latestDeployment.creator.timestamp).fromNow()}
+                <div>
+                  <div className={styles.action}>
+                    {latestDeployment.creator.name || latestDeployment.creator.email} generated a new preview
+                  </div>
+                  <div className={styles.timestamp}>
+                    {moment(latestDeployment.creator.timestamp).fromNow()}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className={styles.open}>
-              <MinardLink openInNewWindow deployment={latestDeployment}>
+              <div className={styles.open}>
                 Open <Icon name="external-link" />
-              </MinardLink>
+              </div>
             </div>
-          </div>
+          </MinardLink>
         )}
       </div>
     </div>
