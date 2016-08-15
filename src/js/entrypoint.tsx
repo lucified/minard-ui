@@ -10,8 +10,8 @@ import Selected from './modules/selected';
 import routes from './routes';
 import sagaCreator from './sagas';
 
-export const startStoreAndRender = (
-  configureStore: (initalState: Object) => Store<{}>,
+export const createStoreAndRender = (
+  configureStore: (initalState: Object) => Store<any>,
   api: Api,
   history: History.History
 ) => {
