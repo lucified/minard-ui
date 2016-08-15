@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import { compact, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -43,6 +44,17 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
         </MinardLink>
       </div>
       <div className={styles['card-middle']}>
+        <div className={styles.avatars}>
+          {project.activeUsers.map(user => // TODO: have an upper range for this
+            <figure
+              key={`avatar-${user.email}`}
+              title={user.name || user.email}
+              className={classNames('avatar', styles.avatar)}
+            >
+              <Gravatar className={styles['avatar-shadow']} rating="pg" email={user.email} size={72} https />
+            </figure>
+          )}
+        </div>
         <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>
         <p className={styles.description}>{project.description}</p>
       </div>
