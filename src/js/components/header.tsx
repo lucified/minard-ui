@@ -24,7 +24,9 @@ interface GeneratedDispatchProps {
   clearError: (error: FetchError) => void;
 }
 
-const Header = ({ errors, clearError, selectedSection }: PassedProps & GeneratedStateProps & GeneratedDispatchProps) => (
+type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
+
+const Header = ({ errors, clearError, selectedSection }: Props) => (
   <section className={styles['header-background']}>
     <section className={classNames('container', 'grid-1200')}>
       <header className={classNames(styles.header, 'navbar')}>
