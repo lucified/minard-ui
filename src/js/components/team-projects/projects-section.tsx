@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import * as chunk from 'lodash/chunk';
 import * as React from 'react';
 
 import { FetchError } from '../../modules/errors';
@@ -13,8 +14,23 @@ interface Props {
   projects?: (Project | FetchError)[];
 }
 
-const projectInfo = (projects: (Project | FetchError)[]) =>
-  projects.map(project => <ProjectSummary key={project.id!} project={project} />);
+const projectCards = (projects: (Project | FetchError)[]) => {
+  const projectRows = chunk(projects, 3);
+
+  return (
+    <section className="container grid-1200">
+      {projectRows.map((projectGroup, i) => (
+        <div key={`project-group-${i}`} className="columns">
+          {projectGroup.map(project => (
+            <div className="column col-4">
+              <ProjectSummary key={project.id!} project={project} />
+            </div>
+          ))}
+        </div>
+      ))}
+    </section>
+  );
+};
 
 const ProjectsSection = ({ projects }: Props) => (
   <div>
@@ -36,15 +52,7 @@ const ProjectsSection = ({ projects }: Props) => (
         </span>
       )}
     </SectionTitle>
-    {projects && (
-      <div className="columns">
-        <div className="column col-1" />
-        <div className="column col-10">
-          {projectInfo(projects)}
-        </div>
-        <div className="column col-1" />
-      </div>
-    )}
+    {projects && projectCards(projects)}
   </div>
 );
 
