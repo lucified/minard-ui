@@ -24,11 +24,10 @@ export const createStoreAndRender = (
   // Store current open project + branch into state
   syncedHistory.listen(location => {
     const result = /^\/project\/([^/]+)(\/([^/]+))?/.exec(location.pathname);
-    if (result) {
-      const project = result[1] || null;
-      const branch = result[3] || null;
-      store.dispatch(Selected.actions.setSelected(project, branch));
-    }
+    const project = (result && result[1]) || null;
+    const branch = (result && result[3]) || null;
+
+    store.dispatch(Selected.actions.setSelected(project, branch));
   });
 
   ReactDOM.render(
