@@ -1,0 +1,24 @@
+.sub-header-background {
+  background-color: white;
+}
+
+.sub-header {
+  height: 60px;
+  font-size: 14px;
+  font-weight: 200;
+  color: #7f8c8d;
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  justify-content: center;
+}
+
+.left {
+  justify-content: flex-start;
+}
+
+.right {
+  justify-content: flex-end;
+}
