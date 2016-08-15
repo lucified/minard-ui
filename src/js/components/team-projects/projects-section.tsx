@@ -22,8 +22,8 @@ const projectCards = (projects: (Project | FetchError)[]) => {
       {projectRows.map((projectGroup, i) => (
         <div key={`project-group-${i}`} className="columns">
           {projectGroup.map(project => (
-            <div className="column col-4">
-              <ProjectSummary key={project.id!} project={project} />
+            <div key={project.id!} className="column col-4">
+              <ProjectSummary project={project} />
             </div>
           ))}
         </div>
