@@ -11,10 +11,10 @@ interface Props {
 
 }
 
-export default class App extends React.Component<Props, any> {
+class App extends React.Component<Props, any> {
   public render() {
     return (
-      <div className="container grid-1200">
+      <div>
         <Header />
         {this.props.children}
         <Footer />
@@ -22,3 +22,5 @@ export default class App extends React.Component<Props, any> {
     );
   }
 }
+
+export default App;

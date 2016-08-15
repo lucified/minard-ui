@@ -1,0 +1,37 @@
+.header {
+  height: 72px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #fbfbfb;
+}
+
+.header-background {
+  background-image: linear-gradient(to left, #17b7b7, #54c6a8);
+}
+
+.link-container {
+  align-self: flex-end;
+}
+
+.link {
+  height: 48px;
+}
+
+.link.active {
+  border-bottom: #95ffe7 5px solid;
+}
+
+.minard {
+  margin: 0;
+  font-weight: 600;
+}
+
+.profile-container {
+  align-items: center;
+}
+
+.team-dropdown {
+  margin-right: 20px;
+  font-size: 14px;
+  font-weight: 300;
+}
