@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { History, Router, browserHistory } from 'react-router';
+import { History, Router } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Store } from 'redux';
 
@@ -19,7 +19,7 @@ export const startStoreAndRender = (
   const store = configureStore(initialState);
   (store as any).runSaga(sagaCreator(api).root);
 
-  const syncedHistory = syncHistoryWithStore(browserHistory, store);
+  const syncedHistory = syncHistoryWithStore(history, store);
 
   // Store current open project + branch into state
   syncedHistory.listen(location => {
