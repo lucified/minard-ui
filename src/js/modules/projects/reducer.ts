@@ -27,8 +27,15 @@ const responseToStateShape = (projects: t.ApiResponse) => {
     };
   };
 
-  return projects.reduce((obj, project) =>
-    Object.assign(obj, { [project.id]: createProjectObject(project) }), {});
+  return projects.reduce((obj, project) => {
+    try {
+      const stateObject = createProjectObject(project);
+      return Object.assign(obj, { [project.id]: stateObject });
+    } catch (e) {
+      console.log('Error parsing project:', project, e);
+      return obj;
+    }
+  }, {});
 };
 
 const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {

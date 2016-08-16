@@ -24,8 +24,15 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
     };
   };
 
-  return deployments.reduce((obj, deployment) =>
-    Object.assign(obj, { [deployment.id]: createDeploymentObject(deployment) }), {});
+  return deployments.reduce((obj, deployment) => {
+    try {
+      const stateObject = createDeploymentObject(deployment);
+      return Object.assign(obj, { [deployment.id]: stateObject });
+    } catch (e) {
+      console.log('Error parsing deployment:', deployment, e);
+      return obj;
+    }
+  }, {});
 };
 
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
