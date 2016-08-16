@@ -37,7 +37,15 @@ const responseToStateShape = (commits: t.ApiResponse) => {
     };
   };
 
-  return commits.reduce((obj, commit) => Object.assign(obj, { [commit.id]: createCommitObject(commit) }), {});
+  return commits.reduce((obj, commit) => {
+    try {
+      const stateObject = createCommitObject(commit);
+      return Object.assign(obj, { [commit.id]: stateObject });
+    } catch (e) {
+      console.log('Error parsing commit:', commit, e);
+      return obj;
+    }
+  }, {});
 };
 
 const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {

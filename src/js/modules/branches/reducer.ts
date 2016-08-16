@@ -26,7 +26,15 @@ const responseToStateShape = (branches: t.ApiResponse) => {
     };
   };
 
-  return branches.reduce((obj, branch) => Object.assign(obj, { [branch.id]: createBranchObject(branch) }), {});
+  return branches.reduce((obj, branch) => {
+    try {
+      const stateObject = createBranchObject(branch);
+      return Object.assign(obj, { [branch.id]: stateObject });
+    } catch (e) {
+      console.log('Error parsing branch:', branch, e);
+      return obj;
+    }
+  }, {});
 };
 
 const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {

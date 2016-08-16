@@ -29,8 +29,15 @@ const responseToStateShape = (activities: t.ApiResponse) => {
     };
   };
 
-  return activities.reduce((obj, activity) =>
-    Object.assign(obj, { [activity.id]: createActivityObject(activity) }), {});
+  return activities.reduce((obj, activity) => {
+    try {
+      const activityObject = createActivityObject(activity);
+      return Object.assign(obj, { [activity.id]: activityObject });
+    } catch (e) {
+      console.log('Error parsing activity:', activity, e);
+      return obj;
+    }
+  }, {});
 };
 
 const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
