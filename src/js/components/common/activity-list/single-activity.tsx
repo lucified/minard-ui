@@ -1,8 +1,6 @@
-import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
-import * as Gravatar from 'react-gravatar';
 
 import { Activity, ActivityType } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
@@ -11,6 +9,7 @@ import { Deployment } from '../../../modules/deployments';
 import { FetchError, isError } from '../../../modules/errors';
 import { Project } from '../../../modules/projects';
 
+import Avatar from '../avatar';
 import MinardLink from '../minard-link';
 
 const styles = require('./single-activity.scss');
@@ -153,9 +152,7 @@ const SingleActivity = (props: Props) => {
       <MinardLink deployment={deployment}>
         <div className={styles['activity-content']}>
           <div className={styles.avatar}>
-            <figure title={creator.name || creator.email} className={classNames(styles['avatar-40'], 'avatar')}>
-              <Gravatar size={80} rating="pg" email={creator.email} https />
-            </figure>
+            <Avatar title={creator.name || creator.email} size="40" email={creator.email} />
           </div>
           <div>
             <div className={styles['activity-metadata']}>

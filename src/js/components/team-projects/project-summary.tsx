@@ -1,9 +1,7 @@
-import * as classNames from 'classnames';
 import { compact, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
-import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
 
 import Branches from '../../modules/branches';
@@ -12,6 +10,7 @@ import { FetchError, isError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import Avatar from '../common/avatar';
 import MinardLink from '../common/minard-link';
 
 const styles = require('./project-summary.scss');
@@ -46,13 +45,7 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
       <div className={styles['card-middle']}>
         <div className={styles.avatars}>
           {project.activeUsers.map(user => // TODO: have an upper range for this
-            <figure
-              key={`avatar-${user.email}`}
-              title={user.name || user.email}
-              className={classNames('avatar', styles.avatar)}
-            >
-              <Gravatar className={styles['avatar-shadow']} rating="pg" email={user.email} size={72} https />
-            </figure>
+            <Avatar key={`avatar-${user.email}`} title={user.name || user.email} email={user.email} />
           )}
         </div>
         <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>
