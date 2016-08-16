@@ -17,8 +17,12 @@
   height: 48px;
 }
 
-.link.active {
+.link.active, .link.active:hover {
   border-bottom: #95ffe7 5px solid;
+}
+
+.link:hover {
+  border-bottom: #ffffff 5px solid;
 }
 
 .minard {

@@ -44,7 +44,7 @@ const ProjectsSection = ({ projects }: Props) => (
       {projects ? (
         <span>
           {projects.length} projects for{' '}
-          <strong>Team Lucify</strong>
+          <span className={styles.team}>Team Lucify</span>
         </span>
       ) : (
         <span>

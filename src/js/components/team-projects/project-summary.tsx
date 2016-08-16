@@ -68,7 +68,13 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
                 </div>
                 <div>
                   <div className={styles.action}>
-                    {latestDeployment.creator.name || latestDeployment.creator.email} generated a new preview
+                    <span className={styles.author}>
+                      {latestDeployment.creator.name || latestDeployment.creator.email}
+                    </span>
+                    {' '}generated a{' '}
+                    <span className={styles.target}>
+                      new preview
+                    </span>
                   </div>
                   <div className={styles.timestamp}>
                     {moment(latestDeployment.creator.timestamp).fromNow()}

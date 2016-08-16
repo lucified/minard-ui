@@ -75,8 +75,13 @@
 
 }
 
+.author, .target {
+  font-weight: 600;
+}
+
 .timestamp {
-  font-size: 10px;
+  font-weight: 300;
+  font-size: 11px;
 }
 
 .open {
