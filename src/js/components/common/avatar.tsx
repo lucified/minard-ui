@@ -45,7 +45,7 @@ const Avatar = ({ size, email, iconEmail, initials, title }: Props) => {
     );
   } else {
     return (
-      <figure title={title} className={classNames(styles.avatar, styles[`avatar-${size}`], styles.initials)} data-initial={initials}>
+      <figure title={title} className={classNames(styles.avatar, styles[`avatar-${size}`])} data-initial={initials}>
         {iconEmail &&
           <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" https size={pixelSize * 0.4} />
         }
