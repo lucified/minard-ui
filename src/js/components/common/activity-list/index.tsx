@@ -9,6 +9,7 @@ interface Props {
   showProjectName: boolean;
 }
 
+// Group activities by subsequent actions to the same deployment.
 const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
   let lastGroup = [activities[0]];
   const groupedActivities = [lastGroup];
@@ -29,11 +30,11 @@ const ActivityList = ({ activities, showProjectName }: Props) => {
   const groupedActivities = generateDeploymentGroups(activities);
 
   return (
-    <div>
-      {groupedActivities.map((activityGroup, i) =>
+    <section className="container grid-1200">
+      {groupedActivities.map((activityGroup, i) => // TODO: key should be a bit smarter
         <ActivityGroup key={i} activities={activityGroup} showProjectName={showProjectName} />
       )}
-    </div>
+    </section>
   );
 };
 

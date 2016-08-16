@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import * as moment from 'moment';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -54,27 +55,39 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
     return getErrorContent(deployment);
   }
 
-  // Seems this is needed due to a bug in TypeScript?
-  let realBranch = branch;
-
   return (
-    <div className={classNames('columns', styles.activityGroup)}>
-      <div className={classNames('column', 'col-3', styles.activityScreenshot)}>
+    <div className={classNames('columns', styles['activity-group'])}>
+      <div className={classNames('column', 'col-1', styles.timestamp)}>
+        {moment(activities[0].timestamp).fromNow()}
+      </div>
+      <div className={classNames('column', 'col-2', styles.screenshot)}>
         <MinardLink deployment={deployment} openInNewWindow>
           <img src={screenshot} className="img-responsive" />
         </MinardLink>
       </div>
-      <div className={classNames('column', 'col-9', styles.activityContent)}>
-        {activities.map(activity =>
+      <div className={classNames('column', 'col-9', styles['activity-content'])}>
+        <div>
           <SingleActivity
-            activity={activity}
+            activity={activities[0]}
             deployment={deployment}
             commit={commit}
-            branch={realBranch}
-            key={activity.id}
+            branch={branch}
             project={project}
             showProjectName={showProjectName}
           />
+        </div>
+        {activities.slice(1).map(activity =>
+          <div key={activity.id}>
+            <hr className={styles.line} />
+            <SingleActivity
+              activity={activity}
+              deployment={deployment}
+              commit={commit}
+              branch={branch}
+              project={project}
+              showProjectName={showProjectName}
+            />
+          </div>
         )}
       </div>
     </div>

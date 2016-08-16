@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { Link } from 'react-router';
 
@@ -10,6 +11,7 @@ interface Props {
   branch?: Branch;
   project?: Project;
   openInNewWindow?: boolean;
+  className?: string;
 }
 
 class MinardLink extends React.Component<Props, any> {
@@ -26,7 +28,7 @@ class MinardLink extends React.Component<Props, any> {
 
       if (path) {
         return (
-          <a href={path} target={target}>
+          <a className={classNames(this.props.className)} href={path} target={target}>
             {children}
           </a>
         );
@@ -44,7 +46,7 @@ class MinardLink extends React.Component<Props, any> {
     }
 
     return (
-      <Link target={target} to={path}>
+      <Link className={classNames(this.props.className)} target={target} to={path}>
         {children}
       </Link>
     );

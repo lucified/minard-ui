@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { compact, flatMap, maxBy } from 'lodash';
+import { compact, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
@@ -13,20 +13,19 @@ import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 import MinardLink from '../common/minard-link';
-import ScreenshotPile from '../common/screenshot-pile';
 
 const styles = require('./project-summary.scss');
+const screenshot = require('../../../images/screenshot.png');
 
 interface PassedProps {
   project: Project | FetchError;
 }
 
 interface GeneratedProps {
-  deployments?: (Deployment | FetchError | undefined)[];
   latestDeployment?: Deployment;
 }
 
-const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps & GeneratedProps) => {
+const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
       <div key={project.id!} className="empty">
@@ -38,40 +37,56 @@ const ProjectSummary = ({ project, deployments, latestDeployment }: PassedProps 
   }
 
   return (
-    <div className="columns">
-      <div className={classNames('column', 'col-3', styles.screenshot)}>
+    <div className={styles.card}>
+      <div className={styles['card-top']}>
         <MinardLink project={project}>
-          <ScreenshotPile deployments={deployments!} />
+          <img src={screenshot} className={styles.screenshot} />
         </MinardLink>
       </div>
-      <div className="column col-9">
-        <MinardLink project={project}>
-          <h3 className={styles.title}>{project.name}</h3>
-          <p>{project.description}</p>
-        </MinardLink>
-        <div className="flex">
-          <div className={styles.activeUsers}>
-            {project.activeUsers.map(user => // TODO: have an upper range for this
-              <figure
-                key={`avatar-${user.email}`}
-                title={user.name || user.email}
-                className={classNames('avatar', styles.avatar)}
-              >
-                <Gravatar rating="pg" email={user.email} https />
-              </figure>
-            )}
-          </div>
-          {latestDeployment && (
-            <div className={styles.latestActivity}>
-              {latestDeployment.creator.name ? latestDeployment.creator.name : latestDeployment.creator.email} deployed
-              a new preview {moment(latestDeployment.creator.timestamp).fromNow()}
-              <br />
-              <MinardLink openInNewWindow deployment={latestDeployment}>
-                Open latest preview <Icon name="external-link" />
-              </MinardLink>
-            </div>
+      <div className={styles['card-middle']}>
+        <div className={styles.avatars}>
+          {project.activeUsers.map(user => // TODO: have an upper range for this
+            <figure
+              key={`avatar-${user.email}`}
+              title={user.name || user.email}
+              className={classNames('avatar', styles.avatar)}
+            >
+              <Gravatar className={styles['avatar-shadow']} rating="pg" email={user.email} size={72} https />
+            </figure>
           )}
         </div>
+        <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>
+        <p className={styles.description}>{project.description}</p>
+      </div>
+      <div className={styles['card-bottom']}>
+        {latestDeployment && (
+          <MinardLink openInNewWindow deployment={latestDeployment}>
+            <div className={styles.spread}>
+              <div className="flex">
+                <div className={styles['preview-icon']}>
+                  <Icon name="eye" />
+                </div>
+                <div>
+                  <div className={styles.action}>
+                    <span className={styles.author}>
+                      {latestDeployment.creator.name || latestDeployment.creator.email}
+                    </span>
+                    {' '}generated a{' '}
+                    <span className={styles.target}>
+                      new preview
+                    </span>
+                  </div>
+                  <div className={styles.timestamp}>
+                    {moment(latestDeployment.creator.timestamp).fromNow()}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.open}>
+                Open <Icon name="external-link" />
+              </div>
+            </div>
+          </MinardLink>
+        )}
       </div>
     </div>
   );
@@ -85,26 +100,29 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   }
 
   // TODO: Make this more efficient
-  const deployments = flatMap<Deployment | FetchError | undefined>(project.branches, branchId => {
+  const latestDeploymentPerBranch = compact(project.branches.map(branchId => {
     const branch = Branches.selectors.getBranch(state, branchId);
 
-    if (!branch || isError(branch)) {
+    if (!branch || isError(branch) || !branch.deployments[0]) {
       return undefined;
     }
 
-    return branch.deployments.map(deploymentId => Deployments.selectors.getDeployment(state, deploymentId));
-  });
+    const latestDeployment = Deployments.selectors.getDeployment(state, branch.deployments[0]);
+
+    if (isError(latestDeployment)) {
+      return undefined;
+    }
+
+    return latestDeployment;
+  }));
 
   let latestDeployment: Deployment | undefined;
-  const loadedDeployments = compact(
-    deployments.map(deploymentOrError => isError(deploymentOrError) ? undefined : deploymentOrError)
-  ) as Deployment[];
-  if (loadedDeployments.length > 0) {
-    latestDeployment = maxBy(loadedDeployments, deployment => deployment.creator.timestamp);
+
+  if (latestDeploymentPerBranch.length > 0) {
+    latestDeployment = maxBy(latestDeploymentPerBranch, deployment => deployment.creator.timestamp);
   }
 
   return {
-    deployments,
     latestDeployment,
   };
 };
