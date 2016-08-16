@@ -41,7 +41,6 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
           <a className={styles['sorting-dropdown']} href="#">Recent <Icon name="caret-down" /></a>
         </SubHeader>
         <ProjectsSection projects={projects} />
-        <div className="divider" />
         <ActivitySection activities={activities} />
       </div>
     );

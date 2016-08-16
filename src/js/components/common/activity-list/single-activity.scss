@@ -2,23 +2,65 @@
   margin-left: 2rem;
 }
 
-.activity::before {
-  content: '\25CF';
-  font-weight: 100;
-  position: absolute;
-  left: -0.8rem;
+.deployment-metadata {
+  display: flex;
+  font-size: 13px;
+  color: #7F8C8D;
+  margin-bottom: 12px;
 }
 
-.metadata {
-  display: flex;
-  font-size: 0.9em;
-  color: darkgray;
+.deployment-metadata-author, .deployment-metadata-deployment,
+.deployment-metadata-branch, .deployment-metadata-project {
+  font-weight: 600;
+}
+
+.deployment-metadata-project {
+  color: #2EBDB1;
 }
 
 .action {
   align-self: flex-start;
 }
 
-.timestamp {
+.share {
   margin-left: auto;
+  font-size: 11px;
+}
+
+.preview-icon {
+  margin-right: 6px;
+}
+
+.activity-content {
+  display: flex;
+}
+
+.avatar {
+  padding-right: 14px;
+}
+
+.avatar-40 {
+  font-size: 16px;
+  height: 40px;
+  width: 40px;
+}
+
+.activity-metadata {
+  font-size: 11px;
+  color: #919D9F;
+}
+
+.author {
+  color: #4A4A4A;
+}
+
+.activity-body {
+  color: #2C3E50;
+  line-height: 2.09;
+}
+
+.commit {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 15px;
+  font-weight: 600;
 }

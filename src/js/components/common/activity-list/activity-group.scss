@@ -1,12 +1,33 @@
-.activityGroup {
-  border-bottom: 1px solid lightgray;
+.activity-group {
+  padding: 30px 36px 28px 42px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+  border-radius: 3px;
+  margin-bottom: 18px;
 }
 
-.activityScreenshot {
-  margin-right: 2rem;
+.activity-group:last-child {
+  margin-bottom: 0;
 }
 
-.activityContent {
-  border-left: 1px solid darkgray;
-  position: relative;
+.timestamp {
+  font-size: 12px;
+  color: #95a5a6;
+}
+
+.screenshot {
+  padding-left: 20px;
+}
+
+.activity-content, .screenshot, .timestamp {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.line {
+  color: #f0f0f0;
+  background-color: #f0f0f0;
+  height: 1px;
+  font-size: 0;
+  border: 0;
 }
