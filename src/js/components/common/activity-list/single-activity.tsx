@@ -27,9 +27,9 @@ interface Props {
 const getAction = (activity: Activity): string => {
   switch (activity.type) {
     case ActivityType.Comment:
-      return 'commented on';
+      return 'commented on a preview';
     case ActivityType.Deployment:
-      return 'generated preview';
+      return 'generated a preview';
     default:
       return 'did an unknown action';
   }
@@ -115,11 +115,7 @@ const getBranchAction = (activity: Activity, branch: Branch, deployment: Deploym
       <span className={styles['deployment-metadata-author']}>
         {getAuthor(activity, deployment)}
       </span>
-      {` ${getAction(activity)} `}
-      <MinardLink className={styles['deployment-metadata-deployment']} deployment={deployment} openInNewWindow>
-        {activity.deployment}
-      </MinardLink>
-      {' in '}
+      {` ${getAction(activity)} in `}
       <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
         {branch.name}
       </MinardLink>
@@ -154,21 +150,23 @@ const SingleActivity = (props: Props) => {
           Share
         </div>
       </div>
-      <div className={styles['activity-content']}>
-        <div className={styles.avatar}>
-          <figure title={creator.name || creator.email} className={classNames(styles['avatar-40'], 'avatar')}>
-            <Gravatar size={80} rating="pg" email={creator.email} https />
-          </figure>
-        </div>
-        <div>
-          <div className={styles['activity-metadata']}>
-            {getActivityMetadata(activity, commit)}
+      <MinardLink deployment={deployment}>
+        <div className={styles['activity-content']}>
+          <div className={styles.avatar}>
+            <figure title={creator.name || creator.email} className={classNames(styles['avatar-40'], 'avatar')}>
+              <Gravatar size={80} rating="pg" email={creator.email} https />
+            </figure>
           </div>
-          <div className={styles['activity-body']}>
-            {getActivityBody(activity, commit)}
+          <div>
+            <div className={styles['activity-metadata']}>
+              {getActivityMetadata(activity, commit)}
+            </div>
+            <div className={styles['activity-body']}>
+              {getActivityBody(activity, commit)}
+            </div>
           </div>
         </div>
-      </div>
+      </MinardLink>
     </div>
   );
 };
