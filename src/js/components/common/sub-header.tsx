@@ -3,10 +3,8 @@ import * as React from 'react';
 
 const styles = require('./sub-header.scss');
 
-type AlignOptions = 'left' | 'center' | 'right';
-
 interface Props {
-  align: AlignOptions;
+  align: 'left' | 'center' | 'right';
 }
 
 const classForAlignment: { [align: string]: string } = {

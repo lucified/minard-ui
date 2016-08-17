@@ -59,16 +59,16 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
   }
 
   return (
-    <div className={classNames('columns', styles['activity-group'])}>
-      <div className={classNames('column', 'col-1', styles.timestamp)}>
+    <div className={classNames('row', styles['activity-group'])}>
+      <div className={classNames('col-xs-1', styles.timestamp)}>
         {moment(activities[0].timestamp).fromNow()}
       </div>
-      <div className={classNames('column', 'col-2', styles.screenshot)}>
+      <div className={classNames('col-xs-2', styles.screenshot)}>
         <MinardLink deployment={deployment} openInNewWindow>
           <img src={screenshot[Math.round(Math.random())] /* TODO */} className={styles.image} />
         </MinardLink>
       </div>
-      <div className={classNames('column', 'col-9', styles['activity-content'])}>
+      <div className={classNames('col-xs-9', styles['activity-content'])}>
         <div>
           <SingleActivity
             activity={activities[0]}
