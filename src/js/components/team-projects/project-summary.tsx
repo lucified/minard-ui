@@ -48,7 +48,12 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
       <div className={styles['card-middle']}>
         <div className={styles.avatars}>
           {project.activeUsers.map(user => // TODO: have an upper range for this
-            <Avatar key={`avatar-${user.email}`} title={user.name || user.email} email={user.email} />
+            <Avatar
+              key={`avatar-${user.email}`}
+              className={styles.avatar}
+              title={user.name || user.email}
+              email={user.email}
+            />
           )}
         </div>
         <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>
