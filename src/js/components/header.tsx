@@ -29,35 +29,37 @@ type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 const Header = ({ errors, clearError, selectedSection }: Props) => (
   <section className={styles['header-background']}>
-    <section className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
-      <div className={classNames(styles['link-container'], 'col-xs')}>
-        <ul className={styles.links}>
-          <li className={classNames(styles.link, { [styles.active]: selectedSection === 'team-projects' })}>
-            <Link to="/">Projects</Link>
-          </li>
-          <li className={styles.link}>
-            <Link to="/">Activity</Link>
-          </li>
-        </ul>
+    <div className="container">
+      <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
+        <div className={classNames(styles['link-container'], 'col-xs')}>
+          <ul className={styles.links}>
+            <li className={classNames(styles.link, { [styles.active]: selectedSection === 'team-projects' })}>
+              <Link to="/">Projects</Link>
+            </li>
+            <li className={styles.link}>
+              <Link to="/">Activity</Link>
+            </li>
+          </ul>
+        </div>
+        <div className={classNames(styles.logo, 'col-xs')}>
+          {errors && errors.length > 0 ? (
+            <div>
+              <button onClick={() => clearError(errors[0])} />
+              <span />
+              {errors[0].prettyError}
+            </div>
+          ) : <h1 title="Minard" className={styles.minard}>m</h1>}
+        </div>
+        <div className={classNames(styles['profile-container'], 'col-xs')}>
+          <a className={styles['team-dropdown']} href="#">
+            Team Lucify <Icon name="caret-down" />
+          </a>
+          <a href="#">
+            <Avatar size="lg" email="ville.saarinen@gmail.com" />
+          </a>
+        </div>
       </div>
-      <div className={classNames(styles.logo, 'col-xs')}>
-        {errors && errors.length > 0 ? (
-          <div>
-            <button onClick={() => clearError(errors[0])} />
-            <span />
-            {errors[0].prettyError}
-          </div>
-        ) : <h1 title="Minard" className={styles.minard}>m</h1>}
-      </div>
-      <div className={classNames(styles['profile-container'], 'col-xs')}>
-        <a className={styles['team-dropdown']} href="#">
-          Team Lucify <Icon name="caret-down" />
-        </a>
-        <a href="#">
-          <Avatar size="lg" email="ville.saarinen@gmail.com" />
-        </a>
-      </div>
-    </section>
+    </div>
   </section>
 );
 
