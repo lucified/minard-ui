@@ -10,6 +10,7 @@ interface Props {
   iconEmail?: string;
   initials?: string;
   title?: string;
+  className?: string;
 }
 
 // Get double the actual size (for retina displays)
@@ -31,12 +32,12 @@ const getRetinaSize = (sizeLabel: string): number => {
   }
 };
 
-const Avatar = ({ size, email, iconEmail, initials, title }: Props) => {
+const Avatar = ({ size, email, iconEmail, initials, title, className }: Props) => {
   const pixelSize = getRetinaSize(size);
 
   if (email) {
     return (
-      <figure title={title} className={classNames(styles.avatar, styles[`avatar-${size}`])}>
+      <figure title={title} className={classNames(className, styles.avatar, styles[`avatar-${size}`])}>
         <Gravatar className={styles['avatar-img']} email={email} rating="pg" https size={pixelSize} />
         {iconEmail &&
           <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" https size={pixelSize * 0.4} />
@@ -45,7 +46,7 @@ const Avatar = ({ size, email, iconEmail, initials, title }: Props) => {
     );
   } else {
     return (
-      <figure title={title} className={classNames(styles.avatar, styles[`avatar-${size}`])} data-initial={initials}>
+      <figure title={title} className={classNames(className, styles.avatar, styles[`avatar-${size}`])} data-initial={initials}>
         {iconEmail &&
           <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" https size={pixelSize * 0.4} />
         }
