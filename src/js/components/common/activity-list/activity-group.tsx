@@ -15,7 +15,10 @@ import MinardLink from '../minard-link';
 import SingleActivity from './single-activity';
 
 const styles = require('./activity-group.scss');
-const screenshot = require('../../../../images/screenshot.png');
+const screenshot = [
+  require('../../../../images/screenshot-1.png'),
+  require('../../../../images/screenshot-2.png'),
+];
 
 interface PassedProps {
   activities: Activity[];
@@ -62,7 +65,7 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
       </div>
       <div className={classNames('column', 'col-2', styles.screenshot)}>
         <MinardLink deployment={deployment} openInNewWindow>
-          <img src={screenshot} className="img-responsive" />
+          <img src={screenshot[Math.round(Math.random())] /* TODO */} className={styles.image} />
         </MinardLink>
       </div>
       <div className={classNames('column', 'col-9', styles['activity-content'])}>

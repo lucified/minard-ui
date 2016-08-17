@@ -9,7 +9,10 @@ import { StateTree } from '../../reducers';
 import CommitSummary from '../common/commit-summary';
 import MinardLink from '../common/minard-link';
 
-const screenshot = require('../../../images/screenshot.png');
+const screenshot = [
+  require('../../../images/screenshot-1.png'),
+  require('../../../images/screenshot-2.png'),
+];
 
 interface PassedProps {
   commit: Commit;
@@ -26,7 +29,7 @@ const getDeploymentScreenshot = (deployment: Deployment) => {
 
   return (
     <MinardLink deployment={deployment} openInNewWindow>
-      <img src={screenshot /* TODO: deployment.screenshot*/} className="img-responsive" />
+      <img src={screenshot[Math.round(Math.random())] /* TODO: deployment.screenshot*/} />
     </MinardLink>
   );
 };
