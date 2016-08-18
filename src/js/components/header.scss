@@ -20,10 +20,11 @@
 }
 
 .link {
+  box-sizing: border-box;
   list-style: none;
-  margin: 0 32px 0 0;
+  margin: 0 36px 0 0;
   padding: 0;
-  height: 40px;
+  height: 44px;
 }
 
 .link:last-child {
