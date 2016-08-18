@@ -47,7 +47,7 @@ class ProjectBranches extends React.Component<Props, any> {
 
     return (
       <div>
-        <SectionTitle>Branches</SectionTitle>
+        <SectionTitle><span>Branches</span></SectionTitle>
         {(branches.length === 0) ? this.getEmptyContent() : (
           <div className="columns">
             <div className="column col-1" />

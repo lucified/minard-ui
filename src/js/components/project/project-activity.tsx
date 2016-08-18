@@ -26,7 +26,7 @@ class ProjectActivity extends React.Component<Props, any> {
 
     return (
       <div>
-        <SectionTitle>Activity</SectionTitle>
+        <SectionTitle><span>Activity</span></SectionTitle>
         {(activities.length === 0) ? this.getEmptyContent() : (
           <div className="columns">
             <div className="column col-1" />

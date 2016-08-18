@@ -37,7 +37,7 @@ interface Props {
 
 const CommitList = ({ commits }: Props) => (
   <div>
-    <SectionTitle>Branches</SectionTitle>
+    <SectionTitle><span>Branches</span></SectionTitle>
     {(commits.length === 0) ? getEmptyContent() : (
       <div className="columns">
         <div className="column col-2" />
