@@ -10,29 +10,21 @@ interface Props {
   activities: Activity[];
 }
 
-class ActivitySection extends React.Component<Props, any> {
-  private getEmptyContent() {
-    return (
-      <div className="empty">
-        <Icon name="code-fork" fixedWidth size="3x" />
-        <p className="empty-title">Nothing has happened in your projects!</p>
-        <p className="empty-meta">Commit some code to get things started.</p>
-      </div>
-    );
-  }
+const getEmptyContent = () => (
+  <div className="empty">
+    <Icon name="code-fork" fixedWidth size="3x" />
+    <p className="empty-title">Nothing has happened in your projects!</p>
+    <p className="empty-meta">Commit some code to get things started.</p>
+  </div>
+);
 
-  public render() {
-    const { activities } = this.props;
-
-    return (
-      <section className="container">
-        <SectionTitle><span>Activity</span></SectionTitle>
-        {(activities.length === 0) ? this.getEmptyContent() :
-          <ActivityList activities={activities} showProjectName={true} />
-        }
-      </section>
-    );
-  }
-}
+const ActivitySection = ({ activities }: Props) => (
+  <section className="container">
+    <SectionTitle><span>Activity</span></SectionTitle>
+    {(activities.length === 0) ? getEmptyContent() :
+      <ActivityList activities={activities} showProjectName />
+    }
+  </section>
+);
 
 export default ActivitySection;
