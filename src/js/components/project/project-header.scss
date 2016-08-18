@@ -1,6 +1,32 @@
 .title {
-  font-size: 2.4rem;
-  color: inherit;
-  font-weight: 300;
-  line-height: 1.1;
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -0.9px;
+  color: #2c3e50;
+}
+
+.description {
+  font-size: 21px;
+  line-height: 1.62;
+  color: #2c3e50;
+}
+
+.settings {
+  position: relative;
+  top: 48px;
+  font-size: 14px;
+  color: #95a5a6;
+}
+
+.avatars {
+  position: relative;
+  top: -16px;
+}
+
+.avatar {
+  margin-left: 6px;
+}
+
+.avatar:first-child {
+  margin-left: 0;
 }
