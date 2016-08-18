@@ -1,22 +1,24 @@
 .pile {
   position: relative;
-  width: 234px;
-  height: 148px;
+  width: 138px;
+  height: 115px;
   text-align: center;
 }
 
 .empty {
-  width: 220px;
-  height: 140px;
-  padding: 5rem;
-  border: 1px black solid;
+  padding: 25px 0;
 }
 
 .screenshot {
+  width: 120px;
+  height: 100px;
   position: absolute;
   display: block;
   height: auto;
   max-width: 90%;
+  object-fit: contain;
+  border-radius: 1px;
+  border: solid 1px #d8d8d8;
 }
 
 .screenshot-0 {
