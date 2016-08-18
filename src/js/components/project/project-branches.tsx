@@ -8,66 +8,50 @@ import SectionTitle from '../common/section-title';
 import BranchSummary from './branch-summary';
 
 interface Props {
-  branches: (Branch | FetchError)[];
+  branches: (Branch | FetchError | undefined)[];
 }
 
-class ProjectBranches extends React.Component<Props, any> {
-  private getEmptyContent() {
-    return (
-      <div className="empty">
-        <Icon name="exclamation" fixedWidth size="3x" />
-        <p className="empty-title">No branches</p>
-        <p className="empty-meta">Is your repository set up correctly?</p>
-      </div>
-    );
-  }
+const getEmptyContent = () => (
+  <div className="empty">
+    <Icon name="exclamation" fixedWidth size="3x" />
+    <p className="empty-title">No branches</p>
+    <p className="empty-meta">Is your repository set up correctly?</p>
+  </div>
+);
 
-  private getLoadingContent(key: number) {
-    return (
-      <div key={key} className="empty">
-        <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-        <p className="empty-title">Loading branch</p>
-        <p className="empty-meta">Hold on a sec…</p>
-      </div>
-    );
-  }
+const getLoadingContent = (key: number) => (
+  <div key={key} className="empty">
+    <Icon name="circle-o-notch" spin fixedWidth size="3x" />
+    <p className="empty-title">Loading branch</p>
+    <p className="empty-meta">Hold on a sec…</p>
+  </div>
+);
 
-  private getErrorMessage(branch: FetchError) {
-    return (
-      <div key={branch.id!} className="empty">
-        <Icon name="exclamation" fixedWidth size="3x" />
-        <p className="empty-title">Uhhoh. Unable to get branch information</p>
-        <p className="empty-meta">{branch.prettyError}</p>
-      </div>
-    );
-  }
+const getErrorMessage = (branch: FetchError) => (
+  <div key={branch.id!} className="empty">
+    <Icon name="exclamation" fixedWidth size="3x" />
+    <p className="empty-title">Uhhoh. Unable to get branch information</p>
+    <p className="empty-meta">{branch.prettyError}</p>
+  </div>
+);
 
-  public render() {
-    const { branches } = this.props;
+const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
+  return branches.map((branch, i) => {
+    if (!branch) {
+      return getLoadingContent(i);
+    } else if (isError(branch)) {
+      return getErrorMessage(branch);
+    }
 
-    return (
-      <div>
-        <SectionTitle><span>Branches</span></SectionTitle>
-        {(branches.length === 0) ? this.getEmptyContent() : (
-          <div className="columns">
-            <div className="column col-1" />
-            <div className="column col-10">
-              {branches.map((branch, i) => {
-                if (!branch) {
-                  return this.getLoadingContent(i);
-                } else if (isError(branch)) {
-                  return this.getErrorMessage(branch);
-                }
-
-                return <BranchSummary key={branch.id} branch={branch} />;
-              })}
-            </div>
-            <div className="column col-1" />
-          </div>
-        )}
-      </div>
-    );
-  }
+    return <BranchSummary key={branch.id} branch={branch} />;
+  });
 };
+
+const ProjectBranches = ({ branches }: Props) => (
+  <section className="container">
+    <SectionTitle><span>Branches</span></SectionTitle>
+    {(branches.length === 0) ? getEmptyContent() : getBranches(branches)}
+  </section>
+);
 
 export default ProjectBranches;
