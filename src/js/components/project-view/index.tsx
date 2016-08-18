@@ -14,7 +14,7 @@ import ProjectActivity from './project-activity';
 import ProjectBranches from './project-branches';
 import ProjectHeader from './project-header';
 
-const styles = require('./project-view.scss');
+const styles = require('./index.scss');
 
 interface PassedProps {
   params: {

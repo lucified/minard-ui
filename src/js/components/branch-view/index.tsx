@@ -13,7 +13,7 @@ import SubHeader from '../common/sub-header';
 import BranchHeader from './branch-header';
 import CommitList from './commit-list';
 
-const styles = require('./branch-view.scss');
+const styles = require('./index.scss');
 
 interface PassedProps {
   params: {
