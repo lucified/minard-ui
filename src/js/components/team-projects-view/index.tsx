@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
 import { FetchError } from '../../modules/errors';
+import Loading from '../../modules/loading';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import LoadingIcon from '../common/loading-icon';
 import SubHeader from '../common/sub-header';
 import ActivitySection from './activity-section';
 import ProjectsSection from './projects-section';
@@ -16,6 +18,8 @@ const styles = require('./index.scss');
 interface GeneratedStateProps {
   activities: Activity[];
   projects: (Project | FetchError)[];
+  isLoadingProjects: boolean;
+  isLoadingAllActivities: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -32,7 +36,16 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
   }
 
   public render() {
-    const { projects, activities } = this.props;
+    const { projects, activities, isLoadingAllActivities, isLoadingProjects } = this.props;
+
+    if (isLoadingProjects && projects.length === 0) {
+      return (
+        <div>
+          <SubHeader align="center" />
+          <LoadingIcon className={styles.loading} center />
+        </div>
+      );
+    }
 
     return (
       <div>
@@ -41,7 +54,7 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
           <a className={styles['sorting-dropdown']} href="#">Recent <Icon name="caret-down" /></a>
         </SubHeader>
         <ProjectsSection projects={projects} />
-        <ActivitySection activities={activities} />
+        <ActivitySection activities={activities} isLoading={isLoadingAllActivities} />
       </div>
     );
   }
@@ -50,6 +63,8 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   projects: Projects.selectors.getProjects(state),
   activities: Activities.selectors.getActivities(state),
+  isLoadingProjects: Loading.selectors.isLoadingAllProjects(state),
+  isLoadingAllActivities: Loading.selectors.isLoadingAllActivities(state),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(

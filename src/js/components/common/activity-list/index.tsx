@@ -1,13 +1,25 @@
 import * as React from 'react';
+import * as Icon from 'react-fontawesome';
 
 import { Activity } from '../../../modules/activities';
 
-import ActivityGroup from './activity-group';
+import ActivityGroup, { LoadingActivityGroup } from './activity-group';
 
 interface Props {
   activities: Activity[];
   showProjectName?: boolean;
+  isLoading?: boolean;
+  emptyContentHeader: string;
+  emptyContentBody: string;
 }
+
+const getEmptyContent = (header: string, body: string) => (
+  <div className="empty">
+    <Icon name="code-fork" fixedWidth size="3x" />
+    <p className="empty-title">{header}</p>
+    <p className="empty-meta">{body}</p>
+  </div>
+);
 
 // Group activities by subsequent actions to the same deployment.
 const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
@@ -26,7 +38,15 @@ const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
   return groupedActivities;
 };
 
-const ActivityList = ({ activities, showProjectName }: Props) => {
+const ActivityList = ({ activities, emptyContentHeader, emptyContentBody, showProjectName, isLoading }: Props) => {
+  if (activities.length === 0) {
+    if (isLoading) {
+      return <LoadingActivityGroup />;
+    }
+
+    return getEmptyContent(emptyContentHeader, emptyContentBody);
+  }
+
   const groupedActivities = generateDeploymentGroups(activities);
 
   return (
