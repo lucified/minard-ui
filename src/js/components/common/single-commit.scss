@@ -1,0 +1,32 @@
+.commit-content {
+  display: flex;
+}
+
+.avatar {
+  padding-right: 14px;
+}
+
+.commit-metadata {
+  font-size: 11px;
+  color: #919D9F;
+}
+
+.author {
+  color: #4A4A4A;
+}
+
+.commit-body {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 15px;
+  color: #2C3E50;
+}
+
+.message {
+  line-height: 2.09;
+  font-weight: 600;
+}
+
+.description {
+  line-height: 1.53;
+  font-size: 12px;
+}

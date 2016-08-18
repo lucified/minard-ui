@@ -5,7 +5,7 @@ import { Commit } from '../../modules/commits';
 import { FetchError, isError } from '../../modules/errors';
 
 import SectionTitle from '../common/section-title';
-import SingleCommit from './single-commit';
+import CommitRow from './commit-row';
 
 const getEmptyContent = () => (
   <div className="empty">
@@ -49,7 +49,7 @@ const CommitList = ({ commits }: Props) => (
               return getErrorContent(commit);
             }
 
-            return <SingleCommit key={i} commit={commit} />;
+            return <CommitRow key={commit.hash} commit={commit} />;
           })}
         </div>
         <div className="column col-2" />
