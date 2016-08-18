@@ -24,7 +24,7 @@ const getScreenshot = (deployment: Deployment | FetchError | undefined, i: numbe
     );
   }
 
-  if (isError(deployment)) {
+  if (isError(deployment) || deployment.status === 'failed') {
     return (
       <div key={i} className={classNames(styles.screenshot, styles[`screenshot-${i}`], styles.empty)}>
         <Icon name="exclamation" fixedWidth size="3x" />
