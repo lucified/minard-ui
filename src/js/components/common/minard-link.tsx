@@ -19,7 +19,7 @@ class MinardLink extends React.Component<Props, any> {
   public render() {
     const { children, deployment, branch, homepage, project, openInNewWindow } = this.props;
     const target = openInNewWindow ? '_blank' : '_self';
-    let path = '/';
+    let path: string;
 
     if (deployment) {
       // path = `/deployment/${deployment.id}`;
@@ -46,6 +46,7 @@ class MinardLink extends React.Component<Props, any> {
       path = '/projects';
     } else {
       console.log('Error: no link handler found');
+      return <span>{children}</span>;
     }
 
     return (
