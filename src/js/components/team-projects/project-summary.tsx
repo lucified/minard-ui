@@ -53,6 +53,7 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
               className={styles.avatar}
               title={user.name || user.email}
               email={user.email}
+              shadow
             />
           )}
         </div>
