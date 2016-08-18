@@ -25,18 +25,12 @@ class ActivitySection extends React.Component<Props, any> {
     const { activities } = this.props;
 
     return (
-      <div>
+      <section className="container">
         <SectionTitle><span>Activity</span></SectionTitle>
-        {(activities.length === 0) ? this.getEmptyContent() : (
-          <div className="columns">
-            <div className="column col-1" />
-            <div className="column col-10">
-              <ActivityList activities={activities} showProjectName={true} />
-            </div>
-            <div className="column col-1" />
-          </div>
-        )}
-      </div>
+        {(activities.length === 0) ? this.getEmptyContent() :
+          <ActivityList activities={activities} showProjectName={true} />
+        }
+      </section>
     );
   }
 }

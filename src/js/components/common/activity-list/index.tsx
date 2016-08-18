@@ -30,11 +30,11 @@ const ActivityList = ({ activities, showProjectName }: Props) => {
   const groupedActivities = generateDeploymentGroups(activities);
 
   return (
-    <section className="container grid-1200">
+    <div>
       {groupedActivities.map((activityGroup, i) => // TODO: key should be a bit smarter
         <ActivityGroup key={i} activities={activityGroup} showProjectName={showProjectName} />
       )}
-    </section>
+    </div>
   );
 };
 

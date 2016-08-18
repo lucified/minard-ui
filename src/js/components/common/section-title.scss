@@ -1,5 +1,4 @@
 .section-title {
-  align-items: center;
   height: 140px;
 }
 
@@ -48,4 +47,8 @@
   top: 71px;
   position: relative;
   z-index: -1;
+
+  @media only screen and (max-width: 48em) {
+    display: none;
+  }
 }

@@ -7,6 +7,7 @@
   font-size: 13px;
   color: #7F8C8D;
   margin-bottom: 12px;
+  line-height: 1.92;
 }
 
 .deployment-metadata-author, .deployment-metadata-branch, .deployment-metadata-project {
@@ -36,12 +37,6 @@
 
 .avatar {
   padding-right: 14px;
-}
-
-.avatar-40 {
-  font-size: 16px;
-  height: 40px;
-  width: 40px;
 }
 
 .activity-metadata {

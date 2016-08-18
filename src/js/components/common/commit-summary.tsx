@@ -1,12 +1,12 @@
 import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
-import * as Gravatar from 'react-gravatar';
 
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 import { FetchError, isError } from '../../modules/errors';
 
+import Avatar from './avatar';
 import MinardLink from './minard-link';
 
 const styles = require('./commit-summary.scss');
@@ -27,16 +27,12 @@ const CommitSummary = ({ commit, deployment }: Props) => {
   }
 
   const { author, committer } = commit;
+  const secondaryAvatarEmail = (committer.email !== author.email) && committer.email;
 
   const content = (
     <div className="container flex">
       <div className={styles.avatarBox}>
-        <figure title={author.name || author.email} className="avatar avatar-lg">
-          <Gravatar rating="pg" email={author.email} https />
-          {committer.email !== author.email &&
-            <Gravatar rating="pg" email={committer.email} className="avatar-icon" https />
-          }
-        </figure>
+        <Avatar title={author.name || author.email} size="lg" email={author.email} iconEmail={secondaryAvatarEmail} />
       </div>
       <div className={styles.commitContent}>
         <div className="flex">

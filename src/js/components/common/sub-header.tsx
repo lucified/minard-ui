@@ -7,15 +7,25 @@ interface Props {
   align: 'left' | 'center' | 'right';
 }
 
+const classForAlignment: { [align: string]: string } = {
+  left: 'start-xs',
+  center: 'center-xs',
+  right: 'end-xs',
+};
+
 class SubHeader extends React.Component<Props, any> {
   public render() {
+    const { align, children } = this.props;
+
     return (
-      <section className={styles['sub-header-background']}>
-        <section className={classNames('container', 'grid-1200')}>
-          <section className={classNames(styles['sub-header'], styles[this.props.align])}>
-            {this.props.children}
-          </section>
-        </section>
+      <section className={classNames(styles['sub-header-background'])}>
+        <div className="container">
+          <div className="row">
+            <div className={classNames(styles['sub-header'], classForAlignment[align], 'col-xs-12')}>
+              {children}
+            </div>
+          </div>
+        </div>
       </section>
     );
   }

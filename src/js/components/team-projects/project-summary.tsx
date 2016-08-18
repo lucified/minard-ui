@@ -1,9 +1,7 @@
-import * as classNames from 'classnames';
 import { compact, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
-import * as Gravatar from 'react-gravatar';
 import { connect } from 'react-redux';
 
 import Branches from '../../modules/branches';
@@ -12,10 +10,14 @@ import { FetchError, isError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import Avatar from '../common/avatar';
 import MinardLink from '../common/minard-link';
 
 const styles = require('./project-summary.scss');
-const screenshot = require('../../../images/screenshot.png');
+const screenshot = [
+  require('../../../images/screenshot-1.png'),
+  require('../../../images/screenshot-2.png'),
+];
 
 interface PassedProps {
   project: Project | FetchError;
@@ -40,19 +42,18 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
     <div className={styles.card}>
       <div className={styles['card-top']}>
         <MinardLink project={project}>
-          <img src={screenshot} className={styles.screenshot} />
+          <img src={screenshot[Math.round(Math.random())] /* TODO */} className={styles.screenshot} />
         </MinardLink>
       </div>
       <div className={styles['card-middle']}>
         <div className={styles.avatars}>
           {project.activeUsers.map(user => // TODO: have an upper range for this
-            <figure
+            <Avatar
               key={`avatar-${user.email}`}
+              className={styles.avatar}
               title={user.name || user.email}
-              className={classNames('avatar', styles.avatar)}
-            >
-              <Gravatar className={styles['avatar-shadow']} rating="pg" email={user.email} size={72} https />
-            </figure>
+              email={user.email}
+            />
           )}
         </div>
         <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>

@@ -50,16 +50,16 @@ const SectionTitle = ({ children, leftContent, rightContent }: Props) => {
   }
 
   return (
-    <section className="container grid-1200">
+    <section>
       <hr className={styles.line} />
-      <div className={classNames(styles['section-title'], 'columns', 'col-gapless')}>
-        <div className={classNames(styles.left, 'column', 'col-3')}>
+      <div className={classNames(styles['section-title'], 'row', 'middle-xs', 'between-xs')}>
+        <div className={classNames(styles.left, 'col-xs-6', 'col-sm-3', 'first-sm')}>
           { leftContentWithBackgroundColor }
         </div>
-        <div className={classNames(styles.title, 'column', 'col-6')}>
+        <div className={classNames(styles.title, 'col-xs-12', 'col-sm-6', 'first-xs')}>
           { childrenWithBackgroundColor }
         </div>
-        <div className={classNames(styles.right, 'column', 'col-3')}>
+        <div className={classNames(styles.right, 'col-xs-6', 'col-sm-3')}>
           { rightContentWithBackgroundColor }
         </div>
       </div>
