@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -40,7 +41,7 @@ const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
       <div className="col-xs-2 end-xs">
         {getDeploymentScreenshot(deployment)}
       </div>
-      <div className="col-xs-10">
+      <div className={classNames(styles['commit-container'], 'col-xs-10')}>
         <SingleCommit className={styles.commit} commit={commit} />
       </div>
     </div>

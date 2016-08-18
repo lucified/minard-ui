@@ -5,9 +5,14 @@
   padding-top: 15px;
 }
 
+.commit-container {
+  display: flex;
+  align-content: stretch;
+}
+
 .commit {
-  height: 100%;
   padding: 20px 0;
   margin-left: 30px;
   border-bottom: 1px #f0f0f0 solid;
+  flex: 1;
 }
