@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 
 import { Activity } from '../../modules/activities';
 
@@ -8,22 +7,18 @@ import SectionTitle from '../common/section-title';
 
 interface Props {
   activities: Activity[];
+  isLoading: boolean;
 }
 
-const getEmptyContent = () => (
-  <div className="empty">
-    <Icon name="code-fork" fixedWidth size="3x" />
-    <p className="empty-title">Nothing has happened in your project!</p>
-    <p className="empty-meta">Commit some code to get things started.</p>
-  </div>
-);
-
-const ProjectActivity = ({ activities }: Props) => (
+const ProjectActivity = ({ activities, isLoading }: Props) => (
   <section className="container">
     <SectionTitle><span>Activity</span></SectionTitle>
-    {(activities.length === 0) ? getEmptyContent() :
-      <ActivityList activities={activities} />
-    }
+    <ActivityList
+      activities={activities}
+      emptyContentHeader="Nothing has happened in your project!"
+      emptyContentBody="Commit some code to get things started."
+      isLoading={isLoading}
+    />
   </section>
 );
 
