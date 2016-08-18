@@ -1,7 +1,13 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { Branch } from '../../modules/branches';
 import { Project } from '../../modules/projects';
+
+import MinardLink from '../common/minard-link';
+import SectionTitle from '../common/section-title';
+
+const styles = require('./branch-header.scss');
 
 interface Props {
   branch: Branch;
@@ -9,17 +15,27 @@ interface Props {
 }
 
 const BranchHeader = ({ branch, project }: Props) => (
-  <div className="columns">
-    <div className="column col-4">
-
+  <section className="container">
+    <SectionTitle
+        rightContent={(
+          <a href="#" className={styles['delete-branch-link']}>
+            Delete branch
+          </a>
+        )}
+    >
+      <span className={styles.title}>
+        <MinardLink project={project}>
+          <span className={styles.project}>{project.name}</span>
+        </MinardLink>
+        {` / ${branch.name}`}
+      </span>
+    </SectionTitle>
+    <div className="row">
+      <div className={classNames(styles.description, 'col-xs-12', 'center-xs')}>
+        {branch.description}
+      </div>
     </div>
-    <div className="column col-6">
-      <p>{branch.description}</p>
-    </div>
-    <div className="column col-2 text-right">
-      <a href="#">Delete branch</a>
-    </div>
-  </div>
+  </section>
 );
 
 export default BranchHeader;
