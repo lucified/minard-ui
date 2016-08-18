@@ -16,7 +16,7 @@ const styles = require('./comment-activity.scss');
 interface Props {
   activity: Activity;
   branch: Branch;
-  showProjectName: boolean;
+  showProjectName?: boolean;
   deployment: Deployment;
   project: Project | FetchError;
   comment?: any; // TODO

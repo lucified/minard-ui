@@ -22,7 +22,7 @@ const screenshot = [
 
 interface PassedProps {
   activities: Activity[];
-  showProjectName: boolean;
+  showProjectName?: boolean;
 }
 
 interface GeneratedProps {

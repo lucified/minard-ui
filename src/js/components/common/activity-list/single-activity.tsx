@@ -13,7 +13,7 @@ import DeploymentActivity from './deployment-activity';
 interface Props {
   activity: Activity;
   branch: Branch;
-  showProjectName: boolean;
+  showProjectName?: boolean;
   deployment: Deployment;
   project: Project | FetchError;
   commit?: Commit | FetchError;
