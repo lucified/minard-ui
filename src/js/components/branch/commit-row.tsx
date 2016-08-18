@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 
 import { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
-import { isError } from '../../modules/errors';
+import { FetchError, isError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
 import MinardLink from '../common/minard-link';
 import SingleCommit from '../common/single-commit';
+
+const styles = require('./commit-row.scss');
 
 const screenshot = [
   require('../../../images/screenshot-1.png'),
@@ -15,7 +17,7 @@ const screenshot = [
 ];
 
 interface PassedProps {
-  commit: Commit;
+  commit?: Commit | FetchError;
 }
 
 interface GeneratedProps {
@@ -28,27 +30,33 @@ const getDeploymentScreenshot = (deployment: Deployment) => {
   }
 
   return (
-    <MinardLink deployment={deployment} openInNewWindow>
-      <img src={screenshot[Math.round(Math.random())] /* TODO: deployment.screenshot*/} />
-    </MinardLink>
+    <img className={styles.screenshot} src={screenshot[Math.round(Math.random())] /* TODO: deployment.screenshot*/} />
   );
 };
 
-const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
-  <div className="columns">
-    <div className="column col-3">
-      {getDeploymentScreenshot(deployment)}
+const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
+  const content = (
+    <div className="row">
+      <div className="col-xs-2 end-xs">
+        {getDeploymentScreenshot(deployment)}
+      </div>
+      <div className="col-xs-10">
+        <SingleCommit className={styles.commit} commit={commit} />
+      </div>
     </div>
-    <div className="column col-9">
-      <SingleCommit commit={commit} />
-    </div>
-  </div>
-);
+  );
+
+  if (deployment) {
+    return <MinardLink deployment={deployment} openInNewWindow>{content}</MinardLink>;
+  }
+
+  return content;
+};
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { commit } = ownProps;
 
-  if (commit.deployment) {
+  if (commit && !isError(commit) && commit.deployment) {
     let deploymentOrError = Deployments.selectors.getDeployment(state, commit.deployment);
 
     return {

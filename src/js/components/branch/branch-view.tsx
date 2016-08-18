@@ -94,7 +94,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const { projectId, id } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, id);
-  let commits: (Commit | FetchError)[] | undefined;
+  let commits: (Commit | FetchError | undefined)[] | undefined;
 
   if (branch && !isError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));

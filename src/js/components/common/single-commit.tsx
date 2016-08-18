@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 
@@ -9,10 +10,11 @@ import Avatar from './avatar';
 const styles = require('./single-commit.scss');
 
 interface Props {
-  commit: Commit | FetchError;
+  commit?: Commit | FetchError;
+  className?: string;
 }
 
-const SingleCommit = ({ commit }: Props) => {
+const SingleCommit = ({ commit, className }: Props) => {
   if (!commit) {
     return <span>'Loading...'</span>;
   }
@@ -25,7 +27,7 @@ const SingleCommit = ({ commit }: Props) => {
   const otherAuthorEmail = author.email !== committer.email ? committer.email : undefined;
 
   return (
-    <div className={styles['commit-content']}>
+    <div className={classNames(styles['commit-content'], className)}>
       <div className={styles.avatar}>
         <Avatar title={author.name || author.email} size="40" email={author.email} iconEmail={otherAuthorEmail} />
       </div>

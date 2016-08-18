@@ -1,11 +1,13 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
 import { Commit } from '../../modules/commits';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError } from '../../modules/errors';
 
-import SectionTitle from '../common/section-title';
 import CommitRow from './commit-row';
+
+const styles = require('./commit-list.scss');
 
 const getEmptyContent = () => (
   <div className="empty">
@@ -15,47 +17,17 @@ const getEmptyContent = () => (
   </div>
 );
 
-const getLoadingContent = (key: number) => (
-  <div key={key} className="empty">
-    <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-    <p className="empty-title">Loading commit</p>
-    <p className="empty-meta">Hold on a sec…</p>
-  </div>
-);
-
-const getErrorContent = (commit: FetchError) => (
-  <div key={commit.id!} className="empty">
-    <Icon name="exclamation" fixedWidth size="3x" />
-    <p className="empty-title">Error :(</p>
-    <p className="empty-meta">{commit.prettyError}</p>
-  </div>
-);
-
 interface Props {
-  commits: (Commit | FetchError)[];
+  commits: (Commit | FetchError | undefined)[];
 }
 
 const CommitList = ({ commits }: Props) => (
-  <div>
-    <SectionTitle><span>Branches</span></SectionTitle>
-    {(commits.length === 0) ? getEmptyContent() : (
-      <div className="columns">
-        <div className="column col-2" />
-        <div className="column col-8">
-          {commits.map((commit, i) => {
-            if (!commit) {
-              return getLoadingContent(i);
-            } else if (isError(commit)) {
-              return getErrorContent(commit);
-            }
-
-            return <CommitRow key={commit.hash} commit={commit} />;
-          })}
-        </div>
-        <div className="column col-2" />
-      </div>
-    )}
-  </div>
+  <section className={classNames(styles['commit-list'], 'container')}>
+    {(commits.length === 0) ?
+      getEmptyContent() :
+      commits.map((commit, i) => <CommitRow key={i} commit={commit} />)
+    }
+  </section>
 );
 
 export default CommitList;
