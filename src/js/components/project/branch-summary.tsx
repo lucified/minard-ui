@@ -37,15 +37,7 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
   } else {
     const latestDeployment = deployments[0];
 
-    if (!latestDeployedCommit) {
-      commitContent = (
-        <div className="empty">
-          <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-          <p className="empty-title">Loading deployment</p>
-          <p className="empty-meta">Hold on a sec…</p>
-        </div>
-      );
-    } else if (isError(latestDeployment)) {
+    if (isError(latestDeployment)) {
       commitContent = (
         <div className="empty">
           <Icon name="exclamation" fixedWidth size="3x" />
