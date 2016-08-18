@@ -31,7 +31,9 @@ class ProjectHeader extends React.Component<Props, any> {
             <p className={styles.description}>{project.description}</p>
           </div>
           <div className="col-sm-2 col-xs-12 end-sm center-xs">
-            <a className={styles.settings} href="#"><Icon name="gear" /> Project settings</a>
+            <a className={styles.settings} href="#">
+              <Icon className={styles.icon} name="gear" /> Project settings
+            </a>
           </div>
         </div>
       </section>
