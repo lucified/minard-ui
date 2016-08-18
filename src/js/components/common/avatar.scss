@@ -62,12 +62,13 @@
 
 .avatar-icon {
   background: #fff;
+  border-radius: 50%;
   bottom: -.2em;
-  height: 50%;
+  height: 40%;
   padding: 5%;
   position: absolute;
   right: -.2em;
-  width: 50%;
+  width: 40%;
 }
 
 .avatar[data-initial] {
