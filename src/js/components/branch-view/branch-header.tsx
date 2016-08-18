@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as Icon from 'react-fontawesome';
 
 import { Branch } from '../../modules/branches';
 import { Project } from '../../modules/projects';
@@ -19,7 +20,7 @@ const BranchHeader = ({ branch, project }: Props) => (
     <SectionTitle
         rightContent={(
           <a href="#" className={styles['delete-branch-link']}>
-            Delete branch
+            <Icon className={styles.icon} name="trash-o" /> Delete branch
           </a>
         )}
     >
