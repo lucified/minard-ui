@@ -44,7 +44,7 @@ const DeploymentActivity = (props: Props) => {
     <div className={styles.activity}>
       <div className={styles['deployment-metadata']}>
         <div className={styles.action}>
-          <Icon className={styles['preview-icon']} name="eye" />
+          <Icon className={styles.icon} name="eye" />
           <span>
             <span className={styles['deployment-metadata-author']}>
               {deployment.creator.name || deployment.creator.email}

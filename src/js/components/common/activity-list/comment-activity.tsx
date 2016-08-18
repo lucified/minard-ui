@@ -74,7 +74,7 @@ const CommentActivity = (props: Props) => {
     <div className={styles.activity}>
       <div className={styles['deployment-metadata']}>
         <div className={styles.action}>
-          <Icon className={styles['preview-icon']} name="comment-o" />
+          <Icon className={styles.icon} name="comment-o" />
           <span>
             <span className={styles['deployment-metadata-author']}>
               {'Foo bar' /* TODO */}
