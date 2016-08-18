@@ -1,4 +1,3 @@
-import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 

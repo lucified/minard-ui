@@ -51,7 +51,6 @@ const getCommentBody = (activity: Activity, comment?: any): JSX.Element => {
   return null; // TODO
 };
 
-
 const getProjectLabel = (project?: Project | FetchError) => {
   if (!project || isError(project)) {
     return null;
