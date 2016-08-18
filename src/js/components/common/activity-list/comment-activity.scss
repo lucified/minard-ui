@@ -1,0 +1,54 @@
+.activity {
+  margin-left: 2rem;
+}
+
+.deployment-metadata {
+  display: flex;
+  font-size: 13px;
+  color: #7F8C8D;
+  margin-bottom: 12px;
+  line-height: 1.92;
+}
+
+.deployment-metadata-author, .deployment-metadata-branch, .deployment-metadata-project {
+  font-weight: 600;
+}
+
+.deployment-metadata-project {
+  color: #2EBDB1;
+}
+
+.action {
+  align-self: flex-start;
+}
+
+.share {
+  margin-left: auto;
+  font-size: 11px;
+}
+
+.icon {
+  margin-right: 6px;
+}
+
+.activity-content {
+  display: flex;
+}
+
+.avatar {
+  padding-right: 14px;
+}
+
+.activity-metadata {
+  font-size: 11px;
+  color: #919D9F;
+}
+
+.author {
+  color: #4A4A4A;
+}
+
+.activity-body {
+  color: #2C3E50;
+  line-height: 2.09;
+}

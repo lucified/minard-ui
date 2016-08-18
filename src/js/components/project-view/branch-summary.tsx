@@ -9,9 +9,9 @@ import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
-import CommitSummary from '../common/commit-summary';
 import MinardLink from '../common/minard-link';
 import ScreenshotPile from '../common/screenshot-pile';
+import SingleCommit from '../common/single-commit';
 
 const styles = require('./branch-summary.scss');
 
@@ -25,58 +25,52 @@ interface GeneratedProps {
 }
 
 const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProps & GeneratedProps) => {
-  let cardContent: JSX.Element;
+  let commitContent: JSX.Element;
 
-  if (branch.deployments.length > 0) {
-    const latestDeployment = deployments[0];
-
-    if (latestDeployedCommit) {
-      if (isError(latestDeployment)) {
-        cardContent = (
-          <div className="empty">
-            <Icon name="exclamation" fixedWidth size="3x" />
-            <p className="empty-title">Error loading deployment</p>
-            <p className="empty-meta">{latestDeployment.prettyError}</p>
-          </div>
-        );
-      } else {
-        cardContent = <CommitSummary commit={latestDeployedCommit} deployment={latestDeployment} />;
-      }
-    } else {
-      cardContent = (
-        <div className="empty">
-          <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-          <p className="empty-title">Loading deployment</p>
-          <p className="empty-meta">Hold on a sec…</p>
-        </div>
-      );
-    }
-  } else {
-    cardContent = (
+  if (branch.deployments.length === 0) {
+    commitContent = (
       <div className="card-header">
         <h4 className="card-title">No previews available</h4>
         <h6 className="card-meta">Make some commits to {branch.name} generate previews</h6>
       </div>
     );
+  } else {
+    const latestDeployment = deployments[0];
+
+    if (isError(latestDeployment)) {
+      commitContent = (
+        <div className="empty">
+          <Icon name="exclamation" fixedWidth size="3x" />
+          <p className="empty-title">Error loading deployment</p>
+          <p className="empty-meta">{latestDeployment.prettyError}</p>
+        </div>
+      );
+    } else {
+      commitContent = (
+        <MinardLink deployment={latestDeployment}>
+          <SingleCommit commit={latestDeployedCommit} />
+        </MinardLink>
+      );
+    }
   }
 
   return (
-    <div className={classNames('columns', styles.branch)}>
-      <div className="column col-3">
+    <div className={classNames('row', styles.branch)}>
+      <div className={classNames('col-xs-2', styles.screenshots)}>
         <MinardLink branch={branch}>
           <ScreenshotPile deployments={deployments} />
         </MinardLink>
       </div>
-      <div className="column col-9">
+      <div className={classNames('col-xs-10', styles['activity-content'])}>
         <MinardLink branch={branch}>
           <div className={styles.header}>
-            <h4 className={styles.title}>{branch.name}</h4>
-            <h6 className={styles.description}>{branch.description}</h6>
+            <div className={styles.title}>{branch.name}</div>
+            {/* TODO: add comments, build status/failure */}
           </div>
+          <div className={styles.description}>{branch.description}</div>
         </MinardLink>
-        <div className="card">
-          {cardContent}
-        </div>
+        <hr className={styles.line} />
+        {commitContent}
       </div>
     </div>
   );

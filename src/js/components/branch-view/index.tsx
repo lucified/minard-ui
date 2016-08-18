@@ -8,8 +8,12 @@ import { FetchError, isError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import MinardLink from '../common/minard-link';
+import SubHeader from '../common/sub-header';
 import BranchHeader from './branch-header';
 import CommitList from './commit-list';
+
+const styles = require('./index.scss');
 
 interface PassedProps {
   params: {
@@ -76,8 +80,10 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 
     return (
       <div>
+        <SubHeader align="left">
+          <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>
+        </SubHeader>
         <BranchHeader project={project} branch={branch} />
-        <div className="divider" />
         <CommitList commits={commits!} />
       </div>
     );
@@ -88,7 +94,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const { projectId, id } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, id);
-  let commits: (Commit | FetchError)[] | undefined;
+  let commits: (Commit | FetchError | undefined)[] | undefined;
 
   if (branch && !isError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));

@@ -18,21 +18,15 @@ interface Props {
 const getScreenshot = (deployment: Deployment | FetchError | undefined, i: number) => {
   if (!deployment) {
     return (
-      <div
-        key={i}
-        className={classNames('img-responsive', styles.screenshot, styles[`screenshot-${i}`], styles.empty)}
-      >
+      <div key={i} className={classNames(styles.screenshot, styles[`screenshot-${i}`], styles.empty)}>
         <Icon name="circle-o-notch" spin fixedWidth size="3x" />
       </div>
     );
   }
 
-  if (isError(deployment)) {
+  if (isError(deployment) || deployment.status === 'failed') {
     return (
-      <div
-        key={i}
-        className={classNames('img-responsive', styles.screenshot, styles[`screenshot-${i}`], styles.empty)}
-      >
+      <div key={i} className={classNames(styles.screenshot, styles[`screenshot-${i}`], styles.empty)}>
         <Icon name="exclamation" fixedWidth size="3x" />
       </div>
     );
@@ -41,26 +35,22 @@ const getScreenshot = (deployment: Deployment | FetchError | undefined, i: numbe
   return (
     <img
       key={i}
-      className={classNames('img-responsive', styles.screenshot, styles[`screenshot-${i}`])}
+      className={classNames(styles.screenshot, styles[`screenshot-${i}`])}
       src={screenshot[Math.round(Math.random())] /* TODO: deployment.screenshot */}
     />
   );
 };
 
 const ScreenshotPile = ({ deployments }: Props) => {
-  if (deployments.length === 0) {
-    return (
-      <div className={styles.pile}>
-        <div className={classNames('img-responsive', styles.screenshot, styles['screenshot-0'], styles.empty)}>
-          <Icon name="times" size="3x" />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.pile}>
-      {deployments.slice(0, 4).map((deployment, i) => getScreenshot(deployment, i))}
+    {(deployments.length > 0) ?
+      deployments.slice(0, 4).map((deployment, i) => getScreenshot(deployment, i)) : (
+        <div className={classNames(styles.screenshot, styles['screenshot-0'], styles.empty)}>
+          <Icon name="times" size="3x" />
+        </div>
+      )
+    }
     </div>
   );
 };

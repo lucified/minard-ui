@@ -6,7 +6,7 @@ import ActivityGroup from './activity-group';
 
 interface Props {
   activities: Activity[];
-  showProjectName: boolean;
+  showProjectName?: boolean;
 }
 
 // Group activities by subsequent actions to the same deployment.

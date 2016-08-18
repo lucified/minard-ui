@@ -11,14 +11,15 @@ interface Props {
   branch?: Branch;
   project?: Project;
   openInNewWindow?: boolean;
+  homepage?: boolean;
   className?: string;
 }
 
 class MinardLink extends React.Component<Props, any> {
   public render() {
-    const { children, deployment, branch, project, openInNewWindow } = this.props;
+    const { children, deployment, branch, homepage, project, openInNewWindow } = this.props;
     const target = openInNewWindow ? '_blank' : '_self';
-    let path = '/';
+    let path: string;
 
     if (deployment) {
       // path = `/deployment/${deployment.id}`;
@@ -41,8 +42,11 @@ class MinardLink extends React.Component<Props, any> {
       path = `/project/${branch.project}/${branch.id}`;
     } else if (project) {
       path = `/project/${project.id}`;
+    } else if (homepage) {
+      path = '/projects';
     } else {
       console.log('Error: no link handler found');
+      return <span>{children}</span>;
     }
 
     return (

@@ -23,13 +23,13 @@
   margin-left: 6px;
 }
 
-.avatar-shadow {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+.avatar:first-child {
+  margin-left: 0;
 }
 
 .card-middle {
   padding: 36px;
-  height: 106px;
+  height: 178px;
   background-color: #ffffff;
   position: relative;
 
@@ -40,7 +40,7 @@
 
 .card-bottom {
   padding: 18px 36px;
-  height: 40px;
+  height: 76px;
   background-color: #fbfbfb;
 
   color: #7f8c8d;
@@ -69,10 +69,6 @@
 
 .preview-icon {
   margin-right: 6px;
-}
-
-.action {
-
 }
 
 .author, .target {

@@ -11,7 +11,7 @@ import SubHeader from '../common/sub-header';
 import ActivitySection from './activity-section';
 import ProjectsSection from './projects-section';
 
-const styles = require('./team-projects-view.scss');
+const styles = require('./index.scss');
 
 interface GeneratedStateProps {
   activities: Activity[];

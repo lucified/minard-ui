@@ -2,6 +2,10 @@
   @import '~normalize.css/normalize';
   @import '~flexboxgrid/dist/flexboxgrid';
 
+  *, *:before, *:after {
+    box-sizing: border-box;
+  }
+
   body {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
