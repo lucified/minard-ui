@@ -4,6 +4,7 @@ import * as React from 'react';
 import { FetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 
+import LoadingIcon from '../common/loading-icon';
 import SectionTitle from '../common/section-title';
 import ProjectSummary from './project-summary';
 
@@ -11,9 +12,10 @@ const styles = require('./projects-section.scss');
 
 interface Props {
   projects: (Project | FetchError)[];
+  isLoading: boolean;
 }
 
-const ProjectsSection = ({ projects }: Props) => (
+const ProjectsSection = ({ projects, isLoading }: Props) => (
   <section className="container">
     <SectionTitle
       rightContent={(
@@ -23,7 +25,7 @@ const ProjectsSection = ({ projects }: Props) => (
       )}
     >
       <span>
-        {projects.length} projects for{' '}
+        {isLoading ? 'Projects for ' : `${projects.length} projects for `}
         <span className={styles.team}>Team Lucify</span>
       </span>
     </SectionTitle>
@@ -33,6 +35,11 @@ const ProjectsSection = ({ projects }: Props) => (
           <ProjectSummary project={project} />
         </div>
       ))}
+      {isLoading && (
+        <div className={classNames('col-xs-12', 'col-sm-6', 'col-md-4', styles['project-card'])}>
+          <LoadingIcon className={styles.loading} center />
+        </div>
+      )}
     </div>
   </section>
 );

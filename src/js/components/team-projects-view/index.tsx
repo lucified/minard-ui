@@ -53,7 +53,7 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
           Sort projects by
           <a className={styles['sorting-dropdown']} href="#">Recent <Icon name="caret-down" /></a>
         </SubHeader>
-        <ProjectsSection projects={projects} />
+        <ProjectsSection projects={projects} isLoading={isLoadingProjects} />
         <ActivitySection activities={activities} isLoading={isLoadingAllActivities} />
       </div>
     );
