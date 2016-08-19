@@ -4,6 +4,7 @@ import * as Icon from 'react-fontawesome';
 import { Branch } from '../../modules/branches';
 import { FetchError, isError } from '../../modules/errors';
 
+import LoadingIcon from '../common/loading-icon';
 import SectionTitle from '../common/section-title';
 import BranchSummary from './branch-summary';
 
@@ -12,26 +13,22 @@ interface Props {
 }
 
 const getEmptyContent = () => (
-  <div className="empty">
+  <div>
     <Icon name="exclamation" fixedWidth size="3x" />
-    <p className="empty-title">No branches</p>
-    <p className="empty-meta">Is your repository set up correctly?</p>
+    <p>No branches</p>
+    <p>Is your repository set up correctly?</p>
   </div>
 );
 
 const getLoadingContent = (key: number) => (
-  <div key={key} className="empty">
-    <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-    <p className="empty-title">Loading branch</p>
-    <p className="empty-meta">Hold on a sec…</p>
-  </div>
+  <LoadingIcon center key={key} />
 );
 
 const getErrorMessage = (branch: FetchError) => (
-  <div key={branch.id!} className="empty">
+  <div key={branch.id!}>
     <Icon name="exclamation" fixedWidth size="3x" />
-    <p className="empty-title">Uhhoh. Unable to get branch information</p>
-    <p className="empty-meta">{branch.prettyError}</p>
+    <p>Uhhoh. Unable to get branch information</p>
+    <p>{branch.prettyError}</p>
   </div>
 );
 

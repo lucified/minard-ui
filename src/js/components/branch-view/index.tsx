@@ -8,6 +8,7 @@ import { FetchError, isError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import LoadingIcon from '../common/loading-icon';
 import MinardLink from '../common/minard-link';
 import SubHeader from '../common/sub-header';
 import BranchHeader from './branch-header';
@@ -42,20 +43,19 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 
   private getLoadingContent() {
     return (
-      <div className="empty">
-        <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-        <p className="empty-title">Loading branch</p>
-        <p className="empty-meta">Hold on a sec…</p>
+      <div>
+        <SubHeader align="center" />
+        <LoadingIcon className={styles.loading} center />
       </div>
     );
   }
 
   private getErrorContent(error: FetchError) {
     return (
-      <div className="empty">
+      <div>
         <Icon name="exclamation" fixedWidth size="3x" />
-        <p className="empty-title">Error!</p>
-        <p className="empty-meta">{error.prettyError}</p>
+        <p>Error!</p>
+        <p>{error.prettyError}</p>
       </div>
     );
   }

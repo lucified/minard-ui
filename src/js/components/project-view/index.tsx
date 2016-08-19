@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
 import { FetchError, isError } from '../../modules/errors';
+import Loading from '../../modules/loading';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import LoadingIcon from '../common/loading-icon';
 import MinardLink from '../common/minard-link';
 import SubHeader from '../common/sub-header';
 import ProjectActivity from './project-activity';
@@ -26,6 +28,7 @@ interface GeneratedStateProps {
   project?: Project | FetchError;
   branches?: (Branch | FetchError)[];
   activities?: Activity[];
+  isLoadingActivities: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -47,25 +50,29 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 
     if (!project) {
       return (
-        <div className="empty">
-          <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-          <p className="empty-title">Loading project</p>
-          <p className="empty-meta">We'll be right with you!</p>
+        <div>
+          <SubHeader align="left">
+            <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
+          </SubHeader>
+          <LoadingIcon className={styles.loading} center />
         </div>
       );
     }
 
     if (isError(project)) {
       return (
-        <div className="empty">
+        <div>
+          <SubHeader align="left">
+            <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
+          </SubHeader>
           <Icon name="exclamation" fixedWidth size="3x" />
-          <p className="empty-title">Error loading project</p>
-          <p className="empty-meta">{project.prettyError}</p>
+          <p>Error loading project</p>
+          <p>{project.prettyError}</p>
         </div>
       );
     }
 
-    const { branches, activities } = this.props;
+    const { branches, activities, isLoadingActivities } = this.props;
 
     return (
       <div>
@@ -74,7 +81,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
         </SubHeader>
         <ProjectHeader project={project} />
         <ProjectBranches branches={branches!} />
-        <ProjectActivity activities={activities!} />
+        <ProjectActivity activities={activities!} isLoading={isLoadingActivities} />
       </div>
     );
   }
@@ -83,13 +90,15 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { id: projectId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
+  const isLoadingActivities = Loading.selectors.isLoadinglActivitiesForProject(state, projectId);
 
   if (!project || isError(project)) {
-    return { project };
+    return { project, isLoadingActivities };
   }
 
   return {
     project,
+    isLoadingActivities,
     branches: project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
     activities: Activities.selectors.getActivitiesForProject(state),
   };

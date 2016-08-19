@@ -6,6 +6,7 @@ import Branches, { BranchState } from './modules/branches';
 import Commits, { CommitState } from './modules/commits';
 import Deployments, { DeploymentState } from './modules/deployments';
 import Errors, { ErrorState } from './modules/errors';
+import Loading, { LoadingState } from './modules/loading';
 import Projects, { ProjectState } from './modules/projects';
 import Selected, { SelectedState } from './modules/selected';
 
@@ -18,6 +19,7 @@ export default combineReducers({
     deployments: Deployments.reducer,
   }),
   errors: Errors.reducer,
+  loading: Loading.reducer,
   selected: Selected.reducer,
   routing: routerReducer,
 });
@@ -31,6 +33,7 @@ export interface StateTree {
     deployments: DeploymentState;
   };
   errors: ErrorState;
+  loading: LoadingState;
   selected: SelectedState;
   routing: any;
 }

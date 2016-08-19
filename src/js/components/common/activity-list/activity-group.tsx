@@ -11,6 +11,7 @@ import { FetchError, isError } from '../../../modules/errors';
 import Projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
+import LoadingIcon from '../loading-icon';
 import MinardLink from '../minard-link';
 import SingleActivity from './single-activity';
 
@@ -126,3 +127,11 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
 };
 
 export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ActivityGroup);
+
+export const LoadingActivityGroup = () => (
+  <div className={classNames('row', 'middle-xs', 'between-xs', styles['activity-group'], styles.loading)}>
+    <div className={classNames('col-xs-12')}>
+      <LoadingIcon center />
+    </div>
+  </div>
+);
