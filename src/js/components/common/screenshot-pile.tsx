@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import * as range from 'lodash/range';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
@@ -12,7 +13,8 @@ const screenshot = [
 ];
 
 interface Props {
-  deployments: (Deployment | FetchError | undefined)[];
+  deployment?: Deployment | FetchError;
+  count: number;
 }
 
 const getScreenshot = (deployment: Deployment | FetchError | undefined, i: number) => {
@@ -41,16 +43,18 @@ const getScreenshot = (deployment: Deployment | FetchError | undefined, i: numbe
   );
 };
 
-const ScreenshotPile = ({ deployments }: Props) => {
+const ScreenshotPile = ({ deployment, count }: Props) => {
+  if (count === 0) {
+    return (
+      <div className={classNames(styles.screenshot, styles['screenshot-0'], styles.empty)}>
+        <Icon name="times" size="3x" />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.pile}>
-    {(deployments.length > 0) ?
-      deployments.slice(0, 4).map((deployment, i) => getScreenshot(deployment, i)) : (
-        <div className={classNames(styles.screenshot, styles['screenshot-0'], styles.empty)}>
-          <Icon name="times" size="3x" />
-        </div>
-      )
-    }
+      {range(Math.min(count, 4)).map(i => getScreenshot(deployment, i))}
     </div>
   );
 };

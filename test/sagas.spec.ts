@@ -735,55 +735,17 @@ describe('sagas', () => {
           activeUsers: [],
         },
       ];
-      const project1Branches: Branch[] = [
-        {
-          id: 'a',
-          name: 'brancha',
-          project: '1',
-          commits: [],
-          deployments: ['d1'],
-        },
-        {
-          id: 'b',
-          name: 'branchb',
-          project: '1',
-          commits: [],
-          deployments: [],
-        },
-      ];
-
-      const project2Branches: Branch[] = [
-        {
-          id: 'c',
-          name: 'branchc',
-          project: '2',
-          commits: [],
-          deployments: ['d2', 'd3', 'd4'],
-        },
-      ];
 
       expect(iterator.next().value).to.deep.equal(
         select(Projects.selectors.getProjects)
       );
 
       expect(iterator.next(projects).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'branches', '1'),
-          call(sagas.fetchIfMissing, 'branches', '2'),
-        ]
+        call(sagas.ensureProjectRelatedDataLoaded, projects[0])
       );
 
-      expect(iterator.next(project1Branches).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'branches', '3'),
-        ]
-      );
-
-      expect(iterator.next(project2Branches).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'deployments', 'd1'),
-          call(sagas.fetchIfMissing, 'deployments', 'd2'),
-        ]
+      expect(iterator.next().value).to.deep.equal(
+        call(sagas.ensureProjectRelatedDataLoaded, projects[1])
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -791,7 +753,7 @@ describe('sagas', () => {
   });
 
   describe('ensureProjectRelatedDataLoaded', () => {
-    it('makes sure branches and all deployments exist for the project', () => {
+    it('makes sure branches and latest deployments exist for the project', () => {
       const id = '1';
       const iterator = sagas.ensureProjectRelatedDataLoaded(id);
       const project: Project = {
@@ -840,8 +802,58 @@ describe('sagas', () => {
         [
           call(sagas.fetchIfMissing, 'deployments', 'd1'),
           call(sagas.fetchIfMissing, 'deployments', 'd2'),
-          call(sagas.fetchIfMissing, 'deployments', 'd3'),
-          call(sagas.fetchIfMissing, 'deployments', 'd4'),
+        ]
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('also accepts a Project as a parameter', () => {
+      const project: Project = {
+        id: '1',
+        name: 'name',
+        branches: ['1', '2', '3'],
+        activeUsers: [],
+      };
+
+      const iterator = sagas.ensureProjectRelatedDataLoaded(project);
+
+      const branches: Branch[] = [
+        {
+          id: 'a',
+          name: 'brancha',
+          project: '1',
+          commits: [],
+          deployments: ['d1'],
+        },
+        {
+          id: 'b',
+          name: 'branchb',
+          project: '1',
+          commits: [],
+          deployments: [],
+        },
+        {
+          id: 'c',
+          name: 'branchc',
+          project: '1',
+          commits: [],
+          deployments: ['d2', 'd3', 'd4'],
+        },
+      ];
+
+      expect(iterator.next().value).to.deep.equal(
+        [
+          call(sagas.fetchIfMissing, 'branches', '1'),
+          call(sagas.fetchIfMissing, 'branches', '2'),
+          call(sagas.fetchIfMissing, 'branches', '3'),
+        ]
+      );
+
+      expect(iterator.next(branches).value).to.deep.equal(
+        [
+          call(sagas.fetchIfMissing, 'deployments', 'd1'),
+          call(sagas.fetchIfMissing, 'deployments', 'd2'),
         ]
       );
 
