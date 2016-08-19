@@ -27,6 +27,43 @@ interface GeneratedProps {
   latestDeployment?: Deployment;
 }
 
+const getDeploymentSummary = (deployment?: Deployment) => {
+  if (!deployment) {
+    return null;
+  }
+
+  const { creator } = deployment;
+
+  return (
+    <MinardLink openInNewWindow deployment={deployment}>
+      <div className={styles.spread}>
+        <div className="flex">
+          <div className={styles['preview-icon']}>
+            <Icon name="eye" />
+          </div>
+          <div>
+            <div className={styles.action}>
+              <span className={styles.author}>
+                {creator.name || creator.email}
+              </span>
+              {' '}generated a{' '}
+              <span className={styles.target}>
+                new preview
+              </span>
+            </div>
+            <div className={styles.timestamp}>
+              {moment(creator.timestamp).fromNow()}
+            </div>
+          </div>
+        </div>
+        <div className={styles.open}>
+          Open <Icon name="external-link" />
+        </div>
+      </div>
+    </MinardLink>
+  );
+};
+
 const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
@@ -61,34 +98,7 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
         <p className={styles.description}>{project.description}</p>
       </div>
       <div className={styles['card-bottom']}>
-        {latestDeployment && (
-          <MinardLink openInNewWindow deployment={latestDeployment}>
-            <div className={styles.spread}>
-              <div className="flex">
-                <div className={styles['preview-icon']}>
-                  <Icon name="eye" />
-                </div>
-                <div>
-                  <div className={styles.action}>
-                    <span className={styles.author}>
-                      {latestDeployment.creator.name || latestDeployment.creator.email}
-                    </span>
-                    {' '}generated a{' '}
-                    <span className={styles.target}>
-                      new preview
-                    </span>
-                  </div>
-                  <div className={styles.timestamp}>
-                    {moment(latestDeployment.creator.timestamp).fromNow()}
-                  </div>
-                </div>
-              </div>
-              <div className={styles.open}>
-                Open <Icon name="external-link" />
-              </div>
-            </div>
-          </MinardLink>
-        )}
+        {getDeploymentSummary(latestDeployment)}
       </div>
     </div>
   );
