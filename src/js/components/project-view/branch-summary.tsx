@@ -29,9 +29,9 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
 
   if (branch.deployments.length === 0) {
     commitContent = (
-      <div className="card-header">
-        <h4 className="card-title">No previews available</h4>
-        <h6 className="card-meta">Make some commits to {branch.name} generate previews</h6>
+      <div>
+        <h4>No previews available</h4>
+        <h6>Make some commits to {branch.name} generate previews</h6>
       </div>
     );
   } else {
@@ -39,10 +39,10 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
 
     if (isError(latestDeployment)) {
       commitContent = (
-        <div className="empty">
+        <div>
           <Icon name="exclamation" fixedWidth size="3x" />
-          <p className="empty-title">Error loading deployment</p>
-          <p className="empty-meta">{latestDeployment.prettyError}</p>
+          <p>Error loading deployment</p>
+          <p>{latestDeployment.prettyError}</p>
         </div>
       );
     } else {
