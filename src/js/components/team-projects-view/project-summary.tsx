@@ -67,10 +67,10 @@ const getDeploymentSummary = (deployment?: Deployment) => {
 const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
-      <div key={project.id!} className="empty">
+      <div key={project.id!}>
         <Icon name="exclamation" fixedWidth size="3x" />
-        <p className="empty-title">Error fetching project</p>
-        <p className="empty-meta">{project.prettyError}</p>
+        <p>Error fetching project</p>
+        <p>{project.prettyError}</p>
       </div>
     );
   }

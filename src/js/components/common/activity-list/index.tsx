@@ -14,10 +14,10 @@ interface Props {
 }
 
 const getEmptyContent = (header: string, body: string) => (
-  <div className="empty">
+  <div>
     <Icon name="code-fork" fixedWidth size="3x" />
-    <p className="empty-title">{header}</p>
-    <p className="empty-meta">{body}</p>
+    <p>{header}</p>
+    <p>{body}</p>
   </div>
 );
 
