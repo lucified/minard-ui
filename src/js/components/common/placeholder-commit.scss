@@ -1,0 +1,70 @@
+.commit-container {
+  background: #ffffff;
+  max-width: 350px;
+  min-height: 45px;
+  display: block;
+}
+
+@-webkit-keyframes place-holder-shimmer{
+  0% {
+    background-position: -346px 0
+  }
+  100% {
+    background-position: 346px 0
+  }
+}
+
+@keyframes place-holder-shimmer{
+  0% {
+    background-position: -346px 0
+  }
+  100% {
+    background-position: 346px 0
+  }
+}
+
+.animated-background {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: place-holder-shimmer;
+  animation-timing-function: linear;
+  background: #f6f7f8;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 600px 52px;
+  height: 40px;
+  position: relative;
+}
+
+.mask {
+  background: #ffffff;
+  position: absolute;
+}
+
+.avatar {
+  top: 0px;
+  left: 40px;
+  height: 40px;
+  width: 14px;
+}
+
+.top-right {
+  right: 0px;
+  top: 0px;
+  width: 100px;
+  height: 22px;
+}
+
+.bottom-right {
+  right: 0px;
+  bottom: 0px;
+  width: 50px;
+  height: 18px;
+}
+
+.between {
+  top: 12px;
+  left: 54px;
+  height: 10px;
+  width: 250px;
+}

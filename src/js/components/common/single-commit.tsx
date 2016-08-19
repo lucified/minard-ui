@@ -6,6 +6,7 @@ import { Commit } from '../../modules/commits';
 import { FetchError, isError } from '../../modules/errors';
 
 import Avatar from './avatar';
+import PlaceholderCommit from './placeholder-commit';
 
 const styles = require('./single-commit.scss');
 
@@ -16,7 +17,7 @@ interface Props {
 
 const SingleCommit = ({ commit, className }: Props) => {
   if (!commit) {
-    return <span>'Loading...'</span>;
+    return <PlaceholderCommit className={className} />;
   }
 
   if (isError(commit)) {
