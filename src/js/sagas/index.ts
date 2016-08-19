@@ -143,29 +143,24 @@ export default function createSagas(api: Api) {
       throw new Error('No projects found!');
     }
 
-    const deploymentIdsToCheck: string[] = [];
-
     for (let i = 0; i < projects.length; i++) {
-      // Check all branches exist
-      const { branches: branchIds } = projects[i];
-      const branches = yield branchIds.map(branchId => call(fetchIfMissing, 'branches', branchId));
-
-      // Make sure latest deployment from each branch of each project is loaded
-      for (let j = 0; j < branches.length; j++) {
-        const branch = <Branch> branches[j];
-        deploymentIdsToCheck.push(branch.deployments[0]);
-      }
+      yield call(ensureProjectRelatedDataLoaded, projects[i]);
     }
-
-    yield compact(deploymentIdsToCheck).map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
   }
 
   // PROJECT
   const fetchProject = createFetcher(Projects.actions.FetchProject, api.fetchProject);
   const loadProject = createLoader(Projects.selectors.getProject, fetchProject, ensureProjectRelatedDataLoaded);
 
-  function* ensureProjectRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const project = <Project> (yield select(Projects.selectors.getProject, id));
+  function* ensureProjectRelatedDataLoaded(projectOrId: Project | string): IterableIterator<Effect | Effect[]> {
+    let project: Project;
+
+    if (typeof projectOrId === 'string') {
+      project = <Project> (yield select(Projects.selectors.getProject, projectOrId));
+    } else {
+      project = projectOrId;
+    }
+
     if (!project) {
       throw new Error('No project found!');
     }
@@ -174,12 +169,12 @@ export default function createSagas(api: Api) {
     const { branches: branchIds } = project;
     const branches = yield branchIds.map(branchId => call(fetchIfMissing, 'branches', branchId));
 
-    // Make sure all the deployments from each branch have been loaded
+    // Make sure the latest deployment from each branch has been loaded
     let deploymentIdsToCheck: string[] = [];
 
     for (let i = 0; i < branches.length; i++) {
       const branch = <Branch> branches[i];
-      deploymentIdsToCheck = deploymentIdsToCheck.concat(branch.deployments);
+      deploymentIdsToCheck.push(branch.deployments[0]);
     }
 
     yield compact(deploymentIdsToCheck).map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
