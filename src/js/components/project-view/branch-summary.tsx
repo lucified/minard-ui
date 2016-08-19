@@ -20,11 +20,11 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  deployments: (Deployment | FetchError)[];
+  latestDeployment?: Deployment | FetchError;
   latestDeployedCommit?: Commit | FetchError;
 }
 
-const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProps & GeneratedProps) => {
+const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: PassedProps & GeneratedProps) => {
   let commitContent: JSX.Element;
 
   if (branch.deployments.length === 0) {
@@ -35,8 +35,6 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
       </div>
     );
   } else {
-    const latestDeployment = deployments[0];
-
     if (isError(latestDeployment)) {
       commitContent = (
         <div>
@@ -58,7 +56,7 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
     <div className={classNames('row', styles.branch)}>
       <div className={classNames('col-xs-2', styles.screenshots)}>
         <MinardLink branch={branch}>
-          <ScreenshotPile deployments={deployments} />
+          <ScreenshotPile deployment={latestDeployment} count={branch.deployments.length} />
         </MinardLink>
       </div>
       <div className={classNames('col-xs-10', styles['activity-content'])}>
@@ -78,18 +76,16 @@ const BranchSummary = ({ branch, deployments, latestDeployedCommit }: PassedProp
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { branch } = ownProps;
-  const deployments = branch.deployments.map(id => Deployments.selectors.getDeployment(state, id));
+  const latestDeploymentId = branch.deployments[0];
+  const latestDeployment = latestDeploymentId && Deployments.selectors.getDeployment(state, latestDeploymentId);
   let latestDeployedCommit: Commit | FetchError | undefined = undefined;
 
-  if (deployments.length > 0) {
-    const latestDeployment = deployments[0];
-    if (latestDeployment && !isError(latestDeployment)) {
-      latestDeployedCommit = Commits.selectors.getCommit(state, latestDeployment.commit);
-    }
+  if (latestDeployment && !isError(latestDeployment)) {
+    latestDeployedCommit = Commits.selectors.getCommit(state, latestDeployment.commit);
   }
 
   return {
-    deployments,
+    latestDeployment,
     latestDeployedCommit,
   };
 };
