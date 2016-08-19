@@ -9,6 +9,7 @@ import Loading from '../../modules/loading';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import LoadingIcon from '../common/loading-icon';
 import MinardLink from '../common/minard-link';
 import SubHeader from '../common/sub-header';
 import ProjectActivity from './project-activity';
@@ -49,17 +50,21 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 
     if (!project) {
       return (
-        <div className="empty">
-          <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-          <p className="empty-title">Loading project</p>
-          <p className="empty-meta">We'll be right with you!</p>
+        <div>
+          <SubHeader align="left">
+            <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
+          </SubHeader>
+          <LoadingIcon className={styles.loading} center />
         </div>
       );
     }
 
     if (isError(project)) {
       return (
-        <div className="empty">
+        <div>
+          <SubHeader align="left">
+            <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
+          </SubHeader>
           <Icon name="exclamation" fixedWidth size="3x" />
           <p className="empty-title">Error loading project</p>
           <p className="empty-meta">{project.prettyError}</p>
