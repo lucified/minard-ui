@@ -25,8 +25,7 @@ const ProjectsSection = ({ projects, isLoading }: Props) => (
       )}
     >
       <span>
-        {isLoading ? 'Projects for ' : `${projects.length} projects for `}
-        <span className={styles.team}>Team Lucify</span>
+        Projects for <span className={styles.team}>Team Lucify</span>
       </span>
     </SectionTitle>
     <div className="row center-xs start-sm">
