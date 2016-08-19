@@ -20,11 +20,7 @@ const getEmptyContent = () => (
 );
 
 const getLoadingContent = (key: number) => (
-  <div key={key} className="empty">
-    <Icon name="circle-o-notch" spin fixedWidth size="3x" />
-    <p className="empty-title">Loading branch</p>
-    <p className="empty-meta">Hold on a sec…</p>
-  </div>
+  <LoadingIcon center key={key} />
 );
 
 const getErrorMessage = (branch: FetchError) => (
