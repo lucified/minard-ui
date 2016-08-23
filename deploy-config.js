@@ -7,7 +7,7 @@ const opts = {
       return 'lucify-protected';
     }
     if (env === 'staging') {
-      return 'lucify-staging-new';
+      return 'minard-ui-staging';
     }
     return null;
   },
@@ -16,17 +16,19 @@ const opts = {
       return 'https://protected.lucify.com/';
     }
     if (env === 'staging') {
-      return 'https://staging.lucify.com/';
+      return 'https://minard-staging.lucify.com/';
     }
     return null;
   },
   publicPath: (env) => {
     if (env === 'production' || env === 'staging') {
-      return '/minard/';
+      return '/';
     }
     return null;
   },
   flow: 'bdc6c13b-be3f-42a9-9f71-e9197dd8fb03', // The Main flow ID
 };
 
-module.exports = lucifyDeployConfig(null, opts);
+// TODO: change 'qa' to 'master' before merging
+const env = process.env.CIRCLE_BRANCH === 'qa' ? 'staging' : null;
+module.exports = lucifyDeployConfig(env, opts);
