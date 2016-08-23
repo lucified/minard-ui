@@ -17,7 +17,7 @@ interface Props {
 
 const SingleCommit = ({ commit, className }: Props) => {
   if (!commit) {
-    return <PlaceholderCommit className={className} />;
+    return <PlaceholderCommit className={classNames(className)} />;
   }
 
   if (isError(commit)) {

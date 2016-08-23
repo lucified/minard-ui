@@ -11,7 +11,7 @@ interface Props {
 }
 
 const LoadingIcon = ({ className, center }: Props) => (
-  <div className={classNames(styles.container, { [styles.center]: center }, className)}>
+  <div className={classNames(styles.container, { [styles.center]: !!center }, className)}>
     <div className={styles.loading} />
   </div>
 );

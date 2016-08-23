@@ -15,7 +15,7 @@ interface Props {
 }
 
 // Get double the actual size (for retina displays)
-const getRetinaSize = (sizeLabel: string): number => {
+const getRetinaSize = (sizeLabel?: string): number => {
   switch (sizeLabel) {
     case 'xs':
       return 32;
@@ -35,7 +35,7 @@ const getRetinaSize = (sizeLabel: string): number => {
 
 const Avatar = ({ size, email, iconEmail, initials, title, shadow, className }: Props) => {
   const pixelSize = getRetinaSize(size);
-  const classes = classNames(styles.avatar, styles[`avatar-${size}`], className, { [styles.shadow]: shadow });
+  const classes = classNames(styles.avatar, styles[`avatar-${size}`], className, { [styles.shadow]: !!shadow });
 
   if (email) {
     return (

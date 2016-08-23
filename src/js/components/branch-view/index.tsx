@@ -26,7 +26,7 @@ interface PassedProps {
 interface GeneratedStateProps {
   project?: Project | FetchError;
   branch?: Branch | FetchError;
-  commits?: (Commit | FetchError)[];
+  commits?: (Commit | FetchError | undefined)[];
 }
 
 interface GeneratedDispatchProps {

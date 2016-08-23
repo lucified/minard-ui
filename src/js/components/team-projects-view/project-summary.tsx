@@ -126,7 +126,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     }
 
     return latestDeployment;
-  }));
+  })) as Deployment[];
 
   let latestDeployment: Deployment | undefined;
 

@@ -19,7 +19,7 @@ interface AnyAction extends Action {
 
 const testInitialState = (reducer: Reducer<ModuleState>, expectedState: ModuleState) => {
   it('returns the correct default state', () => {
-    expect(reducer(undefined, { type: 'foobar' })).to.deep.equal(expectedState);
+    expect(reducer(<any> undefined, { type: 'foobar' })).to.deep.equal(expectedState);
   });
 };
 
@@ -34,7 +34,7 @@ const testStoreEntities = (
 ) => {
   describe(`store entities (${action.type})`, () => {
     it('with an empty initial state', () => {
-      expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
+      expect(reducer(<any> undefined, action)).to.deep.equal(expectedStateFromEmpty);
     });
 
     it('makes no changes with an empty list', () => {
@@ -71,7 +71,7 @@ const testSuccessfulRequest = (
     it('with an empty initial state', () => {
       const expected = expectedStateFromEmpty;
 
-      expect(reducer(undefined, action)).to.deep.equal(expected);
+      expect(reducer(<any> undefined, action)).to.deep.equal(expected);
     });
 
     it('makes no changes with an empty result', () => {
@@ -117,7 +117,7 @@ const testFailedRequest = (
 ) => {
   describe(`failed request (${action.type})`, () => {
     it('with an empty initial state', () => {
-      expect(reducer(undefined, action)).to.deep.equal(expectedStateFromEmpty);
+      expect(reducer(<any> undefined, action)).to.deep.equal(expectedStateFromEmpty);
     });
 
     it('with other entities in state', () => {
@@ -203,7 +203,7 @@ describe('reducers', () => {
         branch: 'b',
       };
 
-      const endState: SelectedState = reducer(undefined, action);
+      const endState: SelectedState = reducer(<any> undefined, action);
 
       expect(endState).to.deep.equal(expectedState);
     });
@@ -268,7 +268,7 @@ describe('reducers', () => {
 
       const expectedState = [action];
 
-      const endState = reducer(undefined, action);
+      const endState = reducer(<any> undefined, action);
 
       expect(endState).to.deep.equal(expectedState);
     });
@@ -542,7 +542,7 @@ describe('reducers', () => {
 
     describe(`successful request all activities (${successfulActivitiesRequestAction.type})`, () => {
       it('with an empty initial state', () => {
-        expect(reducer(undefined, successfulActivitiesRequestAction)).to.deep.equal(expectedObjectsToStore);
+        expect(reducer(<any> undefined, successfulActivitiesRequestAction)).to.deep.equal(expectedObjectsToStore);
       });
 
       it('makes no changes with an empty list', () => {
@@ -567,7 +567,9 @@ describe('reducers', () => {
 
     describe(`successful request activities for project (${successfulActivitiesForProjectRequestAction.type})`, () => {
       it('with an empty initial state', () => {
-        expect(reducer(undefined, successfulActivitiesForProjectRequestAction)).to.deep.equal(expectedObjectsToStore);
+        expect(reducer(<any> undefined, successfulActivitiesForProjectRequestAction)).to.deep.equal(
+          expectedObjectsToStore
+        );
       });
 
       it('makes no changes with an empty list', () => {
@@ -1049,7 +1051,7 @@ describe('reducers', () => {
 
     describe(`successful request all projects (${successfulAllProjectsRequestAction.type})`, () => {
       it('with an empty initial state', () => {
-        expect(reducer(undefined, successfulAllProjectsRequestAction)).to.deep.equal(allProjectsObjects);
+        expect(reducer(<any> undefined, successfulAllProjectsRequestAction)).to.deep.equal(allProjectsObjects);
       });
 
       it('makes no changes with an empty list', () => {
