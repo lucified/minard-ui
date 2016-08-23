@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@types/chai": "^3.4.31",
-    "@types/classnames": "^0.0.28",
     "@types/isomorphic-fetch": "0.0.29",
     "@types/lodash": "^4.14.33",
     "@types/mocha": "^2.2.30",

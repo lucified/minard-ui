@@ -18,7 +18,8 @@
       "react-gravatar": ["types/react-gravatar.d.ts"],
       "react-redux": ["types/react-redux/index.d.ts"],
       "react-router-redux": ["types/react-router-redux/index.d.ts"],
-      "history": ["types/history/index.d.ts"]
+      "history": ["types/history/index.d.ts"],
+      "classnames": ["types/classnames/index.d.ts"] // needed in order to be able to pass null/undefined
     }
   },
   "exclude": [
