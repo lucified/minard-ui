@@ -120,7 +120,7 @@ const config = {
   },
   entry: [
     'babel-polyfill',
-    getEntrypoint(process.env.LUCIFY_ENV || process.env.NODE_ENV, process.env.CHARLES),
+    getEntrypoint(deployConfig.env, process.env.CHARLES),
   ],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
@@ -130,8 +130,7 @@ const config = {
   ],
 };
 
-if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1 ||
-  ['production', 'staging'].indexOf(process.env.LUCIFY_ENV) > -1) {
+if (['production', 'staging'].indexOf(deployConfig.env) > -1){
   config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {
