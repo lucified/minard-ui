@@ -25,7 +25,7 @@ interface GeneratedProps {
   deployment?: Deployment;
 }
 
-const getDeploymentScreenshot = (deployment: Deployment) => {
+const getDeploymentScreenshot = (deployment?: Deployment) => {
   if (!deployment || !deployment.url) { // TODO: !deployment.screenshot) {
     return null;
   }

@@ -48,7 +48,7 @@ const SingleActivity = (props: Props) => {
       );
     default:
       console.log('Error: Unknown activity type!');
-      return null;
+      return <div />;
   }
 };
 

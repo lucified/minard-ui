@@ -3,7 +3,6 @@ import { Action } from 'redux';
 import { FetchError } from '../errors';
 import { ApiUser, RequestActionCreators, User } from '../types';
 
-
 // State
 export interface Deployment {
   id: string;

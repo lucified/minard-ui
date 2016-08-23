@@ -23,7 +23,7 @@ const SectionTitle = ({ children, leftContent, rightContent }: Props) => {
     });
   }
 
-  let childrenWithBackgroundColor: React.ReactElement<any>;
+  let childrenWithBackgroundColor: any;
   if (React.Children.count(children) === 1) {
     childrenWithBackgroundColor = React.Children.only(children);
     childrenWithBackgroundColor = React.cloneElement(childrenWithBackgroundColor, {

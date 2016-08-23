@@ -22,7 +22,7 @@ interface Props {
   comment?: any; // TODO
 }
 
-const getCommentMetadata = (activity: Activity, comment?: any): JSX.Element => {
+const getCommentMetadata = (activity: Activity, comment?: any): JSX.Element | null => {
   if (!comment || isError(comment)) {
     return null;
   }
@@ -39,7 +39,7 @@ const getCommentMetadata = (activity: Activity, comment?: any): JSX.Element => {
   );
 };
 
-const getCommentBody = (activity: Activity, comment?: any): JSX.Element => {
+const getCommentBody = (activity: Activity, comment?: any): JSX.Element | null => {
   if (!comment) {
     return <span>'Loading...'</span>;
   }

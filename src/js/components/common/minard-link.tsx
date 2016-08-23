@@ -25,7 +25,7 @@ class MinardLink extends React.Component<Props, any> {
       // path = `/deployment/${deployment.id}`;
 
       // TODO: link to deployment view instead of actual deployment
-      path = deployment.url;
+      path = deployment.url || '';
 
       if (path) {
         return (

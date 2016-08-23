@@ -1,4 +1,4 @@
-import * as values from 'lodash/values';
+import { values } from 'lodash';
 import { createSelector } from 'reselect';
 
 import { StateTree } from '../../reducers';
