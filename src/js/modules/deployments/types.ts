@@ -3,6 +3,12 @@ import { Action } from 'redux';
 import { FetchError } from '../errors';
 import { ApiUser, RequestActionCreators, User } from '../types';
 
+type DeploymentStatus = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
+
+export const isSuccessful = (deployment: Deployment) => deployment.status === 'success';
+export const isPending = (deployment: Deployment) => deployment.status === 'pending' || deployment.status === 'running';
+export const isFailed = (deployment: Deployment) => deployment.status === 'failed' || deployment.status === 'canceled';
+
 // State
 export interface Deployment {
   id: string;
@@ -10,7 +16,7 @@ export interface Deployment {
   creator: User;
   url?: string;
   screenshot?: string;
-  status: 'success' | 'failed' | 'running';
+  status: DeploymentStatus;
 }
 
 export interface DeploymentState {
@@ -54,7 +60,7 @@ export interface ResponseDeploymentElement {
     creator: ApiUser;
     url?: string;
     screenshot?: string;
-    status: 'success' | 'failed' | 'running';
+    status: DeploymentStatus;
   };
   relationships: {
     commit: {
