@@ -62,11 +62,14 @@ NODE_ENV=production CHARLES=<API URL> npm run watch
 Prerequisites:
  - The AWS profile `lucify-protected` is defined `~/.aws/credentials`.
 
-Deploy to Lucify's production environment with
+### To the Q/A environment
+
+Deploy to Lucify's Minard Q/A environment with
 ```shell
-LUCIFY_ENV=production \
+LUCIFY_ENV=staging \
 AWS_PROFILE=lucify-protected \
 GITHUB_TOKEN='' \
+CHARLES='http://charles-staging.lucify.com' \
 FLOW_TOKEN=$FLOW_TOKEN_MAIN \
 npm run deploy
 ```
@@ -78,6 +81,8 @@ deployment has finished.
 Note that we set `GITHUB_TOKEN` to an empty string to
 make sure it is not defined, so that we don't send any
 notifications of local deployments to GitHub deployment API.
+
+Note that commits to `master` will automatically deploy to the Q/A environment.
 
 # Test
 

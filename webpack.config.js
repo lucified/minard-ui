@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
@@ -6,29 +8,21 @@ const postcssReporter = require('postcss-reporter');
 
 const deployConfig = require('./deploy-config');
 
-const environments = [
-  'test',
-  'development',
-  'staging',
-  'production',
-];
-
 const getEntrypoint = (env, charles) => {
-  let middle = env;
+  let middle;
   if (env === 'test' || !charles) {
     // No remote backend
     middle = 'development.local-json';
-  } else if (env === 'staging') {
+  } else if (['staging', 'production'].indexOf(env) > -1) {
     // Use production configuration in staging
     middle = 'production';
-  } else if (!env || environments.indexOf(env) < 0) {
-    // Default to development if env is not one
-    // of the allowed values
+  } else {
+    // Default to development
     middle = 'development.server';
   }
 
   const entrypoint = `./src/js/entrypoint.${middle}.tsx`;
-  console.log(`Using entrypoint ${entrypoint}`);
+  console.log(`Using entrypoint ${entrypoint}`); // eslint-disable-line
 
   return entrypoint;
 };
@@ -91,8 +85,8 @@ const htmlWebpackPluginConfig = {
   template: require.resolve('./src/templates/index.hbs'),
   inject: false,
   filename: 'index.html',
-  googleAnalytics: (process.env.LUCIFY_ENV === 'production'),
-  googleAnalyticsSendPageView: (process.env.LUCIFY_ENV === 'production'),
+  googleAnalytics: (deployConfig.env === 'production'),
+  googleAnalyticsSendPageView: (deployConfig.env === 'production'),
 };
 
 const config = {
@@ -120,7 +114,7 @@ const config = {
   },
   entry: [
     'babel-polyfill',
-    getEntrypoint(process.env.LUCIFY_ENV || process.env.NODE_ENV, process.env.CHARLES),
+    getEntrypoint(deployConfig.env, process.env.CHARLES),
   ],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
@@ -130,15 +124,18 @@ const config = {
   ],
 };
 
-if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1 ||
-  ['production', 'staging'].indexOf(process.env.LUCIFY_ENV) > -1) {
+if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
   config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+      },
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
   ]);

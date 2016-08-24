@@ -1,4 +1,4 @@
-const config = require('./webpack.config.js');
+const config = require('./webpack.config.js'); // eslint-disable-line
 
 // For server path
 config.output.publicPath = '/';
