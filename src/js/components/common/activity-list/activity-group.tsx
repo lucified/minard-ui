@@ -62,9 +62,11 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
         {moment(activities[0].timestamp).fromNow()}
       </div>
       <div className={classNames('col-xs-2', styles.screenshot)}>
-        <MinardLink deployment={deployment} openInNewWindow>
-          <img src={deployment.screenshot || noScreenshot} className={styles.image} />
-        </MinardLink>
+        {(deployment.status === 'success') && (
+          <MinardLink deployment={deployment} openInNewWindow>
+            <img src={deployment.screenshot || noScreenshot} className={styles.image} />
+          </MinardLink>
+        )}
       </div>
       <div className={classNames('col-xs-9', styles['activity-content'])}>
         <div>
