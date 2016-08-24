@@ -21,7 +21,7 @@ const getEntrypoint = (env, charles) => {
   } else if (env === 'staging') {
     // Use production configuration in staging
     middle = 'production';
-  } else if (!env || environments.indexOf(env) < 0) {
+  } else if (env === 'development' || !env || environments.indexOf(env) < 0) {
     // Default to development if env is not one
     // of the allowed values
     middle = 'development.server';
