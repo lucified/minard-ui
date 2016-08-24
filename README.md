@@ -40,7 +40,7 @@ npm start -- <API URL>
 By default, the minard-backed (charles) API runs on `http://localhost:8000`:
 
 ```shell
-npm start -- <API URL>
+npm start -- http://localhost:8000
 ```
 
 ## Building for production
