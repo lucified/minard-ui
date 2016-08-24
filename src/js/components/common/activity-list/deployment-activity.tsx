@@ -4,7 +4,7 @@ import * as Icon from 'react-fontawesome';
 import { Activity } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
 import { Commit } from '../../../modules/commits';
-import { Deployment } from '../../../modules/deployments';
+import { Deployment, isSuccessful } from '../../../modules/deployments';
 import { FetchError, isError } from '../../../modules/errors';
 import { Project } from '../../../modules/projects';
 
@@ -37,31 +37,14 @@ const getProjectLabel = (project?: Project | FetchError) => {
   );
 };
 
-const isSuccess = (deployment: Deployment): boolean => deployment.status === 'success';
-const isRunning = (deployment: Deployment): boolean => deployment.status === 'running';
-
 const getMetadata = (deployment: Deployment, branch: Branch) => {
-  if (isSuccess(deployment)) {
+  if (isSuccessful(deployment)) {
     return (
       <span>
         <span className={styles['deployment-metadata-author']}>
           {deployment.creator.name || deployment.creator.email}
         </span>
         {` generated a preview in `}
-        <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
-          {branch.name}
-        </MinardLink>
-      </span>
-    );
-  }
-
-  if (isRunning(deployment)) {
-    return (
-      <span>
-        <span className={styles['deployment-metadata-author']}>
-          {deployment.creator.name || deployment.creator.email}
-        </span>
-        {` is generating a preview in `}
         <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
           {branch.name}
         </MinardLink>
@@ -80,12 +63,8 @@ const getMetadata = (deployment: Deployment, branch: Branch) => {
 };
 
 const getMetadataIcon = (deployment: Deployment) => {
-  if (isSuccess(deployment)) {
+  if (isSuccessful(deployment)) {
     return <Icon className={styles.icon} name="eye" />;
-  }
-
-  if (isRunning(deployment)) {
-    return <Icon className={styles.icon} name="circle-o-notch" spin />;
   }
 
   return <Icon className={styles.icon} name="times" />;

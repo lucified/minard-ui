@@ -40,7 +40,7 @@ const ScreenshotPile = ({ deployment, count }: Props) => {
     return loading;
   }
 
-  if (isError(deployment) || deployment.status === 'failed' || !deployment.screenshot) {
+  if (isError(deployment) || !deployment.screenshot) {
     return noScreenshot;
   }
 
