@@ -69,6 +69,7 @@ Deploy to Lucify's Minard Q/A environment with
 LUCIFY_ENV=staging \
 AWS_PROFILE=lucify-protected \
 GITHUB_TOKEN='' \
+CHARLES='http://charles-staging.lucify.com' \
 FLOW_TOKEN=$FLOW_TOKEN_MAIN \
 npm run deploy
 ```
