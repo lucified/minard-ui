@@ -37,6 +37,60 @@ const getProjectLabel = (project?: Project | FetchError) => {
   );
 };
 
+const isSuccess = (deployment: Deployment): boolean => deployment.status === 'success';
+const isRunning = (deployment: Deployment): boolean => deployment.status === 'running';
+
+const getMetadata = (deployment: Deployment, branch: Branch) => {
+  if (isSuccess(deployment)) {
+    return (
+      <span>
+        <span className={styles['deployment-metadata-author']}>
+          {deployment.creator.name || deployment.creator.email}
+        </span>
+        {` generated a preview in `}
+        <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
+          {branch.name}
+        </MinardLink>
+      </span>
+    );
+  }
+
+  if (isRunning(deployment)) {
+    return (
+      <span>
+        <span className={styles['deployment-metadata-author']}>
+          {deployment.creator.name || deployment.creator.email}
+        </span>
+        {` is generating a preview in `}
+        <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
+          {branch.name}
+        </MinardLink>
+      </span>
+    );
+  }
+
+  return (
+    <span>
+      {`Preview generation failed in `}
+      <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
+        {branch.name}
+      </MinardLink>
+    </span>
+  );
+};
+
+const getMetadataIcon = (deployment: Deployment) => {
+  if (isSuccess(deployment)) {
+    return <Icon className={styles.icon} name="eye" />;
+  }
+
+  if (isRunning(deployment)) {
+    return <Icon className={styles.icon} name="circle-o-notch" spin />;
+  }
+
+  return <Icon className={styles.icon} name="times" />;
+};
+
 const DeploymentActivity = (props: Props) => {
   const { activity, branch, commit, deployment, showProjectName, project } = props;
 
@@ -44,16 +98,8 @@ const DeploymentActivity = (props: Props) => {
     <div className={styles.activity}>
       <div className={styles['deployment-metadata']}>
         <div className={styles.action}>
-          <Icon className={styles.icon} name="eye" />
-          <span>
-            <span className={styles['deployment-metadata-author']}>
-              {deployment.creator.name || deployment.creator.email}
-            </span>
-            {` generated a preview in `}
-            <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
-              {branch.name}
-            </MinardLink>
-          </span>
+          {getMetadataIcon(deployment)}
+          {getMetadata(deployment, branch)}
           {showProjectName && getProjectLabel(project)}
         </div>
         <div className={styles.share}>
