@@ -51,7 +51,7 @@
     "@types/node": "^6.0.37",
     "@types/react": "^0.14.32",
     "@types/react-dom": "^0.14.15",
-    "@types/react-router": "2.0.29",
+    "@types/react-router": "^2.0.32",
     "atomic-s3": "^0.1.2",
     "babel-core": "^6.13.2",
     "babel-loader": "^6.2.5",

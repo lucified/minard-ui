@@ -5,14 +5,15 @@
 
 /// <reference types="redux" />
 /// <reference types="react-router"/>
+/// <reference path="../history/index.d.ts" />
 
 import * as Redux from "redux";
-import * as History from "history";
 
 export = ReactRouterRedux;
 
 declare namespace ReactRouterRedux {
     import R = Redux;
+    import H = HistoryModule;
 
     const CALL_HISTORY_METHOD: string;
     const LOCATION_CHANGE: string;
@@ -24,7 +25,7 @@ declare namespace ReactRouterRedux {
     const goForward: GoBackAction;
     const routerActions: RouteActions;
 
-    type LocationDescriptor = History.Location | History.Path;
+    type LocationDescriptor = H.Location | H.Path;
     type PushAction = (nextLocation: LocationDescriptor) => RouterAction;
     type ReplaceAction = (nextLocation: LocationDescriptor) => RouterAction;
     type GoAction = (n: number) => RouterAction;
@@ -43,7 +44,7 @@ declare namespace ReactRouterRedux {
         goForward: GoForwardAction;
         goBack: GoBackAction;
     }
-    interface ReactRouterReduxHistory extends History.History {
+    interface ReactRouterReduxHistory extends H.History {
         unsubscribe(): void;
     }
 
@@ -57,6 +58,6 @@ declare namespace ReactRouterRedux {
     }
 
     function routerReducer(state?: any, options?: any): R.Reducer<any>;
-    function syncHistoryWithStore(history: History.History, store: R.Store<any>, options?: SyncHistoryWithStoreOptions): ReactRouterReduxHistory;
-    function routerMiddleware(history: History.History): R.Middleware;
+    function syncHistoryWithStore(history: H.History, store: R.Store<any>, options?: SyncHistoryWithStoreOptions): ReactRouterReduxHistory;
+    function routerMiddleware(history: H.History): R.Middleware;
 }
