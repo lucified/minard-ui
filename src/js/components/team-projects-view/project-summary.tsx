@@ -14,10 +14,7 @@ import Avatar from '../common/avatar';
 import MinardLink from '../common/minard-link';
 
 const styles = require('./project-summary.scss');
-const screenshot = [
-  require('../../../images/screenshot-1.png'),
-  require('../../../images/screenshot-2.png'),
-];
+const noScreenshot = require('../../../images/no-screenshot.png');
 
 interface PassedProps {
   project: Project | FetchError;
@@ -75,11 +72,13 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
     );
   }
 
+  const screenshot = (latestDeployment && latestDeployment.screenshot) || noScreenshot;
+
   return (
     <div className={styles.card}>
       <div className={styles['card-top']}>
         <MinardLink project={project}>
-          <img src={screenshot[Math.round(Math.random())] /* TODO */} className={styles.screenshot} />
+          <img src={screenshot} className={styles.screenshot} />
         </MinardLink>
       </div>
       <div className={styles['card-middle']}>
