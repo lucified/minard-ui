@@ -13,7 +13,7 @@ import { StateTree } from '../../reducers';
 import Avatar from '../common/avatar';
 import MinardLink from '../common/minard-link';
 
-const styles = require('./project-summary.scss');
+const styles = require('./project-card.scss');
 const noScreenshot = require('../../../images/no-screenshot.png');
 
 interface PassedProps {
@@ -61,7 +61,7 @@ const getDeploymentSummary = (deployment?: Deployment) => {
   );
 };
 
-const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
+const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
       <div key={project.id!}>
@@ -138,4 +138,4 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   };
 };
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectSummary);
+export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectCard);
