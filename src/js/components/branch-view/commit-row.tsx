@@ -12,11 +12,6 @@ import SingleCommit from '../common/single-commit';
 
 const styles = require('./commit-row.scss');
 
-const screenshot = [
-  require('../../../images/screenshot-1.png'),
-  require('../../../images/screenshot-2.png'),
-];
-
 interface PassedProps {
   commit?: Commit | FetchError;
 }
@@ -26,12 +21,12 @@ interface GeneratedProps {
 }
 
 const getDeploymentScreenshot = (deployment?: Deployment) => {
-  if (!deployment || !deployment.url) { // TODO: !deployment.screenshot) {
+  if (!deployment || !deployment.screenshot) {
     return null;
   }
 
   return (
-    <img className={styles.screenshot} src={screenshot[Math.round(Math.random())] /* TODO: deployment.screenshot*/} />
+    <img className={styles.screenshot} src={deployment.screenshot} />
   );
 };
 

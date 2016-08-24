@@ -7,10 +7,6 @@ import { Deployment } from '../../modules/deployments';
 import { FetchError, isError } from '../../modules/errors';
 
 const styles = require('./screenshot-pile.scss');
-const screenshot = [
-  require('../../../images/screenshot-1.png'),
-  require('../../../images/screenshot-2.png'),
-];
 
 interface Props {
   deployment?: Deployment | FetchError;
@@ -38,7 +34,7 @@ const getScreenshot = (deployment: Deployment | FetchError | undefined, i: numbe
     <img
       key={i}
       className={classNames(styles.screenshot, styles[`screenshot-${i}`])}
-      src={screenshot[Math.round(Math.random())] /* TODO: deployment.screenshot */}
+      src={deployment.screenshot}
     />
   );
 };
