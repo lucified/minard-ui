@@ -3,4 +3,4 @@ import reducer from './reducer';
 import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
-export { Deployment, DeploymentState } from './types';
+export { Deployment, DeploymentState, isSuccessful, isFailed, isPending } from './types';

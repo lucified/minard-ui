@@ -4,7 +4,7 @@ import * as Icon from 'react-fontawesome';
 import { Activity } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
 import { Commit } from '../../../modules/commits';
-import { Deployment } from '../../../modules/deployments';
+import { Deployment, isSuccessful } from '../../../modules/deployments';
 import { FetchError, isError } from '../../../modules/errors';
 import { Project } from '../../../modules/projects';
 
@@ -37,6 +37,39 @@ const getProjectLabel = (project?: Project | FetchError) => {
   );
 };
 
+const getMetadata = (deployment: Deployment, branch: Branch) => {
+  if (isSuccessful(deployment)) {
+    return (
+      <span>
+        <span className={styles['deployment-metadata-author']}>
+          {deployment.creator.name || deployment.creator.email}
+        </span>
+        {` generated a preview in `}
+        <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
+          {branch.name}
+        </MinardLink>
+      </span>
+    );
+  }
+
+  return (
+    <span>
+      {`Preview generation failed in `}
+      <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
+        {branch.name}
+      </MinardLink>
+    </span>
+  );
+};
+
+const getMetadataIcon = (deployment: Deployment) => {
+  if (isSuccessful(deployment)) {
+    return <Icon className={styles.icon} name="eye" />;
+  }
+
+  return <Icon className={styles.icon} name="times" />;
+};
+
 const DeploymentActivity = (props: Props) => {
   const { activity, branch, commit, deployment, showProjectName, project } = props;
 
@@ -44,16 +77,8 @@ const DeploymentActivity = (props: Props) => {
     <div className={styles.activity}>
       <div className={styles['deployment-metadata']}>
         <div className={styles.action}>
-          <Icon className={styles.icon} name="eye" />
-          <span>
-            <span className={styles['deployment-metadata-author']}>
-              {deployment.creator.name || deployment.creator.email}
-            </span>
-            {` generated a preview in `}
-            <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
-              {branch.name}
-            </MinardLink>
-          </span>
+          {getMetadataIcon(deployment)}
+          {getMetadata(deployment, branch)}
           {showProjectName && getProjectLabel(project)}
         </div>
         <div className={styles.share}>
