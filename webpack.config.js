@@ -85,8 +85,8 @@ const htmlWebpackPluginConfig = {
   template: require.resolve('./src/templates/index.hbs'),
   inject: false,
   filename: 'index.html',
-  googleAnalytics: (process.env.LUCIFY_ENV === 'production'),
-  googleAnalyticsSendPageView: (process.env.LUCIFY_ENV === 'production'),
+  googleAnalytics: (deployConfig.env === 'production'),
+  googleAnalyticsSendPageView: (deployConfig.env === 'production'),
 };
 
 const config = {
