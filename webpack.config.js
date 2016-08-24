@@ -9,7 +9,7 @@ const postcssReporter = require('postcss-reporter');
 const deployConfig = require('./deploy-config');
 
 const getEntrypoint = (env, charles) => {
-  let middle = env;
+  let middle;
   if (env === 'test' || !charles) {
     // No remote backend
     middle = 'development.local-json';
