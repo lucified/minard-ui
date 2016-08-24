@@ -1,5 +1,6 @@
 const fs = require('fs');
-const deployOpt = require('./deploy-config.js');
+const deployOpt = require('./deploy-config.js'); // eslint-disable-line
+
 const defaultArtifactFile = 'build-info.json';
 
 function writeBuildArtifact(url, fn) {
@@ -7,9 +8,9 @@ function writeBuildArtifact(url, fn) {
   if (folder) {
     const path = `${folder}/${fn}`;
     fs.writeFileSync(path, JSON.stringify({ url }));
-    console.log(`Wrote the url to ${path}`);
+    console.log(`Wrote the url to ${path}`); // eslint-disable-line no-console
   } else {
-    console.log('CIRCLE_ARTIFACTS not defined');
+    console.log('CIRCLE_ARTIFACTS not defined'); // eslint-disable-line no-console
   }
 }
 
