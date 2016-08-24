@@ -6,29 +6,21 @@ const postcssReporter = require('postcss-reporter');
 
 const deployConfig = require('./deploy-config');
 
-const environments = [
-  'test',
-  'development',
-  'staging',
-  'production',
-];
-
 const getEntrypoint = (env, charles) => {
   let middle = env;
   if (env === 'test' || !charles) {
     // No remote backend
     middle = 'development.local-json';
-  } else if (env === 'staging') {
+  } else if (['staging', 'production'].indexOf(env) > -1) {
     // Use production configuration in staging
     middle = 'production';
-  } else if (env === 'development' || !env || environments.indexOf(env) < 0) {
-    // Default to development if env is not one
-    // of the allowed values
+  } else {
+    // Default to development
     middle = 'development.server';
   }
 
   const entrypoint = `./src/js/entrypoint.${middle}.tsx`;
-  console.log(`Using entrypoint ${entrypoint}`);
+  console.log(`Using entrypoint ${entrypoint}`); // eslint-disable-line
 
   return entrypoint;
 };
