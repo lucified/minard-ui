@@ -29,7 +29,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
       const stateObject = createDeploymentObject(deployment);
       return Object.assign(obj, { [deployment.id]: stateObject });
     } catch (e) {
-      console.log('Error parsing deployment:', deployment, e);
+      console.log('Error parsing deployment:', deployment, e); // tslint:disable-line:no-console
       return obj;
     }
   }, {});
@@ -52,7 +52,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.');
+      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
     case STORE_DEPLOYMENTS:
       const deployments = (<t.StoreDeploymentsAction> action).entities;

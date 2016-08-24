@@ -350,7 +350,7 @@ describe('sagas', () => {
           call(apiCall, id)
         );
 
-        expect(iterator.next({ response: response }).value).to.deep.equal(
+        expect(iterator.next({ response }).value).to.deep.equal(
           call(sagas.storeIncludedEntities, response.included)
         );
 
@@ -431,7 +431,7 @@ describe('sagas', () => {
         call(api.fetchActivities)
       );
 
-      expect(iterator.next({ response: response }).value).to.deep.equal(
+      expect(iterator.next({ response }).value).to.deep.equal(
         put(Activities.actions.FetchActivities.success(response.data))
       );
 
@@ -453,7 +453,7 @@ describe('sagas', () => {
         call(api.fetchActivities)
       );
 
-      expect(iterator.next({ response: response }).value).to.deep.equal(
+      expect(iterator.next({ response }).value).to.deep.equal(
         call(sagas.storeIncludedEntities, response.included)
       );
 
@@ -505,7 +505,7 @@ describe('sagas', () => {
         call(api.fetchActivitiesForProject, id)
       );
 
-      expect(iterator.next({ response: response }).value).to.deep.equal(
+      expect(iterator.next({ response }).value).to.deep.equal(
         put(Activities.actions.FetchActivitiesForProject.success(id, response.data))
       );
 
@@ -527,7 +527,7 @@ describe('sagas', () => {
         call(api.fetchActivitiesForProject, id)
       );
 
-      expect(iterator.next({ response: response }).value).to.deep.equal(
+      expect(iterator.next({ response }).value).to.deep.equal(
         call(sagas.storeIncludedEntities, response.included)
       );
 
@@ -577,7 +577,7 @@ describe('sagas', () => {
         call(api.fetchAllProjects)
       );
 
-      expect(iterator.next({ response: response }).value).to.deep.equal(
+      expect(iterator.next({ response }).value).to.deep.equal(
         put(Projects.actions.FetchAllProjects.success(response.data))
       );
 
@@ -599,7 +599,7 @@ describe('sagas', () => {
         call(api.fetchAllProjects)
       );
 
-      expect(iterator.next({ response: response }).value).to.deep.equal(
+      expect(iterator.next({ response }).value).to.deep.equal(
         call(sagas.storeIncludedEntities, response.included)
       );
 
@@ -660,26 +660,26 @@ describe('sagas', () => {
 
       const deployments = [
         {
-          'id': '7',
-          'url': '#',
-          'screenshot': '#',
-          'creator': {
-            'name': 'Ville Saarinen',
-            'email': 'ville.saarinen@lucify.com',
-            'timestamp': 1470131481802,
+          id: '7',
+          url: '#',
+          screenshot: '#',
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470131481802,
           },
-          'commit': 'aacceeff02',
+          commit: 'aacceeff02',
         },
         {
-          'id': '8',
-          'url': '#',
-          'screenshot': '#',
-          'creator': {
-            'name': undefined,
-            'email': 'juho@lucify.com',
-            'timestamp': 1470131481902,
+          id: '8',
+          url: '#',
+          screenshot: '#',
+          creator: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1470131481902,
           },
-          'commit': 'aacceeff03',
+          commit: 'aacceeff03',
         },
       ];
 

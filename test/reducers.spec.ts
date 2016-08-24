@@ -604,49 +604,49 @@ describe('reducers', () => {
     const expectedObjectsToStore: BranchState = {
       1: {
         id: '1',
-        'name': 'first-branch',
-        'description': 'This is a branch description',
-        'deployments': ['7'],
-        'commits': ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
-        'project': '1',
+        name: 'first-branch',
+        description: 'This is a branch description',
+        deployments: ['7'],
+        commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+        project: '1',
       },
       2: {
         id: '2',
-        'name': 'second-branch',
-        'description': undefined,
-        'commits': ['aacd00f02', 'a998823423'],
-        'deployments': ['8'],
-        'project': '1',
+        name: 'second-branch',
+        description: undefined,
+        commits: ['aacd00f02', 'a998823423'],
+        deployments: ['8'],
+        project: '1',
       },
     };
 
     const stateWithoutExistingEntity: BranchState = {
       3: {
         id: '3',
-        'name': 'third-branch',
-        'description': undefined,
-        'commits': ['aacd00f03', 'a998833433'],
-        'deployments': <string[]> [],
-        'project': '1',
+        name: 'third-branch',
+        description: undefined,
+        commits: ['aacd00f03', 'a998833433'],
+        deployments: <string[]> [],
+        project: '1',
       },
     };
 
     const stateWithExistingEntity: BranchState = {
       3: {
         id: '3',
-        'name': 'third-branch-foo',
-        'description': undefined,
-        'commits': ['aacd00f03', 'a998833433'],
-        'deployments': <string[]> [],
-        'project': '1',
+        name: 'third-branch-foo',
+        description: undefined,
+        commits: ['aacd00f03', 'a998833433'],
+        deployments: <string[]> [],
+        project: '1',
       },
       1: {
         id: '1',
-        'name': 'first-branch-foo',
-        'description': undefined,
-        'commits': ['a998823423'],
-        'deployments': ['8'],
-        'project': '1',
+        name: 'first-branch-foo',
+        description: undefined,
+        commits: ['a998823423'],
+        deployments: ['8'],
+        project: '1',
       },
     };
 
@@ -657,12 +657,12 @@ describe('reducers', () => {
 
     const expectedSuccessfulRequestObject: BranchState = {
       1: {
-        'id': '1',
-        'name': 'first-branch',
-        'description': 'This is a branch description',
-        'deployments': ['7'],
-        'commits': ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
-        'project': '1',
+        id: '1',
+        name: 'first-branch',
+        description: 'This is a branch description',
+        deployments: ['7'],
+        commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+        project: '1',
       },
     };
 
@@ -694,95 +694,95 @@ describe('reducers', () => {
     };
 
     const expectedObjectsToStore: CommitState = {
-      '12354124': {
-        'id': '12354124',
-        'hash': '0123456789abcdef',
-        'author': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470066081802,
+      12354124: {
+        id: '12354124',
+        hash: '0123456789abcdef',
+        author: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470066081802,
         },
-        'committer': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470066081802,
+        committer: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470066081802,
         },
-        'message': 'Foobar is nice',
-        'deployment': undefined,
+        message: 'Foobar is nice',
+        deployment: undefined,
         description: undefined,
       },
-      '2543452': {
-        'id': '2543452',
-        'hash': '0123456789abcdef',
-        'author': {
+      2543452: {
+        id: '2543452',
+        hash: '0123456789abcdef',
+        author: {
           name: undefined,
-          'email': 'juho@lucify.com',
-          'timestamp': 1470055881802,
+          email: 'juho@lucify.com',
+          timestamp: 1470055881802,
         },
-        'committer': {
+        committer: {
           name: undefined,
-          'email': 'juho@lucify.com',
-          'timestamp': 1470055881802,
+          email: 'juho@lucify.com',
+          timestamp: 1470055881802,
         },
-        'message': 'Barbar barr barb aearr',
-        'deployment': undefined,
+        message: 'Barbar barr barb aearr',
+        deployment: undefined,
         description: undefined,
       },
     };
 
     const stateWithoutExistingEntity: CommitState = {
-      '098325343': {
-        'id': '098325343',
-        'hash': '0123456789abcdef',
-        'author': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470055881801,
+      098325343: {
+        id: '098325343',
+        hash: '0123456789abcdef',
+        author: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470055881801,
         },
-        'committer': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470055881801,
+        committer: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470055881801,
         },
-        'message': 'This is a commit message',
+        message: 'This is a commit message',
         deployment: undefined,
         description: undefined,
       },
     };
 
     const stateWithExistingEntity: CommitState = {
-      '098325343': {
-        'id': '098325343',
-        'hash': '0123456789abcdecccf',
-        'author': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470055881801,
+      098325343: {
+        id: '098325343',
+        hash: '0123456789abcdecccf',
+        author: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470055881801,
         },
-        'committer': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470055881801,
+        committer: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470055881801,
         },
-        'message': 'This is a commit message',
+        message: 'This is a commit message',
         deployment: undefined,
         description: undefined,
       },
-      '2543452': {
-        'id': '2543452',
-        'hash': '1235232141',
-        'author': {
+      2543452: {
+        id: '2543452',
+        hash: '1235232141',
+        author: {
           name: undefined,
-          'email': 'juho@lucify.com',
-          'timestamp': 1470055881812,
+          email: 'juho@lucify.com',
+          timestamp: 1470055881812,
         },
-        'committer': {
+        committer: {
           name: undefined,
-          'email': 'juho@lucify.com',
-          'timestamp': 1470055881812,
+          email: 'juho@lucify.com',
+          timestamp: 1470055881812,
         },
-        'message': 'Barbar barearr',
-        'deployment': undefined,
+        message: 'Barbar barearr',
+        deployment: undefined,
         description: undefined,
       },
     };
@@ -793,22 +793,22 @@ describe('reducers', () => {
     };
 
     const expectedSuccessfulRequestObject: CommitState = {
-      'aacceeff02': {
-        'id': 'aacceeff02',
-        'hash': '0123456789abcdef',
-        'author': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470066681802,
+      aacceeff02: {
+        id: 'aacceeff02',
+        hash: '0123456789abcdef',
+        author: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470066681802,
         },
-        'committer': {
-          'name': undefined,
-          'email': 'juho@lucify.com',
-          'timestamp': 1469800281802,
+        committer: {
+          name: undefined,
+          email: 'juho@lucify.com',
+          timestamp: 1469800281802,
         },
-        'message': 'Fix colors',
-        'description': "The previous colors didn't look nice. Now they're much prettier.",
-        'deployment': '7',
+        message: 'Fix colors',
+        description: "The previous colors didn't look nice. Now they're much prettier.",
+        deployment: '7',
       },
     };
 
@@ -840,47 +840,47 @@ describe('reducers', () => {
     };
 
     const expectedObjectsToStore: DeploymentState = {
-      '7': {
-        'id': '7',
-        'status': 'success',
-        'url': '#',
-        'screenshot': '#',
-        'creator': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470131481802,
+      7: {
+        id: '7',
+        status: 'success',
+        url: '#',
+        screenshot: '#',
+        creator: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470131481802,
         },
-        'commit': 'aacceeff02',
+        commit: 'aacceeff02',
       },
     };
 
     const stateWithoutExistingEntity: DeploymentState = {
-      '8': {
-        'id': '8',
-        'status': 'success',
-        'url': '#',
-        'screenshot': '#',
-        'creator': {
-          'name': undefined,
-          'email': 'juho@lucify.com',
-          'timestamp': 1470131581802,
+      8: {
+        id: '8',
+        status: 'success',
+        url: '#',
+        screenshot: '#',
+        creator: {
+          name: undefined,
+          email: 'juho@lucify.com',
+          timestamp: 1470131581802,
         },
-        'commit': '2543452',
+        commit: '2543452',
       },
     };
 
     const stateWithExistingEntity: DeploymentState = {
-      '7': {
-        'id': '7',
-        'status': 'success',
-        'url': 'foo#',
-        'screenshot': 'bar#',
-        'creator': {
-          'name': 'Ville',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470131481802,
+      7: {
+        id: '7',
+        status: 'success',
+        url: 'foo#',
+        screenshot: 'bar#',
+        creator: {
+          name: 'Ville',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470131481802,
         },
-        'commit': '123468594',
+        commit: '123468594',
       },
     };
 
@@ -890,17 +890,17 @@ describe('reducers', () => {
     };
 
     const expectedSuccessfulRequestObject: DeploymentState = {
-      '7': {
-        'id': '7',
-        'status': 'success',
-        'url': '#',
-        'screenshot': '#',
-        'creator': {
-          'name': 'Ville Saarinen',
-          'email': 'ville.saarinen@lucify.com',
-          'timestamp': 1470131481802,
+      7: {
+        id: '7',
+        status: 'success',
+        url: '#',
+        screenshot: '#',
+        creator: {
+          name: 'Ville Saarinen',
+          email: 'ville.saarinen@lucify.com',
+          timestamp: 1470131481802,
         },
-        'commit': 'aacceeff02',
+        commit: 'aacceeff02',
       },
     };
 
@@ -932,67 +932,67 @@ describe('reducers', () => {
     };
 
     const expectedObjectsToStore: ProjectState = {
-      '1': {
-        'id': '1',
-        'name': 'First project',
-        'description': 'This is the first project description. It might not be set.',
-        'activeUsers': [
+      1: {
+        id: '1',
+        name: 'First project',
+        description: 'This is the first project description. It might not be set.',
+        activeUsers: [
           {
-            'name': 'Ville Saarinen',
-            'email': 'ville.saarinen@lucify.com',
-            'timestamp': 1470066681802,
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470066681802,
           },
           {
-            'email': 'juho@lucify.com',
-            'name': undefined,
-            'timestamp': 1469800281802,
+            email: 'juho@lucify.com',
+            name: undefined,
+            timestamp: 1469800281802,
           },
         ],
-        'branches': ['1', '2', '3'],
+        branches: ['1', '2', '3'],
       },
-      '2': {
-        'id': '2',
-        'name': 'Second project',
-        'description': undefined,
-        'activeUsers': [],
-        'branches': [],
+      2: {
+        id: '2',
+        name: 'Second project',
+        description: undefined,
+        activeUsers: [],
+        branches: [],
       },
     };
 
     const stateWithoutExistingEntity: ProjectState = {
-      '3': {
-        'id': '3',
-        'name': 'Third project',
-        'description': undefined,
-        'activeUsers': [],
-        'branches': [],
+      3: {
+        id: '3',
+        name: 'Third project',
+        description: undefined,
+        activeUsers: [],
+        branches: [],
       },
     };
 
     const stateWithExistingEntity: ProjectState = {
-      '3': {
-        'id': '3',
-        'name': 'Third project a',
-        'description': undefined,
-        'activeUsers': [
+      3: {
+        id: '3',
+        name: 'Third project a',
+        description: undefined,
+        activeUsers: [
           {
-            'email': 'foo@bar.com',
-            'timestamp': 147001234532,
+            email: 'foo@bar.com',
+            timestamp: 147001234532,
           },
         ],
-        'branches': [],
+        branches: [],
       },
-      '1': {
-        'id': '1',
-        'name': 'First project again',
-        'description': 'foobar',
-        'activeUsers': [
+      1: {
+        id: '1',
+        name: 'First project again',
+        description: 'foobar',
+        activeUsers: [
           {
-            'email': 'foo@bar.com',
-            'timestamp': 147001334532,
+            email: 'foo@bar.com',
+            timestamp: 147001334532,
           },
         ],
-        'branches': [],
+        branches: [],
       },
     };
 
@@ -1003,22 +1003,22 @@ describe('reducers', () => {
 
     const expectedSuccessfulRequestObject: ProjectState = {
       1: {
-        'id': '1',
-        'name': 'First project',
-        'description': 'This is the first project description. It might not be set.',
-        'activeUsers': [
+        id: '1',
+        name: 'First project',
+        description: 'This is the first project description. It might not be set.',
+        activeUsers: [
           {
-            'name': 'Ville Saarinen',
-            'email': 'ville.saarinen@lucify.com',
-            'timestamp': 1470066681802,
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470066681802,
           },
           {
-            'email': 'juho@lucify.com',
-            'name': undefined,
-            'timestamp': 1469800281802,
+            email: 'juho@lucify.com',
+            name: undefined,
+            timestamp: 1469800281802,
           },
         ],
-        'branches': ['1', '2', '3'],
+        branches: ['1', '2', '3'],
       },
     };
 

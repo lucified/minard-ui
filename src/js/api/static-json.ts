@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-console.log('Using bundled JSON files');
+console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
 const activitiesJSON = require('file!../../../json/activities.json');
 const allProjectsJSON = require('file!../../../json/projects.json');

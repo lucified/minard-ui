@@ -25,7 +25,7 @@ class MinardLink extends React.Component<Props, any> {
       // path = `/deployment/${deployment.id}`;
 
       // TODO: link to deployment view instead of actual deployment
-      path = deployment.url || '';
+      path = deployment.url || '';
 
       if (path) {
         return (
@@ -45,7 +45,7 @@ class MinardLink extends React.Component<Props, any> {
     } else if (homepage) {
       path = '/projects';
     } else {
-      console.log('Error: no link handler found');
+      console.log('Error: no link handler found'); // tslint:disable-line:no-console
       return <span>{children}</span>;
     }
 

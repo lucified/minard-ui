@@ -47,7 +47,7 @@ const SingleActivity = (props: Props) => {
         />
       );
     default:
-      console.log('Error: Unknown activity type!');
+      console.log('Error: Unknown activity type!'); // tslint:disable-line:no-console
       return <div />;
   }
 };

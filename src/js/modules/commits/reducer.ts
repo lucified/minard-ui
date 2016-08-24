@@ -42,7 +42,7 @@ const responseToStateShape = (commits: t.ApiResponse) => {
       const stateObject = createCommitObject(commit);
       return Object.assign(obj, { [commit.id]: stateObject });
     } catch (e) {
-      console.log('Error parsing commit:', commit, e);
+      console.log('Error parsing commit:', commit, e); // tslint:disable-line:no-console
       return obj;
     }
   }, {});
@@ -64,7 +64,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [responseAction.id!]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.');
+      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
     case STORE_COMMITS:
       const commits = (<t.StoreCommitsAction> action).entities;

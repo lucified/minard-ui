@@ -21,7 +21,13 @@ class ProjectHeader extends React.Component<Props, any> {
         <div className={classNames(styles.avatars, 'row', 'top-xs')}>
           <div className="col-xs-12 center-xs">
             {project.activeUsers.map(user =>
-              <Avatar key={user.email} className={styles.avatar} email={user.email} title={user.name || user.email} shadow />
+              <Avatar
+                key={user.email}
+                className={styles.avatar}
+                email={user.email}
+                title={user.name || user.email}
+                shadow
+              />
             )}
           </div>
         </div>

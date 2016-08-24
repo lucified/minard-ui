@@ -34,7 +34,7 @@ const responseToStateShape = (activities: t.ApiResponse) => {
       const activityObject = createActivityObject(activity);
       return Object.assign(obj, { [activity.id]: activityObject });
     } catch (e) {
-      console.log('Error parsing activity:', activity, e);
+      console.log('Error parsing activity:', activity, e); // tslint:disable-line:no-console
       return obj;
     }
   }, {});

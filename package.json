@@ -18,6 +18,7 @@
     "webpack-dev-server": "webpack-dev-server --config=webpack.config.dev.js --inline --hot --port 3000 --host 0.0.0.0",
     "compile": "tsc",
     "circle-artifact": "node circle-artifact.js",
+    "lint": "tslint --format=verbose 'src/js/**/*.ts' 'src/js/**/*.tsx'",
     "watch": "webpack --progress --colors --watch"
   },
   "engines": {

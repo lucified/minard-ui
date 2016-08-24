@@ -31,7 +31,7 @@ const responseToStateShape = (branches: t.ApiResponse) => {
       const stateObject = createBranchObject(branch);
       return Object.assign(obj, { [branch.id]: stateObject });
     } catch (e) {
-      console.log('Error parsing branch:', branch, e);
+      console.log('Error parsing branch:', branch, e); // tslint:disable-line:no-console
       return obj;
     }
   }, {});
@@ -54,7 +54,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.');
+      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
     case STORE_BRANCHES:
       const branches = (<t.StoreBranchesAction> action).entities;

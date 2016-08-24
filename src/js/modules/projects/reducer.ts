@@ -32,7 +32,7 @@ const responseToStateShape = (projects: t.ApiResponse) => {
       const stateObject = createProjectObject(project);
       return Object.assign(obj, { [project.id]: stateObject });
     } catch (e) {
-      console.log('Error parsing project:', project, e);
+      console.log('Error parsing project:', project, e); // tslint:disable-line:no-console
       return obj;
     }
   }, {});
@@ -62,7 +62,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.');
+      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
