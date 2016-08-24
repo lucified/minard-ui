@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const postcssReporter = require('postcss-reporter');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const deployConfig = require('./deploy-config');
 
@@ -27,6 +28,8 @@ const getEntrypoint = (env, charles) => {
   return entrypoint;
 };
 
+const name = '[name]-[hash:8].[ext]';
+
 /*
  * Get the webpack loaders object for the webpack configuration
  */
@@ -41,7 +44,7 @@ const loaders = [
   },
   {
     test: /\.(jpeg|jpg|gif|png)$/,
-    loader: 'file-loader?name=[name]-[hash:12].[ext]',
+    loader: `file-loader?name=${name}`,
   },
   {
     test: /\.hbs$/,
@@ -59,23 +62,23 @@ const loaders = [
   // For Font Awesome. From https://gist.github.com/Turbo87/e8e941e68308d3b40ef6
   {
     test: /\.css$/,
-    loader: 'style!css?sourceMap',
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+    loader: `url-loader?limit=10000&mimetype=application/font-woff&name=${name}`,
   },
   {
     test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-    loader: 'url?limit=10000&mimetype=application/octet-stream',
+    loader: `url?limit=10000&mimetype=application/octet-stream&name=${name}`,
   },
   {
     test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-    loader: 'file',
+    loader: `file?name=${name}`,
   },
   {
     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-    loader: 'url?limit=10000&mimetype=image/svg+xml',
+    loader: `url?limit=10000&mimetype=image/svg+xml&name=${name}`,
   },
 ];
 
@@ -87,6 +90,9 @@ const htmlWebpackPluginConfig = {
   filename: 'index.html',
   googleAnalytics: (deployConfig.env === 'production'),
   googleAnalyticsSendPageView: (deployConfig.env === 'production'),
+  files: {
+    css: ['font-awesome.css'],
+  },
 };
 
 const config = {
@@ -121,6 +127,7 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
     }),
+    new ExtractTextPlugin('font-awesome-[hash].css'),
   ],
 };
 
