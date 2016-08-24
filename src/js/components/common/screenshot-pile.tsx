@@ -14,7 +14,15 @@ interface Props {
   count: number;
 }
 
-const noScreenshot = <img className={styles.single} src={noScreenshotURL} />;
+const noScreenshot = (
+  <img
+    alt="No screenshot available"
+    title="No screenshot available"
+    className={styles.single}
+    src={noScreenshotURL}
+  />
+);
+
 const loading = (
   <div className={styles.pile}>
     <div className={classNames(styles.screenshot, styles['screenshot-0'], styles.empty)}>
