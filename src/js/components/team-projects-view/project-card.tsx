@@ -32,32 +32,30 @@ const getDeploymentSummary = (deployment?: Deployment) => {
   const { creator } = deployment;
 
   return (
-    <MinardLink openInNewWindow deployment={deployment}>
-      <div className={styles.spread}>
-        <div className="flex">
-          <div className={styles['preview-icon']}>
-            <Icon name="eye" />
-          </div>
-          <div>
-            <div className={styles.action}>
-              <span className={styles.author}>
-                {creator.name || creator.email}
-              </span>
-              {' '}generated a{' '}
-              <span className={styles.target}>
-                new preview
-              </span>
-            </div>
-            <div className={styles.timestamp}>
-              {moment(creator.timestamp).fromNow()}
-            </div>
-          </div>
+    <div className={styles.spread}>
+      <div className="flex">
+        <div className={styles['preview-icon']}>
+          <Icon name="eye" />
         </div>
-        <div className={styles.open}>
-          Open <Icon name="external-link" />
+        <div>
+          <div className={styles.action}>
+            <span className={styles.author}>
+              {creator.name || creator.email}
+            </span>
+            {' '}generated a{' '}
+            <span className={styles.target}>
+              new preview
+            </span>
+          </div>
+          <div className={styles.timestamp}>
+            {moment(creator.timestamp).fromNow()}
+          </div>
         </div>
       </div>
-    </MinardLink>
+      <div className={styles.open}>
+        Open <Icon name="external-link" />
+      </div>
+    </div>
   );
 };
 
@@ -76,13 +74,13 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
 
   return (
     <div className={styles.card}>
-      <div className={styles['card-top']}>
-        <MinardLink project={project}>
-          <img src={screenshot} className={styles.screenshot} />
-        </MinardLink>
-      </div>
-      <div className={styles['card-middle']}>
-        <MinardLink project={project}>
+      <MinardLink project={project}>
+        <div className={styles['card-top']}>
+          <MinardLink project={project}>
+            <img src={screenshot} className={styles.screenshot} />
+          </MinardLink>
+        </div>
+        <div className={styles['card-middle']}>
           <div className={styles.avatars}>
             {project.activeUsers.map(user => // TODO: have an upper range for this
               <Avatar
@@ -96,11 +94,13 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
           </div>
           <h3 className={styles.title}>{project.name}</h3>
           <p className={styles.description}>{project.description}</p>
-        </MinardLink>
-      </div>
-      <div className={styles['card-bottom']}>
-        {getDeploymentSummary(latestDeployment)}
-      </div>
+        </div>
+      </MinardLink>
+      <MinardLink openInNewWindow deployment={latestDeployment}>
+        <div className={styles['card-bottom']}>
+          {getDeploymentSummary(latestDeployment)}
+        </div>
+      </MinardLink>
     </div>
   );
 };
