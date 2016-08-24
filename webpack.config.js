@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
@@ -122,7 +124,7 @@ const config = {
   ],
 };
 
-if (['production', 'staging'].indexOf(deployConfig.env) > -1){
+if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
   config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {

@@ -1,5 +1,5 @@
 
-const lucifyDeployConfig = require('lucify-deploy-config').default;
+const lucifyDeployConfig = require('lucify-deploy-config').default; // eslint-disable-line
 
 const opts = {
   bucket: (env) => {
@@ -32,6 +32,6 @@ const opts = {
 // TODO: change 'qa' to 'master' before merging
 
 const env = process.env.CIRCLE_BRANCH === 'qa' ? 'staging'
-  : process.env.LUCIFY_ENV || process.env.NODE_ENV || 'development'
+  : process.env.LUCIFY_ENV || process.env.NODE_ENV || 'development';
 
 module.exports = lucifyDeployConfig(env, opts);
