@@ -76,9 +76,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
     <div className={styles.card}>
       <MinardLink project={project}>
         <div className={styles['card-top']}>
-          <MinardLink project={project}>
-            <img src={screenshot} className={styles.screenshot} />
-          </MinardLink>
+          <img src={screenshot} className={styles.screenshot} />
         </div>
         <div className={styles['card-middle']}>
           <div className={styles.avatars}>
