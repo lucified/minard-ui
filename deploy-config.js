@@ -29,9 +29,7 @@ const opts = {
   flow: 'bdc6c13b-be3f-42a9-9f71-e9197dd8fb03', // The Main flow ID
 };
 
-// TODO: change 'qa' to 'master' before merging
-
-const env = process.env.CIRCLE_BRANCH === 'qa' ? 'staging'
+const env = process.env.CIRCLE_BRANCH === 'master' ? 'staging'
   : process.env.LUCIFY_ENV || process.env.NODE_ENV || 'development';
 
 module.exports = lucifyDeployConfig(env, opts);
