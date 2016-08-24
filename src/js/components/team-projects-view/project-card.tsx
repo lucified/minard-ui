@@ -82,19 +82,21 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
         </MinardLink>
       </div>
       <div className={styles['card-middle']}>
-        <div className={styles.avatars}>
-          {project.activeUsers.map(user => // TODO: have an upper range for this
-            <Avatar
-              key={`avatar-${user.email}`}
-              className={styles.avatar}
-              title={user.name || user.email}
-              email={user.email}
-              shadow
-            />
-          )}
-        </div>
-        <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>
-        <p className={styles.description}>{project.description}</p>
+        <MinardLink project={project}>
+          <div className={styles.avatars}>
+            {project.activeUsers.map(user => // TODO: have an upper range for this
+              <Avatar
+                key={`avatar-${user.email}`}
+                className={styles.avatar}
+                title={user.name || user.email}
+                email={user.email}
+                shadow
+              />
+            )}
+          </div>
+          <h3 className={styles.title}>{project.name}</h3>
+          <p className={styles.description}>{project.description}</p>
+        </MinardLink>
       </div>
       <div className={styles['card-bottom']}>
         {getDeploymentSummary(latestDeployment)}
