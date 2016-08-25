@@ -1,6 +1,5 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import { Branch } from '../../modules/branches';
@@ -29,18 +28,15 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 
   if (branch.deployments.length === 0) {
     commitContent = (
-      <div>
-        <h4>No previews available</h4>
-        <h6>Make some commits to {branch.name} generate previews</h6>
+      <div className={styles.empty}>
+        No previews available
       </div>
     );
   } else {
     if (isError(latestDeployment)) {
       commitContent = (
-        <div>
-          <Icon name="exclamation" fixedWidth size="3x" />
-          <p>Error loading deployment</p>
-          <p>{latestDeployment.prettyError}</p>
+        <div className={styles.error}>
+          Error loading deployment: {latestDeployment.prettyError}
         </div>
       );
     } else {
