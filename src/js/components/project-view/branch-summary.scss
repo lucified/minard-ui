@@ -11,32 +11,27 @@
 }
 
 .hover {
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  border-radius: 8px;
-  position: relative;
-
-  &:hover {
-    background-color: #fbfbfb;
-  }
-
-  &:hover::after {
-    opacity: 1;
-  }
-
-  &::after {
-    color: #919D9F;
-    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-    position: absolute;
-    font-family: "FontAwesome";
-    font-size: 14px;
-    content: "\f08e";
-    top: 5px;
-    right: 5px;
-    width: 15px;
-    height: 15px;
-    opacity: 0;
+  :global {
+    & .commit-message::after {
+      color: #919D9F;
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      font-family: "FontAwesome";
+      font-size: 13px;
+      content: "\f08e";
+      opacity: 0;
+      padding-left: 10px;
+    }
   }
 }
+
+.hover:hover {
+  :global {
+    & .commit-message::after {
+      opacity: 1;
+    }
+  }
+}
+
 
 .header {
   display: flex;
