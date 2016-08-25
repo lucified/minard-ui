@@ -91,7 +91,7 @@ const htmlWebpackPluginConfig = {
   googleAnalytics: (deployConfig.env === 'production'),
   googleAnalyticsSendPageView: (deployConfig.env === 'production'),
   files: {
-    css: ['font-awesome.css'],
+    css: ['bundled.css'],
   },
 };
 
@@ -127,7 +127,7 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
     }),
-    new ExtractTextPlugin('font-awesome-[hash].css'),
+    new ExtractTextPlugin('bundled-[hash].css'),
   ],
 };
 
