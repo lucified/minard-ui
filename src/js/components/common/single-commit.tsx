@@ -43,7 +43,7 @@ const SingleCommit = ({ commit, className }: Props) => {
           </span>
         </div>
         <div className={styles['commit-body']}>
-          <div className={styles.message}>{commit.message}</div>
+          <div className={classNames(styles.message, 'commit-message')}>{commit.message}</div>
           {commit.description && <div className={styles.description}>{commit.description}</div>}
         </div>
       </div>

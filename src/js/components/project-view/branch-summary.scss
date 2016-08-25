@@ -10,9 +10,35 @@
   margin-bottom: 0;
 }
 
-.screenshots {
+.hover {
+  :global {
+    // This prevents a flicker on Safari once opacity reaches 1
+    & .commit-message {
+      -webkit-transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+    }
 
+    & .commit-message::after {
+      color: #2C3E50;
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      font-family: "FontAwesome";
+      font-size: 13px;
+      content: "\f08e";
+      opacity: 0;
+      padding-left: 10px;
+      font-weight: normal;
+    }
+  }
 }
+
+.hover:hover {
+  :global {
+    & .commit-message::after {
+      opacity: 1;
+    }
+  }
+}
+
 
 .header {
   display: flex;
