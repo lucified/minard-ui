@@ -8,6 +8,11 @@
   color: #7F8C8D;
   margin-bottom: 12px;
   line-height: 1.92;
+
+  a:hover {
+    color: #2C3E50;
+    text-decoration: underline;
+  }
 }
 
 .deployment-metadata-author, .deployment-metadata-branch, .deployment-metadata-project {
@@ -16,6 +21,10 @@
 
 .deployment-metadata-project {
   color: #2EBDB1;
+
+  &:hover {
+    color: #0F807E !important;
+  }
 }
 
 .action {

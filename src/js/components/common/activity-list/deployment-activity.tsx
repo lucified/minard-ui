@@ -82,7 +82,7 @@ const DeploymentActivity = (props: Props) => {
           {showProjectName && getProjectLabel(project)}
         </div>
         <div className={styles.share}>
-          Share
+          {'' /* TODO: add share link */}
         </div>
       </div>
       <MinardLink deployment={deployment}>

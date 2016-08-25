@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import { compact, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -13,7 +14,7 @@ import { StateTree } from '../../reducers';
 import Avatar from '../common/avatar';
 import MinardLink from '../common/minard-link';
 
-const styles = require('./project-summary.scss');
+const styles = require('./project-card.scss');
 const noScreenshot = require('../../../images/no-screenshot.png');
 
 interface PassedProps {
@@ -32,36 +33,34 @@ const getDeploymentSummary = (deployment?: Deployment) => {
   const { creator } = deployment;
 
   return (
-    <MinardLink openInNewWindow deployment={deployment}>
-      <div className={styles.spread}>
-        <div className="flex">
-          <div className={styles['preview-icon']}>
-            <Icon name="eye" />
-          </div>
-          <div>
-            <div className={styles.action}>
-              <span className={styles.author}>
-                {creator.name || creator.email}
-              </span>
-              {' '}generated a{' '}
-              <span className={styles.target}>
-                new preview
-              </span>
-            </div>
-            <div className={styles.timestamp}>
-              {moment(creator.timestamp).fromNow()}
-            </div>
-          </div>
+    <div className={styles.spread}>
+      <div className="flex">
+        <div className={styles['preview-icon']}>
+          <Icon name="eye" />
         </div>
-        <div className={styles.open}>
-          Open <Icon name="external-link" />
+        <div>
+          <div className={styles.action}>
+            <span className={styles.author}>
+              {creator.name || creator.email}
+            </span>
+            {' '}generated a{' '}
+            <span className={styles.target}>
+              new preview
+            </span>
+          </div>
+          <div className={styles.timestamp}>
+            {moment(creator.timestamp).fromNow()}
+          </div>
         </div>
       </div>
-    </MinardLink>
+      <div className={styles.open}>
+        Open <Icon name="external-link" />
+      </div>
+    </div>
   );
 };
 
-const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
+const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
       <div key={project.id!}>
@@ -73,32 +72,35 @@ const ProjectSummary = ({ project, latestDeployment }: PassedProps & GeneratedPr
   }
 
   const screenshot = (latestDeployment && latestDeployment.screenshot) || noScreenshot;
+  const deploymentSummary = getDeploymentSummary(latestDeployment);
 
   return (
     <div className={styles.card}>
-      <div className={styles['card-top']}>
-        <MinardLink project={project}>
+      <MinardLink project={project}>
+        <div className={styles['card-top']}>
           <img src={screenshot} className={styles.screenshot} />
-        </MinardLink>
-      </div>
-      <div className={styles['card-middle']}>
-        <div className={styles.avatars}>
-          {project.activeUsers.map(user => // TODO: have an upper range for this
-            <Avatar
-              key={`avatar-${user.email}`}
-              className={styles.avatar}
-              title={user.name || user.email}
-              email={user.email}
-              shadow
-            />
-          )}
         </div>
-        <MinardLink project={project}><h3 className={styles.title}>{project.name}</h3></MinardLink>
-        <p className={styles.description}>{project.description}</p>
-      </div>
-      <div className={styles['card-bottom']}>
-        {getDeploymentSummary(latestDeployment)}
-      </div>
+        <div className={styles['card-middle']}>
+          <div className={styles.avatars}>
+            {project.activeUsers.map(user => // TODO: have an upper range for this
+              <Avatar
+                key={`avatar-${user.email}`}
+                className={styles.avatar}
+                title={user.name || user.email}
+                email={user.email}
+                shadow
+              />
+            )}
+          </div>
+          <h3 className={styles.title}>{project.name}</h3>
+          <p className={styles.description}>{project.description}</p>
+        </div>
+      </MinardLink>
+      <MinardLink openInNewWindow deployment={latestDeployment}>
+        <div className={classNames(styles['card-bottom'], { [styles['hover-effect']]: !!deploymentSummary })}>
+          {deploymentSummary}
+        </div>
+      </MinardLink>
     </div>
   );
 };
@@ -138,4 +140,4 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   };
 };
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectSummary);
+export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectCard);
