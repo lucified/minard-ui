@@ -52,10 +52,11 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 
   private getErrorContent(error: FetchError) {
     return (
-      <div>
-        <Icon name="exclamation" fixedWidth size="3x" />
-        <p>Error!</p>
-        <p>{error.prettyError}</p>
+      <div className={styles.error}>
+        <SubHeader align="center" />
+        <h2>Unable to load content</h2>
+        <p>Refresh to retry</p>
+        <small>{error.prettyError}</small>
       </div>
     );
   }
