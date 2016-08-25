@@ -55,6 +55,14 @@
   line-height: 1.67;
 }
 
+.hover-effect {
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}
+
 .spread {
   display: flex;
   justify-content: space-between;

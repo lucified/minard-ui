@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import { compact, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -71,6 +72,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
   }
 
   const screenshot = (latestDeployment && latestDeployment.screenshot) || noScreenshot;
+  const deploymentSummary = getDeploymentSummary(latestDeployment);
 
   return (
     <div className={styles.card}>
@@ -95,8 +97,8 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
         </div>
       </MinardLink>
       <MinardLink openInNewWindow deployment={latestDeployment}>
-        <div className={styles['card-bottom']}>
-          {getDeploymentSummary(latestDeployment)}
+        <div className={classNames(styles['card-bottom'], { [styles['hover-effect']]: !!deploymentSummary })}>
+          {deploymentSummary}
         </div>
       </MinardLink>
     </div>
