@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
@@ -86,7 +87,7 @@ const DeploymentActivity = (props: Props) => {
         </div>
       </div>
       <MinardLink deployment={deployment}>
-        <SingleCommit commit={commit} />
+        <SingleCommit className={classNames({ [styles.hover]: isSuccessful(deployment) })} commit={commit} />
       </MinardLink>
     </div>
   );
