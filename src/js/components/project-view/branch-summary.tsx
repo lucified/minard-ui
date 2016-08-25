@@ -36,7 +36,8 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
     if (isError(latestDeployment)) {
       commitContent = (
         <div className={styles.error}>
-          Error loading deployment: {latestDeployment.prettyError}
+          <p>Error loading deployment</p>
+          <small>{latestDeployment.prettyError}</small>
         </div>
       );
     } else {

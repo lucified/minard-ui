@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import Branches, { Branch } from '../../modules/branches';

@@ -21,7 +21,12 @@ const SingleCommit = ({ commit, className }: Props) => {
   }
 
   if (isError(commit)) {
-    return <span>`Error: ${commit.prettyError}`</span>;
+    return (
+      <div className={styles.error}>
+        <p>Error loading commit</p>
+        <small>{commit.prettyError}</small>
+      </div>
+    );
   }
 
   const { author, committer } = commit;

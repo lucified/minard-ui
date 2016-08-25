@@ -31,13 +31,16 @@ interface GeneratedProps {
 }
 
 const getLoadingContent = () => (
-  <div><h3>Loading...</h3></div>
+  <div className={styles.loading}>
+    Loading...
+  </div>
 );
 
 const getErrorContent = (branch: FetchError) => (
-  <div>
-    <h1>Oh no, errors. :(</h1>
-    <p>{branch.prettyError}</p>
+  <div className={styles.error}>
+    <h2>Unable to load activity</h2>
+    <p>Refresh to retry</p>
+    <small>{branch.prettyError}</small>
   </div>
 );
 

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 
 import { Branch } from '../../modules/branches';
 import { FetchError, isError } from '../../modules/errors';
@@ -25,11 +24,11 @@ const getLoadingContent = (key: number) => (
   <LoadingIcon center key={key} />
 );
 
-const getErrorMessage = (branch: FetchError) => (
-  <div key={branch.id!}>
-    <Icon name="exclamation" fixedWidth size="3x" />
-    <p>Uhhoh. Unable to get branch information</p>
-    <p>{branch.prettyError}</p>
+const getErrorMessage = (error: FetchError) => (
+  <div className={styles.error} key={error.id!}>
+    <h3>Unable to load branch</h3>
+    <p>Refresh to retry</p>
+    <small>{error.prettyError}</small>
   </div>
 );
 
