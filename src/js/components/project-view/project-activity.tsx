@@ -15,8 +15,8 @@ const ProjectActivity = ({ activities, isLoading }: Props) => (
     <SectionTitle><span>Activity</span></SectionTitle>
     <ActivityList
       activities={activities}
-      emptyContentHeader="Nothing has happened in your project!"
-      emptyContentBody="Commit some code to get things started."
+      emptyContentHeader="Nothing to see here yet…"
+      emptyContentBody=""
       isLoading={isLoading}
     />
   </section>
