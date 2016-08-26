@@ -18,7 +18,7 @@ interface Props {
 class MinardLink extends React.Component<Props, any> {
   public render() {
     const { children, deployment, branch, homepage, project, openInNewWindow } = this.props;
-    const target = openInNewWindow ? '_blank' : '_self';
+    const target = openInNewWindow ? '_blank' : undefined;
     let path: string;
 
     if (deployment) {
