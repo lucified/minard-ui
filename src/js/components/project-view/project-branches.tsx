@@ -30,7 +30,7 @@ const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
       return getLoadingContent(i);
     }
 
-    return <BranchSummary key={branch.id} branch={branch} />;
+    return <BranchSummary key={branch.id!} branch={branch} />;
   });
 };
 
