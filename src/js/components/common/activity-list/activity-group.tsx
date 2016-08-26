@@ -37,10 +37,12 @@ const getLoadingContent = () => (
 );
 
 const getErrorContent = (branch: FetchError) => (
-  <div className={styles.error}>
-    <h2>Unable to load activity</h2>
-    <p>Refresh to retry</p>
-    <small>{branch.prettyError}</small>
+  <div className={classNames('row', styles['activity-group'])}>
+    <div className={classNames('col-xs-12', styles.error)}>
+      <h2>Unable to load activity</h2>
+      <p>Refresh to retry</p>
+      <small>{branch.prettyError}</small>
+    </div>
   </div>
 );
 

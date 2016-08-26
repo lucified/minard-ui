@@ -23,7 +23,7 @@ const SingleCommit = ({ commit, className }: Props) => {
   if (isError(commit)) {
     return (
       <div className={styles.error}>
-        <p>Error loading commit</p>
+        <p>Unable to load commit. Refresh to retry.</p>
         <small>{commit.prettyError}</small>
       </div>
     );
