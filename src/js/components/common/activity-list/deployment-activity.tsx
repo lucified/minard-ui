@@ -86,7 +86,7 @@ const DeploymentActivity = (props: Props) => {
           {'' /* TODO: add share link */}
         </div>
       </div>
-      <MinardLink deployment={deployment}>
+      <MinardLink openInNewWindow deployment={deployment}>
         <SingleCommit className={classNames({ [styles.hover]: isSuccessful(deployment) })} commit={commit} />
       </MinardLink>
     </div>

@@ -90,7 +90,7 @@ const CommentActivity = (props: Props) => {
           Share
         </div>
       </div>
-      <MinardLink deployment={deployment}>
+      <MinardLink openInNewWindow deployment={deployment}>
         <div className={styles['activity-content']}>
           <div className={styles.avatar}>
             <Avatar title={creator.name || creator.email} size="40" email={creator.email} />

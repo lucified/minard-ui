@@ -45,7 +45,7 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
       );
     } else {
       commitContent = (
-        <MinardLink deployment={latestDeployment}>
+        <MinardLink openInNewWindow deployment={latestDeployment}>
           <SingleCommit className={styles.hover} commit={latestDeployedCommit} />
         </MinardLink>
       );
