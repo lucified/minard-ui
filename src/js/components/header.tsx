@@ -11,6 +11,7 @@ import { StateTree } from '../reducers';
 import Avatar from './common/avatar';
 
 const styles = require('./header.scss');
+const errorImage = require('../../images/icon-no-network.svg');
 
 interface PassedProps {
 
@@ -29,6 +30,15 @@ type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 const Header = ({ errors, clearError, selectedSection }: Props) => (
   <section className={styles['header-background']}>
+    {errors && errors.length > 0 && (
+      <div className={styles['error-box']}>
+        <img className={styles['error-image']} src={errorImage} />
+        <div>
+          Uhhoh, we seem to be having<br />
+          connection problems.
+        </div>
+      </div>
+    )}
     <div className="container">
       <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
         <div className={classNames(styles['link-container'], 'col-xs')}>
@@ -42,13 +52,7 @@ const Header = ({ errors, clearError, selectedSection }: Props) => (
           </ul>
         </div>
         <div className={classNames(styles.logo, 'col-xs')}>
-          {errors && errors.length > 0 ? (
-            <div>
-              <button onClick={() => clearError(errors[0])} />
-              <span />
-              {errors[0].prettyError}
-            </div>
-          ) : <h1 title="Minard" className={styles.minard}>m</h1>}
+          <h1 title="Minard" className={styles.minard}>m</h1>
         </div>
         <div className={classNames(styles['profile-container'], 'col-xs')}>
           <a className={styles['team-dropdown']} href="#">

@@ -63,3 +63,26 @@
   font-size: 14px;
   font-weight: 300;
 }
+
+.error-box {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  height: 97px;
+  border-radius: 6px;
+  background-color: #e74c3c;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  padding: 24px 30px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.71;
+  color: #ffffff;
+}
+
+.error-image {
+  margin-right: 20px;
+}
