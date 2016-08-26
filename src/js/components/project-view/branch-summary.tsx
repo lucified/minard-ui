@@ -15,7 +15,7 @@ import SingleCommit from '../common/single-commit';
 const styles = require('./branch-summary.scss');
 
 interface PassedProps {
-  branch: Branch;
+  branch: Branch | FetchError;
 }
 
 interface GeneratedProps {
@@ -24,6 +24,18 @@ interface GeneratedProps {
 }
 
 const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: PassedProps & GeneratedProps) => {
+  if (isError(branch)) {
+    return (
+      <div className={classNames('row', styles.branch)}>
+        <div className={classNames('col-xs-12', styles.error)}>
+          <h3>Unable to load branch</h3>
+          <p>Refresh to retry</p>
+          <small>{branch.prettyError}</small>
+        </div>
+      </div>
+    );
+  }
+
   let commitContent: JSX.Element;
 
   if (branch.deployments.length === 0) {
@@ -73,6 +85,11 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { branch } = ownProps;
+
+  if (isError(branch)) {
+    return {};
+  }
+
   const latestDeploymentId = branch.deployments[0];
   const latestDeployment = latestDeploymentId && Deployments.selectors.getDeployment(state, latestDeploymentId);
   let latestDeployedCommit: Commit | FetchError | undefined = undefined;

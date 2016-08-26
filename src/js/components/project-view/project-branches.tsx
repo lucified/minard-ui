@@ -24,20 +24,10 @@ const getLoadingContent = (key: number) => (
   <LoadingIcon center key={key} />
 );
 
-const getErrorMessage = (error: FetchError) => (
-  <div className={styles.error} key={error.id!}>
-    <h3>Unable to load branch</h3>
-    <p>Refresh to retry</p>
-    <small>{error.prettyError}</small>
-  </div>
-);
-
 const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
   return branches.map((branch, i) => {
     if (!branch) {
       return getLoadingContent(i);
-    } else if (isError(branch)) {
-      return getErrorMessage(branch);
     }
 
     return <BranchSummary key={branch.id} branch={branch} />;
