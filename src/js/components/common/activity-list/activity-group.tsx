@@ -36,11 +36,17 @@ const getLoadingContent = () => (
   </div>
 );
 
+const reloadPage = (e: any) => {
+  e.preventDefault();
+  location.reload(true);
+  return false;
+};
+
 const getErrorContent = (branch: FetchError) => (
   <div className={classNames('row', styles['activity-group'])}>
     <div className={classNames('col-xs-12', styles.error)}>
       <h2>Unable to load activity</h2>
-      <p>Refresh to retry</p>
+      <p><a onClick={reloadPage}>Click to reload</a></p>
       <small>{branch.prettyError}</small>
     </div>
   </div>

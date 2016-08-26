@@ -44,6 +44,12 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
     loadActivity(id);
   }
 
+  private reloadPage(e: any) {
+    e.preventDefault();
+    location.reload(true);
+    return false;
+  }
+
   public render() {
     const { project } = this.props;
 
@@ -64,8 +70,8 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
           <SubHeader align="left">
             <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
           </SubHeader>
-          <h2>Unable to load content</h2>
-          <p>Refresh to retry</p>
+          <h2>Unable to load project</h2>
+          <p><a onClick={this.reloadPage}>Click to reload</a></p>
           <small>{project.prettyError}</small>
         </div>
       );

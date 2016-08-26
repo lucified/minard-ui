@@ -23,13 +23,19 @@ interface GeneratedProps {
   latestDeployedCommit?: Commit | FetchError;
 }
 
+const reloadPage = (e: any) => {
+  e.preventDefault();
+  location.reload(true);
+  return false;
+};
+
 const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: PassedProps & GeneratedProps) => {
   if (isError(branch)) {
     return (
       <div className={classNames('row', styles.branch)}>
         <div className={classNames('col-xs-12', styles.error)}>
           <h3>Unable to load branch</h3>
-          <p>Refresh to retry</p>
+          <p><a onClick={reloadPage}>Click to reload</a></p>
           <small>{branch.prettyError}</small>
         </div>
       </div>

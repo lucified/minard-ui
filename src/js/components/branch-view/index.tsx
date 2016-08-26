@@ -40,6 +40,12 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     loadBranch(id);
   }
 
+  private reloadPage(e: any) {
+    e.preventDefault();
+    location.reload(true);
+    return false;
+  }
+
   private getLoadingContent() {
     return (
       <div>
@@ -53,8 +59,8 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     return (
       <div className={styles.error}>
         <SubHeader align="center" />
-        <h2>Unable to load content</h2>
-        <p>Refresh to retry</p>
+        <h2>Unable to load branch</h2>
+        <p><a onClick={this.reloadPage}>Click to reload</a></p>
         <small>{error.prettyError}</small>
       </div>
     );
