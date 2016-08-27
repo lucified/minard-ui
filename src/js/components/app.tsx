@@ -59,7 +59,7 @@ class App extends React.Component<Props, any> {
           transitionEnterTimeout={300}
           transitionLeaveTimeout={10}
         >
-          {React.cloneElement(children, { key: path })}
+          {React.cloneElement(children as any, { key: path })}
         </ReactCSSTransitionGroup>
         <Footer />
       </div>
