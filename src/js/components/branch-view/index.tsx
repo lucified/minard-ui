@@ -8,8 +8,6 @@ import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
-import MinardLink from '../common/minard-link';
-import SubHeader from '../common/sub-header';
 import BranchHeader from './branch-header';
 import CommitList from './commit-list';
 
@@ -17,7 +15,7 @@ const styles = require('./index.scss');
 
 interface PassedProps {
   params: {
-    id: string;
+    branchId: string;
     projectId: string;
   };
 }
@@ -35,9 +33,9 @@ interface GeneratedDispatchProps {
 class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
   public componentWillMount() {
     const { loadBranch } = this.props;
-    const { id } = this.props.params;
+    const { branchId } = this.props.params;
 
-    loadBranch(id);
+    loadBranch(branchId);
   }
 
   private reloadPage(e: any) {
@@ -47,18 +45,12 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
   }
 
   private getLoadingContent() {
-    return (
-      <div>
-        <SubHeader align="center" />
-        <LoadingIcon className={styles.loading} center />
-      </div>
-    );
+    return <LoadingIcon className={styles.loading} center />;
   }
 
   private getErrorContent(error: FetchError) {
     return (
       <div className={styles.error}>
-        <SubHeader align="center" />
         <h2>Unable to load branch</h2>
         <p><a onClick={this.reloadPage}>Click to reload</a></p>
         <small>{error.prettyError}</small>
@@ -86,9 +78,6 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 
     return (
       <div>
-        <SubHeader align="left">
-          <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>
-        </SubHeader>
         <BranchHeader project={project} branch={branch} />
         <CommitList commits={commits!} />
       </div>
@@ -97,9 +86,9 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 }
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
-  const { projectId, id } = ownProps.params;
+  const { projectId, branchId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
-  const branch = Branches.selectors.getBranch(state, id);
+  const branch = Branches.selectors.getBranch(state, branchId);
   let commits: (Commit | FetchError | undefined)[] | undefined;
 
   if (branch && !isError(branch)) {
