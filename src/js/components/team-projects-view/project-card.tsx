@@ -60,18 +60,12 @@ const getDeploymentSummary = (deployment?: Deployment) => {
   );
 };
 
-const reloadPage = (e: any) => {
-  e.preventDefault();
-  location.reload(true);
-  return false;
-};
-
 const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
       <div className={classNames(styles.card, styles.error)} key={project.id!}>
         <h2>Unable to load project</h2>
-        <p><a onClick={reloadPage}>Click to reload</a></p>
+        <p>Refresh to retry</p>
         <small>{project.prettyError}</small>
       </div>
     );
