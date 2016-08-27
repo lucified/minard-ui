@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
@@ -9,7 +8,6 @@ import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
-import SubHeader from '../common/sub-header';
 import ActivitySection from './activity-section';
 import ProjectsSection from './projects-section';
 
@@ -39,20 +37,11 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     const { projects, activities, isLoadingAllActivities, isLoadingProjects } = this.props;
 
     if (isLoadingProjects && projects.length === 0) {
-      return (
-        <div>
-          <SubHeader align="center" />
-          <LoadingIcon className={styles.loading} center />
-        </div>
-      );
+      return <LoadingIcon className={styles.loading} center />;
     }
 
     return (
       <div>
-        <SubHeader align="center">
-          Sort projects by
-          <a className={styles['sorting-dropdown']} href="#">Recent <Icon name="caret-down" /></a>
-        </SubHeader>
         <ProjectsSection projects={projects} isLoading={isLoadingProjects} />
         <ActivitySection activities={activities} isLoading={isLoadingAllActivities} />
       </div>

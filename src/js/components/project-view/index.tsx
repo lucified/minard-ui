@@ -9,8 +9,6 @@ import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
-import MinardLink from '../common/minard-link';
-import SubHeader from '../common/sub-header';
 import ProjectActivity from './project-activity';
 import ProjectBranches from './project-branches';
 import ProjectHeader from './project-header';
@@ -19,7 +17,7 @@ const styles = require('./index.scss');
 
 interface PassedProps {
   params: {
-    id: string;
+    projectId: string;
   };
 }
 
@@ -38,10 +36,10 @@ interface GeneratedDispatchProps {
 class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
     const { loadProject, loadActivity } = this.props;
-    const { id } = this.props.params;
+    const { projectId } = this.props.params;
 
-    loadProject(id);
-    loadActivity(id);
+    loadProject(projectId);
+    loadActivity(projectId);
   }
 
   private reloadPage(e: any) {
@@ -54,22 +52,12 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
     const { project } = this.props;
 
     if (!project) {
-      return (
-        <div>
-          <SubHeader align="left">
-            <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
-          </SubHeader>
-          <LoadingIcon className={styles.loading} center />
-        </div>
-      );
+      return <LoadingIcon className={styles.loading} center />;
     }
 
     if (isError(project)) {
       return (
         <div className={styles.error}>
-          <SubHeader align="left">
-            <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
-          </SubHeader>
           <h2>Unable to load project</h2>
           <p><a onClick={this.reloadPage}>Click to reload</a></p>
           <small>{project.prettyError}</small>
@@ -81,9 +69,6 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 
     return (
       <div>
-        <SubHeader align="left">
-          <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
-        </SubHeader>
         <ProjectHeader project={project} />
         <ProjectBranches branches={branches!} />
         <ProjectActivity activities={activities!} isLoading={isLoadingActivities} />
@@ -93,7 +78,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 }
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
-  const { id: projectId } = ownProps.params;
+  const { projectId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const isLoadingActivities = Loading.selectors.isLoadinglActivitiesForProject(state, projectId);
 

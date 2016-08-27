@@ -6,16 +6,22 @@ import './styles.scss';
 
 import Footer from './footer';
 import Header from './header';
+import SubHeader from './sub-header';
 
 interface Props {
-
+  location: any;
+  route: any;
+  params: any;
 }
 
 class App extends React.Component<Props, any> {
   public render() {
+    const { params } = this.props;
+
     return (
       <div>
         <Header />
+        <SubHeader params={params} />
         {this.props.children}
         <Footer />
       </div>
