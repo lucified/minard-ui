@@ -1,6 +1,5 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import { Branch } from '../../modules/branches';
@@ -16,7 +15,7 @@ import SingleCommit from '../common/single-commit';
 const styles = require('./branch-summary.scss');
 
 interface PassedProps {
-  branch: Branch;
+  branch: Branch | FetchError;
 }
 
 interface GeneratedProps {
@@ -24,23 +23,39 @@ interface GeneratedProps {
   latestDeployedCommit?: Commit | FetchError;
 }
 
+const reloadPage = (e: any) => {
+  e.preventDefault();
+  location.reload(true);
+  return false;
+};
+
 const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: PassedProps & GeneratedProps) => {
+  if (isError(branch)) {
+    return (
+      <div className={classNames('row', styles.branch)}>
+        <div className={classNames('col-xs-12', styles.error)}>
+          <h3>Unable to load branch</h3>
+          <p><a onClick={reloadPage}>Click to reload</a></p>
+          <small>{branch.prettyError}</small>
+        </div>
+      </div>
+    );
+  }
+
   let commitContent: JSX.Element;
 
   if (branch.deployments.length === 0) {
     commitContent = (
-      <div>
-        <h4>No previews available</h4>
-        <h6>Make some commits to {branch.name} generate previews</h6>
+      <div className={styles.empty}>
+        No previews available
       </div>
     );
   } else {
     if (isError(latestDeployment)) {
       commitContent = (
-        <div>
-          <Icon name="exclamation" fixedWidth size="3x" />
+        <div className={styles.error}>
           <p>Error loading deployment</p>
-          <p>{latestDeployment.prettyError}</p>
+          <small>{latestDeployment.prettyError}</small>
         </div>
       );
     } else {
@@ -76,6 +91,11 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { branch } = ownProps;
+
+  if (isError(branch)) {
+    return {};
+  }
+
   const latestDeploymentId = branch.deployments[0];
   const latestDeployment = latestDeploymentId && Deployments.selectors.getDeployment(state, latestDeploymentId);
   let latestDeployedCommit: Commit | FetchError | undefined = undefined;

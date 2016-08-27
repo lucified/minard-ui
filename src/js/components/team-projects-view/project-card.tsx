@@ -63,10 +63,10 @@ const getDeploymentSummary = (deployment?: Deployment) => {
 const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
   if (isError(project)) {
     return (
-      <div key={project.id!}>
-        <Icon name="exclamation" fixedWidth size="3x" />
-        <p>Error fetching project</p>
-        <p>{project.prettyError}</p>
+      <div className={classNames(styles.card, styles.error)} key={project.id!}>
+        <h2>Unable to load project</h2>
+        <p>Refresh to retry</p>
+        <small>{project.prettyError}</small>
       </div>
     );
   }

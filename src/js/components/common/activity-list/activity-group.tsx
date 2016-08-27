@@ -31,13 +31,24 @@ interface GeneratedProps {
 }
 
 const getLoadingContent = () => (
-  <div><h3>Loading...</h3></div>
+  <div className={styles.loading}>
+    Loading...
+  </div>
 );
 
+const reloadPage = (e: any) => {
+  e.preventDefault();
+  location.reload(true);
+  return false;
+};
+
 const getErrorContent = (branch: FetchError) => (
-  <div>
-    <h1>Oh no, errors. :(</h1>
-    <p>{branch.prettyError}</p>
+  <div className={classNames('row', styles['activity-group'])}>
+    <div className={classNames('col-xs-12', styles.error)}>
+      <h2>Unable to load activity</h2>
+      <p><a onClick={reloadPage}>Click to reload</a></p>
+      <small>{branch.prettyError}</small>
+    </div>
   </div>
 );
 

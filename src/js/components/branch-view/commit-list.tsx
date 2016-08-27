@@ -10,9 +10,9 @@ import CommitRow from './commit-row';
 const styles = require('./commit-list.scss');
 
 const getEmptyContent = () => (
-  <div>
+  <div className={styles.empty}>
     <Icon name="code-fork" fixedWidth size="3x" />
-    <p>Nothing has happened in this branch!</p>
+    <h2>No activity in this branch</h2>
     <p>Commit some code to get things started.</p>
   </div>
 );

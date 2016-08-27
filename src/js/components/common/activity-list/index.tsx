@@ -1,9 +1,10 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 
 import { Activity } from '../../../modules/activities';
 
 import ActivityGroup, { LoadingActivityGroup } from './activity-group';
+
+const styles = require('./index.scss');
 
 interface Props {
   activities: Activity[];
@@ -14,9 +15,8 @@ interface Props {
 }
 
 const getEmptyContent = (header: string, body: string) => (
-  <div>
-    <Icon name="code-fork" fixedWidth size="3x" />
-    <p>{header}</p>
+  <div className={styles.empty}>
+    <h2>{header}</h2>
     <p>{body}</p>
   </div>
 );

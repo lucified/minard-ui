@@ -21,7 +21,12 @@ const SingleCommit = ({ commit, className }: Props) => {
   }
 
   if (isError(commit)) {
-    return <span>`Error: ${commit.prettyError}`</span>;
+    return (
+      <div className={styles.error}>
+        <p>Unable to load commit. Refresh to retry.</p>
+        <small>{commit.prettyError}</small>
+      </div>
+    );
   }
 
   const { author, committer } = commit;

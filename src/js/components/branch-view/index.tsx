@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import Branches, { Branch } from '../../modules/branches';
@@ -41,6 +40,12 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     loadBranch(id);
   }
 
+  private reloadPage(e: any) {
+    e.preventDefault();
+    location.reload(true);
+    return false;
+  }
+
   private getLoadingContent() {
     return (
       <div>
@@ -52,10 +57,11 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 
   private getErrorContent(error: FetchError) {
     return (
-      <div>
-        <Icon name="exclamation" fixedWidth size="3x" />
-        <p>Error!</p>
-        <p>{error.prettyError}</p>
+      <div className={styles.error}>
+        <SubHeader align="center" />
+        <h2>Unable to load branch</h2>
+        <p><a onClick={this.reloadPage}>Click to reload</a></p>
+        <small>{error.prettyError}</small>
       </div>
     );
   }

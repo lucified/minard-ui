@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
@@ -45,6 +44,12 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
     loadActivity(id);
   }
 
+  private reloadPage(e: any) {
+    e.preventDefault();
+    location.reload(true);
+    return false;
+  }
+
   public render() {
     const { project } = this.props;
 
@@ -61,13 +66,13 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 
     if (isError(project)) {
       return (
-        <div>
+        <div className={styles.error}>
           <SubHeader align="left">
             <MinardLink className={styles['sub-header-link']} homepage>‹ Team Lucify</MinardLink>
           </SubHeader>
-          <Icon name="exclamation" fixedWidth size="3x" />
-          <p>Error loading project</p>
-          <p>{project.prettyError}</p>
+          <h2>Unable to load project</h2>
+          <p><a onClick={this.reloadPage}>Click to reload</a></p>
+          <small>{project.prettyError}</small>
         </div>
       );
     }
