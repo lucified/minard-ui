@@ -16,12 +16,10 @@ interface Props {
 
 class App extends React.Component<Props, any> {
   public render() {
-    const { params } = this.props;
-
     return (
       <div>
         <Header />
-        <SubHeader params={params} />
+        <SubHeader />
         {this.props.children}
         <Footer />
       </div>

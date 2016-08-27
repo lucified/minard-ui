@@ -5,55 +5,46 @@ import { connect } from 'react-redux';
 
 import { FetchError, isError } from '../modules/errors';
 import Projects, { Project } from '../modules/projects';
+import Selected from '../modules/selected';
 import { StateTree } from '../reducers';
 import MinardLink from './common/minard-link';
 
 const styles = require('./sub-header.scss');
 
-interface PassedProps {
-  params: any;
-}
+enum PageType {
+  TeamProjectsView,
+  ProjectView,
+  BranchView,
+};
 
 interface GeneratedProps {
+  openPageType: PageType;
   teamName?: string;
   project?: Project | FetchError;
 }
 
-const classForType = (type: string): string => {
+const classForType = (type: PageType): string => {
   switch (type) {
-    case 'branch':
-    case 'project':
+    case PageType.BranchView:
+    case PageType.ProjectView:
       return 'start-xs';
-    case 'projects':
+    case PageType.TeamProjectsView:
       return 'center-xs';
     default:
       return 'start-xs';
   }
 };
 
-const getHeaderType = (params: any) => {
-  if (params.projectId !== undefined) {
-    if (params.branchId !== undefined) {
-      return 'branch';
-    }
-
-    return 'project';
-  }
-
-  return 'projects';
-};
-
-class SubHeader extends React.Component<PassedProps & GeneratedProps, any> {
+class SubHeader extends React.Component<GeneratedProps, any> {
   public render() {
-    const { params, project, teamName } = this.props;
-    const headerType = getHeaderType(params);
+    const { openPageType, project, teamName } = this.props;
     let content: JSX.Element | null = null;
 
-    if (headerType === 'branch' && project && !isError(project)) {
+    if (openPageType === PageType.BranchView && project && !isError(project)) {
       content = <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>;
-    } else if (headerType === 'project' && teamName) {
+    } else if (openPageType === PageType.ProjectView && teamName) {
       content = <MinardLink className={styles['sub-header-link']} homepage>‹ {teamName}</MinardLink>;
-    } else if (headerType === 'projects') {
+    } else if (openPageType === PageType.TeamProjectsView) {
       content = (
         <span>
           Sort projects by
@@ -66,7 +57,7 @@ class SubHeader extends React.Component<PassedProps & GeneratedProps, any> {
       <section className={classNames(styles['sub-header-background'])}>
         <div className="container">
           <div className="row">
-            <div className={classNames(styles['sub-header'], classForType(headerType), 'col-xs-12')}>
+            <div className={classNames(styles['sub-header'], classForType(openPageType), 'col-xs-12')}>
               {content}
             </div>
           </div>
@@ -76,14 +67,28 @@ class SubHeader extends React.Component<PassedProps & GeneratedProps, any> {
   }
 };
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
-  const { projectId } = ownProps.params;
-  const headerType = getHeaderType(ownProps.params);
-  if (headerType === 'branch') {
-    return { project: Projects.selectors.getProject(state, projectId) };
+const mapStateToProps = (state: StateTree): GeneratedProps => {
+  const selectedBranch = Selected.selectors.getSelectedBranch(state);
+  const selectedProject = Selected.selectors.getSelectedProject(state);
+  let openPageType: PageType;
+  let project: Project | FetchError | undefined;
+
+  if (selectedProject !== null) {
+    if (selectedBranch !== null) {
+      openPageType = PageType.BranchView;
+      project = Projects.selectors.getProject(state, selectedProject);
+    } else {
+      openPageType = PageType.ProjectView;
+    }
+  } else {
+    openPageType = PageType.TeamProjectsView;
   }
 
-  return { teamName: 'Team Lucify' }; // TODO: use actual team name
+  return {
+    openPageType,
+    project,
+    teamName: 'Team Lucify', // TODO: use actual team name
+  };
 };
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(SubHeader);
+export default connect<GeneratedProps, {}, {}>(mapStateToProps)(SubHeader);
