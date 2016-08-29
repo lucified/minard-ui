@@ -1,0 +1,23 @@
+{
+    "authors": "Rajab Shakirov <https://github.com/radziksh>",
+    "definitionFilename": "react-modal.d.ts",
+    "libraryDependencies": [],
+    "moduleDependencies": [],
+    "libraryMajorVersion": "1",
+    "libraryMinorVersion": "3",
+    "libraryName": "react-modal v1.3.0",
+    "typingsPackageName": "react-modal",
+    "projectName": "https://github.com/reactjs/react-modal",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "sourceBranch": "types-2.0",
+    "kind": "DeclareModule",
+    "globals": [],
+    "declaredModules": [
+        "react-modal"
+    ],
+    "files": [
+        "react-modal.d.ts"
+    ],
+    "hasPackageJson": false,
+    "contentHash": "e341324791405e45621f47de500dc36514dda1ae9ad173aa18432b34bb89ff84"
+}
