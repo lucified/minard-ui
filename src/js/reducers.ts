@@ -1,5 +1,6 @@
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 import Activities, { ActivityState } from './modules/activities';
 import Branches, { BranchState } from './modules/branches';
@@ -23,6 +24,7 @@ export default combineReducers({
   loading: Loading.reducer,
   selected: Selected.reducer,
   modal: Modal.reducer,
+  form: formReducer,
   routing: routerReducer,
 });
 
@@ -38,5 +40,6 @@ export interface StateTree {
   loading: LoadingState;
   selected: SelectedState;
   modal: ModalState;
+  form: any;
   routing: any;
 }
