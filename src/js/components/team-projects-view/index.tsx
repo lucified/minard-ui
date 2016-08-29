@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
 import { FetchError } from '../../modules/errors';
-import Loading from '../../modules/loading';
+import Requests from '../../modules/requests';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -52,8 +52,8 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   projects: Projects.selectors.getProjects(state),
   activities: Activities.selectors.getActivities(state),
-  isLoadingProjects: Loading.selectors.isLoadingAllProjects(state),
-  isLoadingAllActivities: Loading.selectors.isLoadingAllActivities(state),
+  isLoadingProjects: Requests.selectors.isLoadingAllProjects(state),
+  isLoadingAllActivities: Requests.selectors.isLoadingAllActivities(state),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(

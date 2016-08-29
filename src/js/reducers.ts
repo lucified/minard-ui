@@ -7,9 +7,9 @@ import Branches, { BranchState } from './modules/branches';
 import Commits, { CommitState } from './modules/commits';
 import Deployments, { DeploymentState } from './modules/deployments';
 import Errors, { ErrorState } from './modules/errors';
-import Loading, { LoadingState } from './modules/loading';
 import Modal, { ModalState } from './modules/modal';
 import Projects, { ProjectState } from './modules/projects';
+import Requests, { RequestsState } from './modules/requests';
 import Selected, { SelectedState } from './modules/selected';
 
 export default combineReducers({
@@ -21,7 +21,7 @@ export default combineReducers({
     deployments: Deployments.reducer,
   }),
   errors: Errors.reducer,
-  loading: Loading.reducer,
+  requests: Requests.reducer,
   selected: Selected.reducer,
   modal: Modal.reducer,
   form: formReducer,
@@ -37,7 +37,7 @@ export interface StateTree {
     deployments: DeploymentState;
   };
   errors: ErrorState;
-  loading: LoadingState;
+  requests: RequestsState;
   selected: SelectedState;
   modal: ModalState;
   form: any;
