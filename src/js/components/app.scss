@@ -1,0 +1,11 @@
+// Needed in order to create a global app stacking context.
+// Allows modals to be shown on top of everything else.
+.app {
+  position: relative;
+  z-index: 0;
+}
+
+.modal-open {
+  overflow: hidden;
+  position: fixed;
+}
