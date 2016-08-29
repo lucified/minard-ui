@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Field, FormProps, reduxForm } from 'redux-form';
+import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
 
 import Modal, { ModalType } from '../../modules/modal';
 
@@ -28,14 +28,29 @@ interface FormData {
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & FormProps<FormData, any>;
 
 const validate = (values: FormData) => {
-  const errors = {};
-  // TODO
+  const errors: FormData = {};
+  const projectNameRegex = /^[a-z0-9\-]+$/;
+
+  if (!values.name) {
+    errors.name = 'Required';
+  } else if (!projectNameRegex.test(values.name)) {
+    errors.name = 'Only lower-case letters, numbers and dashes allowed.'
+  }
+
   return errors;
 };
 
-interface FieldCustomProps {
-
-}
+const RenderField = ({ input, name, label, placeholder, type, meta: { touched, error }}: BaseFieldProps) => (
+  <div className="row">
+    <div className="col-xs-4">
+      <label htmlFor={name}>{label}</label>
+    </div>
+    <div className="col-xs-8">
+      <input {...input} placeholder={placeholder} type={type} />
+      {touched && error && <span className={styles.error}>{error}</span>}
+    </div>
+  </div>
+);
 
 class NewProjectDialog extends React.Component<Props, any> {
   public render() {
@@ -49,24 +64,8 @@ class NewProjectDialog extends React.Component<Props, any> {
       >
         <h1>Create a new project</h1>
         <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-xs-4">
-              <label htmlFor="name">Name</label>
-            </div>
-            <div className="col-xs-8">
-              <Field name="name" component="input" type="text" placeholder="my-project-name" />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-4">
-              <label htmlFor="description">
-                Description
-              </label>
-            </div>
-            <div className="col-xs-8">
-              <Field name="description" component="textarea" type="text" placeholder="Describe your project" />
-            </div>
-          </div>
+          <Field name="name" component={RenderField} type="text" label="Name" placeholder="my-project-name" />
+          <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
           <div className="row">
             <div className="col-xs-12">
               <button type="submit" disabled={pristine || submitting}>Create project</button>
@@ -84,7 +83,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
 
 export default reduxForm({
   form: 'newProject',  // a unique identifier for this form
-  // validate
+  validate,
 })(
   connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
     () => ({}),
