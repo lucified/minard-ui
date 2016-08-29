@@ -3,7 +3,7 @@ import { Reducer } from 'redux';
 import { CLOSE_MODAL, OPEN_MODAL } from './actions';
 import * as t from './types';
 
-const initialState: t.ModalState = undefined;
+const initialState: t.ModalState = null;
 
 const reducer: Reducer<t.ModalState> = (state: t.ModalState = initialState, action: any): t.ModalState => {
   switch (action.type) {
@@ -17,7 +17,7 @@ const reducer: Reducer<t.ModalState> = (state: t.ModalState = initialState, acti
       return state;
     case CLOSE_MODAL:
       if (state && state.type === action.modalType) {
-        return undefined;
+        return null;
       }
 
       return state;

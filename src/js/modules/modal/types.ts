@@ -12,7 +12,7 @@ export interface ModalDialog {
   type: ModalType;
 }
 
-export type ModalState = ModalDialog | undefined;
+export type ModalState = ModalDialog | null;
 
 // Actions
 export interface OpenModalAction extends Action {
