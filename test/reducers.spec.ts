@@ -188,6 +188,15 @@ const testReducer = (
 };
 
 describe('reducers', () => {
+  describe('modal', () => {
+    it('opens a modal dialog when one is not open');
+    it('does nothing when opening a modal that is already open');
+    it('does nothing when opening a modal when another modal is already open');
+    it('closes a modal dialog');
+    it('does not close a modal dialog of a different type');
+    it('does nothing when closing a modal when none are open');
+  });
+
   describe('selected', () => {
     const { reducer } = Selected;
 
