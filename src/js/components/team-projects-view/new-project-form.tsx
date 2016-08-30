@@ -53,7 +53,9 @@ class NewProjectForm extends React.Component<Props, any> {
         <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
         <div className="row">
           <div className="col-xs-12">
-            <button type="submit" disabled={pristine || submitting}>Create project</button>
+            <button type="submit" disabled={pristine || submitting}>
+              {submitting ? 'Creating...' : 'Create project'}
+            </button>
           </div>
         </div>
       </form>
