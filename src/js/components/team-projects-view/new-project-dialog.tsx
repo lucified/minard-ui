@@ -5,6 +5,9 @@ import { Dispatch } from 'redux';
 import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
 
 import Modal, { ModalType } from '../../modules/modal';
+import Projects, { Project } from '../../modules/projects';
+import { isError } from '../../modules/errors';
+import { StateTree } from '../../reducers';
 
 const styles = require('../common/modal-dialog.scss');
 
@@ -13,7 +16,7 @@ interface PassedProps {
 }
 
 interface GeneratedStateProps {
-
+  existingProjectNames: string[];
 }
 
 interface GeneratedDispatchProps {
@@ -27,14 +30,18 @@ interface FormData {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & FormProps<FormData, any>;
 
-const validate = (values: FormData) => {
+const validate = (values: FormData, props: Props) => {
   const errors: FormData = {};
   const projectNameRegex = /^[a-z0-9\-]+$/;
 
-  if (!values.name) {
+  const { name, description } = values;
+
+  if (!name) {
     errors.name = 'Required';
-  } else if (!projectNameRegex.test(values.name)) {
-    errors.name = 'Only lower-case letters, numbers and dashes allowed.'
+  } else if (!projectNameRegex.test(name)) {
+    errors.name = 'Only lower-case letters, numbers and dashes allowed.';
+  } else if (props.existingProjectNames.indexOf(name) > -1) {
+    errors.name = 'Project name already exists';
   }
 
   return errors;
@@ -77,16 +84,22 @@ class NewProjectDialog extends React.Component<Props, any> {
   }
 };
 
+const mapStateToProps = (state: StateTree) => ({
+  existingProjectNames: Projects.selectors.getProjects(state)
+    .filter(projectOrError => !isError(projectOrError))
+    .map(project => (project as Project).name),
+});
+
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
   closeDialog: () => dispatch(Modal.actions.closeModal(ModalType.NewProject)),
 });
 
-export default reduxForm({
-  form: 'newProject',  // a unique identifier for this form
-  validate,
-})(
-  connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-    () => ({}),
-    mapDispatchToProps,
-  )(NewProjectDialog)
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(
+  reduxForm({
+    form: 'newProject',  // a unique identifier for this form
+    validate,
+  })(NewProjectDialog)
 );
