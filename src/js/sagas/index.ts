@@ -83,7 +83,8 @@ export default function createSagas(api: Api) {
   }
 
   // PROJECT ACTIVITIES
-  function* loadActivitiesForProject(id: string): IterableIterator<Effect> {
+  function* loadActivitiesForProject(action: any): IterableIterator<Effect> {
+    const id = action.id;
     const fetchSuccess = yield call(fetchActivitiesForProject, id);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
