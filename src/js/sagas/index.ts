@@ -261,7 +261,7 @@ export default function createSagas(api: Api) {
     successAction: string;
     failureAction: string;
     values: any;
-    resolve: () => void;
+    resolve: (id: string) => void;
     reject: (error: any) => void;
   }
 
