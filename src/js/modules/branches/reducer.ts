@@ -11,7 +11,7 @@ const responseToStateShape = (branches: t.ApiResponse) => {
   const createBranchObject = (branch: t.ResponseBranchElement): t.Branch => {
     const deployments = (branch.relationships.deployments &&
       branch.relationships.deployments.data &&
-      branch.relationships.deployments.data.map(d => d.id)) || [];
+      branch.relationships.deployments.data.map(d => d.id)) || [];
     const commits = (branch.relationships.commits &&
       branch.relationships.commits.data &&
       branch.relationships.commits.data.map(c => c.id)) || [];
