@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { ActionCreator } from 'redux';
-import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
+import { SubmissionError } from 'redux-form';
+import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
 import Activities, { ActivityType } from '../src/js/modules/activities';
@@ -129,7 +130,6 @@ describe('sagas', () => {
       );
     });
   });
-
 
   const testLoader = (
     name: string,
@@ -1048,8 +1048,66 @@ describe('sagas', () => {
   });
 
   describe('formSubmitSaga', () => {
-    it('starts submitting form data');
-    it('resolves the supplied promise if submitting is successful');
-    it('rejects the promise with a SubmissionError if submitting the form fails');
+    const submitAction = 'SUBMITACTION';
+    const successAction = 'SUCCESSACTION';
+    const failureAction = 'FAILUREACTION';
+    const values = { foo: 'bar' };
+    const resolve = () => {}; // tslint:disable-line
+    const reject = () => {}; // tslint:disable-line
+
+    const payload = {
+      submitAction,
+      successAction,
+      failureAction,
+      values,
+      resolve,
+      reject,
+    };
+
+    it('starts submitting form data', () => {
+      const iterator = sagas.formSubmitSaga({ payload });
+
+      expect(iterator.next().value).to.deep.equal(
+        put({ type: submitAction, payload: values })
+      );
+    });
+
+    it('resolves the supplied promise if submitting is successful', () => {
+      const iterator = sagas.formSubmitSaga({ payload });
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        race({
+          success: take(successAction),
+          failure: take(failureAction),
+        })
+      );
+
+      expect(iterator.next({ success: { id: 3 } }).value).to.deep.equal(
+        call(resolve, 3)
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('rejects the promise with a SubmissionError if submitting the form fails', () => {
+      const iterator = sagas.formSubmitSaga({ payload });
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        race({
+          success: take(successAction),
+          failure: take(failureAction),
+        })
+      );
+
+      expect(iterator.next({ failure: { prettyError: 'foobar' } }).value).to.deep.equal(
+        call(reject, new SubmissionError({ _error: 'foobar' }))
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
   });
 });
