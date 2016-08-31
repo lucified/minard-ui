@@ -30,6 +30,10 @@ const validate = (values: FormData, props: Props) => {
     errors.name = 'Project name already exists';
   }
 
+  if (description && description.length > 2000) {
+    errors.description = 'The description can be up to 2000 characters long.'
+  }
+
   return errors;
 };
 
