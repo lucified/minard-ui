@@ -171,6 +171,11 @@ export default function createSagas(api: Api) {
 
     // Make sure all branches have been loaded
     const { branches: branchIds } = project;
+
+    if (!branchIds) {
+      return;
+    }
+
     const branches = yield branchIds.map(branchId => call(fetchIfMissing, 'branches', branchId));
 
     // Make sure the latest deployment from each branch has been loaded
