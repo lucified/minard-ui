@@ -943,8 +943,8 @@ describe('reducers', () => {
     const expectedObjectsToStore: ProjectState = {
       1: {
         id: '1',
-        name: 'First project',
-        description: 'This is the first project description. It might not be set.',
+        name: 'first-project',
+        description: 'This is the first-project description. It might not be set.',
         activeUsers: [
           {
             name: 'Ville Saarinen',
@@ -961,7 +961,7 @@ describe('reducers', () => {
       },
       2: {
         id: '2',
-        name: 'Second project',
+        name: 'second-project',
         description: undefined,
         activeUsers: [],
         branches: [],
@@ -993,7 +993,7 @@ describe('reducers', () => {
       },
       1: {
         id: '1',
-        name: 'First project again',
+        name: 'first-project again',
         description: 'foobar',
         activeUsers: [
           {
@@ -1013,8 +1013,8 @@ describe('reducers', () => {
     const expectedSuccessfulRequestObject: ProjectState = {
       1: {
         id: '1',
-        name: 'First project',
-        description: 'This is the first project description. It might not be set.',
+        name: 'first-project',
+        description: 'This is the first-project description. It might not be set.',
         activeUsers: [
           {
             name: 'Ville Saarinen',

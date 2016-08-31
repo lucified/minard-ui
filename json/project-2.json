@@ -3,7 +3,7 @@
     "type": "projects",
     "id": "2",
     "attributes": {
-      "name": "Second project",
+      "name": "second-project",
       "active-committers": []
     },
     "relationships": {
