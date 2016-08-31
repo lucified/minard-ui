@@ -2,11 +2,13 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
 
+import { onSubmitActions } from '../../modules/forms';
+import Projects from '../../modules/projects';
+
 const styles = require('../common/modal-dialog.scss');
 
 interface PassedProps {
   existingProjectNames: string[];
-  onSubmit: (values: { name: string, description?: string }, dispatch: Dispatch<any>) => Promise<any>;
 }
 
 interface FormData {
@@ -72,4 +74,9 @@ class NewProjectForm extends React.Component<Props, any> {
 export default reduxForm({
   form: 'newProject',
   validate,
+  onSubmit: onSubmitActions(
+    Projects.actions.CREATE_PROJECT,
+    Projects.actions.SEND_CREATE_PROJECT.SUCCESS,
+    Projects.actions.SEND_CREATE_PROJECT.FAILURE,
+  )
 })(NewProjectForm);

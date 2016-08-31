@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { isError } from '../../modules/errors';
-import { onSubmitActions } from '../../modules/forms';
 import Modal, { ModalType } from '../../modules/modal';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
@@ -44,14 +43,7 @@ class NewProjectDialog extends React.Component<Props, any> {
         overlayClassName={styles.overlay}
       >
         <h1>Create a new project</h1>
-        <NewProjectForm
-          existingProjectNames={existingProjectNames}
-          onSubmit={onSubmitActions(
-            Projects.actions.CREATE_PROJECT,
-            Projects.actions.SEND_CREATE_PROJECT.SUCCESS,
-            Projects.actions.SEND_CREATE_PROJECT.FAILURE,
-          )}
-        />
+        <NewProjectForm existingProjectNames={existingProjectNames} />
       </ModalDialog>
     );
   }
