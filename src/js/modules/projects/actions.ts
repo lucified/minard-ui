@@ -57,6 +57,6 @@ export const SendCreateProject: t.SendCreateProjectActionCreators = {
   failure: (error) => ({
     type: SEND_CREATE_PROJECT.FAILURE,
     error,
-    _error: prettyErrorMessage(error),
+    prettyError: prettyErrorMessage(error),
   }),
 };

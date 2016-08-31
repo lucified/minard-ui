@@ -1,4 +1,5 @@
 import { compact, uniq } from 'lodash';
+import { SubmissionError } from 'redux-form';
 import { takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
@@ -279,7 +280,7 @@ export default function createSagas(api: Api) {
     if (success) {
       yield call(resolve);
     } else {
-      yield call(reject, failure.payload);
+      yield call(reject, new SubmissionError({ _error: failure.prettyError }));
     }
   }
 

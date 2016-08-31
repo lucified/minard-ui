@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
@@ -53,10 +54,17 @@ const RenderField = ({ input, name, label, placeholder, type, meta: { touched, e
 
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting } = this.props;
+    const { handleSubmit, pristine, submitting, error } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
+        {error && (
+          <div className="row">
+            <div className={classNames('col-xs-12', styles['general-error'])}>
+              {error}
+            </div>
+          </div>
+        )}
         <Field name="name" component={RenderField} type="text" label="Name" placeholder="my-project-name" />
         <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
         <div className="row">

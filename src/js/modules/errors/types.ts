@@ -26,5 +26,5 @@ export interface ClearErrorAction extends Action {
 export interface CreateError {
   type: string;
   error: string;
-  _error: string; // For forms
+  prettyError: string;
 }
