@@ -53,7 +53,7 @@ export const CREATE_PROJECT = 'PROJECTS/CREATE_PROJECT';
 export const SEND_CREATE_PROJECT = createRequestTypes('PROJECTS/SEND_CREATE_PROJECT');
 export const SendCreateProject: t.SendCreateProjectActionCreators = {
   request: (name, description) => ({ type: SEND_CREATE_PROJECT.REQUEST, name, description }),
-  success: () => ({ type: SEND_CREATE_PROJECT.SUCCESS }),
+  success: (id) => ({ type: SEND_CREATE_PROJECT.SUCCESS, id }),
   failure: (error) => ({
     type: SEND_CREATE_PROJECT.FAILURE,
     error,

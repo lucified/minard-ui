@@ -10,6 +10,7 @@ const styles = require('../common/modal-dialog.scss');
 
 interface PassedProps {
   existingProjectNames: string[];
+  onSubmitSuccess: (projectId: string) => void;
 }
 
 interface FormData {

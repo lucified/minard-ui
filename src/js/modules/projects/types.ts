@@ -69,7 +69,9 @@ export interface SendCreateProjectRequestAction extends Action {
   description?: string;
 }
 
-export interface SendCreateProjectSuccessAction extends Action {}
+export interface SendCreateProjectSuccessAction extends Action {
+  id: string;
+}
 
 export type SendCreateProjectActionCreators =
   RequestActionCreators<SendCreateProjectRequestAction, SendCreateProjectSuccessAction, CreateError>;

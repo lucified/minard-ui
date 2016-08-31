@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Dispatch } from 'redux';
 
 import { isError } from '../../modules/errors';
@@ -16,6 +17,10 @@ interface PassedProps {
   isOpen: boolean;
 }
 
+interface InjectedProps {
+  router: any;
+}
+
 interface GeneratedStateProps {
   existingProjectNames: string[];
 }
@@ -29,9 +34,20 @@ interface FormData {
   description?: string;
 }
 
-type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
+type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
 
 class NewProjectDialog extends React.Component<Props, any> {
+  constructor(props: Props) {
+    super(props);
+
+    this.onSuccessfulCreation = this.onSuccessfulCreation.bind(this);
+  }
+
+  private onSuccessfulCreation(projectId: string) {
+    this.props.closeDialog();
+    this.props.router.push(`/project/${projectId}`);
+  }
+
   public render() {
     const { isOpen, closeDialog, existingProjectNames } = this.props;
 
@@ -43,7 +59,7 @@ class NewProjectDialog extends React.Component<Props, any> {
         overlayClassName={styles.overlay}
       >
         <h1>Create a new project</h1>
-        <NewProjectForm existingProjectNames={existingProjectNames} />
+        <NewProjectForm existingProjectNames={existingProjectNames} onSubmitSuccess={this.onSuccessfulCreation}/>
       </ModalDialog>
     );
   }
@@ -62,4 +78,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
-)(NewProjectDialog);
+)(withRouter(NewProjectDialog));

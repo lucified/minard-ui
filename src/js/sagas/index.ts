@@ -234,11 +234,12 @@ export default function createSagas(api: Api) {
       }
 
       const projectData = response.data;
+      const projectId = projectData.id;
 
       // Store new project
-      yield put(Projects.actions.FetchProject.success(projectData.id, projectData))
+      yield put(Projects.actions.FetchProject.success(projectId, projectData))
       // Notify form that creation was a success
-      yield put(Projects.actions.SendCreateProject.success());
+      yield put(Projects.actions.SendCreateProject.success(projectId));
 
       return true;
     } else {
@@ -278,7 +279,7 @@ export default function createSagas(api: Api) {
 
     // Resolve and reject tell the redux-form that submitting is done and if it was successful or not
     if (success) {
-      yield call(resolve);
+      yield call(resolve, success.id);
     } else {
       yield call(reject, new SubmissionError({ _error: failure.prettyError }));
     }
