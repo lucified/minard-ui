@@ -1,7 +1,7 @@
-import { ActionCreator } from 'redux';
+import { ActionCreator, Dispatch } from 'redux';
 import { Effect, call, fork, put, select } from 'redux-saga/effects';
 
-import { ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
+import { ApiEntity, ApiEntityTypeString, ApiPromise } from '../api/types';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
@@ -21,7 +21,8 @@ export const createLoader = (
   fetcher: (id: string) => IterableIterator<Effect>,
   dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>
 ) => {
-  return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (action: any): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+    const id: string = action.id;
     const existingEntity = yield select(selector, id);
     let fetchSucceeded: boolean = false;
 
@@ -37,7 +38,7 @@ export const createLoader = (
 
 export const createFetcher = (
   requestActionCreators: RequestActionCreators,
-  apiFetchFunction: (id: string) => Promise<{ response: ApiResponse } | { error: string }>
+  apiFetchFunction: (id: string) => ApiPromise
 ) => {
   return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.request(id));
@@ -79,3 +80,34 @@ export function* storeIncludedEntities(entities: ApiEntity[] | undefined): Itera
     }
   }
 };
+
+// Based on https://github.com/yelouafi/redux-saga/issues/161#issuecomment-229350795
+export const FORM_SUBMIT = 'FORMS/FORM_SUBMIT';
+
+export function formSubmit(
+  submitAction: string,
+  successAction: string,
+  failureAction: string,
+  values: any,
+  resolve: (result: any) => void,
+  reject: (error: any) => void
+) {
+  return {
+    type: FORM_SUBMIT,
+    payload: {
+      submitAction,
+      successAction,
+      failureAction,
+      values,
+      resolve,
+      reject,
+    },
+  };
+}
+
+export function onSubmitActions(submitAction: string, successAction: string, failureAction: string) {
+  return (values: any, dispatch: Dispatch<any>) =>
+    new Promise((resolve, reject) => {
+      dispatch(formSubmit(submitAction, successAction, failureAction, values, resolve, reject));
+    });
+}

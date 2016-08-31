@@ -45,7 +45,7 @@ describe('sagas', () => {
   const testWatcher = (
     name: string,
     action: string,
-    iterator: IterableIterator<Effect>,
+    iterator: IterableIterator<Effect | Effect[]>,
     loader: (id: string) => IterableIterator<Effect>
   ) => {
     describe(name, () => {

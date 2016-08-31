@@ -1,5 +1,6 @@
 import { compact, uniq } from 'lodash';
-import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga';
+import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString } from '../api/types';
 import Activities, { Activity } from '../modules/activities';
@@ -10,7 +11,7 @@ import Projects, { Project } from '../modules/projects';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
-import { createFetcher, createLoader, storeIncludedEntities } from './utils';
+import { createFetcher, createLoader, storeIncludedEntities, FORM_SUBMIT } from './utils';
 
 export default function createSagas(api: Api) {
 
@@ -216,61 +217,71 @@ export default function createSagas(api: Api) {
     }
   }
 
+  interface Payload {
+    submitAction: string;
+    successAction: string;
+    failureAction: string;
+    values: any;
+    resolve: () => void;
+    reject: (error: any) => void;
+  }
+
+  function* formSubmitSaga({
+    payload: {
+      submitAction,
+      successAction,
+      failureAction,
+      values,
+      resolve,
+      reject,
+    },
+  }: { payload: Payload }): IterableIterator<Effect> {
+    yield put({ type: submitAction, payload: values });
+
+    const { success, failure } = yield race({
+      success: take(successAction),
+      failure: take(failureAction),
+    });
+
+    // Resolve and reject tell the redux-form that submitting is done and if it was successful or not
+    if (success) {
+      yield call(resolve);
+    } else {
+      yield call(reject, failure.payload);
+    }
+  }
+
   // WATCHERS: Watch for specific actions to begin async operations.
-  function* watchForLoadActivities(): IterableIterator<Effect> {
-    while (true) {
-      yield take(Activities.actions.LOAD_ACTIVITIES);
-
-      yield fork(loadActivities);
-    }
+  function* watchForFormSubmit() {
+    yield* takeEvery(FORM_SUBMIT, formSubmitSaga);
   }
 
-  function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
-    while (true) {
-      const { id } = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
-
-      yield fork(loadActivitiesForProject, id);
-    }
+  function* watchForLoadActivities() {
+    yield* takeEvery(Activities.actions.LOAD_ACTIVITIES, loadActivities);
   }
 
-  function* watchForLoadAllProjects(): IterableIterator<Effect> {
-    while (true) {
-      yield take(Projects.actions.LOAD_ALL_PROJECTS);
-
-      yield fork(loadAllProjects);
-    }
+  function* watchForLoadActivitiesForProject() {
+    yield* takeEvery(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject);
   }
 
-  function* watchForLoadProject(): IterableIterator<Effect> {
-    while (true) {
-      const { id } = yield take(Projects.actions.LOAD_PROJECT);
-
-      yield fork(loadProject, id);
-    }
+  function* watchForLoadAllProjects() {
+    yield* takeEvery(Projects.actions.LOAD_ALL_PROJECTS, loadAllProjects);
   }
 
-  function* watchForLoadBranch(): IterableIterator<Effect> {
-    while (true) {
-      const { id } = yield take(Branches.actions.LOAD_BRANCH);
-
-      yield fork(loadBranch, id);
-    }
+  function* watchForLoadProject() {
+    yield* takeEvery(Projects.actions.LOAD_PROJECT, loadProject);
   }
 
-  function* watchForLoadDeployment(): IterableIterator<Effect> {
-    while (true) {
-      const { id } = yield take(Deployments.actions.LOAD_DEPLOYMENT);
-
-      yield fork(loadDeployment, id);
-    }
+  function* watchForLoadBranch() {
+    yield* takeEvery(Branches.actions.LOAD_BRANCH, loadBranch);
   }
 
-  function* watchForLoadCommit(): IterableIterator<Effect> {
-    while (true) {
-      const { id } = yield take(Commits.actions.LOAD_COMMIT);
+  function* watchForLoadDeployment() {
+    yield* takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
+  }
 
-      yield fork(loadCommit, id);
-    }
+  function* watchForLoadCommit() {
+    yield* takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
 
   function* root() {
@@ -282,6 +293,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadCommit),
       fork(watchForLoadActivities),
       fork(watchForLoadActivitiesForProject),
+      fork(watchForFormSubmit),
     ];
   }
 
@@ -294,6 +306,8 @@ export default function createSagas(api: Api) {
     watchForLoadCommit,
     watchForLoadActivities,
     watchForLoadActivitiesForProject,
+    watchForFormSubmit,
+    formSubmitSaga,
     fetchActivities,
     fetchActivitiesForProject,
     fetchBranch,
