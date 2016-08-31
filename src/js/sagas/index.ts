@@ -232,8 +232,10 @@ export default function createSagas(api: Api) {
         yield call(storeIncludedEntities, response.included);
       }
 
+      const projectData = response.data;
+
       // Store new project
-      yield put(Projects.actions.FetchProject.success(response.data))
+      yield put(Projects.actions.FetchProject.success(projectData.id, projectData))
       // Notify form that creation was a success
       yield put(Projects.actions.SendCreateProject.success());
 
