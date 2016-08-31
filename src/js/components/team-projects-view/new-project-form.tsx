@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
 
 const styles = require('../common/modal-dialog.scss');
 
 interface PassedProps {
   existingProjectNames: string[];
+  onSubmit: (values: { name: string, description?: string }, dispatch: Dispatch<any>) => Promise<any>;
 }
 
 interface FormData {

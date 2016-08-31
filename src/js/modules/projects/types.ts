@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { FetchError } from '../errors';
+import { CreateError, FetchError } from '../errors';
 import { ApiUser, RequestActionCreators, User } from '../types';
 
 // State
@@ -56,6 +56,23 @@ export type RequestProjectActionCreators =
 export interface StoreProjectsAction extends Action {
   entities: ResponseProjectElement[];
 }
+
+// CREATE_PROJECT
+export interface CreateProjectAction extends Action {
+  name: string;
+  description?: string;
+}
+
+// SEND_CREATE_PROJECT
+export interface SendCreateProjectRequestAction extends Action {
+  name: string;
+  description?: string;
+}
+
+export interface SendCreateProjectSuccessAction extends Action {}
+
+export type SendCreateProjectActionCreators =
+  RequestActionCreators<SendCreateProjectRequestAction, SendCreateProjectSuccessAction, CreateError>;
 
 // API response
 interface ResponseBranchReference {

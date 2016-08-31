@@ -43,3 +43,4 @@ export const fetchProject = (id: string) => callApi(projectJSON[id]);
 export const fetchBranch = (id: string) => callApi(branchJSON[id]);
 export const fetchDeployment = (id: string) => callApi(deploymentJSON[id]);
 export const fetchCommit = (id: string) => callApi(commitJSON);
+export const createProject = (name: string, description?: string) => callApi(projectJSON[1]);

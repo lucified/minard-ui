@@ -22,6 +22,7 @@ interface CreateApiParameter {
   fetchDeployment?: (id: string) => ApiPromise;
   fetchProject?: (id: string) => ApiPromise;
   fetchAllProjects?: () => ApiPromise;
+  createProject?: (name: string, description?: string) => ApiPromise;
 }
 
 const createApi = (functionsToReplace?: CreateApiParameter): Api => {
@@ -33,6 +34,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchDeployment: (_) => Promise.resolve({ response: {} }),
     fetchProject: (_) => Promise.resolve({ response: {} }),
     fetchAllProjects: () => Promise.resolve({ response: {} }),
+    createProject: (_1, _2) => Promise.resolve({ response: {} }),
   };
 
   return Object.assign(defaultFunctions, functionsToReplace);

@@ -46,3 +46,17 @@ export const storeProjects: ActionCreator<t.StoreProjectsAction> = (projects) =>
   type: STORE_PROJECTS,
   entities: projects,
 });
+
+// Create a new project
+export const CREATE_PROJECT = 'PROJECTS/CREATE_PROJECT';
+
+export const SEND_CREATE_PROJECT = createRequestTypes('PROJECTS/SEND_CREATE_PROJECT');
+export const SendCreateProject: t.SendCreateProjectActionCreators = {
+  request: (name, description) => ({ type: SEND_CREATE_PROJECT.REQUEST, name, description }),
+  success: () => ({ type: SEND_CREATE_PROJECT.SUCCESS }),
+  failure: (error) => ({
+    type: SEND_CREATE_PROJECT.FAILURE,
+    error,
+    _error: prettyErrorMessage(error),
+  }),
+};

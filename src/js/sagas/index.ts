@@ -1,5 +1,5 @@
 import { compact, uniq } from 'lodash';
-import { takeEvery } from 'redux-saga';
+import { takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString } from '../api/types';
@@ -219,6 +219,34 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // CREATE PROJECT
+  function* createProject(action: any): IterableIterator<Effect> {
+    const { name, description } = action.payload;
+
+    yield put(Projects.actions.SendCreateProject.request(name, description));
+
+    const { response, error } = yield call(api.createProject, name, description);
+
+    if (response) {
+      if (response.included) {
+        yield call(storeIncludedEntities, response.included);
+      }
+
+      // Store new project
+      yield put(Projects.actions.FetchProject.success(response.data))
+      // Notify form that creation was a success
+      yield put(Projects.actions.SendCreateProject.success());
+
+      return true;
+    } else {
+      // Notify form that creation failed
+      yield put(Projects.actions.SendCreateProject.failure(error));
+
+      return false;
+    }
+  }
+
+  // FORMS
   interface Payload {
     submitAction: string;
     successAction: string;
@@ -258,6 +286,10 @@ export default function createSagas(api: Api) {
     yield* takeEvery(FORM_SUBMIT, formSubmitSaga);
   }
 
+  function* watchForCreateProject() {
+    yield* takeLatest(Projects.actions.CREATE_PROJECT, createProject);
+  }
+
   function* watchForLoadActivities() {
     yield* takeEvery(Activities.actions.LOAD_ACTIVITIES, loadActivities);
   }
@@ -288,6 +320,7 @@ export default function createSagas(api: Api) {
 
   function* root() {
     yield [
+      fork(watchForCreateProject),
       fork(watchForLoadAllProjects),
       fork(watchForLoadProject),
       fork(watchForLoadBranch),

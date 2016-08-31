@@ -22,3 +22,9 @@ export const isError = (obj: any): obj is FetchError => {
 export interface ClearErrorAction extends Action {
   id?: string;
 }
+
+export interface CreateError {
+  type: string;
+  error: string;
+  _error: string; // For forms
+}
