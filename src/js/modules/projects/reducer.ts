@@ -10,9 +10,9 @@ const initialState: t.ProjectState = {};
 
 const responseToStateShape = (projects: t.ApiResponse) => {
   const createProjectObject = (project: t.ResponseProjectElement): t.Project => {
-    const branches =  project.relationships.branches &&
+    const branches =  (project.relationships.branches &&
        project.relationships.branches.data &&
-       project.relationships.branches.data.map(({ id }) => id);
+       project.relationships.branches.data.map(({ id }) => id)) || [];
 
     return {
       id: project.id,
