@@ -54,7 +54,7 @@ const RenderField = ({ input, name, label, placeholder, type, meta: { touched, e
 
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting, error } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -69,7 +69,7 @@ class NewProjectForm extends React.Component<Props, any> {
         <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
         <div className="row">
           <div className="col-xs-12">
-            <button type="submit" disabled={pristine || submitting}>
+            <button type="submit" disabled={pristine || submitting || invalid}>
               {submitting ? 'Creating...' : 'Create project'}
             </button>
           </div>
