@@ -14,7 +14,7 @@ import NewProjectForm from './new-project-form';
 const styles = require('../common/modal-dialog.scss');
 
 interface PassedProps {
-  isOpen: boolean;
+
 }
 
 interface InjectedProps {
@@ -22,6 +22,7 @@ interface InjectedProps {
 }
 
 interface GeneratedStateProps {
+  isOpen: boolean;
   existingProjectNames: string[];
 }
 
@@ -66,6 +67,7 @@ class NewProjectDialog extends React.Component<Props, any> {
 };
 
 const mapStateToProps = (state: StateTree) => ({
+  isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.NewProject),
   existingProjectNames: Projects.selectors.getProjects(state)
     .filter(projectOrError => !isError(projectOrError))
     .map(project => (project as Project).name),

@@ -6,7 +6,6 @@ import { Dispatch } from 'redux';
 import { FetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import { Project } from '../../modules/projects';
-import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
 import SectionTitle from '../common/section-title';
@@ -21,7 +20,7 @@ interface PassedProps {
 }
 
 interface GeneratedStateProps {
-  isCreateNewProjectOpen: boolean;
+
 }
 
 interface GeneratedDispatchProps {
@@ -30,9 +29,9 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 
-const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, isCreateNewProjectOpen }: Props) => (
+const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog }: Props) => (
   <section className="container">
-    <NewProjectDialog isOpen={isCreateNewProjectOpen} />
+    <NewProjectDialog />
     <SectionTitle
       rightContent={(
         <a onClick={openCreateNewProjectDialog} className={classNames(styles['add-project-link'])}>
@@ -59,15 +58,11 @@ const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, isCr
   </section>
 );
 
-const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  isCreateNewProjectOpen: Modal.selectors.isModalOpenOfType(state, ModalType.NewProject),
-});
-
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   openCreateNewProjectDialog: () => dispatch(Modal.actions.openModal(ModalType.NewProject)),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
+  () => ({}),
   mapDispatchToProps
 )(ProjectsSection);
