@@ -8,6 +8,7 @@ import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
 import { FetchError } from '../src/js/modules/errors';
+import { FORM_SUBMIT } from '../src/js/modules/forms';
 import Projects, { Project } from '../src/js/modules/projects';
 import { StateTree } from '../src/js/reducers';
 import sagaCreator from '../src/js/sagas';
@@ -46,14 +47,16 @@ describe('sagas', () => {
 
   const testWatcher = (
     name: string,
-    action: string,
+    actionType: string,
     iterator: IterableIterator<Effect | Effect[]>,
     loader: (id: string) => IterableIterator<Effect>
   ) => {
     describe(name, () => {
-      it(`forks a new saga on ${action}`, () => {
+      const action = { type: actionType };
+
+      it(`forks a new saga on ${actionType}`, () => {
         expect(iterator.next().value).to.deep.equal(
-          take(action)
+          take(actionType)
         );
 
         expect(iterator.next(action).value).to.deep.equal(
@@ -91,53 +94,42 @@ describe('sagas', () => {
     sagas.loadCommit,
   );
 
-  describe('watchForLoadAllProjects', () => {
-    it(`forks a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
-      const iterator = sagas.watchForLoadAllProjects();
-      const action = { type: Projects.actions.LOAD_ALL_PROJECTS };
+  testWatcher(
+    'watchForLoadAllProjects',
+    Projects.actions.LOAD_ALL_PROJECTS,
+    sagas.watchForLoadAllProjects(),
+    sagas.loadAllProjects,
+  );
+
+  testWatcher(
+    'watchForLoadActivities',
+    Activities.actions.LOAD_ACTIVITIES,
+    sagas.watchForLoadActivities(),
+    sagas.loadActivities
+  );
+
+  testWatcher(
+    'watchForLoadActivitiesForProject',
+    Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
+    sagas.watchForLoadActivitiesForProject(),
+    sagas.loadActivitiesForProject
+  );
+
+  describe('watchForFormSubmit', () => {
+    it(`forks a new saga on ${FORM_SUBMIT}`, () => {
+      const iterator = sagas.watchForFormSubmit();
+      const action = { type: FORM_SUBMIT, values: 'foo' };
 
       expect(iterator.next().value).to.deep.equal(
-        take(Projects.actions.LOAD_ALL_PROJECTS)
+        take(FORM_SUBMIT)
       );
 
       expect(iterator.next(action).value).to.deep.equal(
-        fork(sagas.loadAllProjects, action)
+        fork(sagas.formSubmitSaga, action)
       );
     });
   });
 
-  describe('watchForLoadActivities', () => {
-    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
-      const iterator = sagas.watchForLoadActivities();
-      const action = { type: Activities.actions.LOAD_ACTIVITIES };
-
-      expect(iterator.next().value).to.deep.equal(
-        take(Activities.actions.LOAD_ACTIVITIES)
-      );
-
-      expect(iterator.next(action).value).to.deep.equal(
-        fork(sagas.loadActivities, action)
-      );
-    });
-  });
-
-  describe('watchForLoadActivitiesForProject', () => {
-    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT}`, () => {
-      const iterator = sagas.watchForLoadActivitiesForProject();
-      const action = {
-        type: Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
-        id: 'id',
-      };
-
-      expect(iterator.next().value).to.deep.equal(
-        take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT)
-      );
-
-      expect(iterator.next(action).value).to.deep.equal(
-        fork(sagas.loadActivitiesForProject, action)
-      );
-    });
-  });
 
   const testLoader = (
     name: string,
