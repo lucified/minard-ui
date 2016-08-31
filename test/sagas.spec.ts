@@ -1040,4 +1040,16 @@ describe('sagas', () => {
       expect(iteratorEmptyArray.next().done).to.equal(true);
     });
   });
+
+  describe('createProject', () => {
+    it('stores information that a request has been started');
+    it('generates a .success action if the submission succeeds');
+    it('generates a .failure action if the submission fails');
+  });
+
+  describe('formSubmitSaga', () => {
+    it('starts submitting form data');
+    it('resolves the supplied promise if submitting is successful');
+    it('rejects the promise with a SubmissionError if submitting the form fails');
+  });
 });
