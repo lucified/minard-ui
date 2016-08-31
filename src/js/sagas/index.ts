@@ -7,11 +7,12 @@ import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
+import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
 import Projects, { Project } from '../modules/projects';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
-import { createFetcher, createLoader, storeIncludedEntities, FORM_SUBMIT } from './utils';
+import { createFetcher, createLoader, storeIncludedEntities } from './utils';
 
 export default function createSagas(api: Api) {
 
