@@ -3,10 +3,13 @@
     "type": "projects",
     "id": "3",
     "attributes": {
-      "name": "New project",
+      "name": "new-project",
       "active-committers": []
     },
     "relationships": {
+      "branches": {
+        "data": []
+      }
     }
   },
   "included": []
