@@ -52,14 +52,12 @@ describe('sagas', () => {
   ) => {
     describe(name, () => {
       it(`forks a new saga on ${action}`, () => {
-        const id = 'id';
-
         expect(iterator.next().value).to.deep.equal(
           take(action)
         );
 
-        expect(iterator.next({ id }).value).to.deep.equal(
-          fork(loader, id)
+        expect(iterator.next(action).value).to.deep.equal(
+          fork(loader, action)
         );
       });
     });
@@ -96,13 +94,14 @@ describe('sagas', () => {
   describe('watchForLoadAllProjects', () => {
     it(`forks a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
       const iterator = sagas.watchForLoadAllProjects();
+      const action = { type: Projects.actions.LOAD_ALL_PROJECTS };
 
       expect(iterator.next().value).to.deep.equal(
         take(Projects.actions.LOAD_ALL_PROJECTS)
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.loadAllProjects)
+      expect(iterator.next(action).value).to.deep.equal(
+        fork(sagas.loadAllProjects, action)
       );
     });
   });
@@ -110,44 +109,52 @@ describe('sagas', () => {
   describe('watchForLoadActivities', () => {
     it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
       const iterator = sagas.watchForLoadActivities();
+      const action = { type: Activities.actions.LOAD_ACTIVITIES };
 
       expect(iterator.next().value).to.deep.equal(
         take(Activities.actions.LOAD_ACTIVITIES)
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.loadActivities)
+      expect(iterator.next(action).value).to.deep.equal(
+        fork(sagas.loadActivities, action)
       );
     });
   });
 
   describe('watchForLoadActivitiesForProject', () => {
-    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
+    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT}`, () => {
       const iterator = sagas.watchForLoadActivitiesForProject();
-      const id = 'id';
+      const action = {
+        type: Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
+        id: 'id',
+      };
 
       expect(iterator.next().value).to.deep.equal(
         take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT)
       );
 
-      expect(iterator.next({ id }).value).to.deep.equal(
-        fork(sagas.loadActivitiesForProject, id)
+      expect(iterator.next(action).value).to.deep.equal(
+        fork(sagas.loadActivitiesForProject, action)
       );
     });
   });
 
   const testLoader = (
     name: string,
-    loader: (id: string) => IterableIterator<Effect>,
+    loader: (action: any) => IterableIterator<Effect>,
     selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
     fetcher: (id: string) => IterableIterator<Effect>,
     ensurer: (id: string) => IterableIterator<Effect | Effect[]>,
   ) => {
     describe(name, () => {
       const id = 'id';
+      const action = {
+        type: 'foo',
+        id,
+      };
 
       it('fetches the entity and ensures data if it does not exist', () => {
-        const iterator = loader(id);
+        const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
           select(selector, id)
@@ -165,7 +172,7 @@ describe('sagas', () => {
       });
 
       it('does not ensure data if fetching fails', () => {
-        const iterator = loader(id);
+        const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
           select(selector, id)
@@ -179,7 +186,7 @@ describe('sagas', () => {
       });
 
       it('it still ensures data even if entity already exists', () => {
-        const iterator = loader(id);
+        const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
           select(selector, id)
@@ -280,9 +287,13 @@ describe('sagas', () => {
 
   describe('loadActivitiesForProject', () => {
     const id = 'id';
+    const action = {
+      type: Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
+      id,
+    };
 
     it('fetches projects and ensures data', () => {
-      const iterator = sagas.loadActivitiesForProject(id);
+      const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
         call(sagas.fetchActivitiesForProject, id)
@@ -296,7 +307,7 @@ describe('sagas', () => {
     });
 
     it('does not ensure data if fetching fails', () => {
-      const iterator = sagas.loadActivitiesForProject(id);
+      const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
         call(sagas.fetchActivitiesForProject, id)
