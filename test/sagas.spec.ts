@@ -1042,9 +1042,70 @@ describe('sagas', () => {
   });
 
   describe('createProject', () => {
-    it('stores information that a request has been started');
-    it('generates a .success action if the submission succeeds');
-    it('generates a .failure action if the submission fails');
+    const name = 'projectName';
+    const description = 'projectDescription';
+    const action = {
+      type: 'SUBMITACTION',
+      payload: {
+        name,
+        description,
+      },
+    };
+
+    it('stores information that a request has been started', () => {
+      const iterator = sagas.createProject(action);
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendCreateProject.request(name, description))
+      );
+    });
+
+    it('calls the API createProject function', () => {
+      const iterator = sagas.createProject(action);
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.createProject, name, description)
+      );
+    });
+
+    it('saves the returned project and generates a .success action if the submission succeeds', () => {
+      const iterator = sagas.createProject(action);
+      const projectId = '58';
+      const response = { data: { id: projectId } };
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ response }).value).to.deep.equal(
+        put(Projects.actions.FetchProject.success(projectId, response.data))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendCreateProject.success(projectId))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(true);
+      expect(val.done).to.equal(true);
+    });
+
+    it('generates a .failure action if the submission fails', () => {
+      const iterator = sagas.createProject(action);
+      const error = 'error!';
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ error }).value).to.deep.equal(
+        put(Projects.actions.SendCreateProject.failure(error))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(false);
+      expect(val.done).to.equal(true);
+    });
   });
 
   describe('formSubmitSaga', () => {
