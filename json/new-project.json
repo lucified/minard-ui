@@ -1,0 +1,13 @@
+{
+  "data": {
+    "type": "projects",
+    "id": "3",
+    "attributes": {
+      "name": "New project",
+      "active-committers": []
+    },
+    "relationships": {
+    }
+  },
+  "included": []
+}
