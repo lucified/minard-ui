@@ -7,7 +7,7 @@ import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
 import Errors, { ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
-import Modal, { ModalState, ModalType } from '../src/js/modules/modal';
+import Modal, { ModalType } from '../src/js/modules/modal';
 import Projects, { ProjectState } from '../src/js/modules/projects';
 import Selected, { SelectedState } from '../src/js/modules/selected';
 
