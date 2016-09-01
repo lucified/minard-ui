@@ -13,8 +13,16 @@ if (host.slice(-1) === '/') {
 }
 const path: string = `${host}/api`;
 
-export const getApi = (url: string): ApiPromise =>
-  fetch(url, { credentials: 'same-origin' })
+const defaultOptions = {
+  credentials: 'same-origin',
+  headers: {
+    Accept: 'application/vnd.api+json',
+    'Content-Type': 'application/vnd.api+json',
+  },
+};
+
+const connectToApi = (url: string, options: RequestInit = defaultOptions): ApiPromise =>
+  fetch(url, options)
     .then(response =>
       response.json().then(json => ({
         json,
@@ -29,28 +37,13 @@ export const getApi = (url: string): ApiPromise =>
       error: error.message || 'Something bad happened',
     }));
 
+export const getApi = (url: string): ApiPromise => connectToApi(url);
+
 export const postApi = (url: string, payload: any): ApiPromise =>
-  fetch(url, {
-    credentials: 'same-origin',
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  }).then(response =>
-      response.json().then(json => ({
-        json,
-        response,
-      }))
-    ).then(({ json, response }) =>
-      response.ok ? json : Promise.reject(json)
-    ).then(json => ({
-      response: json,
-    }))
-    .catch(error => ({
-      error: error.message || 'Something bad happened',
-    }));
+  connectToApi(url, Object.assign({}, defaultOptions, { method: 'POST', body: JSON.stringify(payload) }));
+
+export const patchApi = (url: string, payload: any): ApiPromise =>
+  connectToApi(url, Object.assign({}, defaultOptions, { method: 'PATCH', body: JSON.stringify(payload) }));
 
 export const fetchActivities = () => getApi(`${path}/activity`);
 export const fetchActivitiesForProject = (id: string) => getApi(`${path}/activity?filter=project[${id}]`);
