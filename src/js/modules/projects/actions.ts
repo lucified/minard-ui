@@ -61,7 +61,6 @@ export const SendCreateProject: t.SendCreateProjectActionCreators = {
   }),
 };
 
-
 // Edit an existing project
 export const EDIT_PROJECT = 'PROJECTS/EDIT_PROJECT';
 

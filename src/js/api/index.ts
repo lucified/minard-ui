@@ -52,6 +52,7 @@ export const fetchProject = (id: string) => getApi(`${path}/projects/${id}`);
 export const fetchBranch = (id: string) => getApi(`${path}/branches/${id}`);
 export const fetchDeployment = (id: string) => getApi(`${path}/deployments/${id}`);
 export const fetchCommit = (id: string) => getApi(`${path}/commits/${id}`);
+
 export const createProject = (name: string, description?: string) =>
   postApi(`${path}/projects`, {
     data: {
