@@ -33,7 +33,7 @@ const connectToApi = (url: string, options: RequestInit = defaultOptions): ApiPr
       response: json,
     }))
     .catch(error => ({
-      error: error.message || 'Something bad happened',
+      error: error.message || 'An error occurred',
     }));
 
 export const getApi = (url: string): ApiPromise => connectToApi(url);

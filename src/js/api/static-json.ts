@@ -34,7 +34,7 @@ function callApi(url: string) {
       response: json,
     }))
     .catch(error => ({
-      error: error.message || 'Something bad happened',
+      error: error.message || 'An error occurred',
     }));
 }
 
