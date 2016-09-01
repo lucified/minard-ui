@@ -1,0 +1,17 @@
+{
+  "data": {
+    "type": "projects",
+    "id": "3",
+    "attributes": {
+      "name": "new-edited-project",
+      "description": "And now with a description",
+      "active-committers": []
+    },
+    "relationships": {
+      "branches": {
+        "data": []
+      }
+    }
+  },
+  "included": []
+}

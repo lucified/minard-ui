@@ -19,6 +19,7 @@ const deploymentJSON: { [id: string]: string } = {
 };
 const commitJSON = require('file!../../../json/commit.json');
 const newProjectJSON = require('file!../../../json/new-project.json');
+const editedProjectJSON = require('file!../../../json/edited-project.json');
 
 function callApi(url: string) {
   return fetch(url, { credentials: 'same-origin' })
@@ -45,3 +46,5 @@ export const fetchBranch = (id: string) => callApi(branchJSON[id]);
 export const fetchDeployment = (id: string) => callApi(deploymentJSON[id]);
 export const fetchCommit = (id: string) => callApi(commitJSON);
 export const createProject = (name: string, description?: string) => callApi(newProjectJSON);
+export const editProject = (id: string, newAttributes: { name?: string, description?: string}) =>
+  callApi(editedProjectJSON);
