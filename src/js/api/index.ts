@@ -17,7 +17,6 @@ const defaultOptions = {
   credentials: 'same-origin',
   headers: {
     Accept: 'application/vnd.api+json',
-    'Content-Type': 'application/vnd.api+json',
   },
 };
 
@@ -40,10 +39,24 @@ const connectToApi = (url: string, options: RequestInit = defaultOptions): ApiPr
 export const getApi = (url: string): ApiPromise => connectToApi(url);
 
 export const postApi = (url: string, payload: any): ApiPromise =>
-  connectToApi(url, Object.assign({}, defaultOptions, { method: 'POST', body: JSON.stringify(payload) }));
+  connectToApi(url, Object.assign({}, defaultOptions, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/vnd.api+json',
+      'Content-Type': 'application/vnd.api+json',
+    },
+    body: JSON.stringify(payload),
+  }));
 
 export const patchApi = (url: string, payload: any): ApiPromise =>
-  connectToApi(url, Object.assign({}, defaultOptions, { method: 'PATCH', body: JSON.stringify(payload) }));
+  connectToApi(url, Object.assign({}, defaultOptions, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/vnd.api+json',
+      'Content-Type': 'application/vnd.api+json',
+    },
+    body: JSON.stringify(payload),
+  }));
 
 export const fetchActivities = (): ApiPromise => getApi(`${path}/activity`);
 export const fetchActivitiesForProject = (id: string): ApiPromise => getApi(`${path}/activity?filter=project[${id}]`);
