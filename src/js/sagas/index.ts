@@ -257,11 +257,11 @@ export default function createSagas(api: Api) {
 
   // Edit PROJECT
   function* editProject(action: any): IterableIterator<Effect> {
-    const { id, newAttributes } = action.payload;
+    const { id, name, description } = action.payload;
 
-    yield put(Projects.actions.SendEditProject.request(id, newAttributes));
+    yield put(Projects.actions.SendEditProject.request(id));
 
-    const { response, error } = yield call(api.editProject, id, newAttributes);
+    const { response, error } = yield call(api.editProject, id, { name, description });
 
     if (response) {
       // Store edited project
