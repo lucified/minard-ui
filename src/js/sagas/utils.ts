@@ -1,7 +1,7 @@
 import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select } from 'redux-saga/effects';
 
-import { ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
+import { ApiEntity, ApiEntityTypeString, ApiPromise } from '../api/types';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
@@ -21,7 +21,8 @@ export const createLoader = (
   fetcher: (id: string) => IterableIterator<Effect>,
   dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>
 ) => {
-  return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (action: any): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+    const id: string = action.id;
     const existingEntity = yield select(selector, id);
     let fetchSucceeded: boolean = false;
 
@@ -37,7 +38,7 @@ export const createLoader = (
 
 export const createFetcher = (
   requestActionCreators: RequestActionCreators,
-  apiFetchFunction: (id: string) => Promise<{ response: ApiResponse } | { error: string }>
+  apiFetchFunction: (id: string) => ApiPromise
 ) => {
   return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.request(id));

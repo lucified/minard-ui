@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { ActionCreator } from 'redux';
-import { Effect, call, fork, put, select, take } from 'redux-saga/effects';
+import { SubmissionError } from 'redux-form';
+import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
 import Activities, { ActivityType } from '../src/js/modules/activities';
@@ -8,6 +9,7 @@ import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
 import { FetchError } from '../src/js/modules/errors';
+import { FORM_SUBMIT } from '../src/js/modules/forms';
 import Projects, { Project } from '../src/js/modules/projects';
 import { StateTree } from '../src/js/reducers';
 import sagaCreator from '../src/js/sagas';
@@ -22,6 +24,7 @@ interface CreateApiParameter {
   fetchDeployment?: (id: string) => ApiPromise;
   fetchProject?: (id: string) => ApiPromise;
   fetchAllProjects?: () => ApiPromise;
+  createProject?: (name: string, description?: string) => ApiPromise;
 }
 
 const createApi = (functionsToReplace?: CreateApiParameter): Api => {
@@ -33,6 +36,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchDeployment: (_) => Promise.resolve({ response: {} }),
     fetchProject: (_) => Promise.resolve({ response: {} }),
     fetchAllProjects: () => Promise.resolve({ response: {} }),
+    createProject: (_1, _2) => Promise.resolve({ response: {} }),
   };
 
   return Object.assign(defaultFunctions, functionsToReplace);
@@ -44,20 +48,20 @@ describe('sagas', () => {
 
   const testWatcher = (
     name: string,
-    action: string,
-    iterator: IterableIterator<Effect>,
+    actionType: string,
+    iterator: IterableIterator<Effect | Effect[]>,
     loader: (id: string) => IterableIterator<Effect>
   ) => {
     describe(name, () => {
-      it(`forks a new saga on ${action}`, () => {
-        const id = 'id';
+      const action = { type: actionType };
 
+      it(`forks a new saga on ${actionType}`, () => {
         expect(iterator.next().value).to.deep.equal(
-          take(action)
+          take(actionType)
         );
 
-        expect(iterator.next({ id }).value).to.deep.equal(
-          fork(loader, id)
+        expect(iterator.next(action).value).to.deep.equal(
+          fork(loader, action)
         );
       });
     });
@@ -91,61 +95,58 @@ describe('sagas', () => {
     sagas.loadCommit,
   );
 
-  describe('watchForLoadAllProjects', () => {
-    it(`forks a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
-      const iterator = sagas.watchForLoadAllProjects();
+  testWatcher(
+    'watchForLoadAllProjects',
+    Projects.actions.LOAD_ALL_PROJECTS,
+    sagas.watchForLoadAllProjects(),
+    sagas.loadAllProjects,
+  );
+
+  testWatcher(
+    'watchForLoadActivities',
+    Activities.actions.LOAD_ACTIVITIES,
+    sagas.watchForLoadActivities(),
+    sagas.loadActivities
+  );
+
+  testWatcher(
+    'watchForLoadActivitiesForProject',
+    Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
+    sagas.watchForLoadActivitiesForProject(),
+    sagas.loadActivitiesForProject
+  );
+
+  describe('watchForFormSubmit', () => {
+    it(`forks a new saga on ${FORM_SUBMIT}`, () => {
+      const iterator = sagas.watchForFormSubmit();
+      const action = { type: FORM_SUBMIT, values: 'foo' };
 
       expect(iterator.next().value).to.deep.equal(
-        take(Projects.actions.LOAD_ALL_PROJECTS)
+        take(FORM_SUBMIT)
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.loadAllProjects)
-      );
-    });
-  });
-
-  describe('watchForLoadActivities', () => {
-    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
-      const iterator = sagas.watchForLoadActivities();
-
-      expect(iterator.next().value).to.deep.equal(
-        take(Activities.actions.LOAD_ACTIVITIES)
-      );
-
-      expect(iterator.next().value).to.deep.equal(
-        fork(sagas.loadActivities)
-      );
-    });
-  });
-
-  describe('watchForLoadActivitiesForProject', () => {
-    it(`forks a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
-      const iterator = sagas.watchForLoadActivitiesForProject();
-      const id = 'id';
-
-      expect(iterator.next().value).to.deep.equal(
-        take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT)
-      );
-
-      expect(iterator.next({ id }).value).to.deep.equal(
-        fork(sagas.loadActivitiesForProject, id)
+      expect(iterator.next(action).value).to.deep.equal(
+        fork(sagas.formSubmitSaga, action)
       );
     });
   });
 
   const testLoader = (
     name: string,
-    loader: (id: string) => IterableIterator<Effect>,
+    loader: (action: any) => IterableIterator<Effect>,
     selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
     fetcher: (id: string) => IterableIterator<Effect>,
     ensurer: (id: string) => IterableIterator<Effect | Effect[]>,
   ) => {
     describe(name, () => {
       const id = 'id';
+      const action = {
+        type: 'foo',
+        id,
+      };
 
       it('fetches the entity and ensures data if it does not exist', () => {
-        const iterator = loader(id);
+        const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
           select(selector, id)
@@ -163,7 +164,7 @@ describe('sagas', () => {
       });
 
       it('does not ensure data if fetching fails', () => {
-        const iterator = loader(id);
+        const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
           select(selector, id)
@@ -177,7 +178,7 @@ describe('sagas', () => {
       });
 
       it('it still ensures data even if entity already exists', () => {
-        const iterator = loader(id);
+        const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
           select(selector, id)
@@ -278,9 +279,13 @@ describe('sagas', () => {
 
   describe('loadActivitiesForProject', () => {
     const id = 'id';
+    const action = {
+      type: Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
+      id,
+    };
 
     it('fetches projects and ensures data', () => {
-      const iterator = sagas.loadActivitiesForProject(id);
+      const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
         call(sagas.fetchActivitiesForProject, id)
@@ -294,7 +299,7 @@ describe('sagas', () => {
     });
 
     it('does not ensure data if fetching fails', () => {
-      const iterator = sagas.loadActivitiesForProject(id);
+      const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
         call(sagas.fetchActivitiesForProject, id)
@@ -1033,6 +1038,137 @@ describe('sagas', () => {
 
       const iteratorEmptyArray = sagas.storeIncludedEntities([]);
       expect(iteratorEmptyArray.next().done).to.equal(true);
+    });
+  });
+
+  describe('createProject', () => {
+    const name = 'projectName';
+    const description = 'projectDescription';
+    const action = {
+      type: 'SUBMITACTION',
+      payload: {
+        name,
+        description,
+      },
+    };
+
+    it('stores information that a request has been started', () => {
+      const iterator = sagas.createProject(action);
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendCreateProject.request(name, description))
+      );
+    });
+
+    it('calls the API createProject function', () => {
+      const iterator = sagas.createProject(action);
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.createProject, name, description)
+      );
+    });
+
+    it('saves the returned project and generates a .success action if the submission succeeds', () => {
+      const iterator = sagas.createProject(action);
+      const projectId = '58';
+      const response = { data: { id: projectId } };
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ response }).value).to.deep.equal(
+        put(Projects.actions.FetchProject.success(projectId, response.data))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendCreateProject.success(projectId))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(true);
+      expect(val.done).to.equal(true);
+    });
+
+    it('generates a .failure action if the submission fails', () => {
+      const iterator = sagas.createProject(action);
+      const error = 'error!';
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ error }).value).to.deep.equal(
+        put(Projects.actions.SendCreateProject.failure(error))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(false);
+      expect(val.done).to.equal(true);
+    });
+  });
+
+  describe('formSubmitSaga', () => {
+    const submitAction = 'SUBMITACTION';
+    const successAction = 'SUCCESSACTION';
+    const failureAction = 'FAILUREACTION';
+    const values = { foo: 'bar' };
+    const resolve = () => {}; // tslint:disable-line
+    const reject = () => {}; // tslint:disable-line
+
+    const payload = {
+      submitAction,
+      successAction,
+      failureAction,
+      values,
+      resolve,
+      reject,
+    };
+
+    it('starts submitting form data', () => {
+      const iterator = sagas.formSubmitSaga({ payload });
+
+      expect(iterator.next().value).to.deep.equal(
+        put({ type: submitAction, payload: values })
+      );
+    });
+
+    it('resolves the supplied promise if submitting is successful', () => {
+      const iterator = sagas.formSubmitSaga({ payload });
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        race({
+          success: take(successAction),
+          failure: take(failureAction),
+        })
+      );
+
+      expect(iterator.next({ success: { id: 3 } }).value).to.deep.equal(
+        call(resolve, 3)
+      );
+
+      expect(iterator.next().done).to.equal(true);
+    });
+
+    it('rejects the promise with a SubmissionError if submitting the form fails', () => {
+      const iterator = sagas.formSubmitSaga({ payload });
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        race({
+          success: take(successAction),
+          failure: take(failureAction),
+        })
+      );
+
+      expect(iterator.next({ failure: { prettyError: 'foobar' } }).value).to.deep.equal(
+        call(reject, new SubmissionError({ _error: 'foobar' }))
+      );
+
+      expect(iterator.next().done).to.equal(true);
     });
   });
 });

@@ -1,9 +1,9 @@
 {
   "data": {
     "type": "projects",
-    "id": "2",
+    "id": "3",
     "attributes": {
-      "name": "second-project",
+      "name": "new-project",
       "active-committers": []
     },
     "relationships": {
@@ -11,5 +11,6 @@
         "data": []
       }
     }
-  }
+  },
+  "included": []
 }

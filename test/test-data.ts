@@ -6,8 +6,8 @@ export const allProjectsResponse: ApiResponse = {
       'type': 'projects',
       'id': '1',
       'attributes': {
-        'name': 'First project',
-        'description': 'This is the first project description. It might not be set.',
+        'name': 'first-project',
+        'description': 'This is the first-project description. It might not be set.',
         'active-committers': [
           {
             'name': 'Ville Saarinen',
@@ -41,7 +41,7 @@ export const allProjectsResponse: ApiResponse = {
       'type': 'projects',
       'id': '2',
       'attributes': {
-        'name': 'Second project',
+        'name': 'second-project',
         'active-committers': <any[]> [],
       },
       'relationships': {
@@ -312,8 +312,8 @@ export const projectResponse: ApiResponse = {
     'type': 'projects',
     'id': '1',
     'attributes': {
-      'name': 'First project',
-      'description': 'This is the first project description. It might not be set.',
+      'name': 'first-project',
+      'description': 'This is the first-project description. It might not be set.',
       'active-committers': [
         {
           'name': 'Ville Saarinen',

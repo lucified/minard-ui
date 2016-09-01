@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
 import { FetchError, isError } from '../../modules/errors';
-import Loading from '../../modules/loading';
+import Requests from '../../modules/requests';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -80,7 +80,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { projectId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
-  const isLoadingActivities = Loading.selectors.isLoadinglActivitiesForProject(state, projectId);
+  const isLoadingActivities = Requests.selectors.isLoadinglActivitiesForProject(state, projectId);
 
   if (!project || isError(project)) {
     return { project, isLoadingActivities };

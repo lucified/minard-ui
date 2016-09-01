@@ -1,25 +1,40 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { FetchError } from '../../modules/errors';
+import Modal, { ModalType } from '../../modules/modal';
 import { Project } from '../../modules/projects';
 
 import LoadingIcon from '../common/loading-icon';
 import SectionTitle from '../common/section-title';
+import NewProjectDialog from './new-project-dialog';
 import ProjectCard from './project-card';
 
 const styles = require('./projects-section.scss');
 
-interface Props {
+interface PassedProps {
   projects: (Project | FetchError)[];
   isLoading: boolean;
 }
 
-const ProjectsSection = ({ projects, isLoading }: Props) => (
+interface GeneratedStateProps {
+
+}
+
+interface GeneratedDispatchProps {
+  openCreateNewProjectDialog: () => void;
+}
+
+type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
+
+const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog }: Props) => (
   <section className="container">
+    <NewProjectDialog />
     <SectionTitle
       rightContent={(
-        <a href="#" className={classNames(styles['add-project-link'])}>
+        <a onClick={openCreateNewProjectDialog} className={classNames(styles['add-project-link'])}>
           + Add new project
         </a>
       )}
@@ -43,4 +58,11 @@ const ProjectsSection = ({ projects, isLoading }: Props) => (
   </section>
 );
 
-export default ProjectsSection;
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  openCreateNewProjectDialog: () => dispatch(Modal.actions.openModal(ModalType.NewProject)),
+});
+
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+  () => ({}),
+  mapDispatchToProps
+)(ProjectsSection);

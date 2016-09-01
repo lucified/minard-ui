@@ -7,6 +7,7 @@ import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
 import Errors, { ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
+import Modal, { ModalState, ModalType } from '../src/js/modules/modal';
 import Projects, { ProjectState } from '../src/js/modules/projects';
 import Selected, { SelectedState } from '../src/js/modules/selected';
 
@@ -188,6 +189,64 @@ const testReducer = (
 };
 
 describe('reducers', () => {
+  describe('modal', () => {
+    const { reducer } = Modal;
+
+    it('opens a modal dialog when one is not open', () => {
+      const type = ModalType.NewProject;
+      const action = Modal.actions.openModal(type);
+      const initialState = null;
+      const expectedState = { type };
+
+      expect(reducer(initialState, action)).to.deep.equal(expectedState);
+    });
+
+    it('does nothing when opening a modal that is already open', () => {
+      const type = ModalType.NewProject;
+      const action = Modal.actions.openModal(type);
+      const initialState = { type };
+      const expectedState = { type };
+
+      expect(reducer(initialState, action)).to.deep.equal(expectedState);
+    });
+
+    it('does nothing when opening a modal when another modal is already open', () => {
+      const action = Modal.actions.openModal(ModalType.NewProject);
+      const initialState = { type: ModalType.ProjectSettings };
+      const expectedState = { type: ModalType.ProjectSettings };
+
+      expect(reducer(initialState, action)).to.deep.equal(expectedState);
+    });
+
+    it('closes a modal dialog', () => {
+      const action = Modal.actions.closeModal(ModalType.ProjectSettings);
+      const initialState = { type: ModalType.ProjectSettings };
+      const expectedState = null;
+
+      expect(reducer(initialState, action)).to.deep.equal(expectedState);
+    });
+
+    it('does not close a modal dialog of a different type', () => {
+      const action = Modal.actions.closeModal(ModalType.NewProject);
+      const initialState = { type: ModalType.ProjectSettings };
+      const expectedState = { type: ModalType.ProjectSettings };
+
+      expect(reducer(initialState, action)).to.deep.equal(expectedState);
+    });
+
+    it('does nothing when closing a modal when none are open', () => {
+      const action = Modal.actions.closeModal(ModalType.NewProject);
+      const initialState = null;
+      const expectedState = null;
+
+      expect(reducer(initialState, action)).to.deep.equal(expectedState);
+    });
+  });
+
+  describe('requests', () => {
+    it(''); // TODO
+  });
+
   describe('selected', () => {
     const { reducer } = Selected;
 
@@ -934,8 +993,8 @@ describe('reducers', () => {
     const expectedObjectsToStore: ProjectState = {
       1: {
         id: '1',
-        name: 'First project',
-        description: 'This is the first project description. It might not be set.',
+        name: 'first-project',
+        description: 'This is the first-project description. It might not be set.',
         activeUsers: [
           {
             name: 'Ville Saarinen',
@@ -952,7 +1011,7 @@ describe('reducers', () => {
       },
       2: {
         id: '2',
-        name: 'Second project',
+        name: 'second-project',
         description: undefined,
         activeUsers: [],
         branches: [],
@@ -984,7 +1043,7 @@ describe('reducers', () => {
       },
       1: {
         id: '1',
-        name: 'First project again',
+        name: 'first-project again',
         description: 'foobar',
         activeUsers: [
           {
@@ -1004,8 +1063,8 @@ describe('reducers', () => {
     const expectedSuccessfulRequestObject: ProjectState = {
       1: {
         id: '1',
-        name: 'First project',
-        description: 'This is the first project description. It might not be set.',
+        name: 'first-project',
+        description: 'This is the first-project description. It might not be set.',
         activeUsers: [
           {
             name: 'Ville Saarinen',

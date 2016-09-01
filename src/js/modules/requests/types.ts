@@ -1,12 +1,12 @@
 import { Action } from 'redux';
 
 // State
-export interface LoadingInformation {
+export interface RequestInformation {
   type: string;
   id?: string;
 }
 
-export type LoadingState = LoadingInformation[];
+export type RequestsState = RequestInformation[];
 
 export interface ClearErrorAction extends Action {
   type: string;
