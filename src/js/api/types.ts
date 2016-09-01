@@ -23,4 +23,5 @@ export interface Api {
   fetchBranch: (id: string) => ApiPromise;
   fetchCommit: (id: string) => ApiPromise;
   createProject: (name: string, description?: string) => ApiPromise;
+  editProject: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise;
 }
