@@ -255,6 +255,29 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // Edit PROJECT
+  function* editProject(action: any): IterableIterator<Effect> {
+    const { id, newAttributes } = action.payload;
+
+    yield put(Projects.actions.SendEditProject.request(id, newAttributes));
+
+    const { response, error } = yield call(api.editProject, id, newAttributes);
+
+    if (response) {
+      // Store edited project
+      yield put(Projects.actions.FetchProject.success(id, response.data))
+      // Notify form that creation was a success
+      yield put(Projects.actions.SendEditProject.success(id));
+
+      return true;
+    } else {
+      // Notify form that creation failed
+      yield put(Projects.actions.SendEditProject.failure(id, error));
+
+      return false;
+    }
+  }
+
   // FORMS
   interface FormSubmitPayload {
     submitAction: string;
@@ -300,6 +323,10 @@ export default function createSagas(api: Api) {
     yield* takeLatest(Projects.actions.CREATE_PROJECT, createProject);
   }
 
+  function* watchForEditProject() {
+    yield* takeLatest(Projects.actions.EDIT_PROJECT, editProject);
+  }
+
   function* watchForLoadActivities() {
     yield* takeEvery(Activities.actions.LOAD_ACTIVITIES, loadActivities);
   }
@@ -331,6 +358,7 @@ export default function createSagas(api: Api) {
   function* root() {
     yield [
       fork(watchForCreateProject),
+      fork(watchForEditProject),
       fork(watchForLoadAllProjects),
       fork(watchForLoadProject),
       fork(watchForLoadBranch),
