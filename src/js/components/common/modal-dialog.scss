@@ -41,3 +41,13 @@
     color: #000000;
   }
 }
+
+.delete {
+  float: right;
+  color: #95a5a6;
+  cursor: pointer;
+
+  &:hover {
+    color: #000000;
+  }
+}

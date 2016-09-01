@@ -9,6 +9,7 @@ import Modal, { ModalType } from '../../modules/modal';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
+import confirm from '../common/confirm';
 import ProjectSettingsForm from './project-settings-form';
 
 const styles = require('../common/modal-dialog.scss');
@@ -33,6 +34,15 @@ interface FormData {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
+const confirmDeletion = (project: Project) => {
+  return (e: any) => {
+    e.preventDefault();
+    confirm(`Are you sure you want to delete ${project.name}? This action can't be undone`)
+      .then(() => console.log('will delete'))
+      .catch(() => {}); // tslint:disable-line
+  };
+};
+
 const ProjectSettingsDialog = ({ project, isOpen, closeDialog, existingProjectNames }: Props) => (
   <ModalDialog
     isOpen={isOpen}
@@ -49,6 +59,9 @@ const ProjectSettingsDialog = ({ project, isOpen, closeDialog, existingProjectNa
       onSubmitSuccess={closeDialog}
       initialValues={project}
     />
+    <a className={styles.delete} onClick={confirmDeletion(project)}>
+      Delete project
+    </a>
   </ModalDialog>
 );
 
