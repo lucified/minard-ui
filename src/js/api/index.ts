@@ -70,3 +70,12 @@ export const createProject = (name: string, description?: string) =>
       },
     },
   });
+
+export const editProject = (id: string, newAttributes: { name?: string, description?: string }) =>
+  patchApi(`${path}/projects/${id}`, {
+    data: {
+      type: 'projects',
+      id,
+      attributes: newAttributes,
+    },
+  });
