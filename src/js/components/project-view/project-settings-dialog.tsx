@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Icon from 'react-fontawesome';
 import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -39,11 +40,13 @@ const ProjectSettingsDialog = ({ project, isOpen, closeDialog, existingProjectNa
     className={styles.dialog}
     overlayClassName={styles.overlay}
   >
+    <div onClick={closeDialog} className={styles.close}>
+      <Icon name="times-circle" size="4x" />
+    </div>
     <h1>Project settings</h1>
     <ProjectSettingsForm
       existingProjectNames={existingProjectNames}
       onSubmitSuccess={closeDialog}
-      onClose={closeDialog}
       initialValues={project}
     />
   </ModalDialog>

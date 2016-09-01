@@ -11,7 +11,6 @@ const styles = require('../common/modal-dialog.scss');
 interface PassedProps {
   existingProjectNames: string[];
   onSubmitSuccess: () => void;
-  onClose: () => void;
   initialValues: Project;
 }
 
