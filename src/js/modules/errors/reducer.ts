@@ -19,7 +19,7 @@ const reducer: Reducer<t.ErrorState> = (state = initialState, action: any) => {
       return state.concat(action);
     case Projects.actions.SEND_DELETE_PROJECT.REQUEST:
       return state.filter(error =>
-        !(error.type !== Projects.actions.SEND_DELETE_PROJECT.FAILURE && (<any> error).id !== action.id)
+        !(error.type === Projects.actions.SEND_DELETE_PROJECT.FAILURE && (<any> error).id === action.id)
       );
     case Projects.actions.SEND_DELETE_PROJECT.FAILURE:
       return state.concat(action);

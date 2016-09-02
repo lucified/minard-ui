@@ -17,7 +17,7 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
     case Activities.actions.ACTIVITIES_FOR_PROJECT.FAILURE:
     case Activities.actions.ACTIVITIES_FOR_PROJECT.SUCCESS:
       return state.filter(requestInfo =>
-        (requestInfo.type !== Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST) &&
+        (requestInfo.type !== Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST) ||
         (requestInfo.id !== action.id)
       );
     case Projects.actions.ALL_PROJECTS.FAILURE:
@@ -31,7 +31,7 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
     case Projects.actions.SEND_DELETE_PROJECT.SUCCESS:
     case Projects.actions.SEND_DELETE_PROJECT.FAILURE:
       return state.filter(requestInfo =>
-        (requestInfo.type !== Projects.actions.SEND_DELETE_PROJECT.REQUEST) &&
+        (requestInfo.type !== Projects.actions.SEND_DELETE_PROJECT.REQUEST) ||
         (requestInfo.id !== action.id)
       );
     default:
