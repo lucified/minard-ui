@@ -57,7 +57,8 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
 
     const { project, deleteProject, closeDialog, router } = this.props;
 
-    confirm(`Are you sure you want to delete ${project.name}? This action can't be undone`)
+    confirm(`Are you sure you want to delete ${project.name}? ` +
+      'This action will remove the project, repository and all previews.')
       .then(() => new Promise((resolve, reject) => {
           deleteProject(project.id, resolve, reject);
         })
@@ -93,8 +94,13 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
           onSubmitSuccess={this.clearAndClose}
           initialValues={project}
         />
+        <h3 className={styles['delete-section']}>Delete project</h3>
+        <div>
+          Deleting the project will also delete the git repository. This action cannot be undone.
+          You have been warned.
+        </div>
         {deletionInProgress ? (
-          <span className={styles.deleting}>Deleting...</span>
+          <div className={styles.deleting}>Deleting...</div>
         ) : (
           <div className={styles.delete}>
             <a onClick={this.confirmDeletion}>

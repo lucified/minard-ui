@@ -16,7 +16,7 @@ interface Props {
 
 let ConfirmDialog = ({show, proceed, dismiss, cancel, confirmation, options}: Props) => (
   <ModalDialog className={styles.dialog} overlayClassName={styles.overlay} onRequestClose={dismiss} isOpen={show}>
-    <div>{confirmation}</div>
+    <p>{confirmation}</p>
     <div>
       <button onClick={() => cancel()}>Cancel</button>
       <button onClick={() => proceed()}>OK</button>

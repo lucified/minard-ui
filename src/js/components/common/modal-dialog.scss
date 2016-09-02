@@ -42,12 +42,20 @@
   }
 }
 
+.delete-section {
+  margin-top: 50px;
+}
+
 .delete {
-  float: right;
+  margin-top: 12px;
   color: #95a5a6;
   cursor: pointer;
 
   &:hover {
     color: #000000;
   }
+}
+
+.deleting {
+  color: #95a5a6;
 }
