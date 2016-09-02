@@ -28,6 +28,5 @@ ConfirmDialog = ReactConfirm.confirmable(ConfirmDialog);
 const confirmFunction = ReactConfirm.createConfirmation(ConfirmDialog);
 
 export default function(confirmation: string, options = {}) {
-  // You can pass whatever you want to the component. These arguments will be your Component's props
   return confirmFunction({ confirmation, options });
 }
