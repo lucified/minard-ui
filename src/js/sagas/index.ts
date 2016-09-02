@@ -384,6 +384,7 @@ export default function createSagas(api: Api) {
     watchForFormSubmit,
     formSubmitSaga,
     createProject,
+    editProject,
     fetchActivities,
     fetchActivitiesForProject,
     fetchBranch,

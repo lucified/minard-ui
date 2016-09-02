@@ -25,6 +25,7 @@ interface CreateApiParameter {
   fetchProject?: (id: string) => ApiPromise;
   fetchAllProjects?: () => ApiPromise;
   createProject?: (name: string, description?: string) => ApiPromise;
+  editProject?: (id: string, newAttributes: { name: string, description: string }) => ApiPromise;
 }
 
 const createApi = (functionsToReplace?: CreateApiParameter): Api => {
@@ -1101,6 +1102,74 @@ describe('sagas', () => {
 
       expect(iterator.next({ error }).value).to.deep.equal(
         put(Projects.actions.SendCreateProject.failure(error))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(false);
+      expect(val.done).to.equal(true);
+    });
+  });
+
+  describe('editProject', () => {
+    const id = '23524';
+    const name = 'projectName-new';
+    const description = 'projectDescription-edited';
+    const action = {
+      type: 'SUBMITACTION',
+      payload: {
+        id,
+        name,
+        description,
+      },
+    };
+
+    it('stores information that a request has been started', () => {
+      const iterator = sagas.editProject(action);
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendEditProject.request(id))
+      );
+    });
+
+    it('calls the API editProject function', () => {
+      const iterator = sagas.editProject(action);
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.editProject, id, { name, description })
+      );
+    });
+
+    it('saves the returned project and generates a .success action if the submission succeeds', () => {
+      const iterator = sagas.editProject(action);
+      const response = { data: { id, attributes: { name, description }}};
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ response }).value).to.deep.equal(
+        put(Projects.actions.FetchProject.success(id, response.data))
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendEditProject.success(id))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(true);
+      expect(val.done).to.equal(true);
+    });
+
+    it('generates a .failure action if the submission fails', () => {
+      const iterator = sagas.editProject(action);
+      const error = 'error!';
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ error }).value).to.deep.equal(
+        put(Projects.actions.SendEditProject.failure(id, error))
       );
 
       const val = iterator.next();
