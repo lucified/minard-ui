@@ -248,7 +248,7 @@ describe('reducers', () => {
     const { reducer } = Requests;
 
     describe('fetch all projects', () => {
-      it('stores information requests', () => {
+      it('stores request information', () => {
         const initialState: RequestsState = [];
         const action = {
           type: Projects.actions.ALL_PROJECTS.REQUEST,
@@ -293,7 +293,7 @@ describe('reducers', () => {
     });
 
     describe('fetch all activities', () => {
-      it('stores information requests', () => {
+      it('stores request information', () => {
         const initialState: RequestsState = [];
         const action = {
           type: Activities.actions.ACTIVITIES.REQUEST,
@@ -338,7 +338,7 @@ describe('reducers', () => {
     });
 
     describe('fetch all activities for project', () => {
-      it('stores information requests', () => {
+      it('stores request information', () => {
         const initialState: RequestsState = [];
         const action = {
           type: Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST,
@@ -388,7 +388,7 @@ describe('reducers', () => {
     });
 
     describe('delete project', () => {
-      it('stores information requests', () => {
+      it('stores request information', () => {
         const initialState: RequestsState = [];
         const action = {
           type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
