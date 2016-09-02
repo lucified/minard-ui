@@ -119,6 +119,27 @@ describe('sagas', () => {
     sagas.loadActivitiesForProject
   );
 
+  testWatcher(
+    'watchForCreateProject',
+    Projects.actions.CREATE_PROJECT,
+    sagas.watchForCreateProject(),
+    sagas.createProject
+  );
+
+  testWatcher(
+    'watchForEditProject',
+    Projects.actions.EDIT_PROJECT,
+    sagas.watchForEditProject(),
+    sagas.editProject
+  );
+
+  testWatcher(
+    'watchForDeleteProject',
+    Projects.actions.DELETE_PROJECT,
+    sagas.watchForDeleteProject(),
+    sagas.deleteProject
+  );
+
   describe('watchForFormSubmit', () => {
     it(`forks a new saga on ${FORM_SUBMIT}`, () => {
       const iterator = sagas.watchForFormSubmit();
@@ -1103,6 +1124,76 @@ describe('sagas', () => {
 
       expect(iterator.next({ error }).value).to.deep.equal(
         put(Projects.actions.SendCreateProject.failure(error))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(false);
+      expect(val.done).to.equal(true);
+    });
+  });
+
+  describe('deleteProject', () => {
+    const id = '23524';
+    const resolve = () => ({});
+    const reject = () => ({});
+    const action = {
+      type: 'DELETEACTION',
+      id,
+      resolve,
+      reject,
+    };
+
+    it('stores information that a request has been started', () => {
+      const iterator = sagas.deleteProject(action);
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendDeleteProject.request(id))
+      );
+    });
+
+    it('calls the API deleteProject function', () => {
+      const iterator = sagas.deleteProject(action);
+
+      iterator.next();
+
+      expect(iterator.next().value).to.deep.equal(
+        call(api.deleteProject, id)
+      );
+    });
+
+    it('resolves the promise and generates a .success action if the deletion succeeds', () => {
+      const iterator = sagas.deleteProject(action);
+      const response = 'ok';
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ response }).value).to.deep.equal(
+        call(resolve)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendDeleteProject.success(id))
+      );
+
+      const val = iterator.next();
+      expect(val.value).to.equal(true);
+      expect(val.done).to.equal(true);
+    });
+
+    it('generates a .failure action if the deletion fails', () => {
+      const iterator = sagas.deleteProject(action);
+      const error = 'error!';
+
+      iterator.next();
+      iterator.next();
+
+      expect(iterator.next({ error }).value).to.deep.equal(
+        call(reject)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Projects.actions.SendDeleteProject.failure(id, error))
       );
 
       const val = iterator.next();

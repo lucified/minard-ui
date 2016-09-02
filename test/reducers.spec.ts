@@ -244,7 +244,18 @@ describe('reducers', () => {
   });
 
   describe('requests', () => {
-    it(''); // TODO
+    it('stores information about fetch all projects requests');
+    it('removes request information about fetch all projects once request succeeds');
+    it('removes request information about fetch all projects once request fails');
+    it('stores information about fetch all activities requests');
+    it('removes request information about fetch all activities once request succeeds');
+    it('removes request information about fetch all activities once request fails');
+    it('stores information about fetch activities for project requests');
+    it('removes request information about fetch activities for project once request succeeds');
+    it('removes request information about fetch activities for project once request fails');
+    it('stores information about project deletion requests');
+    it('removes request information about project deletions once request succeeds');
+    it('removes request information about project deletions once request fails');
   });
 
   describe('selected', () => {
@@ -449,6 +460,10 @@ describe('reducers', () => {
       expect(endState).to.deep.equal(expectedState);
       expect(endState).to.not.equal(initialState);
     });
+
+    it('adds an error when deleting a project fails');
+    it('clears the error when trying to delete a project again');
+    it(`clears all project deletion errors on ${Errors.actions.CLEAR_PROJECT_DELETION_ERRORS}`);
   });
 
   describe('activities', () => {
@@ -1063,6 +1078,10 @@ describe('reducers', () => {
         expect(newState).to.deep.equal(expectedStateWithExistingEntity);
         expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
       });
+    });
+
+    describe('project deletion', () => {
+      it(''); // TODO
     });
   });
 });
