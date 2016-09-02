@@ -39,6 +39,7 @@ const createApi = (functionsToReplace?: CreateApiParameter): Api => {
     fetchAllProjects: () => Promise.resolve({ response: {} }),
     createProject: (_1, _2) => Promise.resolve({ response: {} }),
     editProject: (_1, _2) => Promise.resolve({ response: {} }),
+    deleteProject: (_) => Promise.resolve({ response: {} }),
   };
 
   return Object.assign(defaultFunctions, functionsToReplace);

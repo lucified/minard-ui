@@ -48,3 +48,4 @@ export const fetchCommit = (id: string) => callApi(commitJSON);
 export const createProject = (name: string, description?: string) => callApi(newProjectJSON);
 export const editProject = (id: string, newAttributes: { name?: string, description?: string}) =>
   callApi(editedProjectJSON);
+export const deleteProject = (id: string) => Promise.resolve();
