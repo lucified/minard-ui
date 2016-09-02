@@ -41,9 +41,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       const deploymentResponse = (<t.RequestDeploymentSuccessAction> action).response;
       if (deploymentResponse) {
         return Object.assign({}, state, responseToStateShape([deploymentResponse]));
-      } else {
-        return state;
       }
+
+      return state;
     case DEPLOYMENT.FAILURE:
       const responseAction = <FetchError> action;
       const id = responseAction.id;
@@ -58,9 +58,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       const deployments = (<t.StoreDeploymentsAction> action).entities;
       if (deployments && deployments.length > 0) {
         return Object.assign({}, state, responseToStateShape(deployments));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }

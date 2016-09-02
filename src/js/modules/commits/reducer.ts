@@ -54,9 +54,9 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       const commitResonse = (<t.RequestCommitRequestAction> action).response;
       if (commitResonse) {
         return Object.assign({}, state, responseToStateShape([commitResonse]));
-      } else {
-        return state;
       }
+
+      return state;
     case COMMIT.FAILURE:
       const responseAction = <FetchError> action;
       const existingEntity = state[responseAction.id];
@@ -70,9 +70,9 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       const commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
         return Object.assign({}, state, responseToStateShape(commits));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }

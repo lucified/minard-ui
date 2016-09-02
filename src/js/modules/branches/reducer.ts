@@ -43,9 +43,9 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       const branchResonse = (<t.RequestBranchSuccessAction> action).response;
       if (branchResonse) {
         return Object.assign({}, state, responseToStateShape([branchResonse]));
-      } else {
-        return state;
       }
+
+      return state;
     case BRANCH.FAILURE:
       const responseAction = <FetchError> action;
       const id = responseAction.id;
@@ -60,9 +60,9 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       const branches = (<t.StoreBranchesAction> action).entities;
       if (branches && branches.length > 0) {
         return Object.assign({}, state, responseToStateShape(branches));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }

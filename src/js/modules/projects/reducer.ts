@@ -45,16 +45,16 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       const projectsResponse = (<t.RequestAllProjectsSuccessAction> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
         return Object.assign({}, state, responseToStateShape(projectsResponse));
-      } else {
-        return state;
       }
+
+      return state;
     case PROJECT.SUCCESS:
       const projectResponse = (<t.RequestProjectSuccessAction> action).response;
       if (projectResponse) {
         return Object.assign({}, state, responseToStateShape([projectResponse]));
-      } else {
-        return state;
       }
+
+      return state;
     case PROJECT.FAILURE:
       const responseAction = <FetchError> action;
       const id = responseAction.id;
@@ -76,9 +76,9 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
         return Object.assign({}, state, responseToStateShape(projects));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }
