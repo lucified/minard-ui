@@ -64,7 +64,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
         })
       )
       .then(() => {
-        closeDialog();
+        this.clearAndClose();
         router.push('/projects');
       })
       .catch(() => {}); // tslint:disable-line
