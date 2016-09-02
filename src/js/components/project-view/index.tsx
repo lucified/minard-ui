@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
@@ -56,7 +56,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       return <LoadingIcon className={styles.loading} center />;
     }
 
-    if (isError(project)) {
+    if (isFetchError(project)) {
       return (
         <div className={styles.error}>
           <h2>Unable to load project</h2>
@@ -84,7 +84,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const project = Projects.selectors.getProject(state, projectId);
   const isLoadingActivities = Requests.selectors.isLoadinglActivitiesForProject(state, projectId);
 
-  if (!project || isError(project)) {
+  if (!project || isFetchError(project)) {
     return { project, isLoadingActivities };
   }
 

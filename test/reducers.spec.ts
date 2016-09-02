@@ -175,7 +175,7 @@ const testReducer = (
     expectedStateWithExistingEntity,
   );
 
-  expectedStateFromEmpty = { [failedRequestAction.id!]: failedRequestAction };
+  expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
   expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedStateFromEmpty);
 
   testFailedRequest(
@@ -416,40 +416,6 @@ describe('reducers', () => {
       expect(endState).to.not.equal(initialState);
     });
 
-    it(`clears all projects fetching error with ${Errors.actions.CLEAR_FETCH_ALL_PROJECTS_ERRORS}`, () => {
-      const initialState: ErrorState = [
-        {
-          type: Projects.actions.ALL_PROJECTS.FAILURE,
-          id: null,
-          error: 'projects fetch error',
-          prettyError: 'pretty error',
-        },
-        {
-          type: Projects.actions.ALL_PROJECTS.FAILURE,
-          id: null,
-          error: 'another projects fetch error',
-          prettyError: 'another pretty error',
-        },
-        {
-          id: null,
-          type: Activities.actions.ACTIVITIES.FAILURE,
-          error: 'foobar error',
-          prettyError: 'pretty foobar error',
-        },
-      ];
-
-      const action: any = {
-        type: Errors.actions.CLEAR_FETCH_ALL_PROJECTS_ERRORS,
-      };
-
-      const expectedState = initialState.slice(2);
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
     it('clears activity fetching error when starting new request', () => {
       const initialState: ErrorState = [
         {
@@ -474,40 +440,6 @@ describe('reducers', () => {
 
       const action: any = {
         type: Activities.actions.ACTIVITIES.REQUEST,
-      };
-
-      const expectedState = initialState.slice(0, 2);
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it(`clears all projects fetching error with ${Errors.actions.CLEAR_ACTIVITIES_ERRORS}`, () => {
-      const initialState: ErrorState = [
-        {
-          type: Projects.actions.ALL_PROJECTS.FAILURE,
-          id: null,
-          error: 'projects fetch error',
-          prettyError: 'pretty error',
-        },
-        {
-          type: Projects.actions.ALL_PROJECTS.FAILURE,
-          id: null,
-          error: 'another projects fetch error',
-          prettyError: 'another pretty error',
-        },
-        {
-          id: null,
-          type: Activities.actions.ACTIVITIES.FAILURE,
-          error: 'foobar error',
-          prettyError: 'pretty foobar error',
-        },
-      ];
-
-      const action: any = {
-        type: Errors.actions.CLEAR_ACTIVITIES_ERRORS,
       };
 
       const expectedState = initialState.slice(0, 2);

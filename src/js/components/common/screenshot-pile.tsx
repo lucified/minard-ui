@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
 import { Deployment } from '../../modules/deployments';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 
 const noScreenshotURL = require('../../../images/no-screenshot.png');
 const styles = require('./screenshot-pile.scss');
@@ -40,7 +40,7 @@ const ScreenshotPile = ({ deployment, count }: Props) => {
     return loading;
   }
 
-  if (isError(deployment) || !deployment.screenshot) {
+  if (isFetchError(deployment) || !deployment.screenshot) {
     return noScreenshot;
   }
 

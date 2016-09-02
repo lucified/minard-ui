@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { FetchError, isError } from '../errors';
+import { FetchError, isFetchError } from '../errors';
 
 import { COMMIT, STORE_COMMITS } from './actions';
 import * as t from './types';
@@ -59,9 +59,9 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       }
     case COMMIT.FAILURE:
       const responseAction = <FetchError> action;
-      const existingEntity = state[responseAction.id!];
-      if (!existingEntity || isError(existingEntity)) {
-        return Object.assign({}, state, { [responseAction.id!]: responseAction });
+      const existingEntity = state[responseAction.id];
+      if (!existingEntity || isFetchError(existingEntity)) {
+        return Object.assign({}, state, { [responseAction.id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console

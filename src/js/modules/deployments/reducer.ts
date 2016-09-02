@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { FetchError, isError } from '../errors';
+import { FetchError, isFetchError } from '../errors';
 
 import { DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
 import * as t from './types';
@@ -46,9 +46,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       }
     case DEPLOYMENT.FAILURE:
       const responseAction = <FetchError> action;
-      const id = responseAction.id!;
+      const id = responseAction.id;
       const existingEntity = state[id];
-      if (!existingEntity || isError(existingEntity)) {
+      if (!existingEntity || isFetchError(existingEntity)) {
         return Object.assign({}, state, { [id]: responseAction });
       }
 

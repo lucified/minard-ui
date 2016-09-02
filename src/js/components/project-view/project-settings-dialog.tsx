@@ -4,7 +4,7 @@ import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { isError } from '../../modules/errors';
+import { isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
@@ -68,7 +68,7 @@ const ProjectSettingsDialog = ({ project, isOpen, closeDialog, existingProjectNa
 const mapStateToProps = (state: StateTree, ownProps: PassedProps) => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.ProjectSettings),
   existingProjectNames: Projects.selectors.getProjects(state)
-    .filter(projectOrError => !isError(projectOrError))
+    .filter(projectOrError => !isFetchError(projectOrError))
     .filter(project => (project as Project).name !== ownProps.project.name) // filter out own name
     .map(project => (project as Project).name),
 });

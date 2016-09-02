@@ -45,7 +45,7 @@ const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog }: Pr
     </SectionTitle>
     <div className="row center-xs start-sm">
       {projects.map(project => (
-        <div key={project.id!} className={classNames('col-xs-12', 'col-sm-6', 'col-md-4', styles['project-card'])}>
+        <div key={project.id} className={classNames('col-xs-12', 'col-sm-6', 'col-md-4', styles['project-card'])}>
           <ProjectCard project={project} />
         </div>
       ))}

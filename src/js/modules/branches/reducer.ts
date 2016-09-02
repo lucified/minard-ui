@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { FetchError, isError } from '../errors';
+import { FetchError, isFetchError } from '../errors';
 
 import { BRANCH, STORE_BRANCHES } from './actions';
 import * as t from './types';
@@ -48,9 +48,9 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
     case BRANCH.FAILURE:
       const responseAction = <FetchError> action;
-      const id = responseAction.id!;
+      const id = responseAction.id;
       const existingEntity = state[id];
-      if (!existingEntity || isError(existingEntity)) {
+      if (!existingEntity || isFetchError(existingEntity)) {
         return Object.assign({}, state, { [id]: responseAction });
       }
 

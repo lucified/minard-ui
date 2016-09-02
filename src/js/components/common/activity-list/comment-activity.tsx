@@ -5,7 +5,7 @@ import * as Icon from 'react-fontawesome';
 import { Activity } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
 import { Deployment } from '../../../modules/deployments';
-import { FetchError, isError } from '../../../modules/errors';
+import { FetchError, isFetchError } from '../../../modules/errors';
 import { Project } from '../../../modules/projects';
 
 import Avatar from '../avatar';
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const getCommentMetadata = (activity: Activity, comment?: any): JSX.Element | null => {
-  if (!comment || isError(comment)) {
+  if (!comment || isFetchError(comment)) {
     return null;
   }
 
@@ -44,7 +44,7 @@ const getCommentBody = (activity: Activity, comment?: any): JSX.Element | null =
     return <span>'Loading...'</span>;
   }
 
-  if (isError(comment)) {
+  if (isFetchError(comment)) {
     return <span>`Error: ${comment.prettyError}`</span>;
   }
 
@@ -52,7 +52,7 @@ const getCommentBody = (activity: Activity, comment?: any): JSX.Element | null =
 };
 
 const getProjectLabel = (project?: Project | FetchError) => {
-  if (!project || isError(project)) {
+  if (!project || isFetchError(project)) {
     return null;
   }
 

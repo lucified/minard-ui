@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
 import MinardLink from '../common/minard-link';
@@ -52,11 +52,11 @@ const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { commit } = ownProps;
 
-  if (commit && !isError(commit) && commit.deployment) {
+  if (commit && !isFetchError(commit) && commit.deployment) {
     let deploymentOrError = Deployments.selectors.getDeployment(state, commit.deployment);
 
     return {
-      deployment: isError(deploymentOrError) ? undefined : deploymentOrError,
+      deployment: isFetchError(deploymentOrError) ? undefined : deploymentOrError,
     };
   }
 

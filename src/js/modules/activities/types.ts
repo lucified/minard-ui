@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { FetchError } from '../errors';
+import { FetchCollectionError } from '../errors';
 import { RequestActionCreators } from '../types';
 
 // State
@@ -37,7 +37,11 @@ export interface RequestActivitiesSuccessAction extends Action {
 }
 
 export type RequestActivitiesActionCreators =
-  RequestActionCreators<RequestActivitiesRequestAction, RequestActivitiesSuccessAction, FetchError>;
+  RequestActionCreators<
+    RequestActivitiesRequestAction,
+    RequestActivitiesSuccessAction,
+    FetchCollectionError
+  >;
 
 // ACTIVITIES_FOR_PROJECT
 export interface LoadActivitiesForProjectAction extends Action {
@@ -54,7 +58,11 @@ export interface RequestActivitiesForProjectSuccessAction extends Action {
 }
 
 export type RequestActivitiesForProjectActionCreators =
-  RequestActionCreators<RequestActivitiesForProjectRequestAction, RequestActivitiesForProjectSuccessAction, FetchError>;
+  RequestActionCreators<
+    RequestActivitiesForProjectRequestAction,
+    RequestActivitiesForProjectSuccessAction,
+    FetchCollectionError
+  >;
 
 // STORE_PROJECTS
 export interface StoreActivitiesAction extends Action {

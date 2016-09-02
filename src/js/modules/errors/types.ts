@@ -1,37 +1,56 @@
 import { Action } from 'redux';
 
 // State
-export interface FetchError {
+export type ErrorState = Error[];
+
+export interface ClearErrorAction extends Action {
+  id?: string;
+}
+
+// Error types
+interface GenericError {
   // The type of action that produced the error
   type: string;
-  // If the error concerns a specific entity, the id of that entity
-  id: string | null;
   // The original error message
   error: string;
   // The error to display to the user
   prettyError: string;
 }
 
-export type ErrorState = FetchError[];
+export type Error = FetchError | FetchCollectionError | CreateError | DeleteError | EditError;
 
-export const isError = (obj: any): obj is FetchError => {
+export interface FetchError extends GenericError {
+  id: string;
+}
+
+export const isFetchError = (obj: any): obj is FetchError => {
   const possiblyError = (<FetchError> obj);
-  return possiblyError && possiblyError.type !== undefined && possiblyError.error !== undefined;
+  return possiblyError &&
+    possiblyError.type !== undefined &&
+    possiblyError.error !== undefined &&
+    possiblyError.id !== undefined;
 };
 
-export interface ClearErrorAction extends Action {
-  id?: string;
+export interface FetchCollectionError extends GenericError {
+
 }
 
-export interface CreateError {
-  type: string;
-  error: string;
-  prettyError: string;
+export interface CreateError extends GenericError {
+
 }
 
-export interface EditError {
-  type: string;
+export interface DeleteError extends GenericError {
   id: string;
-  error: string;
-  prettyError: string;
+}
+
+export const isDeleteError = (obj: any): obj is DeleteError => {
+  const possiblyError = (<DeleteError> obj);
+  return possiblyError &&
+    possiblyError.type !== undefined &&
+    possiblyError.error !== undefined &&
+    possiblyError.id !== undefined;
+};
+
+export interface EditError extends GenericError {
+  id: string;
 }
