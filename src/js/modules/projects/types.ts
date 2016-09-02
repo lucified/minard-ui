@@ -61,12 +61,6 @@ export interface StoreProjectsAction extends Action {
   entities: ResponseProjectElement[];
 }
 
-// CREATE_PROJECT
-export interface CreateProjectAction extends Action {
-  name: string;
-  description?: string;
-}
-
 // SEND_CREATE_PROJECT
 export interface SendCreateProjectRequestAction extends Action {
   name: string;
