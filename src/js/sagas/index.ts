@@ -257,7 +257,9 @@ export default function createSagas(api: Api) {
 
   // Edit PROJECT
   function* editProject(action: any): IterableIterator<Effect> {
-    const { id, name, description } = action.payload;
+    const { id, name } = action.payload;
+    // If we don't force description to exist, there would be no way to clear it when editing
+    const description = action.payload.description || '';
 
     yield put(Projects.actions.SendEditProject.request(id));
 

@@ -78,16 +78,17 @@ export type SendCreateProjectActionCreators =
 
 // EDIT_PROJECT
 export interface EditProjectAction extends Action {
+  id: string;
   name: string;
-  description?: string;
+  description: string;
 }
 
 // SEND_EDIT_PROJECT
 export interface SendEditProjectRequestAction extends Action {
   id: string;
   newAttributes: {
-    name?: string;
-    description?: string;
+    name: string;
+    description: string;
   };
 }
 
