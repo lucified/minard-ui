@@ -1,9 +1,10 @@
+import { omit } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
 
-import { ALL_PROJECTS, PROJECT, STORE_PROJECTS } from './actions';
+import { ALL_PROJECTS, PROJECT, SEND_DELETE_PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
 const initialState: t.ProjectState = {};
@@ -64,6 +65,9 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
+    case SEND_DELETE_PROJECT.SUCCESS:
+      const { id: idToDelete } = (<t.SendDeleteProjectSuccessAction> action);
+      return omit<t.ProjectState, t.ProjectState>(state, idToDelete);
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {

@@ -111,6 +111,24 @@ export type SendEditProjectActionCreators =
     EditError
   >;
 
+// DELETE_PROJECT
+export interface DeleteProjectAction extends Action {
+  id: string;
+  resolve: () => void;
+  reject: () => void;
+}
+
+// SEND_DELETE_PROJECT
+export interface SendDeleteProjectRequestAction extends Action {
+  id: string;
+}
+
+export interface SendDeleteProjectSuccessAction extends Action {
+  id: string;
+}
+
+export type SendDeleteProjectActionCreators =
+  RequestActionCreators<SendDeleteProjectRequestAction, SendDeleteProjectSuccessAction, DeleteError>;
 
 // API response
 interface ResponseBranchReference {
