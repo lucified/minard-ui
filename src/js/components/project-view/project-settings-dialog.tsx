@@ -98,16 +98,14 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
           Deleting the project will also delete the git repository and all previews.
           This action cannot be undone. You have been warned.
         </div>
-        {deletionInProgress ? (
-          <div className={styles.deleting}>Deleting...</div>
-        ) : (
-          <div className={styles.delete}>
+        <div className={styles.delete}>
+          {deletionInProgress ? 'Deleting...' : (
             <a onClick={this.confirmDeletion}>
               Delete project
             </a>
-            {deletionError && <div className={styles.error}>{deletionError.prettyError}</div>}
-          </div>
-        )}
+          )}
+        </div>
+        {deletionError && <div className={styles.error}>{deletionError.prettyError}</div>}
       </ModalDialog>
     );
   }

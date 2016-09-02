@@ -49,13 +49,12 @@
 .delete {
   margin-top: 12px;
   color: #95a5a6;
-  cursor: pointer;
 
-  &:hover {
+  a {
+    cursor: pointer;
+  }
+
+  a:hover {
     color: #000000;
   }
-}
-
-.deleting {
-  color: #95a5a6;
 }
