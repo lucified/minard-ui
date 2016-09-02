@@ -1081,7 +1081,31 @@ describe('reducers', () => {
     });
 
     describe('project deletion', () => {
-      it(''); // TODO
+      it(`removes a project from the state upon receiving ${Projects.actions.SEND_DELETE_PROJECT.SUCCESS}`, () => {
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.SUCCESS,
+          id: 3,
+        };
+        const initialState = expectedStateWithExistingEntity;
+        const expectedNewState = Object.assign({}, initialState);
+        delete expectedNewState['3'];
+
+        const newState = reducer(initialState, action);
+        expect(newState).to.deep.equal(expectedNewState);
+        expect(newState).to.not.equal(initialState);
+      });
+
+      it('does nothing if the project does not exist', () => {
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.SUCCESS,
+          id: 7,
+        };
+        const initialState = expectedStateWithExistingEntity;
+        const newState = reducer(initialState, action);
+
+        expect(newState).to.deep.equal(initialState);
+        expect(newState).to.equal(initialState);
+      });
     });
   });
 });
