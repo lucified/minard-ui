@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { CreateError, FetchError } from '../errors';
+import { CreateError, EditError, FetchError } from '../errors';
 import { ApiUser, RequestActionCreators, User } from '../types';
 
 // State
@@ -75,6 +75,29 @@ export interface SendCreateProjectSuccessAction extends Action {
 
 export type SendCreateProjectActionCreators =
   RequestActionCreators<SendCreateProjectRequestAction, SendCreateProjectSuccessAction, CreateError>;
+
+// EDIT_PROJECT
+export interface EditProjectAction extends Action {
+  id: string;
+  name: string;
+  description: string;
+}
+
+// SEND_EDIT_PROJECT
+export interface SendEditProjectRequestAction extends Action {
+  id: string;
+  newAttributes: {
+    name: string;
+    description: string;
+  };
+}
+
+export interface SendEditProjectSuccessAction extends Action {
+  id: string;
+}
+
+export type SendEditProjectActionCreators =
+  RequestActionCreators<SendEditProjectRequestAction, SendEditProjectSuccessAction, EditError>;
 
 // API response
 interface ResponseBranchReference {

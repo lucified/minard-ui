@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Icon from 'react-fontawesome';
 import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -59,6 +60,9 @@ class NewProjectDialog extends React.Component<Props, any> {
         className={styles.dialog}
         overlayClassName={styles.overlay}
       >
+        <div onClick={closeDialog} className={styles.close}>
+          <Icon name="times-circle" size="4x" />
+        </div>
         <h1>Create a new project</h1>
         <NewProjectForm existingProjectNames={existingProjectNames} onSubmitSuccess={this.onSuccessfulCreation}/>
       </ModalDialog>

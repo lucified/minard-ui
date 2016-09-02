@@ -60,3 +60,18 @@ export const SendCreateProject: t.SendCreateProjectActionCreators = {
     prettyError: prettyErrorMessage(error),
   }),
 };
+
+// Edit an existing project
+export const EDIT_PROJECT = 'PROJECTS/EDIT_PROJECT';
+
+export const SEND_EDIT_PROJECT = createRequestTypes('PROJECTS/SEND_EDIT_PROJECT');
+export const SendEditProject: t.SendEditProjectActionCreators = {
+  request: (id, newAttributes) => ({ type: SEND_EDIT_PROJECT.REQUEST, id, newAttributes }),
+  success: (id) => ({ type: SEND_EDIT_PROJECT.SUCCESS, id }),
+  failure: (id, error) => ({
+    type: SEND_EDIT_PROJECT.FAILURE,
+    id,
+    error,
+    prettyError: prettyErrorMessage(error),
+  }),
+};

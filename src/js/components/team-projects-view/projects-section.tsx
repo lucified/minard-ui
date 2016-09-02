@@ -24,7 +24,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  openCreateNewProjectDialog: () => void;
+  openCreateNewProjectDialog: (e: any) => void;
 }
 
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
@@ -59,7 +59,10 @@ const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog }: Pr
 );
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  openCreateNewProjectDialog: () => dispatch(Modal.actions.openModal(ModalType.NewProject)),
+  openCreateNewProjectDialog: (e: any) => {
+    e.preventDefault();
+    dispatch(Modal.actions.openModal(ModalType.NewProject));
+  },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

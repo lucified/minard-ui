@@ -28,3 +28,10 @@ export interface CreateError {
   error: string;
   prettyError: string;
 }
+
+export interface EditError {
+  type: string;
+  id: string;
+  error: string;
+  prettyError: string;
+}

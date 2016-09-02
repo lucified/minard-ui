@@ -4,14 +4,15 @@ import { connect } from 'react-redux';
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
 import { FetchError, isError } from '../../modules/errors';
-import Requests from '../../modules/requests';
 import Projects, { Project } from '../../modules/projects';
+import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
 import ProjectActivity from './project-activity';
 import ProjectBranches from './project-branches';
 import ProjectHeader from './project-header';
+import ProjectSettingsDialog from './project-settings-dialog';
 
 const styles = require('./index.scss');
 
@@ -69,6 +70,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 
     return (
       <div>
+        <ProjectSettingsDialog project={project} />
         <ProjectHeader project={project} />
         <ProjectBranches branches={branches!} />
         <ProjectActivity activities={activities!} isLoading={isLoadingActivities} />

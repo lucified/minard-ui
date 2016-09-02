@@ -13,8 +13,15 @@ if (host.slice(-1) === '/') {
 }
 const path: string = `${host}/api`;
 
-export const getApi = (url: string): ApiPromise =>
-  fetch(url, { credentials: 'same-origin' })
+const defaultOptions = {
+  credentials: 'same-origin',
+  headers: {
+    Accept: 'application/vnd.api+json',
+  },
+};
+
+const connectToApi = (url: string, options: RequestInit = defaultOptions): ApiPromise =>
+  fetch(url, options)
     .then(response =>
       response.json().then(json => ({
         json,
@@ -26,40 +33,40 @@ export const getApi = (url: string): ApiPromise =>
       response: json,
     }))
     .catch(error => ({
-      error: error.message || 'Something bad happened',
+      error: error.message || 'An error occurred',
     }));
+
+export const getApi = (url: string): ApiPromise => connectToApi(url);
 
 export const postApi = (url: string, payload: any): ApiPromise =>
-  fetch(url, {
-    credentials: 'same-origin',
+  connectToApi(url, Object.assign({}, defaultOptions, {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: 'application/vnd.api+json',
+      'Content-Type': 'application/vnd.api+json',
     },
     body: JSON.stringify(payload),
-  }).then(response =>
-      response.json().then(json => ({
-        json,
-        response,
-      }))
-    ).then(({ json, response }) =>
-      response.ok ? json : Promise.reject(json)
-    ).then(json => ({
-      response: json,
-    }))
-    .catch(error => ({
-      error: error.message || 'Something bad happened',
-    }));
+  }));
 
-export const fetchActivities = () => getApi(`${path}/activity`);
-export const fetchActivitiesForProject = (id: string) => getApi(`${path}/activity?filter=project[${id}]`);
-export const fetchAllProjects = () => getApi(`${path}/teams/1/projects`); // TODO: add actual team ID
-export const fetchProject = (id: string) => getApi(`${path}/projects/${id}`);
-export const fetchBranch = (id: string) => getApi(`${path}/branches/${id}`);
-export const fetchDeployment = (id: string) => getApi(`${path}/deployments/${id}`);
-export const fetchCommit = (id: string) => getApi(`${path}/commits/${id}`);
-export const createProject = (name: string, description?: string) =>
+export const patchApi = (url: string, payload: any): ApiPromise =>
+  connectToApi(url, Object.assign({}, defaultOptions, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/vnd.api+json',
+      'Content-Type': 'application/vnd.api+json',
+    },
+    body: JSON.stringify(payload),
+  }));
+
+export const fetchActivities = (): ApiPromise => getApi(`${path}/activity`);
+export const fetchActivitiesForProject = (id: string): ApiPromise => getApi(`${path}/activity?filter=project[${id}]`);
+export const fetchAllProjects = (): ApiPromise => getApi(`${path}/teams/1/projects`); // TODO: add actual team ID
+export const fetchProject = (id: string): ApiPromise => getApi(`${path}/projects/${id}`);
+export const fetchBranch = (id: string): ApiPromise => getApi(`${path}/branches/${id}`);
+export const fetchDeployment = (id: string): ApiPromise => getApi(`${path}/deployments/${id}`);
+export const fetchCommit = (id: string): ApiPromise => getApi(`${path}/commits/${id}`);
+
+export const createProject = (name: string, description?: string): ApiPromise =>
   postApi(`${path}/projects`, {
     data: {
       type: 'projects',
@@ -75,5 +82,14 @@ export const createProject = (name: string, description?: string) =>
           },
         },
       },
+    },
+  });
+
+export const editProject = (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
+  patchApi(`${path}/projects/${id}`, {
+    data: {
+      type: 'projects',
+      id,
+      attributes: newAttributes,
     },
   });

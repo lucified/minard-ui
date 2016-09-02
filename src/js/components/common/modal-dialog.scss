@@ -30,3 +30,14 @@
 .general-error {
   color: red;
 }
+
+.close {
+  float: right;
+  color: #95a5a6;
+  cursor: pointer;
+  margin: 24px;
+
+  &:hover {
+    color: #000000;
+  }
+}
