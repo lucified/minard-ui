@@ -9,6 +9,7 @@ import Errors, { DeleteError, ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
 import Modal, { ModalType } from '../src/js/modules/modal';
 import Projects, { ProjectState } from '../src/js/modules/projects';
+import Requests, { RequestsState } from '../src/js/modules/requests';
 import Selected, { SelectedState } from '../src/js/modules/selected';
 
 import * as testData from './test-data';
@@ -244,18 +245,197 @@ describe('reducers', () => {
   });
 
   describe('requests', () => {
-    it('stores information about fetch all projects requests');
-    it('removes request information about fetch all projects once request succeeds');
-    it('removes request information about fetch all projects once request fails');
-    it('stores information about fetch all activities requests');
-    it('removes request information about fetch all activities once request succeeds');
-    it('removes request information about fetch all activities once request fails');
-    it('stores information about fetch activities for project requests');
-    it('removes request information about fetch activities for project once request succeeds');
-    it('removes request information about fetch activities for project once request fails');
-    it('stores information about project deletion requests');
-    it('removes request information about project deletions once request succeeds');
-    it('removes request information about project deletions once request fails');
+    const { reducer } = Requests;
+
+    describe('fetch all projects', () => {
+      it('stores information requests', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Projects.actions.ALL_PROJECTS.REQUEST,
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.ALL_PROJECTS.REQUEST,
+        }];
+        const action = {
+          type: Projects.actions.ALL_PROJECTS.SUCCESS,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.ALL_PROJECTS.REQUEST,
+        }];
+        const action = {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
+    describe('fetch all activities', () => {
+      it('stores information requests', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Activities.actions.ACTIVITIES.REQUEST,
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES.REQUEST,
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES.SUCCESS,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES.REQUEST,
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES.FAILURE,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
+    describe('fetch all activities for project', () => {
+      it('stores information requests', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST,
+          id: 'foo',
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.SUCCESS,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.FAILURE,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
+    describe('delete project', () => {
+      it('stores information requests', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
+          id: 'foo',
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.SUCCESS,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
   });
 
   describe('selected', () => {
