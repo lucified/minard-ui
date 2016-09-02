@@ -67,7 +67,11 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       return state;
     case SEND_DELETE_PROJECT.SUCCESS:
       const { id: idToDelete } = (<t.SendDeleteProjectSuccessAction> action);
-      return omit<t.ProjectState, t.ProjectState>(state, idToDelete);
+      if (state[idToDelete]) {
+        return omit<t.ProjectState, t.ProjectState>(state, idToDelete);
+      }
+
+      return state;
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {

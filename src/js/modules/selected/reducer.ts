@@ -12,10 +12,15 @@ const reducer: Reducer<t.SelectedState> = (state = initialState, action: any) =>
   switch (action.type) {
     case SET_SELECTED:
       const { project, branch } = action;
-      return {
-        project,
-        branch,
-      };
+
+      if (project !== state.project || branch !== state.branch) {
+        return {
+          project,
+          branch,
+        };
+      }
+
+      return state;
     default:
       return state;
   }
