@@ -19,7 +19,7 @@ interface PassedProps {
 }
 
 interface InjectedProps {
-  router: any;
+  router: ReactRouter.RouterOnContext;
 }
 
 interface GeneratedStateProps {
