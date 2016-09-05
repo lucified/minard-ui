@@ -35,26 +35,31 @@ const checkNameChangeAndSubmit = async (values: FormData, dispatch: Dispatch<any
   )(values, dispatch);
 }
 
-const validate = (values: FormData, props: Props) => {
-  const errors: FormData = {};
-  const projectNameRegex = /^[a-z0-9\-]+$/;
+// TODO: make a proper definition file
+interface ValidationError {
+  name: "ValidationError";
+  path: string;
+  message: string;
+  errors: string[];
+  inner: ValidationError[];
+}
 
-  const { name, description } = values;
+const asyncValidate = (values: FormData, dispatch: Dispatch<any>, props: Props) =>
+  new Promise((resolve, reject) => {
+    Projects.schema(props.existingProjectNames).validate(values, { abortEarly: false })
+      .then(() => {
+        resolve();
+      })
+      .catch((errors: ValidationError) => {
+        let formErrors: { [field: string]: string } = {};
 
-  if (!name) {
-    errors.name = 'Required';
-  } else if (!projectNameRegex.test(name)) {
-    errors.name = 'Only lower-case letters, numbers and dashes allowed.';
-  } else if (props.existingProjectNames.indexOf(name) > -1) {
-    errors.name = 'Project name already exists';
-  }
+        errors.inner.forEach(error => {
+          formErrors[error.path] = error.message;
+        })
 
-  if (description && description.length > 2000) {
-    errors.description = 'The description can be up to 2000 characters long.'
-  }
-
-  return errors;
-};
+        reject(formErrors);
+      })
+    });
 
 const RenderField = ({ input, name, label, placeholder, type, meta: { touched, error }}: BaseFieldProps) => (
   <div className="row">
@@ -97,6 +102,6 @@ class ProjectSettingsForm extends React.Component<Props, any> {
 
 export default reduxForm({
   form: 'editProject',
-  validate,
+  asyncValidate,
   onSubmit: checkNameChangeAndSubmit as any // redux-form typings are missing the third props param
 })(ProjectSettingsForm);
