@@ -11,7 +11,7 @@ let host: string = process.env.CHARLES;
 if (host.slice(-1) === '/') {
   host = host.slice(0, -1);
 }
-const path: string = `${host}/api`;
+host = `${host}/api`;
 
 const defaultOptions = {
   credentials: 'same-origin',
@@ -27,8 +27,8 @@ interface Error {
   detail: string;
 }
 
-const connectToApi = (url: string, options?: RequestInit): ApiPromise =>
-  fetch(url, Object.assign({}, defaultOptions, options))
+const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
+  fetch(`${host}${path}`, Object.assign({}, defaultOptions, options))
     .then(response =>
       response.json().then(json => ({
         json,
@@ -56,10 +56,11 @@ const connectToApi = (url: string, options?: RequestInit): ApiPromise =>
       };
     });
 
-const getApi = (url: string): ApiPromise => connectToApi(url);
+const getApi = (path: string, query?: string): ApiPromise =>
+  connectToApi(`${path}${query ? `?${encodeURIComponent(query)}` : ''}`);
 
-const postApi = (url: string, payload: any): ApiPromise =>
-  connectToApi(url, {
+const postApi = (path: string, payload: any): ApiPromise =>
+  connectToApi(path, {
     method: 'POST',
     headers: {
       Accept: 'application/vnd.api+json',
@@ -68,11 +69,11 @@ const postApi = (url: string, payload: any): ApiPromise =>
     body: JSON.stringify(payload),
   });
 
-const deleteApi = (url: string): ApiPromise =>
-  connectToApi(url, { method: 'DELETE' });
+const deleteApi = (path: string): ApiPromise =>
+  connectToApi(path, { method: 'DELETE' });
 
-const patchApi = (url: string, payload: any): ApiPromise =>
-  connectToApi(url, {
+const patchApi = (path: string, payload: any): ApiPromise =>
+  connectToApi(path, {
     method: 'PATCH',
     headers: {
       Accept: 'application/vnd.api+json',
@@ -81,16 +82,16 @@ const patchApi = (url: string, payload: any): ApiPromise =>
     body: JSON.stringify(payload),
   });
 
-export const fetchActivities = (): ApiPromise => getApi(`${path}/activity`);
-export const fetchActivitiesForProject = (id: string): ApiPromise => getApi(`${path}/activity?filter=project[${id}]`);
-export const fetchAllProjects = (): ApiPromise => getApi(`${path}/teams/1/projects`); // TODO: add actual team ID
-export const fetchProject = (id: string): ApiPromise => getApi(`${path}/projects/${id}`);
-export const fetchBranch = (id: string): ApiPromise => getApi(`${path}/branches/${id}`);
-export const fetchDeployment = (id: string): ApiPromise => getApi(`${path}/deployments/${id}`);
-export const fetchCommit = (id: string): ApiPromise => getApi(`${path}/commits/${id}`);
+export const fetchActivities = (): ApiPromise => getApi('/activity');
+export const fetchActivitiesForProject = (id: string): ApiPromise => getApi('/activity', `filter=project[${id}]`);
+export const fetchAllProjects = (): ApiPromise => getApi('/teams/1/projects'); // TODO: add actual team ID
+export const fetchProject = (id: string): ApiPromise => getApi(`/projects/${id}`);
+export const fetchBranch = (id: string): ApiPromise => getApi(`/branches/${id}`);
+export const fetchDeployment = (id: string): ApiPromise => getApi(`/deployments/${id}`);
+export const fetchCommit = (id: string): ApiPromise => getApi(`/commits/${id}`);
 
 export const createProject = (name: string, description?: string): ApiPromise =>
-  postApi(`${path}/projects`, {
+  postApi('/projects', {
     data: {
       type: 'projects',
       attributes: {
@@ -109,7 +110,7 @@ export const createProject = (name: string, description?: string): ApiPromise =>
   });
 
 export const editProject = (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
-  patchApi(`${path}/projects/${id}`, {
+  patchApi(`/projects/${id}`, {
     data: {
       type: 'projects',
       id,
@@ -117,4 +118,4 @@ export const editProject = (id: string, newAttributes: { name?: string, descript
     },
   });
 
-export const deleteProject = (id: string): ApiPromise => deleteApi(`${path}/projects/${id}`);
+export const deleteProject = (id: string): ApiPromise => deleteApi(`/projects/${id}`);
