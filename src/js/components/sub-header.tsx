@@ -13,6 +13,7 @@ const styles = require('./sub-header.scss');
 
 enum PageType {
   TeamProjectsView,
+  ProjectsList,
   ProjectView,
   BranchView,
 };
@@ -23,29 +24,21 @@ interface GeneratedProps {
   project?: Project | FetchError;
 }
 
-const classForType = (type: PageType): string => {
-  switch (type) {
-    case PageType.BranchView:
-    case PageType.ProjectView:
-      return 'start-xs';
-    case PageType.TeamProjectsView:
-      return 'center-xs';
-    default:
-      return 'start-xs';
-  }
-};
-
 class SubHeader extends React.Component<GeneratedProps, any> {
   public render() {
     const { openPageType, project, teamName } = this.props;
-    let content: JSX.Element | null = null;
+    let leftContent: JSX.Element | null = null;
+    let centerContent: JSX.Element | null = null;
+    let rightContent: JSX.Element | null = null;
 
     if (openPageType === PageType.BranchView && project && !isFetchError(project)) {
-      content = <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>;
-    } else if (openPageType === PageType.ProjectView && teamName) {
-      content = <MinardLink className={styles['sub-header-link']} homepage>‹ {teamName}</MinardLink>;
-    } else if (openPageType === PageType.TeamProjectsView) {
-      content = (
+      leftContent = <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>;
+    } else if (teamName && (openPageType === PageType.ProjectView || openPageType === PageType.ProjectsList)) {
+      leftContent = <MinardLink className={styles['sub-header-link']} homepage>‹ {teamName}</MinardLink>;
+    }
+
+    if (openPageType === PageType.TeamProjectsView || openPageType === PageType.ProjectsList) {
+      centerContent = (
         <span>
           Sort projects by
           <a className={styles['sorting-dropdown']} href="#">Recent <Icon name="caret-down" /></a>
@@ -57,8 +50,14 @@ class SubHeader extends React.Component<GeneratedProps, any> {
       <section className={classNames(styles['sub-header-background'])}>
         <div className="container">
           <div className="row">
-            <div className={classNames(styles['sub-header'], classForType(openPageType), 'col-xs-12')}>
-              {content}
+            <div className={classNames(styles['sub-header'], 'start-xs', 'col-xs-4')}>
+              {leftContent}
+            </div>
+            <div className={classNames(styles['sub-header'], 'center-xs', 'col-xs-4')}>
+              {centerContent}
+            </div>
+            <div className={classNames(styles['sub-header'], 'end-xs', 'col-xs-4')}>
+              {rightContent}
             </div>
           </div>
         </div>
@@ -70,6 +69,7 @@ class SubHeader extends React.Component<GeneratedProps, any> {
 const mapStateToProps = (state: StateTree): GeneratedProps => {
   const selectedBranch = Selected.selectors.getSelectedBranch(state);
   const selectedProject = Selected.selectors.getSelectedProject(state);
+  const isShowingAll = Selected.selectors.isShowingAll(state);
   let openPageType: PageType;
   let project: Project | FetchError | undefined;
 
@@ -81,7 +81,11 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
       openPageType = PageType.ProjectView;
     }
   } else {
-    openPageType = PageType.TeamProjectsView;
+    if (isShowingAll) {
+      openPageType = PageType.ProjectsList;
+    } else {
+      openPageType = PageType.TeamProjectsView;
+    }
   }
 
   return {
