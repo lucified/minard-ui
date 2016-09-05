@@ -26,8 +26,9 @@ export const createStoreAndRender = (
     const result = /^\/project\/([^/]+)(\/([^/]+))?/.exec(location.pathname);
     const project = (result && result[1]) || null;
     const branch = (result && result[3]) || null;
+    const showAll = /\/all$/.exec(location.pathname);
 
-    store.dispatch(Selected.actions.setSelected(project, branch));
+    store.dispatch(Selected.actions.setSelected(project, branch, showAll));
   });
 
   ReactDOM.render(
