@@ -513,6 +513,7 @@ describe('reducers', () => {
         type: Projects.actions.ALL_PROJECTS.FAILURE,
         id: null,
         error: 'projects fetch error',
+        details: 'detailed fetch error',
         prettyError: 'pretty error',
       };
 
@@ -529,6 +530,7 @@ describe('reducers', () => {
           id: null,
           type: Activities.actions.ACTIVITIES.FAILURE,
           error: 'foobar error',
+          details: 'detailed foobar error',
           prettyError: 'pretty foobar error',
         },
       ];
@@ -537,6 +539,7 @@ describe('reducers', () => {
         type: Projects.actions.ALL_PROJECTS.FAILURE,
         id: null,
         error: 'projects fetch error',
+        details: 'detailed fetch error',
         prettyError: 'pretty error',
       };
 
@@ -554,6 +557,7 @@ describe('reducers', () => {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'projects fetch error',
+          details: 'detailed fetch error',
           prettyError: 'pretty error',
         },
       ];
@@ -562,6 +566,7 @@ describe('reducers', () => {
         id: null,
         type: Activities.actions.ACTIVITIES.FAILURE,
         error: 'foobar error',
+        details: 'detailed foobar error',
         prettyError: 'pretty foobar error',
       };
 
@@ -579,18 +584,21 @@ describe('reducers', () => {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'projects fetch error',
+          details: 'detailed fetch error',
           prettyError: 'pretty error',
         },
         {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'another projects fetch error',
+          details: 'another detailed error',
           prettyError: 'another pretty error',
         },
         {
           id: null,
           type: Activities.actions.ACTIVITIES.FAILURE,
           error: 'foobar error',
+          details: 'detailed foobar error',
           prettyError: 'pretty foobar error',
         },
       ];
@@ -613,18 +621,21 @@ describe('reducers', () => {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'projects fetch error',
+          details: 'detailed fetch error',
           prettyError: 'pretty error',
         },
         {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'another projects fetch error',
+          details: 'another detailed error',
           prettyError: 'another pretty error',
         },
         {
           id: null,
           type: Activities.actions.ACTIVITIES.FAILURE,
           error: 'foobar error',
+          details: 'detailed foobar error',
           prettyError: 'pretty foobar error',
         },
       ];
@@ -647,6 +658,7 @@ describe('reducers', () => {
         type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
         id: 'foo',
         error: 'failed',
+        details: 'detailed error\nhere',
         prettyError: 'failed',
       };
       const expectedState = [action];
@@ -661,6 +673,7 @@ describe('reducers', () => {
         type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
         id: 'foo',
         error: 'failed',
+        details: 'detailed error\nhere',
         prettyError: 'failed',
       }];
       const action = {
@@ -680,30 +693,35 @@ describe('reducers', () => {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'projects fetch error',
+          details: 'detailed fetch error',
           prettyError: 'pretty error',
         },
         {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'another projects fetch error',
+          details: 'another detailed error',
           prettyError: 'another pretty error',
         },
         {
           id: null,
           type: Activities.actions.ACTIVITIES.FAILURE,
           error: 'foobar error',
+          details: 'detailed foobar error',
           prettyError: 'pretty foobar error',
         },
         {
           type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
           id: 'foo',
           error: 'failed',
+          details: 'detailed error\nhere',
           prettyError: 'failed',
         },
         {
           type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
           id: 'bar',
           error: 'failed',
+          details: 'detailed error\nhere',
           prettyError: 'failed',
         },
       ];
@@ -715,18 +733,21 @@ describe('reducers', () => {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'projects fetch error',
+          details: 'detailed fetch error',
           prettyError: 'pretty error',
         },
         {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'another projects fetch error',
+          details: 'another detailed error',
           prettyError: 'another pretty error',
         },
         {
           id: null,
           type: Activities.actions.ACTIVITIES.FAILURE,
           error: 'foobar error',
+          details: 'detailed foobar error',
           prettyError: 'pretty foobar error',
         },
       ];
@@ -742,18 +763,21 @@ describe('reducers', () => {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'projects fetch error',
+          details: 'detailed fetch error',
           prettyError: 'pretty error',
         },
         {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
           error: 'another projects fetch error',
+          details: 'another detailed error',
           prettyError: 'another pretty error',
         },
         {
           id: null,
           type: Activities.actions.ACTIVITIES.FAILURE,
           error: 'foobar error',
+          details: 'detailed foobar error',
           prettyError: 'pretty foobar error',
         },
       ];
@@ -978,6 +1002,7 @@ describe('reducers', () => {
       id: '1',
       type: Branches.actions.BRANCH.FAILURE,
       error: 'Error message in testing',
+      details: 'Detailed message in testing',
       prettyError: 'Pretty error message in testing',
     };
 
@@ -1124,6 +1149,7 @@ describe('reducers', () => {
       id: '2543452',
       type: Commits.actions.COMMIT.FAILURE,
       error: 'Error message in testing',
+      details: 'Detailed message in testing',
       prettyError: 'Pretty error message in testing',
     };
 
@@ -1216,6 +1242,7 @@ describe('reducers', () => {
       id: '7',
       type: Deployments.actions.DEPLOYMENT.FAILURE,
       error: 'Error message in testing',
+      details: 'Detailed message in testing',
       prettyError: 'Pretty error message in testing',
     };
 
@@ -1334,6 +1361,7 @@ describe('reducers', () => {
       id: '1',
       type: Projects.actions.PROJECT.FAILURE,
       error: 'Error message in testing',
+      details: 'Detailed message in testing',
       prettyError: 'Pretty error message in testing',
     };
 

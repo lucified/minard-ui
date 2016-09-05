@@ -7,10 +7,11 @@ export const ACTIVITIES = createRequestTypes('ACTIVITIES/ACTIVITIES');
 export const FetchActivities: t.RequestActivitiesActionCreators = {
   request: () => ({ type: ACTIVITIES.REQUEST }),
   success: (response) => ({ type: ACTIVITIES.SUCCESS, response }),
-  failure: (error) => ({
+  failure: (error, details) => ({
     type: ACTIVITIES.FAILURE,
     id: null,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };
@@ -24,10 +25,11 @@ export const ACTIVITIES_FOR_PROJECT = createRequestTypes('ACTIVITIES/ACTIVITIES_
 export const FetchActivitiesForProject: t.RequestActivitiesActionCreators = {
   request: (id) => ({ type: ACTIVITIES_FOR_PROJECT.REQUEST, id }),
   success: (id, response) => ({ type: ACTIVITIES_FOR_PROJECT.SUCCESS, id, response }),
-  failure: (id, error) => ({
+  failure: (id, error, details) => ({
     type: ACTIVITIES_FOR_PROJECT.FAILURE,
     id,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };

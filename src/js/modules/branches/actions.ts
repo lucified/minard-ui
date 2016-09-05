@@ -7,10 +7,11 @@ export const BRANCH = createRequestTypes('BRANCHES/BRANCH');
 export const FetchBranch: t.RequestBranchActionCreators = {
   request: (id) => ({ type: BRANCH.REQUEST, id }),
   success: (id, response) => ({ type: BRANCH.SUCCESS, id, response }),
-  failure: (id, error) => ({
+  failure: (id, error, details) => ({
     type: BRANCH.FAILURE,
     id,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };

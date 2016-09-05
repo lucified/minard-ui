@@ -20,6 +20,13 @@ const defaultOptions = {
   },
 };
 
+interface Error {
+  status: string;
+  source?: any;
+  title?: string;
+  detail: string;
+}
+
 const connectToApi = (url: string, options?: RequestInit): ApiPromise =>
   fetch(url, Object.assign({}, defaultOptions, options))
     .then(response =>
@@ -32,9 +39,22 @@ const connectToApi = (url: string, options?: RequestInit): ApiPromise =>
     ).then(json => ({
       response: json,
     }))
-    .catch(error => ({
-      error: error.message || 'An error occurred',
-    }));
+    .catch(errorResponse => {
+      let error: string = errorResponse.message || 'An error occurred';
+      let details: string = '';
+
+      if (errorResponse && errorResponse.errors && errorResponse.errors.length > 0) {
+        const errorTitles = new Set();
+        errorResponse.errors.forEach((singleError: Error) => { errorTitles.add(singleError.title); });
+        error = Array.from(errorTitles.values()).join(' & ');
+        details = errorResponse.errors.map((singleError: Error) => singleError.detail).join('\n');
+      }
+
+      return {
+        error,
+        details,
+      };
+    });
 
 const getApi = (url: string): ApiPromise => connectToApi(url);
 

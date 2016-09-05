@@ -7,7 +7,13 @@ export const COMMIT = createRequestTypes('COMMITS/COMMIT');
 export const FetchCommit: t.RequestCommitActionCreators = {
   request: (id) => ({ type: COMMIT.REQUEST, id }),
   success: (id, response) => ({ type: COMMIT.SUCCESS, id, response }),
-  failure: (id, error) => ({ type: COMMIT.FAILURE, id, error, prettyError: prettyErrorMessage(error) }),
+  failure: (id, error, details) => ({
+    type: COMMIT.FAILURE,
+    id,
+    error,
+    details,
+    prettyError: prettyErrorMessage(error),
+  }),
 };
 
 export const LOAD_COMMIT = 'COMMITS/LOAD_COMMIT';
