@@ -355,7 +355,7 @@ export default function createSagas(api: Api) {
   }
 
   function* watchForLoadActivities() {
-    yield* takeEvery(Activities.actions.LOAD_ACTIVITIES, loadActivities);
+    yield* takeLatest(Activities.actions.LOAD_ACTIVITIES, loadActivities);
   }
 
   function* watchForLoadActivitiesForProject() {
@@ -363,7 +363,7 @@ export default function createSagas(api: Api) {
   }
 
   function* watchForLoadAllProjects() {
-    yield* takeEvery(Projects.actions.LOAD_ALL_PROJECTS, loadAllProjects);
+    yield* takeLatest(Projects.actions.LOAD_ALL_PROJECTS, loadAllProjects);
   }
 
   function* watchForLoadProject() {
