@@ -56,8 +56,16 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
       };
     });
 
-const getApi = (path: string, query?: string): ApiPromise =>
-  connectToApi(`${path}${query ? `?${encodeURIComponent(query)}` : ''}`);
+const getApi = (path: string, query?: any): ApiPromise => {
+  let queryString = '';
+
+  if (query) {
+    queryString = '?';
+    queryString += Object.keys(query).map(param => `${param}=${encodeURIComponent(query[param])}`).join('&');
+  }
+
+  return connectToApi(`${path}${queryString}`);
+};
 
 const postApi = (path: string, payload: any): ApiPromise =>
   connectToApi(path, {
@@ -84,7 +92,7 @@ const patchApi = (path: string, payload: any): ApiPromise =>
 
 export const Activity = {
   fetchAll: (): ApiPromise => getApi('/activity'),
-  fetchAllForProject: (id: string): ApiPromise => getApi('/activity', `filter=project[${id}]`),
+  fetchAllForProject: (id: string): ApiPromise => getApi('/activity', { filter: `project[${id}]`}),
 };
 
 export const Branch = {
