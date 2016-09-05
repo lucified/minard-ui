@@ -23,22 +23,17 @@ interface FormData {
 
 type Props = PassedProps & FormProps<FormData, any>;
 
-const checkNameChangeAndSubmit = (values: FormData, dispatch: Dispatch<any>, props: Props) =>
-  new Promise((resolve, reject) => {
-    if (values.name !== props.initialValues.name) {
-      confirm('Changing the name of your project will change the repository address as well. Are you sure you want to do this?')
-        .then(() => resolve())
-        .catch(() => reject());
-    } else {
-      resolve();
-    }
-  }).then(() =>
-    onSubmitActions(
-      Projects.actions.EDIT_PROJECT,
-      Projects.actions.SEND_EDIT_PROJECT.SUCCESS,
-      Projects.actions.SEND_EDIT_PROJECT.FAILURE,
-    )(values, dispatch)
-  );
+const checkNameChangeAndSubmit = async (values: FormData, dispatch: Dispatch<any>, props: Props) => {
+  if (values.name !== props.initialValues.name) {
+    await confirm('Changing the name of your project will change the repository address as well. Are you sure you want to do this?');
+  }
+
+  return onSubmitActions(
+    Projects.actions.EDIT_PROJECT,
+    Projects.actions.SEND_EDIT_PROJECT.SUCCESS,
+    Projects.actions.SEND_EDIT_PROJECT.FAILURE,
+  )(values, dispatch);
+}
 
 const validate = (values: FormData, props: Props) => {
   const errors: FormData = {};
