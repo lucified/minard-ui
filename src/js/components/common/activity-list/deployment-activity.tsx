@@ -6,7 +6,7 @@ import { Activity } from '../../../modules/activities';
 import { Branch } from '../../../modules/branches';
 import { Commit } from '../../../modules/commits';
 import { Deployment, isSuccessful } from '../../../modules/deployments';
-import { FetchError, isError } from '../../../modules/errors';
+import { FetchError, isFetchError } from '../../../modules/errors';
 import { Project } from '../../../modules/projects';
 
 import MinardLink from '../minard-link';
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const getProjectLabel = (project?: Project | FetchError) => {
-  if (!project || isError(project)) {
+  if (!project || isFetchError(project)) {
     return null;
   }
 

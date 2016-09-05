@@ -5,10 +5,11 @@ import Activities, { ActivityState, ActivityType } from '../src/js/modules/activ
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState } from '../src/js/modules/deployments';
-import Errors, { ErrorState } from '../src/js/modules/errors';
+import Errors, { DeleteError, ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
 import Modal, { ModalType } from '../src/js/modules/modal';
 import Projects, { ProjectState } from '../src/js/modules/projects';
+import Requests, { RequestsState } from '../src/js/modules/requests';
 import Selected, { SelectedState } from '../src/js/modules/selected';
 
 import * as testData from './test-data';
@@ -175,7 +176,7 @@ const testReducer = (
     expectedStateWithExistingEntity,
   );
 
-  expectedStateFromEmpty = { [failedRequestAction.id!]: failedRequestAction };
+  expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
   expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedStateFromEmpty);
 
   testFailedRequest(
@@ -244,7 +245,197 @@ describe('reducers', () => {
   });
 
   describe('requests', () => {
-    it(''); // TODO
+    const { reducer } = Requests;
+
+    describe('fetch all projects', () => {
+      it('stores request information', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Projects.actions.ALL_PROJECTS.REQUEST,
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.ALL_PROJECTS.REQUEST,
+        }];
+        const action = {
+          type: Projects.actions.ALL_PROJECTS.SUCCESS,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.ALL_PROJECTS.REQUEST,
+        }];
+        const action = {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
+    describe('fetch all activities', () => {
+      it('stores request information', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Activities.actions.ACTIVITIES.REQUEST,
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES.REQUEST,
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES.SUCCESS,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES.REQUEST,
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES.FAILURE,
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
+    describe('fetch all activities for project', () => {
+      it('stores request information', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST,
+          id: 'foo',
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.SUCCESS,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Activities.actions.ACTIVITIES_FOR_PROJECT.FAILURE,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
+    describe('delete project', () => {
+      it('stores request information', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
+          id: 'foo',
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.SUCCESS,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
+          id: 'foo',
+        }];
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
   });
 
   describe('selected', () => {
@@ -416,40 +607,6 @@ describe('reducers', () => {
       expect(endState).to.not.equal(initialState);
     });
 
-    it(`clears all projects fetching error with ${Errors.actions.CLEAR_FETCH_ALL_PROJECTS_ERRORS}`, () => {
-      const initialState: ErrorState = [
-        {
-          type: Projects.actions.ALL_PROJECTS.FAILURE,
-          id: null,
-          error: 'projects fetch error',
-          prettyError: 'pretty error',
-        },
-        {
-          type: Projects.actions.ALL_PROJECTS.FAILURE,
-          id: null,
-          error: 'another projects fetch error',
-          prettyError: 'another pretty error',
-        },
-        {
-          id: null,
-          type: Activities.actions.ACTIVITIES.FAILURE,
-          error: 'foobar error',
-          prettyError: 'pretty foobar error',
-        },
-      ];
-
-      const action: any = {
-        type: Errors.actions.CLEAR_FETCH_ALL_PROJECTS_ERRORS,
-      };
-
-      const expectedState = initialState.slice(2);
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
     it('clears activity fetching error when starting new request', () => {
       const initialState: ErrorState = [
         {
@@ -484,8 +641,76 @@ describe('reducers', () => {
       expect(endState).to.not.equal(initialState);
     });
 
-    it(`clears all projects fetching error with ${Errors.actions.CLEAR_ACTIVITIES_ERRORS}`, () => {
+    it('adds an error when deleting a project fails', () => {
+      const initialState: ErrorState = [];
+      const action: DeleteError = {
+        type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
+        id: 'foo',
+        error: 'failed',
+        prettyError: 'failed',
+      };
+      const expectedState = [action];
+
+      const newState = reducer(initialState, action);
+      expect(newState).to.deep.equal(expectedState);
+      expect(newState).to.not.equal(initialState);
+    });
+
+    it('clears the error when trying to delete a project again', () => {
+      const initialState: ErrorState = [{
+        type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
+        id: 'foo',
+        error: 'failed',
+        prettyError: 'failed',
+      }];
+      const action = {
+        type: Projects.actions.SEND_DELETE_PROJECT.REQUEST,
+        id: 'foo',
+      };
+      const expectedState = [];
+
+      const newState = reducer(initialState, action);
+      expect(newState).to.deep.equal(expectedState);
+      expect(newState).to.not.equal(initialState);
+    });
+
+    it(`clears all project deletion errors on ${Errors.actions.CLEAR_PROJECT_DELETION_ERRORS}`, () => {
       const initialState: ErrorState = [
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'projects fetch error',
+          prettyError: 'pretty error',
+        },
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'another projects fetch error',
+          prettyError: 'another pretty error',
+        },
+        {
+          id: null,
+          type: Activities.actions.ACTIVITIES.FAILURE,
+          error: 'foobar error',
+          prettyError: 'pretty foobar error',
+        },
+        {
+          type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
+          id: 'foo',
+          error: 'failed',
+          prettyError: 'failed',
+        },
+        {
+          type: Projects.actions.SEND_DELETE_PROJECT.FAILURE,
+          id: 'bar',
+          error: 'failed',
+          prettyError: 'failed',
+        },
+      ];
+      const action = {
+        type: Errors.actions.CLEAR_PROJECT_DELETION_ERRORS,
+      };
+      const expectedState = [
         {
           type: Projects.actions.ALL_PROJECTS.FAILURE,
           id: null,
@@ -506,16 +731,40 @@ describe('reducers', () => {
         },
       ];
 
-      const action: any = {
-        type: Errors.actions.CLEAR_ACTIVITIES_ERRORS,
+      const newState = reducer(initialState, action);
+      expect(newState).to.deep.equal(expectedState);
+      expect(newState).to.not.equal(initialState);
+    });
+
+    it(`does nothing on ${Errors.actions.CLEAR_PROJECT_DELETION_ERRORS} when no deletion errors exist`, () => {
+      const initialState: ErrorState = [
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'projects fetch error',
+          prettyError: 'pretty error',
+        },
+        {
+          type: Projects.actions.ALL_PROJECTS.FAILURE,
+          id: null,
+          error: 'another projects fetch error',
+          prettyError: 'another pretty error',
+        },
+        {
+          id: null,
+          type: Activities.actions.ACTIVITIES.FAILURE,
+          error: 'foobar error',
+          prettyError: 'pretty foobar error',
+        },
+      ];
+      const action = {
+        type: Errors.actions.CLEAR_PROJECT_DELETION_ERRORS,
       };
+      const expectedState = initialState;
 
-      const expectedState = initialState.slice(0, 2);
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
+      const newState = reducer(initialState, action);
+      expect(newState).to.deep.equal(expectedState);
+      expect(newState).to.equal(initialState);
     });
   });
 
@@ -1130,6 +1379,34 @@ describe('reducers', () => {
         const newState = reducer(stateWithExistingEntity, successfulAllProjectsRequestAction);
         expect(newState).to.deep.equal(expectedStateWithExistingEntity);
         expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
+      });
+    });
+
+    describe('project deletion', () => {
+      it(`removes a project from the state upon receiving ${Projects.actions.SEND_DELETE_PROJECT.SUCCESS}`, () => {
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.SUCCESS,
+          id: 3,
+        };
+        const initialState = expectedStateWithExistingEntity;
+        const expectedNewState = Object.assign({}, initialState);
+        delete expectedNewState['3'];
+
+        const newState = reducer(initialState, action);
+        expect(newState).to.deep.equal(expectedNewState);
+        expect(newState).to.not.equal(initialState);
+      });
+
+      it('does nothing if the project does not exist', () => {
+        const action = {
+          type: Projects.actions.SEND_DELETE_PROJECT.SUCCESS,
+          id: 7,
+        };
+        const initialState = expectedStateWithExistingEntity;
+        const newState = reducer(initialState, action);
+
+        expect(newState).to.deep.equal(initialState);
+        expect(newState).to.equal(initialState);
       });
     });
   });

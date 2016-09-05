@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
 import MinardLink from '../common/minard-link';
@@ -30,7 +30,7 @@ const reloadPage = (e: any) => {
 };
 
 const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: PassedProps & GeneratedProps) => {
-  if (isError(branch)) {
+  if (isFetchError(branch)) {
     return (
       <div className={classNames('row', styles.branch)}>
         <div className={classNames('col-xs-12', styles.error)}>
@@ -51,7 +51,7 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
       </div>
     );
   } else {
-    if (isError(latestDeployment)) {
+    if (isFetchError(latestDeployment)) {
       commitContent = (
         <div className={styles.error}>
           <p>Error loading deployment</p>
@@ -92,7 +92,7 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { branch } = ownProps;
 
-  if (isError(branch)) {
+  if (isFetchError(branch)) {
     return {};
   }
 
@@ -100,7 +100,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   const latestDeployment = latestDeploymentId && Deployments.selectors.getDeployment(state, latestDeploymentId);
   let latestDeployedCommit: Commit | FetchError | undefined = undefined;
 
-  if (latestDeployment && !isError(latestDeployment)) {
+  if (latestDeployment && !isFetchError(latestDeployment)) {
     latestDeployedCommit = Commits.selectors.getCommit(state, latestDeployment.commit);
   }
 

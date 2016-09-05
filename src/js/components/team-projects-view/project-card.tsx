@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import Branches from '../../modules/branches';
 import Deployments, { Deployment } from '../../modules/deployments';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -61,9 +61,9 @@ const getDeploymentSummary = (deployment?: Deployment) => {
 };
 
 const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
-  if (isError(project)) {
+  if (isFetchError(project)) {
     return (
-      <div className={classNames(styles.card, styles.error)} key={project.id!}>
+      <div className={classNames(styles.card, styles.error)} key={project.id}>
         <h2>Unable to load project</h2>
         <p>Refresh to retry</p>
         <small>{project.prettyError}</small>
@@ -108,7 +108,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { project } = ownProps;
 
-  if (isError(project)) {
+  if (isFetchError(project)) {
     return {};
   }
 
@@ -116,13 +116,13 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   const latestDeploymentPerBranch = compact(project.branches.map(branchId => {
     const branch = Branches.selectors.getBranch(state, branchId);
 
-    if (!branch || isError(branch) || !branch.deployments[0]) {
+    if (!branch || isFetchError(branch) || !branch.deployments[0]) {
       return undefined;
     }
 
     const latestDeployment = Deployments.selectors.getDeployment(state, branch.deployments[0]);
 
-    if (isError(latestDeployment)) {
+    if (isFetchError(latestDeployment)) {
       return undefined;
     }
 

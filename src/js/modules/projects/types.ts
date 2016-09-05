@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { CreateError, EditError, FetchError } from '../errors';
+import { CreateError, DeleteError, EditError, FetchCollectionError, FetchError } from '../errors';
 import { ApiUser, RequestActionCreators, User } from '../types';
 
 // State
@@ -32,7 +32,11 @@ export interface RequestAllProjectsSuccessAction extends Action {
 }
 
 export type RequestAllProjectsActionCreators =
-  RequestActionCreators<RequestAllProjectsRequestAction, RequestAllProjectsSuccessAction, FetchError>;
+  RequestActionCreators<
+    RequestAllProjectsRequestAction,
+    RequestAllProjectsSuccessAction,
+    FetchCollectionError
+  >;
 
 // LOAD_PROJECT
 export interface LoadProjectAction extends Action {
@@ -57,12 +61,6 @@ export interface StoreProjectsAction extends Action {
   entities: ResponseProjectElement[];
 }
 
-// CREATE_PROJECT
-export interface CreateProjectAction extends Action {
-  name: string;
-  description?: string;
-}
-
 // SEND_CREATE_PROJECT
 export interface SendCreateProjectRequestAction extends Action {
   name: string;
@@ -74,7 +72,11 @@ export interface SendCreateProjectSuccessAction extends Action {
 }
 
 export type SendCreateProjectActionCreators =
-  RequestActionCreators<SendCreateProjectRequestAction, SendCreateProjectSuccessAction, CreateError>;
+  RequestActionCreators<
+    SendCreateProjectRequestAction,
+    SendCreateProjectSuccessAction,
+    CreateError
+  >;
 
 // EDIT_PROJECT
 export interface EditProjectAction extends Action {
@@ -97,7 +99,30 @@ export interface SendEditProjectSuccessAction extends Action {
 }
 
 export type SendEditProjectActionCreators =
-  RequestActionCreators<SendEditProjectRequestAction, SendEditProjectSuccessAction, EditError>;
+  RequestActionCreators<
+    SendEditProjectRequestAction,
+    SendEditProjectSuccessAction,
+    EditError
+  >;
+
+// DELETE_PROJECT
+export interface DeleteProjectAction extends Action {
+  id: string;
+  resolve: () => void;
+  reject: () => void;
+}
+
+// SEND_DELETE_PROJECT
+export interface SendDeleteProjectRequestAction extends Action {
+  id: string;
+}
+
+export interface SendDeleteProjectSuccessAction extends Action {
+  id: string;
+}
+
+export type SendDeleteProjectActionCreators =
+  RequestActionCreators<SendDeleteProjectRequestAction, SendDeleteProjectSuccessAction, DeleteError>;
 
 // API response
 interface ResponseBranchReference {

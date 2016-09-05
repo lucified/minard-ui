@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { FetchError, isError } from '../errors';
+import { FetchError, isFetchError } from '../errors';
 
 import { COMMIT, STORE_COMMITS } from './actions';
 import * as t from './types';
@@ -54,14 +54,14 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       const commitResonse = (<t.RequestCommitRequestAction> action).response;
       if (commitResonse) {
         return Object.assign({}, state, responseToStateShape([commitResonse]));
-      } else {
-        return state;
       }
+
+      return state;
     case COMMIT.FAILURE:
       const responseAction = <FetchError> action;
-      const existingEntity = state[responseAction.id!];
-      if (!existingEntity || isError(existingEntity)) {
-        return Object.assign({}, state, { [responseAction.id!]: responseAction });
+      const existingEntity = state[responseAction.id];
+      if (!existingEntity || isFetchError(existingEntity)) {
+        return Object.assign({}, state, { [responseAction.id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
@@ -70,9 +70,9 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       const commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
         return Object.assign({}, state, responseToStateShape(commits));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }

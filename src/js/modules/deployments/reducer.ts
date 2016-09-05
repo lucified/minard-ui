@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { FetchError, isError } from '../errors';
+import { FetchError, isFetchError } from '../errors';
 
 import { DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
 import * as t from './types';
@@ -41,14 +41,14 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       const deploymentResponse = (<t.RequestDeploymentSuccessAction> action).response;
       if (deploymentResponse) {
         return Object.assign({}, state, responseToStateShape([deploymentResponse]));
-      } else {
-        return state;
       }
+
+      return state;
     case DEPLOYMENT.FAILURE:
       const responseAction = <FetchError> action;
-      const id = responseAction.id!;
+      const id = responseAction.id;
       const existingEntity = state[id];
-      if (!existingEntity || isError(existingEntity)) {
+      if (!existingEntity || isFetchError(existingEntity)) {
         return Object.assign({}, state, { [id]: responseAction });
       }
 
@@ -58,9 +58,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       const deployments = (<t.StoreDeploymentsAction> action).entities;
       if (deployments && deployments.length > 0) {
         return Object.assign({}, state, responseToStateShape(deployments));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }

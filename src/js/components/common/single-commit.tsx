@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import * as React from 'react';
 
 import { Commit } from '../../modules/commits';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 
 import Avatar from './avatar';
 import PlaceholderCommit from './placeholder-commit';
@@ -20,7 +20,7 @@ const SingleCommit = ({ commit, className }: Props) => {
     return <PlaceholderCommit className={classNames(className)} />;
   }
 
-  if (isError(commit)) {
+  if (isFetchError(commit)) {
     return (
       <div className={styles.error}>
         <p>Unable to load commit. Refresh to retry.</p>

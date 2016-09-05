@@ -47,16 +47,16 @@ const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState
       const activitiesResponse = (<t.RequestActivitiesSuccessAction> action).response;
       if (activitiesResponse && activitiesResponse.length > 0) {
         return Object.assign({}, state, responseToStateShape(activitiesResponse));
-      } else {
-        return state;
       }
+
+      return state;
     case STORE_ACTIVITIES:
       const projects = (<t.StoreActivitiesAction> action).entities;
       if (projects && projects.length > 0) {
         return Object.assign({}, state, responseToStateShape(projects));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }

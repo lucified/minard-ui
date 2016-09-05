@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Branch } from '../../modules/branches';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError } from '../../modules/errors';
 
 import LoadingIcon from '../common/loading-icon';
 import SectionTitle from '../common/section-title';
@@ -30,7 +30,7 @@ const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
       return getLoadingContent(i);
     }
 
-    return <BranchSummary key={branch.id!} branch={branch} />;
+    return <BranchSummary key={branch.id} branch={branch} />;
   });
 };
 

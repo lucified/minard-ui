@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Branches, { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
-import { FetchError, isError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
 
@@ -64,7 +64,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
       return this.getLoadingContent();
     }
 
-    if (isError(branch)) {
+    if (isFetchError(branch)) {
       return this.getErrorContent(branch);
     }
 
@@ -72,7 +72,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
       return this.getLoadingContent();
     }
 
-    if (isError(project)) {
+    if (isFetchError(project)) {
       return this.getErrorContent(project);
     }
 
@@ -91,7 +91,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const branch = Branches.selectors.getBranch(state, branchId);
   let commits: (Commit | FetchError | undefined)[] | undefined;
 
-  if (branch && !isError(branch)) {
+  if (branch && !isFetchError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));
   }
 

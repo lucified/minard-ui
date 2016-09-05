@@ -20,8 +20,14 @@ export const isLoadingAllActivities = createSelector<StateTree, boolean, t.Reque
     !!requestInformations.find(requestInfo => requestInfo.type === Activities.actions.ACTIVITIES.REQUEST)
 );
 
-export const isLoadinglActivitiesForProject = (state: StateTree, id: string) =>
+export const isLoadinglActivitiesForProject = (state: StateTree, id: string): boolean =>
   !!selectRequestsTree(state).find(requestInfo =>
     (requestInfo.type === Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST) &&
+    (requestInfo.id === id)
+  );
+
+export const isDeletingProject = (state: StateTree, id: string): boolean =>
+  !!selectRequestsTree(state).find(requestInfo =>
+    (requestInfo.type === Projects.actions.SEND_DELETE_PROJECT.REQUEST) &&
     (requestInfo.id === id)
   );

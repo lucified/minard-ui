@@ -1,9 +1,10 @@
+import { omit } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import { FetchError, isError } from '../errors';
+import { FetchError, isFetchError } from '../errors';
 
-import { ALL_PROJECTS, PROJECT, STORE_PROJECTS } from './actions';
+import { ALL_PROJECTS, PROJECT, SEND_DELETE_PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
 const initialState: t.ProjectState = {};
@@ -44,33 +45,40 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       const projectsResponse = (<t.RequestAllProjectsSuccessAction> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
         return Object.assign({}, state, responseToStateShape(projectsResponse));
-      } else {
-        return state;
       }
+
+      return state;
     case PROJECT.SUCCESS:
       const projectResponse = (<t.RequestProjectSuccessAction> action).response;
       if (projectResponse) {
         return Object.assign({}, state, responseToStateShape([projectResponse]));
-      } else {
-        return state;
       }
+
+      return state;
     case PROJECT.FAILURE:
       const responseAction = <FetchError> action;
-      const id = responseAction.id!;
+      const id = responseAction.id;
       const existingEntity = state[id];
-      if (!existingEntity || isError(existingEntity)) {
+      if (!existingEntity || isFetchError(existingEntity)) {
         return Object.assign({}, state, { [id]: responseAction });
       }
 
       console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
+    case SEND_DELETE_PROJECT.SUCCESS:
+      const { id: idToDelete } = (<t.SendDeleteProjectSuccessAction> action);
+      if (state[idToDelete]) {
+        return omit<t.ProjectState, t.ProjectState>(state, idToDelete);
+      }
+
+      return state;
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
         return Object.assign({}, state, responseToStateShape(projects));
-      } else {
-        return state;
       }
+
+      return state;
     default:
       return state;
   }

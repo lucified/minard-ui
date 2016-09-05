@@ -255,6 +255,27 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // Delete PROJECT
+  function* deleteProject(action: any): IterableIterator<Effect> {
+    const { id, resolve, reject } = action;
+
+    yield put(Projects.actions.SendDeleteProject.request(id));
+
+    const { response, error } = yield call(api.deleteProject, id);
+
+    if (response) {
+      yield call(resolve);
+      yield put(Projects.actions.SendDeleteProject.success(id));
+
+      return true;
+    } else {
+      yield call(reject);
+      yield put(Projects.actions.SendDeleteProject.failure(id, error));
+
+      return false;
+    }
+  }
+
   // Edit PROJECT
   function* editProject(action: any): IterableIterator<Effect> {
     const { id, name } = action.payload;
@@ -325,6 +346,10 @@ export default function createSagas(api: Api) {
     yield* takeLatest(Projects.actions.CREATE_PROJECT, createProject);
   }
 
+  function* watchForDeleteProject() {
+    yield* takeLatest(Projects.actions.DELETE_PROJECT, deleteProject);
+  }
+
   function* watchForEditProject() {
     yield* takeLatest(Projects.actions.EDIT_PROJECT, editProject);
   }
@@ -360,6 +385,7 @@ export default function createSagas(api: Api) {
   function* root() {
     yield [
       fork(watchForCreateProject),
+      fork(watchForDeleteProject),
       fork(watchForEditProject),
       fork(watchForLoadAllProjects),
       fork(watchForLoadProject),
@@ -382,9 +408,13 @@ export default function createSagas(api: Api) {
     watchForLoadActivities,
     watchForLoadActivitiesForProject,
     watchForFormSubmit,
+    watchForCreateProject,
+    watchForDeleteProject,
+    watchForEditProject,
     formSubmitSaga,
     createProject,
     editProject,
+    deleteProject,
     fetchActivities,
     fetchActivitiesForProject,
     fetchBranch,

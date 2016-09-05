@@ -62,6 +62,32 @@ export const SendCreateProject: t.SendCreateProjectActionCreators = {
 };
 
 // Edit an existing project
+export const DELETE_PROJECT = 'PROJECTS/DELETE_PROJECT';
+
+export const deleteProjectPromiseResolver = (
+  id: string,
+  resolve: () => void,
+  reject: () => void
+) => ({
+  type: DELETE_PROJECT,
+  id,
+  resolve,
+  reject,
+});
+
+export const SEND_DELETE_PROJECT = createRequestTypes('PROJECTS/SEND_DELETE_PROJECT');
+export const SendDeleteProject: t.SendDeleteProjectActionCreators = {
+  request: (id) => ({ type: SEND_DELETE_PROJECT.REQUEST, id }),
+  success: (id) => ({ type: SEND_DELETE_PROJECT.SUCCESS, id }),
+  failure: (id, error) => ({
+    type: SEND_DELETE_PROJECT.FAILURE,
+    id,
+    error,
+    prettyError: prettyErrorMessage(error),
+  }),
+};
+
+// Edit an existing project
 export const EDIT_PROJECT = 'PROJECTS/EDIT_PROJECT';
 
 export const SEND_EDIT_PROJECT = createRequestTypes('PROJECTS/SEND_EDIT_PROJECT');

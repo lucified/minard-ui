@@ -20,8 +20,8 @@ const defaultOptions = {
   },
 };
 
-const connectToApi = (url: string, options: RequestInit = defaultOptions): ApiPromise =>
-  fetch(url, options)
+const connectToApi = (url: string, options?: RequestInit): ApiPromise =>
+  fetch(url, Object.assign({}, defaultOptions, options))
     .then(response =>
       response.json().then(json => ({
         json,
@@ -36,27 +36,30 @@ const connectToApi = (url: string, options: RequestInit = defaultOptions): ApiPr
       error: error.message || 'An error occurred',
     }));
 
-export const getApi = (url: string): ApiPromise => connectToApi(url);
+const getApi = (url: string): ApiPromise => connectToApi(url);
 
-export const postApi = (url: string, payload: any): ApiPromise =>
-  connectToApi(url, Object.assign({}, defaultOptions, {
+const postApi = (url: string, payload: any): ApiPromise =>
+  connectToApi(url, {
     method: 'POST',
     headers: {
       Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
     },
     body: JSON.stringify(payload),
-  }));
+  });
 
-export const patchApi = (url: string, payload: any): ApiPromise =>
-  connectToApi(url, Object.assign({}, defaultOptions, {
+const deleteApi = (url: string): ApiPromise =>
+  connectToApi(url, { method: 'DELETE' });
+
+const patchApi = (url: string, payload: any): ApiPromise =>
+  connectToApi(url, {
     method: 'PATCH',
     headers: {
       Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
     },
     body: JSON.stringify(payload),
-  }));
+  });
 
 export const fetchActivities = (): ApiPromise => getApi(`${path}/activity`);
 export const fetchActivitiesForProject = (id: string): ApiPromise => getApi(`${path}/activity?filter=project[${id}]`);
@@ -93,3 +96,5 @@ export const editProject = (id: string, newAttributes: { name?: string, descript
       attributes: newAttributes,
     },
   });
+
+export const deleteProject = (id: string): ApiPromise => deleteApi(`${path}/projects/${id}`);

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Dispatch } from 'redux';
 
-import { isError } from '../../modules/errors';
+import { isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import Projects, { Project } from '../../modules/projects';
 import { StateTree } from '../../reducers';
@@ -19,7 +19,7 @@ interface PassedProps {
 }
 
 interface InjectedProps {
-  router: any;
+  router: ReactRouter.RouterOnContext;
 }
 
 interface GeneratedStateProps {
@@ -73,7 +73,7 @@ class NewProjectDialog extends React.Component<Props, any> {
 const mapStateToProps = (state: StateTree) => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.NewProject),
   existingProjectNames: Projects.selectors.getProjects(state)
-    .filter(projectOrError => !isError(projectOrError))
+    .filter(projectOrError => !isFetchError(projectOrError))
     .map(project => (project as Project).name),
 });
 

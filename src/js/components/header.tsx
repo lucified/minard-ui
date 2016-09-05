@@ -4,7 +4,7 @@ import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import Errors, { FetchError } from '../modules/errors';
+import Errors, { FetchCollectionError } from '../modules/errors';
 import Selected from '../modules/selected';
 import { StateTree } from '../reducers';
 
@@ -19,16 +19,16 @@ interface PassedProps {
 
 interface GeneratedStateProps {
   selectedSection: string;
-  errors: FetchError[];
+  errors: FetchCollectionError[];
 }
 
 interface GeneratedDispatchProps {
-  clearError: (error: FetchError) => void;
+
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-const Header = ({ errors, clearError, selectedSection }: Props) => (
+const Header = ({ errors, selectedSection }: Props) => (
   <section className={styles['header-background']}>
     {errors && errors.length > 0 && (
       <div className={styles['error-box']}>
@@ -73,11 +73,9 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     Selected.selectors.getSelectedProject(state) === null ? 'team-projects' : 'other';
 
   return {
-    errors: Errors.selectors.getErrors(state),
+    errors: Errors.selectors.getFetchCollectionErrors(state),
     selectedSection,
   };
 };
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(mapStateToProps, {
-  clearError: Errors.actions.clearError,
-})(Header);
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(mapStateToProps)(Header);

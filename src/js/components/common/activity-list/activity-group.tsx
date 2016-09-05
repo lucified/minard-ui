@@ -7,7 +7,7 @@ import { Activity } from '../../../modules/activities';
 import Branches, { Branch } from '../../../modules/branches';
 import Commits, { Commit } from '../../../modules/commits';
 import Deployments, { Deployment } from '../../../modules/deployments';
-import { FetchError, isError } from '../../../modules/errors';
+import { FetchError, isFetchError } from '../../../modules/errors';
 import Projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
@@ -59,11 +59,11 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
     return getLoadingContent();
   }
 
-  if (isError(branch)) {
+  if (isFetchError(branch)) {
     return getErrorContent(branch);
   }
 
-  if (isError(deployment)) {
+  if (isFetchError(deployment)) {
     return getErrorContent(deployment);
   }
 
@@ -120,11 +120,11 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   let project: Project | FetchError | undefined;
   let commit: Commit | FetchError | undefined;
 
-  if (branch && !isError(branch)) {
+  if (branch && !isFetchError(branch)) {
     project = Projects.selectors.getProject(state, branch.project);
   }
 
-  if (deployment && !isError(deployment)) {
+  if (deployment && !isFetchError(deployment)) {
     commit = Commits.selectors.getCommit(state, deployment.commit);
   }
 

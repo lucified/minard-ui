@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
-import { FetchError, isError } from '../modules/errors';
+import { FetchError, isFetchError } from '../modules/errors';
 import Projects, { Project } from '../modules/projects';
 import Selected from '../modules/selected';
 import { StateTree } from '../reducers';
@@ -40,7 +40,7 @@ class SubHeader extends React.Component<GeneratedProps, any> {
     const { openPageType, project, teamName } = this.props;
     let content: JSX.Element | null = null;
 
-    if (openPageType === PageType.BranchView && project && !isError(project)) {
+    if (openPageType === PageType.BranchView && project && !isFetchError(project)) {
       content = <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>;
     } else if (openPageType === PageType.ProjectView && teamName) {
       content = <MinardLink className={styles['sub-header-link']} homepage>‹ {teamName}</MinardLink>;
