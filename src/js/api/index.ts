@@ -82,40 +82,51 @@ const patchApi = (path: string, payload: any): ApiPromise =>
     body: JSON.stringify(payload),
   });
 
-export const fetchActivities = (): ApiPromise => getApi('/activity');
-export const fetchActivitiesForProject = (id: string): ApiPromise => getApi('/activity', `filter=project[${id}]`);
-export const fetchAllProjects = (): ApiPromise => getApi('/teams/1/projects'); // TODO: add actual team ID
-export const fetchProject = (id: string): ApiPromise => getApi(`/projects/${id}`);
-export const fetchBranch = (id: string): ApiPromise => getApi(`/branches/${id}`);
-export const fetchDeployment = (id: string): ApiPromise => getApi(`/deployments/${id}`);
-export const fetchCommit = (id: string): ApiPromise => getApi(`/commits/${id}`);
+export const Activity = {
+  fetchAll: (): ApiPromise => getApi('/activity'),
+  fetchAllForProject: (id: string): ApiPromise => getApi('/activity', `filter=project[${id}]`),
+};
 
-export const createProject = (name: string, description?: string): ApiPromise =>
-  postApi('/projects', {
-    data: {
-      type: 'projects',
-      attributes: {
-        name,
-        description,
-      },
-      relationships: {
-        team: {
-          data: {
-            type: 'teams',
-            id: 1, // TODO: add actual team ID
+export const Branch = {
+  fetch: (id: string): ApiPromise => getApi(`/branches/${id}`),
+};
+
+export const Commit = {
+  fetch: (id: string): ApiPromise => getApi(`/commits/${id}`),
+};
+
+export const Deployment = {
+  fetch: (id: string): ApiPromise => getApi(`/deployments/${id}`),
+};
+
+export const Project = {
+  fetchAll: (): ApiPromise => getApi('/teams/1/projects'), // TODO: add actual team Id
+  fetch: (id: string): ApiPromise => getApi(`/projects/${id}`),
+  create: (name: string, description?: string): ApiPromise =>
+    postApi('/projects', {
+      data: {
+        type: 'projects',
+        attributes: {
+          name,
+          description,
+        },
+        relationships: {
+          team: {
+            data: {
+              type: 'teams',
+              id: 1, // TODO: add actual team ID
+            },
           },
         },
       },
-    },
-  });
-
-export const editProject = (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
-  patchApi(`/projects/${id}`, {
-    data: {
-      type: 'projects',
-      id,
-      attributes: newAttributes,
-    },
-  });
-
-export const deleteProject = (id: string): ApiPromise => deleteApi(`/projects/${id}`);
+    }),
+  edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
+    patchApi(`/projects/${id}`, {
+      data: {
+        type: 'projects',
+        id,
+        attributes: newAttributes,
+      },
+    }),
+  delete: (id: string): ApiPromise => deleteApi(`/projects/${id}`),
+};

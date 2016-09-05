@@ -15,14 +15,24 @@ export interface ApiResponse {
 export type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; details: string; }>;
 
 export interface Api {
-  fetchActivities: () => ApiPromise;
-  fetchActivitiesForProject: (id: string) => ApiPromise;
-  fetchAllProjects: () => ApiPromise;
-  fetchProject: (id: string) => ApiPromise;
-  fetchDeployment: (id: string) => ApiPromise;
-  fetchBranch: (id: string) => ApiPromise;
-  fetchCommit: (id: string) => ApiPromise;
-  createProject: (name: string, description?: string) => ApiPromise;
-  editProject: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise;
-  deleteProject: (id: string) => ApiPromise;
+  Project: {
+    fetchAll: () => ApiPromise;
+    fetch: (id: string) => ApiPromise;
+    create: (name: string, description?: string) => ApiPromise;
+    edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise;
+    delete: (id: string) => ApiPromise;
+  };
+  Activity: {
+    fetchAll: () => ApiPromise;
+    fetchAllForProject: (id: string) => ApiPromise;
+  };
+  Deployment: {
+    fetch: (id: string) => ApiPromise;
+  };
+  Branch: {
+    fetch: (id: string) => ApiPromise;
+  };
+  Commit: {
+    fetch: (id: string) => ApiPromise;
+  };
 }

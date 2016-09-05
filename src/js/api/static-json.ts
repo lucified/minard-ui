@@ -1,5 +1,7 @@
 import 'isomorphic-fetch';
 
+import { ApiPromise } from './types';
+
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
 const activitiesJSON = require('file!../../../json/activities.json');
@@ -39,15 +41,29 @@ function callApi(url: string) {
     }));
 }
 
-export const fetchActivities = () => callApi(activitiesJSON);
-export const fetchActivitiesForProject = (id: string) => callApi(activitiesJSON);
-export const fetchAllProjects = () => callApi(allProjectsJSON);
-export const fetchProject = (id: string) => callApi(projectJSON[id]);
-export const fetchBranch = (id: string) => callApi(branchJSON[id]);
-export const fetchDeployment = (id: string) => callApi(deploymentJSON[id]);
-export const fetchCommit = (id: string) => callApi(commitJSON);
-export const createProject = (name: string, description?: string) => callApi(newProjectJSON);
-export const editProject = (id: string, newAttributes: { name?: string, description?: string}) =>
-  callApi(editedProjectJSON);
-export const deleteProject = (id: string) => Promise.resolve({ response: 'ok!' });
-// export const deleteProject = (id: string) => Promise.resolve({ error: 'sad face :(' });
+export const Activity = {
+  fetchAll: (): ApiPromise => callApi(activitiesJSON),
+  fetchAllForProject: (id: string): ApiPromise => callApi(activitiesJSON),
+};
+
+export const Branch = {
+  fetch: (id: string): ApiPromise => callApi(branchJSON[id]),
+};
+
+export const Commit = {
+  fetch: (id: string): ApiPromise => callApi(commitJSON),
+};
+
+export const Deployment = {
+  fetch: (id: string): ApiPromise => callApi(deploymentJSON[id]),
+};
+
+export const Project = {
+  fetchAll: (): ApiPromise => callApi(allProjectsJSON),
+  fetch: (id: string): ApiPromise => callApi(projectJSON[id]),
+  create: (name: string, description?: string): ApiPromise => callApi(newProjectJSON),
+  edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
+    callApi(editedProjectJSON),
+  delete: (id: string): ApiPromise => Promise.resolve({ response: 'ok!' }),
+    // Promise.resolve({ error: 'sad face :(' });
+};
