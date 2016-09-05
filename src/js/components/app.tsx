@@ -7,6 +7,7 @@ require('font-awesome/css/font-awesome.css');
 import './styles.scss';
 
 import Modal from '../modules/modal';
+import Projects from '../modules/projects';
 import { StateTree } from '../reducers';
 
 import Footer from './footer';
@@ -21,11 +22,19 @@ interface PassedProps {
   params: any;
 }
 
-interface GeneratedProps {
+interface GeneratedStateProps {
   isModalOpen: boolean;
 }
 
-class App extends React.Component<PassedProps & GeneratedProps, any> {
+interface GeneratedDispatchProps {
+  loadAllProjects: () => void;
+}
+
+class App extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
+  public componentWillMount() {
+    this.props.loadAllProjects();
+  }
+
   public render() {
     const { isModalOpen, children } = this.props;
 
@@ -40,6 +49,7 @@ class App extends React.Component<PassedProps & GeneratedProps, any> {
   }
 };
 
-export default connect<GeneratedProps, {}, PassedProps>(
-  (state: StateTree) => ({ isModalOpen: Modal.selectors.isModalOpen(state) })
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+  (state: StateTree) => ({ isModalOpen: Modal.selectors.isModalOpen(state) }),
+  { loadAllProjects: Projects.actions.loadAllProjects }
 )(App);
