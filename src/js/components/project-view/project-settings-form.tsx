@@ -6,6 +6,8 @@ import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
 import { onSubmitActions } from '../../modules/forms';
 import Projects, { Project } from '../../modules/projects';
 
+import confirm from '../common/confirm';
+
 const styles = require('../common/modal-dialog.scss');
 
 interface PassedProps {
@@ -20,6 +22,18 @@ interface FormData {
 }
 
 type Props = PassedProps & FormProps<FormData, any>;
+
+const checkNameChangeAndSubmit = async (values: FormData, dispatch: Dispatch<any>, props: Props) => {
+  if (values.name !== props.initialValues.name) {
+    await confirm('Changing the name of your project will change the repository address as well. Are you sure you want to do this?');
+  }
+
+  return onSubmitActions(
+    Projects.actions.EDIT_PROJECT,
+    Projects.actions.SEND_EDIT_PROJECT.SUCCESS,
+    Projects.actions.SEND_EDIT_PROJECT.FAILURE,
+  )(values, dispatch);
+}
 
 const validate = (values: FormData, props: Props) => {
   const errors: FormData = {};
@@ -56,7 +70,7 @@ const RenderField = ({ input, name, label, placeholder, type, meta: { touched, e
 
 class ProjectSettingsForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid, submitFailed } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -71,7 +85,7 @@ class ProjectSettingsForm extends React.Component<Props, any> {
         <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
         <div className="row">
           <div className="col-xs-12">
-            <button type="submit" disabled={pristine || submitting || invalid}>
+            <button type="submit" disabled={pristine || submitting || (invalid && !submitFailed)}>
               {submitting ? 'Saving...' : 'Save'}
             </button>
           </div>
@@ -84,9 +98,5 @@ class ProjectSettingsForm extends React.Component<Props, any> {
 export default reduxForm({
   form: 'editProject',
   validate,
-  onSubmit: onSubmitActions(
-    Projects.actions.EDIT_PROJECT,
-    Projects.actions.SEND_EDIT_PROJECT.SUCCESS,
-    Projects.actions.SEND_EDIT_PROJECT.FAILURE,
-  )
+  onSubmit: checkNameChangeAndSubmit as any // redux-form typings are missing the third props param
 })(ProjectSettingsForm);
