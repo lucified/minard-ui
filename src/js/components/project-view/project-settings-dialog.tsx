@@ -55,7 +55,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
   private confirmDeletion(e: any) {
     e.preventDefault();
 
-    const { project, deleteProject, closeDialog, router } = this.props;
+    const { project, deleteProject, router } = this.props;
 
     confirm(`Are you positive you want to delete ${project.name}?`)
       .then(() => new Promise((resolve, reject) => {
