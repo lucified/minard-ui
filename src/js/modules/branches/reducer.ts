@@ -9,23 +9,12 @@ import * as t from './types';
 const initialState: t.BranchState = {};
 
 const responseToStateShape = (branches: t.ApiResponse) => {
-  const createBranchObject = (branch: t.ResponseBranchElement): t.Branch => {
-    const deployments = (branch.relationships.deployments &&
-      branch.relationships.deployments.data &&
-      branch.relationships.deployments.data.map(d => d.id)) || [];
-    const commits = (branch.relationships.commits &&
-      branch.relationships.commits.data &&
-      branch.relationships.commits.data.map(c => c.id)) || [];
-
-    return {
-      id: branch.id,
-      name: branch.attributes.name,
-      description: branch.attributes.description,
-      project: branch.relationships.project.data.id,
-      deployments,
-      commits,
-    };
-  };
+  const createBranchObject = (branch: t.ResponseBranchElement): t.Branch => ({
+    id: branch.id,
+    name: branch.attributes.name,
+    description: branch.attributes.description,
+    project: branch.relationships.project.data.id,
+  });
 
   return branches.reduce((obj, branch) => {
     try {

@@ -16,7 +16,6 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
       status: deployment.attributes.status,
       url: deployment.attributes.url,
       screenshot: deployment.attributes.screenshot,
-      commit: deployment.relationships.commit.data.id,
       creator: {
         name: deployment.attributes.creator.name,
         email: deployment.attributes.creator.email,
