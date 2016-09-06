@@ -27,12 +27,11 @@ export interface LoadCommitAction extends Action {
 // COMMIT
 export interface RequestCommitRequestAction extends Action {
   id: string;
-  response?: ResponseCommitElement;
 }
 
 export interface RequestCommitSuccessAction extends Action {
   id: string;
-  response?: ResponseCommitElement;
+  response: ResponseCommitElement;
 }
 
 export type RequestCommitActionCreators =

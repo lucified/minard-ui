@@ -51,7 +51,7 @@ const responseToStateShape = (commits: t.ApiResponse) => {
 const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
   switch (action.type) {
     case COMMIT.SUCCESS:
-      const commitResonse = (<t.RequestCommitRequestAction> action).response;
+      const commitResonse = (<t.RequestCommitSuccessAction> action).response;
       if (commitResonse) {
         return Object.assign({}, state, responseToStateShape([commitResonse]));
       }
