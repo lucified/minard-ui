@@ -84,13 +84,6 @@ export interface SendCreateProjectSuccessAction extends Action {
   id: string;
 }
 
-
-// EDIT_PROJECT
-export interface EditProjectAction extends Action {
-  id: string;
-  name: string;
-  description: string;
-}
 export type SendCreateProjectActionCreators = RequestCreateActionCreators<
   SendCreateProjectRequestAction,
   SendCreateProjectSuccessAction,
