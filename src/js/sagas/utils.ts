@@ -1,4 +1,4 @@
-import { ActionCreator } from 'redux';
+import { Action, ActionCreator } from 'redux';
 import { Effect, call, fork, put, select } from 'redux-saga/effects';
 
 import { ApiEntity, ApiEntityTypeString, ApiPromise } from '../api/types';
@@ -7,14 +7,10 @@ import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { FetchError } from '../modules/errors';
 import Projects, { Project } from '../modules/projects';
+import { RequestFetchActionCreators } from '../modules/types';
 import { StateTree } from '../reducers';
 
 type EntityType = Commit | Project | Deployment | Branch | FetchError;
-interface RequestActionCreators {
-  request: (id: string) => any;
-  success: (id: string, response: any) => any;
-  failure: (id: string, error: string, details?: string) => any;
-}
 
 interface FetchAction {
   type: string;
@@ -41,8 +37,8 @@ export const createLoader = (
   };
 };
 
-export const createFetcher = (
-  requestActionCreators: RequestActionCreators,
+export const createFetcher = <R extends Action, ResponseEntity, S extends Action, F extends Action>(
+  requestActionCreators: RequestFetchActionCreators<R, ResponseEntity, S, F>,
   apiFetchFunction: (id: string) => ApiPromise
 ) => {
   return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
