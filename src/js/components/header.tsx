@@ -43,11 +43,8 @@ const Header = ({ errors, selectedSection }: Props) => (
       <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
         <div className={classNames(styles['link-container'], 'col-xs')}>
           <ul className={styles.links}>
-            <li className={classNames(styles.link, { [styles.active]: selectedSection === 'team-projects' })}>
-              <Link to="/">Projects</Link>
-            </li>
-            <li className={styles.link}>
-              <Link to="/">Activity</Link>
+            <li className={classNames(styles.link, { [styles.active]: selectedSection === 'homepage' })}>
+              <Link to="/">Home</Link>
             </li>
           </ul>
         </div>
@@ -68,9 +65,11 @@ const Header = ({ errors, selectedSection }: Props) => (
 );
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
-  // TODO: Improve this
-  const selectedSection = Selected.selectors.getSelectedBranch(state) === null &&
-    Selected.selectors.getSelectedProject(state) === null ? 'team-projects' : 'other';
+  const selectedSection =
+    Selected.selectors.getSelectedBranch(state) === null &&
+    Selected.selectors.getSelectedProject(state) === null &&
+    !Selected.selectors.isShowingAll(state) ?
+      'homepage' : 'other';
 
   return {
     errors: Errors.selectors.getFetchCollectionErrors(state),
