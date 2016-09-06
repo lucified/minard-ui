@@ -1,0 +1,156 @@
+{
+  "data": [
+    {
+      "type": "commits",
+      "id": "aacceeff02",
+      "attributes": {
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-01T15:51:21.802Z"
+        },
+        "hash": "0123456789abcdef",
+        "committer": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T13:51:21.802Z"
+        },
+        "message": "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier."
+      },
+      "relationships": {
+        "deployments": {
+          "data": [{
+            "type": "deployments",
+            "id": "7"
+          }]
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "12354124",
+      "attributes": {
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-01T15:41:21.802Z"
+        },
+        "hash": "0123456789abcdef",
+        "committer": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-01T15:41:21.802Z"
+        },
+        "message": "Foobar is nice"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "2543452",
+      "attributes": {
+        "author": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-08-01T12:51:21.802Z"
+        },
+        "hash": "0123456789abcdef",
+        "committer": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-08-01T12:51:21.802Z"
+        },
+        "message": "Barbar barr barb aearr"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "098325343",
+      "attributes": {
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-29T15:51:21.802Z"
+        },
+        "hash": "0123456789abcdef",
+        "committer": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-29T15:51:21.802Z"
+        },
+        "message": "This is a commit message"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "29832572fc1",
+      "attributes": {
+        "author": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T15:50:21.802Z"
+        },
+        "hash": "0123456789abcdef",
+        "committer": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T15:50:21.802Z"
+        },
+        "message": "And this is one as well"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        }
+      }
+    },
+    {
+      "type": "commits",
+      "id": "29752a385",
+      "attributes": {
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-28T15:51:21.802Z"
+        },
+        "hash": "0123456789abcdef",
+        "committer": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-07-28T15:51:21.802Z"
+        },
+        "message": "How about this?"
+      },
+      "relationships": {
+        "deployments": {
+          "data": []
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "deployments",
+      "id": "7",
+      "attributes": {
+        "url": "#",
+        "screenshot": "http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png",
+        "status": "success",
+        "creator": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-02T09:51:21.802Z"
+        }
+      }
+    }
+  ]
+}

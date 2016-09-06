@@ -6,11 +6,11 @@
       "name": "third-long-name-branch"
     },
     "relationships": {
-      "commits": {
-        "data": []
+      "latest-successfully-deployed-commit": {
+        "data": {}
       },
-      "deployments": {
-        "data": []
+      "latest-commit": {
+        "data": {}
       },
       "project": {
         "data": {

@@ -1,33 +1,5 @@
 {
-  "data": {
-    "type": "branches",
-    "id": "2",
-    "attributes": {
-      "name": "second-branch",
-      "minard-json": {}
-    },
-    "relationships": {
-      "latest-successfully-deployed-commit": {
-        "data": {
-          "type": "commits",
-          "id": "a998823423"
-        }
-      },
-      "latest-commit": {
-        "data": {
-          "type": "commits",
-          "id": "aacd00f02"
-        }
-      },
-      "project": {
-        "data": {
-          "type": "projects",
-          "id": "1"
-        }
-      }
-    }
-  },
-  "included": [
+  "data": [
     {
       "type": "commits",
       "id": "aacd00f02",
@@ -73,13 +45,15 @@
           }]
         }
       }
-    },
+    }
+  ],
+  "included": [
     {
       "type": "deployments",
       "id": "8",
       "attributes": {
         "url": "#",
-        "screenshot": "https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png",
+        "screenshot": "http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png",
         "status": "success",
         "creator": {
           "name": "Ville Saarinen",
