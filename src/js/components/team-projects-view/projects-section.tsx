@@ -8,6 +8,7 @@ import Modal, { ModalType } from '../../modules/modal';
 import { Project } from '../../modules/projects';
 
 import LoadingIcon from '../common/loading-icon';
+import MinardLink from '../common/minard-link';
 import SectionTitle from '../common/section-title';
 import NewProjectDialog from './new-project-dialog';
 import ProjectCard from './project-card';
@@ -62,6 +63,15 @@ const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, show
           </div>
         )}
       </div>
+      {(!showAll && projects.length > count) && (
+        <div className="row end-xs">
+          <div className={classNames('col-xs-12', styles['show-all-projects-section'])}>
+            <MinardLink className={styles['show-all-projects-link']} showAll homepage>
+              Show all projects ({projects.length})
+            </MinardLink>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
