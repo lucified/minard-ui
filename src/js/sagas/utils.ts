@@ -43,7 +43,7 @@ export const createFetcher = (
   return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.request(id));
 
-    const { response, error } = yield call(apiFetchFunction, id);
+    const { response, error, details } = yield call(apiFetchFunction, id);
 
     if (response) {
       if (response.included) {
@@ -54,7 +54,7 @@ export const createFetcher = (
 
       return true;
     } else {
-      yield put(requestActionCreators.failure(id, error));
+      yield put(requestActionCreators.failure(id, error, details));
 
       return false;
     }
