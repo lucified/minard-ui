@@ -33,7 +33,7 @@ const createProjectObject = (project: t.ResponseProjectElement, state: t.Project
 };
 
 const responseToStateShape = (projects: t.ApiResponse, state: t.ProjectState): t.ProjectState =>
-  projects.reduce((obj, project) => {
+  projects.reduce<t.ProjectState>((obj, project) => {
     try {
       const stateObject = createProjectObject(project, state);
       return Object.assign(obj, { [project.id]: stateObject });

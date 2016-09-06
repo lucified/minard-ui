@@ -8,30 +8,30 @@ import * as t from './types';
 
 const initialState: t.ActivityState = {};
 
-const responseToStateShape = (activities: t.ApiResponse) => {
-  const activityType = (activityString: string): t.ActivityType => {
-    switch (activityString) {
-      case 'deployment':
-        return t.ActivityType.Deployment;
-      case 'comment':
-        return t.ActivityType.Comment;
-      default:
-        throw new Error('Unknown activity type!');
-    }
-  };
+const activityType = (activityString: string): t.ActivityType => {
+  switch (activityString) {
+    case 'deployment':
+      return t.ActivityType.Deployment;
+    case 'comment':
+      return t.ActivityType.Comment;
+    default:
+      throw new Error('Unknown activity type!');
+  }
+};
 
-  const createActivityObject = (activity: t.ResponseActivityElement): t.Activity => {
-    return {
-      id: activity.id,
-      type: activityType(activity.attributes['activity-type']),
-      deployment: activity.relationships.deployment.data.id,
-      branch: activity.relationships.branch.data.id,
-      project: activity.relationships.project.data.id,
-      timestamp: moment(activity.attributes.timestamp).valueOf(),
-    };
+const createActivityObject = (activity: t.ResponseActivityElement): t.Activity => {
+  return {
+    id: activity.id,
+    type: activityType(activity.attributes['activity-type']),
+    deployment: activity.relationships.deployment.data.id,
+    branch: activity.relationships.branch.data.id,
+    project: activity.relationships.project.data.id,
+    timestamp: moment(activity.attributes.timestamp).valueOf(),
   };
+};
 
-  return activities.reduce((obj, activity) => {
+const responseToStateShape = (activities: t.ApiResponse): t.ActivityState =>
+  activities.reduce<t.ActivityState>((obj, activity) => {
     try {
       const activityObject = createActivityObject(activity);
       return Object.assign(obj, { [activity.id]: activityObject });
@@ -40,7 +40,6 @@ const responseToStateShape = (activities: t.ApiResponse) => {
       return obj;
     }
   }, {});
-};
 
 const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
   switch (action.type) {

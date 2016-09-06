@@ -27,7 +27,7 @@ const createBranchObject = (branch: t.ResponseBranchElement, state: t.BranchStat
 };
 
 const responseToStateShape = (branches: t.ApiResponse, state: t.BranchState): t.BranchState =>
-  branches.reduce((obj, branch) => {
+  branches.reduce<t.BranchState>((obj, branch) => {
     try {
       const stateObject = createBranchObject(branch, state);
       return Object.assign(obj, { [branch.id]: stateObject });

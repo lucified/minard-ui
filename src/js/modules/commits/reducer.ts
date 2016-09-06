@@ -9,36 +9,36 @@ import * as t from './types';
 
 const initialState: t.CommitState = {};
 
-const responseToStateShape = (commits: t.ApiResponse) => {
-  const createCommitObject = (commit: t.ResponseCommitElement): t.Commit => {
-    const commitMessageLines = commit.attributes.message.match(/[^\r\n]+/g);
-    const commitMessage = commitMessageLines ? commitMessageLines[0] : '';
-    const commitDescription = commitMessageLines && commitMessageLines.length > 1 ?
-      commitMessageLines.slice(1).join('\n') : undefined;
-    const deployments = commit.relationships && commit.relationships.deployments;
-    const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
-    const committer = commit.attributes.committer;
+const createCommitObject = (commit: t.ResponseCommitElement): t.Commit => {
+  const commitMessageLines = commit.attributes.message.match(/[^\r\n]+/g);
+  const commitMessage = commitMessageLines ? commitMessageLines[0] : '';
+  const commitDescription = commitMessageLines && commitMessageLines.length > 1 ?
+    commitMessageLines.slice(1).join('\n') : undefined;
+  const deployments = commit.relationships && commit.relationships.deployments;
+  const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
+  const committer = commit.attributes.committer;
 
-    return {
-      id: commit.id,
-      hash: commit.attributes.hash,
-      message: commitMessage,
-      description: commitDescription,
-      deployment: latestDeployment,
-      committer: {
-        name: committer.name,
-        email: committer.email,
-        timestamp: moment(committer.timestamp).valueOf(),
-      },
-      author: {
-        name: commit.attributes.author.name,
-        email: commit.attributes.author.email,
-        timestamp: moment(commit.attributes.author.timestamp).valueOf(),
-      },
-    };
+  return {
+    id: commit.id,
+    hash: commit.attributes.hash,
+    message: commitMessage,
+    description: commitDescription,
+    deployment: latestDeployment,
+    committer: {
+      name: committer.name,
+      email: committer.email,
+      timestamp: moment(committer.timestamp).valueOf(),
+    },
+    author: {
+      name: commit.attributes.author.name,
+      email: commit.attributes.author.email,
+      timestamp: moment(commit.attributes.author.timestamp).valueOf(),
+    },
   };
+};
 
-  return commits.reduce((obj, commit) => {
+const responseToStateShape = (commits: t.ApiResponse): t.CommitState =>
+  commits.reduce<t.CommitState>((obj, commit) => {
     try {
       const stateObject = createCommitObject(commit);
       return Object.assign(obj, { [commit.id]: stateObject });
@@ -47,7 +47,6 @@ const responseToStateShape = (commits: t.ApiResponse) => {
       return obj;
     }
   }, {});
-};
 
 const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
   switch (action.type) {
