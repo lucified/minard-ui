@@ -13,7 +13,14 @@ import Projects, { Project } from '../src/js/modules/projects';
 import { StateTree } from '../src/js/reducers';
 import sagaCreator from '../src/js/sagas';
 
-import * as testData from './test-data';
+const testData = {
+  allProjectsResponse: require('../json/projects.json') as ApiResponse,
+  deploymentResponse: require('../json/deployment-7.json') as ApiResponse,
+  branchResponse: require('../json/branch-1.json') as ApiResponse,
+  commitResponse: require('../json/commit.json') as ApiResponse,
+  projectResponse: require('../json/project-1.json') as ApiResponse,
+  activitiesResponse: require('../json/activities.json') as ApiResponse,
+};
 
 const createApi = (): Api => {
   return {

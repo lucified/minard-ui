@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { Action, Reducer } from 'redux';
 
+import { ApiResponse } from '../src/js/api/types';
 import Activities, { ActivityState, ActivityType } from '../src/js/modules/activities';
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
@@ -12,7 +13,14 @@ import Projects, { ProjectState } from '../src/js/modules/projects';
 import Requests, { RequestsState } from '../src/js/modules/requests';
 import Selected, { SelectedState, SetSelectedAction } from '../src/js/modules/selected';
 
-import * as testData from './test-data';
+const testData = {
+  allProjectsResponse: require('../json/projects.json') as ApiResponse,
+  deploymentResponse: require('../json/deployment-7.json') as ApiResponse,
+  branchResponse: require('../json/branch-1.json') as ApiResponse,
+  commitResponse: require('../json/commit.json') as ApiResponse,
+  projectResponse: require('../json/project-1.json') as ApiResponse,
+  activitiesResponse: require('../json/activities.json') as ApiResponse,
+};
 
 type ModuleState = BranchState | CommitState | DeploymentState | ProjectState | ActivityState;
 interface AnyAction extends Action {
@@ -1178,7 +1186,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Deployments.actions.STORE_DEPLOYMENTS,
-      entities: testData.branchResponse.included!.slice(1, 2),
+      entities: testData.branchResponse.included!.filter(entity => entity.type === 'deployments'),
     };
 
     const expectedObjectsToStore: DeploymentState = {
@@ -1186,7 +1194,7 @@ describe('reducers', () => {
         id: '7',
         status: 'success',
         url: '#',
-        screenshot: '#',
+        screenshot: 'http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
@@ -1201,7 +1209,7 @@ describe('reducers', () => {
         id: '8',
         status: 'success',
         url: '#',
-        screenshot: '#',
+        screenshot: 'http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: undefined,
           email: 'juho@lucify.com',
@@ -1236,7 +1244,7 @@ describe('reducers', () => {
         id: '7',
         status: 'success',
         url: '#',
-        screenshot: '#',
+        screenshot: 'http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
