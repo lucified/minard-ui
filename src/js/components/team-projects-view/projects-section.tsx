@@ -47,7 +47,7 @@ const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, show
         )}
       >
         <span>
-          Projects for <span className={styles.team}>Team Lucify</span>
+          {showAll ? 'All' : 'Latest'} projects for <span className={styles.team}>Team Lucify</span>
         </span>
       </SectionTitle>
       <div className="row center-xs start-sm">
