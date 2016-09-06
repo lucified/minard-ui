@@ -16,12 +16,17 @@ interface RequestActionCreators {
   failure: (id: string, error: string, details?: string) => any;
 }
 
+interface FetchAction {
+  type: string;
+  id: string;
+}
+
 export const createLoader = (
   selector: (state: StateTree, id: string) => EntityType,
   fetcher: (id: string) => IterableIterator<Effect>,
   dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>
 ) => {
-  return function* (action: any): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (action: FetchAction): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     const id: string = action.id;
     const existingEntity = yield select(selector, id);
     let fetchSucceeded: boolean = false;

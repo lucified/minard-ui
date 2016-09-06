@@ -3,4 +3,4 @@ import reducer from './reducer';
 import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
-export { Activity, ActivityState, ActivityType } from './types';
+export { Activity, ActivityState, ActivityType, LoadActivitiesAction, LoadActivitiesForProjectAction } from './types';

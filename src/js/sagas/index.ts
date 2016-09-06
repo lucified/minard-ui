@@ -4,12 +4,12 @@ import { takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString } from '../api/types';
-import Activities, { Activity } from '../modules/activities';
+import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
-import Projects, { Project } from '../modules/projects';
+import Projects, { Project, LoadAllProjectsAction, DeleteProjectAction } from '../modules/projects';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -84,7 +84,7 @@ export default function createSagas(api: Api) {
   }
 
   // PROJECT ACTIVITIES
-  function* loadActivitiesForProject(action: any): IterableIterator<Effect> {
+  function* loadActivitiesForProject(action: LoadActivitiesForProjectAction): IterableIterator<Effect> {
     const id = action.id;
     const fetchSuccess = yield call(fetchActivitiesForProject, id);
     if (fetchSuccess) {
@@ -226,7 +226,7 @@ export default function createSagas(api: Api) {
   }
 
   // CREATE PROJECT
-  function* createProject(action: any): IterableIterator<Effect> {
+  function* createProject(action: { type: string, payload: any }): IterableIterator<Effect> {
     const { name, description } = action.payload;
 
     yield put(Projects.actions.SendCreateProject.request(name));
@@ -256,7 +256,7 @@ export default function createSagas(api: Api) {
   }
 
   // Delete PROJECT
-  function* deleteProject(action: any): IterableIterator<Effect> {
+  function* deleteProject(action: DeleteProjectAction): IterableIterator<Effect> {
     const { id, resolve, reject } = action;
 
     yield put(Projects.actions.SendDeleteProject.request(id));
@@ -277,7 +277,7 @@ export default function createSagas(api: Api) {
   }
 
   // Edit PROJECT
-  function* editProject(action: any): IterableIterator<Effect> {
+  function* editProject(action: { type: string, payload: any }): IterableIterator<Effect> {
     const { id, name } = action.payload;
     // If we don't force description to exist, there would be no way to clear it when editing
     const description = action.payload.description || '';
