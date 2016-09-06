@@ -169,24 +169,11 @@ export default function createSagas(api: Api) {
       throw new Error('No project found!');
     }
 
-    // Make sure all branches have been loaded
-    const { branches: branchIds } = project;
-
-    if (!branchIds) {
-      return;
+    if (project.latestSuccessfullyDeployedCommit) {
+      yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit);
     }
 
-    const branches = yield branchIds.map(branchId => call(fetchIfMissing, 'branches', branchId));
-
-    // Make sure the latest deployment from each branch has been loaded
-    let deploymentIdsToCheck: string[] = [];
-
-    for (let i = 0; i < branches.length; i++) {
-      const branch = <Branch> branches[i];
-      deploymentIdsToCheck.push(branch.deployments[0]);
-    }
-
-    yield compact(deploymentIdsToCheck).map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
+    // TODO: fetch branches somewhere else
   }
 
   // BRANCH
@@ -197,8 +184,7 @@ export default function createSagas(api: Api) {
     const branch = <Branch> (yield select(Branches.selectors.getBranch, id));
 
     yield call(fetchIfMissing, 'projects', branch.project);
-    yield branch.deployments.map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
-    yield branch.commits.map(commitId => call(fetchIfMissing, 'commits', commitId));
+    // TODO: fetch commits somewhere else
   }
 
   // DEPLOYMENT
@@ -207,9 +193,7 @@ export default function createSagas(api: Api) {
     createLoader(Deployments.selectors.getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
 
   function* ensureDeploymentRelatedDataLoaded(id: string): IterableIterator<Effect> {
-    const deployment = <Deployment> (yield select(Deployments.selectors.getDeployment, id));
-
-    yield call(fetchIfMissing, 'commits', deployment.commit);
+    // Nothing to do
   }
 
   // COMMIT
