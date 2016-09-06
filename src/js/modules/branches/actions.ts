@@ -1,5 +1,3 @@
-import { ActionCreator } from 'redux';
-
 import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
 
@@ -17,13 +15,13 @@ export const FetchBranch: t.RequestBranchActionCreators = {
 };
 
 export const LOAD_BRANCH = 'BRANCHES/LOAD_BRANCH';
-export const loadBranch: ActionCreator<t.LoadBranchAction> = (id) => ({
+export const loadBranch = (id: string): t.LoadBranchAction => ({
   type: LOAD_BRANCH,
   id,
 });
 
 export const STORE_BRANCHES = 'BRANCHES/STORE_BRANCHES';
-export const storeBranches: ActionCreator<t.StoreBranchesAction> = (branches) => ({
+export const storeBranches = (branches: t.ResponseBranchElement[]): t.StoreBranchesAction => ({
   type: STORE_BRANCHES,
   entities: branches,
 });

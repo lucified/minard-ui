@@ -11,9 +11,9 @@ import { StateTree } from '../reducers';
 
 type EntityType = Commit | Project | Deployment | Branch | FetchError;
 interface RequestActionCreators {
-  request: ActionCreator<any>;
-  success: ActionCreator<any>;
-  failure: ActionCreator<any>;
+  request: (id: string) => any;
+  success: (id: string, response: any) => any;
+  failure: (id: string, error: string, details?: string) => any;
 }
 
 export const createLoader = (

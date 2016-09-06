@@ -1,11 +1,9 @@
-import { ActionCreator } from 'redux';
-
 import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
 
 // Load multiple projects
 export const LOAD_ALL_PROJECTS = 'PROJECTS/LOAD_ALL_PROJECTS';
-export const loadAllProjects: ActionCreator<t.LoadAllProjectsAction> = () => ({
+export const loadAllProjects = (): t.LoadAllProjectsAction => ({
   type: LOAD_ALL_PROJECTS,
 });
 
@@ -24,7 +22,7 @@ export const FetchAllProjects: t.RequestAllProjectsActionCreators = {
 
 // Load a single project
 export const LOAD_PROJECT = 'PROJECTS/LOAD_PROJECT';
-export const loadProject: ActionCreator<t.LoadProjectAction> = (id) => ({
+export const loadProject = (id: string): t.LoadProjectAction => ({
   type: LOAD_PROJECT,
   id,
 });
@@ -44,7 +42,7 @@ export const FetchProject: t.RequestProjectActionCreators = {
 
 // Store included projects
 export const STORE_PROJECTS = 'PROJECTS/STORE_PROJECTS';
-export const storeProjects: ActionCreator<t.StoreProjectsAction> = (projects) => ({
+export const storeProjects = (projects: t.ResponseProjectElement[]): t.StoreProjectsAction => ({
   type: STORE_PROJECTS,
   entities: projects,
 });

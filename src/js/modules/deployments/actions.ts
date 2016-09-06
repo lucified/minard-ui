@@ -1,5 +1,3 @@
-import { ActionCreator } from 'redux';
-
 import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
 
@@ -17,13 +15,13 @@ export const FetchDeployment: t.RequestDeploymentActionCreators = {
 };
 
 export const LOAD_DEPLOYMENT = 'DEPLOYMENTS/LOAD_DEPLOYMENT';
-export const loadDeployment: ActionCreator<t.LoadDeploymentAction> = (id) => ({
+export const loadDeployment = (id: string): t.LoadDeploymentAction => ({
   type: LOAD_DEPLOYMENT,
   id,
 });
 
 export const STORE_DEPLOYMENTS = 'DEPLOYMENTS/STORE_DEPLOYMENTS';
-export const storeDeployments: ActionCreator<t.StoreDeploymentsAction> = (deployments) => ({
+export const storeDeployments = (deployments: t.ResponseDeploymentElement[]): t.StoreDeploymentsAction => ({
   type: STORE_DEPLOYMENTS,
   entities: deployments,
 });

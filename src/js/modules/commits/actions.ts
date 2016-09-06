@@ -1,5 +1,3 @@
-import { ActionCreator } from 'redux';
-
 import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
 
@@ -17,13 +15,13 @@ export const FetchCommit: t.RequestCommitActionCreators = {
 };
 
 export const LOAD_COMMIT = 'COMMITS/LOAD_COMMIT';
-export const loadCOMMIT: ActionCreator<t.LoadCommitAction> = (id) => ({
+export const loadCOMMIT = (id: string): t.LoadCommitAction => ({
   type: LOAD_COMMIT,
   id,
 });
 
 export const STORE_COMMITS = 'COMMITS/STORE_COMMITS';
-export const storeCommits: ActionCreator<t.StoreCommitsAction> = (commits) => ({
+export const storeCommits = (commits: t.ResponseCommitElement[]): t.StoreCommitsAction => ({
   type: STORE_COMMITS,
   entities: commits,
 });
