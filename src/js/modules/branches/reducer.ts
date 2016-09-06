@@ -8,31 +8,41 @@ import * as t from './types';
 
 const initialState: t.BranchState = {};
 
-const responseToStateShape = (branches: t.ApiResponse) => {
-  const createBranchObject = (branch: t.ResponseBranchElement): t.Branch => ({
+const createBranchObject = (branch: t.ResponseBranchElement, state: t.BranchState): t.Branch => {
+  // Since we don't get commits information with project requests, let's keep
+  // the existing commits list (if any)
+  let commits: string[] | undefined;
+  const existingBranch = state[branch.id];
+  if (existingBranch && !isFetchError(existingBranch)) {
+    commits = existingBranch.commits;
+  }
+
+  return {
     id: branch.id,
     name: branch.attributes.name,
     description: branch.attributes.description,
     project: branch.relationships.project.data.id,
-  });
+    commits,
+  };
+};
 
-  return branches.reduce((obj, branch) => {
+const responseToStateShape = (branches: t.ApiResponse, state: t.BranchState): t.BranchState =>
+  branches.reduce((obj, branch) => {
     try {
-      const stateObject = createBranchObject(branch);
+      const stateObject = createBranchObject(branch, state);
       return Object.assign(obj, { [branch.id]: stateObject });
     } catch (e) {
       console.log('Error parsing branch:', branch, e); // tslint:disable-line:no-console
       return obj;
     }
   }, {});
-};
 
 const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
   switch (action.type) {
     case BRANCH.SUCCESS:
       const branchResonse = (<RequestFetchSuccessAction<t.ResponseBranchElement>> action).response;
       if (branchResonse) {
-        return Object.assign({}, state, responseToStateShape([branchResonse]));
+        return Object.assign({}, state, responseToStateShape([branchResonse], state));
       }
 
       return state;
@@ -49,7 +59,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
     case STORE_BRANCHES:
       const branches = (<t.StoreBranchesAction> action).entities;
       if (branches && branches.length > 0) {
-        return Object.assign({}, state, responseToStateShape(branches));
+        return Object.assign({}, state, responseToStateShape(branches, state));
       }
 
       return state;
