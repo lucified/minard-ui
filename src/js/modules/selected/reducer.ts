@@ -6,17 +6,19 @@ import * as t from './types';
 const initialState: t.SelectedState = {
   project: null,
   branch: null,
+  showAll: false,
 };
 
 const reducer: Reducer<t.SelectedState> = (state = initialState, action: any) => {
   switch (action.type) {
     case SET_SELECTED:
-      const { project, branch } = action;
+      const { project, branch, showAll } = action;
 
-      if (project !== state.project || branch !== state.branch) {
+      if (project !== state.project || branch !== state.branch || showAll !== state.showAll) {
         return {
           project,
           branch,
+          showAll,
         };
       }
 

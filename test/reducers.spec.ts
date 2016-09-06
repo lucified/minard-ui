@@ -10,7 +10,7 @@ import { FetchError } from '../src/js/modules/errors';
 import Modal, { ModalType } from '../src/js/modules/modal';
 import Projects, { ProjectState } from '../src/js/modules/projects';
 import Requests, { RequestsState } from '../src/js/modules/requests';
-import Selected, { SelectedState } from '../src/js/modules/selected';
+import Selected, { SelectedState, SetSelectedAction } from '../src/js/modules/selected';
 
 import * as testData from './test-data';
 
@@ -442,15 +442,17 @@ describe('reducers', () => {
     const { reducer } = Selected;
 
     it('adds selected project and branch to empty state', () => {
-      const action: any = {
+      const action: SetSelectedAction = {
         type: Selected.actions.SET_SELECTED,
         project: 'p',
         branch: 'b',
+        showAll: false,
       };
 
       const expectedState: SelectedState = {
         project: 'p',
         branch: 'b',
+        showAll: false,
       };
 
       const endState: SelectedState = reducer(<any> undefined, action);
@@ -459,20 +461,23 @@ describe('reducers', () => {
     });
 
     it('it replaces existing selections', () => {
-      const action: any = {
+      const action: SetSelectedAction = {
         type: Selected.actions.SET_SELECTED,
         project: 'p',
         branch: 'b',
+        showAll: true,
       };
 
       const initialState: SelectedState = {
         project: 'p2',
         branch: 'b2',
+        showAll: false,
       };
 
       const expectedState: SelectedState = {
         project: 'p',
         branch: 'b',
+        showAll: true,
       };
 
       const endState: SelectedState = reducer(initialState, action);
@@ -482,20 +487,23 @@ describe('reducers', () => {
     });
 
     it('it clears existing selections', () => {
-      const action: any = {
+      const action: SetSelectedAction = {
         type: Selected.actions.SET_SELECTED,
         project: null,
         branch: null,
+        showAll: false,
       };
 
       const initialState: SelectedState = {
         project: 'p2',
         branch: 'b',
+        showAll: true,
       };
 
       const expectedState: SelectedState = {
         project: null,
         branch: null,
+        showAll: false,
       };
 
       const endState: SelectedState = reducer(initialState, action);

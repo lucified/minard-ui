@@ -13,11 +13,12 @@ interface Props {
   openInNewWindow?: boolean;
   homepage?: boolean;
   className?: string;
+  showAll?: boolean;
 }
 
 class MinardLink extends React.Component<Props, any> {
   public render() {
-    const { children, deployment, branch, homepage, project, openInNewWindow } = this.props;
+    const { children, deployment, branch, homepage, project, showAll, openInNewWindow } = this.props;
     const target = openInNewWindow ? '_blank' : undefined;
     let path: string;
 
@@ -43,7 +44,11 @@ class MinardLink extends React.Component<Props, any> {
     } else if (project) {
       path = `/project/${project.id}`;
     } else if (homepage) {
-      path = '/projects';
+      if (showAll) {
+        path = '/projects/all';
+      } else {
+        path = '/projects';
+      }
     } else {
       console.log('Error: no link handler found'); // tslint:disable-line:no-console
       return <span>{children}</span>;

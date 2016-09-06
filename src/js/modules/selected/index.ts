@@ -3,4 +3,4 @@ import reducer from './reducer';
 import * as selectors from './selectors';
 
 export default { reducer, selectors, actions };
-export { SelectedState } from './types';
+export { SelectedState, SetSelectedAction } from './types';
