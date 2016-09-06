@@ -12,7 +12,6 @@ export const isFailed = (deployment: Deployment) => deployment.status === 'faile
 // State
 export interface Deployment {
   id: string;
-  commit: string;
   creator: User;
   url?: string;
   screenshot?: string;
@@ -36,11 +35,6 @@ export interface StoreDeploymentsAction extends Action {
 }
 
 // API response
-interface ResponseCommitReference {
-  type: "commits";
-  id: string;
-}
-
 export interface ResponseDeploymentElement {
   type: "deployments";
   id: string;
@@ -49,11 +43,6 @@ export interface ResponseDeploymentElement {
     url?: string;
     screenshot?: string;
     status: DeploymentStatus;
-  };
-  relationships: {
-    commit: {
-      data: ResponseCommitReference;
-    };
   };
 }
 

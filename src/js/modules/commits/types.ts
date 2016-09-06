@@ -47,7 +47,7 @@ export interface ResponseCommitElement {
   };
   relationships?: {
     deployments?: {
-      data: ResponseDeploymentReference[];
+      data?: ResponseDeploymentReference[];
     };
   };
 }

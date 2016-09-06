@@ -9,8 +9,12 @@ export interface Branch {
   name: string;
   project: string;
   description?: string;
-  commits: string[];
-  deployments: string[];
+  commits?: string[]; // If undefined, we have not fetched the relationship data yet
+  latestSuccessfullyDeployedCommit?: string;
+  latestCommit?: string;
+  minardJson?: {
+    errors?: string[];
+  };
 }
 
 export interface BranchState {
@@ -30,11 +34,6 @@ export interface StoreBranchesAction extends Action {
 }
 
 // API response
-interface ResponseDeploymentReference {
-  type: "deployments";
-  id: string;
-}
-
 interface ResponseCommitReference {
   type: "commits";
   id: string;
@@ -51,13 +50,16 @@ export interface ResponseBranchElement {
   attributes: {
     name: string;
     description?: string;
+    'minard-json'?: {
+      errors?: string[];
+    };
   };
   relationships: {
-    deployments: {
-      data: ResponseDeploymentReference[];
+    'latest-successfully-deployed-commit'?: {
+      data?: ResponseCommitReference;
     };
-    commits: {
-      data: ResponseCommitReference[];
+    'latest-commit'?: {
+      data?: ResponseCommitReference;
     };
     project: {
       data: ResponseProjectReference;
