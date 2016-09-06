@@ -99,20 +99,6 @@ describe('sagas', () => {
   );
 
   testWatcher(
-    'watchForLoadAllProjects',
-    Projects.actions.LOAD_ALL_PROJECTS,
-    sagas.watchForLoadAllProjects(),
-    sagas.loadAllProjects,
-  );
-
-  testWatcher(
-    'watchForLoadActivities',
-    Activities.actions.LOAD_ACTIVITIES,
-    sagas.watchForLoadActivities(),
-    sagas.loadActivities
-  );
-
-  testWatcher(
     'watchForLoadActivitiesForProject',
     Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
     sagas.watchForLoadActivitiesForProject(),
@@ -139,6 +125,36 @@ describe('sagas', () => {
     sagas.watchForDeleteProject(),
     sagas.deleteProject
   );
+
+  describe('watchForLoadAllProjects', () => {
+    it(`calls a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
+      const iterator = sagas.watchForLoadAllProjects();
+      const action = { type: Projects.actions.LOAD_ALL_PROJECTS };
+
+      expect(iterator.next().value).to.deep.equal(
+        take(Projects.actions.LOAD_ALL_PROJECTS)
+      );
+
+      expect(iterator.next(action).value).to.deep.equal(
+        call(sagas.loadAllProjects)
+      );
+    });
+  });
+
+  describe('watchForLoadActivities', () => {
+    it(`calls a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
+      const iterator = sagas.watchForLoadActivities();
+      const action = { type: Activities.actions.LOAD_ACTIVITIES };
+
+      expect(iterator.next().value).to.deep.equal(
+        take(Activities.actions.LOAD_ACTIVITIES)
+      );
+
+      expect(iterator.next(action).value).to.deep.equal(
+        call(sagas.loadActivities)
+      );
+    });
+  });
 
   describe('watchForFormSubmit', () => {
     it(`forks a new saga on ${FORM_SUBMIT}`, () => {

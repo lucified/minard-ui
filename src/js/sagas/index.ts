@@ -354,16 +354,22 @@ export default function createSagas(api: Api) {
     yield* takeLatest(Projects.actions.EDIT_PROJECT, editProject);
   }
 
-  function* watchForLoadActivities() {
-    yield* takeLatest(Activities.actions.LOAD_ACTIVITIES, loadActivities);
+  function* watchForLoadActivities(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(Activities.actions.LOAD_ACTIVITIES);
+      yield call(loadActivities);
+    }
   }
 
   function* watchForLoadActivitiesForProject() {
     yield* takeEvery(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject);
   }
 
-  function* watchForLoadAllProjects() {
-    yield* takeLatest(Projects.actions.LOAD_ALL_PROJECTS, loadAllProjects);
+  function* watchForLoadAllProjects(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(Projects.actions.LOAD_ALL_PROJECTS);
+      yield call(loadAllProjects);
+    }
   }
 
   function* watchForLoadProject() {
