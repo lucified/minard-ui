@@ -52,7 +52,7 @@ export const CREATE_PROJECT = 'PROJECTS/CREATE_PROJECT';
 
 export const SEND_CREATE_PROJECT = createRequestTypes('PROJECTS/SEND_CREATE_PROJECT');
 export const SendCreateProject: t.SendCreateProjectActionCreators = {
-  request: (name, description) => ({ type: SEND_CREATE_PROJECT.REQUEST, name, description }),
+  request: (name) => ({ type: SEND_CREATE_PROJECT.REQUEST, name }),
   success: (id) => ({ type: SEND_CREATE_PROJECT.SUCCESS, id }),
   failure: (error, details) => ({
     type: SEND_CREATE_PROJECT.FAILURE,
@@ -94,7 +94,7 @@ export const EDIT_PROJECT = 'PROJECTS/EDIT_PROJECT';
 
 export const SEND_EDIT_PROJECT = createRequestTypes('PROJECTS/SEND_EDIT_PROJECT');
 export const SendEditProject: t.SendEditProjectActionCreators = {
-  request: (id, newAttributes) => ({ type: SEND_EDIT_PROJECT.REQUEST, id, newAttributes }),
+  request: (id) => ({ type: SEND_EDIT_PROJECT.REQUEST, id }),
   success: (id) => ({ type: SEND_EDIT_PROJECT.SUCCESS, id }),
   failure: (id, error, details) => ({
     type: SEND_EDIT_PROJECT.FAILURE,

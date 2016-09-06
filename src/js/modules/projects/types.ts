@@ -78,7 +78,6 @@ export interface StoreProjectsAction extends Action {
 // SEND_CREATE_PROJECT
 export interface SendCreateProjectRequestAction extends Action {
   name: string;
-  description?: string;
 }
 
 export interface SendCreateProjectSuccessAction extends Action {
@@ -101,10 +100,6 @@ export type SendCreateProjectActionCreators = RequestCreateActionCreators<
 // SEND_EDIT_PROJECT
 export interface SendEditProjectRequestAction extends Action {
   id: string;
-  newAttributes: {
-    name: string;
-    description: string;
-  };
 }
 
 export interface SendEditProjectSuccessAction extends Action {

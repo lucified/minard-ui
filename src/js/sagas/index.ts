@@ -229,7 +229,7 @@ export default function createSagas(api: Api) {
   function* createProject(action: any): IterableIterator<Effect> {
     const { name, description } = action.payload;
 
-    yield put(Projects.actions.SendCreateProject.request(name, description));
+    yield put(Projects.actions.SendCreateProject.request(name));
 
     const { response, error, details } = yield call(api.Project.create, name, description);
 
