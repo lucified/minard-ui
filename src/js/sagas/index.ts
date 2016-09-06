@@ -8,6 +8,7 @@ import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
+import { isFetchError } from '../modules/errors';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
 import Projects, { Project, DeleteProjectAction } from '../modules/projects';
 
@@ -37,7 +38,7 @@ export default function createSagas(api: Api) {
 
     let existingEntity = yield select(selector, id);
 
-    if (!existingEntity) {
+    if (!existingEntity || isFetchError(existingEntity)) {
       yield call(fetcher, id);
       existingEntity = yield select(selector, id);
     }
