@@ -15,6 +15,7 @@ enum PageType {
   TeamProjectsView,
   ProjectsList,
   ProjectView,
+  BranchesList,
   BranchView,
 };
 
@@ -31,7 +32,8 @@ class SubHeader extends React.Component<GeneratedProps, any> {
     let centerContent: JSX.Element | null = null;
     let rightContent: JSX.Element | null = null;
 
-    if (openPageType === PageType.BranchView && project && !isFetchError(project)) {
+    if (project && !isFetchError(project) &&
+      (openPageType === PageType.BranchView || openPageType === PageType.BranchesList)) {
       leftContent = <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>;
     } else if (teamName && (openPageType === PageType.ProjectView || openPageType === PageType.ProjectsList)) {
       leftContent = <MinardLink className={styles['sub-header-link']} homepage>‹ {teamName}</MinardLink>;
@@ -78,7 +80,11 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
       openPageType = PageType.BranchView;
       project = Projects.selectors.getProject(state, selectedProject);
     } else {
-      openPageType = PageType.ProjectView;
+      if (isShowingAll) {
+        openPageType = PageType.BranchesList;
+      } else {
+        openPageType = PageType.ProjectView;
+      }
     }
   } else {
     if (isShowingAll) {

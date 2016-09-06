@@ -10,7 +10,7 @@ export default (
   <Route path="/" component={App}>
     <IndexRedirect to="/projects" />
     <Route path="projects(/:show)" component={TeamProjectsView} />
-    <Route path="project/:projectId" component={ProjectView} />
-    <Route path="project/:projectId/:branchId" component={BranchView} />
+    <Route path="project/:projectId/branch/:branchId" component={BranchView} />
+    <Route path="project/:projectId(/:show)" component={ProjectView} />
   </Route>
 );

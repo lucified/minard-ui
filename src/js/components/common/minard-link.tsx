@@ -40,9 +40,13 @@ class MinardLink extends React.Component<Props, any> {
         <span>{children}</span>
       );
     } else if (branch) {
-      path = `/project/${branch.project}/${branch.id}`;
+      path = `/project/${branch.project}/branch/${branch.id}`;
     } else if (project) {
-      path = `/project/${project.id}`;
+      if (showAll) {
+        path = `/project/${project.id}/all`;
+      } else {
+        path = `/project/${project.id}`;
+      }
     } else if (homepage) {
       if (showAll) {
         path = '/projects/all';

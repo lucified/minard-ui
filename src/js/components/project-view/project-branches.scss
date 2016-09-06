@@ -8,7 +8,6 @@
   }
 }
 
-
 .error {
   text-align: center;
   font-weight: 200;
@@ -17,4 +16,15 @@
   small {
     font-family: "Lucida Console", Monaco, monospace;
   }
+}
+
+.show-all-branches-section {
+  margin: 48px 36px 72px 0;
+}
+
+.show-all-branches-link {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: right;
+  color: #2ebdb1;
 }
