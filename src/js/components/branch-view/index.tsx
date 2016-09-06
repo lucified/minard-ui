@@ -76,10 +76,14 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
       return this.getErrorContent(project);
     }
 
+    if (!commits) {
+      return this.getLoadingContent();
+    }
+
     return (
       <div>
         <BranchHeader project={project} branch={branch} />
-        <CommitList commits={commits!} />
+        <CommitList commits={commits} />
       </div>
     );
   }
@@ -91,7 +95,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const branch = Branches.selectors.getBranch(state, branchId);
   let commits: (Commit | FetchError | undefined)[] | undefined;
 
-  if (branch && !isFetchError(branch)) {
+  if (branch && !isFetchError(branch) && branch.commits) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));
   }
 

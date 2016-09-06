@@ -100,7 +100,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   return {
     project,
     isLoadingActivities,
-    branches: project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
+    branches: project.branches && project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
     activities: Activities.selectors.getActivitiesForProject(state),
   };
 };

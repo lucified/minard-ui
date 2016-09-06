@@ -8,8 +8,8 @@ import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
+import DeploymentScreenshot from '../common/deployment-screenshot';
 import MinardLink from '../common/minard-link';
-import ScreenshotPile from '../common/screenshot-pile';
 import SingleCommit from '../common/single-commit';
 
 const styles = require('./branch-summary.scss');
@@ -44,7 +44,13 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 
   let commitContent: JSX.Element;
 
-  if (branch.deployments.length === 0) {
+  if (!branch.commits) {
+    commitContent = (
+      <div className={styles.empty}>
+        Loading commit…
+      </div>
+    );
+  } else if (branch.commits.length === 0) {
     commitContent = (
       <div className={styles.empty}>
         No previews available
@@ -69,9 +75,9 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 
   return (
     <div className={classNames('row', styles.branch)}>
-      <div className={classNames('col-xs-2', styles.screenshots)}>
+      <div className={classNames('col-xs-2', styles.screenshot)}>
         <MinardLink branch={branch}>
-          <ScreenshotPile deployment={latestDeployment} count={branch.deployments.length} />
+          <DeploymentScreenshot deployment={latestDeployment} />
         </MinardLink>
       </div>
       <div className={classNames('col-xs-10', styles['activity-content'])}>
@@ -96,12 +102,12 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     return {};
   }
 
-  const latestDeploymentId = branch.deployments[0];
-  const latestDeployment = latestDeploymentId && Deployments.selectors.getDeployment(state, latestDeploymentId);
-  let latestDeployedCommit: Commit | FetchError | undefined = undefined;
+  const latestDeployedCommit = branch.latestSuccessfullyDeployedCommit &&
+    Commits.selectors.getCommit(state, branch.latestSuccessfullyDeployedCommit);
 
-  if (latestDeployment && !isFetchError(latestDeployment)) {
-    latestDeployedCommit = Commits.selectors.getCommit(state, latestDeployment.commit);
+  let latestDeployment: FetchError | Deployment | undefined;
+  if (latestDeployedCommit && !isFetchError(latestDeployedCommit) && latestDeployedCommit.deployment) {
+    latestDeployment = Deployments.selectors.getDeployment(state, latestDeployedCommit.deployment);
   }
 
   return {

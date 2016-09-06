@@ -11,12 +11,12 @@ import { FetchError, isFetchError } from '../../../modules/errors';
 import Projects, { Project } from '../../../modules/projects';
 import { StateTree } from '../../../reducers';
 
+import DeploymentScreenshot from '../deployment-screenshot';
 import LoadingIcon from '../loading-icon';
 import MinardLink from '../minard-link';
 import SingleActivity from './single-activity';
 
 const styles = require('./activity-group.scss');
-const noScreenshot = require('../../../../images/no-screenshot.png');
 
 interface PassedProps {
   activities: Activity[];
@@ -75,7 +75,7 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
       <div className={classNames('col-xs-2', styles.screenshot)}>
         {(deployment.status === 'success') && (
           <MinardLink deployment={deployment} openInNewWindow>
-            <img src={deployment.screenshot || noScreenshot} className={styles.image} />
+            <DeploymentScreenshot deployment={deployment} />
           </MinardLink>
         )}
       </div>

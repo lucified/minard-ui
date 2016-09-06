@@ -1,11 +1,10 @@
 import * as classNames from 'classnames';
-import { compact, maxBy } from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
-import Branches from '../../modules/branches';
+import Commits from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
@@ -112,31 +111,18 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     return {};
   }
 
-  // TODO: Make this more efficient
-  const latestDeploymentPerBranch = compact(project.branches.map(branchId => {
-    const branch = Branches.selectors.getBranch(state, branchId);
+  const latestSuccessfullyDeployedCommitId = project.latestSuccessfullyDeployedCommit;
+  const latestDeployedCommit = latestSuccessfullyDeployedCommitId &&
+    Commits.selectors.getCommit(state, latestSuccessfullyDeployedCommitId);
+  let latestDeployment: Deployment | FetchError | undefined;
 
-    if (!branch || isFetchError(branch) || !branch.deployments[0]) {
-      return undefined;
-    }
-
-    const latestDeployment = Deployments.selectors.getDeployment(state, branch.deployments[0]);
-
-    if (isFetchError(latestDeployment)) {
-      return undefined;
-    }
-
-    return latestDeployment;
-  })) as Deployment[];
-
-  let latestDeployment: Deployment | undefined;
-
-  if (latestDeploymentPerBranch.length > 0) {
-    latestDeployment = maxBy(latestDeploymentPerBranch, deployment => deployment.creator.timestamp);
+  if (latestDeployedCommit && !isFetchError(latestDeployedCommit) && latestDeployedCommit.deployment) {
+    latestDeployment = Deployments.selectors.getDeployment(state, latestDeployedCommit.deployment);
   }
 
+  // TODO: Don't convert error state to loading state?
   return {
-    latestDeployment,
+    latestDeployment: isFetchError(latestDeployment) ? undefined : latestDeployment,
   };
 };
 
