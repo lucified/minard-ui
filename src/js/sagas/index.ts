@@ -56,7 +56,7 @@ export default function createSagas(api: Api) {
   function* fetchActivities(): IterableIterator<Effect> {
     yield put(Activities.actions.FetchActivities.request());
 
-    const { response, error, details } = yield call(api.fetchActivities);
+    const { response, error, details } = yield call(api.Activity.fetchAll);
 
     if (response) {
       if (response.included) {
@@ -95,7 +95,7 @@ export default function createSagas(api: Api) {
   function* fetchActivitiesForProject(id: string): IterableIterator<Effect> {
     yield put(Activities.actions.FetchActivitiesForProject.request(id));
 
-    const { response, error, details } = yield call(api.fetchActivitiesForProject, id);
+    const { response, error, details } = yield call(api.Activity.fetchAllForProject, id);
 
     if (response) {
       if (response.included) {
@@ -123,7 +123,7 @@ export default function createSagas(api: Api) {
   function* fetchAllProjects(): IterableIterator<Effect> {
     yield put(Projects.actions.FetchAllProjects.request());
 
-    const { response, error, details } = yield call(api.fetchAllProjects);
+    const { response, error, details } = yield call(api.Project.fetchAll);
 
     if (response) {
       if (response.included) {
@@ -153,7 +153,7 @@ export default function createSagas(api: Api) {
   }
 
   // PROJECT
-  const fetchProject = createFetcher(Projects.actions.FetchProject, api.fetchProject);
+  const fetchProject = createFetcher(Projects.actions.FetchProject, api.Project.fetch);
   const loadProject = createLoader(Projects.selectors.getProject, fetchProject, ensureProjectRelatedDataLoaded);
 
   function* ensureProjectRelatedDataLoaded(projectOrId: Project | string): IterableIterator<Effect | Effect[]> {
@@ -190,7 +190,7 @@ export default function createSagas(api: Api) {
   }
 
   // BRANCH
-  const fetchBranch = createFetcher(Branches.actions.FetchBranch, api.fetchBranch);
+  const fetchBranch = createFetcher(Branches.actions.FetchBranch, api.Branch.fetch);
   const loadBranch = createLoader(Branches.selectors.getBranch, fetchBranch, ensureBranchRelatedDataLoaded);
 
   function* ensureBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
@@ -202,7 +202,7 @@ export default function createSagas(api: Api) {
   }
 
   // DEPLOYMENT
-  const fetchDeployment = createFetcher(Deployments.actions.FetchDeployment, api.fetchDeployment);
+  const fetchDeployment = createFetcher(Deployments.actions.FetchDeployment, api.Deployment.fetch);
   const loadDeployment =
     createLoader(Deployments.selectors.getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
 
@@ -213,7 +213,7 @@ export default function createSagas(api: Api) {
   }
 
   // COMMIT
-  const fetchCommit = createFetcher(Commits.actions.FetchCommit, api.fetchCommit);
+  const fetchCommit = createFetcher(Commits.actions.FetchCommit, api.Commit.fetch);
   const loadCommit =
     createLoader(Commits.selectors.getCommit, fetchCommit, ensureCommitRelatedDataLoaded);
 
@@ -231,7 +231,7 @@ export default function createSagas(api: Api) {
 
     yield put(Projects.actions.SendCreateProject.request(name, description));
 
-    const { response, error, details } = yield call(api.createProject, name, description);
+    const { response, error, details } = yield call(api.Project.create, name, description);
 
     if (response) {
       if (response.included) {
@@ -261,7 +261,7 @@ export default function createSagas(api: Api) {
 
     yield put(Projects.actions.SendDeleteProject.request(id));
 
-    const { response, error, details } = yield call(api.deleteProject, id);
+    const { response, error, details } = yield call(api.Project.delete, id);
 
     if (response) {
       yield call(resolve);
@@ -284,7 +284,7 @@ export default function createSagas(api: Api) {
 
     yield put(Projects.actions.SendEditProject.request(id));
 
-    const { response, error, details } = yield call(api.editProject, id, { name, description });
+    const { response, error, details } = yield call(api.Project.edit, id, { name, description });
 
     if (response) {
       // Store edited project

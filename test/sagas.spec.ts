@@ -16,33 +16,30 @@ import sagaCreator from '../src/js/sagas';
 
 import * as testData from './test-data';
 
-interface CreateApiParameter {
-  fetchActivities?: () => ApiPromise;
-  FetchActivitiesForProject?: (id: string) => ApiPromise;
-  fetchCommit?: (id: string) => ApiPromise;
-  fetchBranch?: (id: string) => ApiPromise;
-  fetchDeployment?: (id: string) => ApiPromise;
-  fetchProject?: (id: string) => ApiPromise;
-  fetchAllProjects?: () => ApiPromise;
-  createProject?: (name: string, description?: string) => ApiPromise;
-  editProject?: (id: string, newAttributes: { name: string, description: string }) => ApiPromise;
-}
-
-const createApi = (functionsToReplace?: CreateApiParameter): Api => {
-  const defaultFunctions: Api = {
-    fetchActivities: () => Promise.resolve({ response: {} }),
-    fetchActivitiesForProject: (_) => Promise.resolve({ response: {} }),
-    fetchCommit: (_) => Promise.resolve({ response: {} }),
-    fetchBranch: (_) => Promise.resolve({ response: {} }),
-    fetchDeployment: (_) => Promise.resolve({ response: {} }),
-    fetchProject: (_) => Promise.resolve({ response: {} }),
-    fetchAllProjects: () => Promise.resolve({ response: {} }),
-    createProject: (_1, _2) => Promise.resolve({ response: {} }),
-    editProject: (_1, _2) => Promise.resolve({ response: {} }),
-    deleteProject: (_) => Promise.resolve({ response: {} }),
+const createApi = (): Api => {
+  return {
+    Project: {
+      fetchAll: () => Promise.resolve({ response: {} }),
+      fetch: (id: string) => Promise.resolve({ response: {} }),
+      create: (name: string, description?: string) => Promise.resolve({ response: {} }),
+      edit: (id: string, newAttributes: { description?: string, name?: string }) =>
+        Promise.resolve({ response: {} }),
+      delete: (id: string) => Promise.resolve({ response: {} }),
+    },
+    Activity: {
+      fetchAll: () => Promise.resolve({ response: {} }),
+      fetchAllForProject: (id: string) => Promise.resolve({ response: {} }),
+    },
+    Deployment: {
+      fetch: (id: string) => Promise.resolve({ response: {} }),
+    },
+    Branch: {
+      fetch: (id: string) => Promise.resolve({ response: {} }),
+    },
+    Commit: {
+      fetch: (id: string) => Promise.resolve({ response: {} }),
+    },
   };
-
-  return Object.assign(defaultFunctions, functionsToReplace);
 };
 
 describe('sagas', () => {
@@ -433,7 +430,7 @@ describe('sagas', () => {
     { data: testData.deploymentResponse.data },
     Deployments.actions.FetchDeployment,
     sagas.fetchDeployment,
-    api.fetchDeployment
+    api.Deployment.fetch,
   );
 
   testFetcher(
@@ -442,7 +439,7 @@ describe('sagas', () => {
     { data: testData.branchResponse.data },
     Branches.actions.FetchBranch,
     sagas.fetchBranch,
-    api.fetchBranch,
+    api.Branch.fetch,
   );
 
   testFetcher(
@@ -451,7 +448,7 @@ describe('sagas', () => {
     { data: testData.commitResponse.data },
     Commits.actions.FetchCommit,
     sagas.fetchCommit,
-    api.fetchCommit,
+    api.Commit.fetch,
   );
 
   testFetcher(
@@ -460,7 +457,7 @@ describe('sagas', () => {
     { data: testData.projectResponse.data },
     Projects.actions.FetchProject,
     sagas.fetchProject,
-    api.fetchProject,
+    api.Project.fetch,
   );
 
   describe('fetchActivities', () => {
@@ -473,7 +470,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchActivities)
+        call(api.Activity.fetchAll)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -495,7 +492,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchActivities)
+        call(api.Activity.fetchAll)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -521,7 +518,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchActivities)
+        call(api.Activity.fetchAll)
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
@@ -547,7 +544,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchActivitiesForProject, id)
+        call(api.Activity.fetchAllForProject, id)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -569,7 +566,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchActivitiesForProject, id)
+        call(api.Activity.fetchAllForProject, id)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -595,7 +592,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchActivitiesForProject, id)
+        call(api.Activity.fetchAllForProject, id)
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
@@ -619,7 +616,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchAllProjects)
+        call(api.Project.fetchAll)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -641,7 +638,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchAllProjects)
+        call(api.Project.fetchAll)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -667,7 +664,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.fetchAllProjects)
+        call(api.Project.fetchAll)
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
@@ -1106,7 +1103,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.createProject, name, description)
+        call(api.Project.create, name, description)
       );
     });
 
@@ -1173,7 +1170,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.deleteProject, id)
+        call(api.Project.delete, id)
       );
     });
 
@@ -1245,7 +1242,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.editProject, id, { name, description })
+        call(api.Project.edit, id, { name, description })
       );
     });
 
