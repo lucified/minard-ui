@@ -13,10 +13,11 @@ export const ALL_PROJECTS = createRequestTypes('PROJECTS/ALL_PROJECTS');
 export const FetchAllProjects: t.RequestAllProjectsActionCreators = {
   request: () => ({ type: ALL_PROJECTS.REQUEST }),
   success: (response) => ({ type: ALL_PROJECTS.SUCCESS, response }),
-  failure: (error) => ({
+  failure: (error, details) => ({
     type: ALL_PROJECTS.FAILURE,
     id: null,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };
@@ -32,10 +33,11 @@ export const PROJECT = createRequestTypes('PROJECTS/PROJECT');
 export const FetchProject: t.RequestProjectActionCreators = {
   request: (id) => ({ type: PROJECT.REQUEST, id }),
   success: (id, response) => ({ type: PROJECT.SUCCESS, id, response }),
-  failure: (id, error) => ({
+  failure: (id, error, details) => ({
     type: PROJECT.FAILURE,
     id,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };
@@ -54,9 +56,10 @@ export const SEND_CREATE_PROJECT = createRequestTypes('PROJECTS/SEND_CREATE_PROJ
 export const SendCreateProject: t.SendCreateProjectActionCreators = {
   request: (name, description) => ({ type: SEND_CREATE_PROJECT.REQUEST, name, description }),
   success: (id) => ({ type: SEND_CREATE_PROJECT.SUCCESS, id }),
-  failure: (error) => ({
+  failure: (error, details) => ({
     type: SEND_CREATE_PROJECT.FAILURE,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };
@@ -79,10 +82,11 @@ export const SEND_DELETE_PROJECT = createRequestTypes('PROJECTS/SEND_DELETE_PROJ
 export const SendDeleteProject: t.SendDeleteProjectActionCreators = {
   request: (id) => ({ type: SEND_DELETE_PROJECT.REQUEST, id }),
   success: (id) => ({ type: SEND_DELETE_PROJECT.SUCCESS, id }),
-  failure: (id, error) => ({
+  failure: (id, error, details) => ({
     type: SEND_DELETE_PROJECT.FAILURE,
     id,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };
@@ -94,10 +98,11 @@ export const SEND_EDIT_PROJECT = createRequestTypes('PROJECTS/SEND_EDIT_PROJECT'
 export const SendEditProject: t.SendEditProjectActionCreators = {
   request: (id, newAttributes) => ({ type: SEND_EDIT_PROJECT.REQUEST, id, newAttributes }),
   success: (id) => ({ type: SEND_EDIT_PROJECT.SUCCESS, id }),
-  failure: (id, error) => ({
+  failure: (id, error, details) => ({
     type: SEND_EDIT_PROJECT.FAILURE,
     id,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };

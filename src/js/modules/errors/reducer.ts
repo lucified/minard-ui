@@ -11,7 +11,7 @@ const initialState: t.ErrorState = [];
 const returnFilteredStateIfChanged = (state: t.ErrorState, predicate: (error: t.Error) => boolean): t.ErrorState => {
   const filteredState = state.filter(predicate);
   return filteredState.length !== state.length ? filteredState : state;
-}
+};
 
 const reducer: Reducer<t.ErrorState> = (state = initialState, action: any) => {
   switch (action.type) {

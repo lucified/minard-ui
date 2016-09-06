@@ -12,7 +12,7 @@ export interface ApiResponse {
   included?: ApiEntity[];
 }
 
-export type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; }>;
+export type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; details: string; }>;
 
 export interface Api {
   fetchActivities: () => ApiPromise;

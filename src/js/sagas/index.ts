@@ -56,7 +56,7 @@ export default function createSagas(api: Api) {
   function* fetchActivities(): IterableIterator<Effect> {
     yield put(Activities.actions.FetchActivities.request());
 
-    const { response, error } = yield call(api.fetchActivities);
+    const { response, error, details } = yield call(api.fetchActivities);
 
     if (response) {
       if (response.included) {
@@ -67,7 +67,7 @@ export default function createSagas(api: Api) {
 
       return true;
     } else {
-      yield put(Activities.actions.FetchActivities.failure(error));
+      yield put(Activities.actions.FetchActivities.failure(error, details));
 
       return false;
     }
@@ -95,7 +95,7 @@ export default function createSagas(api: Api) {
   function* fetchActivitiesForProject(id: string): IterableIterator<Effect> {
     yield put(Activities.actions.FetchActivitiesForProject.request(id));
 
-    const { response, error } = yield call(api.fetchActivitiesForProject, id);
+    const { response, error, details } = yield call(api.fetchActivitiesForProject, id);
 
     if (response) {
       if (response.included) {
@@ -106,7 +106,7 @@ export default function createSagas(api: Api) {
 
       return true;
     } else {
-      yield put(Activities.actions.FetchActivitiesForProject.failure(id, error));
+      yield put(Activities.actions.FetchActivitiesForProject.failure(id, error, details));
 
       return false;
     }
@@ -123,7 +123,7 @@ export default function createSagas(api: Api) {
   function* fetchAllProjects(): IterableIterator<Effect> {
     yield put(Projects.actions.FetchAllProjects.request());
 
-    const { response, error } = yield call(api.fetchAllProjects);
+    const { response, error, details } = yield call(api.fetchAllProjects);
 
     if (response) {
       if (response.included) {
@@ -134,7 +134,7 @@ export default function createSagas(api: Api) {
 
       return true;
     } else {
-      yield put(Projects.actions.FetchAllProjects.failure(error));
+      yield put(Projects.actions.FetchAllProjects.failure(error, details));
 
       return false;
     }
@@ -231,7 +231,7 @@ export default function createSagas(api: Api) {
 
     yield put(Projects.actions.SendCreateProject.request(name, description));
 
-    const { response, error } = yield call(api.createProject, name, description);
+    const { response, error, details } = yield call(api.createProject, name, description);
 
     if (response) {
       if (response.included) {
@@ -249,7 +249,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Projects.actions.SendCreateProject.failure(error));
+      yield put(Projects.actions.SendCreateProject.failure(error, details));
 
       return false;
     }
@@ -261,7 +261,7 @@ export default function createSagas(api: Api) {
 
     yield put(Projects.actions.SendDeleteProject.request(id));
 
-    const { response, error } = yield call(api.deleteProject, id);
+    const { response, error, details } = yield call(api.deleteProject, id);
 
     if (response) {
       yield call(resolve);
@@ -270,7 +270,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       yield call(reject);
-      yield put(Projects.actions.SendDeleteProject.failure(id, error));
+      yield put(Projects.actions.SendDeleteProject.failure(id, error, details));
 
       return false;
     }
@@ -284,7 +284,7 @@ export default function createSagas(api: Api) {
 
     yield put(Projects.actions.SendEditProject.request(id));
 
-    const { response, error } = yield call(api.editProject, id, { name, description });
+    const { response, error, details } = yield call(api.editProject, id, { name, description });
 
     if (response) {
       // Store edited project
@@ -295,7 +295,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Projects.actions.SendEditProject.failure(id, error));
+      yield put(Projects.actions.SendEditProject.failure(id, error, details));
 
       return false;
     }

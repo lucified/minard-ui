@@ -13,6 +13,8 @@ interface GenericError {
   type: string;
   // The original error message
   error: string;
+  // Detailed error message
+  details: string;
   // The error to display to the user
   prettyError: string;
 }

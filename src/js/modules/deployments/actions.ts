@@ -7,10 +7,11 @@ export const DEPLOYMENT = createRequestTypes('DEPLOYMENTS/DEPLOYMENT');
 export const FetchDeployment: t.RequestDeploymentActionCreators = {
   request: (id) => ({ type: DEPLOYMENT.REQUEST, id }),
   success: (id, response) => ({ type: DEPLOYMENT.SUCCESS, id, response }),
-  failure: (id, error) => ({
+  failure: (id, error, details) => ({
     type: DEPLOYMENT.FAILURE,
     id,
     error,
+    details,
     prettyError: prettyErrorMessage(error),
   }),
 };
