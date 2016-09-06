@@ -1,0 +1,84 @@
+{
+  "data": [
+    {
+      "type": "branches",
+      "id": "1",
+      "attributes": {
+        "name": "first-branch",
+        "description": "This is a branch description",
+        "minard-json": {
+          "errors": []
+        }
+      },
+      "relationships": {
+        "latest-successfully-deployed-commit": {
+          "data": {
+            "type": "commits",
+            "id": "aacceeff02"
+          }
+        },
+        "latest-commit": {
+          "data": {
+            "type": "commits",
+            "id": "aacceeff02"
+          }
+        },
+        "project": {
+          "data": {
+            "type": "projects",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "type": "branches",
+      "id": "2",
+      "attributes": {
+        "name": "second-branch",
+        "minard-json": {}
+      },
+      "relationships": {
+        "latest-successfully-deployed-commit": {
+          "data": {
+            "type": "commits",
+            "id": "a998823423"
+          }
+        },
+        "latest-commit": {
+          "data": {
+            "type": "commits",
+            "id": "aacd00f02"
+          }
+        },
+        "project": {
+          "data": {
+            "type": "projects",
+            "id": "1"
+          }
+        }
+      }
+    },
+    {
+      "type": "branches",
+      "id": "3",
+      "attributes": {
+        "name": "third-long-name-branch"
+      },
+      "relationships": {
+        "latest-successfully-deployed-commit": {
+          "data": {}
+        },
+        "latest-commit": {
+          "data": {}
+        },
+        "project": {
+          "data": {
+            "type": "projects",
+            "id": "1"
+          }
+        }
+      }
+    }
+  ]
+}
