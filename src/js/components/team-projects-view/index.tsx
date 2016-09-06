@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
 import { FetchError } from '../../modules/errors';
-import Requests from '../../modules/requests';
 import Projects, { Project } from '../../modules/projects';
+import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
