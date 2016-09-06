@@ -41,9 +41,11 @@ const createApi = (): Api => {
     },
     Branch: {
       fetch: (id: string) => Promise.resolve({ response: {} }),
+      fetchForProject: (id: string) => Promise.resolve({ response: {} }),
     },
     Commit: {
       fetch: (id: string) => Promise.resolve({ response: {} }),
+      fetchForBranch: (id: string) => Promise.resolve({ response: {} }),
     },
   };
 };

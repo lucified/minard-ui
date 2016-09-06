@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-import { ApiPromise } from './types';
+import { Api, ApiPromise } from './types';
 
 if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
@@ -90,24 +90,26 @@ const patchApi = (path: string, payload: any): ApiPromise =>
     body: JSON.stringify(payload),
   });
 
-export const Activity = {
+const Activity = {
   fetchAll: (): ApiPromise => getApi('/activity'),
   fetchAllForProject: (id: string): ApiPromise => getApi('/activity', { filter: `project[${id}]`}),
 };
 
-export const Branch = {
+const Branch = {
   fetch: (id: string): ApiPromise => getApi(`/branches/${id}`),
+  fetchForProject: (id: string): ApiPromise => getApi(`/projects/${id}/relationships/branches`),
 };
 
-export const Commit = {
+const Commit = {
   fetch: (id: string): ApiPromise => getApi(`/commits/${id}`),
+  fetchForBranch: (id: string): ApiPromise => getApi(`/branches/${id}/relationships/commits`),
 };
 
-export const Deployment = {
+const Deployment = {
   fetch: (id: string): ApiPromise => getApi(`/deployments/${id}`),
 };
 
-export const Project = {
+const Project = {
   fetchAll: (): ApiPromise => getApi('/teams/1/projects'), // TODO: add actual team Id
   fetch: (id: string): ApiPromise => getApi(`/projects/${id}`),
   create: (name: string, description?: string): ApiPromise =>
@@ -138,3 +140,13 @@ export const Project = {
     }),
   delete: (id: string): ApiPromise => deleteApi(`/projects/${id}`),
 };
+
+const API: Api = {
+  Activity,
+  Branch,
+  Commit,
+  Deployment,
+  Project,
+};
+
+export default API;

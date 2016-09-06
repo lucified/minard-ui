@@ -31,8 +31,10 @@ export interface Api {
   };
   Branch: {
     fetch: (id: string) => ApiPromise;
+    fetchForProject: (id: string) => ApiPromise;
   };
   Commit: {
     fetch: (id: string) => ApiPromise;
+    fetchForBranch: (id: string) => ApiPromise;
   };
 }
