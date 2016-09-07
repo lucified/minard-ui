@@ -8,7 +8,7 @@ import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules
 import Branches, { Branch, LoadBranchesForProjectAction } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
-import { isFetchError } from '../modules/errors';
+import { isFetchError, FetchError } from '../modules/errors';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
 import Projects, { Project, DeleteProjectAction } from '../modules/projects';
 
@@ -171,10 +171,11 @@ export default function createSagas(api: Api) {
     }
 
     if (project.latestSuccessfullyDeployedCommit) {
-      yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit);
+      const commit = <Commit | FetchError | undefined> (yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit));
+      if (commit && !isFetchError(commit) && commit.deployment) {
+        yield call(fetchIfMissing, 'deployments', commit.deployment);
+      }
     }
-
-    // TODO: fetch branches somewhere else
   }
 
   // BRANCH
@@ -182,10 +183,21 @@ export default function createSagas(api: Api) {
   const loadBranch = createLoader(Branches.selectors.getBranch, fetchBranch, ensureBranchRelatedDataLoaded);
 
   function* ensureBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const branch = <Branch> (yield select(Branches.selectors.getBranch, id));
+    const branch = <Branch | FetchError | undefined> (yield select(Branches.selectors.getBranch, id));
 
-    yield call(fetchIfMissing, 'projects', branch.project);
-    // TODO: fetch commits somewhere else
+    if (branch && !isFetchError(branch)) {
+      yield call(fetchIfMissing, 'projects', branch.project);
+      if (branch.latestSuccessfullyDeployedCommit) {
+        const commit = <Commit | FetchError | undefined>
+          (yield call(fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit));
+        if (commit && !isFetchError(commit) && commit.deployment) {
+          yield call(fetchIfMissing, 'deployments', commit.deployment);
+        }
+      }
+      if (branch.latestCommit) {
+        yield call(fetchIfMissing, 'commits', branch.latestCommit);
+      }
+    }
   }
 
   // BRANCHES_FOR_PROJECT
