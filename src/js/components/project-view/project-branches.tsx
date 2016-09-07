@@ -43,7 +43,7 @@ const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
 const ProjectBranches = ({ branches, project, showAll, count = 3 }: Props) => {
   const branchesToShow = showAll ? branches : branches.slice(0, count);
   const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
-  const title = showAll ? 'All branches' : 'Branches';
+  const title = showAll ? `All branches for ${project.name}` : 'Branches';
 
   return (
     <section className="container">
