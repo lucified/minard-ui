@@ -1194,7 +1194,7 @@ describe('reducers', () => {
         id: '7',
         status: 'success',
         url: '#',
-        screenshot: 'http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
@@ -1209,7 +1209,7 @@ describe('reducers', () => {
         id: '8',
         status: 'success',
         url: '#',
-        screenshot: 'http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: undefined,
           email: 'juho@lucify.com',
@@ -1244,7 +1244,7 @@ describe('reducers', () => {
         id: '7',
         status: 'success',
         url: '#',
-        screenshot: 'http://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
