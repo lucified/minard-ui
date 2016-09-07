@@ -2,21 +2,14 @@ import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
-import { RequestFetchSuccessAction } from '../types';
+import { RequestFetchSpecificCollectionSuccessAction, RequestFetchSuccessAction } from '../types';
 
-import { BRANCH, STORE_BRANCHES } from './actions';
+import { BRANCH, BRANCHES_FOR_PROJECT, STORE_BRANCHES } from './actions';
 import * as t from './types';
 
 const initialState: t.BranchState = {};
 
 const createBranchObject = (branch: t.ResponseBranchElement, state: t.BranchState): t.Branch => {
-  // Since we don't get commits information with project requests, let's keep
-  // the existing commits list (if any)
-  let commits: string[] | undefined;
-  const existingBranch = state[branch.id];
-  if (existingBranch && !isFetchError(existingBranch)) {
-    commits = existingBranch.commits;
-  }
   const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = branch.relationships &&
     branch.relationships['latest-successfully-deployed-commit'];
   const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
@@ -28,6 +21,21 @@ const createBranchObject = (branch: t.ResponseBranchElement, state: t.BranchStat
   const latestCommit: string | undefined = latestCommitObject &&
     latestCommitObject.data &&
     latestCommitObject.data.id;
+
+  // Since we don't get commits information with project requests, let's keep
+  // the existing commits list (if any)
+  let commits: string[] = [];
+  const existingBranch = state[branch.id];
+  if (existingBranch && !isFetchError(existingBranch)) {
+    commits = commits.concat(existingBranch.commits);
+  }
+  // Make sure latestSuccessfullyDeployedCommit and latestCommit are included in the list
+  if (latestSuccessfullyDeployedCommit && commits.indexOf(latestSuccessfullyDeployedCommit) < 0) {
+    commits.unshift(latestSuccessfullyDeployedCommit);
+  }
+  if (latestCommit && commits.indexOf(latestCommit) < 0) {
+    commits.unshift(latestCommit);
+  }
 
   const latestActivityTimestampString = branch.attributes['latest-activity-timestamp'];
   const latestActivityTimestamp = latestActivityTimestampString &&
@@ -58,6 +66,9 @@ const responseToStateShape = (branches: t.ApiResponse, state: t.BranchState): t.
   }, {});
 
 const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
+  let branches: t.ResponseBranchElement[];
+  let id: string;
+
   switch (action.type) {
     case BRANCH.SUCCESS:
       const branchResonse = (<RequestFetchSuccessAction<t.ResponseBranchElement>> action).response;
@@ -68,7 +79,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       return state;
     case BRANCH.FAILURE:
       const responseAction = <FetchError> action;
-      const id = responseAction.id;
+      id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
         return Object.assign({}, state, { [id]: responseAction });
@@ -76,8 +87,14 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
+    case BRANCHES_FOR_PROJECT.SUCCESS:
+      branches = (<RequestFetchSpecificCollectionSuccessAction<t.ResponseBranchElement[]>> action).response;
+      if (branches && branches.length > 0) {
+        return Object.assign({}, state, responseToStateShape(branches, state));
+      }
+      return state;
     case STORE_BRANCHES:
-      const branches = (<t.StoreBranchesAction> action).entities;
+      branches = (<t.StoreBranchesAction> action).entities;
       if (branches && branches.length > 0) {
         return Object.assign({}, state, responseToStateShape(branches, state));
       }

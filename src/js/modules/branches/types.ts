@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { FetchError } from '../errors';
-import { RequestFetchActionCreators } from '../types';
+import { RequestFetchActionCreators, RequestFetchSpecificCollectionActionCreators } from '../types';
 
 // State
 export interface Branch {
@@ -9,7 +9,7 @@ export interface Branch {
   name: string;
   project: string;
   description?: string;
-  commits?: string[]; // If undefined, we have not fetched the relationship data yet
+  commits: string[];
   latestSuccessfullyDeployedCommit?: string;
   latestCommit?: string;
   latestActivityTimestamp?: number;
@@ -28,6 +28,13 @@ export interface LoadBranchAction extends Action {
   id: string;
 }
 export type RequestBranchActionCreators = RequestFetchActionCreators<ResponseBranchElement>;
+
+// LOAD_BRANCHES_FOR_PROJECT
+export interface LoadBranchesForProjectAction extends Action {
+  id: string;
+}
+export type RequestBranchesForProjectActionCreators =
+  RequestFetchSpecificCollectionActionCreators<ResponseBranchElement[]>;
 
 // STORE_BRANCHES
 export interface StoreBranchesAction extends Action {

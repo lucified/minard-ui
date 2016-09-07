@@ -16,7 +16,7 @@ export interface Project {
   id: string;
   name: string;
   description?: string;
-  branches?: string[]; // Undefined if they have not yet been fetched
+  branches?: string[] | FetchError; // Undefined if they have not yet been fetched
   latestActivityTimestamp?: number;
   latestSuccessfullyDeployedCommit?: string;
   activeUsers: User[];
@@ -40,6 +40,12 @@ export type RequestProjectActionCreators = RequestFetchActionCreators<ResponsePr
 // STORE_PROJECTS
 export interface StoreProjectsAction extends Action {
   entities: ResponseProjectElement[];
+}
+
+// ADD_BRANCHES_TO_PROJECT
+export interface AddBranchesToProjectAction extends Action {
+  id: string;
+  branches: string[];
 }
 
 // CREATE_PROJECT

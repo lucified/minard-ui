@@ -44,13 +44,7 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 
   let commitContent: JSX.Element;
 
-  if (!branch.commits) {
-    commitContent = (
-      <div className={styles.empty}>
-        Loading commit…
-      </div>
-    );
-  } else if (branch.commits.length === 0) {
+  if (branch.commits.length === 0) {
     commitContent = (
       <div className={styles.empty}>
         No previews available
