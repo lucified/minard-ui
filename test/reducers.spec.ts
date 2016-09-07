@@ -21,7 +21,7 @@ const testData = {
   projectResponse: require('../json/project-1.json') as ApiResponse,
   activitiesResponse: require('../json/activities.json') as ApiResponse,
   projectBranchesResponse: require('../json/project-1-branches.json') as ApiResponse,
-  branchCommitsResponse: require('../json/branch-1-commits.json') as ApiResponse,
+  branchCommitsResponse: require('../json/branch-2-commits.json') as ApiResponse,
 };
 
 type ModuleState = BranchState | CommitState | DeploymentState | ProjectState | ActivityState;
@@ -1012,7 +1012,7 @@ describe('reducers', () => {
         name: 'first-branch-foo',
         buildErrors: [],
         description: undefined,
-        commits: ['a998823423'],
+        commits: ['1497539235'],
         project: '1',
       },
     };
@@ -1026,14 +1026,17 @@ describe('reducers', () => {
       1: {
         id: '1',
         name: 'first-branch',
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
+        latestCommit: 'aacceeff02',
+        latestActivityTimestamp: 1470066681802,
         buildErrors: [],
         description: 'This is a branch description',
-        commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+        commits: ['aacceeff02'],
         project: '1',
       },
     };
 
-    const failedRequestObject: FetchError = {
+    const failedRequestAction: FetchError = {
       id: '1',
       type: Branches.actions.BRANCH.FAILURE,
       error: 'Error message in testing',
@@ -1041,15 +1044,64 @@ describe('reducers', () => {
       prettyError: 'Pretty error message in testing',
     };
 
-    testReducer(
+    // Start actual tests
+    testInitialState(reducer, {});
+
+    let expectedStateFromEmpty = expectedObjectsToStore;
+    let expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
+    let expectedStateWithExistingEntity: BranchState = {
+      1: Object.assign({}, expectedObjectsToStore['1'],
+        // Merge the commits from the existing one
+        { commits: (<any> expectedObjectsToStore['1']).commits.concat((<any> stateWithExistingEntity['1']).commits) }
+      ),
+      2: expectedObjectsToStore['2'],
+      3: expectedObjectsToStore['3'],
+      5: stateWithExistingEntity['5'],
+    };
+
+    testStoreEntities(
       reducer,
       storeAction,
-      expectedObjectsToStore,
+      expectedStateFromEmpty,
       stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
       stateWithExistingEntity,
+      expectedStateWithExistingEntity,
+    );
+
+    expectedStateFromEmpty = expectedSuccessfulRequestObject;
+    expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+    expectedStateWithExistingEntity = {
+      1: Object.assign({}, expectedSuccessfulRequestObject['1'],
+        { // Merge the commits from existing old one
+          commits: (<any> expectedSuccessfulRequestObject['1']).commits.concat(
+            (<any> stateWithExistingEntity['1']).commits
+          ),
+        }
+      ),
+      5: stateWithExistingEntity['5'],
+    };
+
+    testSuccessfulRequest(
+      reducer,
       successfulRequestAction,
-      expectedSuccessfulRequestObject,
-      failedRequestObject,
+      expectedStateFromEmpty,
+      stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
+      stateWithExistingEntity,
+      expectedStateWithExistingEntity,
+    );
+
+    expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
+    expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedStateFromEmpty);
+
+    testFailedRequest(
+      reducer,
+      failedRequestAction,
+      expectedStateFromEmpty,
+      stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
+      stateWithExistingEntity,
     );
   });
 
@@ -1062,39 +1114,39 @@ describe('reducers', () => {
     };
 
     const expectedObjectsToStore: CommitState = {
-      12354124: {
-        id: '12354124',
+      '01234567': {
+        id: '01234567',
         hash: '0123456789abcdef',
         author: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
-          timestamp: 1470066081802,
+          timestamp: 1469713881802,
         },
         committer: {
-          name: 'Ville Saarinen',
-          email: 'ville.saarinen@lucify.com',
-          timestamp: 1470066081802,
+          name: undefined,
+          email: 'juho@lucify.com',
+          timestamp: 1469800281802,
         },
-        message: 'Foobar is nice',
+        message: 'Try to do something else',
         deployment: undefined,
         description: undefined,
       },
-      2543452: {
-        id: '2543452',
+      a998823423: {
+        id: 'a998823423',
         hash: '0123456789abcdef',
         author: {
           name: undefined,
           email: 'juho@lucify.com',
-          timestamp: 1470055881802,
+          timestamp: 1469634681802,
         },
         committer: {
           name: undefined,
           email: 'juho@lucify.com',
-          timestamp: 1470055881802,
+          timestamp: 1469634681802,
         },
-        message: 'Barbar barr barb aearr',
-        deployment: undefined,
-        description: undefined,
+        message: 'Try to do something',
+        deployment: '8',
+        description: 'This is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases',
       },
     };
 
@@ -1302,6 +1354,9 @@ describe('reducers', () => {
         id: '1',
         name: 'first-project',
         description: 'This is the first-project description. It might not be set.',
+        branches: undefined,
+        latestActivityTimestamp: 1470066681802,
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
         activeUsers: [
           {
             name: 'Ville Saarinen',
@@ -1314,14 +1369,15 @@ describe('reducers', () => {
             timestamp: 1469800281802,
           },
         ],
-        branches: ['1', '2', '3'],
       },
       2: {
         id: '2',
         name: 'second-project',
         description: undefined,
+        branches: undefined,
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [],
-        branches: [],
       },
     };
 
@@ -1331,7 +1387,9 @@ describe('reducers', () => {
         name: 'Third project',
         description: undefined,
         activeUsers: [],
-        branches: [],
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
+        branches: undefined,
       },
     };
 
@@ -1340,25 +1398,29 @@ describe('reducers', () => {
         id: '3',
         name: 'Third project a',
         description: undefined,
+        branches: undefined,
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [
           {
             email: 'foo@bar.com',
             timestamp: 147001234532,
           },
         ],
-        branches: [],
       },
       1: {
         id: '1',
         name: 'first-project again',
         description: 'foobar',
+        branches: undefined,
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [
           {
             email: 'foo@bar.com',
             timestamp: 147001334532,
           },
         ],
-        branches: [],
       },
     };
 
@@ -1372,6 +1434,9 @@ describe('reducers', () => {
         id: '1',
         name: 'first-project',
         description: 'This is the first-project description. It might not be set.',
+        branches: undefined,
+        latestActivityTimestamp: 1470066681802,
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
         activeUsers: [
           {
             name: 'Ville Saarinen',
@@ -1384,7 +1449,6 @@ describe('reducers', () => {
             timestamp: 1469800281802,
           },
         ],
-        branches: ['1', '2', '3'],
       },
     };
 
