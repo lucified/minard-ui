@@ -158,16 +158,20 @@ export default function createSagas(api: Api) {
   const loadProject = createLoader(Projects.selectors.getProject, fetchProject, ensureProjectRelatedDataLoaded);
 
   function* ensureProjectRelatedDataLoaded(projectOrId: Project | string): IterableIterator<Effect | Effect[]> {
-    let project: Project;
+    let project: Project | FetchError | undefined;
 
     if (typeof projectOrId === 'string') {
-      project = <Project> (yield select(Projects.selectors.getProject, projectOrId));
+      project = <Project | FetchError | undefined> (yield select(Projects.selectors.getProject, projectOrId));
     } else {
       project = projectOrId;
     }
 
     if (!project) {
       throw new Error('No project found!');
+    }
+
+    if (isFetchError(project)) {
+      throw new Error('Unable to fetch project!');
     }
 
     if (project.latestSuccessfullyDeployedCommit) {
@@ -261,9 +265,9 @@ export default function createSagas(api: Api) {
     createLoader(Commits.selectors.getCommit, fetchCommit, ensureCommitRelatedDataLoaded);
 
   function* ensureCommitRelatedDataLoaded(id: string): IterableIterator<Effect> {
-    const commit = <Commit> (yield select(Commits.selectors.getCommit, id));
+    const commit = <Commit | undefined | FetchError> (yield select(Commits.selectors.getCommit, id));
 
-    if (commit.deployment) {
+    if (commit && !isFetchError(commit) && commit.deployment) {
       yield call(fetchIfMissing, 'deployments', commit.deployment);
     }
   }
@@ -301,7 +305,7 @@ export default function createSagas(api: Api) {
   }
 
   function* ensureCommitsForBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const branch = <Branch> (yield select(Branches.selectors.getBranch, id));
+    const branch = <Branch | undefined | FetchError> (yield select(Branches.selectors.getBranch, id));
     if (branch && !isFetchError(branch)) {
       const commits = <Commit[]> (yield branch.commits.map(id => call(fetchIfMissing, 'commits', id)));
       yield compact(commits.map(commit => commit.deployment))
