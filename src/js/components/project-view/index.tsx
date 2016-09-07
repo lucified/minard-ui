@@ -25,7 +25,7 @@ interface PassedProps {
 
 interface GeneratedStateProps {
   project?: Project | FetchError;
-  branches?: (Branch | FetchError)[] | FetchError;
+  branches?: (Branch | FetchError | undefined)[] | FetchError;
   activities?: Activity[];
   isLoadingActivities: boolean;
 }
@@ -109,7 +109,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     return { project, isLoadingActivities };
   }
 
-  let branches: (Branch | FetchError)[] | undefined | FetchError;
+  let branches: (Branch | FetchError | undefined)[] | undefined | FetchError;
   let branchIDs = project.branches;
   if (branchIDs) {
     if (isFetchError(branchIDs)) {
