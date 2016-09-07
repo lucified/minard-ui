@@ -12,6 +12,7 @@ export interface Branch {
   commits?: string[]; // If undefined, we have not fetched the relationship data yet
   latestSuccessfullyDeployedCommit?: string;
   latestCommit?: string;
+  latestActivityTimestamp?: number;
   minardJson?: {
     errors?: string[];
   };
@@ -50,6 +51,7 @@ export interface ResponseBranchElement {
   attributes: {
     name: string;
     description?: string;
+    'latest-activity-timestamp'?: string;
     'minard-json'?: {
       errors?: string[];
     };
