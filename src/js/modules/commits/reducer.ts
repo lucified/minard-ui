@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
+import { RequestFetchSuccessAction } from '../types';
 
 import { COMMIT, STORE_COMMITS } from './actions';
 import * as t from './types';
@@ -51,7 +52,7 @@ const responseToStateShape = (commits: t.ApiResponse) => {
 const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
   switch (action.type) {
     case COMMIT.SUCCESS:
-      const commitResonse = (<t.RequestCommitSuccessAction> action).response;
+      const commitResonse = (<RequestFetchSuccessAction<t.ResponseCommitElement>> action).response;
       if (commitResonse) {
         return Object.assign({}, state, responseToStateShape([commitResonse]));
       }

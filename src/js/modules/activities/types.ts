@@ -1,7 +1,6 @@
 import { Action } from 'redux';
 
-import { FetchCollectionError } from '../errors';
-import { RequestFetchActionCreators, RequestFetchCollectionActionCreators } from '../types';
+import { RequestFetchCollectionActionCreators, RequestFetchSpecificCollectionActionCreators } from '../types';
 
 // State
 export enum ActivityType {
@@ -27,44 +26,15 @@ export interface ActivityState {
 export interface LoadActivitiesAction extends Action {
 
 }
-
-export interface RequestActivitiesRequestAction extends Action {
-
-}
-
-export interface RequestActivitiesSuccessAction extends Action {
-  response: ResponseActivityElement[];
-}
-
 export type RequestActivitiesActionCreators =
-  RequestFetchCollectionActionCreators<
-    RequestActivitiesRequestAction,
-    ResponseActivityElement[],
-    RequestActivitiesSuccessAction,
-    FetchCollectionError
-  >;
+  RequestFetchCollectionActionCreators<ResponseActivityElement[]>;
 
 // ACTIVITIES_FOR_PROJECT
 export interface LoadActivitiesForProjectAction extends Action {
   id: string;
 }
-
-export interface RequestActivitiesForProjectRequestAction extends Action {
-  id: string;
-}
-
-export interface RequestActivitiesForProjectSuccessAction extends Action {
-  id: string;
-  response: ResponseActivityElement[];
-}
-
 export type RequestActivitiesForProjectActionCreators =
-  RequestFetchActionCreators<
-    RequestActivitiesForProjectRequestAction,
-    ResponseActivityElement[],
-    RequestActivitiesForProjectSuccessAction,
-    FetchCollectionError
-  >;
+  RequestFetchSpecificCollectionActionCreators<ResponseActivityElement[]>;
 
 // STORE_PROJECTS
 export interface StoreActivitiesAction extends Action {

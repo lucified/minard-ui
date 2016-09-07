@@ -1,6 +1,7 @@
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
+import { RequestFetchSuccessAction } from '../types';
 
 import { BRANCH, STORE_BRANCHES } from './actions';
 import * as t from './types';
@@ -40,7 +41,7 @@ const responseToStateShape = (branches: t.ApiResponse) => {
 const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
   switch (action.type) {
     case BRANCH.SUCCESS:
-      const branchResonse = (<t.RequestBranchSuccessAction> action).response;
+      const branchResonse = (<RequestFetchSuccessAction<t.ResponseBranchElement>> action).response;
       if (branchResonse) {
         return Object.assign({}, state, responseToStateShape([branchResonse]));
       }

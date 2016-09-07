@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
+import { RequestFetchSuccessAction } from '../types';
 
 import { DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
 import * as t from './types';
@@ -38,7 +39,7 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
   switch (action.type) {
     case DEPLOYMENT.SUCCESS:
-      const deploymentResponse = (<t.RequestDeploymentSuccessAction> action).response;
+      const deploymentResponse = (<RequestFetchSuccessAction<t.ResponseDeploymentElement>> action).response;
       if (deploymentResponse) {
         return Object.assign({}, state, responseToStateShape([deploymentResponse]));
       }

@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
+import { RequestDeleteSuccessAction, RequestFetchCollectionSuccessAction, RequestFetchSuccessAction } from '../types';
 
 import { ALL_PROJECTS, PROJECT, SEND_DELETE_PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
@@ -42,14 +43,14 @@ const responseToStateShape = (projects: t.ApiResponse) => {
 const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
   switch (action.type) {
     case ALL_PROJECTS.SUCCESS:
-      const projectsResponse = (<t.RequestAllProjectsSuccessAction> action).response;
+      const projectsResponse = (<RequestFetchCollectionSuccessAction<t.ResponseProjectElement[]>> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
         return Object.assign({}, state, responseToStateShape(projectsResponse));
       }
 
       return state;
     case PROJECT.SUCCESS:
-      const projectResponse = (<t.RequestProjectSuccessAction> action).response;
+      const projectResponse = (<RequestFetchSuccessAction<t.ResponseProjectElement>> action).response;
       if (projectResponse) {
         return Object.assign({}, state, responseToStateShape([projectResponse]));
       }
@@ -66,7 +67,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
     case SEND_DELETE_PROJECT.SUCCESS:
-      const { id: idToDelete } = (<t.SendDeleteProjectSuccessAction> action);
+      const { id: idToDelete } = (<RequestDeleteSuccessAction> action);
       if (state[idToDelete]) {
         return omit<t.ProjectState, t.ProjectState>(state, idToDelete);
       }

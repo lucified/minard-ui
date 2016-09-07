@@ -28,24 +28,7 @@ export interface DeploymentState {
 export interface LoadDeploymentAction extends Action {
   id: string;
 }
-
-// DEPLOYMENT
-export interface RequestDeploymentRequestAction extends Action {
-  id: string;
-}
-
-export interface RequestDeploymentSuccessAction extends Action {
-  id: string;
-  response: ResponseDeploymentElement;
-}
-
-export type RequestDeploymentActionCreators =
-  RequestFetchActionCreators<
-    RequestDeploymentRequestAction,
-    ResponseDeploymentElement,
-    RequestDeploymentSuccessAction,
-    FetchError
-  >;
+export type RequestDeploymentActionCreators = RequestFetchActionCreators<ResponseDeploymentElement>;
 
 // STORE_DEPLOYMENTS
 export interface StoreDeploymentsAction extends Action {
