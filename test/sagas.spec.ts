@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { ActionCreator } from 'redux';
 import { SubmissionError } from 'redux-form';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
@@ -50,10 +49,10 @@ describe('sagas', () => {
     name: string,
     actionType: string,
     iterator: IterableIterator<Effect | Effect[]>,
-    loader: (id: string) => IterableIterator<Effect>
+    loader: (action: any) => IterableIterator<Effect>
   ) => {
     describe(name, () => {
-      const action = { type: actionType };
+      const action = { type: actionType, id: 'id' };
 
       it(`forks a new saga on ${actionType}`, () => {
         expect(iterator.next().value).to.deep.equal(
@@ -347,9 +346,9 @@ describe('sagas', () => {
   });
 
   interface RequestActionCreators {
-    request: ActionCreator<any>;
-    success: ActionCreator<any>;
-    failure: ActionCreator<any>;
+    request: (id: string) => any;
+    success: (id: string, data: any) => any;
+    failure: (id: string, error: string, details?: string) => any;
   }
 
   const testFetcher = (
@@ -405,6 +404,7 @@ describe('sagas', () => {
 
       it('throws an error on failure', () => {
         const errorMessage = 'an error message';
+        const details = 'a detailed error message';
         const iterator = fetcher(id);
 
         expect(iterator.next().value).to.deep.equal(
@@ -415,8 +415,8 @@ describe('sagas', () => {
           call(apiCall, id)
         );
 
-        expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-          put(requestActionCreators.failure(id, errorMessage))
+        expect(iterator.next({ error: errorMessage, details }).value).to.deep.equal(
+          put(requestActionCreators.failure(id, errorMessage, details))
         );
 
         expect(iterator.next().done).to.equal(true);
@@ -474,7 +474,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        put(Activities.actions.FetchActivities.success(response.data))
+        put(Activities.actions.FetchActivities.success(<any> response.data))
       );
 
       const result = iterator.next();
@@ -500,7 +500,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Activities.actions.FetchActivities.success(response.data))
+        put(Activities.actions.FetchActivities.success(<any> response.data))
       );
 
       const result = iterator.next();
@@ -548,7 +548,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        put(Activities.actions.FetchActivitiesForProject.success(id, response.data))
+        put(Activities.actions.FetchActivitiesForProject.success(id, <any> response.data))
       );
 
       const result = iterator.next();
@@ -574,7 +574,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Activities.actions.FetchActivitiesForProject.success(id, response.data))
+        put(Activities.actions.FetchActivitiesForProject.success(id, <any> response.data))
       );
 
       const result = iterator.next();
@@ -620,7 +620,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        put(Projects.actions.FetchAllProjects.success(response.data))
+        put(Projects.actions.FetchAllProjects.success(<any> response.data))
       );
 
       const result = iterator.next();
@@ -646,7 +646,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Projects.actions.FetchAllProjects.success(response.data))
+        put(Projects.actions.FetchAllProjects.success(<any> response.data))
       );
 
       const result = iterator.next();
@@ -1059,11 +1059,11 @@ describe('sagas', () => {
       const commitsEntities = includedData.filter(entity => entity.type === 'commits');
 
       expect(iterator.next().value).to.deep.equal(
-        put(Deployments.actions.storeDeployments(deploymentsEntities))
+        put(Deployments.actions.storeDeployments(<any> deploymentsEntities))
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Commits.actions.storeCommits(commitsEntities))
+        put(Commits.actions.storeCommits(<any> commitsEntities))
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1093,7 +1093,7 @@ describe('sagas', () => {
       const iterator = sagas.createProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Projects.actions.SendCreateProject.request(name, description))
+        put(Projects.actions.SendCreateProject.request(name))
       );
     });
 
@@ -1110,13 +1110,13 @@ describe('sagas', () => {
     it('saves the returned project and generates a .success action if the submission succeeds', () => {
       const iterator = sagas.createProject(action);
       const projectId = '58';
-      const response = { data: { id: projectId } };
+      const response = { data: { id: projectId, type: 'projects' } };
 
       iterator.next();
       iterator.next();
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        put(Projects.actions.FetchProject.success(projectId, response.data))
+        put(Projects.actions.FetchProject.success(projectId, <any> response.data))
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -1254,7 +1254,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        put(Projects.actions.FetchProject.success(id, response.data))
+        put(Projects.actions.FetchProject.success(id, <any> response.data))
       );
 
       expect(iterator.next().value).to.deep.equal(

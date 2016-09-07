@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { FetchCollectionError } from '../errors';
-import { RequestActionCreators } from '../types';
+import { RequestFetchActionCreators, RequestFetchCollectionActionCreators } from '../types';
 
 // State
 export enum ActivityType {
@@ -37,8 +37,9 @@ export interface RequestActivitiesSuccessAction extends Action {
 }
 
 export type RequestActivitiesActionCreators =
-  RequestActionCreators<
+  RequestFetchCollectionActionCreators<
     RequestActivitiesRequestAction,
+    ResponseActivityElement[],
     RequestActivitiesSuccessAction,
     FetchCollectionError
   >;
@@ -58,8 +59,9 @@ export interface RequestActivitiesForProjectSuccessAction extends Action {
 }
 
 export type RequestActivitiesForProjectActionCreators =
-  RequestActionCreators<
+  RequestFetchActionCreators<
     RequestActivitiesForProjectRequestAction,
+    ResponseActivityElement[],
     RequestActivitiesForProjectSuccessAction,
     FetchCollectionError
   >;

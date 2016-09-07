@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { FetchError } from '../errors';
-import { ApiUser, RequestActionCreators, User } from '../types';
+import { ApiUser, RequestFetchActionCreators, User } from '../types';
 
 type DeploymentStatus = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
 
@@ -40,7 +40,12 @@ export interface RequestDeploymentSuccessAction extends Action {
 }
 
 export type RequestDeploymentActionCreators =
-  RequestActionCreators<RequestDeploymentRequestAction, RequestDeploymentSuccessAction, FetchError>;
+  RequestFetchActionCreators<
+    RequestDeploymentRequestAction,
+    ResponseDeploymentElement,
+    RequestDeploymentSuccessAction,
+    FetchError
+  >;
 
 // STORE_DEPLOYMENTS
 export interface StoreDeploymentsAction extends Action {

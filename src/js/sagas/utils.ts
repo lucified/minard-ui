@@ -1,4 +1,4 @@
-import { ActionCreator } from 'redux';
+import { Action, ActionCreator } from 'redux';
 import { Effect, call, fork, put, select } from 'redux-saga/effects';
 
 import { ApiEntity, ApiEntityTypeString, ApiPromise } from '../api/types';
@@ -7,13 +7,14 @@ import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { FetchError } from '../modules/errors';
 import Projects, { Project } from '../modules/projects';
+import { RequestFetchActionCreators } from '../modules/types';
 import { StateTree } from '../reducers';
 
 type EntityType = Commit | Project | Deployment | Branch | FetchError;
-interface RequestActionCreators {
-  request: ActionCreator<any>;
-  success: ActionCreator<any>;
-  failure: ActionCreator<any>;
+
+interface FetchAction {
+  type: string;
+  id: string;
 }
 
 export const createLoader = (
@@ -21,7 +22,7 @@ export const createLoader = (
   fetcher: (id: string) => IterableIterator<Effect>,
   dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>
 ) => {
-  return function* (action: any): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (action: FetchAction): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     const id: string = action.id;
     const existingEntity = yield select(selector, id);
     let fetchSucceeded: boolean = false;
@@ -36,14 +37,14 @@ export const createLoader = (
   };
 };
 
-export const createFetcher = (
-  requestActionCreators: RequestActionCreators,
+export const createFetcher = <R extends Action, ResponseEntity, S extends Action, F extends Action>(
+  requestActionCreators: RequestFetchActionCreators<R, ResponseEntity, S, F>,
   apiFetchFunction: (id: string) => ApiPromise
 ) => {
   return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.request(id));
 
-    const { response, error } = yield call(apiFetchFunction, id);
+    const { response, error, details } = yield call(apiFetchFunction, id);
 
     if (response) {
       if (response.included) {
@@ -54,7 +55,7 @@ export const createFetcher = (
 
       return true;
     } else {
-      yield put(requestActionCreators.failure(id, error));
+      yield put(requestActionCreators.failure(id, error, details));
 
       return false;
     }

@@ -28,7 +28,7 @@ export const createStoreAndRender = (
     const branch = (result && result[3]) || null;
     const showAll = /\/all$/.exec(location.pathname);
 
-    store.dispatch(Selected.actions.setSelected(project, branch, showAll));
+    store.dispatch(Selected.actions.setSelected(project, branch, !!showAll));
   });
 
   ReactDOM.render(

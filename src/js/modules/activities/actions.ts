@@ -1,5 +1,3 @@
-import { ActionCreator } from 'redux';
-
 import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
 
@@ -17,12 +15,12 @@ export const FetchActivities: t.RequestActivitiesActionCreators = {
 };
 
 export const LOAD_ACTIVITIES = 'ACTIVITIES/LOAD_ACTIVITIES';
-export const loadActivities: ActionCreator<t.LoadActivitiesAction> = () => ({
+export const loadActivities = (): t.LoadActivitiesAction => ({
   type: LOAD_ACTIVITIES,
 });
 
 export const ACTIVITIES_FOR_PROJECT = createRequestTypes('ACTIVITIES/ACTIVITIES_FOR_PROJECT');
-export const FetchActivitiesForProject: t.RequestActivitiesActionCreators = {
+export const FetchActivitiesForProject: t.RequestActivitiesForProjectActionCreators = {
   request: (id) => ({ type: ACTIVITIES_FOR_PROJECT.REQUEST, id }),
   success: (id, response) => ({ type: ACTIVITIES_FOR_PROJECT.SUCCESS, id, response }),
   failure: (id, error, details) => ({
@@ -35,13 +33,13 @@ export const FetchActivitiesForProject: t.RequestActivitiesActionCreators = {
 };
 
 export const LOAD_ACTIVITIES_FOR_PROJECT = 'ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT';
-export const loadActivitiesForProject: ActionCreator<t.LoadActivitiesForProjectAction> = (id: string) => ({
+export const loadActivitiesForProject = (id: string): t.LoadActivitiesForProjectAction => ({
   type: LOAD_ACTIVITIES_FOR_PROJECT,
   id,
 });
 
 export const STORE_ACTIVITIES = 'ACTIVITIES/STORE_ACTIVITIES';
-export const storeActivities: ActionCreator<t.StoreActivitiesAction> = (activities) => ({
+export const storeActivities = (activities: t.ResponseActivityElement[]): t.StoreActivitiesAction => ({
   type: STORE_ACTIVITIES,
   entities: activities,
 });

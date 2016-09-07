@@ -14,7 +14,7 @@ interface GenericError {
   // The original error message
   error: string;
   // Detailed error message
-  details: string;
+  details?: string;
   // The error to display to the user
   prettyError: string;
 }
