@@ -5,6 +5,7 @@
     "attributes": {
       "name": "first-branch",
       "description": "This is a branch description",
+      "latest-activity-timestamp": "2016-08-01T15:51:21.802Z",
       "minard-json": {
         "errors": []
       }
