@@ -90,6 +90,13 @@ describe('sagas', () => {
   );
 
   testWatcher(
+    'watchForLoadBranchesForProject',
+    Branches.actions.LOAD_BRANCHES_FOR_PROJECT,
+    sagas.watchForLoadBranchesForProject(),
+    sagas.loadBranchesForProject,
+  );
+
+  testWatcher(
     'watchForLoadProject',
     Projects.actions.LOAD_PROJECT,
     sagas.watchForLoadProject(),
@@ -101,6 +108,13 @@ describe('sagas', () => {
     Commits.actions.LOAD_COMMIT,
     sagas.watchForLoadCommit(),
     sagas.loadCommit,
+  );
+
+  testWatcher(
+    'watchForLoadCommitsForBranch',
+    Commits.actions.LOAD_COMMITS_FOR_BRANCH,
+    sagas.watchForLoadCommitsForBranch(),
+    sagas.loadCommitsForBranch,
   );
 
   testWatcher(
@@ -354,6 +368,14 @@ describe('sagas', () => {
     });
   });
 
+  describe('loadBranchesForProject', () => {
+    it('TODO');
+  });
+
+  describe('loadCommitsForBranch', () => {
+    it('TODO');
+  });
+
   interface RequestActionCreators {
     request: (id: string) => any;
     success: (id: string, data: any) => any;
@@ -400,13 +422,19 @@ describe('sagas', () => {
           call(apiCall, id)
         );
 
-        expect(iterator.next({ response }).value).to.deep.equal(
-          call(sagas.storeIncludedEntities, response.included)
-        );
+        if (response.included && response.included.length > 0) {
+          expect(iterator.next({ response }).value).to.deep.equal(
+            call(sagas.storeIncludedEntities, response.included)
+          );
 
-        expect(iterator.next().value).to.deep.equal(
-          put(requestActionCreators.success(id, response.data))
-        );
+          expect(iterator.next().value).to.deep.equal(
+            put(requestActionCreators.success(id, response.data))
+          );
+        } else {
+          expect(iterator.next({ response }).value).to.deep.equal(
+            put(requestActionCreators.success(id, response.data))
+          );
+        }
 
         expect(iterator.next().done).to.equal(true);
       });
@@ -638,32 +666,6 @@ describe('sagas', () => {
       expect(result.done).to.equal(true);
     });
 
-    it('fetches and stores included data', () => {
-      const response = testData.allProjectsResponse;
-      const iterator = sagas.fetchAllProjects();
-
-      expect(iterator.next().value).to.deep.equal(
-        put(Projects.actions.FetchAllProjects.request())
-      );
-
-      expect(iterator.next().value).to.deep.equal(
-        call(api.Project.fetchAll)
-      );
-
-      expect(iterator.next({ response }).value).to.deep.equal(
-        call(sagas.storeIncludedEntities, response.included)
-      );
-
-      expect(iterator.next().value).to.deep.equal(
-        put(Projects.actions.FetchAllProjects.success(<any> response.data))
-      );
-
-      const result = iterator.next();
-
-      expect(result.value).to.equal(true);
-      expect(result.done).to.equal(true);
-    });
-
     it('throws an error on failure', () => {
       const errorMessage = 'an error message';
       const iterator = sagas.fetchAllProjects();
@@ -687,14 +689,23 @@ describe('sagas', () => {
     });
   });
 
+  describe('fetchBranchesForProject', () => {
+    it('TODO');
+  });
+
+  describe('fetchCommitsForBranch', () => {
+    it('TODO');
+  });
+
   describe('ensureActivitiesRelatedDataLoaded', () => {
     it('makes sure branches and first deployments exist for all projects', () => {
       const iterator = sagas.ensureActivitiesRelatedDataLoaded();
+      // TODO
       const activities = [
         {
           id: '1',
           type: ActivityType.Deployment,
-          deployment: '7',
+          commit: '7',
           branch: '1',
           project: '1',
           timestamp: 1470131481802,
@@ -702,14 +713,14 @@ describe('sagas', () => {
         {
           id: '2',
           type: ActivityType.Deployment,
-          deployment: '8',
+          commit: '8',
           branch: '2',
           project: '1',
           timestamp: 1470045081802,
         },
       ];
 
-      const deployments = [
+      const commits = [
         {
           id: '7',
           url: '#',
@@ -719,7 +730,6 @@ describe('sagas', () => {
             email: 'ville.saarinen@lucify.com',
             timestamp: 1470131481802,
           },
-
         },
         {
           id: '8',
@@ -730,7 +740,6 @@ describe('sagas', () => {
             email: 'juho@lucify.com',
             timestamp: 1470131481902,
           },
-
         },
       ];
 
@@ -740,12 +749,12 @@ describe('sagas', () => {
 
       expect(iterator.next(activities).value).to.deep.equal(
         [
-          call(sagas.fetchIfMissing, 'deployments', '7'),
-          call(sagas.fetchIfMissing, 'deployments', '8'),
+          call(sagas.fetchIfMissing, 'commits', '7'),
+          call(sagas.fetchIfMissing, 'commits', '8'),
         ]
       );
 
-      expect(iterator.next(deployments).value).to.deep.equal(
+      expect(iterator.next(commits).value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'commits', 'aacceeff02'),
           call(sagas.fetchIfMissing, 'commits', 'aacceeff03'),
@@ -810,47 +819,29 @@ describe('sagas', () => {
       const project: Project = {
         id: '1',
         name: 'name',
-        branches: ['1', '2', '3'],
+        latestActivityTimestamp: 123456789,
+        latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
       };
-      const branches: Branch[] = [
-        {
-          id: 'a',
-          name: 'brancha',
-          project: '1',
-          commits: [],
-        },
-        {
-          id: 'b',
-          name: 'branchb',
-          project: '1',
-          commits: [],
-        },
-        {
-          id: 'c',
-          name: 'branchc',
-          project: '1',
-          commits: [],
-        },
-      ];
+      const commit: Commit = {
+        id: 'abc',
+        message: '',
+        author: { email: '', timestamp: 1 },
+        committer: { email: '', timestamp: 1 },
+        hash: 'abc',
+        deployment: 'foo',
+      };
 
       expect(iterator.next().value).to.deep.equal(
         select(Projects.selectors.getProject, id)
       );
 
       expect(iterator.next(project).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'branches', '1'),
-          call(sagas.fetchIfMissing, 'branches', '2'),
-          call(sagas.fetchIfMissing, 'branches', '3'),
-        ]
+        call(sagas.fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit)
       );
 
-      expect(iterator.next(branches).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'deployments', 'd1'),
-          call(sagas.fetchIfMissing, 'deployments', 'd2'),
-        ]
+      expect(iterator.next(commit).value).to.deep.equal(
+        call(sagas.fetchIfMissing, 'deployments', commit.deployment)
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -860,46 +851,28 @@ describe('sagas', () => {
       const project: Project = {
         id: '1',
         name: 'name',
-        branches: ['1', '2', '3'],
+        latestActivityTimestamp: 123456789,
+        latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
       };
 
       const iterator = sagas.ensureProjectRelatedDataLoaded(project);
 
-      const branches: Branch[] = [
-        {
-          id: 'a',
-          name: 'brancha',
-          project: '1',
-          commits: [],
-        },
-        {
-          id: 'b',
-          name: 'branchb',
-          project: '1',
-          commits: [],
-        },
-        {
-          id: 'c',
-          name: 'branchc',
-          project: '1',
-          commits: [],
-        },
-      ];
+      const commit: Commit = {
+        id: 'abc',
+        message: '',
+        author: { email: '', timestamp: 1 },
+        committer: { email: '', timestamp: 1 },
+        hash: 'abc',
+        deployment: 'foo',
+      };
 
-      expect(iterator.next().value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'branches', '1'),
-          call(sagas.fetchIfMissing, 'branches', '2'),
-          call(sagas.fetchIfMissing, 'branches', '3'),
-        ]
+      expect(iterator.next(project).value).to.deep.equal(
+        call(sagas.fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit)
       );
 
-      expect(iterator.next(branches).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'deployments', 'd1'),
-          call(sagas.fetchIfMissing, 'deployments', 'd2'),
-        ]
+      expect(iterator.next(commit).value).to.deep.equal(
+        call(sagas.fetchIfMissing, 'deployments', commit.deployment)
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -913,8 +886,18 @@ describe('sagas', () => {
       const branch: Branch = {
         id: 'a',
         name: 'brancha',
+        latestCommit: 'lc',
+        latestSuccessfullyDeployedCommit: 'lsdc',
         project: '1',
-        commits: ['c1', 'c2', 'c3']
+        commits: ['lc', 'lsdc'],
+      };
+      const latestSuccessfullyDeployedCommit: Commit = {
+        id: 'abc',
+        message: '',
+        author: { email: '', timestamp: 1 },
+        committer: { email: '', timestamp: 1 },
+        hash: 'abc',
+        deployment: 'foo',
       };
 
       expect(iterator.next().value).to.deep.equal(
@@ -926,48 +909,27 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'deployments', 'd1'),
-        ]
+        call(sagas.fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit)
+      );
+
+      expect(iterator.next(latestSuccessfullyDeployedCommit).value).to.deep.equal(
+        call(sagas.fetchIfMissing, 'deployments', latestSuccessfullyDeployedCommit.deployment)
       );
 
       expect(iterator.next().value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'commits', 'c1'),
-          call(sagas.fetchIfMissing, 'commits', 'c2'),
-          call(sagas.fetchIfMissing, 'commits', 'c3'),
-        ]
+        call(sagas.fetchIfMissing, 'commits', branch.latestCommit)
       );
 
       expect(iterator.next().done).to.equal(true);
     });
   });
 
+  describe('ensureBranchesForProjectRelatedDataLoaded', () => {
+    it('TODO');
+  });
+
   describe('ensureDeploymentRelatedDataLoaded', () => {
-    it('makes sure commit exists for the deployment', () => {
-      const id = '1';
-      const iterator = sagas.ensureDeploymentRelatedDataLoaded(id);
-      const deployment: Deployment = {
-        id: 'a',
-        status: 'success',
-        url: '',
-        screenshot: '',
-        creator: {
-          email: '',
-          timestamp: 1,
-        },
-      };
-
-      expect(iterator.next().value).to.deep.equal(
-        select(Deployments.selectors.getDeployment, id)
-      );
-
-      expect(iterator.next(deployment).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'commits', 'c1')
-      );
-
-      expect(iterator.next().done).to.equal(true);
-    });
+    // Nothing to do
   });
 
   describe('ensureCommitRelatedDataLoaded', () => {
@@ -999,6 +961,10 @@ describe('sagas', () => {
 
       expect(iterator.next().done).to.equal(true);
     });
+  });
+
+  describe('ensureCommitsForBranchRelatedDataLoaded', () => {
+    it('TODO');
   });
 
   describe('fetchIfMissing', () => {
