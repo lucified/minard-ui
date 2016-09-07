@@ -1,4 +1,4 @@
-import { Action, ActionCreator } from 'redux';
+import { ActionCreator } from 'redux';
 import { Effect, call, fork, put, select } from 'redux-saga/effects';
 
 import { ApiEntity, ApiEntityTypeString, ApiPromise } from '../api/types';
@@ -37,8 +37,8 @@ export const createLoader = (
   };
 };
 
-export const createFetcher = <R extends Action, ResponseEntity, S extends Action, F extends Action>(
-  requestActionCreators: RequestFetchActionCreators<R, ResponseEntity, S, F>,
+export const createFetcher = <ResponseEntity>(
+  requestActionCreators: RequestFetchActionCreators<ResponseEntity>,
   apiFetchFunction: (id: string) => ApiPromise
 ) => {
   return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions

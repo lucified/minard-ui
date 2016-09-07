@@ -23,24 +23,7 @@ export interface CommitState {
 export interface LoadCommitAction extends Action {
   id: string;
 }
-
-// COMMIT
-export interface RequestCommitRequestAction extends Action {
-  id: string;
-}
-
-export interface RequestCommitSuccessAction extends Action {
-  id: string;
-  response: ResponseCommitElement;
-}
-
-export type RequestCommitActionCreators =
-  RequestFetchActionCreators<
-    RequestCommitRequestAction,
-    ResponseCommitElement,
-    RequestCommitSuccessAction,
-    FetchError
-  >;
+export type RequestCommitActionCreators = RequestFetchActionCreators<ResponseCommitElement>;
 
 // STORE_COMMITS
 export interface StoreCommitsAction extends Action {

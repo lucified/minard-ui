@@ -22,24 +22,7 @@ export interface BranchState {
 export interface LoadBranchAction extends Action {
   id: string;
 }
-
-// BRANCH
-export interface RequestBranchRequestAction extends Action {
-  id: string;
-}
-
-export interface RequestBranchSuccessAction extends Action {
-  id: string;
-  response: ResponseBranchElement;
-}
-
-export type RequestBranchActionCreators =
-  RequestFetchActionCreators<
-    RequestBranchRequestAction,
-    ResponseBranchElement,
-    RequestBranchSuccessAction,
-    FetchError
-  >;
+export type RequestBranchActionCreators = RequestFetchActionCreators<ResponseBranchElement>;
 
 // STORE_BRANCHES
 export interface StoreBranchesAction extends Action {

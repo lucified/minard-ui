@@ -1,6 +1,8 @@
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
+import { RequestFetchSuccessAction } from '../types';
+
 import { ACTIVITIES, ACTIVITIES_FOR_PROJECT, STORE_ACTIVITIES } from './actions';
 import * as t from './types';
 
@@ -44,7 +46,7 @@ const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState
   switch (action.type) {
     case ACTIVITIES_FOR_PROJECT.SUCCESS:
     case ACTIVITIES.SUCCESS:
-      const activitiesResponse = (<t.RequestActivitiesSuccessAction> action).response;
+      const activitiesResponse = (<RequestFetchSuccessAction<t.ResponseActivityElement[]>> action).response;
       if (activitiesResponse && activitiesResponse.length > 0) {
         return Object.assign({}, state, responseToStateShape(activitiesResponse));
       }

@@ -9,7 +9,7 @@ import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
-import Projects, { Project, LoadAllProjectsAction, DeleteProjectAction } from '../modules/projects';
+import Projects, { Project, DeleteProjectAction } from '../modules/projects';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
