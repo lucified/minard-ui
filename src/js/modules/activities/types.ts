@@ -12,7 +12,7 @@ export interface Activity {
   id: string;
   type: ActivityType;
   timestamp: number;
-  deployment: string;
+  commit: string;
   branch: string;
   project: string;
 }
@@ -42,8 +42,8 @@ export interface StoreActivitiesAction extends Action {
 }
 
 // API response
-interface ResponseDeploymentReference {
-  type: "deployments";
+interface ResponseCommitReference {
+  type: "commits";
   id: string;
 }
 
@@ -65,8 +65,8 @@ export interface ResponseActivityElement {
     timestamp: string;
   };
   relationships: {
-    deployment: {
-      data: ResponseDeploymentReference;
+    commit: {
+      data: ResponseCommitReference;
     };
     branch: {
       data: ResponseBranchReference;

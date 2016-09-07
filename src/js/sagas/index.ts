@@ -76,10 +76,10 @@ export default function createSagas(api: Api) {
 
   function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
     const activities = <Activity[]> (yield select(Activities.selectors.getActivities));
-    const deployments =
-      <Deployment[]> (yield activities.map(activity => call(fetchIfMissing, 'deployments', activity.deployment)));
+    const commits =
+      <Commit[]> (yield activities.map(activity => call(fetchIfMissing, 'commits', activity.commit)));
     // TODO: check activity type and fetch e.g. comments
-    yield deployments.map(deployment => call(fetchIfMissing, 'commits', deployment.commit));
+    yield commits.map(commit => call(fetchIfMissing, 'deployments', commit.deployment));
     yield uniq(activities.map(activity => activity.project)).map(project => call(fetchIfMissing, 'projects', project));
     yield uniq(activities.map(activity => activity.branch)).map(branch => call(fetchIfMissing, 'branches', branch));
   }

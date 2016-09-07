@@ -36,7 +36,7 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     const { loadAllProjects, loadActivities } = this.props;
 
     loadAllProjects();
-    loadActivities();
+    //loadActivities();
   }
 
   public render() {
@@ -55,7 +55,7 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     return (
       <div>
         <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={6} />
-        <ActivitySection activities={activities} isLoading={isLoadingAllActivities} />
+        {/*<ActivitySection activities={activities} isLoading={isLoadingAllActivities} />*/}
       </div>
     );
   }
