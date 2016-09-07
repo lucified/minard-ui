@@ -956,22 +956,42 @@ describe('reducers', () => {
         id: '1',
         name: 'first-branch',
         description: 'This is a branch description',
-        commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
+        latestCommit: 'aacceeff02',
+        latestActivityTimestamp: 1470066681802,
+        buildErrors: [],
+        commits: ['aacceeff02'],
         project: '1',
       },
       2: {
         id: '2',
         name: 'second-branch',
         description: undefined,
-        commits: ['aacd00f02', 'a998823423'],
+        latestSuccessfullyDeployedCommit: 'a998823423',
+        latestCommit: '01234567',
+        latestActivityTimestamp: 1469634681802,
+        buildErrors: [],
+        commits: ['01234567', 'a998823423'],
+        project: '1',
+      },
+      3: {
+        id: '3',
+        description: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
+        latestCommit: undefined,
+        latestActivityTimestamp: undefined,
+        buildErrors: [],
+        name: 'third-long-name-branch',
+        commits: [],
         project: '1',
       },
     };
 
     const stateWithoutExistingEntity: BranchState = {
-      3: {
-        id: '3',
-        name: 'third-branch',
+      4: {
+        id: '4',
+        name: 'fourth-branch',
+        buildErrors: [],
         description: undefined,
         commits: ['aacd00f03', 'a998833433'],
         project: '1',
@@ -979,16 +999,18 @@ describe('reducers', () => {
     };
 
     const stateWithExistingEntity: BranchState = {
-      3: {
-        id: '3',
-        name: 'third-branch-foo',
+      5: {
+        id: '5',
+        name: 'fifth-branch-foo',
+        buildErrors: [],
         description: undefined,
-        commits: ['aacd00f03', 'a998833433'],
+        commits: ['125124235', '566342463'],
         project: '1',
       },
       1: {
         id: '1',
         name: 'first-branch-foo',
+        buildErrors: [],
         description: undefined,
         commits: ['a998823423'],
         project: '1',
@@ -1004,6 +1026,7 @@ describe('reducers', () => {
       1: {
         id: '1',
         name: 'first-branch',
+        buildErrors: [],
         description: 'This is a branch description',
         commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
         project: '1',

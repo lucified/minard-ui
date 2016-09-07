@@ -13,9 +13,7 @@ export interface Branch {
   latestSuccessfullyDeployedCommit?: string;
   latestCommit?: string;
   latestActivityTimestamp?: number;
-  minardJson?: {
-    errors?: string[];
-  };
+  buildErrors: string[];
 }
 
 export interface BranchState {

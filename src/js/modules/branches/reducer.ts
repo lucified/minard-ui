@@ -41,13 +41,18 @@ const createBranchObject = (branch: t.ResponseBranchElement, state: t.BranchStat
   const latestActivityTimestampString = branch.attributes['latest-activity-timestamp'];
   const latestActivityTimestamp = latestActivityTimestampString &&
     moment(latestActivityTimestampString).valueOf();
+  let errors: string[] = [];
+  if (branch.attributes['minard-json'] && branch.attributes['minard-json']!.errors &&
+    branch.attributes['minard-json']!.errors!.length > 0) {
+    errors = errors.concat(branch.attributes['minard-json']!.errors!);
+  }
 
   return {
     id: branch.id,
     name: branch.attributes.name,
     description: branch.attributes.description,
     project: branch.relationships.project.data.id,
-    minardJson: branch.attributes['minard-json'],
+    buildErrors: errors,
     latestActivityTimestamp,
     commits,
     latestCommit,

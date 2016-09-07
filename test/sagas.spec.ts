@@ -1105,6 +1105,7 @@ describe('sagas', () => {
         name: 'brancha',
         latestCommit: 'lc',
         latestSuccessfullyDeployedCommit: 'lsdc',
+        buildErrors: [],
         project: '1',
         commits: ['lc', 'lsdc'],
       };
@@ -1149,6 +1150,7 @@ describe('sagas', () => {
           id: 'b1',
           latestSuccessfullyDeployedCommit: 'b1sc',
           project: projectId,
+          buildErrors: [],
           name: 'branch-1',
           latestCommit: 'b1lc',
           commits: ['b1lc', 'b1sc'],
@@ -1157,6 +1159,7 @@ describe('sagas', () => {
           id: 'b2',
           latestSuccessfullyDeployedCommit: 'b2sc',
           project: projectId,
+          buildErrors: [],
           name: 'branch-2',
           latestCommit: 'b2sc',
           commits: ['b2sc'],
@@ -1164,6 +1167,7 @@ describe('sagas', () => {
         {
           id: 'b3',
           project: projectId,
+          buildErrors: [],
           name: 'branch-3',
           commits: [],
         },
@@ -1285,6 +1289,7 @@ describe('sagas', () => {
       const branch: Branch = {
         id: 'b',
         project: '1',
+        buildErrors: [],
         name: 'branchname',
         commits: ['c1', 'c2', 'c3'],
       };
