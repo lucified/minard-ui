@@ -1,6 +1,6 @@
 import { browserHistory } from 'react-router';
 
-import * as api from './api';
+import api from './api';
 import configureStore from './configure-store.production';
 import { createStoreAndRender } from './entrypoint';
 
