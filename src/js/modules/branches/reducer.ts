@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
@@ -16,13 +17,32 @@ const createBranchObject = (branch: t.ResponseBranchElement, state: t.BranchStat
   if (existingBranch && !isFetchError(existingBranch)) {
     commits = existingBranch.commits;
   }
+  const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = branch.relationships &&
+    branch.relationships['latest-successfully-deployed-commit'];
+  const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
+    latestSuccessfullyDeployedCommitObject.data &&
+    latestSuccessfullyDeployedCommitObject.data.id;
+
+  const latestCommitObject: { data?: { id: string }} | undefined = branch.relationships &&
+    branch.relationships['latest-commit'];
+  const latestCommit: string | undefined = latestCommitObject &&
+    latestCommitObject.data &&
+    latestCommitObject.data.id;
+
+  const latestActivityTimestampString = branch.attributes['latest-activity-timestamp'];
+  const latestActivityTimestamp = latestActivityTimestampString &&
+    moment(latestActivityTimestampString).valueOf();
 
   return {
     id: branch.id,
     name: branch.attributes.name,
     description: branch.attributes.description,
     project: branch.relationships.project.data.id,
+    minardJson: branch.attributes['minard-json'],
+    latestActivityTimestamp,
     commits,
+    latestCommit,
+    latestSuccessfullyDeployedCommit,
   };
 };
 

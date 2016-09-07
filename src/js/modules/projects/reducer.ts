@@ -19,6 +19,16 @@ const createProjectObject = (project: t.ResponseProjectElement, state: t.Project
     branches = existingProject.branches;
   }
 
+  const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = project.relationships &&
+    project.relationships['latest-successfully-deployed-commit'];
+  const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
+    latestSuccessfullyDeployedCommitObject.data &&
+    latestSuccessfullyDeployedCommitObject.data.id;
+
+  const latestActivityTimestampString = project.attributes['latest-activity-timestamp'];
+  const latestActivityTimestamp = latestActivityTimestampString &&
+    moment(latestActivityTimestampString).valueOf();
+
   return {
     id: project.id,
     name: project.attributes.name,
@@ -29,6 +39,8 @@ const createProjectObject = (project: t.ResponseProjectElement, state: t.Project
       email: user.email,
       timestamp: moment(user.timestamp).valueOf(),
     })),
+    latestActivityTimestamp,
+    latestSuccessfullyDeployedCommit,
   };
 };
 
