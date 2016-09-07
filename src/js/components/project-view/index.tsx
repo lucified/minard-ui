@@ -19,6 +19,7 @@ const styles = require('./index.scss');
 interface PassedProps {
   params: {
     projectId: string;
+    show?: string;
   };
 }
 
@@ -66,13 +67,21 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       );
     }
 
-    const { branches, activities, isLoadingActivities } = this.props;
+    const { branches, activities, isLoadingActivities, params: { show } } = this.props;
+
+    if (show === 'all') {
+      return (
+        <div>
+          <ProjectBranches project={project} branches={branches!} showAll />
+        </div>
+      );
+    }
 
     return (
       <div>
         <ProjectSettingsDialog project={project} />
         <ProjectHeader project={project} />
-        <ProjectBranches branches={branches!} />
+        <ProjectBranches project={project} branches={branches!} count={3} />
         <ProjectActivity activities={activities!} isLoading={isLoadingActivities} />
       </div>
     );

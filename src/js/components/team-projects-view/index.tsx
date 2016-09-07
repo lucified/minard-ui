@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -9,7 +8,6 @@ import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
-import MinardLink from '../common/minard-link';
 import ActivitySection from './activity-section';
 import ProjectsSection from './projects-section';
 
@@ -43,9 +41,8 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
 
   public render() {
     const { projects, activities, isLoadingAllActivities, isLoadingProjects, params: { show } } = this.props;
-    const projectCount = projects.length;
 
-    if (isLoadingProjects && projectCount === 0) {
+    if (isLoadingProjects && projects.length === 0) {
       return <LoadingIcon className={styles.loading} center />;
     }
 
@@ -58,17 +55,6 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     return (
       <div>
         <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={6} />
-        {(projectCount > 6) && (
-          <div className="container">
-            <div className="row end-xs">
-              <div className={classNames('col-xs-12', styles['show-all-projects-section'])}>
-                <MinardLink className={styles['show-all-projects-link']} showAll homepage>
-                  Show all projects ({projectCount})
-                </MinardLink>
-              </div>
-            </div>
-          </div>
-        )}
         <ActivitySection activities={activities} isLoading={isLoadingAllActivities} />
       </div>
     );
