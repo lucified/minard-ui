@@ -36,6 +36,12 @@ export interface LoadBranchesForProjectAction extends Action {
 export type RequestBranchesForProjectActionCreators =
   RequestFetchSpecificCollectionActionCreators<ResponseBranchElement[]>;
 
+// ADD_COMMITS_TO_BRANCH
+export interface AddCommitsToBranchAction extends Action {
+  id: string;
+  commits: string[];
+}
+
 // STORE_BRANCHES
 export interface StoreBranchesAction extends Action {
   entities: ResponseBranchElement[];

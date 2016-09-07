@@ -47,6 +47,7 @@ export const storeProjects = (projects: t.ResponseProjectElement[]): t.StoreProj
   entities: projects,
 });
 
+// Add branches to existing project
 export const ADD_BRANCHES_TO_PROJECT = 'PROJECTS/ADD_BRANCHES_TO_PROJECT';
 export const addBranchesToProject = (id: string, branchIds: string[]): t.AddBranchesToProjectAction => ({
   type: ADD_BRANCHES_TO_PROJECT,

@@ -1,10 +1,11 @@
+import * as uniq from 'lodash/uniq';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
 import { RequestFetchSpecificCollectionSuccessAction, RequestFetchSuccessAction } from '../types';
 
-import { BRANCH, BRANCHES_FOR_PROJECT, STORE_BRANCHES } from './actions';
+import { ADD_COMMITS_TO_BRANCH, BRANCH, BRANCHES_FOR_PROJECT, STORE_BRANCHES } from './actions';
 import * as t from './types';
 
 const initialState: t.BranchState = {};
@@ -92,6 +93,17 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       if (branches && branches.length > 0) {
         return Object.assign({}, state, responseToStateShape(branches, state));
       }
+      return state;
+    case ADD_COMMITS_TO_BRANCH:
+      const commitsAction = <t.AddCommitsToBranchAction> action;
+      const branch = state[commitsAction.id];
+      if (branch && !isFetchError(branch)) {
+        // Note: the commits list might not be sorted by time now
+        const newCommitsList = uniq(branch.commits.concat(commitsAction.commits));
+        const newBranch = Object.assign({}, branch, { commits: newCommitsList });
+        return Object.assign({}, state, { [commitsAction.id]: newBranch });
+      }
+
       return state;
     case STORE_BRANCHES:
       branches = (<t.StoreBranchesAction> action).entities;

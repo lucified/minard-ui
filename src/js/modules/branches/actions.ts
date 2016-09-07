@@ -39,6 +39,14 @@ export const FetchBranchesForProject: t.RequestBranchesForProjectActionCreators 
   }),
 };
 
+// Add commits to existing branch
+export const ADD_COMMITS_TO_BRANCH = 'BRANCHES/ADD_COMMITS_TO_BRANCH';
+export const addCommitsToBranch = (id: string, commitIds: string[]): t.AddCommitsToBranchAction => ({
+  type: ADD_COMMITS_TO_BRANCH,
+  id,
+  commits: commitIds,
+});
+
 export const STORE_BRANCHES = 'BRANCHES/STORE_BRANCHES';
 export const storeBranches = (branches: t.ResponseBranchElement[]): t.StoreBranchesAction => ({
   type: STORE_BRANCHES,

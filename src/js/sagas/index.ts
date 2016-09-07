@@ -6,7 +6,7 @@ import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects'
 import { Api, ApiEntityTypeString } from '../api/types';
 import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, { Branch, LoadBranchesForProjectAction } from '../modules/branches';
-import Commits, { Commit } from '../modules/commits';
+import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { isFetchError } from '../modules/errors';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
@@ -256,6 +256,47 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // COMMITS_FOR_BRANCH
+  function* loadCommitsForBranch(action: LoadCommitsForBranchAction): IterableIterator<Effect> {
+    const id = action.id;
+    const fetchSuccess = yield call(fetchCommitsForBranch, id);
+    if (fetchSuccess) {
+      yield fork(ensureCommitsForBranchRelatedDataLoaded, id);
+    }
+  }
+
+  function* fetchCommitsForBranch(id: string): IterableIterator<Effect> {
+    yield put(Commits.actions.FetchCommitsForBranch.request(id));
+
+    const { response, error, details } = yield call(api.Commit.fetchForBranch, id);
+
+    if (response) {
+      if (response.included) {
+        yield call(storeIncludedEntities, response.included);
+      }
+
+      yield put(Commits.actions.FetchCommitsForBranch.success(id, response.data));
+
+      const commitIds = response.data.map((commit: any) => commit.id);
+      yield put(Branches.actions.addCommitsToBranch(id, commitIds));
+
+      return true;
+    } else {
+      yield put(Commits.actions.FetchCommitsForBranch.failure(id, error, details));
+
+      return false;
+    }
+  }
+
+  function* ensureCommitsForBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
+    const branch = <Branch> (yield select(Branches.selectors.getBranch, id));
+    if (branch && !isFetchError(branch)) {
+      const commits = <Commit[]> (yield branch.commits.map(id => call(fetchIfMissing, 'commits', id)));
+      yield compact(commits.map(commit => commit.deployment))
+        .map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
+    }
+  }
+
   // CREATE PROJECT
   function* createProject(action: { type: string, payload: any }): IterableIterator<Effect> {
     const { name, description } = action.payload;
@@ -423,6 +464,10 @@ export default function createSagas(api: Api) {
     yield* takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
 
+  function* watchForLoadCommitsForBranch() {
+    yield* takeEvery(Commits.actions.LOAD_COMMITS_FOR_BRANCH, loadCommitsForBranch);
+  }
+
   function* root() {
     yield [
       fork(watchForCreateProject),
@@ -434,6 +479,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadBranchesForProject),
       fork(watchForLoadDeployment),
       fork(watchForLoadCommit),
+      fork(watchForLoadCommitsForBranch),
       fork(watchForLoadActivities),
       fork(watchForLoadActivitiesForProject),
       fork(watchForFormSubmit),
