@@ -23,7 +23,7 @@ const createActivityObject = (activity: t.ResponseActivityElement): t.Activity =
   return {
     id: activity.id,
     type: activityType(activity.attributes['activity-type']),
-    deployment: activity.relationships.deployment.data.id,
+    commit: activity.relationships.commit.data.id,
     branch: activity.relationships.branch.data.id,
     project: activity.relationships.project.data.id,
     timestamp: moment(activity.attributes.timestamp).valueOf(),

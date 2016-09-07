@@ -20,6 +20,8 @@ const testData = {
   commitResponse: require('../json/commit.json') as ApiResponse,
   projectResponse: require('../json/project-1.json') as ApiResponse,
   activitiesResponse: require('../json/activities.json') as ApiResponse,
+  projectBranchesResponse: require('../json/project-1-branches.json') as ApiResponse,
+  branchCommitsResponse: require('../json/branch-1-commits.json') as ApiResponse,
 };
 
 type ModuleState = BranchState | CommitState | DeploymentState | ProjectState | ActivityState;
@@ -830,7 +832,7 @@ describe('reducers', () => {
       1: {
         id: '1',
         type: ActivityType.Deployment,
-        deployment: '7',
+        commit: 'abc',
         branch: '1',
         project: '1',
         timestamp: 1470131481802,
@@ -838,7 +840,7 @@ describe('reducers', () => {
       2: {
         id: '2',
         type: ActivityType.Deployment,
-        deployment: '8',
+        commit: 'def',
         branch: '2',
         project: '1',
         timestamp: 1470045081802,
@@ -849,7 +851,7 @@ describe('reducers', () => {
       3: {
         id: '3',
         type: ActivityType.Deployment,
-        deployment: '1',
+        commit: 'xyz',
         branch: '3',
         project: '2',
         timestamp: 1469945081802,
@@ -860,7 +862,7 @@ describe('reducers', () => {
       1: {
         id: '1',
         type: ActivityType.Deployment,
-        deployment: '2',
+        commit: 'foo',
         branch: '1',
         project: '3',
         timestamp: 1470101481802,
@@ -868,7 +870,7 @@ describe('reducers', () => {
       3: {
         id: '3',
         type: ActivityType.Deployment,
-        deployment: '1',
+        commit: 'bar',
         branch: '3',
         project: '2',
         timestamp: 1469945081802,
@@ -946,7 +948,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Branches.actions.STORE_BRANCHES,
-      entities: testData.projectResponse.included!.slice(0, 2),
+      entities: testData.projectBranchesResponse.data,
     };
 
     const expectedObjectsToStore: BranchState = {
@@ -954,7 +956,6 @@ describe('reducers', () => {
         id: '1',
         name: 'first-branch',
         description: 'This is a branch description',
-        deployments: ['7'],
         commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
         project: '1',
       },
@@ -963,7 +964,6 @@ describe('reducers', () => {
         name: 'second-branch',
         description: undefined,
         commits: ['aacd00f02', 'a998823423'],
-        deployments: ['8'],
         project: '1',
       },
     };
@@ -974,7 +974,6 @@ describe('reducers', () => {
         name: 'third-branch',
         description: undefined,
         commits: ['aacd00f03', 'a998833433'],
-        deployments: <string[]> [],
         project: '1',
       },
     };
@@ -985,7 +984,6 @@ describe('reducers', () => {
         name: 'third-branch-foo',
         description: undefined,
         commits: ['aacd00f03', 'a998833433'],
-        deployments: <string[]> [],
         project: '1',
       },
       1: {
@@ -993,7 +991,6 @@ describe('reducers', () => {
         name: 'first-branch-foo',
         description: undefined,
         commits: ['a998823423'],
-        deployments: ['8'],
         project: '1',
       },
     };
@@ -1008,7 +1005,6 @@ describe('reducers', () => {
         id: '1',
         name: 'first-branch',
         description: 'This is a branch description',
-        deployments: ['7'],
         commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
         project: '1',
       },
@@ -1039,7 +1035,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Commits.actions.STORE_COMMITS,
-      entities: testData.commitResponse.included!.slice(0, 2),
+      entities: testData.branchCommitsResponse.data,
     };
 
     const expectedObjectsToStore: CommitState = {
@@ -1200,7 +1196,6 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        commit: 'aacceeff02',
       },
     };
 
@@ -1215,7 +1210,6 @@ describe('reducers', () => {
           email: 'juho@lucify.com',
           timestamp: 1470131581802,
         },
-        commit: '2543452',
       },
     };
 
@@ -1230,7 +1224,6 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        commit: '123468594',
       },
     };
 
@@ -1250,7 +1243,6 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        commit: 'aacceeff02',
       },
     };
 

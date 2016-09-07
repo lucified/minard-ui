@@ -179,7 +179,7 @@ describe('sagas', () => {
   const testLoader = (
     name: string,
     loader: (action: any) => IterableIterator<Effect>,
-    selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
+    selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError | undefined,
     fetcher: (id: string) => IterableIterator<Effect>,
     ensurer: (id: string) => IterableIterator<Effect | Effect[]>,
   ) => {
@@ -719,7 +719,7 @@ describe('sagas', () => {
             email: 'ville.saarinen@lucify.com',
             timestamp: 1470131481802,
           },
-          commit: 'aacceeff02',
+
         },
         {
           id: '8',
@@ -730,7 +730,7 @@ describe('sagas', () => {
             email: 'juho@lucify.com',
             timestamp: 1470131481902,
           },
-          commit: 'aacceeff03',
+
         },
       ];
 
@@ -819,21 +819,18 @@ describe('sagas', () => {
           name: 'brancha',
           project: '1',
           commits: [],
-          deployments: ['d1'],
         },
         {
           id: 'b',
           name: 'branchb',
           project: '1',
           commits: [],
-          deployments: [],
         },
         {
           id: 'c',
           name: 'branchc',
           project: '1',
           commits: [],
-          deployments: ['d2', 'd3', 'd4'],
         },
       ];
 
@@ -875,21 +872,18 @@ describe('sagas', () => {
           name: 'brancha',
           project: '1',
           commits: [],
-          deployments: ['d1'],
         },
         {
           id: 'b',
           name: 'branchb',
           project: '1',
           commits: [],
-          deployments: [],
         },
         {
           id: 'c',
           name: 'branchc',
           project: '1',
           commits: [],
-          deployments: ['d2', 'd3', 'd4'],
         },
       ];
 
@@ -920,8 +914,7 @@ describe('sagas', () => {
         id: 'a',
         name: 'brancha',
         project: '1',
-        commits: ['c1', 'c2', 'c3'],
-        deployments: ['d1'],
+        commits: ['c1', 'c2', 'c3']
       };
 
       expect(iterator.next().value).to.deep.equal(
@@ -957,7 +950,6 @@ describe('sagas', () => {
       const deployment: Deployment = {
         id: 'a',
         status: 'success',
-        commit: 'c1',
         url: '',
         screenshot: '',
         creator: {
@@ -1012,7 +1004,7 @@ describe('sagas', () => {
   describe('fetchIfMissing', () => {
     const testFetchIfMissing = (
       type: ApiEntityTypeString,
-      selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError,
+      selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError | undefined,
       fetcher: (id: string) => IterableIterator<Effect>,
     ) => {
       it(`fetches missing ${type}`, () => {
