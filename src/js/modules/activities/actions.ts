@@ -1,36 +1,9 @@
-import { createRequestTypes, prettyErrorMessage } from '../common';
 import * as t from './types';
-
-export const ACTIVITIES = createRequestTypes('ACTIVITIES/ACTIVITIES');
-export const FetchActivities: t.RequestActivitiesActionCreators = {
-  request: () => ({ type: ACTIVITIES.REQUEST }),
-  success: (response) => ({ type: ACTIVITIES.SUCCESS, response }),
-  failure: (error, details) => ({
-    type: ACTIVITIES.FAILURE,
-    id: null,
-    error,
-    details,
-    prettyError: prettyErrorMessage(error),
-  }),
-};
 
 export const LOAD_ACTIVITIES = 'ACTIVITIES/LOAD_ACTIVITIES';
 export const loadActivities = (): t.LoadActivitiesAction => ({
   type: LOAD_ACTIVITIES,
 });
-
-export const ACTIVITIES_FOR_PROJECT = createRequestTypes('ACTIVITIES/ACTIVITIES_FOR_PROJECT');
-export const FetchActivitiesForProject: t.RequestActivitiesForProjectActionCreators = {
-  request: (id) => ({ type: ACTIVITIES_FOR_PROJECT.REQUEST, id }),
-  success: (id, response) => ({ type: ACTIVITIES_FOR_PROJECT.SUCCESS, id, response }),
-  failure: (id, error, details) => ({
-    type: ACTIVITIES_FOR_PROJECT.FAILURE,
-    id,
-    error,
-    details,
-    prettyError: prettyErrorMessage(error),
-  }),
-};
 
 export const LOAD_ACTIVITIES_FOR_PROJECT = 'ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT';
 export const loadActivitiesForProject = (id: string): t.LoadActivitiesForProjectAction => ({
@@ -39,7 +12,7 @@ export const loadActivitiesForProject = (id: string): t.LoadActivitiesForProject
 });
 
 export const STORE_ACTIVITIES = 'ACTIVITIES/STORE_ACTIVITIES';
-export const storeActivities = (activities: t.ResponseActivityElement[]): t.StoreActivitiesAction => ({
+export const storeActivities = (activities: t.Activity[]): t.StoreActivitiesAction => ({
   type: STORE_ACTIVITIES,
   entities: activities,
 });

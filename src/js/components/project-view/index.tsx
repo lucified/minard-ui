@@ -103,7 +103,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { projectId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
-  const isLoadingActivities = Requests.selectors.isLoadinglActivitiesForProject(state, projectId);
+  const isLoadingActivities = Requests.selectors.isLoadingActivitiesForProject(state, projectId);
 
   if (!project || isFetchError(project)) {
     return { project, isLoadingActivities };

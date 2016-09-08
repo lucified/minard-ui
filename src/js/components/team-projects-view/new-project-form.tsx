@@ -5,6 +5,7 @@ import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
 
 import { onSubmitActions } from '../../modules/forms';
 import Projects from '../../modules/projects';
+import Requests from '../../modules/requests';
 
 const styles = require('../common/modal-dialog.scss');
 
@@ -85,7 +86,7 @@ export default reduxForm({
   validate,
   onSubmit: onSubmitActions(
     Projects.actions.CREATE_PROJECT,
-    Projects.actions.SEND_CREATE_PROJECT.SUCCESS,
-    Projects.actions.SEND_CREATE_PROJECT.FAILURE,
+    Requests.actions.Projects.CreateProject.SUCCESS.type,
+    Requests.actions.Projects.CreateProject.FAILURE.type,
   )
 })(NewProjectForm);

@@ -5,6 +5,7 @@ import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
 
 import { onSubmitActions } from '../../modules/forms';
 import Projects, { Project } from '../../modules/projects';
+import Requests from '../../modules/requests';
 
 import confirm from '../common/confirm';
 
@@ -30,8 +31,8 @@ const checkNameChangeAndSubmit = async (values: FormData, dispatch: Dispatch<any
 
   return onSubmitActions(
     Projects.actions.EDIT_PROJECT,
-    Projects.actions.SEND_EDIT_PROJECT.SUCCESS,
-    Projects.actions.SEND_EDIT_PROJECT.FAILURE,
+    Requests.actions.Projects.EditProject.SUCCESS.type,
+    Requests.actions.Projects.EditProject.FAILURE.type,
   )(values, dispatch);
 }
 

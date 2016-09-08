@@ -1,9 +1,8 @@
 import { Action } from 'redux';
 
 import { FetchError } from '../errors';
-import { ApiUser, RequestFetchActionCreators, User } from '../types';
+import { User } from '../types';
 
-export type DeploymentStatusString = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
 export enum DeploymentStatus {
   Success,
   Failed,
@@ -54,23 +53,8 @@ export interface DeploymentState {
 export interface LoadDeploymentAction extends Action {
   id: string;
 }
-export type RequestDeploymentActionCreators = RequestFetchActionCreators<ResponseDeploymentElement>;
 
 // STORE_DEPLOYMENTS
 export interface StoreDeploymentsAction extends Action {
-  entities: ResponseDeploymentElement[];
+  entities: Deployment[];
 }
-
-// API response
-export interface ResponseDeploymentElement {
-  type: "deployments";
-  id: string;
-  attributes: {
-    creator: ApiUser;
-    url?: string;
-    screenshot?: string;
-    status: DeploymentStatusString;
-  };
-}
-
-export type ApiResponse = ResponseDeploymentElement[];

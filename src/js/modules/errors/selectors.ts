@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { StateTree } from '../../reducers';
-import Activities from '../activities';
-import Projects from '../projects';
+import Requests from '../requests';
 
 import * as t from './types';
 
@@ -13,15 +12,15 @@ export const getFetchCollectionErrors =
     selectErrorTree,
     (errors) => errors.filter((error: t.Error) =>
       [
-        Projects.actions.ALL_PROJECTS.FAILURE,
-        Activities.actions.ACTIVITIES.FAILURE,
-        Activities.actions.ACTIVITIES_FOR_PROJECT.FAILURE,
+        Requests.actions.Projects.LoadAllProjects.FAILURE.type,
+        Requests.actions.Activities.LoadAllActivities.FAILURE.type,
+        Requests.actions.Activities.LoadActivitiesForProject.FAILURE.type,
       ].indexOf(error.type) > -1,
     )
   );
 
 export const getProjectDeletionError = (state: StateTree, id: string): t.DeleteError | undefined =>
   <t.DeleteError | undefined> selectErrorTree(state).find(error =>
-    (error.type === Projects.actions.SEND_DELETE_PROJECT.FAILURE) &&
+    (error.type === Requests.actions.Projects.DeleteProject.FAILURE.type) &&
     ((<t.DeleteError> error).id === id)
   );
