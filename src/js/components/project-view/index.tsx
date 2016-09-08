@@ -43,7 +43,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
 
     loadProject(projectId);
     loadBranches(projectId);
-    //loadActivity(projectId);
+    loadActivity(projectId);
   }
 
   private reloadPage(e: any) {
@@ -94,7 +94,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
         <ProjectSettingsDialog project={project} />
         <ProjectHeader project={project} />
         <ProjectBranches project={project} branches={branches!} count={3} />
-        {/*<ProjectActivity activities={activities!} isLoading={isLoadingActivities} />*/}
+        <ProjectActivity activities={activities!} isLoading={isLoadingActivities} />
       </div>
     );
   }
