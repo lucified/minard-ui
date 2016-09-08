@@ -36,7 +36,7 @@ const ActivityGroup = (props: PassedProps) => {
       <div className={classNames('col-xs-9', styles['activity-content'])}>
         <div>
           <SingleActivity
-            activity={activities[0]}
+            activity={firstActivity}
             showProjectName={showProjectName}
           />
         </div>
