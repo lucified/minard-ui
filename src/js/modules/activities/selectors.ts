@@ -15,5 +15,5 @@ export const getActivities = createSelector(
 export const getActivitiesForProject = createSelector(
   getActivities,
   Selected.selectors.getSelectedProject,
-  (activities, project) => activities.filter(activity => activity.project === project)
+  (activities, project) => activities.filter(activity => activity.project.id === project)
 );

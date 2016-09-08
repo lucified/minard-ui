@@ -8,13 +8,46 @@ export enum ActivityType {
   Deployment,
 };
 
+type DeploymentStatus = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
+
 export interface Activity {
   id: string;
   type: ActivityType;
   timestamp: number;
-  commit: string;
-  branch: string;
-  project: string;
+  commit: {
+    id: string;
+    hash: string;
+    message: string;
+    author: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+    committer: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+  };
+  branch: {
+    id: string;
+    name: string;
+  };
+  project: {
+    id: string;
+    name: string;
+  };
+  deployment: {
+    status: DeploymentStatus;
+    id: string;
+    url?: string;
+    screenshot?: string;
+    creator: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+  };
 }
 
 export interface ActivityState {
@@ -63,16 +96,39 @@ export interface ResponseActivityElement {
   attributes: {
     'activity-type': 'deployment' | 'comment';
     timestamp: string;
-  };
-  relationships: {
-    commit: {
-      data: ResponseCommitReference;
+    project: {
+      id: string;
+      name: string;
     };
     branch: {
-      data: ResponseBranchReference;
+      id: string;
+      name: string;
     };
-    project: {
-      data: ResponseProjectReference;
+    commit: {
+      id: string;
+      hash: string;
+      message: string;
+      author: {
+        name?: string;
+        email: string;
+        timestamp: string;
+      };
+      committer: {
+        name?: string;
+        email: string;
+        timestamp: string;
+      };
+    };
+    deployment: {
+      status: DeploymentStatus;
+      id: string;
+      url?: string;
+      screenshot?: string;
+      creator: {
+        name?: string;
+        email: string;
+        timestamp: string;
+      };
     };
   };
 }

@@ -20,12 +20,40 @@ const activityType = (activityString: string): t.ActivityType => {
 };
 
 const createActivityObject = (activity: t.ResponseActivityElement): t.Activity => {
+  const commit = activity.attributes.commit;
+  const deployment = activity.attributes.deployment;
+
   return {
     id: activity.id,
     type: activityType(activity.attributes['activity-type']),
-    commit: activity.relationships.commit.data.id,
-    branch: activity.relationships.branch.data.id,
-    project: activity.relationships.project.data.id,
+    project: activity.attributes.project,
+    branch: activity.attributes.branch,
+    commit: {
+      id: commit.id,
+      hash: commit.hash,
+      message: commit.message,
+      author: {
+        name: commit.author.name,
+        email: commit.author.email,
+        timestamp: moment(commit.author.timestamp).valueOf(),
+      },
+      committer: {
+        name: commit.committer.name,
+        email: commit.committer.email,
+        timestamp: moment(commit.committer.timestamp).valueOf(),
+      },
+    },
+    deployment: {
+      status: deployment.status,
+      id: deployment.id,
+      url: deployment.url,
+      screenshot: deployment.screenshot,
+      creator: {
+        name: deployment.creator.name,
+        email: deployment.creator.email,
+        timestamp: moment(deployment.creator.timestamp).valueOf(),
+      },
+    },
     timestamp: moment(activity.attributes.timestamp).valueOf(),
   };
 };

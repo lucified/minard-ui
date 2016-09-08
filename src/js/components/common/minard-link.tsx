@@ -8,8 +8,8 @@ import { Project } from '../../modules/projects';
 
 interface Props {
   deployment?: Deployment;
-  branch?: Branch;
-  project?: Project;
+  branch?: Branch | string;
+  project?: Project | string;
   openInNewWindow?: boolean;
   homepage?: boolean;
   className?: string;
@@ -40,12 +40,31 @@ class MinardLink extends React.Component<Props, any> {
         <span>{children}</span>
       );
     } else if (branch) {
-      path = `/project/${branch.project}/branch/${branch.id}`;
-    } else if (project) {
-      if (showAll) {
-        path = `/project/${project.id}/all`;
+      let projectId: string;
+      let branchId: string;
+
+      if (typeof branch === 'string') {
+        branchId = branch;
+        projectId = project as string;
       } else {
-        path = `/project/${project.id}`;
+        branchId = branch.id;
+        projectId = branch.project;
+      }
+
+      path = `/project/${projectId}/branch/${branchId}`;
+    } else if (project) {
+      let projectId: string;
+
+      if (typeof project === 'string') {
+        projectId = project as string;
+      } else {
+        projectId = project.id;
+      }
+
+      if (showAll) {
+        path = `/project/${projectId}/all`;
+      } else {
+        path = `/project/${projectId}`;
       }
     } else if (homepage) {
       if (showAll) {

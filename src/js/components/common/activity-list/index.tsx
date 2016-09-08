@@ -27,7 +27,7 @@ const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
   const groupedActivities = [lastGroup];
 
   activities.slice(1).forEach(activity => {
-    if (activity.deployment !== lastGroup[0].deployment) {
+    if (activity.deployment.id !== lastGroup[0].deployment.id) {
       lastGroup = [activity];
       groupedActivities.push(lastGroup);
     } else {
