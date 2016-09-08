@@ -62,7 +62,7 @@ export const createEntityFetcher = <ResponseEntity>(
         yield call(storeIncludedEntities, response.included);
       }
 
-      const entities = converter(response.data);
+      const entities = yield call(converter, response.data);
       yield put(storeEntitiesActionCreator(entities));
 
       return true;
@@ -93,7 +93,7 @@ export const createCollectionFetcher = <ResponseEntity>(
         yield call(storeIncludedEntities, response.included);
       }
 
-      const entities = converter(response.data);
+      const entities = yield call(converter, response.data);
       yield put(storeEntitiesActionCreator(entities));
 
       return true;
@@ -123,7 +123,7 @@ export function* storeIncludedEntities(entities: ApiEntity[] | undefined): Itera
     for (let i = 0; i < storingMetadata.length; i++) {
       const currentType = storingMetadata[i];
       const includedEntities = entities.filter(entity => entity.type === currentType.type);
-      const objects = currentType.converter(includedEntities);
+      const objects = yield call(currentType.converter, includedEntities);
       if (includedEntities.length > 0) {
         yield put(currentType.storeActionCreator(objects));
       }

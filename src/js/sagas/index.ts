@@ -193,7 +193,7 @@ export default function createSagas(api: Api) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      const entities = Converter.toBranches(response.data);
+      const entities = yield call(Converter.toBranches, response.data);
       yield put(Branches.actions.storeBranches(entities));
 
       const branchIds = response.data.map((branch: any) => branch.id);
@@ -274,7 +274,7 @@ export default function createSagas(api: Api) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      const entities = Converter.toCommits(response.data);
+      const entities = yield call(Converter.toCommits, response.data);
       yield put(Commits.actions.storeCommits(entities));
 
       const commitIds = response.data.map((commit: any) => commit.id);
@@ -312,7 +312,7 @@ export default function createSagas(api: Api) {
       }
 
       // Store new project
-      const projectObject = Converter.toProjects(response.data);
+      const projectObject = yield call(Converter.toProjects, response.data);
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success
@@ -360,7 +360,7 @@ export default function createSagas(api: Api) {
 
     if (response) {
       // Store edited project
-      const projectObject = Converter.toProjects(response.data);
+      const projectObject = yield call(Converter.toProjects, response.data);
       yield put(Projects.actions.storeProjects(projectObject));
       // Notify form that creation was a success
       yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
