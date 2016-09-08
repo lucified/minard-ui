@@ -42,6 +42,7 @@ const createActivityObject = (activity: t.ResponseActivityElement): t.Activity =
         email: commit.committer.email,
         timestamp: moment(commit.committer.timestamp).valueOf(),
       },
+      deployment: commit.deployments && commit.deployments.length > 0 ? commit.deployments[0] : undefined,
     },
     deployment: {
       status: deployment.status,

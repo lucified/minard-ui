@@ -28,6 +28,7 @@ export interface Activity {
       email: string;
       timestamp: number;
     };
+    deployment?: string;
   };
   branch: {
     id: string;
@@ -118,6 +119,7 @@ export interface ResponseActivityElement {
         email: string;
         timestamp: string;
       };
+      deployments: string[];
     };
     deployment: {
       status: DeploymentStatus;
