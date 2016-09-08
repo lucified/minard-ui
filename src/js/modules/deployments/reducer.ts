@@ -11,7 +11,7 @@ const initialState: t.DeploymentState = {};
 
 const createDeploymentObject = (deployment: t.ResponseDeploymentElement): t.Deployment => ({
   id: deployment.id,
-  status: deployment.attributes.status,
+  status: t.toDeploymentStatus(deployment.attributes.status),
   url: deployment.attributes.url,
   screenshot: deployment.attributes.screenshot,
   creator: {

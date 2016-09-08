@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 
+import { DeploymentStatus, DeploymentStatusString } from '../deployments';
 import { RequestFetchCollectionActionCreators, RequestFetchSpecificCollectionActionCreators } from '../types';
 
 // State
@@ -7,8 +8,6 @@ export enum ActivityType {
   Comment,
   Deployment,
 };
-
-type DeploymentStatus = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
 
 export interface Activity {
   id: string;
@@ -122,7 +121,7 @@ export interface ResponseActivityElement {
       deployments: string[];
     };
     deployment: {
-      status: DeploymentStatus;
+      status: DeploymentStatusString;
       id: string;
       url?: string;
       screenshot?: string;

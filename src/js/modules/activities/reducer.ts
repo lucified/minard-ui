@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
+import { toDeploymentStatus } from '../deployments';
 import { RequestFetchSuccessAction } from '../types';
 
 import { ACTIVITIES, ACTIVITIES_FOR_PROJECT, STORE_ACTIVITIES } from './actions';
@@ -45,7 +46,7 @@ const createActivityObject = (activity: t.ResponseActivityElement): t.Activity =
       deployment: commit.deployments && commit.deployments.length > 0 ? commit.deployments[0] : undefined,
     },
     deployment: {
-      status: deployment.status,
+      status: toDeploymentStatus(deployment.status),
       id: deployment.id,
       url: deployment.url,
       screenshot: deployment.screenshot,

@@ -5,7 +5,7 @@ import { ApiResponse } from '../src/js/api/types';
 import Activities, { ActivityState, ActivityType } from '../src/js/modules/activities';
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
-import Deployments, { DeploymentState } from '../src/js/modules/deployments';
+import Deployments, { DeploymentState, DeploymentStatus } from '../src/js/modules/deployments';
 import Errors, { DeleteError, ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
 import Modal, { ModalType } from '../src/js/modules/modal';
@@ -861,7 +861,7 @@ describe('reducers', () => {
           id: '7',
           url: '#',
           screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
-          status: 'success',
+          status: DeploymentStatus.Success,
           creator: {
             name: 'Ville Saarinen',
             email: 'ville.saarinen@lucify.com',
@@ -901,7 +901,7 @@ describe('reducers', () => {
           id: '8',
           url: '#',
           screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
-          status: 'success',
+          status: DeploymentStatus.Success,
           creator: {
             name: 'Ville Saarinen',
             email: 'ville.saarinen@lucify.com',
@@ -944,7 +944,7 @@ describe('reducers', () => {
           id: '9',
           url: '#',
           screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
-          status: 'success',
+          status: DeploymentStatus.Success,
           creator: {
             name: 'Ville Saarinen',
             email: 'ville.saarinen@lucify.com',
@@ -986,7 +986,7 @@ describe('reducers', () => {
           id: '6',
           url: '#',
           screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
-          status: 'success',
+          status: DeploymentStatus.Success,
           creator: {
             name: 'Ville Saarinen',
             email: 'ville.saarinen@lucify.com',
@@ -1024,7 +1024,7 @@ describe('reducers', () => {
           id: '9',
           url: '#',
           screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
-          status: 'success',
+          status: DeploymentStatus.Success,
           creator: {
             name: 'Ville Saarinen',
             email: 'ville.saarinen@lucify.com',
@@ -1420,7 +1420,7 @@ describe('reducers', () => {
     const expectedObjectsToStore: DeploymentState = {
       7: {
         id: '7',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: '#',
         screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
@@ -1434,7 +1434,7 @@ describe('reducers', () => {
     const stateWithoutExistingEntity: DeploymentState = {
       8: {
         id: '8',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: '#',
         screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
@@ -1448,7 +1448,7 @@ describe('reducers', () => {
     const stateWithExistingEntity: DeploymentState = {
       7: {
         id: '7',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: 'foo#',
         screenshot: 'bar#',
         creator: {
@@ -1467,7 +1467,7 @@ describe('reducers', () => {
     const expectedSuccessfulRequestObject: DeploymentState = {
       7: {
         id: '7',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: '#',
         screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {

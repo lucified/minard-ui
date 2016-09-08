@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import * as React from 'react';
 
 import { Activity } from '../../../modules/activities';
+import { isSuccessful } from '../../../modules/deployments';
 
 import DeploymentScreenshot from '../deployment-screenshot';
 import LoadingIcon from '../loading-icon';
@@ -26,7 +27,7 @@ const ActivityGroup = (props: PassedProps) => {
         {moment(firstActivity.timestamp).fromNow()}
       </div>
       <div className={classNames('col-xs-2', styles.screenshot)}>
-        {(firstActivity.deployment.status === 'success') && (
+        {isSuccessful(firstActivity.deployment) && (
           <MinardLink deployment={firstActivity.deployment} openInNewWindow>
             <DeploymentScreenshot deployment={firstActivity.deployment} />
           </MinardLink>
