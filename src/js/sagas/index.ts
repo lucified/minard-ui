@@ -75,13 +75,7 @@ export default function createSagas(api: Api) {
   }
 
   function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
-    const activities = <Activity[]> (yield select(Activities.selectors.getActivities));
-    const commits =
-      <Commit[]> (yield activities.map(activity => call(fetchIfMissing, 'commits', activity.commit)));
-    // TODO: check activity type and fetch e.g. comments
-    yield commits.map(commit => call(fetchIfMissing, 'deployments', commit.deployment));
-    yield uniq(activities.map(activity => activity.project)).map(project => call(fetchIfMissing, 'projects', project));
-    yield uniq(activities.map(activity => activity.branch)).map(branch => call(fetchIfMissing, 'branches', branch));
+    // Do nothing. Activities are self-contained
   }
 
   // PROJECT ACTIVITIES
