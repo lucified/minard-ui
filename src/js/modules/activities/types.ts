@@ -4,6 +4,7 @@ import { DeploymentStatus, DeploymentStatusString } from '../deployments';
 import { RequestFetchCollectionActionCreators, RequestFetchSpecificCollectionActionCreators } from '../types';
 
 // State
+type ActivityTypeString = 'deployment' | 'comment';
 export enum ActivityType {
   Comment,
   Deployment,
@@ -94,7 +95,7 @@ export interface ResponseActivityElement {
   type: "activities";
   id: string;
   attributes: {
-    'activity-type': 'deployment' | 'comment';
+    'activity-type': ActivityTypeString;
     timestamp: string;
     project: {
       id: string;
