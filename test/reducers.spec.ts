@@ -831,19 +831,83 @@ describe('reducers', () => {
     const expectedObjectsToStore: ActivityState = {
       1: {
         id: '1',
-        type: ActivityType.Deployment,
-        commit: 'abc',
-        branch: '1',
-        project: '1',
         timestamp: 1470131481802,
+        type: ActivityType.Deployment,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '1',
+          name: 'first-branch',
+        },
+        commit: {
+          id: 'aacceeff02',
+          author: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470066681802,
+          },
+          hash: '0123456789abcdef',
+          committer: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469800281802,
+          },
+          message: "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier.",
+          deployment: '7',
+        },
+        deployment: {
+          id: '7',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: 'success',
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470131481802,
+          },
+        },
       },
       2: {
         id: '2',
         type: ActivityType.Deployment,
-        commit: 'def',
-        branch: '2',
-        project: '1',
         timestamp: 1470045081802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '2',
+          name: 'second-branch',
+        },
+        commit: {
+          id: 'a998823423',
+          author: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          hash: '0123456789abcdef',
+          committer: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          message: 'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases',
+          deployment: '8',
+        },
+        deployment: {
+          id: '8',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: 'success',
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470045081802,
+          },
+        },
       },
     };
 
@@ -851,29 +915,122 @@ describe('reducers', () => {
       3: {
         id: '3',
         type: ActivityType.Deployment,
-        commit: 'xyz',
-        branch: '3',
-        project: '2',
-        timestamp: 1469945081802,
+        timestamp: 1470145081802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '2',
+          name: 'second-branch',
+        },
+        commit: {
+          id: '12345623',
+          author: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          hash: '532625434',
+          committer: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          message: 'foobar',
+          deployment: '9',
+        },
+        deployment: {
+          id: '9',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: 'success',
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470145081802,
+          },
+        },
       },
     };
 
     const stateWithExistingEntity: ActivityState = {
       1: {
         id: '1',
+        timestamp: 1471131481802,
         type: ActivityType.Deployment,
-        commit: 'foo',
-        branch: '1',
-        project: '3',
-        timestamp: 1470101481802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '1',
+          name: 'first-branch',
+        },
+        commit: {
+          id: 'aacceeff02',
+          author: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470066681802,
+          },
+          hash: '0123456789abcdef',
+          committer: {
+            email: 'juho@lucify.com',
+            timestamp: 1469800281802,
+          },
+          message: 'Is this replaced?',
+          deployment: '6',
+        },
+        deployment: {
+          id: '6',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: 'success',
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1471131481802,
+          },
+        },
       },
       3: {
         id: '3',
         type: ActivityType.Deployment,
-        commit: 'bar',
-        branch: '3',
-        project: '2',
-        timestamp: 1469945081802,
+        timestamp: 1470145081802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '2',
+          name: 'second-branch',
+        },
+        commit: {
+          id: '12345623',
+          author: {
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          hash: '532625434',
+          committer: {
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          message: 'foobar',
+          deployment: '9',
+        },
+        deployment: {
+          id: '9',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: 'success',
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470145081802,
+          },
+        },
       },
     };
 

@@ -3,7 +3,7 @@ import { SubmissionError } from 'redux-form';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
-import Activities, { ActivityType } from '../src/js/modules/activities';
+import Activities from '../src/js/modules/activities';
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
@@ -555,28 +555,6 @@ describe('sagas', () => {
 
   describe('fetchActivities', () => {
     it('fetches and stores all activities', () => {
-      const response = { data: testData.activitiesResponse.data };
-      const iterator = sagas.fetchActivities();
-
-      expect(iterator.next().value).to.deep.equal(
-        put(Activities.actions.FetchActivities.request())
-      );
-
-      expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAll)
-      );
-
-      expect(iterator.next({ response }).value).to.deep.equal(
-        put(Activities.actions.FetchActivities.success(<any> response.data))
-      );
-
-      const result = iterator.next();
-
-      expect(result.value).to.equal(true);
-      expect(result.done).to.equal(true);
-    });
-
-    it('fetches and stores included data', () => {
       const response = testData.activitiesResponse;
       const iterator = sagas.fetchActivities();
 
@@ -589,10 +567,6 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(sagas.storeIncludedEntities, response.included)
-      );
-
-      expect(iterator.next().value).to.deep.equal(
         put(Activities.actions.FetchActivities.success(<any> response.data))
       );
 
@@ -629,28 +603,6 @@ describe('sagas', () => {
     const id = 'id';
 
     it('fetches and stores activities', () => {
-      const response = { data: testData.activitiesResponse.data };
-      const iterator = sagas.fetchActivitiesForProject(id);
-
-      expect(iterator.next().value).to.deep.equal(
-        put(Activities.actions.FetchActivitiesForProject.request(id))
-      );
-
-      expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAllForProject, id)
-      );
-
-      expect(iterator.next({ response }).value).to.deep.equal(
-        put(Activities.actions.FetchActivitiesForProject.success(id, <any> response.data))
-      );
-
-      const result = iterator.next();
-
-      expect(result.value).to.equal(true);
-      expect(result.done).to.equal(true);
-    });
-
-    it('fetches and stores included data', () => {
       const response = testData.activitiesResponse;
       const iterator = sagas.fetchActivitiesForProject(id);
 
@@ -663,10 +615,6 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(sagas.storeIncludedEntities, response.included)
-      );
-
-      expect(iterator.next().value).to.deep.equal(
         put(Activities.actions.FetchActivitiesForProject.success(id, <any> response.data))
       );
 
@@ -915,81 +863,8 @@ describe('sagas', () => {
   });
 
   describe('ensureActivitiesRelatedDataLoaded', () => {
-    it('makes sure branches and first deployments exist for all projects', () => {
+    it('does nothing', () => {
       const iterator = sagas.ensureActivitiesRelatedDataLoaded();
-      // TODO
-      const activities = [
-        {
-          id: '1',
-          type: ActivityType.Deployment,
-          commit: '7',
-          branch: '1',
-          project: '1',
-          timestamp: 1470131481802,
-        },
-        {
-          id: '2',
-          type: ActivityType.Deployment,
-          commit: '8',
-          branch: '2',
-          project: '1',
-          timestamp: 1470045081802,
-        },
-      ];
-
-      const commits = [
-        {
-          id: '7',
-          url: '#',
-          screenshot: '#',
-          creator: {
-            name: 'Ville Saarinen',
-            email: 'ville.saarinen@lucify.com',
-            timestamp: 1470131481802,
-          },
-        },
-        {
-          id: '8',
-          url: '#',
-          screenshot: '#',
-          creator: {
-            name: undefined,
-            email: 'juho@lucify.com',
-            timestamp: 1470131481902,
-          },
-        },
-      ];
-
-      expect(iterator.next().value).to.deep.equal(
-        select(Activities.selectors.getActivities)
-      );
-
-      expect(iterator.next(activities).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'commits', '7'),
-          call(sagas.fetchIfMissing, 'commits', '8'),
-        ]
-      );
-
-      expect(iterator.next(commits).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'commits', 'aacceeff02'),
-          call(sagas.fetchIfMissing, 'commits', 'aacceeff03'),
-        ]
-      );
-
-      expect(iterator.next([]).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'projects', '1'),
-        ]
-      );
-
-      expect(iterator.next([]).value).to.deep.equal(
-        [
-          call(sagas.fetchIfMissing, 'branches', '1'),
-          call(sagas.fetchIfMissing, 'branches', '2'),
-        ]
-      );
 
       expect(iterator.next().done).to.equal(true);
     });
