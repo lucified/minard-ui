@@ -110,7 +110,7 @@ const Deployment = {
 };
 
 const Project = {
-  fetchAll: (): ApiPromise => getApi('/teams/1/projects'), // TODO: add actual team Id
+  fetchAll: (): ApiPromise => getApi('/teams/1/relationships/projects'), // TODO: add actual team Id
   fetch: (id: string): ApiPromise => getApi(`/projects/${id}`),
   create: (name: string, description?: string): ApiPromise =>
     postApi('/projects', {
