@@ -123,8 +123,8 @@ export function* storeIncludedEntities(entities: ApiEntity[] | undefined): Itera
     for (let i = 0; i < storingMetadata.length; i++) {
       const currentType = storingMetadata[i];
       const includedEntities = entities.filter(entity => entity.type === currentType.type);
-      const objects = yield call(currentType.converter, includedEntities);
       if (includedEntities.length > 0) {
+        const objects = yield call(currentType.converter, includedEntities);
         yield put(currentType.storeActionCreator(objects));
       }
     }
