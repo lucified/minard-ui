@@ -311,12 +311,12 @@ export default function createSagas(api: Api) {
         yield call(storeIncludedEntities, response.included);
       }
 
+      // Notify form that creation was a success
+      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(name));
+
       // Store new project
       const projectObject = yield call(Converter.toProjects, response.data);
       yield put(Projects.actions.storeProjects(projectObject));
-
-      // Notify form that creation was a success
-      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(name));
 
       return true;
     } else {
@@ -359,11 +359,12 @@ export default function createSagas(api: Api) {
     const { response, error, details } = yield call(api.Project.edit, id, { name, description });
 
     if (response) {
+      // Notify form that creation was a success
+      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
+
       // Store edited project
       const projectObject = yield call(Converter.toProjects, response.data);
       yield put(Projects.actions.storeProjects(projectObject));
-      // Notify form that creation was a success
-      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
 
       return true;
     } else {
