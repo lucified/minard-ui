@@ -34,6 +34,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [commitsAction.id]: newBranch });
       }
 
+      console.log('Error: trying save commits to branch that does not exist.'); // tslint:disable-line:no-console
       return state;
     case STORE_BRANCHES:
       branches = (<t.StoreBranchesAction> action).entities;
