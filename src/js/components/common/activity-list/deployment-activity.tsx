@@ -3,11 +3,7 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
 import { Activity } from '../../../modules/activities';
-import { Branch } from '../../../modules/branches';
-import { Commit } from '../../../modules/commits';
-import { Deployment, isSuccessful } from '../../../modules/deployments';
-import { FetchError, isFetchError } from '../../../modules/errors';
-import { Project } from '../../../modules/projects';
+import { isSuccessful } from '../../../modules/deployments';
 
 import MinardLink from '../minard-link';
 import SingleCommit from '../single-commit';
@@ -16,29 +12,23 @@ const styles = require('./deployment-activity.scss');
 
 interface Props {
   activity: Activity;
-  branch: Branch;
   showProjectName?: boolean;
-  deployment: Deployment;
-  project: Project | FetchError;
-  commit?: Commit | FetchError;
 }
 
-const getProjectLabel = (project?: Project | FetchError) => {
-  if (!project || isFetchError(project)) {
-    return null;
-  }
-
+const getProjectLabel = ({ project }: Activity) => {
   return (
     <span>
       {' in '}
-      <MinardLink className={styles['deployment-metadata-project']} project={project}>
+      <MinardLink className={styles['deployment-metadata-project']} project={project.id}>
         {project.name}
       </MinardLink>
     </span>
   );
 };
 
-const getMetadata = (deployment: Deployment, branch: Branch) => {
+const getMetadata = (activity: Activity) => {
+  const { deployment, branch, project } = activity;
+
   if (isSuccessful(deployment)) {
     return (
       <span>
@@ -46,7 +36,7 @@ const getMetadata = (deployment: Deployment, branch: Branch) => {
           {deployment.creator.name || deployment.creator.email}
         </span>
         {` generated a preview in `}
-        <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
+        <MinardLink className={styles['deployment-metadata-branch']} branch={branch.id} project={project.id} >
           {branch.name}
         </MinardLink>
       </span>
@@ -56,14 +46,14 @@ const getMetadata = (deployment: Deployment, branch: Branch) => {
   return (
     <span>
       {`Preview generation failed in `}
-      <MinardLink className={styles['deployment-metadata-branch']} branch={branch}>
+      <MinardLink className={styles['deployment-metadata-branch']} branch={branch.id} project={project.id} >
         {branch.name}
       </MinardLink>
     </span>
   );
 };
 
-const getMetadataIcon = (deployment: Deployment) => {
+const getMetadataIcon = ({ deployment }: Activity) => {
   if (isSuccessful(deployment)) {
     return <Icon className={styles.icon} name="eye" />;
   }
@@ -72,22 +62,25 @@ const getMetadataIcon = (deployment: Deployment) => {
 };
 
 const DeploymentActivity = (props: Props) => {
-  const { activity, branch, commit, deployment, showProjectName, project } = props;
+  const { activity, showProjectName } = props;
 
   return (
     <div className={styles.activity}>
       <div className={styles['deployment-metadata']}>
         <div className={styles.action}>
-          {getMetadataIcon(deployment)}
-          {getMetadata(deployment, branch)}
-          {showProjectName && getProjectLabel(project)}
+          {getMetadataIcon(activity)}
+          {getMetadata(activity)}
+          {showProjectName && getProjectLabel(activity)}
         </div>
         <div className={styles.share}>
-          {'' /* TODO: add share link */}
+          {/* TODO: add share link */}
         </div>
       </div>
-      <MinardLink openInNewWindow deployment={deployment}>
-        <SingleCommit className={classNames({ [styles.hover]: isSuccessful(deployment) })} commit={commit} />
+      <MinardLink openInNewWindow deployment={activity.deployment}>
+        <SingleCommit
+          className={classNames({ [styles.hover]: isSuccessful(activity.deployment) })}
+          commit={activity.commit}
+        />
       </MinardLink>
     </div>
   );

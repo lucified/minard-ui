@@ -16,7 +16,9 @@ export interface Project {
   id: string;
   name: string;
   description?: string;
-  branches: string[];
+  branches?: string[] | FetchError; // Undefined if they have not yet been fetched
+  latestActivityTimestamp?: number;
+  latestSuccessfullyDeployedCommit?: string;
   activeUsers: User[];
 }
 
@@ -40,6 +42,12 @@ export interface StoreProjectsAction extends Action {
   entities: ResponseProjectElement[];
 }
 
+// ADD_BRANCHES_TO_PROJECT
+export interface AddBranchesToProjectAction extends Action {
+  id: string;
+  branches: string[];
+}
+
 // CREATE_PROJECT
 export type SendCreateProjectActionCreators = RequestCreateActionCreators;
 
@@ -55,8 +63,8 @@ export interface DeleteProjectAction extends Action {
 export type SendDeleteProjectActionCreators = RequestDeleteActionCreators;
 
 // API response
-interface ResponseBranchReference {
-  type: "branches";
+interface ResponseCommitReference {
+  type: "commit";
   id: string;
 }
 
@@ -67,10 +75,11 @@ export interface ResponseProjectElement {
     name: string;
     description?: string;
     'active-committers': ApiUser[];
+    'latest-activity-timestamp'?: string;
   };
-  relationships: {
-    branches: {
-      data: ResponseBranchReference[];
+  relationships?: {
+    'latest-successfully-deployed-commit'?: {
+      data?: ResponseCommitReference;
     };
   };
 }

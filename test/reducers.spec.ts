@@ -1,10 +1,11 @@
 import { expect } from 'chai';
 import { Action, Reducer } from 'redux';
 
+import { ApiResponse } from '../src/js/api/types';
 import Activities, { ActivityState, ActivityType } from '../src/js/modules/activities';
 import Branches, { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
-import Deployments, { DeploymentState } from '../src/js/modules/deployments';
+import Deployments, { DeploymentState, DeploymentStatus } from '../src/js/modules/deployments';
 import Errors, { DeleteError, ErrorState } from '../src/js/modules/errors';
 import { FetchError } from '../src/js/modules/errors';
 import Modal, { ModalType } from '../src/js/modules/modal';
@@ -12,7 +13,16 @@ import Projects, { ProjectState } from '../src/js/modules/projects';
 import Requests, { RequestsState } from '../src/js/modules/requests';
 import Selected, { SelectedState, SetSelectedAction } from '../src/js/modules/selected';
 
-import * as testData from './test-data';
+const testData = {
+  allProjectsResponse: require('../json/projects.json') as ApiResponse,
+  deploymentResponse: require('../json/deployment-7.json') as ApiResponse,
+  branchResponse: require('../json/branch-1.json') as ApiResponse,
+  commitResponse: require('../json/commit.json') as ApiResponse,
+  projectResponse: require('../json/project-1.json') as ApiResponse,
+  activitiesResponse: require('../json/activities.json') as ApiResponse,
+  projectBranchesResponse: require('../json/project-1-branches.json') as ApiResponse,
+  branchCommitsResponse: require('../json/branch-2-commits.json') as ApiResponse,
+};
 
 type ModuleState = BranchState | CommitState | DeploymentState | ProjectState | ActivityState;
 interface AnyAction extends Action {
@@ -821,19 +831,83 @@ describe('reducers', () => {
     const expectedObjectsToStore: ActivityState = {
       1: {
         id: '1',
-        type: ActivityType.Deployment,
-        deployment: '7',
-        branch: '1',
-        project: '1',
         timestamp: 1470131481802,
+        type: ActivityType.Deployment,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '1',
+          name: 'first-branch',
+        },
+        commit: {
+          id: 'aacceeff02',
+          author: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470066681802,
+          },
+          hash: '0123456789abcdef',
+          committer: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469800281802,
+          },
+          message: "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier.",
+          deployment: '7',
+        },
+        deployment: {
+          id: '7',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: DeploymentStatus.Success,
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470131481802,
+          },
+        },
       },
       2: {
         id: '2',
         type: ActivityType.Deployment,
-        deployment: '8',
-        branch: '2',
-        project: '1',
         timestamp: 1470045081802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '2',
+          name: 'second-branch',
+        },
+        commit: {
+          id: 'a998823423',
+          author: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          hash: '0123456789abcdef',
+          committer: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          message: 'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases',
+          deployment: '8',
+        },
+        deployment: {
+          id: '8',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: DeploymentStatus.Success,
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470045081802,
+          },
+        },
       },
     };
 
@@ -841,29 +915,122 @@ describe('reducers', () => {
       3: {
         id: '3',
         type: ActivityType.Deployment,
-        deployment: '1',
-        branch: '3',
-        project: '2',
-        timestamp: 1469945081802,
+        timestamp: 1470145081802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '2',
+          name: 'second-branch',
+        },
+        commit: {
+          id: '12345623',
+          author: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          hash: '532625434',
+          committer: {
+            name: undefined,
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          message: 'foobar',
+          deployment: '9',
+        },
+        deployment: {
+          id: '9',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: DeploymentStatus.Success,
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470145081802,
+          },
+        },
       },
     };
 
     const stateWithExistingEntity: ActivityState = {
       1: {
         id: '1',
+        timestamp: 1471131481802,
         type: ActivityType.Deployment,
-        deployment: '2',
-        branch: '1',
-        project: '3',
-        timestamp: 1470101481802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '1',
+          name: 'first-branch',
+        },
+        commit: {
+          id: 'aacceeff02',
+          author: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470066681802,
+          },
+          hash: '0123456789abcdef',
+          committer: {
+            email: 'juho@lucify.com',
+            timestamp: 1469800281802,
+          },
+          message: 'Is this replaced?',
+          deployment: '6',
+        },
+        deployment: {
+          id: '6',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: DeploymentStatus.Success,
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1471131481802,
+          },
+        },
       },
       3: {
         id: '3',
         type: ActivityType.Deployment,
-        deployment: '1',
-        branch: '3',
-        project: '2',
-        timestamp: 1469945081802,
+        timestamp: 1470145081802,
+        project: {
+          id: '1',
+          name: 'first-project',
+        },
+        branch: {
+          id: '2',
+          name: 'second-branch',
+        },
+        commit: {
+          id: '12345623',
+          author: {
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          hash: '532625434',
+          committer: {
+            email: 'juho@lucify.com',
+            timestamp: 1469634681802,
+          },
+          message: 'foobar',
+          deployment: '9',
+        },
+        deployment: {
+          id: '9',
+          url: '#',
+          screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+          status: DeploymentStatus.Success,
+          creator: {
+            name: 'Ville Saarinen',
+            email: 'ville.saarinen@lucify.com',
+            timestamp: 1470145081802,
+          },
+        },
       },
     };
 
@@ -938,7 +1105,7 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Branches.actions.STORE_BRANCHES,
-      entities: testData.projectResponse.included!.slice(0, 2),
+      entities: testData.projectBranchesResponse.data,
     };
 
     const expectedObjectsToStore: BranchState = {
@@ -946,46 +1113,63 @@ describe('reducers', () => {
         id: '1',
         name: 'first-branch',
         description: 'This is a branch description',
-        deployments: ['7'],
-        commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
+        latestCommit: 'aacceeff02',
+        latestActivityTimestamp: 1470066681802,
+        buildErrors: [],
+        commits: ['aacceeff02'],
         project: '1',
       },
       2: {
         id: '2',
         name: 'second-branch',
         description: undefined,
-        commits: ['aacd00f02', 'a998823423'],
-        deployments: ['8'],
+        latestSuccessfullyDeployedCommit: 'a998823423',
+        latestCommit: '01234567',
+        latestActivityTimestamp: 1469634681802,
+        buildErrors: [],
+        commits: ['01234567', 'a998823423'],
+        project: '1',
+      },
+      3: {
+        id: '3',
+        description: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
+        latestCommit: undefined,
+        latestActivityTimestamp: undefined,
+        buildErrors: [],
+        name: 'third-long-name-branch',
+        commits: [],
         project: '1',
       },
     };
 
     const stateWithoutExistingEntity: BranchState = {
-      3: {
-        id: '3',
-        name: 'third-branch',
+      4: {
+        id: '4',
+        name: 'fourth-branch',
+        buildErrors: [],
         description: undefined,
         commits: ['aacd00f03', 'a998833433'],
-        deployments: <string[]> [],
         project: '1',
       },
     };
 
     const stateWithExistingEntity: BranchState = {
-      3: {
-        id: '3',
-        name: 'third-branch-foo',
+      5: {
+        id: '5',
+        name: 'fifth-branch-foo',
+        buildErrors: [],
         description: undefined,
-        commits: ['aacd00f03', 'a998833433'],
-        deployments: <string[]> [],
+        commits: ['125124235', '566342463'],
         project: '1',
       },
       1: {
         id: '1',
         name: 'first-branch-foo',
+        buildErrors: [],
         description: undefined,
-        commits: ['a998823423'],
-        deployments: ['8'],
+        commits: ['1497539235'],
         project: '1',
       },
     };
@@ -999,14 +1183,17 @@ describe('reducers', () => {
       1: {
         id: '1',
         name: 'first-branch',
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
+        latestCommit: 'aacceeff02',
+        latestActivityTimestamp: 1470066681802,
+        buildErrors: [],
         description: 'This is a branch description',
-        deployments: ['7'],
-        commits: ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+        commits: ['aacceeff02'],
         project: '1',
       },
     };
 
-    const failedRequestObject: FetchError = {
+    const failedRequestAction: FetchError = {
       id: '1',
       type: Branches.actions.BRANCH.FAILURE,
       error: 'Error message in testing',
@@ -1014,15 +1201,64 @@ describe('reducers', () => {
       prettyError: 'Pretty error message in testing',
     };
 
-    testReducer(
+    // Start actual tests
+    testInitialState(reducer, {});
+
+    let expectedStateFromEmpty = expectedObjectsToStore;
+    let expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
+    let expectedStateWithExistingEntity: BranchState = {
+      1: Object.assign({}, expectedObjectsToStore['1'],
+        // Merge the commits from the existing one
+        { commits: (<any> expectedObjectsToStore['1']).commits.concat((<any> stateWithExistingEntity['1']).commits) }
+      ),
+      2: expectedObjectsToStore['2'],
+      3: expectedObjectsToStore['3'],
+      5: stateWithExistingEntity['5'],
+    };
+
+    testStoreEntities(
       reducer,
       storeAction,
-      expectedObjectsToStore,
+      expectedStateFromEmpty,
       stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
       stateWithExistingEntity,
+      expectedStateWithExistingEntity,
+    );
+
+    expectedStateFromEmpty = expectedSuccessfulRequestObject;
+    expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedSuccessfulRequestObject);
+    expectedStateWithExistingEntity = {
+      1: Object.assign({}, expectedSuccessfulRequestObject['1'],
+        { // Merge the commits from existing old one
+          commits: (<any> expectedSuccessfulRequestObject['1']).commits.concat(
+            (<any> stateWithExistingEntity['1']).commits
+          ),
+        }
+      ),
+      5: stateWithExistingEntity['5'],
+    };
+
+    testSuccessfulRequest(
+      reducer,
       successfulRequestAction,
-      expectedSuccessfulRequestObject,
-      failedRequestObject,
+      expectedStateFromEmpty,
+      stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
+      stateWithExistingEntity,
+      expectedStateWithExistingEntity,
+    );
+
+    expectedStateFromEmpty = { [failedRequestAction.id]: failedRequestAction };
+    expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedStateFromEmpty);
+
+    testFailedRequest(
+      reducer,
+      failedRequestAction,
+      expectedStateFromEmpty,
+      stateWithoutExistingEntity,
+      expectedStateWithoutExistingEntity,
+      stateWithExistingEntity,
     );
   });
 
@@ -1031,43 +1267,43 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Commits.actions.STORE_COMMITS,
-      entities: testData.commitResponse.included!.slice(0, 2),
+      entities: testData.branchCommitsResponse.data,
     };
 
     const expectedObjectsToStore: CommitState = {
-      12354124: {
-        id: '12354124',
+      '01234567': {
+        id: '01234567',
         hash: '0123456789abcdef',
         author: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
-          timestamp: 1470066081802,
+          timestamp: 1469713881802,
         },
         committer: {
-          name: 'Ville Saarinen',
-          email: 'ville.saarinen@lucify.com',
-          timestamp: 1470066081802,
+          name: undefined,
+          email: 'juho@lucify.com',
+          timestamp: 1469800281802,
         },
-        message: 'Foobar is nice',
+        message: 'Try to do something else',
         deployment: undefined,
         description: undefined,
       },
-      2543452: {
-        id: '2543452',
+      a998823423: {
+        id: 'a998823423',
         hash: '0123456789abcdef',
         author: {
           name: undefined,
           email: 'juho@lucify.com',
-          timestamp: 1470055881802,
+          timestamp: 1469634681802,
         },
         committer: {
           name: undefined,
           email: 'juho@lucify.com',
-          timestamp: 1470055881802,
+          timestamp: 1469634681802,
         },
-        message: 'Barbar barr barb aearr',
-        deployment: undefined,
-        description: undefined,
+        message: 'Try to do something',
+        deployment: '8',
+        description: 'This is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases',
       },
     };
 
@@ -1178,43 +1414,41 @@ describe('reducers', () => {
 
     const storeAction = {
       type: Deployments.actions.STORE_DEPLOYMENTS,
-      entities: testData.branchResponse.included!.slice(1, 2),
+      entities: testData.branchResponse.included!.filter(entity => entity.type === 'deployments'),
     };
 
     const expectedObjectsToStore: DeploymentState = {
       7: {
         id: '7',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: '#',
-        screenshot: '#',
+        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        commit: 'aacceeff02',
       },
     };
 
     const stateWithoutExistingEntity: DeploymentState = {
       8: {
         id: '8',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: '#',
-        screenshot: '#',
+        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: undefined,
           email: 'juho@lucify.com',
           timestamp: 1470131581802,
         },
-        commit: '2543452',
       },
     };
 
     const stateWithExistingEntity: DeploymentState = {
       7: {
         id: '7',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: 'foo#',
         screenshot: 'bar#',
         creator: {
@@ -1222,7 +1456,6 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        commit: '123468594',
       },
     };
 
@@ -1234,15 +1467,14 @@ describe('reducers', () => {
     const expectedSuccessfulRequestObject: DeploymentState = {
       7: {
         id: '7',
-        status: 'success',
+        status: DeploymentStatus.Success,
         url: '#',
-        screenshot: '#',
+        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        commit: 'aacceeff02',
       },
     };
 
@@ -1279,6 +1511,9 @@ describe('reducers', () => {
         id: '1',
         name: 'first-project',
         description: 'This is the first-project description. It might not be set.',
+        branches: undefined,
+        latestActivityTimestamp: 1470066681802,
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
         activeUsers: [
           {
             name: 'Ville Saarinen',
@@ -1291,14 +1526,15 @@ describe('reducers', () => {
             timestamp: 1469800281802,
           },
         ],
-        branches: ['1', '2', '3'],
       },
       2: {
         id: '2',
         name: 'second-project',
         description: undefined,
+        branches: undefined,
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [],
-        branches: [],
       },
     };
 
@@ -1308,7 +1544,9 @@ describe('reducers', () => {
         name: 'Third project',
         description: undefined,
         activeUsers: [],
-        branches: [],
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
+        branches: undefined,
       },
     };
 
@@ -1317,25 +1555,29 @@ describe('reducers', () => {
         id: '3',
         name: 'Third project a',
         description: undefined,
+        branches: undefined,
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [
           {
             email: 'foo@bar.com',
             timestamp: 147001234532,
           },
         ],
-        branches: [],
       },
       1: {
         id: '1',
         name: 'first-project again',
         description: 'foobar',
+        branches: undefined,
+        latestActivityTimestamp: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [
           {
             email: 'foo@bar.com',
             timestamp: 147001334532,
           },
         ],
-        branches: [],
       },
     };
 
@@ -1349,6 +1591,9 @@ describe('reducers', () => {
         id: '1',
         name: 'first-project',
         description: 'This is the first-project description. It might not be set.',
+        branches: undefined,
+        latestActivityTimestamp: 1470066681802,
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
         activeUsers: [
           {
             name: 'Ville Saarinen',
@@ -1361,7 +1606,6 @@ describe('reducers', () => {
             timestamp: 1469800281802,
           },
         ],
-        branches: ['1', '2', '3'],
       },
     };
 

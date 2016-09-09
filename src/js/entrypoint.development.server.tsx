@@ -1,6 +1,6 @@
 import { hashHistory } from 'react-router';
 
-import * as api from './api';
+import api from './api';
 import configureStore from './configure-store.development';
 import { createStoreAndRender } from './entrypoint';
 

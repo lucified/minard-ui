@@ -28,14 +28,16 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadBranch: (id: string) => void;
+  loadCommits: (id: string) => void;
 }
 
 class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
   public componentWillMount() {
-    const { loadBranch } = this.props;
+    const { loadBranch, loadCommits } = this.props;
     const { branchId } = this.props.params;
 
     loadBranch(branchId);
+    loadCommits(branchId);
   }
 
   private reloadPage(e: any) {
@@ -106,5 +108,6 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>
   mapStateToProps,
   {
     loadBranch: Branches.actions.loadBranch,
+    loadCommits: Commits.actions.loadCommitsForBranch,
   }
 )(BranchView);

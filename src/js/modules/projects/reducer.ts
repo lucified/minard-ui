@@ -2,57 +2,74 @@ import { omit } from 'lodash';
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
+import Branches from '../branches';
 import { FetchError, isFetchError } from '../errors';
 import { RequestDeleteSuccessAction, RequestFetchCollectionSuccessAction, RequestFetchSuccessAction } from '../types';
 
-import { ALL_PROJECTS, PROJECT, SEND_DELETE_PROJECT, STORE_PROJECTS } from './actions';
+import { ADD_BRANCHES_TO_PROJECT, ALL_PROJECTS, PROJECT, SEND_DELETE_PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
 const initialState: t.ProjectState = {};
 
-const responseToStateShape = (projects: t.ApiResponse) => {
-  const createProjectObject = (project: t.ResponseProjectElement): t.Project => {
-    const branches =  (project.relationships.branches &&
-       project.relationships.branches.data &&
-       project.relationships.branches.data.map(({ id }) => id)) || [];
+const createProjectObject = (project: t.ResponseProjectElement, state: t.ProjectState): t.Project => {
+  // Since we don't get branch information with project requests, let's keep
+  // the existing branches list (if any)
+  let branches: string[] | undefined | FetchError;
+  const existingProject = state[project.id];
+  if (existingProject && !isFetchError(existingProject) && !isFetchError(existingProject.branches)) {
+    branches = existingProject.branches;
+  }
 
-    return {
-      id: project.id,
-      name: project.attributes.name,
-      description: project.attributes.description,
-      branches,
-      activeUsers: project.attributes['active-committers'].map(user => ({
-        name: user.name,
-        email: user.email,
-        timestamp: moment(user.timestamp).valueOf(),
-      })),
-    };
+  const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = project.relationships &&
+    project.relationships['latest-successfully-deployed-commit'];
+  const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
+    latestSuccessfullyDeployedCommitObject.data &&
+    latestSuccessfullyDeployedCommitObject.data.id;
+
+  const latestActivityTimestampString = project.attributes['latest-activity-timestamp'];
+  const latestActivityTimestamp = latestActivityTimestampString &&
+    moment(latestActivityTimestampString).valueOf();
+
+  return {
+    id: project.id,
+    name: project.attributes.name,
+    description: project.attributes.description,
+    branches,
+    activeUsers: project.attributes['active-committers'].map(user => ({
+      name: user.name,
+      email: user.email,
+      timestamp: moment(user.timestamp).valueOf(),
+    })),
+    latestActivityTimestamp,
+    latestSuccessfullyDeployedCommit,
   };
+};
 
-  return projects.reduce((obj, project) => {
+const responseToStateShape = (projects: t.ApiResponse, state: t.ProjectState): t.ProjectState =>
+  projects.reduce<t.ProjectState>((obj, project) => {
     try {
-      const stateObject = createProjectObject(project);
+      const stateObject = createProjectObject(project, state);
       return Object.assign(obj, { [project.id]: stateObject });
     } catch (e) {
       console.log('Error parsing project:', project, e); // tslint:disable-line:no-console
       return obj;
     }
   }, {});
-};
 
 const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
+  let project: t.Project | FetchError;
   switch (action.type) {
     case ALL_PROJECTS.SUCCESS:
       const projectsResponse = (<RequestFetchCollectionSuccessAction<t.ResponseProjectElement[]>> action).response;
       if (projectsResponse && projectsResponse.length > 0) {
-        return Object.assign({}, state, responseToStateShape(projectsResponse));
+        return Object.assign({}, state, responseToStateShape(projectsResponse, state));
       }
 
       return state;
     case PROJECT.SUCCESS:
       const projectResponse = (<RequestFetchSuccessAction<t.ResponseProjectElement>> action).response;
       if (projectResponse) {
-        return Object.assign({}, state, responseToStateShape([projectResponse]));
+        return Object.assign({}, state, responseToStateShape([projectResponse], state));
       }
 
       return state;
@@ -66,6 +83,27 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
       return state;
+    case ADD_BRANCHES_TO_PROJECT:
+      const { id: projectId, branches } = <t.AddBranchesToProjectAction> action;
+      project = state[projectId];
+
+      if (project && !isFetchError(project)) {
+        const newProject = Object.assign({}, project, { branches });
+        return Object.assign({}, state, { [projectId]: newProject });
+      }
+
+      return state;
+    case Branches.actions.BRANCHES_FOR_PROJECT.FAILURE:
+      const fetchError = <FetchError> action;
+      project = state[fetchError.id];
+
+      // Only store the FetchError if branches does not exist or it's an error
+      if (project && !isFetchError(project) && (!project.branches || isFetchError(project.branches))) {
+        const newProject = Object.assign({}, project, { branches: fetchError });
+        return Object.assign({}, state, { [fetchError.id]: newProject });
+      }
+
+      return state;
     case SEND_DELETE_PROJECT.SUCCESS:
       const { id: idToDelete } = (<RequestDeleteSuccessAction> action);
       if (state[idToDelete]) {
@@ -76,7 +114,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
-        return Object.assign({}, state, responseToStateShape(projects));
+        return Object.assign({}, state, responseToStateShape(projects, state));
       }
 
       return state;

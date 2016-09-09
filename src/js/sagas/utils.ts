@@ -10,7 +10,7 @@ import Projects, { Project } from '../modules/projects';
 import { RequestFetchActionCreators } from '../modules/types';
 import { StateTree } from '../reducers';
 
-type EntityType = Commit | Project | Deployment | Branch | FetchError;
+type EntityType = Commit | Project | Deployment | Branch | FetchError | undefined;
 
 interface FetchAction {
   type: string;

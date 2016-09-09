@@ -1,37 +1,8 @@
 {
-  "data": {
-    "type": "branches",
-    "id": "2",
-    "attributes": {
-      "name": "second-branch",
-      "latest-activity-timestamp": "2016-07-27T15:51:21.802Z",
-      "minard-json": {}
-    },
-    "relationships": {
-      "latest-successfully-deployed-commit": {
-        "data": {
-          "type": "commits",
-          "id": "a998823423"
-        }
-      },
-      "latest-commit": {
-        "data": {
-          "type": "commits",
-          "id": "aacd00f02"
-        }
-      },
-      "project": {
-        "data": {
-          "type": "projects",
-          "id": "1"
-        }
-      }
-    }
-  },
-  "included": [
+  "data": [
     {
       "type": "commits",
-      "id": "aacd00f02",
+      "id": "01234567",
       "attributes": {
         "author": {
           "name": "Ville Saarinen",
@@ -74,7 +45,9 @@
           }]
         }
       }
-    },
+    }
+  ],
+  "included": [
     {
       "type": "deployments",
       "id": "8",

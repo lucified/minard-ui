@@ -3,16 +3,42 @@ import { Action } from 'redux';
 import { FetchError } from '../errors';
 import { ApiUser, RequestFetchActionCreators, User } from '../types';
 
-type DeploymentStatus = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
+export type DeploymentStatusString = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
+export enum DeploymentStatus {
+  Success,
+  Failed,
+  Running,
+  Pending,
+  Canceled,
+};
 
-export const isSuccessful = (deployment: Deployment) => deployment.status === 'success';
-export const isPending = (deployment: Deployment) => deployment.status === 'pending' || deployment.status === 'running';
-export const isFailed = (deployment: Deployment) => deployment.status === 'failed' || deployment.status === 'canceled';
+export const toDeploymentStatus = (deploymentStatus: string): DeploymentStatus => {
+  switch (deploymentStatus) {
+    case 'success':
+      return DeploymentStatus.Success;
+    case 'failed':
+      return DeploymentStatus.Failed;
+    case 'running':
+      return DeploymentStatus.Running;
+    case 'pending':
+      return DeploymentStatus.Pending;
+    case 'canceled':
+      return DeploymentStatus.Canceled;
+    default:
+      throw new Error(`Unknown deployment type ${deploymentStatus}!`);
+  }
+};
+
+export const isSuccessful = (deployment: Deployment) =>
+  deployment.status === DeploymentStatus.Success;
+export const isPending = (deployment: Deployment) =>
+  deployment.status === DeploymentStatus.Pending || deployment.status === DeploymentStatus.Running;
+export const isFailed = (deployment: Deployment) =>
+  deployment.status === DeploymentStatus.Failed || deployment.status === DeploymentStatus.Canceled;
 
 // State
 export interface Deployment {
   id: string;
-  commit: string;
   creator: User;
   url?: string;
   screenshot?: string;
@@ -36,11 +62,6 @@ export interface StoreDeploymentsAction extends Action {
 }
 
 // API response
-interface ResponseCommitReference {
-  type: "commits";
-  id: string;
-}
-
 export interface ResponseDeploymentElement {
   type: "deployments";
   id: string;
@@ -48,12 +69,7 @@ export interface ResponseDeploymentElement {
     creator: ApiUser;
     url?: string;
     screenshot?: string;
-    status: DeploymentStatus;
-  };
-  relationships: {
-    commit: {
-      data: ResponseCommitReference;
-    };
+    status: DeploymentStatusString;
   };
 }
 

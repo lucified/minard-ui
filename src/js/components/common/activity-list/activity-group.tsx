@@ -1,92 +1,42 @@
 import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
-import { connect } from 'react-redux';
 
 import { Activity } from '../../../modules/activities';
-import Branches, { Branch } from '../../../modules/branches';
-import Commits, { Commit } from '../../../modules/commits';
-import Deployments, { Deployment } from '../../../modules/deployments';
-import { FetchError, isFetchError } from '../../../modules/errors';
-import Projects, { Project } from '../../../modules/projects';
-import { StateTree } from '../../../reducers';
+import { isSuccessful } from '../../../modules/deployments';
 
+import DeploymentScreenshot from '../deployment-screenshot';
 import LoadingIcon from '../loading-icon';
 import MinardLink from '../minard-link';
 import SingleActivity from './single-activity';
 
 const styles = require('./activity-group.scss');
-const noScreenshot = require('../../../../images/no-screenshot.png');
 
 interface PassedProps {
   activities: Activity[];
   showProjectName?: boolean;
 }
 
-interface GeneratedProps {
-  branch?: Branch | FetchError;
-  deployment?: Deployment | FetchError;
-  project?: Project | FetchError;
-  commit?: Commit | FetchError;
-}
-
-const getLoadingContent = () => (
-  <div className={styles.loading}>
-    Loading...
-  </div>
-);
-
-const reloadPage = (e: any) => {
-  e.preventDefault();
-  location.reload(true);
-  return false;
-};
-
-const getErrorContent = (branch: FetchError) => (
-  <div className={classNames('row', styles['activity-group'])}>
-    <div className={classNames('col-xs-12', styles.error)}>
-      <h2>Unable to load activity</h2>
-      <p><a onClick={reloadPage}>Click to reload</a></p>
-      <small>{branch.prettyError}</small>
-    </div>
-  </div>
-);
-
-const ActivityGroup = (props: PassedProps & GeneratedProps) => {
-  const { activities, branch, commit, deployment, project, showProjectName } = props;
-
-  if (!deployment || !project || !branch) {
-    return getLoadingContent();
-  }
-
-  if (isFetchError(branch)) {
-    return getErrorContent(branch);
-  }
-
-  if (isFetchError(deployment)) {
-    return getErrorContent(deployment);
-  }
+const ActivityGroup = (props: PassedProps) => {
+  const { activities, showProjectName } = props;
+  const firstActivity = activities[0];
 
   return (
     <div className={classNames('row', styles['activity-group'])}>
       <div className={classNames('col-xs-1', styles.timestamp)}>
-        {moment(activities[0].timestamp).fromNow()}
+        {moment(firstActivity.timestamp).fromNow()}
       </div>
       <div className={classNames('col-xs-2', styles.screenshot)}>
-        {(deployment.status === 'success') && (
-          <MinardLink deployment={deployment} openInNewWindow>
-            <img src={deployment.screenshot || noScreenshot} className={styles.image} />
+        {isSuccessful(firstActivity.deployment) && (
+          <MinardLink deployment={firstActivity.deployment} openInNewWindow>
+            <DeploymentScreenshot deployment={firstActivity.deployment} />
           </MinardLink>
         )}
       </div>
       <div className={classNames('col-xs-9', styles['activity-content'])}>
         <div>
           <SingleActivity
-            activity={activities[0]}
-            deployment={deployment}
-            commit={commit}
-            branch={branch}
-            project={project}
+            activity={firstActivity}
             showProjectName={showProjectName}
           />
         </div>
@@ -95,10 +45,6 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
             <hr className={styles.line} />
             <SingleActivity
               activity={activity}
-              deployment={deployment}
-              commit={commit}
-              branch={branch}
-              project={project}
               showProjectName={showProjectName}
             />
           </div>
@@ -108,35 +54,7 @@ const ActivityGroup = (props: PassedProps & GeneratedProps) => {
   );
 };
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
-  const activity = ownProps.activities[0];
-
-  if (!activity) {
-    return {};
-  }
-
-  const deployment = Deployments.selectors.getDeployment(state, activity.deployment);
-  const branch = Branches.selectors.getBranch(state, activity.branch);
-  let project: Project | FetchError | undefined;
-  let commit: Commit | FetchError | undefined;
-
-  if (branch && !isFetchError(branch)) {
-    project = Projects.selectors.getProject(state, branch.project);
-  }
-
-  if (deployment && !isFetchError(deployment)) {
-    commit = Commits.selectors.getCommit(state, deployment.commit);
-  }
-
-  return {
-    deployment,
-    branch,
-    commit,
-    project,
-  };
-};
-
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ActivityGroup);
+export default ActivityGroup;
 
 export const LoadingActivityGroup = () => (
   <div className={classNames('row', 'middle-xs', 'between-xs', styles['activity-group'], styles.loading)}>

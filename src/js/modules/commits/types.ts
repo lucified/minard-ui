@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { FetchError } from '../errors';
-import { ApiUser, RequestFetchActionCreators, User } from '../types';
+import { ApiUser, RequestFetchActionCreators, RequestFetchSpecificCollectionActionCreators, User } from '../types';
 
 // State
 export interface Commit {
@@ -25,6 +25,13 @@ export interface LoadCommitAction extends Action {
 }
 export type RequestCommitActionCreators = RequestFetchActionCreators<ResponseCommitElement>;
 
+// LOAD_COMMITS_FOR_BRANCH
+export interface LoadCommitsForBranchAction extends Action {
+  id: string;
+}
+export type RequestCommitsForBranchActionCreators =
+  RequestFetchSpecificCollectionActionCreators<ResponseCommitElement[]>;
+
 // STORE_COMMITS
 export interface StoreCommitsAction extends Action {
   entities: ResponseCommitElement[];
@@ -47,7 +54,7 @@ export interface ResponseCommitElement {
   };
   relationships?: {
     deployments?: {
-      data: ResponseDeploymentReference[];
+      data?: ResponseDeploymentReference[];
     };
   };
 }

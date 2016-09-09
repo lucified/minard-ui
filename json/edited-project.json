@@ -8,8 +8,8 @@
       "active-committers": []
     },
     "relationships": {
-      "branches": {
-        "data": []
+      "latest-successfully-deployed-commit": {
+        "data": {}
       }
     }
   },

@@ -1,5 +1,6 @@
 import { Action } from 'redux';
-import { CreateError, DeleteError, EditError, FetchError, FetchCollectionError } from './errors'
+
+import { CreateError, DeleteError, EditError, FetchCollectionError, FetchError } from './errors';
 
 export interface User {
   name?: string;

@@ -15,125 +15,16 @@
           "email": "juho@lucify.com",
           "timestamp": "2016-07-29T13:51:21.802Z"
         }
-      ]
+      ],
+      "latest-activity-timestamp": "2016-08-01T15:51:21.802Z"
     },
     "relationships": {
-      "branches": {
-        "data": [{
-          "type": "branches",
-          "id": "1"
-        },
-        {
-          "type": "branches",
-          "id": "2"
-        },
-        {
-          "type": "branches",
-          "id": "3"
-        }]
-      }
-    }
-  },
-  "included": [
-    {
-      "type": "branches",
-      "id": "1",
-      "attributes": {
-        "name": "first-branch",
-        "description": "This is a branch description"
-      },
-      "relationships": {
-        "deployments": {
-          "data": [{
-            "type": "deployments",
-            "id": "7"
-          }]
-        },
-        "commits": {
-          "data": [{
-            "type": "commits",
-            "id": "aacceeff02"
-          },
-          {
-            "type": "commits",
-            "id": "12354124"
-          },
-          {
-            "type": "commits",
-            "id": "2543452"
-          },
-          {
-            "type": "commits",
-            "id": "098325343"
-          },
-          {
-            "type": "commits",
-            "id": "29832572fc1"
-          },
-          {
-            "type": "commits",
-            "id": "29752a385"
-          }]
-        },
-        "project": {
-          "data": {
-            "type": "projects",
-            "id": "1"
-          }
-        }
-      }
-    },
-    {
-      "type": "branches",
-      "id": "2",
-      "attributes": {
-        "name": "second-branch"
-      },
-      "relationships": {
-        "commits": {
-          "data": [{
-            "type": "commits",
-            "id": "aacd00f02"
-          },
-          {
-            "type": "commits",
-            "id": "a998823423"
-          }]
-        },
-        "deployments": {
-          "data": [{
-            "type": "deployments",
-            "id": "8"
-          }]
-        },
-        "project": {
-          "data": {
-            "type": "projects",
-            "id": "1"
-          }
-        }
-      }
-    },
-    {
-      "type": "branches",
-      "id": "3",
-      "attributes": {
-        "name": "third-long-name-branch"
-      },
-      "relationships": {
-        "commits": {
-          "data": []
-        },
-        "deployments": {
-          "data": []
-        },
-        "project": {
-          "data": {
-            "type": "projects",
-            "id": "1"
-          }
+      "latest-successfully-deployed-commit": {
+        "data": {
+          "type": "commits",
+          "id": "aacceeff02"
         }
       }
     }
-  ]
+  }
 }

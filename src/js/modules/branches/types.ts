@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { FetchError } from '../errors';
-import { RequestFetchActionCreators } from '../types';
+import { RequestFetchActionCreators, RequestFetchSpecificCollectionActionCreators } from '../types';
 
 // State
 export interface Branch {
@@ -10,7 +10,10 @@ export interface Branch {
   project: string;
   description?: string;
   commits: string[];
-  deployments: string[];
+  latestSuccessfullyDeployedCommit?: string;
+  latestCommit?: string;
+  latestActivityTimestamp?: number;
+  buildErrors: string[];
 }
 
 export interface BranchState {
@@ -24,17 +27,25 @@ export interface LoadBranchAction extends Action {
 }
 export type RequestBranchActionCreators = RequestFetchActionCreators<ResponseBranchElement>;
 
+// LOAD_BRANCHES_FOR_PROJECT
+export interface LoadBranchesForProjectAction extends Action {
+  id: string;
+}
+export type RequestBranchesForProjectActionCreators =
+  RequestFetchSpecificCollectionActionCreators<ResponseBranchElement[]>;
+
+// ADD_COMMITS_TO_BRANCH
+export interface AddCommitsToBranchAction extends Action {
+  id: string;
+  commits: string[];
+}
+
 // STORE_BRANCHES
 export interface StoreBranchesAction extends Action {
   entities: ResponseBranchElement[];
 }
 
 // API response
-interface ResponseDeploymentReference {
-  type: "deployments";
-  id: string;
-}
-
 interface ResponseCommitReference {
   type: "commits";
   id: string;
@@ -51,13 +62,17 @@ export interface ResponseBranchElement {
   attributes: {
     name: string;
     description?: string;
+    'latest-activity-timestamp'?: string;
+    'minard-json'?: {
+      errors?: string[];
+    };
   };
   relationships: {
-    deployments: {
-      data: ResponseDeploymentReference[];
+    'latest-successfully-deployed-commit'?: {
+      data?: ResponseCommitReference;
     };
-    commits: {
-      data: ResponseCommitReference[];
+    'latest-commit'?: {
+      data?: ResponseCommitReference;
     };
     project: {
       data: ResponseProjectReference;

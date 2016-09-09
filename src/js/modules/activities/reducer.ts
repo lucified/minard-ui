@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Reducer } from 'redux';
 
+import { toDeploymentStatus } from '../deployments';
 import { RequestFetchSuccessAction } from '../types';
 
 import { ACTIVITIES, ACTIVITIES_FOR_PROJECT, STORE_ACTIVITIES } from './actions';
@@ -8,30 +9,59 @@ import * as t from './types';
 
 const initialState: t.ActivityState = {};
 
-const responseToStateShape = (activities: t.ApiResponse) => {
-  const activityType = (activityString: string): t.ActivityType => {
-    switch (activityString) {
-      case 'deployment':
-        return t.ActivityType.Deployment;
-      case 'comment':
-        return t.ActivityType.Comment;
-      default:
-        throw new Error('Unknown activity type!');
-    }
-  };
+const activityType = (activityString: string): t.ActivityType => {
+  switch (activityString) {
+    case 'deployment':
+      return t.ActivityType.Deployment;
+    case 'comment':
+      return t.ActivityType.Comment;
+    default:
+      throw new Error('Unknown activity type!');
+  }
+};
 
-  const createActivityObject = (activity: t.ResponseActivityElement): t.Activity => {
-    return {
-      id: activity.id,
-      type: activityType(activity.attributes['activity-type']),
-      deployment: activity.relationships.deployment.data.id,
-      branch: activity.relationships.branch.data.id,
-      project: activity.relationships.project.data.id,
-      timestamp: moment(activity.attributes.timestamp).valueOf(),
-    };
-  };
+const createActivityObject = (activity: t.ResponseActivityElement): t.Activity => {
+  const commit = activity.attributes.commit;
+  const deployment = activity.attributes.deployment;
 
-  return activities.reduce((obj, activity) => {
+  return {
+    id: activity.id,
+    type: activityType(activity.attributes['activity-type']),
+    project: activity.attributes.project,
+    branch: activity.attributes.branch,
+    commit: {
+      id: commit.id,
+      hash: commit.hash,
+      message: commit.message,
+      author: {
+        name: commit.author.name,
+        email: commit.author.email,
+        timestamp: moment(commit.author.timestamp).valueOf(),
+      },
+      committer: {
+        name: commit.committer.name,
+        email: commit.committer.email,
+        timestamp: moment(commit.committer.timestamp).valueOf(),
+      },
+      deployment: commit.deployments && commit.deployments.length > 0 ? commit.deployments[0] : undefined,
+    },
+    deployment: {
+      status: toDeploymentStatus(deployment.status),
+      id: deployment.id,
+      url: deployment.url,
+      screenshot: deployment.screenshot,
+      creator: {
+        name: deployment.creator.name,
+        email: deployment.creator.email,
+        timestamp: moment(deployment.creator.timestamp).valueOf(),
+      },
+    },
+    timestamp: moment(activity.attributes.timestamp).valueOf(),
+  };
+};
+
+const responseToStateShape = (activities: t.ApiResponse): t.ActivityState =>
+  activities.reduce<t.ActivityState>((obj, activity) => {
     try {
       const activityObject = createActivityObject(activity);
       return Object.assign(obj, { [activity.id]: activityObject });
@@ -40,7 +70,6 @@ const responseToStateShape = (activities: t.ApiResponse) => {
       return obj;
     }
   }, {});
-};
 
 const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
   switch (action.type) {

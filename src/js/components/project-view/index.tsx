@@ -25,7 +25,7 @@ interface PassedProps {
 
 interface GeneratedStateProps {
   project?: Project | FetchError;
-  branches?: (Branch | FetchError)[];
+  branches?: (Branch | FetchError | undefined)[] | FetchError;
   activities?: Activity[];
   isLoadingActivities: boolean;
 }
@@ -33,14 +33,16 @@ interface GeneratedStateProps {
 interface GeneratedDispatchProps {
   loadProject: (id: string) => void;
   loadActivity: (id: string) => void;
+  loadBranches: (id: string) => void;
 }
 
 class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
-    const { loadProject, loadActivity } = this.props;
+    const { loadProject, loadActivity, loadBranches } = this.props;
     const { projectId } = this.props.params;
 
     loadProject(projectId);
+    loadBranches(projectId);
     loadActivity(projectId);
   }
 
@@ -51,9 +53,9 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
   }
 
   public render() {
-    const { project } = this.props;
+    const { project, branches } = this.props;
 
-    if (!project) {
+    if (!project || !branches) {
       return <LoadingIcon className={styles.loading} center />;
     }
 
@@ -67,7 +69,17 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       );
     }
 
-    const { branches, activities, isLoadingActivities, params: { show } } = this.props;
+    if (isFetchError(branches)) {
+      return (
+        <div className={styles.error}>
+          <h2>Unable to load branches</h2>
+          <p><a onClick={this.reloadPage}>Click to reload</a></p>
+          <small>{branches.prettyError}</small>
+        </div>
+      );
+    }
+
+    const { activities, isLoadingActivities, params: { show } } = this.props;
 
     if (show === 'all') {
       return (
@@ -97,10 +109,20 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     return { project, isLoadingActivities };
   }
 
+  let branches: (Branch | FetchError | undefined)[] | undefined | FetchError;
+  let branchIDs = project.branches;
+  if (branchIDs) {
+    if (isFetchError(branchIDs)) {
+      branches = branchIDs;
+    } else {
+      branches = branchIDs.map(branchId => Branches.selectors.getBranch(state, branchId));
+    }
+  }
+
   return {
     project,
     isLoadingActivities,
-    branches: project.branches.map(branchId => Branches.selectors.getBranch(state, branchId)),
+    branches,
     activities: Activities.selectors.getActivitiesForProject(state),
   };
 };
@@ -110,5 +132,6 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>
   {
     loadProject: Projects.actions.loadProject,
     loadActivity: Activities.actions.loadActivitiesForProject,
+    loadBranches: Branches.actions.loadBranchesForProject,
   },
 )(ProjectView);

@@ -9,23 +9,20 @@ import * as t from './types';
 
 const initialState: t.DeploymentState = {};
 
-const responseToStateShape = (deployments: t.ApiResponse) => {
-  const createDeploymentObject = (deployment: t.ResponseDeploymentElement): t.Deployment => {
-    return {
-      id: deployment.id,
-      status: deployment.attributes.status,
-      url: deployment.attributes.url,
-      screenshot: deployment.attributes.screenshot,
-      commit: deployment.relationships.commit.data.id,
-      creator: {
-        name: deployment.attributes.creator.name,
-        email: deployment.attributes.creator.email,
-        timestamp: moment(deployment.attributes.creator.timestamp).valueOf(),
-      },
-    };
-  };
+const createDeploymentObject = (deployment: t.ResponseDeploymentElement): t.Deployment => ({
+  id: deployment.id,
+  status: t.toDeploymentStatus(deployment.attributes.status),
+  url: deployment.attributes.url,
+  screenshot: deployment.attributes.screenshot,
+  creator: {
+    name: deployment.attributes.creator.name,
+    email: deployment.attributes.creator.email,
+    timestamp: moment(deployment.attributes.creator.timestamp).valueOf(),
+  },
+});
 
-  return deployments.reduce((obj, deployment) => {
+const responseToStateShape = (deployments: t.ApiResponse): t.DeploymentState =>
+  deployments.reduce<t.DeploymentState>((obj, deployment) => {
     try {
       const stateObject = createDeploymentObject(deployment);
       return Object.assign(obj, { [deployment.id]: stateObject });
@@ -34,7 +31,6 @@ const responseToStateShape = (deployments: t.ApiResponse) => {
       return obj;
     }
   }, {});
-};
 
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
   switch (action.type) {

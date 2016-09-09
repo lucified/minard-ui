@@ -1,8 +1,10 @@
 import { Action } from 'redux';
 
+import { DeploymentStatus, DeploymentStatusString } from '../deployments';
 import { RequestFetchCollectionActionCreators, RequestFetchSpecificCollectionActionCreators } from '../types';
 
 // State
+type ActivityTypeString = 'deployment' | 'comment';
 export enum ActivityType {
   Comment,
   Deployment,
@@ -12,9 +14,41 @@ export interface Activity {
   id: string;
   type: ActivityType;
   timestamp: number;
-  deployment: string;
-  branch: string;
-  project: string;
+  commit: {
+    id: string;
+    hash: string;
+    message: string;
+    author: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+    committer: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+    deployment?: string;
+  };
+  branch: {
+    id: string;
+    name: string;
+  };
+  project: {
+    id: string;
+    name: string;
+  };
+  deployment: {
+    status: DeploymentStatus;
+    id: string;
+    url?: string;
+    screenshot?: string;
+    creator: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+  };
 }
 
 export interface ActivityState {
@@ -42,8 +76,8 @@ export interface StoreActivitiesAction extends Action {
 }
 
 // API response
-interface ResponseDeploymentReference {
-  type: "deployments";
+interface ResponseCommitReference {
+  type: "commits";
   id: string;
 }
 
@@ -61,18 +95,42 @@ export interface ResponseActivityElement {
   type: "activities";
   id: string;
   attributes: {
-    'activity-type': 'deployment' | 'comment';
+    'activity-type': ActivityTypeString;
     timestamp: string;
-  };
-  relationships: {
-    deployment: {
-      data: ResponseDeploymentReference;
+    project: {
+      id: string;
+      name: string;
     };
     branch: {
-      data: ResponseBranchReference;
+      id: string;
+      name: string;
     };
-    project: {
-      data: ResponseProjectReference;
+    commit: {
+      id: string;
+      hash: string;
+      message: string;
+      author: {
+        name?: string;
+        email: string;
+        timestamp: string;
+      };
+      committer: {
+        name?: string;
+        email: string;
+        timestamp: string;
+      };
+      deployments: string[];
+    };
+    deployment: {
+      status: DeploymentStatusString;
+      id: string;
+      url?: string;
+      screenshot?: string;
+      creator: {
+        name?: string;
+        email: string;
+        timestamp: string;
+      };
     };
   };
 }

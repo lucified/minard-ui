@@ -12,4 +12,5 @@ export const getProjects = createSelector(
   projects => values<Project | FetchError>(projects)
 );
 
-export const getProject = (state: StateTree, id: string) => selectProjectTree(state)[id];
+export const getProject = (state: StateTree, id: string): Project | FetchError | undefined =>
+  selectProjectTree(state)[id];
