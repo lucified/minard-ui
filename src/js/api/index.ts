@@ -104,8 +104,13 @@ const Branch = {
 const Commit = {
   fetch: (id: string): ApiPromise => getApi(`/commits/${id}`),
   fetchForBranch: (id: string, count: number, until?: number): ApiPromise => {
-    const untilString = until ? `&until=${encodeURIComponent(moment(until).toISOString())}` : '';
-    return getApi(`/branches/${id}/relationships/commits?count=${count}${untilString}`);
+    const query: any = { count };
+
+    if (until) {
+      query.until = moment(until).toISOString();
+    }
+
+    return getApi(`/branches/${id}/relationships/commits`, query);
   },
 };
 
