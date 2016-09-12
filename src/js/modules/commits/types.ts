@@ -27,6 +27,8 @@ export interface LoadCommitAction extends Action {
 // LOAD_COMMITS_FOR_BRANCH
 export interface LoadCommitsForBranchAction extends Action {
   id: string;
+  until?: number;
+  count?: number;
 }
 
 // STORE_COMMITS

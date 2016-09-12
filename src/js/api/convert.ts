@@ -148,6 +148,7 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
     buildErrors: errors,
     latestActivityTimestamp,
     commits,
+    allCommitsLoaded: commits.length === 0,
     latestCommit,
     latestSuccessfullyDeployedCommit,
   };

@@ -7,9 +7,11 @@ export const loadCOMMIT = (id: string): t.LoadCommitAction => ({
 });
 
 export const LOAD_COMMITS_FOR_BRANCH = 'COMMITS/LOAD_COMMITS_FOR_BRANCH';
-export const loadCommitsForBranch = (id: string): t.LoadCommitsForBranchAction => ({
+export const loadCommitsForBranch = (id: string, until?: number, count?: number): t.LoadCommitsForBranchAction => ({
   type: LOAD_COMMITS_FOR_BRANCH,
   id,
+  until,
+  count,
 });
 
 export const STORE_COMMITS = 'COMMITS/STORE_COMMITS';
