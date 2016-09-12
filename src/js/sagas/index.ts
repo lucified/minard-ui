@@ -11,7 +11,7 @@ import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits'
 import Deployments, { Deployment } from '../modules/deployments';
 import { isFetchError, FetchError } from '../modules/errors';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
-import Projects, { Project, DeleteProjectAction, StoreProjectsAction } from '../modules/projects';
+import Projects, { Project, DeleteProjectAction, LoadAllProjectsAction, StoreProjectsAction } from '../modules/projects';
 import Requests from '../modules/requests';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
@@ -99,7 +99,7 @@ export default function createSagas(api: Api) {
   }
 
   // ALL PROJECTS
-  function* loadAllProjects(): IterableIterator<Effect> {
+  function* loadAllProjects(action: LoadAllProjectsAction): IterableIterator<Effect> {
     const fetchSuccess = yield call(fetchAllProjects);
     if (fetchSuccess) {
       yield fork(ensureAllProjectsRelatedDataLoaded);
@@ -441,7 +441,7 @@ export default function createSagas(api: Api) {
   function* watchForLoadActivities(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Activities.actions.LOAD_ACTIVITIES);
-      yield call(loadActivities);
+      yield call(loadActivities, action);
     }
   }
 
@@ -452,7 +452,7 @@ export default function createSagas(api: Api) {
   function* watchForLoadAllProjects(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Projects.actions.LOAD_ALL_PROJECTS);
-      yield call(loadAllProjects);
+      yield call(loadAllProjects, action);
     }
   }
 

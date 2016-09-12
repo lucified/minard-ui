@@ -160,7 +160,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next(action).value).to.deep.equal(
-        call(sagas.loadAllProjects)
+        call(sagas.loadAllProjects, action)
       );
     });
   });
@@ -175,7 +175,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next(action).value).to.deep.equal(
-        call(sagas.loadActivities)
+        call(sagas.loadActivities, action)
       );
     });
   });
@@ -290,8 +290,12 @@ describe('sagas', () => {
   );
 
   describe('loadAllProjects', () => {
+    const action = {
+      type: Projects.actions.LOAD_ALL_PROJECTS,
+    };
+
     it('fetches projects and ensures data', () => {
-      const iterator = sagas.loadAllProjects();
+      const iterator = sagas.loadAllProjects(action);
 
       expect(iterator.next().value).to.deep.equal(
         call(sagas.fetchAllProjects)
@@ -305,7 +309,7 @@ describe('sagas', () => {
     });
 
     it('does not ensure data if fetching fails', () => {
-      const iterator = sagas.loadAllProjects();
+      const iterator = sagas.loadAllProjects(action);
 
       expect(iterator.next().value).to.deep.equal(
         call(sagas.fetchAllProjects)
