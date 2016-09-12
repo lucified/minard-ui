@@ -1,6 +1,6 @@
 import { compact, uniq } from 'lodash';
 import { SubmissionError } from 'redux-form';
-import { takeEvery, takeLatest } from 'redux-saga';
+import { delay, takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
@@ -78,6 +78,12 @@ export default function createSagas(api: Api) {
   // PROJECT ACTIVITIES
   function* loadActivitiesForProject(action: LoadActivitiesForProjectAction): IterableIterator<Effect> {
     const { id, count, until } = action;
+
+    // Return if we're already requesting
+    if (yield select(Requests.selectors.isLoadingActivitiesForProject, id)) {
+      return;
+    }
+
     const fetchSuccess = yield call(fetchActivitiesForProject, id, count, until);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
@@ -275,6 +281,11 @@ export default function createSagas(api: Api) {
       branch = branches.find(branch => branch.id === id);
     }
 
+    // Return if we're already requesting
+    if (yield select(Requests.selectors.isLoadingCommitsForBranch, id)) {
+      return;
+    }
+
     if (isFetchError(branch)) {
       console.log('Error: Not fetching commits for branch.');
     } else {
@@ -441,17 +452,24 @@ export default function createSagas(api: Api) {
   function* watchForLoadActivities(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Activities.actions.LOAD_ACTIVITIES);
+      // Block until it's done, skipping any further actions
       yield call(loadActivities, action);
     }
   }
 
-  function* watchForLoadActivitiesForProject() {
-    yield* takeEvery(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject);
+  function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
+      yield fork(loadActivitiesForProject, action);
+      // throttle by 200ms
+      yield call(delay, 200);
+    }
   }
 
   function* watchForLoadAllProjects(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Projects.actions.LOAD_ALL_PROJECTS);
+      // Block until it's done, skipping any further actions
       yield call(loadAllProjects, action);
     }
   }
@@ -476,8 +494,13 @@ export default function createSagas(api: Api) {
     yield* takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
 
-  function* watchForLoadCommitsForBranch() {
-    yield* takeEvery(Commits.actions.LOAD_COMMITS_FOR_BRANCH, loadCommitsForBranch);
+  function* watchForLoadCommitsForBranch(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(Commits.actions.LOAD_COMMITS_FOR_BRANCH);
+      yield fork(loadCommitsForBranch, action);
+      // throttle by 200ms
+      yield call(delay, 200);
+    }
   }
 
   function* root() {
