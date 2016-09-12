@@ -379,10 +379,34 @@ describe('sagas', () => {
       id: '1',
     };
 
-    it('calls fetchBranchesForProject', () => {
+    it('calls fetchBranchesForProject if branch exists', () => {
       const iterator = sagas.loadBranchesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
+        select(Projects.selectors.getProject, action.id)
+      );
+
+      expect(iterator.next({ id: action.id }).value).to.deep.equal(
+        call(sagas.fetchBranchesForProject, action.id)
+      );
+    });
+
+    it('calls fetchBranchesForProject only once branch has been received', () => {
+      const iterator = sagas.loadBranchesForProject(action);
+
+      expect(iterator.next().value).to.deep.equal(
+        select(Projects.selectors.getProject, action.id)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        take(Projects.actions.STORE_PROJECTS)
+      );
+
+      expect(iterator.next({ entities: [{ id: 'foo' }]}).value).to.deep.equal(
+        take(Projects.actions.STORE_PROJECTS)
+      );
+
+      expect(iterator.next({ entities: [{ id: 'bar' }, { id: action.id }]}).value).to.deep.equal(
         call(sagas.fetchBranchesForProject, action.id)
       );
     });
@@ -391,15 +415,18 @@ describe('sagas', () => {
       const iterator = sagas.loadBranchesForProject(action);
 
       iterator.next();
+      iterator.next({ id: action.id });
       expect(iterator.next(true).value).to.deep.equal(
         fork(sagas.ensureBranchesForProjectRelatedDataLoaded, action.id)
       );
       expect(iterator.next().done).to.equal(true);
     });
+
     it('does not ensure needed data if fetch was a failure', () => {
       const iterator = sagas.loadBranchesForProject(action);
 
       iterator.next();
+      iterator.next({ id: action.id });
       expect(iterator.next(false).done).to.equal(true);
     });
   });
@@ -410,10 +437,34 @@ describe('sagas', () => {
       id: '1',
     };
 
-    it('calls fetchCommitsForBranch', () => {
+    it('calls fetchCommitsForBranch if branch exists', () => {
       const iterator = sagas.loadCommitsForBranch(action);
 
       expect(iterator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, action.id)
+      );
+
+      expect(iterator.next({ id: action.id }).value).to.deep.equal(
+        call(sagas.fetchCommitsForBranch, action.id)
+      );
+    });
+
+    it('calls fetchCommitsForBranch only once branch has been received', () => {
+      const iterator = sagas.loadCommitsForBranch(action);
+
+      expect(iterator.next().value).to.deep.equal(
+        select(Branches.selectors.getBranch, action.id)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        take(Branches.actions.STORE_BRANCHES)
+      );
+
+      expect(iterator.next({ entities: [{ id: 'foo' }]}).value).to.deep.equal(
+        take(Branches.actions.STORE_BRANCHES)
+      );
+
+      expect(iterator.next({ entities: [{ id: 'bar' }, { id: action.id }]}).value).to.deep.equal(
         call(sagas.fetchCommitsForBranch, action.id)
       );
     });
@@ -422,15 +473,18 @@ describe('sagas', () => {
       const iterator = sagas.loadCommitsForBranch(action);
 
       iterator.next();
+      iterator.next({ id: action.id });
       expect(iterator.next(true).value).to.deep.equal(
         fork(sagas.ensureCommitsForBranchRelatedDataLoaded, action.id)
       );
       expect(iterator.next().done).to.equal(true);
     });
+
     it('does not ensure needed data if fetch was a failure', () => {
       const iterator = sagas.loadCommitsForBranch(action);
 
       iterator.next();
+      iterator.next({ id: action.id });
       expect(iterator.next(false).done).to.equal(true);
     });
   });

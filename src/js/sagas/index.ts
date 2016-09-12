@@ -6,12 +6,12 @@ import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects'
 import * as Converter from '../api/convert';
 import { Api, ApiEntityTypeString, ApiResponse } from '../api/types';
 import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules/activities';
-import Branches, { Branch, LoadBranchesForProjectAction } from '../modules/branches';
+import Branches, { Branch, LoadBranchesForProjectAction, StoreBranchesAction } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { isFetchError, FetchError } from '../modules/errors';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
-import Projects, { Project, DeleteProjectAction } from '../modules/projects';
+import Projects, { Project, DeleteProjectAction, StoreProjectsAction } from '../modules/projects';
 import Requests from '../modules/requests';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
@@ -174,9 +174,20 @@ export default function createSagas(api: Api) {
   // BRANCHES_FOR_PROJECT
   function* loadBranchesForProject(action: LoadBranchesForProjectAction): IterableIterator<Effect> {
     const id = action.id;
-    const fetchSuccess = yield call(fetchBranchesForProject, id);
-    if (fetchSuccess) {
-      yield fork(ensureBranchesForProjectRelatedDataLoaded, id);
+    let project = <Project | FetchError | undefined>(yield select(Projects.selectors.getProject, id));
+
+    while (!project) {
+      const { entities: projects } = <StoreProjectsAction>(yield take(Projects.actions.STORE_PROJECTS));
+      project = projects.find(project => project.id === id);
+    }
+
+    if (isFetchError(project)) {
+      console.log('Error: Not fetching branches for project.');
+    } else {
+      const fetchSuccess = yield call(fetchBranchesForProject, id);
+      if (fetchSuccess) {
+        yield fork(ensureBranchesForProjectRelatedDataLoaded, id);
+      }
     }
   }
 
@@ -256,9 +267,20 @@ export default function createSagas(api: Api) {
   // COMMITS_FOR_BRANCH
   function* loadCommitsForBranch(action: LoadCommitsForBranchAction): IterableIterator<Effect> {
     const id = action.id;
-    const fetchSuccess = yield call(fetchCommitsForBranch, id);
-    if (fetchSuccess) {
-      yield fork(ensureCommitsForBranchRelatedDataLoaded, id);
+    let branch = <Branch | FetchError | undefined>(yield select(Branches.selectors.getBranch, id));
+
+    while (!branch) {
+      const { entities: branches } = <StoreBranchesAction>(yield take(Branches.actions.STORE_BRANCHES));
+      branch = branches.find(branch => branch.id === id);
+    }
+
+    if (isFetchError(branch)) {
+      console.log('Error: Not fetching commits for branch.');
+    } else {
+      const fetchSuccess = yield call(fetchCommitsForBranch, id);
+      if (fetchSuccess) {
+        yield fork(ensureCommitsForBranchRelatedDataLoaded, id);
+      }
     }
   }
 

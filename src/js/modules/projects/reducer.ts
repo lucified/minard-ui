@@ -33,6 +33,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [projectId]: newProject });
       }
 
+      console.log('Error: trying save branches to project that does not exist.'); // tslint:disable-line:no-console
       return state;
     case Requests.actions.Branches.LoadBranchesForProject.FAILURE.type:
       const fetchError = <FetchError> action;
@@ -51,6 +52,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return omit<t.ProjectState, t.ProjectState>(state, id);
       }
 
+      console.log('Error: trying to delete a project that does not exist.'); // tslint:disable-line:no-console
       return state;
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
