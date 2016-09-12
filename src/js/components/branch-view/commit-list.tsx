@@ -23,7 +23,7 @@ interface Props {
   commits: (Commit | FetchError | undefined)[];
   isLoading: boolean;
   allLoaded: boolean;
-  loadCommits: (count?: number, until?: number) => void;
+  loadCommits: (count: number, until?: number) => void;
 }
 
 const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
