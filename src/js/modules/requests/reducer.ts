@@ -20,6 +20,8 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
     case actions.Projects.DeleteProject.REQUEST.type:
     case actions.Activities.LoadActivitiesForProject.REQUEST.type:
     case actions.Commits.LoadCommitsForBranch.REQUEST.type:
+    case actions.ALL_ACTIVITIES_REQUESTED:
+    case actions.ALL_ACTIVITIES_REQUESTED_FOR_PROJECT:
       return state.concat(action);
 
     case actions.Activities.LoadActivitiesForProject.FAILURE.type:

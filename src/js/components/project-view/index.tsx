@@ -28,6 +28,7 @@ interface GeneratedStateProps {
   branches?: (Branch | FetchError | undefined)[] | FetchError;
   activities?: Activity[];
   isLoadingActivities: boolean;
+  isAllActivitiesRequestedForProject: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -79,7 +80,8 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       );
     }
 
-    const { activities, loadActivities, isLoadingActivities, params: { show } } = this.props;
+    const { activities, loadActivities, isLoadingActivities, isAllActivitiesRequestedForProject } = this.props;
+    const { params: { show } } = this.props;
 
     if (show === 'all') {
       return (
@@ -98,7 +100,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
           activities={activities!}
           loadActivities={loadActivities.bind(this, project.id)}
           isLoading={isLoadingActivities}
-          allLoaded={false /* TODO: fix */}
+          allLoaded={isAllActivitiesRequestedForProject}
         />
       </div>
     );
@@ -109,9 +111,14 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const { projectId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const isLoadingActivities = Requests.selectors.isLoadingActivitiesForProject(state, projectId);
+  const isAllActivitiesRequestedForProject = Requests.selectors.isAllActivitiesRequestedForProject(state, projectId);
 
   if (!project || isFetchError(project)) {
-    return { project, isLoadingActivities };
+    return {
+      project,
+      isLoadingActivities,
+      isAllActivitiesRequestedForProject,
+    };
   }
 
   let branches: (Branch | FetchError | undefined)[] | undefined | FetchError;
@@ -127,6 +134,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   return {
     project,
     isLoadingActivities,
+    isAllActivitiesRequestedForProject,
     branches,
     activities: Activities.selectors.getActivitiesForProject(state),
   };

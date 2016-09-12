@@ -24,6 +24,7 @@ interface GeneratedStateProps {
   projects: (Project | FetchError)[];
   isLoadingProjects: boolean;
   isLoadingAllActivities: boolean;
+  isAllActivitiesRequested: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -40,8 +41,8 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
   }
 
   public render() {
-    const { projects, activities, isLoadingAllActivities, isLoadingProjects, loadActivities } = this.props;
-    const { params: { show } } = this.props;
+    const { activities, projects, params: { show } } = this.props;
+    const { isLoadingAllActivities, isLoadingProjects, isAllActivitiesRequested, loadActivities } = this.props;
 
     if (isLoadingProjects && projects.length === 0) {
       return <LoadingIcon className={styles.loading} center />;
@@ -60,7 +61,7 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
           activities={activities}
           loadActivities={loadActivities}
           isLoading={isLoadingAllActivities}
-          allLoaded={false /* TODO: fix */}
+          allLoaded={isAllActivitiesRequested}
         />
       </div>
     );
@@ -72,6 +73,7 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   activities: Activities.selectors.getActivities(state),
   isLoadingProjects: Requests.selectors.isLoadingAllProjects(state),
   isLoadingAllActivities: Requests.selectors.isLoadingAllActivities(state),
+  isAllActivitiesRequested: Requests.selectors.isAllActivitiesRequested(state),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

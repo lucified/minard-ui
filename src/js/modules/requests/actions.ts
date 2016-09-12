@@ -170,3 +170,14 @@ export const Activities = {
   LoadAllActivities: fetchCollectionActionCreators('ACTIVITIES/LOAD_ALL_ACTIVITIES'),
   LoadActivitiesForProject: fetchEntityActionCreators('ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT'),
 };
+
+export const ALL_ACTIVITIES_REQUESTED = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED';
+export const allActivitiesRequested = (): t.AllActivitiesRequestedAction => ({
+  type: ALL_ACTIVITIES_REQUESTED,
+});
+
+export const ALL_ACTIVITIES_REQUESTED_FOR_PROJECT = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED_FOR_PROJECT';
+export const allActivitiesRequestedForProject = (id: string): t.AllActivitiesRequestedForProjectAction => ({
+  type: ALL_ACTIVITIES_REQUESTED_FOR_PROJECT,
+  id,
+});

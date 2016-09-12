@@ -40,3 +40,17 @@ export const isLoadingCommitsForBranch = (state: StateTree, id: string): boolean
     (requestInfo.type === actions.Commits.LoadCommitsForBranch.REQUEST.type) &&
     (requestInfo.id === id)
   );
+
+export const isAllActivitiesRequested = createSelector<StateTree, boolean, t.RequestsState>(
+  selectRequestsTree,
+  (requestInformations) =>
+    !!requestInformations.find(requestInfo =>
+      requestInfo.type === actions.ALL_ACTIVITIES_REQUESTED
+    )
+);
+
+export const isAllActivitiesRequestedForProject = (state: StateTree, id: string): boolean =>
+  !!selectRequestsTree(state).find(requestInfo =>
+    (requestInfo.type === actions.ALL_ACTIVITIES_REQUESTED_FOR_PROJECT) &&
+    (requestInfo.id === id)
+  );

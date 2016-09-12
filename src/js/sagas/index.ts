@@ -62,7 +62,14 @@ export default function createSagas(api: Api) {
     Converter.toActivities,
     Activities.actions.storeActivities,
     api.Activity.fetchAll,
+    checkIfAllActivitiesLoaded,
   );
+
+  function* checkIfAllActivitiesLoaded(response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+    if ((<ApiEntity[]> response.data).length < count) {
+      yield put(Requests.actions.allActivitiesRequested());
+    }
+  }
 
   function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
     // Do nothing. Activities are self-contained
@@ -82,7 +89,14 @@ export default function createSagas(api: Api) {
     Converter.toActivities,
     Activities.actions.storeActivities,
     api.Activity.fetchAllForProject,
+    checkIfAllActivitiesLoadedForProject,
   );
+
+  function* checkIfAllActivitiesLoadedForProject(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+    if ((<ApiEntity[]> response.data).length < count) {
+      yield put(Requests.actions.allActivitiesRequestedForProject(id));
+    }
+  }
 
   // ALL PROJECTS
   function* loadAllProjects(): IterableIterator<Effect> {
