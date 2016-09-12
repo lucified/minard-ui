@@ -47,6 +47,13 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
           onEnter={() => { loadCommits(lastCommit.committer.timestamp, 10); }}
         />
       }
+      {allLoaded && (
+        <div className="row center-xs">
+          <div className={classNames('col-xs-12', styles.end)}>
+            <h2>Beginning of branch</h2>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
