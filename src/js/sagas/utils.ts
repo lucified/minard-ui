@@ -47,7 +47,8 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
   requestActionCreators: FetchEntityActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise
+  apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise,
+  postStoreEffects?: (id: string, response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
   return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator(id));
@@ -65,6 +66,10 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
       const entities = yield call(converter, response.data);
       yield put(storeEntitiesActionCreator(entities));
 
+      if (postStoreEffects) {
+        yield* postStoreEffects(id, response, ...args);
+      }
+
       return true;
     } else {
       yield put(requestActionCreators.FAILURE.actionCreator(id, error!, details));
@@ -78,7 +83,8 @@ export const createCollectionFetcher = <ResponseEntity, ApiParams>(
   requestActionCreators: CollectionActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (...args: ApiParams[]) => ApiPromise
+  apiFetchFunction: (...args: ApiParams[]) => ApiPromise,
+  postStoreEffects?: (response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
   return function* (...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.REQUEST.actionCreator());
@@ -95,6 +101,10 @@ export const createCollectionFetcher = <ResponseEntity, ApiParams>(
 
       const entities = yield call(converter, response.data);
       yield put(storeEntitiesActionCreator(entities));
+
+      if (postStoreEffects) {
+        yield* postStoreEffects(response, ...args);
+      }
 
       return true;
     } else {

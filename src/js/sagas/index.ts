@@ -4,7 +4,7 @@ import { takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
-import { Api, ApiEntityTypeString, ApiResponse } from '../api/types';
+import { Api, ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
 import Activities, { Activity, LoadActivitiesForProjectAction, LoadActivitiesAction } from '../modules/activities';
 import Branches, { Branch, LoadBranchesForProjectAction, StoreBranchesAction } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
@@ -192,31 +192,17 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchBranchesForProject(id: string): IterableIterator<Effect> {
-    yield put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id));
+  const fetchBranchesForProject = createEntityFetcher(
+    Requests.actions.Branches.LoadBranchesForProject,
+    Converter.toBranches,
+    Branches.actions.storeBranches,
+    api.Branch.fetchForProject,
+    addBranchesToProject,
+  );
 
-    const { response, error, details }: { response?: any, error?: string, details?: string } =
-      yield call(api.Branch.fetchForProject, id);
-
-    if (response) {
-      yield put(Requests.actions.Branches.LoadBranchesForProject.SUCCESS.actionCreator(id));
-
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      const entities = yield call(Converter.toBranches, response.data);
-      yield put(Branches.actions.storeBranches(entities));
-
-      const branchIds = response.data.map((branch: any) => branch.id);
-      yield put(Projects.actions.addBranchesToProject(id, branchIds));
-
-      return true;
-    } else {
-      yield put(Requests.actions.Branches.LoadBranchesForProject.FAILURE.actionCreator(id, error!, details));
-
-      return false;
-    }
+  function* addBranchesToProject(id: string, response: ApiResponse): IterableIterator<Effect> {
+    const branchIds = (<ApiEntity[]> response.data).map((branch: any) => branch.id);
+    yield put(Projects.actions.addBranchesToProject(id, branchIds));
   }
 
   function* ensureBranchesForProjectRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
@@ -285,30 +271,17 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchCommitsForBranch(id: string, count: number, until?: number): IterableIterator<Effect> {
-    yield put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id));
+  const fetchCommitsForBranch = createEntityFetcher(
+    Requests.actions.Commits.LoadCommitsForBranch,
+    Converter.toCommits,
+    Commits.actions.storeCommits,
+    api.Commit.fetchForBranch,
+    addCommitsToBranch,
+  );
 
-    const { response, error, details } = yield call(api.Commit.fetchForBranch, id, count, until);
-
-    if (response) {
-      yield put(Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(id));
-
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      const entities = yield call(Converter.toCommits, response.data);
-      yield put(Commits.actions.storeCommits(entities));
-
-      const commitIds = response.data.map((commit: any) => commit.id);
-      yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));
-
-      return true;
-    } else {
-      yield put(Requests.actions.Commits.LoadCommitsForBranch.FAILURE.actionCreator(id, error, details));
-
-      return false;
-    }
+  function* addCommitsToBranch(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+    const commitIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
+    yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));
   }
 
   function* ensureCommitsForBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
