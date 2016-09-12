@@ -266,7 +266,7 @@ export default function createSagas(api: Api) {
 
   // COMMITS_FOR_BRANCH
   function* loadCommitsForBranch(action: LoadCommitsForBranchAction): IterableIterator<Effect> {
-    const { id, until, count } = action;
+    const { id, count, until } = action;
     let branch = <Branch | FetchError | undefined>(yield select(Branches.selectors.getBranch, id));
 
     while (!branch) {
@@ -277,17 +277,17 @@ export default function createSagas(api: Api) {
     if (isFetchError(branch)) {
       console.log('Error: Not fetching commits for branch.');
     } else {
-      const fetchSuccess = yield call(fetchCommitsForBranch, id, until, count);
+      const fetchSuccess = yield call(fetchCommitsForBranch, id, count, until);
       if (fetchSuccess) {
         yield fork(ensureCommitsForBranchRelatedDataLoaded, id);
       }
     }
   }
 
-  function* fetchCommitsForBranch(id: string, until?: number, count = 10): IterableIterator<Effect> {
+  function* fetchCommitsForBranch(id: string, count: number, until?: number): IterableIterator<Effect> {
     yield put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id));
 
-    const { response, error, details } = yield call(api.Commit.fetchForBranch, id, until, count);
+    const { response, error, details } = yield call(api.Commit.fetchForBranch, id, count, until);
 
     if (response) {
       yield put(Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(id));

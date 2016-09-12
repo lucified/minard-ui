@@ -21,7 +21,7 @@ export interface Api {
   };
   Commit: {
     fetch: (id: string) => ApiPromise;
-    fetchForBranch: (id: string, until?: number, count?: number) => ApiPromise;
+    fetchForBranch: (id: string, count: number, until?: number) => ApiPromise;
   };
 }
 

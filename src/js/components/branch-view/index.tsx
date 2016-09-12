@@ -30,7 +30,7 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadBranch: (id: string) => void;
-  loadCommits: (id: string, until?: number, count?: number) => void;
+  loadCommits: (id: string, count?: number, until?: number) => void;
 }
 
 class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
@@ -39,7 +39,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     const { branchId } = this.props.params;
 
     loadBranch(branchId);
-    loadCommits(branchId);
+    loadCommits(branchId, 10);
   }
 
   private reloadPage(e: any) {

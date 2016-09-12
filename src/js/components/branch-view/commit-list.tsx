@@ -23,7 +23,7 @@ interface Props {
   commits: (Commit | FetchError | undefined)[];
   isLoading: boolean;
   allLoaded: boolean;
-  loadCommits: (until?: number, count?: number) => void;
+  loadCommits: (count?: number, until?: number) => void;
 }
 
 const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
@@ -44,7 +44,7 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
       {!isLoading && !allLoaded && lastCommit && !isFetchError(lastCommit) &&
         <Waypoint
           bottomOffset="-200px" // Start loading new commits when the waypoint is 200px below the bottom edge
-          onEnter={() => { loadCommits(lastCommit.committer.timestamp, 10); }}
+          onEnter={() => { loadCommits(10, lastCommit.committer.timestamp); }}
         />
       }
       {allLoaded && (

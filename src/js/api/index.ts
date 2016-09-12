@@ -103,7 +103,7 @@ const Branch = {
 
 const Commit = {
   fetch: (id: string): ApiPromise => getApi(`/commits/${id}`),
-  fetchForBranch: (id: string, until?: number, count = 10): ApiPromise => {
+  fetchForBranch: (id: string, count: number, until?: number): ApiPromise => {
     const untilString = until ? `&until=${encodeURIComponent(moment(until).toISOString())}` : '';
     return getApi(`/branches/${id}/relationships/commits?count=${count}${untilString}`);
   },
