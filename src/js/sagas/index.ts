@@ -3,7 +3,8 @@ import { SubmissionError } from 'redux-form';
 import { takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
-import { Api, ApiEntityTypeString } from '../api/types';
+import * as Converter from '../api/convert';
+import { Api, ApiEntityTypeString, ApiResponse } from '../api/types';
 import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, { Branch, LoadBranchesForProjectAction } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
@@ -11,10 +12,11 @@ import Deployments, { Deployment } from '../modules/deployments';
 import { isFetchError, FetchError } from '../modules/errors';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
 import Projects, { Project, DeleteProjectAction } from '../modules/projects';
+import Requests from '../modules/requests';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
-import { createFetcher, createLoader, storeIncludedEntities } from './utils';
+import { createCollectionFetcher, createEntityFetcher, createLoader, storeIncludedEntities } from './utils';
 
 export default function createSagas(api: Api) {
 
@@ -54,25 +56,12 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchActivities(): IterableIterator<Effect> {
-    yield put(Activities.actions.FetchActivities.request());
-
-    const { response, error, details } = yield call(api.Activity.fetchAll);
-
-    if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      yield put(Activities.actions.FetchActivities.success(response.data));
-
-      return true;
-    } else {
-      yield put(Activities.actions.FetchActivities.failure(error, details));
-
-      return false;
-    }
-  }
+  const fetchActivities = createCollectionFetcher(
+    Requests.actions.Activities.LoadAllActivities,
+    Converter.toActivities,
+    Activities.actions.storeActivities,
+    api.Activity.fetchAll,
+  );
 
   function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
     // Do nothing. Activities are self-contained
@@ -87,25 +76,12 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchActivitiesForProject(id: string): IterableIterator<Effect> {
-    yield put(Activities.actions.FetchActivitiesForProject.request(id));
-
-    const { response, error, details } = yield call(api.Activity.fetchAllForProject, id);
-
-    if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      yield put(Activities.actions.FetchActivitiesForProject.success(id, response.data));
-
-      return true;
-    } else {
-      yield put(Activities.actions.FetchActivitiesForProject.failure(id, error, details));
-
-      return false;
-    }
-  }
+  const fetchActivitiesForProject = createEntityFetcher(
+    Requests.actions.Activities.LoadActivitiesForProject,
+    Converter.toActivities,
+    Activities.actions.storeActivities,
+    api.Activity.fetchAllForProject,
+  );
 
   // ALL PROJECTS
   function* loadAllProjects(): IterableIterator<Effect> {
@@ -115,25 +91,12 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchAllProjects(): IterableIterator<Effect> {
-    yield put(Projects.actions.FetchAllProjects.request());
-
-    const { response, error, details } = yield call(api.Project.fetchAll);
-
-    if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      yield put(Projects.actions.FetchAllProjects.success(response.data));
-
-      return true;
-    } else {
-      yield put(Projects.actions.FetchAllProjects.failure(error, details));
-
-      return false;
-    }
-  }
+  const fetchAllProjects = createCollectionFetcher(
+    Requests.actions.Projects.LoadAllProjects,
+    Converter.toProjects,
+    Projects.actions.storeProjects,
+    api.Project.fetchAll
+  );
 
   function* ensureAllProjectsRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
     const projects = <Project[]> (yield select(Projects.selectors.getProjects));
@@ -148,7 +111,12 @@ export default function createSagas(api: Api) {
   }
 
   // PROJECT
-  const fetchProject = createFetcher(Projects.actions.FetchProject, api.Project.fetch);
+  const fetchProject = createEntityFetcher(
+    Requests.actions.Projects.LoadProject,
+    Converter.toProjects,
+    Projects.actions.storeProjects,
+    api.Project.fetch
+  );
   const loadProject = createLoader(Projects.selectors.getProject, fetchProject, ensureProjectRelatedDataLoaded);
 
   function* ensureProjectRelatedDataLoaded(projectOrId: Project | string): IterableIterator<Effect | Effect[]> {
@@ -177,7 +145,12 @@ export default function createSagas(api: Api) {
   }
 
   // BRANCH
-  const fetchBranch = createFetcher(Branches.actions.FetchBranch, api.Branch.fetch);
+  const fetchBranch = createEntityFetcher(
+    Requests.actions.Branches.LoadBranch,
+    Converter.toBranches,
+    Branches.actions.storeBranches,
+    api.Branch.fetch
+  );
   const loadBranch = createLoader(Branches.selectors.getBranch, fetchBranch, ensureBranchRelatedDataLoaded);
 
   function* ensureBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
@@ -208,23 +181,27 @@ export default function createSagas(api: Api) {
   }
 
   function* fetchBranchesForProject(id: string): IterableIterator<Effect> {
-    yield put(Branches.actions.FetchBranchesForProject.request(id));
+    yield put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id));
 
-    const { response, error, details } = yield call(api.Branch.fetchForProject, id);
+    const { response, error, details }: { response?: any, error?: string, details?: string } =
+      yield call(api.Branch.fetchForProject, id);
 
     if (response) {
+      yield put(Requests.actions.Branches.LoadBranchesForProject.SUCCESS.actionCreator(id));
+
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      yield put(Branches.actions.FetchBranchesForProject.success(id, response.data));
+      const entities = yield call(Converter.toBranches, response.data);
+      yield put(Branches.actions.storeBranches(entities));
 
       const branchIds = response.data.map((branch: any) => branch.id);
       yield put(Projects.actions.addBranchesToProject(id, branchIds));
 
       return true;
     } else {
-      yield put(Branches.actions.FetchBranchesForProject.failure(id, error, details));
+      yield put(Requests.actions.Branches.LoadBranchesForProject.FAILURE.actionCreator(id, error!, details));
 
       return false;
     }
@@ -245,7 +222,12 @@ export default function createSagas(api: Api) {
   }
 
   // DEPLOYMENT
-  const fetchDeployment = createFetcher(Deployments.actions.FetchDeployment, api.Deployment.fetch);
+  const fetchDeployment = createEntityFetcher(
+    Requests.actions.Deployments.LoadDeployment,
+    Converter.toDeployments,
+    Deployments.actions.storeDeployments,
+    api.Deployment.fetch
+  );
   const loadDeployment =
     createLoader(Deployments.selectors.getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
 
@@ -254,7 +236,12 @@ export default function createSagas(api: Api) {
   }
 
   // COMMIT
-  const fetchCommit = createFetcher(Commits.actions.FetchCommit, api.Commit.fetch);
+  const fetchCommit = createEntityFetcher(
+    Requests.actions.Commits.LoadCommit,
+    Converter.toCommits,
+    Commits.actions.storeCommits,
+    api.Commit.fetch
+  );
   const loadCommit =
     createLoader(Commits.selectors.getCommit, fetchCommit, ensureCommitRelatedDataLoaded);
 
@@ -276,23 +263,26 @@ export default function createSagas(api: Api) {
   }
 
   function* fetchCommitsForBranch(id: string): IterableIterator<Effect> {
-    yield put(Commits.actions.FetchCommitsForBranch.request(id));
+    yield put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id));
 
     const { response, error, details } = yield call(api.Commit.fetchForBranch, id);
 
     if (response) {
+      yield put(Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(id));
+
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      yield put(Commits.actions.FetchCommitsForBranch.success(id, response.data));
+      const entities = yield call(Converter.toCommits, response.data);
+      yield put(Commits.actions.storeCommits(entities));
 
       const commitIds = response.data.map((commit: any) => commit.id);
       yield put(Branches.actions.addCommitsToBranch(id, commitIds));
 
       return true;
     } else {
-      yield put(Commits.actions.FetchCommitsForBranch.failure(id, error, details));
+      yield put(Requests.actions.Commits.LoadCommitsForBranch.FAILURE.actionCreator(id, error, details));
 
       return false;
     }
@@ -311,27 +301,27 @@ export default function createSagas(api: Api) {
   function* createProject(action: { type: string, payload: any }): IterableIterator<Effect> {
     const { name, description } = action.payload;
 
-    yield put(Projects.actions.SendCreateProject.request(name));
+    yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
 
-    const { response, error, details } = yield call(api.Project.create, name, description);
+    const { response, error, details }: { response?: any, error?: string, details?: string } =
+      yield call(api.Project.create, name, description);
 
     if (response) {
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      const projectData = response.data;
-      const projectId = projectData.id;
+      // Notify form that creation was a success
+      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(name));
 
       // Store new project
-      yield put(Projects.actions.FetchProject.success(projectId, projectData))
-      // Notify form that creation was a success
-      yield put(Projects.actions.SendCreateProject.success(projectId));
+      const projectObject = yield call(Converter.toProjects, response.data);
+      yield put(Projects.actions.storeProjects(projectObject));
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Projects.actions.SendCreateProject.failure(error, details));
+      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error!, details));
 
       return false;
     }
@@ -341,18 +331,18 @@ export default function createSagas(api: Api) {
   function* deleteProject(action: DeleteProjectAction): IterableIterator<Effect> {
     const { id, resolve, reject } = action;
 
-    yield put(Projects.actions.SendDeleteProject.request(id));
+    yield put(Requests.actions.Projects.DeleteProject.REQUEST.actionCreator(id));
 
     const { response, error, details } = yield call(api.Project.delete, id);
 
     if (response) {
+      yield put(Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id));
       yield call(resolve);
-      yield put(Projects.actions.SendDeleteProject.success(id));
 
       return true;
     } else {
+      yield put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error, details));
       yield call(reject);
-      yield put(Projects.actions.SendDeleteProject.failure(id, error, details));
 
       return false;
     }
@@ -364,20 +354,22 @@ export default function createSagas(api: Api) {
     // If we don't force description to exist, there would be no way to clear it when editing
     const description = action.payload.description || '';
 
-    yield put(Projects.actions.SendEditProject.request(id));
+    yield put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id));
 
     const { response, error, details } = yield call(api.Project.edit, id, { name, description });
 
     if (response) {
-      // Store edited project
-      yield put(Projects.actions.FetchProject.success(id, response.data))
       // Notify form that creation was a success
-      yield put(Projects.actions.SendEditProject.success(id));
+      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
+
+      // Store edited project
+      const projectObject = yield call(Converter.toProjects, response.data);
+      yield put(Projects.actions.storeProjects(projectObject));
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Projects.actions.SendEditProject.failure(id, error, details));
+      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error, details));
 
       return false;
     }

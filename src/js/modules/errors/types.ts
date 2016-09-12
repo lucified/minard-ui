@@ -38,7 +38,7 @@ export interface FetchCollectionError extends GenericError {
 }
 
 export interface CreateError extends GenericError {
-
+  name: string;
 }
 
 export interface DeleteError extends GenericError {

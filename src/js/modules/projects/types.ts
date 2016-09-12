@@ -1,15 +1,7 @@
 import { Action } from 'redux';
 
 import { FetchError } from '../errors';
-import {
-  ApiUser,
-  RequestCreateActionCreators,
-  RequestDeleteActionCreators,
-  RequestEditActionCreators,
-  RequestFetchActionCreators,
-  RequestFetchCollectionActionCreators,
-  User,
-} from '../types';
+import { User } from '../types';
 
 // State
 export interface Project {
@@ -29,17 +21,15 @@ export interface ProjectState {
 // Actions
 // LOAD_ALL_PROJECTS
 export interface LoadAllProjectsAction extends Action {}
-export type RequestAllProjectsActionCreators = RequestFetchCollectionActionCreators<ResponseProjectElement[]>;
 
 // LOAD_PROJECT
 export interface LoadProjectAction extends Action {
   id: string;
 }
-export type RequestProjectActionCreators = RequestFetchActionCreators<ResponseProjectElement>;
 
 // STORE_PROJECTS
 export interface StoreProjectsAction extends Action {
-  entities: ResponseProjectElement[];
+  entities: Project[];
 }
 
 // ADD_BRANCHES_TO_PROJECT
@@ -49,10 +39,20 @@ export interface AddBranchesToProjectAction extends Action {
 }
 
 // CREATE_PROJECT
-export type SendCreateProjectActionCreators = RequestCreateActionCreators;
+export interface CreateProjectAction extends Action {
+  payload: {
+    name: string;
+    description?: string;
+  };
+}
 
 // EDIT_PROJECT
-export type SendEditProjectActionCreators = RequestEditActionCreators;
+export interface EditProjectAction extends Action {
+  payload: {
+    name: string;
+    description?: string;
+  };
+}
 
 // DELETE_PROJECT
 export interface DeleteProjectAction extends Action {
@@ -60,28 +60,3 @@ export interface DeleteProjectAction extends Action {
   resolve: () => void;
   reject: () => void;
 }
-export type SendDeleteProjectActionCreators = RequestDeleteActionCreators;
-
-// API response
-interface ResponseCommitReference {
-  type: "commit";
-  id: string;
-}
-
-export interface ResponseProjectElement {
-  type: "projects";
-  id: string;
-  attributes: {
-    name: string;
-    description?: string;
-    'active-committers': ApiUser[];
-    'latest-activity-timestamp'?: string;
-  };
-  relationships?: {
-    'latest-successfully-deployed-commit'?: {
-      data?: ResponseCommitReference;
-    };
-  };
-}
-
-export type ApiResponse = ResponseProjectElement[];

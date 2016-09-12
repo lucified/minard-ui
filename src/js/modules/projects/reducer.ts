@@ -1,81 +1,22 @@
 import { omit } from 'lodash';
-import * as moment from 'moment';
 import { Reducer } from 'redux';
 
-import Branches from '../branches';
 import { FetchError, isFetchError } from '../errors';
-import { RequestDeleteSuccessAction, RequestFetchCollectionSuccessAction, RequestFetchSuccessAction } from '../types';
+import Requests from '../requests';
 
-import { ADD_BRANCHES_TO_PROJECT, ALL_PROJECTS, PROJECT, SEND_DELETE_PROJECT, STORE_PROJECTS } from './actions';
+import { ADD_BRANCHES_TO_PROJECT, STORE_PROJECTS } from './actions';
 import * as t from './types';
 
 const initialState: t.ProjectState = {};
 
-const createProjectObject = (project: t.ResponseProjectElement, state: t.ProjectState): t.Project => {
-  // Since we don't get branch information with project requests, let's keep
-  // the existing branches list (if any)
-  let branches: string[] | undefined | FetchError;
-  const existingProject = state[project.id];
-  if (existingProject && !isFetchError(existingProject) && !isFetchError(existingProject.branches)) {
-    branches = existingProject.branches;
-  }
-
-  const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = project.relationships &&
-    project.relationships['latest-successfully-deployed-commit'];
-  const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
-    latestSuccessfullyDeployedCommitObject.data &&
-    latestSuccessfullyDeployedCommitObject.data.id;
-
-  const latestActivityTimestampString = project.attributes['latest-activity-timestamp'];
-  const latestActivityTimestamp = latestActivityTimestampString &&
-    moment(latestActivityTimestampString).valueOf();
-
-  return {
-    id: project.id,
-    name: project.attributes.name,
-    description: project.attributes.description,
-    branches,
-    activeUsers: project.attributes['active-committers'].map(user => ({
-      name: user.name,
-      email: user.email,
-      timestamp: moment(user.timestamp).valueOf(),
-    })),
-    latestActivityTimestamp,
-    latestSuccessfullyDeployedCommit,
-  };
-};
-
-const responseToStateShape = (projects: t.ApiResponse, state: t.ProjectState): t.ProjectState =>
-  projects.reduce<t.ProjectState>((obj, project) => {
-    try {
-      const stateObject = createProjectObject(project, state);
-      return Object.assign(obj, { [project.id]: stateObject });
-    } catch (e) {
-      console.log('Error parsing project:', project, e); // tslint:disable-line:no-console
-      return obj;
-    }
-  }, {});
-
 const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
   let project: t.Project | FetchError;
+  let id: string;
+
   switch (action.type) {
-    case ALL_PROJECTS.SUCCESS:
-      const projectsResponse = (<RequestFetchCollectionSuccessAction<t.ResponseProjectElement[]>> action).response;
-      if (projectsResponse && projectsResponse.length > 0) {
-        return Object.assign({}, state, responseToStateShape(projectsResponse, state));
-      }
-
-      return state;
-    case PROJECT.SUCCESS:
-      const projectResponse = (<RequestFetchSuccessAction<t.ResponseProjectElement>> action).response;
-      if (projectResponse) {
-        return Object.assign({}, state, responseToStateShape([projectResponse], state));
-      }
-
-      return state;
-    case PROJECT.FAILURE:
+    case Requests.actions.Projects.LoadProject.FAILURE.type:
       const responseAction = <FetchError> action;
-      const id = responseAction.id;
+      id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
         return Object.assign({}, state, { [id]: responseAction });
@@ -93,7 +34,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       }
 
       return state;
-    case Branches.actions.BRANCHES_FOR_PROJECT.FAILURE:
+    case Requests.actions.Branches.LoadBranchesForProject.FAILURE.type:
       const fetchError = <FetchError> action;
       project = state[fetchError.id];
 
@@ -104,17 +45,27 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       }
 
       return state;
-    case SEND_DELETE_PROJECT.SUCCESS:
-      const { id: idToDelete } = (<RequestDeleteSuccessAction> action);
-      if (state[idToDelete]) {
-        return omit<t.ProjectState, t.ProjectState>(state, idToDelete);
+    case Requests.actions.Projects.DeleteProject.SUCCESS.type:
+      id = action.id;
+      if (state[id]) {
+        return omit<t.ProjectState, t.ProjectState>(state, id);
       }
 
       return state;
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
-        return Object.assign({}, state, responseToStateShape(projects, state));
+        const newProjects = projects.reduce<t.ProjectState>((obj: t.ProjectState, newProject: t.Project) => {
+          // If existing project has branches, store those
+          const existingProject = state[newProject.id];
+          if (existingProject && !isFetchError(existingProject) && existingProject.branches) {
+            newProject.branches = existingProject.branches;
+          }
+
+          return Object.assign(obj, { [newProject.id]: newProject });
+        }, {});
+
+        return Object.assign({}, state, newProjects);
       }
 
       return state;

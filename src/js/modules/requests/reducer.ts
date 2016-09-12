@@ -1,7 +1,6 @@
 import { Reducer } from 'redux';
 
-import Activities from '../activities';
-import Projects from '../projects';
+import Requests from '../requests';
 
 import * as t from './types';
 
@@ -17,33 +16,33 @@ const returnFilteredStateIfChanged = (
 
 const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) => {
   switch (action.type) {
-    case Projects.actions.ALL_PROJECTS.REQUEST:
-    case Activities.actions.ACTIVITIES.REQUEST:
+    case Requests.actions.Projects.LoadAllProjects.REQUEST.type:
+    case Requests.actions.Activities.LoadAllActivities.REQUEST.type:
       return state.concat({ type: action.type });
-    case Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST:
+    case Requests.actions.Activities.LoadActivitiesForProject.REQUEST.type:
       return state.concat({ type: action.type, id: action.id });
-    case Activities.actions.ACTIVITIES_FOR_PROJECT.FAILURE:
-    case Activities.actions.ACTIVITIES_FOR_PROJECT.SUCCESS:
+    case Requests.actions.Activities.LoadActivitiesForProject.FAILURE.type:
+    case Requests.actions.Activities.LoadActivitiesForProject.SUCCESS.type:
       return returnFilteredStateIfChanged(state, requestInfo =>
-        (requestInfo.type !== Activities.actions.ACTIVITIES_FOR_PROJECT.REQUEST) ||
+        (requestInfo.type !== Requests.actions.Activities.LoadActivitiesForProject.REQUEST.type) ||
         (requestInfo.id !== action.id)
       );
-    case Projects.actions.ALL_PROJECTS.FAILURE:
-    case Projects.actions.ALL_PROJECTS.SUCCESS:
+    case Requests.actions.Projects.LoadAllProjects.FAILURE.type:
+    case Requests.actions.Projects.LoadAllProjects.SUCCESS.type:
       return returnFilteredStateIfChanged(state, requestInfo =>
-        requestInfo.type !== Projects.actions.ALL_PROJECTS.REQUEST
+        requestInfo.type !== Requests.actions.Projects.LoadAllProjects.REQUEST.type
       );
-    case Activities.actions.ACTIVITIES.FAILURE:
-    case Activities.actions.ACTIVITIES.SUCCESS:
+    case Requests.actions.Activities.LoadAllActivities.FAILURE.type:
+    case Requests.actions.Activities.LoadAllActivities.SUCCESS.type:
       return returnFilteredStateIfChanged(state, requestInfo =>
-        requestInfo.type !== Activities.actions.ACTIVITIES.REQUEST
+        requestInfo.type !== Requests.actions.Activities.LoadAllActivities.REQUEST.type
       );
-    case Projects.actions.SEND_DELETE_PROJECT.REQUEST:
+    case Requests.actions.Projects.DeleteProject.REQUEST.type:
       return state.concat(action);
-    case Projects.actions.SEND_DELETE_PROJECT.SUCCESS:
-    case Projects.actions.SEND_DELETE_PROJECT.FAILURE:
+    case Requests.actions.Projects.DeleteProject.SUCCESS.type:
+    case Requests.actions.Projects.DeleteProject.FAILURE.type:
       return returnFilteredStateIfChanged(state, requestInfo =>
-        (requestInfo.type !== Projects.actions.SEND_DELETE_PROJECT.REQUEST) ||
+        (requestInfo.type !== Requests.actions.Projects.DeleteProject.REQUEST.type) ||
         (requestInfo.id !== action.id)
       );
     default:

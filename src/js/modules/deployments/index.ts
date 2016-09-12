@@ -7,7 +7,6 @@ export {
   Deployment,
   DeploymentState,
   DeploymentStatus,
-  DeploymentStatusString,
   isSuccessful,
   isFailed,
   isPending,
