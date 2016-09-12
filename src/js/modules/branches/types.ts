@@ -9,6 +9,7 @@ export interface Branch {
   project: string;
   description?: string;
   commits: string[];
+  allCommitsLoaded: boolean;
   latestSuccessfullyDeployedCommit?: string;
   latestCommit?: string;
   latestActivityTimestamp?: number;
@@ -34,6 +35,7 @@ export interface LoadBranchesForProjectAction extends Action {
 export interface AddCommitsToBranchAction extends Action {
   id: string;
   commits: string[];
+  requestedCount: number;
 }
 
 // STORE_BRANCHES

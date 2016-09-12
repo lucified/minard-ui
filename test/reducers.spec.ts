@@ -338,6 +338,56 @@ describe('reducers', () => {
       });
     });
 
+    describe('fetch all commits for branch', () => {
+      it('stores request information', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Requests.actions.Commits.LoadCommitsForBranch.REQUEST.type,
+          id: 'foo',
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Requests.actions.Commits.LoadCommitsForBranch.REQUEST.type,
+          id: 'foo',
+        }];
+        const action = {
+          type: Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.type,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Requests.actions.Commits.LoadCommitsForBranch.REQUEST.type,
+          id: 'foo',
+        }];
+        const action = {
+          type: Requests.actions.Commits.LoadCommitsForBranch.FAILURE.type,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
     describe('delete project', () => {
       it('stores request information', () => {
         const initialState: RequestsState = [];
@@ -1057,6 +1107,7 @@ describe('reducers', () => {
         latestActivityTimestamp: 1470066681802,
         buildErrors: [],
         commits: ['aacceeff02'],
+        allCommitsLoaded: false,
         project: '1',
       },
       2: {
@@ -1068,6 +1119,7 @@ describe('reducers', () => {
         latestActivityTimestamp: 1469634681802,
         buildErrors: [],
         commits: ['01234567', 'a998823423'],
+        allCommitsLoaded: false,
         project: '1',
       },
       3: {
@@ -1079,6 +1131,7 @@ describe('reducers', () => {
         buildErrors: [],
         name: 'third-long-name-branch',
         commits: [],
+        allCommitsLoaded: true,
         project: '1',
       },
     };
@@ -1095,6 +1148,7 @@ describe('reducers', () => {
         buildErrors: [],
         description: undefined,
         commits: ['aacd00f03', 'a998833433'],
+        allCommitsLoaded: false,
         project: '1',
       },
     };
@@ -1106,6 +1160,7 @@ describe('reducers', () => {
         buildErrors: [],
         description: undefined,
         commits: ['125124235', '566342463'],
+        allCommitsLoaded: false,
         project: '1',
       },
       1: {
@@ -1114,6 +1169,7 @@ describe('reducers', () => {
         buildErrors: [],
         description: undefined,
         commits: ['1497539235'],
+        allCommitsLoaded: false,
         project: '1',
       },
     };

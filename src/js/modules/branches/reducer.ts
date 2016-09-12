@@ -30,7 +30,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       if (branch && !isFetchError(branch)) {
         // Note: the commits list might not be sorted by time now
         const newCommitsList = uniq(branch.commits.concat(commitsAction.commits));
-        const newBranch = Object.assign({}, branch, { commits: newCommitsList });
+        const newBranch = Object.assign({}, branch, {
+          commits: newCommitsList,
+          allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
+        });
         return Object.assign({}, state, { [commitsAction.id]: newBranch });
       }
 

@@ -1,4 +1,5 @@
 import 'isomorphic-fetch';
+import * as moment from 'moment';
 
 import { Api, ApiPromise } from './types';
 
@@ -102,7 +103,15 @@ const Branch = {
 
 const Commit = {
   fetch: (id: string): ApiPromise => getApi(`/commits/${id}`),
-  fetchForBranch: (id: string): ApiPromise => getApi(`/branches/${id}/relationships/commits`),
+  fetchForBranch: (id: string, count: number, until?: number): ApiPromise => {
+    const query: any = { count };
+
+    if (until) {
+      query.until = moment(until).toISOString();
+    }
+
+    return getApi(`/branches/${id}/relationships/commits`, query);
+  },
 };
 
 const Deployment = {

@@ -14,10 +14,15 @@ export const loadBranchesForProject = (id: string): t.LoadBranchesForProjectActi
 
 // Add commits to existing branch
 export const ADD_COMMITS_TO_BRANCH = 'BRANCHES/ADD_COMMITS_TO_BRANCH';
-export const addCommitsToBranch = (id: string, commitIds: string[]): t.AddCommitsToBranchAction => ({
+export const addCommitsToBranch = (
+  id: string,
+  commitIds: string[],
+  requestedCount: number
+): t.AddCommitsToBranchAction => ({
   type: ADD_COMMITS_TO_BRANCH,
   id,
   commits: commitIds,
+  requestedCount,
 });
 
 export const STORE_BRANCHES = 'BRANCHES/STORE_BRANCHES';

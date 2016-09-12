@@ -435,6 +435,8 @@ describe('sagas', () => {
     const action = {
       type: Commits.actions.LOAD_COMMITS_FOR_BRANCH,
       id: '1',
+      count: 10,
+      until: 1234567,
     };
 
     it('calls fetchCommitsForBranch if branch exists', () => {
@@ -445,7 +447,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ id: action.id }).value).to.deep.equal(
-        call(sagas.fetchCommitsForBranch, action.id)
+        call(sagas.fetchCommitsForBranch, action.id, action.count, action.until)
       );
     });
 
@@ -465,7 +467,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ entities: [{ id: 'bar' }, { id: action.id }]}).value).to.deep.equal(
-        call(sagas.fetchCommitsForBranch, action.id)
+        call(sagas.fetchCommitsForBranch, action.id, action.count, action.until)
       );
     });
 
@@ -880,7 +882,9 @@ describe('sagas', () => {
 
     it('fetches, converts and stores commits', () => {
       const response = { data: testData.branchCommitsResponse.data };
-      const iterator = sagas.fetchCommitsForBranch(id);
+      const count = 10;
+      const until = undefined;
+      const iterator = sagas.fetchCommitsForBranch(id, count, until);
       const objects = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
       expect(iterator.next().value).to.deep.equal(
@@ -888,7 +892,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Commit.fetchForBranch, id)
+        call(api.Commit.fetchForBranch, id, count, until)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -904,8 +908,10 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Branches.actions.addCommitsToBranch(id,
-          ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385']
+        put(Branches.actions.addCommitsToBranch(
+          id,
+          ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
+          count,
         ))
       );
 
@@ -917,14 +923,16 @@ describe('sagas', () => {
 
     it('fetches and stores included data', () => {
       const response = testData.branchCommitsResponse;
-      const iterator = sagas.fetchCommitsForBranch(id);
+      const count = 10;
+      const until = undefined;
+      const iterator = sagas.fetchCommitsForBranch(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id))
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Commit.fetchForBranch, id)
+        call(api.Commit.fetchForBranch, id, count, until)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -939,14 +947,16 @@ describe('sagas', () => {
     it('throws an error on failure', () => {
       const errorMessage = 'an error message';
       const detailedMessage = 'detailed message';
-      const iterator = sagas.fetchCommitsForBranch(id);
+      const count = 10;
+      const until = undefined;
+      const iterator = sagas.fetchCommitsForBranch(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id))
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Commit.fetchForBranch, id)
+        call(api.Commit.fetchForBranch, id, count, until)
       );
 
       expect(iterator.next({ error: errorMessage, details: detailedMessage }).value).to.deep.equal(
@@ -1081,6 +1091,7 @@ describe('sagas', () => {
         buildErrors: [],
         project: '1',
         commits: ['lc', 'lsdc'],
+        allCommitsLoaded: false,
       };
       const latestSuccessfullyDeployedCommit: Commit = {
         id: 'abc',
@@ -1127,6 +1138,7 @@ describe('sagas', () => {
           name: 'branch-1',
           latestCommit: 'b1lc',
           commits: ['b1lc', 'b1sc'],
+          allCommitsLoaded: false,
         },
         {
           id: 'b2',
@@ -1136,6 +1148,7 @@ describe('sagas', () => {
           name: 'branch-2',
           latestCommit: 'b2sc',
           commits: ['b2sc'],
+          allCommitsLoaded: false,
         },
         {
           id: 'b3',
@@ -1143,6 +1156,7 @@ describe('sagas', () => {
           buildErrors: [],
           name: 'branch-3',
           commits: [],
+          allCommitsLoaded: true,
         },
       ];
       const deployedCommits: Commit[] = [
@@ -1265,6 +1279,7 @@ describe('sagas', () => {
         buildErrors: [],
         name: 'branchname',
         commits: ['c1', 'c2', 'c3'],
+        allCommitsLoaded: false,
       };
 
       const iterator = sagas.ensureCommitsForBranchRelatedDataLoaded(branchId);

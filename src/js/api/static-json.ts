@@ -62,7 +62,7 @@ const Branch = {
 
 const Commit = {
   fetch: (id: string): ApiPromise => callApi(commitJSON),
-  fetchForBranch: (id: string): ApiPromise => callApi(branchCommitsJSON[id]),
+  fetchForBranch: (id: string, count: number, until?: number): ApiPromise => callApi(branchCommitsJSON[id]),
 };
 
 const Deployment = {
