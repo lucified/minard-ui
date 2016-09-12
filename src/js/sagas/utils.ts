@@ -57,8 +57,6 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
       yield call(apiFetchFunction, id, ...args);
 
     if (response) {
-      yield put(requestActionCreators.SUCCESS.actionCreator(id));
-
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
@@ -69,6 +67,8 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
       if (postStoreEffects) {
         yield* postStoreEffects(id, response, ...args);
       }
+
+      yield put(requestActionCreators.SUCCESS.actionCreator(id));
 
       return true;
     } else {
@@ -93,8 +93,6 @@ export const createCollectionFetcher = <ResponseEntity, ApiParams>(
       yield call(apiFetchFunction, ...args);
 
     if (response) {
-      yield put(requestActionCreators.SUCCESS.actionCreator());
-
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
@@ -105,6 +103,8 @@ export const createCollectionFetcher = <ResponseEntity, ApiParams>(
       if (postStoreEffects) {
         yield* postStoreEffects(response, ...args);
       }
+
+      yield put(requestActionCreators.SUCCESS.actionCreator());
 
       return true;
     } else {
