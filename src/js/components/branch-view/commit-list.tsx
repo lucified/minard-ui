@@ -42,7 +42,10 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
       {commits.map((commit, i) => <CommitRow key={i} commit={commit} />)}
       {isLoading && <LoadingIcon className={styles.loading} center />}
       {!isLoading && !allLoaded && lastCommit && !isFetchError(lastCommit) &&
-        <Waypoint onEnter={() => { if (!isLoading) loadCommits(lastCommit.committer.timestamp, 10); }} />
+        <Waypoint
+          bottomOffset="-200px" // Start loading new commits when the waypoint is 200px below the bottom edge
+          onEnter={() => { loadCommits(lastCommit.committer.timestamp, 10); }}
+        />
       }
     </section>
   );
