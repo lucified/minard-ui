@@ -30,7 +30,7 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadBranch: (id: string) => void;
-  loadCommits: (id: string, until?: number) => void;
+  loadCommits: (id: string, until?: number, count?: number) => void;
 }
 
 class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
