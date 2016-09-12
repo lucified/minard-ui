@@ -338,6 +338,56 @@ describe('reducers', () => {
       });
     });
 
+    describe('fetch all commits for branch', () => {
+      it('stores request information', () => {
+        const initialState: RequestsState = [];
+        const action = {
+          type: Requests.actions.Commits.LoadCommitsForBranch.REQUEST.type,
+          id: 'foo',
+        };
+        const expectedState = [action];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request succeeds', () => {
+        const initialState: RequestsState = [{
+          type: Requests.actions.Commits.LoadCommitsForBranch.REQUEST.type,
+          id: 'foo',
+        }];
+        const action = {
+          type: Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.type,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+
+      it('removes request information once request fails', () => {
+        const initialState: RequestsState = [{
+          type: Requests.actions.Commits.LoadCommitsForBranch.REQUEST.type,
+          id: 'foo',
+        }];
+        const action = {
+          type: Requests.actions.Commits.LoadCommitsForBranch.FAILURE.type,
+          id: 'foo',
+        };
+        const expectedState = [];
+
+        const endState = reducer(initialState, action);
+
+        expect(endState).to.deep.equal(expectedState);
+        expect(endState).to.not.equal(initialState);
+      });
+    });
+
     describe('delete project', () => {
       it('stores request information', () => {
         const initialState: RequestsState = [];

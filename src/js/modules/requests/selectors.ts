@@ -34,3 +34,9 @@ export const isDeletingProject = (state: StateTree, id: string): boolean =>
     (requestInfo.type === Requests.actions.Projects.DeleteProject.REQUEST.type) &&
     (requestInfo.id === id)
   );
+
+export const isLoadingCommitsForBranch = (state: StateTree, id: string): boolean =>
+  !!selectRequestsTree(state).find(requestInfo =>
+    (requestInfo.type === Requests.actions.Commits.LoadCommitsForBranch.REQUEST.type) &&
+    (requestInfo.id === id)
+  );
