@@ -639,13 +639,12 @@ describe('sagas', () => {
   );
 
   describe('fetchActivities', () => {
-    const count = 10;
-    const until = 12523523623;
-
     it('fetches, converts and stores all activities', () => {
       const response = testData.activitiesResponse;
-      const iterator = sagas.fetchActivities(count, until);
       const objects = [{ id: '1' }, { id: '2' }];
+      const until = 12523523623;
+      const count = objects.length;
+      const iterator = sagas.fetchActivities(count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator())
@@ -673,7 +672,51 @@ describe('sagas', () => {
       expect(result.done).to.equal(true);
     });
 
+    it('saves information that all activities have been requested if fewer than count are received', () => {
+      const count = 10;
+      const until = 12523523623;
+      const response = testData.activitiesResponse;
+      const iterator = sagas.fetchActivities(count, until);
+      const objects = [{ id: '1' }, { id: '2' }];
+
+      iterator.next(); // request action
+      iterator.next(); // API call
+      iterator.next({ response }); // request success
+      iterator.next(); // convert
+      iterator.next(objects); // store
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Requests.actions.allActivitiesRequested())
+      );
+
+      const result = iterator.next();
+
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
+    });
+
+    it('does not save information that all activities have been requested if count activities are received', () => {
+      const response = testData.activitiesResponse;
+      const objects = [{ id: '1' }, { id: '2' }];
+      const count = objects.length;
+      const until = undefined;
+      const iterator = sagas.fetchActivities(count, until);
+
+      iterator.next(); // request action
+      iterator.next(); // API call
+      iterator.next({ response }); // request success
+      iterator.next(); // convert
+      iterator.next(objects); // store
+
+      const result = iterator.next();
+
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
+    });
+
     it('throws an error on failure', () => {
+      const count = 10;
+      const until = 12523523623;
       const errorMessage = 'an error message';
       const iterator = sagas.fetchActivities(count, until);
 
@@ -698,13 +741,13 @@ describe('sagas', () => {
 
   describe('fetchActivitiesForProject', () => {
     const id = 'id';
-    const count = 10;
-    const until = undefined;
 
     it('fetches, converts and stores activities', () => {
       const response = testData.activitiesResponse;
-      const iterator = sagas.fetchActivitiesForProject(id, count, until);
       const objects = [{ id: '1' }, { id: '2' }];
+      const count = objects.length;
+      const until = undefined;
+      const iterator = sagas.fetchActivitiesForProject(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id))
@@ -732,7 +775,51 @@ describe('sagas', () => {
       expect(result.done).to.equal(true);
     });
 
+    it('saves information that all activities have been requested if fewer than count are received', () => {
+      const response = testData.activitiesResponse;
+      const count = 10;
+      const until = 51246243;
+      const iterator = sagas.fetchActivitiesForProject(id, count, until);
+      const objects = [{ id: '1' }, { id: '2' }];
+
+      iterator.next(); // request action
+      iterator.next(); // API call
+      iterator.next({ response }); // request success
+      iterator.next(); // convert
+      iterator.next(objects); // store
+
+      expect(iterator.next().value).to.deep.equal(
+        put(Requests.actions.allActivitiesRequestedForProject(id))
+      );
+
+      const result = iterator.next();
+
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
+    });
+
+    it('does not save information that all activities have been requested if count activities are received', () => {
+      const response = testData.activitiesResponse;
+      const objects = [{ id: '1' }, { id: '2' }];
+      const count = objects.length;
+      const until = undefined;
+      const iterator = sagas.fetchActivitiesForProject(id, count, until);
+
+      iterator.next(); // request action
+      iterator.next(); // API call
+      iterator.next({ response }); // request success
+      iterator.next(); // convert
+      iterator.next(objects); // store
+
+      const result = iterator.next();
+
+      expect(result.value).to.equal(true);
+      expect(result.done).to.equal(true);
+    });
+
     it('throws an error on failure', () => {
+      const count = 10;
+      const until = undefined;
       const errorMessage = 'an error message';
       const iterator = sagas.fetchActivitiesForProject(id, count, until);
 
