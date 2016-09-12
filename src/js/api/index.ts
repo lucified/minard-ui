@@ -94,8 +94,24 @@ const patchApi = (path: string, payload: any): ApiPromise =>
   });
 
 const Activity = {
-  fetchAll: (): ApiPromise => getApi('/activity'),
-  fetchAllForProject: (id: string): ApiPromise => getApi('/activity', { filter: `project[${id}]`}),
+  fetchAll: (count: number, until?: number): ApiPromise => {
+    const query: any = { count };
+
+    if (until) {
+      query.until = moment(until).toISOString();
+    }
+
+    return getApi('/activity', query);
+  },
+  fetchAllForProject: (id: string, count: number, until?: number): ApiPromise => {
+    const query: any = { count, filter: `project[${id}]` };
+
+    if (until) {
+      query.until = moment(until).toISOString();
+    }
+
+    return getApi('/activity', query);
+  },
 };
 
 const Branch = {

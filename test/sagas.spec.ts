@@ -316,11 +316,17 @@ describe('sagas', () => {
   });
 
   describe('loadActivities', () => {
+    const action = {
+      type: Activities.actions.LOAD_ACTIVITIES,
+      count: 10,
+      until: 283751293,
+    };
+
     it('fetches activities and ensures data', () => {
-      const iterator = sagas.loadActivities();
+      const iterator = sagas.loadActivities(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivities)
+        call(sagas.fetchActivities, action.count, action.until)
       );
 
       expect(iterator.next(true).value).to.deep.equal(
@@ -331,10 +337,10 @@ describe('sagas', () => {
     });
 
     it('does not ensure data if fetching fails', () => {
-      const iterator = sagas.loadActivities();
+      const iterator = sagas.loadActivities(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivities)
+        call(sagas.fetchActivities, action.count, action.until)
       );
 
       expect(iterator.next(false).done).to.equal(true);
@@ -343,16 +349,20 @@ describe('sagas', () => {
 
   describe('loadActivitiesForProject', () => {
     const id = 'id';
+    const count = 10;
+    const until = undefined;
     const action = {
       type: Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
       id,
+      count,
+      until,
     };
 
     it('fetches projects and ensures data', () => {
       const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivitiesForProject, id)
+        call(sagas.fetchActivitiesForProject, id, count, until)
       );
 
       expect(iterator.next(true).value).to.deep.equal(
@@ -366,7 +376,7 @@ describe('sagas', () => {
       const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivitiesForProject, id)
+        call(sagas.fetchActivitiesForProject, id, count, until)
       );
 
       expect(iterator.next(false).done).to.equal(true);
@@ -629,9 +639,12 @@ describe('sagas', () => {
   );
 
   describe('fetchActivities', () => {
+    const count = 10;
+    const until = 12523523623;
+
     it('fetches, converts and stores all activities', () => {
       const response = testData.activitiesResponse;
-      const iterator = sagas.fetchActivities();
+      const iterator = sagas.fetchActivities(count, until);
       const objects = [{ id: '1' }, { id: '2' }];
 
       expect(iterator.next().value).to.deep.equal(
@@ -639,7 +652,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAll)
+        call(api.Activity.fetchAll, count, until)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -662,14 +675,14 @@ describe('sagas', () => {
 
     it('throws an error on failure', () => {
       const errorMessage = 'an error message';
-      const iterator = sagas.fetchActivities();
+      const iterator = sagas.fetchActivities(count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator())
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAll)
+        call(api.Activity.fetchAll, count, until)
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
@@ -685,10 +698,12 @@ describe('sagas', () => {
 
   describe('fetchActivitiesForProject', () => {
     const id = 'id';
+    const count = 10;
+    const until = undefined;
 
     it('fetches, converts and stores activities', () => {
       const response = testData.activitiesResponse;
-      const iterator = sagas.fetchActivitiesForProject(id);
+      const iterator = sagas.fetchActivitiesForProject(id, count, until);
       const objects = [{ id: '1' }, { id: '2' }];
 
       expect(iterator.next().value).to.deep.equal(
@@ -696,7 +711,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAllForProject, id)
+        call(api.Activity.fetchAllForProject, id, count, until)
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
@@ -719,14 +734,14 @@ describe('sagas', () => {
 
     it('throws an error on failure', () => {
       const errorMessage = 'an error message';
-      const iterator = sagas.fetchActivitiesForProject(id);
+      const iterator = sagas.fetchActivitiesForProject(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id))
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAllForProject, id)
+        call(api.Activity.fetchAllForProject, id, count, until)
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(

@@ -32,18 +32,18 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadProject: (id: string) => void;
-  loadActivity: (id: string) => void;
+  loadActivities: (id: string, count: number, until?: number) => void;
   loadBranches: (id: string) => void;
 }
 
 class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
-    const { loadProject, loadActivity, loadBranches } = this.props;
+    const { loadProject, loadActivities, loadBranches } = this.props;
     const { projectId } = this.props.params;
 
     loadProject(projectId);
     loadBranches(projectId);
-    loadActivity(projectId);
+    loadActivities(projectId, 10);
   }
 
   private reloadPage(e: any) {
@@ -79,7 +79,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       );
     }
 
-    const { activities, isLoadingActivities, params: { show } } = this.props;
+    const { activities, loadActivities, isLoadingActivities, params: { show } } = this.props;
 
     if (show === 'all') {
       return (
@@ -94,7 +94,12 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
         <ProjectSettingsDialog project={project} />
         <ProjectHeader project={project} />
         <ProjectBranches project={project} branches={branches} count={3} />
-        <ProjectActivity activities={activities!} isLoading={isLoadingActivities} />
+        <ProjectActivity
+          activities={activities!}
+          loadActivities={loadActivities.bind(this, project.id)}
+          isLoading={isLoadingActivities}
+          allLoaded={false /* TODO: fix */}
+        />
       </div>
     );
   }
@@ -131,7 +136,7 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>
   mapStateToProps,
   {
     loadProject: Projects.actions.loadProject,
-    loadActivity: Activities.actions.loadActivitiesForProject,
+    loadActivities: Activities.actions.loadActivitiesForProject,
     loadBranches: Branches.actions.loadBranchesForProject,
   },
 )(ProjectView);

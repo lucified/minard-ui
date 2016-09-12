@@ -5,7 +5,7 @@ import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects'
 
 import * as Converter from '../api/convert';
 import { Api, ApiEntityTypeString, ApiResponse } from '../api/types';
-import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules/activities';
+import Activities, { Activity, LoadActivitiesForProjectAction, LoadActivitiesAction } from '../modules/activities';
 import Branches, { Branch, LoadBranchesForProjectAction, StoreBranchesAction } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
@@ -49,8 +49,9 @@ export default function createSagas(api: Api) {
   }
 
   // ALL ACTIVITIES
-  function* loadActivities(): IterableIterator<Effect> {
-    const fetchSuccess = yield call(fetchActivities);
+  function* loadActivities(action: LoadActivitiesAction): IterableIterator<Effect> {
+    const { count, until } = action;
+    const fetchSuccess = yield call(fetchActivities, count, until);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
     }
@@ -69,8 +70,8 @@ export default function createSagas(api: Api) {
 
   // PROJECT ACTIVITIES
   function* loadActivitiesForProject(action: LoadActivitiesForProjectAction): IterableIterator<Effect> {
-    const id = action.id;
-    const fetchSuccess = yield call(fetchActivitiesForProject, id);
+    const { id, count, until } = action;
+    const fetchSuccess = yield call(fetchActivitiesForProject, id, count, until);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
     }

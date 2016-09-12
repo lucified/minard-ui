@@ -56,12 +56,15 @@ export interface ActivityState {
 // Actions
 // ACTIVITIES
 export interface LoadActivitiesAction extends Action {
-
+  count: number;
+  until?: number;
 }
 
 // ACTIVITIES_FOR_PROJECT
 export interface LoadActivitiesForProjectAction extends Action {
   id: string;
+  count: number;
+  until?: number;
 }
 
 // STORE_PROJECTS

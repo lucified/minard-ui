@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Waypoint from 'react-waypoint';
 
 import { Activity } from '../../../modules/activities';
 
@@ -9,7 +10,9 @@ const styles = require('./index.scss');
 interface Props {
   activities: Activity[];
   showProjectName?: boolean;
-  isLoading?: boolean;
+  isLoading: boolean;
+  allLoaded: boolean;
+  loadActivities: (count: number, until?: number) => void;
   emptyContentHeader: string;
   emptyContentBody: string;
 }
@@ -38,7 +41,10 @@ const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
   return groupedActivities;
 };
 
-const ActivityList = ({ activities, emptyContentHeader, emptyContentBody, showProjectName, isLoading }: Props) => {
+const ActivityList = (props: Props) => {
+  const { activities, emptyContentHeader, emptyContentBody } = props;
+  const { showProjectName, loadActivities, allLoaded, isLoading } = props;
+
   if (activities.length === 0) {
     if (isLoading) {
       return <LoadingActivityGroup />;
@@ -54,6 +60,13 @@ const ActivityList = ({ activities, emptyContentHeader, emptyContentBody, showPr
       {groupedActivities.map((activityGroup, i) => // TODO: key should be a bit smarter
         <ActivityGroup key={i} activities={activityGroup} showProjectName={showProjectName} />
       )}
+      {isLoading && <LoadingActivityGroup />}
+      {!isLoading && !allLoaded &&
+        <Waypoint
+          bottomOffset="-200px" // Start loading new commits when the waypoint is 200px below the bottom edge
+          onEnter={() => { loadActivities(10, activities[activities.length - 1].timestamp); }}
+        />
+      }
     </div>
   );
 };

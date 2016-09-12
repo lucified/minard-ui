@@ -43,17 +43,17 @@ export const createLoader = (
   };
 };
 
-export const createEntityFetcher = <ResponseEntity>(
+export const createEntityFetcher = <ResponseEntity, T>(
   requestActionCreators: FetchEntityActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (id: string) => ApiPromise
+  apiFetchFunction: (id: string, ...args: T[]) => ApiPromise
 ) => {
-  return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (id: string, ...args: T[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
     const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =
-      yield call(apiFetchFunction, id);
+      yield call(apiFetchFunction, id, ...args);
 
     if (response) {
       yield put(requestActionCreators.SUCCESS.actionCreator(id));
@@ -74,17 +74,17 @@ export const createEntityFetcher = <ResponseEntity>(
   };
 };
 
-export const createCollectionFetcher = <ResponseEntity>(
+export const createCollectionFetcher = <ResponseEntity, ApiParams>(
   requestActionCreators: CollectionActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: () => ApiPromise
+  apiFetchFunction: (...args: ApiParams[]) => ApiPromise
 ) => {
-  return function* (): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.REQUEST.actionCreator());
 
     const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =
-      yield call(apiFetchFunction);
+      yield call(apiFetchFunction, ...args);
 
     if (response) {
       yield put(requestActionCreators.SUCCESS.actionCreator());

@@ -28,7 +28,7 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadAllProjects: () => void;
-  loadActivities: () => void;
+  loadActivities: (count: number, until?: number) => void;
 }
 
 class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDispatchProps & PassedProps, any> {
@@ -36,11 +36,12 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     const { loadAllProjects, loadActivities } = this.props;
 
     loadAllProjects();
-    loadActivities();
+    loadActivities(10);
   }
 
   public render() {
-    const { projects, activities, isLoadingAllActivities, isLoadingProjects, params: { show } } = this.props;
+    const { projects, activities, isLoadingAllActivities, isLoadingProjects, loadActivities } = this.props;
+    const { params: { show } } = this.props;
 
     if (isLoadingProjects && projects.length === 0) {
       return <LoadingIcon className={styles.loading} center />;
@@ -55,7 +56,12 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     return (
       <div>
         <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={6} />
-        <ActivitySection activities={activities} isLoading={isLoadingAllActivities} />
+        <ActivitySection
+          activities={activities}
+          loadActivities={loadActivities}
+          isLoading={isLoadingAllActivities}
+          allLoaded={false /* TODO: fix */}
+        />
       </div>
     );
   }
