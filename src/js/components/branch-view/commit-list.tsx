@@ -1,10 +1,12 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
+import * as Waypoint from 'react-waypoint';
 
 import { Commit } from '../../modules/commits';
-import { FetchError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 
+import LoadingIcon from '../common/loading-icon';
 import CommitRow from './commit-row';
 
 const styles = require('./commit-list.scss');
@@ -19,15 +21,31 @@ const getEmptyContent = () => (
 
 interface Props {
   commits: (Commit | FetchError | undefined)[];
+  isLoading: boolean;
+  allLoaded: boolean;
+  loadCommits: (until?: number, count?: number) => void;
 }
 
-const CommitList = ({ commits }: Props) => (
-  <section className={classNames(styles['commit-list'], 'container')}>
-    {(commits.length === 0) ?
-      getEmptyContent() :
-      commits.map((commit, i) => <CommitRow key={i} commit={commit} />)
-    }
-  </section>
-);
+const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
+  if (commits.length === 0) {
+    return (
+      <section className={classNames(styles['commit-list'], 'container')}>
+        {getEmptyContent()}
+      </section>
+    );
+  }
+
+  const lastCommit = commits[commits.length - 1];
+
+  return (
+    <section className={classNames(styles['commit-list'], 'container')}>
+      {commits.map((commit, i) => <CommitRow key={i} commit={commit} />)}
+      {isLoading && <LoadingIcon className={styles.loading} center />}
+      {!isLoading && !allLoaded && lastCommit && !isFetchError(lastCommit) &&
+        <Waypoint onEnter={() => { if (!isLoading) loadCommits(lastCommit.committer.timestamp, 10); }} />
+      }
+    </section>
+  );
+};
 
 export default CommitList;

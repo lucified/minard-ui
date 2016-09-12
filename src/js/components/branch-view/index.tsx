@@ -5,6 +5,7 @@ import Branches, { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
 import { FetchError, isFetchError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
+import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
@@ -24,11 +25,12 @@ interface GeneratedStateProps {
   project?: Project | FetchError;
   branch?: Branch | FetchError;
   commits?: (Commit | FetchError | undefined)[];
+  isLoadingCommits: boolean;
 }
 
 interface GeneratedDispatchProps {
   loadBranch: (id: string) => void;
-  loadCommits: (id: string) => void;
+  loadCommits: (id: string, until?: number) => void;
 }
 
 class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
@@ -61,7 +63,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
   }
 
   public render() {
-    const { branch, commits, project } = this.props;
+    const { branch, commits, project, loadCommits, isLoadingCommits } = this.props;
     if (!branch) {
       return this.getLoadingContent();
     }
@@ -81,7 +83,12 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     return (
       <div>
         <BranchHeader project={project} branch={branch} />
-        <CommitList commits={commits!} />
+        <CommitList
+          commits={commits!}
+          isLoading={isLoadingCommits}
+          allLoaded={branch.allCommitsLoaded}
+          loadCommits={loadCommits.bind(this, branch.id)}
+        />
       </div>
     );
   }
@@ -92,6 +99,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, branchId);
   let commits: (Commit | FetchError | undefined)[] | undefined;
+  const isLoadingCommits = Requests.selectors.isLoadingCommitsForBranch(state, branchId);
 
   if (branch && !isFetchError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));
@@ -101,6 +109,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     project,
     branch,
     commits,
+    isLoadingCommits,
   };
 };
 
