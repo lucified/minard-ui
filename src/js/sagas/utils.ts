@@ -43,13 +43,13 @@ export const createLoader = (
   };
 };
 
-export const createEntityFetcher = <ResponseEntity, T>(
+export const createEntityFetcher = <ResponseEntity, ApiParams>(
   requestActionCreators: FetchEntityActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (id: string, ...args: T[]) => ApiPromise
+  apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise
 ) => {
-  return function* (id: string, ...args: T[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
     const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =
