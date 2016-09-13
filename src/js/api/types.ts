@@ -9,8 +9,8 @@ export interface Api {
     delete: (id: string) => ApiPromise;
   };
   Activity: {
-    fetchAll: () => ApiPromise;
-    fetchAllForProject: (id: string) => ApiPromise;
+    fetchAll: (count: number, until?: number) => ApiPromise;
+    fetchAllForProject: (id: string, count: number, until?: number) => ApiPromise;
   };
   Deployment: {
     fetch: (id: string) => ApiPromise;

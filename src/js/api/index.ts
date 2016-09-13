@@ -28,6 +28,23 @@ interface Error {
   detail: string;
 }
 
+const generateErrorObject = (errorResponse: any) => {
+  let error: string = errorResponse.message || 'An error occurred';
+  let details: string = '';
+
+  if (errorResponse && errorResponse.errors && errorResponse.errors.length > 0) {
+    const errorTitles = new Set();
+    errorResponse.errors.forEach((singleError: Error) => { errorTitles.add(singleError.title); });
+    error = Array.from(errorTitles.values()).join(' & ');
+    details = errorResponse.errors.map((singleError: Error) => singleError.detail).join('\n');
+  }
+
+  return {
+    error,
+    details,
+  };
+};
+
 const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
   fetch(`${host}${path}`, Object.assign({}, defaultOptions, options))
     .then(response =>
@@ -40,22 +57,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
     ).then(json => ({
       response: json,
     }))
-    .catch(errorResponse => {
-      let error: string = errorResponse.message || 'An error occurred';
-      let details: string = '';
-
-      if (errorResponse && errorResponse.errors && errorResponse.errors.length > 0) {
-        const errorTitles = new Set();
-        errorResponse.errors.forEach((singleError: Error) => { errorTitles.add(singleError.title); });
-        error = Array.from(errorTitles.values()).join(' & ');
-        details = errorResponse.errors.map((singleError: Error) => singleError.detail).join('\n');
-      }
-
-      return {
-        error,
-        details,
-      };
-    });
+    .catch(errorResponse => generateErrorObject(errorResponse));
 
 const getApi = (path: string, query?: any): ApiPromise => {
   let queryString = '';
@@ -92,8 +94,24 @@ const patchApi = (path: string, payload: any): ApiPromise =>
   });
 
 const Activity = {
-  fetchAll: (): ApiPromise => getApi('/activity'),
-  fetchAllForProject: (id: string): ApiPromise => getApi('/activity', { filter: `project[${id}]`}),
+  fetchAll: (count: number, until?: number): ApiPromise => {
+    const query: any = { count };
+
+    if (until) {
+      query.until = moment(until).toISOString();
+    }
+
+    return getApi('/activity', query);
+  },
+  fetchAllForProject: (id: string, count: number, until?: number): ApiPromise => {
+    const query: any = { count, filter: `project[${id}]` };
+
+    if (until) {
+      query.until = moment(until).toISOString();
+    }
+
+    return getApi('/activity', query);
+  },
 };
 
 const Branch = {

@@ -51,8 +51,8 @@ function callApi(url: string) {
 }
 
 const Activity = {
-  fetchAll: (): ApiPromise => callApi(activitiesJSON),
-  fetchAllForProject: (id: string): ApiPromise => callApi(activitiesJSON),
+  fetchAll: (count: number, until?: number): ApiPromise => callApi(activitiesJSON),
+  fetchAllForProject: (id: string, count: number, until?: number): ApiPromise => callApi(activitiesJSON),
 };
 
 const Branch = {

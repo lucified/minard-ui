@@ -7,10 +7,12 @@ import SectionTitle from '../common/section-title';
 
 interface Props {
   activities: Activity[];
-  isLoading?: boolean;
+  loadActivities: (count: number, until?: number) => void;
+  isLoading: boolean;
+  allLoaded: boolean;
 }
 
-const ActivitySection = ({ activities, isLoading }: Props) => (
+const ActivitySection = ({ activities, isLoading, allLoaded, loadActivities }: Props) => (
   <section className="container">
     <SectionTitle><span>Activity</span></SectionTitle>
     <ActivityList
@@ -18,6 +20,8 @@ const ActivitySection = ({ activities, isLoading }: Props) => (
       emptyContentHeader="Nothing has happened in your projects!"
       emptyContentBody=""
       showProjectName
+      allLoaded={allLoaded}
+      loadActivities={loadActivities}
       isLoading={isLoading}
     />
   </section>

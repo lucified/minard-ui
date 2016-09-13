@@ -117,3 +117,9 @@ export type CollectionActionCreators = RequestActionCreators<
   CollectionSuccessActionCreator,
   CollectionFailureActionCreator
 >;
+
+// Store information about whether all activities have been requested
+export interface AllActivitiesRequestedAction extends Action {}
+export interface AllActivitiesRequestedForProjectAction extends Action {
+  id: string;
+}

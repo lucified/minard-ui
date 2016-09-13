@@ -24,11 +24,12 @@ interface GeneratedStateProps {
   projects: (Project | FetchError)[];
   isLoadingProjects: boolean;
   isLoadingAllActivities: boolean;
+  isAllActivitiesRequested: boolean;
 }
 
 interface GeneratedDispatchProps {
   loadAllProjects: () => void;
-  loadActivities: () => void;
+  loadActivities: (count: number, until?: number) => void;
 }
 
 class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDispatchProps & PassedProps, any> {
@@ -36,11 +37,12 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     const { loadAllProjects, loadActivities } = this.props;
 
     loadAllProjects();
-    loadActivities();
+    loadActivities(10);
   }
 
   public render() {
-    const { projects, activities, isLoadingAllActivities, isLoadingProjects, params: { show } } = this.props;
+    const { activities, projects, params: { show } } = this.props;
+    const { isLoadingAllActivities, isLoadingProjects, isAllActivitiesRequested, loadActivities } = this.props;
 
     if (isLoadingProjects && projects.length === 0) {
       return <LoadingIcon className={styles.loading} center />;
@@ -55,7 +57,12 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     return (
       <div>
         <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={6} />
-        <ActivitySection activities={activities} isLoading={isLoadingAllActivities} />
+        <ActivitySection
+          activities={activities}
+          loadActivities={loadActivities}
+          isLoading={isLoadingAllActivities}
+          allLoaded={isAllActivitiesRequested}
+        />
       </div>
     );
   }
@@ -66,6 +73,7 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   activities: Activities.selectors.getActivities(state),
   isLoadingProjects: Requests.selectors.isLoadingAllProjects(state),
   isLoadingAllActivities: Requests.selectors.isLoadingAllActivities(state),
+  isAllActivitiesRequested: Requests.selectors.isAllActivitiesRequested(state),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

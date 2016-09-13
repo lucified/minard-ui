@@ -1,17 +1,17 @@
 import { compact, uniq } from 'lodash';
 import { SubmissionError } from 'redux-form';
-import { takeEvery, takeLatest } from 'redux-saga';
+import { delay, takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
-import { Api, ApiEntityTypeString, ApiResponse } from '../api/types';
-import Activities, { Activity, LoadActivitiesForProjectAction } from '../modules/activities';
+import { Api, ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
+import Activities, { Activity, LoadActivitiesForProjectAction, LoadActivitiesAction } from '../modules/activities';
 import Branches, { Branch, LoadBranchesForProjectAction, StoreBranchesAction } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { isFetchError, FetchError } from '../modules/errors';
 import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
-import Projects, { Project, DeleteProjectAction, StoreProjectsAction } from '../modules/projects';
+import Projects, { Project, DeleteProjectAction, LoadAllProjectsAction, StoreProjectsAction } from '../modules/projects';
 import Requests from '../modules/requests';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
@@ -49,8 +49,9 @@ export default function createSagas(api: Api) {
   }
 
   // ALL ACTIVITIES
-  function* loadActivities(): IterableIterator<Effect> {
-    const fetchSuccess = yield call(fetchActivities);
+  function* loadActivities(action: LoadActivitiesAction): IterableIterator<Effect> {
+    const { count, until } = action;
+    const fetchSuccess = yield call(fetchActivities, count, until);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
     }
@@ -61,7 +62,14 @@ export default function createSagas(api: Api) {
     Converter.toActivities,
     Activities.actions.storeActivities,
     api.Activity.fetchAll,
+    checkIfAllActivitiesLoaded,
   );
+
+  function* checkIfAllActivitiesLoaded(response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+    if ((<ApiEntity[]> response.data).length < count) {
+      yield put(Requests.actions.allActivitiesRequested());
+    }
+  }
 
   function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
     // Do nothing. Activities are self-contained
@@ -69,8 +77,14 @@ export default function createSagas(api: Api) {
 
   // PROJECT ACTIVITIES
   function* loadActivitiesForProject(action: LoadActivitiesForProjectAction): IterableIterator<Effect> {
-    const id = action.id;
-    const fetchSuccess = yield call(fetchActivitiesForProject, id);
+    const { id, count, until } = action;
+
+    // Return if we're already requesting
+    if (yield select(Requests.selectors.isLoadingActivitiesForProject, id)) {
+      return;
+    }
+
+    const fetchSuccess = yield call(fetchActivitiesForProject, id, count, until);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
     }
@@ -81,10 +95,17 @@ export default function createSagas(api: Api) {
     Converter.toActivities,
     Activities.actions.storeActivities,
     api.Activity.fetchAllForProject,
+    checkIfAllActivitiesLoadedForProject,
   );
 
+  function* checkIfAllActivitiesLoadedForProject(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+    if ((<ApiEntity[]> response.data).length < count) {
+      yield put(Requests.actions.allActivitiesRequestedForProject(id));
+    }
+  }
+
   // ALL PROJECTS
-  function* loadAllProjects(): IterableIterator<Effect> {
+  function* loadAllProjects(action: LoadAllProjectsAction): IterableIterator<Effect> {
     const fetchSuccess = yield call(fetchAllProjects);
     if (fetchSuccess) {
       yield fork(ensureAllProjectsRelatedDataLoaded);
@@ -191,31 +212,17 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchBranchesForProject(id: string): IterableIterator<Effect> {
-    yield put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id));
+  const fetchBranchesForProject = createEntityFetcher(
+    Requests.actions.Branches.LoadBranchesForProject,
+    Converter.toBranches,
+    Branches.actions.storeBranches,
+    api.Branch.fetchForProject,
+    addBranchesToProject,
+  );
 
-    const { response, error, details }: { response?: any, error?: string, details?: string } =
-      yield call(api.Branch.fetchForProject, id);
-
-    if (response) {
-      yield put(Requests.actions.Branches.LoadBranchesForProject.SUCCESS.actionCreator(id));
-
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      const entities = yield call(Converter.toBranches, response.data);
-      yield put(Branches.actions.storeBranches(entities));
-
-      const branchIds = response.data.map((branch: any) => branch.id);
-      yield put(Projects.actions.addBranchesToProject(id, branchIds));
-
-      return true;
-    } else {
-      yield put(Requests.actions.Branches.LoadBranchesForProject.FAILURE.actionCreator(id, error!, details));
-
-      return false;
-    }
+  function* addBranchesToProject(id: string, response: ApiResponse): IterableIterator<Effect> {
+    const branchIds = (<ApiEntity[]> response.data).map((branch: any) => branch.id);
+    yield put(Projects.actions.addBranchesToProject(id, branchIds));
   }
 
   function* ensureBranchesForProjectRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
@@ -274,6 +281,11 @@ export default function createSagas(api: Api) {
       branch = branches.find(branch => branch.id === id);
     }
 
+    // Return if we're already requesting
+    if (yield select(Requests.selectors.isLoadingCommitsForBranch, id)) {
+      return;
+    }
+
     if (isFetchError(branch)) {
       console.log('Error: Not fetching commits for branch.');
     } else {
@@ -284,30 +296,17 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchCommitsForBranch(id: string, count: number, until?: number): IterableIterator<Effect> {
-    yield put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id));
+  const fetchCommitsForBranch = createEntityFetcher(
+    Requests.actions.Commits.LoadCommitsForBranch,
+    Converter.toCommits,
+    Commits.actions.storeCommits,
+    api.Commit.fetchForBranch,
+    addCommitsToBranch,
+  );
 
-    const { response, error, details } = yield call(api.Commit.fetchForBranch, id, count, until);
-
-    if (response) {
-      yield put(Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(id));
-
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
-
-      const entities = yield call(Converter.toCommits, response.data);
-      yield put(Commits.actions.storeCommits(entities));
-
-      const commitIds = response.data.map((commit: any) => commit.id);
-      yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));
-
-      return true;
-    } else {
-      yield put(Requests.actions.Commits.LoadCommitsForBranch.FAILURE.actionCreator(id, error, details));
-
-      return false;
-    }
+  function* addCommitsToBranch(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+    const commitIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
+    yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));
   }
 
   function* ensureCommitsForBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
@@ -333,12 +332,12 @@ export default function createSagas(api: Api) {
         yield call(storeIncludedEntities, response.included);
       }
 
-      // Notify form that creation was a success
-      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(name));
-
       // Store new project
       const projectObject = yield call(Converter.toProjects, response.data);
       yield put(Projects.actions.storeProjects(projectObject));
+
+      // Notify form that creation was a success
+      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(name));
 
       return true;
     } else {
@@ -358,13 +357,13 @@ export default function createSagas(api: Api) {
     const { response, error, details } = yield call(api.Project.delete, id);
 
     if (response) {
-      yield put(Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id));
       yield call(resolve);
+      yield put(Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id));
 
       return true;
     } else {
-      yield put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error, details));
       yield call(reject);
+      yield put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error, details));
 
       return false;
     }
@@ -381,12 +380,12 @@ export default function createSagas(api: Api) {
     const { response, error, details } = yield call(api.Project.edit, id, { name, description });
 
     if (response) {
-      // Notify form that creation was a success
-      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
-
       // Store edited project
       const projectObject = yield call(Converter.toProjects, response.data);
       yield put(Projects.actions.storeProjects(projectObject));
+
+      // Notify form that creation was a success
+      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
 
       return true;
     } else {
@@ -453,18 +452,25 @@ export default function createSagas(api: Api) {
   function* watchForLoadActivities(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Activities.actions.LOAD_ACTIVITIES);
-      yield call(loadActivities);
+      // Block until it's done, skipping any further actions
+      yield call(loadActivities, action);
     }
   }
 
-  function* watchForLoadActivitiesForProject() {
-    yield* takeEvery(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject);
+  function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
+      yield fork(loadActivitiesForProject, action);
+      // throttle by 200ms
+      yield call(delay, 200);
+    }
   }
 
   function* watchForLoadAllProjects(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Projects.actions.LOAD_ALL_PROJECTS);
-      yield call(loadAllProjects);
+      // Block until it's done, skipping any further actions
+      yield call(loadAllProjects, action);
     }
   }
 
@@ -488,8 +494,13 @@ export default function createSagas(api: Api) {
     yield* takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
 
-  function* watchForLoadCommitsForBranch() {
-    yield* takeEvery(Commits.actions.LOAD_COMMITS_FOR_BRANCH, loadCommitsForBranch);
+  function* watchForLoadCommitsForBranch(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(Commits.actions.LOAD_COMMITS_FOR_BRANCH);
+      yield fork(loadCommitsForBranch, action);
+      // throttle by 200ms
+      yield call(delay, 200);
+    }
   }
 
   function* root() {

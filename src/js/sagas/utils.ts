@@ -43,27 +43,32 @@ export const createLoader = (
   };
 };
 
-export const createEntityFetcher = <ResponseEntity>(
+export const createEntityFetcher = <ResponseEntity, ApiParams>(
   requestActionCreators: FetchEntityActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (id: string) => ApiPromise
+  apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise,
+  postStoreEffects?: (id: string, response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
-  return function* (id: string): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
     const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =
-      yield call(apiFetchFunction, id);
+      yield call(apiFetchFunction, id, ...args);
 
     if (response) {
-      yield put(requestActionCreators.SUCCESS.actionCreator(id));
-
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
 
       const entities = yield call(converter, response.data);
       yield put(storeEntitiesActionCreator(entities));
+
+      if (postStoreEffects) {
+        yield* postStoreEffects(id, response, ...args);
+      }
+
+      yield put(requestActionCreators.SUCCESS.actionCreator(id));
 
       return true;
     } else {
@@ -74,27 +79,32 @@ export const createEntityFetcher = <ResponseEntity>(
   };
 };
 
-export const createCollectionFetcher = <ResponseEntity>(
+export const createCollectionFetcher = <ResponseEntity, ApiParams>(
   requestActionCreators: CollectionActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: () => ApiPromise
+  apiFetchFunction: (...args: ApiParams[]) => ApiPromise,
+  postStoreEffects?: (response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
-  return function* (): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function* (...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.REQUEST.actionCreator());
 
     const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =
-      yield call(apiFetchFunction);
+      yield call(apiFetchFunction, ...args);
 
     if (response) {
-      yield put(requestActionCreators.SUCCESS.actionCreator());
-
       if (response.included) {
         yield call(storeIncludedEntities, response.included);
       }
 
       const entities = yield call(converter, response.data);
       yield put(storeEntitiesActionCreator(entities));
+
+      if (postStoreEffects) {
+        yield* postStoreEffects(response, ...args);
+      }
+
+      yield put(requestActionCreators.SUCCESS.actionCreator());
 
       return true;
     } else {
