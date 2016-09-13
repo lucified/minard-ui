@@ -63,7 +63,7 @@ const ActivityList = (props: Props) => {
       {isLoading && <LoadingActivityGroup />}
       {!isLoading && !allLoaded &&
         <Waypoint
-          bottomOffset="-200px" // Start loading new commits when the waypoint is 200px below the bottom edge
+          bottomOffset="-200px" // Start loading new activities when the waypoint is 200px below the bottom edge
           onEnter={() => { loadActivities(10, activities[activities.length - 1].timestamp); }}
         />
       }
