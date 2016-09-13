@@ -1,0 +1,23 @@
+{
+    "authors": "Alexey Svetliakov <https://github.com/asvetliakov>",
+    "definitionFilename": "react-textarea-autosize.d.ts",
+    "libraryDependencies": [],
+    "moduleDependencies": [],
+    "libraryMajorVersion": "4",
+    "libraryMinorVersion": "0",
+    "libraryName": "react-textarea-autosize 4.0.3",
+    "typingsPackageName": "react-textarea-autosize",
+    "projectName": "https://github.com/andreypopp/react-textarea-autosize",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "sourceBranch": "types-2.0",
+    "kind": "DeclareModule",
+    "globals": [],
+    "declaredModules": [
+        "react-textarea-autosize"
+    ],
+    "files": [
+        "react-textarea-autosize.d.ts"
+    ],
+    "hasPackageJson": false,
+    "contentHash": "ad920e08ff358e1b3191c7e1c327bb6c72eab1829146b2ea52cef1c58279aadd"
+}
