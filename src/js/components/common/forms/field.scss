@@ -55,16 +55,10 @@
     line-height: 26px;
   }
 
-  ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  ::placeholder {
     opacity: 0.2;
   }
   :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    opacity: 0.2;
-  }
-  ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    opacity: 0.2;
-  }
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
     opacity: 0.2;
   }
 
