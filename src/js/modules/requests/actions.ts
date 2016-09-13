@@ -55,7 +55,7 @@ const createEntityActionCreators = (prefix: string): t.CreateEntityActionCreator
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (name: string) => ({ type: successAction, name }),
+      actionCreator: (id: string, name: string) => ({ type: successAction, id, name }),
     },
     FAILURE: {
       type: failureAction,

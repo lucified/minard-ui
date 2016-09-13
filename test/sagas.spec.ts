@@ -1578,7 +1578,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(name))
+        put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(object[0].id, name))
       );
 
       const val = iterator.next();

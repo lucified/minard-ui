@@ -333,11 +333,11 @@ export default function createSagas(api: Api) {
       }
 
       // Store new project
-      const projectObject = yield call(Converter.toProjects, response.data);
+      const projectObject = <Project[]>(yield call(Converter.toProjects, response.data));
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(name));
+      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0].id, name));
 
       return true;
     } else {
