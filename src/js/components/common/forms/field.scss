@@ -1,0 +1,80 @@
+.field {
+  margin-bottom: 36px;
+
+  .label {
+    margin-bottom: 8px;
+    margin-right: 12px;
+
+    font-size: 17px;
+    letter-spacing: -0.21px;
+    line-height: 24px;
+  }
+
+  .input {
+    position: relative;
+    left: -24px;
+  }
+
+  .icon {
+    position: absolute;
+    top: 18px;
+    left: 0px;
+    font-size: 14px;
+    color: #95A5A6;
+    margin-right: 12px;
+  }
+
+  .icon.textarea {
+    top: 8px;
+  }
+
+  input, textarea {
+    /* Moved to handle icon */
+    position: relative;
+    left: 22px;
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    color: #2C3E50;
+    font-weight: 200;
+  }
+
+  input {
+    font-size: 36px;
+    letter-spacing: -1.5px;
+    height: 46px;
+  }
+
+  textarea {
+    resize: none;
+
+    font-size: 21px;
+    letter-spacing: -0.21px;
+    line-height: 26px;
+  }
+
+  ::placeholder {
+    opacity: 0.2;
+  }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    opacity: 0.2;
+  }
+
+  .error {
+    font-size: 17px;
+    color: #D0021B;
+    letter-spacing: -0.21px;
+    line-height: 21px;
+  }
+
+  .instructions {
+    margin-top: 4px;
+
+    font-size: 14px;
+    color: #7F8C8D;
+    letter-spacing: -0.17px;
+    line-height: 21px;
+  }
+}

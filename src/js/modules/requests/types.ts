@@ -56,6 +56,17 @@ interface CreateEntityRequestActionCreator {
   (name: string): CreateEntityRequestAction;
 }
 
+// When request succeeds
+interface CreateEntitySuccessAction extends Action {
+  id: string;
+  name: string;
+}
+
+interface CreateEntitySuccessActionCreator {
+  (id: string, name: string): CreateEntitySuccessAction;
+}
+
+// When request fails
 interface FetchEntityFailureActionCreator {
   (id: string, error: string, detail?: string): FetchError;
 }
@@ -80,7 +91,7 @@ export type FetchEntityActionCreators = RequestActionCreators<
 
 export type CreateEntityActionCreators = RequestActionCreators<
   CreateEntityRequestActionCreator,
-  CreateEntityRequestActionCreator,
+  CreateEntitySuccessActionCreator,
   CreateEntityFailureActionCreator
 >;
 

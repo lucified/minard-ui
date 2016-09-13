@@ -9,7 +9,7 @@ import Requests from '../../modules/requests';
 
 import confirm from '../common/confirm';
 
-const styles = require('../common/modal-dialog.scss');
+const styles = require('../common/forms/modal-dialog.scss');
 
 interface PassedProps {
   existingProjectNames: string[];

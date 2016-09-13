@@ -1,17 +1,18 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
-import { Dispatch } from 'redux';
-import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
+import { Field, FormProps, reduxForm } from 'redux-form';
 
 import { onSubmitActions } from '../../modules/forms';
 import Projects from '../../modules/projects';
 import Requests from '../../modules/requests';
 
-const styles = require('../common/modal-dialog.scss');
+import FormField from '../common/forms/field';
+
+const styles = require('../common/forms/modal-dialog.scss');
 
 interface PassedProps {
   existingProjectNames: string[];
   onSubmitSuccess: (projectId: string) => void;
+  closeDialog: () => void;
 }
 
 interface FormData {
@@ -30,52 +31,62 @@ const validate = (values: FormData, props: Props) => {
   if (!name) {
     errors.name = 'Required';
   } else if (!projectNameRegex.test(name)) {
-    errors.name = 'Only lower-case letters, numbers and dashes allowed.';
+    errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (props.existingProjectNames.indexOf(name) > -1) {
     errors.name = 'Project name already exists';
   }
 
   if (description && description.length > 2000) {
-    errors.description = 'The description can be up to 2000 characters long.'
+    errors.description = 'The description can be up to 2000 characters long';
   }
 
   return errors;
 };
 
-const RenderField = ({ input, name, label, placeholder, type, meta: { touched, error }}: BaseFieldProps) => (
-  <div className="row">
-    <div className="col-xs-4">
-      <label htmlFor={name}>{label}</label>
-    </div>
-    <div className="col-xs-8">
-      <input {...input} placeholder={placeholder} type={type} />
-      {touched && error && <span className={styles.error}>{error}</span>}
-    </div>
-  </div>
-);
+const toLowerCase = (value?: string): string | undefined => value && value.toLowerCase();
+const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
+const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid, closeDialog } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
-        {error && (
-          <div className="row">
-            <div className={classNames('col-xs-12', styles['general-error'])}>
+        <div className={styles.form}>
+          {error && (
+            <div className={styles['general-error']}>
               {error}
             </div>
-          </div>
-        )}
-        <Field name="name" component={RenderField} type="text" label="Name" placeholder="my-project-name" />
-        <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
-        <div className="row">
-          <div className="col-xs-12">
-            <button type="submit" disabled={pristine || submitting || invalid}>
+          )}
+          <Field
+            name="name"
+            component={FormField}
+            type="text"
+            label="Name"
+            placeholder="my-project-name"
+            instructions="May only contain letters, numbers, and hyphens"
+            normalize={normalizeProjectName}
+          />
+          <Field
+            name="description"
+            component={FormField}
+            type="textarea"
+            label="Description"
+            placeholder="Describe your project"
+          />
+        </div>
+        <footer className={styles.footer}>
+          <div>
+            <a className={styles.cancel} onClick={closeDialog}>
+              Cancel
+            </a>
+
+            <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
               {submitting ? 'Creating...' : 'Create project'}
             </button>
           </div>
-        </div>
+        </footer>
       </form>
     );
   }
@@ -88,5 +99,5 @@ export default reduxForm({
     Projects.actions.CREATE_PROJECT,
     Requests.actions.Projects.CreateProject.SUCCESS.type,
     Requests.actions.Projects.CreateProject.FAILURE.type,
-  )
+  ),
 })(NewProjectForm);
