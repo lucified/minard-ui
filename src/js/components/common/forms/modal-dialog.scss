@@ -50,6 +50,8 @@
 
 .form {
   padding: 48px 60px 60px 60px;
+
+  color: #2C3E50;
 }
 
 .footer {
@@ -97,4 +99,20 @@
       color: #540006;
     }
   }
+}
+
+.general-error {
+  width: 508px;
+  position: relative;
+  left: -24px;
+  top: -24px;
+  padding: 14px 28px 14px 18px;
+  margin-bottom: 12px;
+  background: #D0021B;
+  border-radius: 3px;
+
+  font-size: 17px;
+  color: #FFFFFF;
+  letter-spacing: -0.21px;
+  line-height: 21px;
 }

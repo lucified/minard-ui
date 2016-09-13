@@ -1,13 +1,13 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
-import { Dispatch } from 'redux';
-import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
+import { Field, FormProps, reduxForm } from 'redux-form';
 
 import { onSubmitActions } from '../../modules/forms';
 import Projects from '../../modules/projects';
 import Requests from '../../modules/requests';
 
-const styles = require('../common/modal-dialog.scss');
+import FormField from '../common/forms/field';
+
+const styles = require('../common/forms/modal-dialog.scss');
 
 interface PassedProps {
   existingProjectNames: string[];
@@ -37,23 +37,12 @@ const validate = (values: FormData, props: Props) => {
   }
 
   if (description && description.length > 2000) {
-    errors.description = 'The description can be up to 2000 characters long.'
+    errors.description = 'The description can be up to 2000 characters long.';
   }
 
   return errors;
 };
 
-const RenderField = ({ input, name, label, placeholder, type, meta: { touched, error }}: BaseFieldProps) => (
-  <div className="row">
-    <div className="col-xs-4">
-      <label htmlFor={name}>{label}</label>
-    </div>
-    <div className="col-xs-8">
-      <input {...input} placeholder={placeholder} type={type} />
-      {touched && error && <span className={styles.error}>{error}</span>}
-    </div>
-  </div>
-);
 
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
@@ -63,14 +52,25 @@ class NewProjectForm extends React.Component<Props, any> {
       <form onSubmit={handleSubmit}>
         <div className={styles.form}>
           {error && (
-            <div className="row">
-              <div className={classNames('col-xs-12', styles['general-error'])}>
-                {error}
-              </div>
+            <div className={styles['general-error']}>
+              {error}
             </div>
           )}
-          <Field name="name" component={RenderField} type="text" label="Name" placeholder="my-project-name" />
-          <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
+          <Field
+            name="name"
+            component={FormField}
+            type="text"
+            label="Name"
+            placeholder="my-project-name"
+            instructions="May only contain letters, numbers, and hyphens"
+          />
+          <Field
+            name="description"
+            component={FormField}
+            type="textarea"
+            label="Description"
+            placeholder="Describe your project"
+          />
         </div>
         <footer className={styles.footer}>
           <div>
@@ -95,5 +95,5 @@ export default reduxForm({
     Projects.actions.CREATE_PROJECT,
     Requests.actions.Projects.CreateProject.SUCCESS.type,
     Requests.actions.Projects.CreateProject.FAILURE.type,
-  )
+  ),
 })(NewProjectForm);

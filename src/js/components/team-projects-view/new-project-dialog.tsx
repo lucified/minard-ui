@@ -12,7 +12,7 @@ import { StateTree } from '../../reducers';
 
 import NewProjectForm from './new-project-form';
 
-const styles = require('../common/modal-dialog.scss');
+const styles = require('../common/forms/modal-dialog.scss');
 
 interface PassedProps {
 
