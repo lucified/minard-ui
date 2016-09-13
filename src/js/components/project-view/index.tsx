@@ -55,7 +55,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
   public render() {
     const { project, branches } = this.props;
 
-    if (!project || !branches) {
+    if (!project) {
       return <LoadingIcon className={styles.loading} center />;
     }
 
@@ -84,7 +84,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
     if (show === 'all') {
       return (
         <div>
-          <ProjectBranches project={project} branches={branches!} showAll />
+          <ProjectBranches project={project} branches={branches} showAll />
         </div>
       );
     }
@@ -93,7 +93,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       <div>
         <ProjectSettingsDialog project={project} />
         <ProjectHeader project={project} />
-        <ProjectBranches project={project} branches={branches!} count={3} />
+        <ProjectBranches project={project} branches={branches} count={3} />
         <ProjectActivity activities={activities!} isLoading={isLoadingActivities} />
       </div>
     );
