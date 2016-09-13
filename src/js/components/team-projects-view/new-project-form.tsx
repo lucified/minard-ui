@@ -31,19 +31,21 @@ const validate = (values: FormData, props: Props) => {
   if (!name) {
     errors.name = 'Required';
   } else if (!projectNameRegex.test(name)) {
-    errors.name = 'Only letters, numbers and dashes allowed.';
+    errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (props.existingProjectNames.indexOf(name) > -1) {
     errors.name = 'Project name already exists';
   }
 
   if (description && description.length > 2000) {
-    errors.description = 'The description can be up to 2000 characters long.';
+    errors.description = 'The description can be up to 2000 characters long';
   }
 
   return errors;
 };
 
 const toLowerCase = (value?: string): string | undefined => value && value.toLowerCase();
+const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
+const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
@@ -64,7 +66,7 @@ class NewProjectForm extends React.Component<Props, any> {
             label="Name"
             placeholder="my-project-name"
             instructions="May only contain letters, numbers, and hyphens"
-            normalize={toLowerCase}
+            normalize={normalizeProjectName}
           />
           <Field
             name="description"
