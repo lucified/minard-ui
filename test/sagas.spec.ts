@@ -826,7 +826,7 @@ describe('sagas', () => {
 
       iterator.next(); // request action
       iterator.next(); // API call
-      iterator.next({ response })
+      iterator.next({ response });
       iterator.next(objects); // store
 
       expect(iterator.next().value).to.deep.equal(
