@@ -13,7 +13,7 @@ import BranchSummary from './branch-summary';
 const styles = require('./project-branches.scss');
 
 interface Props {
-  branches: (Branch | FetchError | undefined)[];
+  branches: (Branch | FetchError | undefined)[] | undefined;
   project: Project;
   showAll?: boolean;
   count?: number;
@@ -41,15 +41,21 @@ const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
 };
 
 const ProjectBranches = ({ branches, project, showAll, count = 3 }: Props) => {
-  const branchesToShow = showAll ? branches : branches.slice(0, count);
-  const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
+  let content: JSX.Element | JSX.Element[];
+  if (branches) {
+    const branchesToShow = showAll ? branches : branches.slice(0, count);
+    content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
+  } else {
+    content = getLoadingContent(0);
+  }
+
   const title = showAll ? `All branches for ${project.name}` : 'Branches';
 
   return (
     <section className="container">
       <SectionTitle><span>{title}</span></SectionTitle>
       {content}
-      {(!showAll && branches.length > count) && (
+      {(!showAll && branches && branches.length > count) && (
         <div className="row end-xs">
           <div className={classNames('col-xs-12', styles['show-all-branches-section'])}>
             <MinardLink className={styles['show-all-branches-link']} showAll project={project}>
