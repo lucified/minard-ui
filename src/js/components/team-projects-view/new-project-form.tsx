@@ -31,7 +31,7 @@ const validate = (values: FormData, props: Props) => {
   if (!name) {
     errors.name = 'Required';
   } else if (!projectNameRegex.test(name)) {
-    errors.name = 'Only lower-case letters, numbers and dashes allowed.';
+    errors.name = 'Only letters, numbers and dashes allowed.';
   } else if (props.existingProjectNames.indexOf(name) > -1) {
     errors.name = 'Project name already exists';
   }
@@ -43,6 +43,7 @@ const validate = (values: FormData, props: Props) => {
   return errors;
 };
 
+const toLowerCase = (value?: string): string | undefined => value && value.toLowerCase();
 
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
@@ -63,6 +64,7 @@ class NewProjectForm extends React.Component<Props, any> {
             label="Name"
             placeholder="my-project-name"
             instructions="May only contain letters, numbers, and hyphens"
+            normalize={toLowerCase}
           />
           <Field
             name="description"
