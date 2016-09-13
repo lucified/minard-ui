@@ -1,17 +1,17 @@
 .dialog {
   z-index: 100;
   position: absolute;
-  top: 40px;
-  left: 40px;
-  right: 40px;
-  bottom: 40px;
-  border: 1px solid #ccc;
-  background: #fff;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 4px;
+  top: 0;
+  left: 50%;
+  margin-left: -260px;
+  width: 580px;
+  border: none;
   outline: none;
-  padding: 20px
+  background: #fff;
+
+  box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.10);
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .overlay {
@@ -20,41 +20,81 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.75);
+  background: linear-gradient(to right, rgba(23, 183, 183, 0.9), rgba(84, 198, 168, 0.9));
 }
 
-.error {
-  color: red;
+.header, .footer {
+  padding: 0 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.general-error {
-  color: red;
-}
+.header {
+  background-color: #4A4A4A;
+  color: #FBFBFB;
 
-.close {
-  float: right;
-  color: #95a5a6;
-  cursor: pointer;
-  margin: 24px;
+  font-size: 16px;
+  height: 72px;
+  font-weight: 600;
 
-  &:hover {
-    color: #000000;
-  }
-}
-
-.delete-section {
-  margin-top: 50px;
-}
-
-.delete {
-  margin-top: 12px;
-  color: #95a5a6;
-
-  a {
+  .close {
+    color: #2EBDB1;
     cursor: pointer;
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+}
+
+.form {
+  padding: 48px 60px 60px 60px;
+}
+
+.footer {
+  background: #F7F7F7;
+  height: 95px;
+  flex-direction: row-reverse;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  .submit {
+    background: #FFFFFF;
+    border: 1px solid #D8D8D8;
+    border-radius: 5px;
+    margin-left: 28px;
+    padding: 14px 24px;
+    cursor: pointer;
+
+    font-weight: 600;
+    font-size: 14px;
+    color: #2EBDB1;
+
+    &:hover {
+      background: #2EBDB1;
+      color: #FBFBFB;
+    }
   }
 
-  a:hover {
-    color: #000000;
+  .cancel {
+    font-weight: 600;
+    font-size: 12px;
+    color: #7F8C8D;
+    cursor: pointer;
+
+    &:hover {
+      color: #2C3E50;
+    }
+  }
+
+  .delete {
+    font-size: 16px;
+    color: #D0021B;
+    cursor: pointer;
+
+    &:hover {
+      color: #540006;
+    }
   }
 }

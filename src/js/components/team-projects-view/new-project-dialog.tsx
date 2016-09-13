@@ -60,11 +60,17 @@ class NewProjectDialog extends React.Component<Props, any> {
         className={styles.dialog}
         overlayClassName={styles.overlay}
       >
-        <div onClick={closeDialog} className={styles.close}>
-          <Icon name="times-circle" size="4x" />
-        </div>
-        <h1>Create a new project</h1>
-        <NewProjectForm existingProjectNames={existingProjectNames} onSubmitSuccess={this.onSuccessfulCreation}/>
+        <header className={styles.header}>
+          <div>Create a new project</div>
+          <div onClick={closeDialog} className={styles.close}>
+            <Icon name="times" />
+          </div>
+        </header>
+        <NewProjectForm
+          existingProjectNames={existingProjectNames}
+          onSubmitSuccess={this.onSuccessfulCreation}
+          closeDialog={closeDialog}
+        />
       </ModalDialog>
     );
   }
@@ -78,7 +84,13 @@ const mapStateToProps = (state: StateTree) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
-  closeDialog: () => dispatch(Modal.actions.closeModal(ModalType.NewProject)),
+  closeDialog: (e?: any) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    return dispatch(Modal.actions.closeModal(ModalType.NewProject));
+  },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

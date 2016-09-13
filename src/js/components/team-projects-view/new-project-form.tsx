@@ -12,6 +12,7 @@ const styles = require('../common/modal-dialog.scss');
 interface PassedProps {
   existingProjectNames: string[];
   onSubmitSuccess: (projectId: string) => void;
+  closeDialog: () => void;
 }
 
 interface FormData {
@@ -56,26 +57,32 @@ const RenderField = ({ input, name, label, placeholder, type, meta: { touched, e
 
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid, closeDialog } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
-        {error && (
-          <div className="row">
-            <div className={classNames('col-xs-12', styles['general-error'])}>
-              {error}
+        <div className={styles.form}>
+          {error && (
+            <div className="row">
+              <div className={classNames('col-xs-12', styles['general-error'])}>
+                {error}
+              </div>
             </div>
-          </div>
-        )}
-        <Field name="name" component={RenderField} type="text" label="Name" placeholder="my-project-name" />
-        <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
-        <div className="row">
-          <div className="col-xs-12">
-            <button type="submit" disabled={pristine || submitting || invalid}>
+          )}
+          <Field name="name" component={RenderField} type="text" label="Name" placeholder="my-project-name" />
+          <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
+        </div>
+        <footer className={styles.footer}>
+          <div>
+            <a className={styles.cancel} onClick={closeDialog}>
+              Cancel
+            </a>
+
+            <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
               {submitting ? 'Creating...' : 'Create project'}
             </button>
           </div>
-        </div>
+        </footer>
       </form>
     );
   }
