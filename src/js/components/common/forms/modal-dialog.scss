@@ -77,6 +77,13 @@
       background: #2EBDB1;
       color: #FBFBFB;
     }
+
+    &[disabled=disabled], &:disabled {
+      cursor: default;
+      pointer-events: none;
+      color: rgba(127, 140, 141, 0.6);
+      background: #FFFFFF;
+    }
   }
 
   .cancel {
