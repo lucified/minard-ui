@@ -11,7 +11,9 @@ interface Props {
   onConfirm?: (e?: any) => void;
 }
 
-// Must be passed (only) one child component
+// Adds (or replaces if one exists) the onClick handler to the passed in element that
+// displays a confirmation popup when clicked. If the user confirms the action, the
+// onConfirm handler is called. Must be passed (only) one child component.
 class Confirmable extends React.Component<Props, any> {
   constructor(props: any) {
     super(props);
