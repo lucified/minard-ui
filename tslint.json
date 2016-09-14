@@ -9,7 +9,8 @@
     "jsx-alignment": true,
     "jsx-no-lambda": true,
     "jsx-no-string-ref": true,
-    "jsx-self-close": true
+    "jsx-self-close": true,
+    "jsx-no-multiline-js": false
   },
   "rulesDirectory": []
 }
