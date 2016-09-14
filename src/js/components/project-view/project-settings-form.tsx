@@ -31,7 +31,8 @@ type Props = PassedProps & FormProps<FormData, any>;
 
 const checkNameChangeAndSubmit = async (values: FormData, dispatch: Dispatch<any>, props: Props) => {
   if (values.name !== props.initialValues.name) {
-    await confirm('Changing the name of your project will change the repository address as well. Are you sure you want to do this?');
+    await confirm('Changing the name of your project will change the ' +
+      'repository address as well. Are you sure you want to do this?');
   }
 
   return onSubmitActions(
@@ -68,7 +69,18 @@ const normalizeProjectName = (value?: string): string | undefined => spaceToHyph
 
 class ProjectSettingsForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid, closeDialog, submitFailed, deletionInProgress, deletionError, confirmDeletion } = this.props;
+    const {
+      handleSubmit,
+      pristine,
+      submitting,
+      error,
+      invalid,
+      closeDialog,
+      submitFailed,
+      deletionInProgress,
+      deletionError,
+      confirmDeletion,
+    } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
