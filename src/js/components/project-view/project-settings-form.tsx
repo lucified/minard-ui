@@ -1,13 +1,14 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { Dispatch } from 'redux';
-import { Field, BaseFieldProps, FormProps, reduxForm } from 'redux-form';
+import { Field, FormProps, reduxForm } from 'redux-form';
 
+import { DeleteError } from '../../modules/errors';
 import { onSubmitActions } from '../../modules/forms';
 import Projects, { Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
 
 import confirm from '../common/confirm';
+import FormField from '../common/forms/field';
 
 const styles = require('../common/forms/modal-dialog.scss');
 
@@ -15,6 +16,10 @@ interface PassedProps {
   existingProjectNames: string[];
   onSubmitSuccess: () => void;
   initialValues: Project;
+  deletionInProgress: boolean;
+  deletionError?: DeleteError;
+  confirmDeletion: (e: any) => void;
+  closeDialog: (e: any) => void;
 }
 
 interface FormData {
@@ -34,7 +39,7 @@ const checkNameChangeAndSubmit = async (values: FormData, dispatch: Dispatch<any
     Requests.actions.Projects.EditProject.SUCCESS.type,
     Requests.actions.Projects.EditProject.FAILURE.type,
   )(values, dispatch);
-}
+};
 
 const validate = (values: FormData, props: Props) => {
   const errors: FormData = {};
@@ -45,52 +50,75 @@ const validate = (values: FormData, props: Props) => {
   if (!name) {
     errors.name = 'Required';
   } else if (!projectNameRegex.test(name)) {
-    errors.name = 'Only lower-case letters, numbers and dashes allowed.';
+    errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (props.existingProjectNames.indexOf(name) > -1) {
     errors.name = 'Project name already exists';
   }
 
   if (description && description.length > 2000) {
-    errors.description = 'The description can be up to 2000 characters long.'
+    errors.description = 'The description can be up to 2000 characters long';
   }
 
   return errors;
 };
 
-const RenderField = ({ input, name, label, placeholder, type, meta: { touched, error }}: BaseFieldProps) => (
-  <div className="row">
-    <div className="col-xs-4">
-      <label htmlFor={name}>{label}</label>
-    </div>
-    <div className="col-xs-8">
-      <input {...input} placeholder={placeholder} type={type} />
-      {error && <span className={styles.error}>{error}</span>}
-    </div>
-  </div>
-);
+const toLowerCase = (value?: string): string | undefined => value && value.toLowerCase();
 
 class ProjectSettingsForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid, submitFailed } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid, closeDialog, submitFailed, deletionInProgress, deletionError, confirmDeletion } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
-        {error && (
-          <div className="row">
-            <div className={classNames('col-xs-12', styles['general-error'])}>
+        <div className={styles.form}>
+          {error && (
+            <div className={styles['general-error']}>
               {error}
             </div>
-          </div>
-        )}
-        <Field name="name" component={RenderField} type="text" label="Name" placeholder="my-project-name" />
-        <Field name="description" component={RenderField} type="textarea" label="Description" placeholder="Describe your project" />
-        <div className="row">
-          <div className="col-xs-12">
-            <button type="submit" disabled={pristine || submitting || (invalid && !submitFailed)}>
+          )}
+          {deletionError && (
+            <div className={styles['general-error']}>
+              {deletionError.prettyError}
+            </div>
+          )}
+          <Field
+            name="name"
+            component={FormField}
+            type="text"
+            label="Name"
+            placeholder="my-project-name"
+            instructions="May only contain letters, numbers, and hyphens"
+            normalize={toLowerCase}
+          />
+          <Field
+            name="description"
+            component={FormField}
+            type="textarea"
+            label="Description"
+            placeholder="Describe your project"
+          />
+        </div>
+        <footer className={styles.footer}>
+          <div>
+            <a className={styles.cancel} onClick={closeDialog}>
+              Cancel
+            </a>
+            <button
+              type="submit"
+              className={styles.submit}
+              disabled={pristine || submitting || (invalid && !submitFailed)}
+            >
               {submitting ? 'Saving...' : 'Save'}
             </button>
           </div>
-        </div>
+          <div className={styles.delete}>
+            {deletionInProgress ? 'Deleting...' : (
+              <a onClick={confirmDeletion}>
+                Delete project
+              </a>
+            )}
+          </div>
+        </footer>
       </form>
     );
   }
@@ -99,5 +127,5 @@ class ProjectSettingsForm extends React.Component<Props, any> {
 export default reduxForm({
   form: 'editProject',
   validate,
-  onSubmit: checkNameChangeAndSubmit as any // redux-form typings are missing the third props param
+  onSubmit: checkNameChangeAndSubmit as any, // redux-form typings are missing the third props param
 })(ProjectSettingsForm);
