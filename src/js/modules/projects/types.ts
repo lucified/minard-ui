@@ -1,9 +1,13 @@
 import { Action } from 'redux';
 
 import { FetchError } from '../errors';
-import { User } from '../types';
 
 // State
+interface ProjectUser {
+  email: string;
+  name?: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -11,7 +15,7 @@ export interface Project {
   branches?: string[] | FetchError; // Undefined if they have not yet been fetched
   latestActivityTimestamp?: number;
   latestSuccessfullyDeployedCommit?: string;
-  activeUsers: User[];
+  activeUsers: ProjectUser[];
 }
 
 export interface ProjectState {

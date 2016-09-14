@@ -1424,12 +1424,10 @@ describe('reducers', () => {
           {
             name: 'Ville Saarinen',
             email: 'ville.saarinen@lucify.com',
-            timestamp: 1470066681802,
           },
           {
             email: 'juho@lucify.com',
             name: undefined,
-            timestamp: 1469800281802,
           },
         ],
       },
@@ -1472,7 +1470,6 @@ describe('reducers', () => {
         activeUsers: [
           {
             email: 'foo@bar.com',
-            timestamp: 147001234532,
           },
         ],
       },
@@ -1486,7 +1483,6 @@ describe('reducers', () => {
         activeUsers: [
           {
             email: 'foo@bar.com',
-            timestamp: 147001334532,
           },
         ],
       },

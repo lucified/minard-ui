@@ -9,12 +9,10 @@
         "active-committers": [
           {
             "name": "Ville Saarinen",
-            "email": "ville.saarinen@lucify.com",
-            "timestamp": "2016-08-01T15:51:21.802Z"
+            "email": "ville.saarinen@lucify.com"
           },
           {
-            "email": "juho@lucify.com",
-            "timestamp": "2016-07-29T13:51:21.802Z"
+            "email": "juho@lucify.com"
           }
         ],
         "latest-activity-timestamp": "2016-08-01T15:51:21.802Z"

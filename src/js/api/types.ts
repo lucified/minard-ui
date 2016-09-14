@@ -67,6 +67,11 @@ interface ResponseProjectReference {
   id: string;
 }
 
+interface ProjectUser {
+  email: string;
+  name?: string;
+}
+
 // Project
 export interface ResponseProjectElement {
   type: "projects";
@@ -74,7 +79,7 @@ export interface ResponseProjectElement {
   attributes: {
     name: string;
     description?: string;
-    'active-committers': ApiUser[];
+    'active-committers': ProjectUser[];
     'latest-activity-timestamp'?: string;
   };
   relationships?: {

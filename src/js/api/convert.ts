@@ -42,11 +42,7 @@ const createProjectObject = (project: t.ResponseProjectElement): Project => {
     id: project.id,
     name: project.attributes.name,
     description: project.attributes.description,
-    activeUsers: project.attributes['active-committers'].map(user => ({
-      name: user.name,
-      email: user.email,
-      timestamp: moment(user.timestamp).valueOf(),
-    })),
+    activeUsers: project.attributes['active-committers'],
     latestActivityTimestamp,
     latestSuccessfullyDeployedCommit,
   };
