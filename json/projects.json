@@ -15,7 +15,8 @@
             "email": "juho@lucify.com"
           }
         ],
-        "latest-activity-timestamp": "2016-08-01T15:51:21.802Z"
+        "latest-activity-timestamp": "2016-08-01T15:51:21.802Z",
+        "repo-url": "http://mock.repo.url/project.git"
       },
       "relationships": {
         "latest-successfully-deployed-commit": {
@@ -31,7 +32,8 @@
       "id": "2",
       "attributes": {
         "name": "second-project",
-        "active-committers": []
+        "active-committers": [],
+        "repo-url": "http://mock.repo.url/project.git"
       },
       "relationships": {
         "latest-successfully-deployed-commit": {

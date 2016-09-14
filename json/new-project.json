@@ -4,7 +4,8 @@
     "id": "3",
     "attributes": {
       "name": "new-project",
-      "active-committers": []
+      "active-committers": [],
+      "repo-url": "http://mock.repo.url/project.git"
     },
     "relationships": {
       "latest-successfully-deployed-commit": {

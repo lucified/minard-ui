@@ -81,6 +81,7 @@ export interface ResponseProjectElement {
     description?: string;
     'active-committers': ProjectUser[];
     'latest-activity-timestamp'?: string;
+    'repo-url': string;
   };
   relationships?: {
     'latest-successfully-deployed-commit'?: {
