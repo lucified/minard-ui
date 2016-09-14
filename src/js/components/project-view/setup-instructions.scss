@@ -1,0 +1,37 @@
+.field {
+  margin-bottom: 36px;
+
+  .label {
+    margin-bottom: 8px;
+    margin-right: 12px;
+
+    font-size: 17px;
+    letter-spacing: -0.21px;
+    line-height: 24px;
+  }
+
+  .instructions {
+    font-size: 14px;
+    color: #7F8C8D;
+    letter-spacing: -0.17px;
+    line-height: 24px;
+    margin-bottom: 8px;
+  }
+
+  .url {
+    color: #2EBDB1;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .console {
+    padding: 0 12px;
+    background: #2C3E50;
+    border-radius: 2px;
+    font-size: 13px;
+    color: #FFFFFF;
+    letter-spacing: -0.38px;
+    line-height: 21px;
+    overflow-x: scroll;
+  }
+}

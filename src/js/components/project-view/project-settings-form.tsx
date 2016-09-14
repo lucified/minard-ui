@@ -10,6 +10,7 @@ import { StateTree } from '../../reducers';
 
 import Confirmable from '../common/confirmable';
 import FormField from '../common/forms/field';
+import SetupInstructions from './setup-instructions';
 
 const styles = require('../common/forms/modal-dialog.scss');
 
@@ -128,6 +129,7 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, a
             label="Description"
             placeholder="Describe your project"
           />
+          <SetupInstructions project={project} />
         </div>
         <footer className={styles.footer}>
           <div className={styles['primary-actions']}>
