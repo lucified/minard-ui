@@ -11,7 +11,6 @@ import Projects, { Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
-import confirm from '../common/confirm';
 import ProjectSettingsForm from './project-settings-form';
 
 const styles = require('../common/forms/modal-dialog.scss');
@@ -48,25 +47,21 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
   constructor(props: Props) {
     super(props);
 
-    this.confirmDeletion = this.confirmDeletion.bind(this);
+    this.deleteProject = this.deleteProject.bind(this);
     this.clearAndClose = this.clearAndClose.bind(this);
   }
 
-  private confirmDeletion(e: any) {
-    e.preventDefault();
-
+  private deleteProject() {
     const { project, deleteProject, router } = this.props;
 
-    confirm(`Are you positive you want to delete ${project.name}?`)
-      .then(() => new Promise((resolve, reject) => {
-          deleteProject(project.id, resolve, reject);
-        })
-      )
-      .then(() => {
-        this.clearAndClose();
-        router.push('/projects');
-      })
-      .catch(() => {}); // tslint:disable-line
+    new Promise((resolve, reject) => {
+      deleteProject(project.id, resolve, reject);
+    })
+    .then(() => {
+      this.clearAndClose();
+      router.push('/projects');
+    })
+    .catch((e) => { console.log('Error deleting project:', e); }); // tslint:disable-line
   };
 
   private clearAndClose() {
@@ -97,7 +92,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
           closeDialog={this.clearAndClose}
           deletionInProgress={deletionInProgress}
           deletionError={deletionError}
-          confirmDeletion={this.confirmDeletion}
+          deleteProject={this.deleteProject}
         />
       </ModalDialog>
     );
