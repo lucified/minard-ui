@@ -84,28 +84,21 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
         className={styles.dialog}
         overlayClassName={styles.overlay}
       >
-        <div onClick={this.clearAndClose} className={styles.close}>
-          <Icon name="times-circle" size="4x" />
-        </div>
-        <h1>Project settings</h1>
+        <header className={styles.header}>
+          <div>Project settings</div>
+          <div onClick={this.clearAndClose} className={styles.close}>
+            <Icon name="times" />
+          </div>
+        </header>
         <ProjectSettingsForm
           existingProjectNames={existingProjectNames}
           onSubmitSuccess={this.clearAndClose}
           initialValues={project}
+          closeDialog={this.clearAndClose}
+          deletionInProgress={deletionInProgress}
+          deletionError={deletionError}
+          confirmDeletion={this.confirmDeletion}
         />
-        <h3 className={styles['delete-section']}>Delete project</h3>
-        <div>
-          Deleting the project will also delete the git repository and all previews.
-          This action cannot be undone. You have been warned.
-        </div>
-        <div className={styles.delete}>
-          {deletionInProgress ? 'Deleting...' : (
-            <a onClick={this.confirmDeletion}>
-              Delete project
-            </a>
-          )}
-        </div>
-        {deletionError && <div className={styles.error}>{deletionError.prettyError}</div>}
       </ModalDialog>
     );
   }
