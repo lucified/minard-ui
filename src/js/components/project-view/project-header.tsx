@@ -40,7 +40,7 @@ const ProjectHeader = ({ project, openProjectSettingsDialog }: PassedProps & Gen
         <p className={styles.description}>{project.description}</p>
       </div>
       <div className="col-sm-2 col-xs-12 end-sm center-xs">
-        <a onClick={openProjectSettingsDialog} className={styles.settings} href="#">
+        <a onClick={openProjectSettingsDialog} className={styles.settings}>
           <Icon className={styles.icon} name="gear" /> Project settings
         </a>
       </div>
@@ -50,7 +50,6 @@ const ProjectHeader = ({ project, openProjectSettingsDialog }: PassedProps & Gen
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   openProjectSettingsDialog: (e: any) => {
-    e.preventDefault();
     dispatch(Modal.actions.openModal(ModalType.ProjectSettings));
   },
 });

@@ -50,20 +50,13 @@ class Confirmable extends React.Component<Props, any> {
     this.setState({ open: true });
   }
 
-  private hidePopup(e?: any) {
-    if (e) {
-      e.preventDefault();
-    }
-
+  private hidePopup() {
     window.removeEventListener('click', this.closePopupIfNotClickingSelf, false);
 
     this.setState({ open: false });
   }
 
-  private confirm(e?: any) {
-    if (e) {
-      e.preventDefault();
-    }
+  private confirm() {
     this.hidePopup();
     if (this.props.onConfirm) {
       this.props.onConfirm();

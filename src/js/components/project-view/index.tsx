@@ -48,7 +48,6 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
   }
 
   private reloadPage(e: any) {
-    e.preventDefault();
     location.reload(true);
     return false;
   }
