@@ -26,7 +26,6 @@ class Confirmable extends React.Component<Props, any> {
   }
 
   private closePopupIfNotClickingSelf(e: any) {
-    console.log('closepopupifnot');
     if (e.target !== findDOMNode(this)) {
       this.hidePopup();
     }
@@ -34,13 +33,11 @@ class Confirmable extends React.Component<Props, any> {
 
   public componentWillUnmount() {
     if (this.state.open) {
-      console.log('cleaning up')
       window.removeEventListener('click', this.closePopupIfNotClickingSelf, false);
     }
   }
 
   private showPopup(e?: any) {
-    console.log('showPopup')
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -52,7 +49,6 @@ class Confirmable extends React.Component<Props, any> {
   }
 
   private hidePopup(e?: any) {
-    console.log('hidePopup')
     if (e) {
       e.preventDefault();
     }
