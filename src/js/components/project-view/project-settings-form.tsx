@@ -63,6 +63,8 @@ const validate = (values: FormData, props: Props) => {
 };
 
 const toLowerCase = (value?: string): string | undefined => value && value.toLowerCase();
+const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
+const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
 class ProjectSettingsForm extends React.Component<Props, any> {
   public render() {
@@ -88,7 +90,7 @@ class ProjectSettingsForm extends React.Component<Props, any> {
             label="Name"
             placeholder="my-project-name"
             instructions="May only contain letters, numbers, and hyphens"
-            normalize={toLowerCase}
+            normalize={normalizeProjectName}
           />
           <Field
             name="description"
