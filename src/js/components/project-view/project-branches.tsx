@@ -26,14 +26,10 @@ const getEmptyContent = () => (
   </div>
 );
 
-const getLoadingContent = (key: number) => (
-  <LoadingIcon center key={key} />
-);
-
 const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
   return branches.map((branch, i) => {
     if (!branch) {
-      return getLoadingContent(i);
+      return <LoadingIcon center key={i} />;
     }
 
     return <BranchSummary key={branch.id} branch={branch} />;
@@ -46,7 +42,7 @@ const ProjectBranches = ({ branches, project, showAll, count = 3 }: Props) => {
     const branchesToShow = showAll ? branches : branches.slice(0, count);
     content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
   } else {
-    content = getLoadingContent(0);
+    content = <LoadingIcon className={styles.loading} center />;
   }
 
   const title = showAll ? `All branches for ${project.name}` : 'Branches';
