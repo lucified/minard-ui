@@ -11,6 +11,7 @@ import Modal, { ModalState } from './modules/modal';
 import Projects, { ProjectState } from './modules/projects';
 import Requests, { RequestsState } from './modules/requests';
 import Selected, { SelectedState } from './modules/selected';
+import Streaming, { StreamingState } from './modules/streaming';
 
 export default combineReducers({
   entities: combineReducers({
@@ -24,6 +25,7 @@ export default combineReducers({
   requests: Requests.reducer,
   selected: Selected.reducer,
   modal: Modal.reducer,
+  streaming: Streaming.reducer,
   form: formReducer,
   routing: routerReducer,
 });
@@ -40,6 +42,7 @@ export interface StateTree {
   requests: RequestsState;
   selected: SelectedState;
   modal: ModalState;
+  streaming: StreamingState;
   form: any;
   routing: any;
 }
