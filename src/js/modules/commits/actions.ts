@@ -19,3 +19,10 @@ export const storeCommits = (commits: t.Commit[]): t.StoreCommitsAction => ({
   type: STORE_COMMITS,
   entities: commits,
 });
+
+export const ADD_DEPLOYMENT_TO_COMMIT = 'COMMITS/ADD_DEPLOYMENT_TO_COMMIT';
+export const addDeploymentToCommit = (id: string, deployment: string): t.AddDeploymentToCommitAction => ({
+  type: ADD_DEPLOYMENT_TO_COMMIT,
+  id,
+  deployment,
+});

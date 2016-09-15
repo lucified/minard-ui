@@ -35,3 +35,8 @@ export interface LoadCommitsForBranchAction extends Action {
 export interface StoreCommitsAction extends Action {
   entities: Commit[];
 }
+
+export interface AddDeploymentToCommitAction extends Action {
+  id: string;
+  deployment: string;
+}

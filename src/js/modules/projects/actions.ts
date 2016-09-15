@@ -48,3 +48,27 @@ export const deleteProjectPromiseResolver = (
   resolve,
   reject,
 });
+
+// Update project based on event from Streaming API
+export const UPDATE_PROJECT = 'PROJECTS/UPDATE_PROJECT';
+export const updateProject = (id: string, name: string, description?: string): t.UpdateProjectAction => ({
+  type: UPDATE_PROJECT,
+  id,
+  name,
+  description,
+});
+
+// Remove project based on event from Streaming API
+export const REMOVE_PROJECT = 'PROJECTS/REMOVE_PROJECT';
+export const removeProject = (id: string): t.RemoveProjectAction => ({
+  type: REMOVE_PROJECT,
+  id,
+});
+
+// Add users to project based on code pushes from Streaming API
+export const STORE_AUTHORS_TO_PROJECT = 'PROJECTS/STORE_AUTHORS_TO_PROJECT';
+export const storeAuthorsToProject = (id: string, authors: t.ProjectUser[]): t.StoreAuthorsToProjectAction => ({
+  type: STORE_AUTHORS_TO_PROJECT,
+  id,
+  authors,
+});
