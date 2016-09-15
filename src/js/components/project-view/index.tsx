@@ -9,6 +9,7 @@ import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
+import EmptyProject from './empty-project';
 import ProjectActivity from './project-activity';
 import ProjectBranches from './project-branches';
 import ProjectHeader from './project-header';
@@ -53,11 +54,15 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
   }
 
   public render() {
-    const { project, branches } = this.props;
-
-    if (!project) {
-      return <LoadingIcon className={styles.loading} center />;
-    }
+    const {
+      project,
+      branches,
+      activities,
+      loadActivities,
+      isLoadingActivities,
+      isAllActivitiesRequestedForProject,
+      params: { show },
+    } = this.props;
 
     if (isFetchError(project)) {
       return (
@@ -79,28 +84,41 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
       );
     }
 
-    const { activities, loadActivities, isLoadingActivities, isAllActivitiesRequestedForProject } = this.props;
-    const { params: { show } } = this.props;
+    if (!project) {
+      return <LoadingIcon className={styles.loading} center />;
+    }
 
     if (show === 'all') {
-      return (
-        <div>
-          <ProjectBranches project={project} branches={branches} showAll />
-        </div>
-      );
+      return <ProjectBranches project={project} branches={branches} showAll />;
+    }
+
+    let mainContent: JSX.Element;
+
+    if (!branches) {
+      mainContent = <LoadingIcon className={styles.loading} center />;
+    } else {
+      if (branches.length === 0) {
+        mainContent = <EmptyProject project={project} />;
+      } else {
+        mainContent = (
+          <div>
+            <ProjectBranches project={project} branches={branches} count={3} />
+            <ProjectActivity
+              activities={activities!}
+              loadActivities={loadActivities.bind(this, project.id)}
+              isLoading={isLoadingActivities}
+              allLoaded={isAllActivitiesRequestedForProject}
+            />
+          </div>
+        );
+      }
     }
 
     return (
       <div>
         <ProjectSettingsDialog project={project} />
         <ProjectHeader project={project} />
-        <ProjectBranches project={project} branches={branches} count={3} />
-        <ProjectActivity
-          activities={activities!}
-          loadActivities={loadActivities.bind(this, project.id)}
-          isLoading={isLoadingActivities}
-          allLoaded={isAllActivitiesRequestedForProject}
-        />
+        {mainContent}
       </div>
     );
   }
