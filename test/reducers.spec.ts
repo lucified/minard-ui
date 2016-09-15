@@ -1430,6 +1430,7 @@ describe('reducers', () => {
             name: undefined,
           },
         ],
+        repoUrl: 'http://mock.repo.url/project.git',
       },
       2: {
         id: '2',
@@ -1439,6 +1440,7 @@ describe('reducers', () => {
         latestActivityTimestamp: undefined,
         latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [],
+        repoUrl: 'http://mock.repo.url/project.git',
       },
     };
 
@@ -1456,6 +1458,7 @@ describe('reducers', () => {
         latestActivityTimestamp: undefined,
         latestSuccessfullyDeployedCommit: undefined,
         branches: undefined,
+        repoUrl: 'http://mock.repo.url/project.git',
       },
     };
 
@@ -1472,6 +1475,7 @@ describe('reducers', () => {
             email: 'foo@bar.com',
           },
         ],
+        repoUrl: 'http://mock.repo.url/project.git',
       },
       1: {
         id: '1',
@@ -1485,6 +1489,7 @@ describe('reducers', () => {
             email: 'foo@bar.com',
           },
         ],
+        repoUrl: 'http://mock.repo.url/project.git',
       },
     };
 

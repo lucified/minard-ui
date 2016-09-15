@@ -1,0 +1,51 @@
+.instructions {
+
+}
+
+.section {
+  margin-bottom: 36px;
+}
+
+.label {
+  margin-bottom: 8px;
+  margin-right: 12px;
+
+  font-size: 17px;
+  letter-spacing: -0.21px;
+  line-height: 24px;
+}
+
+.text {
+  font-size: 21px;
+  line-height: 1.62;
+  color: #2c3e50;
+}
+
+.smaller-text {
+  font-size: 18px;
+  font-weight: 200;
+  line-height: 1.62;
+  color: #2c3e50;
+}
+
+.url {
+  color: #2EBDB1;
+  font-size: 21px;
+  font-weight: 600;
+  padding-bottom: 32px;
+}
+
+.code {
+  display: inline-block;
+  padding: 0 12px;
+  margin: 12px 0;
+  max-width: 100%;
+  overflow-x: auto;
+  background: #2C3E50;
+  border-radius: 2px;
+  font-size: 13px;
+  color: #FFFFFF;
+  letter-spacing: -0.38px;
+  line-height: 21px;
+  text-align: left;
+}

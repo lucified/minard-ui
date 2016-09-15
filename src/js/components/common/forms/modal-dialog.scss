@@ -1,9 +1,8 @@
 .dialog {
   z-index: 100;
-  position: absolute;
+  position: relative;
+  margin: 0 auto 20px auto;
   top: 0;
-  left: 50%;
-  margin-left: -260px;
   width: 580px;
   border: none;
   outline: none;
@@ -15,11 +14,12 @@
 }
 
 .overlay {
-  position: fixed;
+  position: absolute;
+  z-index: 99;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  min-height: 100%;
   background: linear-gradient(to right, rgba(23, 183, 183, 0.9), rgba(84, 198, 168, 0.9));
 }
 

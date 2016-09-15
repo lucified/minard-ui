@@ -5,7 +5,8 @@
     "attributes": {
       "name": "new-edited-project",
       "description": "And now with a description",
-      "active-committers": []
+      "active-committers": [],
+      "repo-url": "http://mock.repo.url/project.git"
     },
     "relationships": {
       "latest-successfully-deployed-commit": {

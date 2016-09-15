@@ -6,9 +6,7 @@ import { connect } from 'react-redux';
 require('font-awesome/css/font-awesome.css');
 import './styles.scss';
 
-import Modal from '../modules/modal';
 import Projects from '../modules/projects';
-import { StateTree } from '../reducers';
 
 import Footer from './footer';
 import Header from './header';
@@ -22,24 +20,20 @@ interface PassedProps {
   params: any;
 }
 
-interface GeneratedStateProps {
-  isModalOpen: boolean;
-}
-
 interface GeneratedDispatchProps {
   loadAllProjects: () => void;
 }
 
-class App extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
+class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
     this.props.loadAllProjects();
   }
 
   public render() {
-    const { isModalOpen, children } = this.props;
+    const { children } = this.props;
 
     return (
-      <div className={classNames(styles.app, { [styles['modal-open']]: isModalOpen })}>
+      <div id="minard-app" className={classNames(styles.app)}>
         <Header />
         <SubHeader />
         {children}
@@ -49,7 +43,7 @@ class App extends React.Component<PassedProps & GeneratedStateProps & GeneratedD
   }
 };
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  (state: StateTree) => ({ isModalOpen: Modal.selectors.isModalOpen(state) }),
+export default connect<{}, GeneratedDispatchProps, PassedProps>(
+  () => ({}),
   { loadAllProjects: Projects.actions.loadAllProjects }
 )(App);

@@ -45,6 +45,12 @@ class NewProjectDialog extends React.Component<Props, any> {
     this.onSuccessfulCreation = this.onSuccessfulCreation.bind(this);
   }
 
+  public componentWillMount() {
+    // We need to mount the modal onto our App component so that
+    // the overlay covers the whole app
+    (ModalDialog as any).setAppElement('#minard-app');
+  }
+
   private onSuccessfulCreation(projectId: string) {
     this.props.closeDialog();
     this.props.router.push(`/project/${projectId}`);

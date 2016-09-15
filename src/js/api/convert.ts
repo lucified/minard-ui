@@ -45,6 +45,7 @@ const createProjectObject = (project: t.ResponseProjectElement): Project => {
     activeUsers: project.attributes['active-committers'],
     latestActivityTimestamp,
     latestSuccessfullyDeployedCommit,
+    repoUrl: project.attributes['repo-url'],
   };
 };
 

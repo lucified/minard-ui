@@ -1124,12 +1124,14 @@ describe('sagas', () => {
           name: 'name',
           branches: ['1', '2'],
           activeUsers: [],
+          repoUrl: 'http://mock.repo.url/project.git',
         },
         {
           id: '2',
           name: 'name2',
           branches: ['3'],
           activeUsers: [],
+          repoUrl: 'http://mock.repo.url/project.git',
         },
       ];
 
@@ -1159,6 +1161,7 @@ describe('sagas', () => {
         latestActivityTimestamp: 123456789,
         latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
+        repoUrl: 'http://mock.repo.url/project.git',
       };
       const commit: Commit = {
         id: 'abc',
@@ -1191,6 +1194,7 @@ describe('sagas', () => {
         latestActivityTimestamp: 123456789,
         latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
+        repoUrl: 'http://mock.repo.url/project.git',
       };
 
       const iterator = sagas.ensureProjectRelatedDataLoaded(project);
