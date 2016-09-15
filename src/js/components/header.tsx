@@ -35,9 +35,10 @@ const reloadPage = (e: any) => {
   return false;
 };
 
-const Header = ({ errors, selectedSection, connectionState }: Props) => (
-  <section className={styles['header-background']}>
-    {errors && errors.length > 0 && (
+const Header = ({ errors, selectedSection, connectionState }: Props) => {
+  let error: JSX.Element | null = null;
+  if (errors && errors.length > 0) {
+    error = (
       <div className={styles['error-box']}>
         <img className={styles['error-image']} src={errorImage} />
         <div>
@@ -45,48 +46,56 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => (
           connection problems.
         </div>
       </div>
-    )}
-    {connectionState === ConnectionState.CONNECTING && (
-      <div className={styles['connection-box']}>
-        <img className={styles['error-image']} src={errorImage} />
-        <div>
-          Hold on, connecting...
-        </div>
-      </div>
-    )}
-    {connectionState === ConnectionState.CLOSED && (
-      <div className={styles['connection-box']}>
+    );
+  } else if (connectionState === ConnectionState.CLOSED) {
+    error = (
+      <div className={styles['error-box']}>
         <img className={styles['error-image']} src={errorImage} />
         <div>
           Connection lost. Trying to reconnect...<br />
           <a onClick={reloadPage}>Click to reload</a>
         </div>
       </div>
-    )}
-    <div className="container">
-      <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
-        <div className={classNames(styles['link-container'], 'col-xs')}>
-          <ul className={styles.links}>
-            <li className={classNames(styles.link, { [styles.active]: selectedSection === 'homepage' })}>
-              <Link to="/">Home</Link>
-            </li>
-          </ul>
-        </div>
-        <div className={classNames(styles.logo, 'col-xs')}>
-          <h1 title="Minard" className={styles.minard}>m</h1>
-        </div>
-        <div className={classNames(styles['profile-container'], 'col-xs')}>
-          <a className={styles['team-dropdown']} href="#">
-            Team Lucify <Icon name="caret-down" />
-          </a>
-          <a href="#">
-            <Avatar size="lg" email="ville.saarinen@gmail.com" />
-          </a>
+    );
+  } else if (connectionState === ConnectionState.CONNECTING) {
+    error = (
+      <div className={styles['connection-box']}>
+        <img className={styles['error-image']} src={errorImage} />
+        <div>
+          Hold on, connecting...
         </div>
       </div>
-    </div>
-  </section>
-);
+    );
+  }
+
+  return (
+    <section className={styles['header-background']}>
+      {error}
+      <div className="container">
+        <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
+          <div className={classNames(styles['link-container'], 'col-xs')}>
+            <ul className={styles.links}>
+              <li className={classNames(styles.link, { [styles.active]: selectedSection === 'homepage' })}>
+                <Link to="/">Home</Link>
+              </li>
+            </ul>
+          </div>
+          <div className={classNames(styles.logo, 'col-xs')}>
+            <h1 title="Minard" className={styles.minard}>m</h1>
+          </div>
+          <div className={classNames(styles['profile-container'], 'col-xs')}>
+            <a className={styles['team-dropdown']} href="#">
+              Team Lucify <Icon name="caret-down" />
+            </a>
+            <a href="#">
+              <Avatar size="lg" email="ville.saarinen@gmail.com" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const selectedSection =

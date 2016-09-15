@@ -87,22 +87,8 @@
 }
 
 .connection-box {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  height: 97px;
-  border-radius: 6px;
-  background-color: #e74c3c;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  padding: 24px 30px;
-  display: flex;
-  align-items: center;
-  z-index: 2;
-
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.71;
-  color: #ffffff;
+  @extend .error-box;
+  background-color: #4b7d7d;
 }
 
 .error-image {
