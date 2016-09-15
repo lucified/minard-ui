@@ -41,7 +41,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     super(props);
 
     this.restartConnection = this.restartConnection.bind(this);
-    this.logConnection = this.logConnection.bind(this);
   }
 
   private restartConnection() {
@@ -61,15 +60,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       }
     }, false);
     this._source.addEventListener('open', () => {
-      console.log('onopen'); this.props.setConnectionState(ConnectionState.OPEN);
+      console.log('onopen');
+      this.props.setConnectionState(ConnectionState.OPEN);
     }, false);
     this.props.setConnectionState(toConnectionState(this._source.readyState));
-    this.logConnection();
-  }
-
-  private logConnection() {
-    console.log('state:', this._source.readyState);
-    setTimeout(this.logConnection, 1000);
   }
 
   public componentWillMount() {
