@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Selected from '../modules/selected';
+import Streaming, { ConnectionState } from '../modules/streaming';
 import { StateTree } from '../reducers';
 
 import Avatar from './common/avatar';
@@ -20,6 +21,7 @@ interface PassedProps {
 interface GeneratedStateProps {
   selectedSection: string;
   errors: FetchCollectionError[];
+  connectionState: ConnectionState;
 }
 
 interface GeneratedDispatchProps {
@@ -28,7 +30,12 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-const Header = ({ errors, selectedSection }: Props) => (
+const reloadPage = (e: any) => {
+  location.reload(true);
+  return false;
+};
+
+const Header = ({ errors, selectedSection, connectionState }: Props) => (
   <section className={styles['header-background']}>
     {errors && errors.length > 0 && (
       <div className={styles['error-box']}>
@@ -36,6 +43,23 @@ const Header = ({ errors, selectedSection }: Props) => (
         <div>
           Uhhoh, we seem to be having<br />
           connection problems.
+        </div>
+      </div>
+    )}
+    {connectionState === ConnectionState.CONNECTING && (
+      <div className={styles['connection-box']}>
+        <img className={styles['error-image']} src={errorImage} />
+        <div>
+          Hold on, connecting...
+        </div>
+      </div>
+    )}
+    {connectionState === ConnectionState.CLOSED && (
+      <div className={styles['connection-box']}>
+        <img className={styles['error-image']} src={errorImage} />
+        <div>
+          Connection lost. Trying to reconnect...<br />
+          <a onClick={reloadPage}>Click to reload</a>
         </div>
       </div>
     )}
@@ -74,6 +98,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   return {
     errors: Errors.selectors.getFetchCollectionErrors(state),
     selectedSection,
+    connectionState: Streaming.selectors.getConnectionState(state),
   };
 };
 
