@@ -79,7 +79,8 @@ interface EditProjectResponse {
 }
 
 interface DeleteProjectResponse {
-  id: string;
+  teamId: string;
+  projectId: string; // TODO: change to 'id' once server does
 }
 
 let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
@@ -140,7 +141,8 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('project deleted', e.data);
     try {
       const response = JSON.parse(e.data) as DeleteProjectResponse;
-      this.props.removeProject(response.id);
+      const { projectId: id } = response;
+      this.props.removeProject(id);
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for project deleted', e.data);
     }
