@@ -44,7 +44,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private restartConnection() {
-    console.log('restarting connection to', streamingAPIUrl);
+    console.log('opening new streaming connection to', streamingAPIUrl);
     this._source = new EventSource(streamingAPIUrl, { withCredentials: false });
     this._source.addEventListener('error', (e: any) => {
       console.log('onerror:', e);
@@ -62,6 +62,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     this._source.addEventListener('open', () => {
       console.log('onopen');
       this.props.setConnectionState(ConnectionState.OPEN);
+    }, false);
+    this._source.addEventListener('message', (e: any) => {
+      console.log('received message:', e.data);
     }, false);
     this.props.setConnectionState(toConnectionState(this._source.readyState));
   }
