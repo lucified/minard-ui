@@ -33,7 +33,7 @@ class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
     const { children } = this.props;
 
     return (
-      <div className={classNames(styles.app)}>
+      <div id="minard-app" className={classNames(styles.app)}>
         <Header />
         <SubHeader />
         {children}

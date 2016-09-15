@@ -51,6 +51,12 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
     this.clearAndClose = this.clearAndClose.bind(this);
   }
 
+  public componentWillMount() {
+    // We need to mount the modal onto our App component so that
+    // the overlay covers the whole app
+    (ModalDialog as any).setAppElement('#minard-app');
+  }
+
   private deleteProject() {
     const { project, deleteProject, router } = this.props;
 
