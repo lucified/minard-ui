@@ -58,14 +58,18 @@ interface CodePushResponse {
   branch: ResponseBranchElement | string;
 }
 
-interface NewActivityResponse extends ResponseActivityElement {}
+interface NewActivityResponse {
+  data: ResponseActivityElement;
+}
 
 interface DeploymentUpdateResponse {
   commit: string;
   deployment: ResponseDeploymentElement;
 }
 
-interface NewProjectResponse extends ResponseProjectElement {}
+interface NewProjectResponse {
+  data: ResponseProjectElement;
+}
 
 interface EditProjectResponse {
   teamId: string;
@@ -146,7 +150,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('project created', e.data);
     try {
       const response = JSON.parse(e.data) as NewProjectResponse;
-      this.props.storeProjects(toProjects(response));
+      this.props.storeProjects(toProjects(response.data));
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for project created', e.data);
     }
@@ -167,7 +171,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('new activity', e.data);
     try {
       const response = JSON.parse(e.data) as NewActivityResponse;
-      this.props.storeActivities(toActivities(response));
+      this.props.storeActivities(toActivities(response.data));
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for new activity', e.data);
     }
