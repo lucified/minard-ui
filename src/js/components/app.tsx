@@ -10,6 +10,7 @@ import Projects from '../modules/projects';
 
 import Footer from './footer';
 import Header from './header';
+import StreamingAPIHandler from './streaming-api-handler';
 import SubHeader from './sub-header';
 
 const styles = require('./app.scss');
@@ -34,6 +35,7 @@ class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
 
     return (
       <div id="minard-app" className={classNames(styles.app)}>
+        <StreamingAPIHandler />
         <Header />
         <SubHeader />
         {children}
