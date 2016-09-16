@@ -73,14 +73,14 @@ interface NewProjectResponse {
 
 interface EditProjectResponse {
   teamId: string;
-  projectId: string; // TODO: change to 'id' once server does
+  id: string; // TODO: change to 'id' once server does
   name: string;
   description: string;
 }
 
 interface DeleteProjectResponse {
   teamId: string;
-  projectId: string; // TODO: change to 'id' once server does
+  id: string; // TODO: change to 'id' once server does
 }
 
 let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
@@ -130,7 +130,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('project edited', e.data);
     try {
       const response = JSON.parse(e.data) as EditProjectResponse;
-      const { projectId: id, name, description } = response;
+      const { id, name, description } = response;
       this.props.updateProject(id, name, description);
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for project edited', e.data); // tslint:disable-line
@@ -141,7 +141,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('project deleted', e.data);
     try {
       const response = JSON.parse(e.data) as DeleteProjectResponse;
-      const { projectId: id } = response;
+      const { id } = response;
       this.props.removeProject(id);
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for project deleted', e.data); // tslint:disable-line
