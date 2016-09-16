@@ -3,7 +3,7 @@ import { Reducer } from 'redux';
 import { SET_CONNECTION_STATE } from './actions';
 import * as t from './types';
 
-const initialState: t.StreamingState = { state: t.ConnectionState.CLOSED };
+const initialState: t.StreamingState = { state: t.ConnectionState.INITIAL_CONNECT };
 
 const reducer: Reducer<t.StreamingState> = (state = initialState, action: any) => {
   switch (action.type) {

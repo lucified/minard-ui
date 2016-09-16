@@ -39,6 +39,13 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     super(props);
 
     this.restartConnection = this.restartConnection.bind(this);
+    this.changeStateToConnecting = this.changeStateToConnecting.bind(this);
+  }
+
+  private changeStateToConnecting() {
+    if (this._source && this._source.readyState === EventSource.CONNECTING) {
+      this.props.setConnectionState(ConnectionState.CONNECTING);
+    }
   }
 
   private restartConnection() {
@@ -64,7 +71,15 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     this._source.addEventListener('message', (e: any) => {
       console.log('received message:', e.data);
     }, false);
-    this.props.setConnectionState(toConnectionState(this._source.readyState));
+    if (this._source.readyState === EventSource.CONNECTING) {
+      // We set the state to INITIAL_CONNECT at first because we don't want the
+      // "connecting..." info dialog to quickly pop up when Minard is loaded.
+      this.props.setConnectionState(ConnectionState.INITIAL_CONNECT);
+      // Show the "connecting..." dialog if we still haven't connected in 3 seconds.
+      setTimeout(this.changeStateToConnecting, 3000);
+    } else {
+      this.props.setConnectionState(toConnectionState(this._source.readyState));
+    }
   }
 
   public componentWillMount() {

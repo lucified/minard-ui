@@ -2,6 +2,7 @@ import { Action } from 'redux';
 
 export enum ConnectionState {
   OPEN,
+  INITIAL_CONNECT,
   CONNECTING,
   CLOSED,
 }
