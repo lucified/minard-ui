@@ -37,33 +37,38 @@ const reloadPage = (e: any) => {
 
 const Header = ({ errors, selectedSection, connectionState }: Props) => {
   let error: JSX.Element | null = null;
+  let errorContent: JSX.Element | null = null;
+  let errorClass: string = '';
   if (errors && errors.length > 0) {
-    error = (
-      <div className={styles['error-box']}>
-        <img className={styles['error-image']} src={errorImage} />
-        <div>
-          Uhhoh, we seem to be having<br />
-          connection problems.
-        </div>
+    errorClass = styles['error-box'];
+    errorContent = (
+      <div>
+        Uhhoh, we seem to be having<br />
+        connection problems.
       </div>
     );
   } else if (connectionState === ConnectionState.CLOSED) {
-    error = (
-      <div className={styles['error-box']}>
-        <img className={styles['error-image']} src={errorImage} />
-        <div>
-          Connection lost. Trying to reconnect...<br />
-          <a onClick={reloadPage}>Click to reload</a>
-        </div>
+    errorClass = styles['error-box'];
+    errorContent = (
+      <div>
+        Connection lost. Trying to reconnect...<br />
+        <a onClick={reloadPage}>Click to reload</a>
       </div>
     );
   } else if (connectionState === ConnectionState.CONNECTING) {
+    errorClass = styles['connection-box'];
+    errorContent = (
+      <div>
+        Hold on, connecting...
+      </div>
+    );
+  }
+
+  if (errorContent && errorClass) {
     error = (
-      <div className={styles['connection-box']}>
+      <div className={errorClass}>
         <img className={styles['error-image']} src={errorImage} />
-        <div>
-          Hold on, connecting...
-        </div>
+        {errorContent}
       </div>
     );
   }
