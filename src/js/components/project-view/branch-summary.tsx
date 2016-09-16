@@ -11,6 +11,7 @@ import { StateTree } from '../../reducers';
 import DeploymentScreenshot from '../common/deployment-screenshot';
 import MinardLink from '../common/minard-link';
 import SingleCommit from '../common/single-commit';
+import BuildStatus from './build-status';
 
 const styles = require('./branch-summary.scss');
 
@@ -19,8 +20,9 @@ interface PassedProps {
 }
 
 interface GeneratedProps {
-  latestDeployment?: Deployment | FetchError;
-  latestDeployedCommit?: Commit | FetchError;
+  latestSuccessfulDeployment?: Deployment | FetchError;
+  latestSuccessfullyDeployedCommit?: Commit | FetchError;
+  deploymentForLatestCommit?: Deployment | FetchError;
 }
 
 const reloadPage = (e: any) => {
@@ -28,7 +30,9 @@ const reloadPage = (e: any) => {
   return false;
 };
 
-const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: PassedProps & GeneratedProps) => {
+const BranchSummary = (props: PassedProps & GeneratedProps) => {
+  const { branch, latestSuccessfulDeployment, latestSuccessfullyDeployedCommit, deploymentForLatestCommit } = props;
+
   if (isFetchError(branch)) {
     return (
       <div className={classNames('row', styles.branch)}>
@@ -43,24 +47,24 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
 
   let commitContent: JSX.Element;
 
-  if (!latestDeployedCommit) {
+  if (!latestSuccessfullyDeployedCommit) {
     commitContent = (
       <div className={styles.empty}>
         No previews available
       </div>
     );
   } else {
-    if (isFetchError(latestDeployment)) {
+    if (isFetchError(latestSuccessfulDeployment)) {
       commitContent = (
         <div className={styles.error}>
           <p>Error loading deployment</p>
-          <small>{latestDeployment.prettyError}</small>
+          <small>{latestSuccessfulDeployment.prettyError}</small>
         </div>
       );
     } else {
       commitContent = (
-        <MinardLink openInNewWindow deployment={latestDeployment}>
-          <SingleCommit className={styles.hover} commit={latestDeployedCommit} />
+        <MinardLink openInNewWindow deployment={latestSuccessfulDeployment}>
+          <SingleCommit className={styles.hover} commit={latestSuccessfullyDeployedCommit} />
         </MinardLink>
       );
     }
@@ -70,14 +74,14 @@ const BranchSummary = ({ branch, latestDeployment, latestDeployedCommit }: Passe
     <div className={classNames('row', styles.branch)}>
       <div className={classNames('col-xs-2', styles.screenshot)}>
         <MinardLink branch={branch}>
-          <DeploymentScreenshot deployment={latestDeployment} />
+          <DeploymentScreenshot deployment={latestSuccessfulDeployment} />
         </MinardLink>
       </div>
       <div className={classNames('col-xs-10', styles['activity-content'])}>
         <MinardLink branch={branch}>
           <div className={styles.header}>
             <div className={styles.title}>{branch.name}</div>
-            {/* TODO: add comments, build status/failure */}
+            <BuildStatus className={styles['build-status']} deployment={deploymentForLatestCommit} />
           </div>
           <div className={styles.description}>{branch.description}</div>
         </MinardLink>
@@ -95,17 +99,25 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     return {};
   }
 
-  const latestDeployedCommit = branch.latestSuccessfullyDeployedCommit &&
+  const latestSuccessfullyDeployedCommit = branch.latestSuccessfullyDeployedCommit &&
     Commits.selectors.getCommit(state, branch.latestSuccessfullyDeployedCommit);
 
-  let latestDeployment: FetchError | Deployment | undefined;
-  if (latestDeployedCommit && !isFetchError(latestDeployedCommit) && latestDeployedCommit.deployment) {
-    latestDeployment = Deployments.selectors.getDeployment(state, latestDeployedCommit.deployment);
+  let latestSuccessfulDeployment: FetchError | Deployment | undefined;
+  if (latestSuccessfullyDeployedCommit &&
+    !isFetchError(latestSuccessfullyDeployedCommit) &&
+    latestSuccessfullyDeployedCommit.deployment
+  ) {
+    latestSuccessfulDeployment =
+      Deployments.selectors.getDeployment(state, latestSuccessfullyDeployedCommit.deployment);
   }
 
+  const deploymentForLatestCommit =
+    branch.latestCommit && Deployments.selectors.getDeployment(state, branch.latestCommit);
+
   return {
-    latestDeployment,
-    latestDeployedCommit,
+    latestSuccessfulDeployment,
+    latestSuccessfullyDeployedCommit,
+    deploymentForLatestCommit,
   };
 };
 
