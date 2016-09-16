@@ -1,28 +1,24 @@
+@import '../mixins';
+
 .section-title {
   height: 140px;
 }
 
-.title {
-  font-size: 30px;
-  font-weight: 300;
-  letter-spacing: -0.2px;
-  text-align: center;
-  color: #2c3e50;
-
+.title, .right, .left {
   position: relative;
   z-index: 1;
+}
+
+.title {
+  @include nitti-grotesk-light;
+  font-size: 36px;
+  color: #2C3E50;
+  letter-spacing: -1px;
+  text-align: center;
 }
 
 .right {
-  position: relative;
-  z-index: 1;
-
   text-align: right;
-}
-
-.left {
-  position: relative;
-  z-index: 1;
 }
 
 .background-color {
