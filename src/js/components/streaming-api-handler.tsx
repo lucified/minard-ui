@@ -133,7 +133,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const { projectId: id, name, description } = response;
       this.props.updateProject(id, name, description);
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for project edited', e.data);
+      console.log('Error: Unable to parse Streaming API response for project edited', e.data); // tslint:disable-line
     }
   }
 
@@ -144,7 +144,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const { projectId: id } = response;
       this.props.removeProject(id);
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for project deleted', e.data);
+      console.log('Error: Unable to parse Streaming API response for project deleted', e.data); // tslint:disable-line
     }
   }
 
@@ -154,7 +154,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const response = JSON.parse(e.data) as NewProjectResponse;
       this.props.storeProjects(toProjects(response.data));
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for project created', e.data);
+      console.log('Error: Unable to parse Streaming API response for project created', e.data); // tslint:disable-line
     }
   }
 
@@ -165,7 +165,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       this.props.storeDeployments(toDeployments(response.deployment));
       this.props.addDeploymentToCommit(response.commit, response.deployment.id);
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for deployment updated', e.data);
+      console.log('Error: Unable to parse Streaming API response for deployment updated', e.data); // tslint:disable-line
     }
   }
 
@@ -175,7 +175,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const response = JSON.parse(e.data) as NewActivityResponse;
       this.props.storeActivities(toActivities(response.data));
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for new activity', e.data);
+      console.log('Error: Unable to parse Streaming API response for new activity', e.data); // tslint:disable-line
     }
   }
 
@@ -186,8 +186,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       if (!after) {
         // branch deleted
         this.props.removeBranch(response.branch as string);
-
-        // TODO: should commits be stored?
         return;
       }
 
@@ -206,7 +204,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
       );
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for code pushed', e.data);
+      console.log('Error: Unable to parse Streaming API response for code pushed', e.data); // tslint:disable-line
     }
   }
 
