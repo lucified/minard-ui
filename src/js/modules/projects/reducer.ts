@@ -40,7 +40,9 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       project = state[projectId];
 
       if (project && !isFetchError(project)) {
-        const newProject = Object.assign({}, project, { branches });
+        const newBranches =
+          (!project.branches || isFetchError(project.branches)) ? branches : branches.concat(project.branches);
+        const newProject = Object.assign({}, project, { branches: newBranches });
         return Object.assign({}, state, { [projectId]: newProject });
       }
 
