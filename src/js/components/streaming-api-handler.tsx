@@ -64,6 +64,8 @@ interface NewActivityResponse {
 
 interface DeploymentUpdateResponse {
   commit: string;
+  branch: string;
+  project: string;
   deployment: ResponseDeploymentElement;
 }
 
@@ -73,14 +75,15 @@ interface NewProjectResponse {
 
 interface EditProjectResponse {
   teamId: string;
-  id: string; // TODO: change to 'id' once server does
+  id: string;
   name: string;
   description: string;
+  'repo-url': string;
 }
 
 interface DeleteProjectResponse {
   teamId: string;
-  id: string; // TODO: change to 'id' once server does
+  id: string;
 }
 
 let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
@@ -236,13 +239,12 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       console.log('received message:', e.data);
     }, false);
 
-    // TODO: Remove SSE_ prefix once server removes them
-    this._source.addEventListener('SSE_PROJECT_CREATED', this.handleProjectCreated, false);
-    this._source.addEventListener('SSE_PROJECT_EDITED', this.handleProjectEdited, false);
-    this._source.addEventListener('SSE_PROJECT_DELETED', this.handleProjectDeleted, false);
-    this._source.addEventListener('SSE_CODE_PUSHED', this.handleCodePush, false);
-    this._source.addEventListener('SSE_NEW_ACTIVITY', this.handleNewActivity, false);
-    this._source.addEventListener('SSE_DEPLOYMENT_UPDATED', this.handleDeploymentUpdate, false);
+    this._source.addEventListener('PROJECT_CREATED', this.handleProjectCreated, false);
+    this._source.addEventListener('PROJECT_EDITED', this.handleProjectEdited, false);
+    this._source.addEventListener('PROJECT_DELETED', this.handleProjectDeleted, false);
+    this._source.addEventListener('CODE_PUSHED', this.handleCodePush, false);
+    this._source.addEventListener('NEW_ACTIVITY', this.handleNewActivity, false);
+    this._source.addEventListener('DEPLOYMENT_UPDATED', this.handleDeploymentUpdate, false);
     // TODO: handle refresh UI
 
     if (this._source.readyState === EventSource.CONNECTING) {
