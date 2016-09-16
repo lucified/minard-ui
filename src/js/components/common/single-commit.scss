@@ -1,3 +1,5 @@
+@import '../mixins';
+
 .commit-content {
   display: flex;
 }
@@ -7,7 +9,9 @@
 }
 
 .commit-metadata {
-  font-size: 11px;
+  @include nitti-grotesk-medium;
+  font-size: 14px;
+  line-height: 18px;
   color: #919D9F;
 }
 
@@ -16,18 +20,18 @@
 }
 
 .commit-body {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 15px;
+  @include nitti;
+  font-size: 17px;
+  letter-spacing: -0.5px;
   color: #2C3E50;
 }
 
 .message {
-  line-height: 2.09;
-  font-weight: 600;
+  line-height: 23px;
 }
 
 .description {
-  line-height: 1.53;
+  line-height: 23px;
   font-size: 12px;
 }
 
@@ -35,6 +39,6 @@
   color: #919D9F;
 
   small {
-    font-family: "Lucida Console", Monaco, monospace;
+    @include nitti;
   }
 }

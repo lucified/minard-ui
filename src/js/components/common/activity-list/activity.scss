@@ -1,13 +1,15 @@
+@import '../../mixins';
+
 .activity {
   margin-left: 2rem;
 }
 
 .deployment-metadata {
   display: flex;
-  font-size: 13px;
+  font-size: 16px;
   color: #7F8C8D;
   margin-bottom: 12px;
-  line-height: 1.92;
+  line-height: 25px;
 
   a:hover {
     color: #2C3E50;
@@ -16,7 +18,7 @@
 }
 
 .deployment-metadata-author, .deployment-metadata-branch, .deployment-metadata-project {
-  font-weight: 600;
+  @include nitti-grotesk-bold;
 }
 
 .deployment-metadata-project {
