@@ -64,9 +64,7 @@ interface CodePushResponse {
   project: string;
 }
 
-interface NewActivityResponse {
-  data: ResponseActivityElement;
-}
+interface NewActivityResponse extends ResponseActivityElement {}
 
 interface DeploymentUpdateResponse {
   commit: string;
@@ -188,7 +186,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('new activity', e.data);
     try {
       const response = JSON.parse(e.data) as NewActivityResponse;
-      this.props.storeActivities(toActivities(response.data));
+      this.props.storeActivities(toActivities(response));
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for new activity', e.data); // tslint:disable-line
     }
