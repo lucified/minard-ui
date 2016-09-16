@@ -56,6 +56,7 @@ interface CodePushResponse {
   commits: ResponseCommitElement[];
   parents: string[];
   branch: ResponseBranchElement | string;
+  project: string;
 }
 
 interface NewActivityResponse {
