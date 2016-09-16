@@ -16,8 +16,8 @@
   :global {
     // This prevents a flicker on Safari once opacity reaches 1
     & .commit-message {
-      -webkit-transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      backface-visibility: hidden;
     }
 
     & .commit-message::after {
