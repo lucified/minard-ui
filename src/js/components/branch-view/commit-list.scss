@@ -1,3 +1,5 @@
+@import '../mixins';
+
 .commit-list {
   padding: 32px 48px 35px 40px;
   border-radius: 3px;
@@ -14,7 +16,7 @@
 }
 
 .end {
-  font-weight: 200;
+  @include nitti-grotesk-light;
   text-align: center;
   color: #7F8C8D;
 }
