@@ -1543,4 +1543,8 @@ describe('reducers', () => {
       });
     });
   });
+
+  describe('streaming', () => {
+    it('TODO');
+  });
 });
