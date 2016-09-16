@@ -58,7 +58,7 @@ interface EventSourceError {
 interface CodePushResponse {
   after: string;
   before: string;
-  commits: ResponseCommitElement[];
+  commits: ResponseCommitElement[]; // oldest is first
   parents: string[];
   branch: ResponseBranchElement | string;
   project: string;
@@ -209,21 +209,22 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       }
 
       const branches = toBranches(response.branch as ResponseBranchElement);
-      const commits = toCommits(commitsResponse);
+      const branch = branches[0];
+      const commits = toCommits(commitsResponse.reverse());
 
       if (!before) {
         // branch created
         this.props.storeBranches(branches);
-        this.props.addBranchToProject(branches[0].project, branches[0].id);
+        this.props.addBranchToProject(branch.project, branch.id);
       }
 
       this.props.storeCommits(commits);
-      this.props.storeCommitsToBranch(branches[0].id, commits, response.parents);
+      this.props.storeCommitsToBranch(branch.id, commits, response.parents);
       this.props.storeAuthorsToProject(
-        branches[0].project,
+        branch.project,
         uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
       );
-      this.props.updateLatestActivityTimestampForProject(branches[0].project, commits[0].committer.timestamp);
+      this.props.updateLatestActivityTimestampForProject(branch.project, commits[0].committer.timestamp);
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for code pushed', e.data); // tslint:disable-line
     }
