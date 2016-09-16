@@ -9,9 +9,7 @@ if (!process.env.CHARLES) {
 
 let host: string = process.env.CHARLES;
 // Remove trailing /
-if (host.slice(-1) === '/') {
-  host = host.slice(0, -1);
-}
+host = host.replace(/\/$/, '');
 host = `${host}/api`;
 
 const defaultOptions = {

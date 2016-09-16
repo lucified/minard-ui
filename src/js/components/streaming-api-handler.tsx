@@ -11,9 +11,7 @@ declare var EventSource: any;
 
 let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
 // Remove trailing /
-if (streamingAPIUrl.slice(-1) === '/') {
-  streamingAPIUrl = streamingAPIUrl.slice(0, -1);
-}
+streamingAPIUrl = streamingAPIUrl.replace(/\/$/, '');
 streamingAPIUrl = `${streamingAPIUrl}/events/1`; // TODO: add actual team ID
 
 const toConnectionState = (state: any): ConnectionState => {
