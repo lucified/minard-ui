@@ -44,11 +44,18 @@ export const removeBranch = (id: string): t.RemoveBranchAction => ({
 export const STORE_COMMITS_TO_BRANCH = 'BRANCHES/STORE_COMMITS_TO_BRANCH';
 export const storeCommitsToBranch = (
   id: string,
-  commits: string[],
+  commits: Commit[],
   parentCommits: string[]
 ): t.StoreCommitsToBranchAction => ({
   type: STORE_COMMITS_TO_BRANCH,
   id,
   commits,
   parentCommits,
+});
+
+export const UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH = 'BRANCHES/UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH';
+export const updateLatestDeployedCommit = (id: string, commit: string): t.UpdateLatestDeployedCommitAction => ({
+  type: UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH,
+  id,
+  commit,
 });

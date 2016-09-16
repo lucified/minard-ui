@@ -22,11 +22,20 @@ export const storeProjects = (projects: t.Project[]): t.StoreProjectsAction => (
 
 // Add branches to existing project
 export const ADD_BRANCHES_TO_PROJECT = 'PROJECTS/ADD_BRANCHES_TO_PROJECT';
-export const addBranchesToProject = (id: string, branchIds: string[]): t.AddBranchesToProjectAction => ({
-  type: ADD_BRANCHES_TO_PROJECT,
-  id,
-  branches: branchIds,
-});
+export const addBranchesToProject = (id: string, branchIds: string[] | string): t.AddBranchesToProjectAction => {
+  let branches: string[];
+  if (typeof branchIds === 'string') {
+    branches = [branchIds];
+  } else {
+    branches = branchIds;
+  }
+
+  return {
+    type: ADD_BRANCHES_TO_PROJECT,
+    id,
+    branches,
+  };
+};
 
 // Create a new project
 // Action creators are handled by redux-form
@@ -51,10 +60,16 @@ export const deleteProjectPromiseResolver = (
 
 // Update project based on event from Streaming API
 export const UPDATE_PROJECT = 'PROJECTS/UPDATE_PROJECT';
-export const updateProject = (id: string, name: string, description?: string): t.UpdateProjectAction => ({
+export const updateProject = (
+  id: string,
+  name: string,
+  repoUrl: string,
+  description?: string,
+): t.UpdateProjectAction => ({
   type: UPDATE_PROJECT,
   id,
   name,
+  repoUrl,
   description,
 });
 
@@ -71,4 +86,32 @@ export const storeAuthorsToProject = (id: string, authors: t.ProjectUser[]): t.S
   type: STORE_AUTHORS_TO_PROJECT,
   id,
   authors,
+});
+
+export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT = 'PROJECTS/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT';
+export const updateLatestActivityTimestampForProject = (
+  id: string,
+  timestamp: number
+): t.UpdateLatestActivityTimestampAction => ({
+  type: UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT,
+  id,
+  timestamp,
+});
+
+export const REMOVE_BRANCH_FROM_PROJECT = 'PROJECTS/REMOVE_BRANCH_FROM_PROJECT';
+export const removeBranchFromProject = (id: string, branch: string): t.RemoveBranchAction => ({
+  type: REMOVE_BRANCH_FROM_PROJECT,
+  id,
+  branch,
+});
+
+export const UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT =
+  'PROJECTS/UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT';
+export const updateLatestDeployedCommitForProject = (
+  id: string,
+  commit: string,
+): t.UpdateLatestDeployedCommitAction => ({
+  type: UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT,
+  id,
+  commit,
 });

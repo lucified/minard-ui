@@ -10,12 +10,12 @@ import {
   ResponseBranchElement,
   ResponseCommitElement,
   ResponseDeploymentElement,
-  ResponseProjectElement
+  ResponseProjectElement,
 } from '../api/types';
 import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
-import Deployments, { Deployment } from '../modules/deployments';
+import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
 import Projects, { Project, ProjectUser } from '../modules/projects';
 import Streaming, { ConnectionState } from '../modules/streaming';
 
@@ -29,11 +29,16 @@ interface GeneratedDispatchProps {
   storeBranches: (branches: Branch[]) => void;
   storeDeployments: (deployments: Deployment[]) => void;
   removeProject: (id: string) => void;
-  updateProject: (id: string, name: string, description?: string) => void;
+  updateProject: (id: string, name: string, repoUrl: string, description?: string) => void;
   addDeploymentToCommit: (commitId: string, deploymentId: string) => void;
   removeBranch: (id: string) => void;
   storeCommitsToBranch: (id: string, commits: Commit[], parentCommits: string[]) => void;
   storeAuthorsToProject: (id: string, authors: ProjectUser[]) => void;
+  addBranchToProject: (id: string, branch: string) => void;
+  updateLatestActivityTimestampForProject: (id: string, timestamp: number) => void;
+  updateLatestDeployedCommitForProject: (id: string, commit: string) => void;
+  updateLatestDeployedCommitForBranch: (id: string, commit: string) => void;
+  removeBranchFromProject: (id: string, branch: string) => void;
 }
 
 // Streaming API types
@@ -134,8 +139,8 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('project edited', e.data);
     try {
       const response = JSON.parse(e.data) as EditProjectResponse;
-      const { id, name, description } = response;
-      this.props.updateProject(id, name, description);
+      const { id, name, description, 'repo-url': repoUrl } = response;
+      this.props.updateProject(id, name, repoUrl, description);
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for project edited', e.data); // tslint:disable-line
     }
@@ -166,8 +171,14 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('deployment updated', e.data);
     try {
       const response = JSON.parse(e.data) as DeploymentUpdateResponse;
-      this.props.storeDeployments(toDeployments(response.deployment));
-      this.props.addDeploymentToCommit(response.commit, response.deployment.id);
+      const { deployment: deploymentResponse, commit, project, branch } = response;
+      const deployments = toDeployments(deploymentResponse);
+      this.props.storeDeployments(deployments);
+      this.props.addDeploymentToCommit(commit, deployments[0].id);
+      if (deployments[0].status === DeploymentStatus.Success) {
+        this.props.updateLatestDeployedCommitForProject(project, commit);
+        this.props.updateLatestDeployedCommitForBranch(branch, commit);
+      }
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for deployment updated', e.data); // tslint:disable-line
     }
@@ -187,26 +198,32 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     console.log('code pushed', e.data);
     try {
       const response = JSON.parse(e.data) as CodePushResponse;
+      const { after, before, commits: commitsResponse, parents, project } = response;
+
       if (!after) {
+        const branchId = response.branch as string;
         // branch deleted
-        this.props.removeBranch(response.branch as string);
+        this.props.removeBranch(branchId);
+        this.props.removeBranchFromProject(project, branchId);
         return;
       }
 
-      let branchElement = response.branch as ResponseBranchElement;
+      const branches = toBranches(response.branch as ResponseBranchElement);
+      const commits = toCommits(commitsResponse);
 
       if (!before) {
         // branch created
-        this.props.storeBranches(toBranches(branchElement));
+        this.props.storeBranches(branches);
+        this.props.addBranchToProject(branches[0].project, branches[0].id);
       }
 
-      const commits = toCommits(response.commits);
       this.props.storeCommits(commits);
-      this.props.storeCommitsToBranch(branchElement.id, commits, response.parents);
+      this.props.storeCommitsToBranch(branches[0].id, commits, response.parents);
       this.props.storeAuthorsToProject(
-        branchElement.relationships.project.data.id,
+        branches[0].project,
         uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
       );
+      this.props.updateLatestActivityTimestampForProject(branches[0].project, commits[0].committer.timestamp);
     } catch (e) {
       console.log('Error: Unable to parse Streaming API response for code pushed', e.data); // tslint:disable-line
     }
@@ -281,16 +298,21 @@ export default connect<{}, GeneratedDispatchProps, {}>(
   () => ({}),
   {
     setConnectionState: Streaming.actions.setConnectionState,
-    updateProject: Projects.actions.updateProject,
-    removeProject: Projects.actions.removeProject,
-    storeDeployments: Deployments.actions.storeDeployments,
-    storeProjects: Projects.actions.storeProjects,
     storeActivities: Activities.actions.storeActivities,
-    storeCommits: Commits.actions.storeCommits,
-    storeBranches: Branches.actions.storeBranches,
-    addDeploymentToCommit: Commits.actions.addDeploymentToCommit,
     removeBranch: Branches.actions.removeBranch,
     storeCommitsToBranch: Branches.actions.storeCommitsToBranch,
+    updateLatestDeployedCommitForBranch: Branches.actions.updateLatestDeployedCommit,
+    storeBranches: Branches.actions.storeBranches,
+    addDeploymentToCommit: Commits.actions.addDeploymentToCommit,
+    storeCommits: Commits.actions.storeCommits,
+    storeDeployments: Deployments.actions.storeDeployments,
+    updateProject: Projects.actions.updateProject,
+    removeProject: Projects.actions.removeProject,
+    storeProjects: Projects.actions.storeProjects,
     storeAuthorsToProject: Projects.actions.storeAuthorsToProject,
+    addBranchToProject: Projects.actions.addBranchesToProject,
+    updateLatestActivityTimestampForProject: Projects.actions.updateLatestActivityTimestampForProject,
+    updateLatestDeployedCommitForProject: Projects.actions.updateLatestDeployedCommitForProject,
+    removeBranchFromProject: Projects.actions.removeBranchFromProject,
   }
 )(StreamingAPIHandler);
