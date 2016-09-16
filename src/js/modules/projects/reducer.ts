@@ -162,6 +162,8 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
           });
           return Object.assign({}, state, { [id]: newProject });
         }
+
+        return state;
       }
 
       console.log('Error: trying to remove branch from nonexistant project or project branches.'); // tslint:disable-line
