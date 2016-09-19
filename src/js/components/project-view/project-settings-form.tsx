@@ -45,6 +45,8 @@ const validate = (values: FormData, props: Props) => {
     errors.name = 'Required';
   } else if (!projectNameRegex.test(name)) {
     errors.name = 'Only letters, numbers, and hyphens allowed';
+  } else if (name[0] === '-') {
+    errors.name = 'Project name can\'t start with a hyphen';
   } else if (props.existingProjectNames.indexOf(name) > -1) {
     errors.name = 'Project name already exists';
   }
