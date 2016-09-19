@@ -27,11 +27,10 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
     case ADD_DEPLOYMENT_TO_COMMIT:
       id = action.id;
       commit = state[id];
-
       if (commit && !isFetchError(commit)) {
         if (commit.deployment !== action.deployment) {
           const newCommit = Object.assign({}, commit);
-          commit.deployment = action.deployment;
+          newCommit.deployment = action.deployment;
           return Object.assign({}, state, { [id]: newCommit });
         }
       }

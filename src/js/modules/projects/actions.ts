@@ -111,7 +111,7 @@ export const updateLatestDeployedCommitForProject = (
   id: string,
   commit: string,
 ): t.UpdateLatestDeployedCommitAction => ({
-  type: UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT,
+  type: UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT,
   id,
   commit,
 });
