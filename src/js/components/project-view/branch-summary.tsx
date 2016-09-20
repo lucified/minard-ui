@@ -111,8 +111,15 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
       Deployments.selectors.getDeployment(state, latestSuccessfullyDeployedCommit.deployment);
   }
 
-  const deploymentForLatestCommit =
-    branch.latestCommit && Deployments.selectors.getDeployment(state, branch.latestCommit);
+  let deploymentForLatestCommit: Deployment | FetchError | undefined;
+  if (branch.latestCommit) {
+    const latestCommit = branch.latestSuccessfullyDeployedCommit &&
+      Commits.selectors.getCommit(state, branch.latestCommit);
+    if (latestCommit && !isFetchError(latestCommit) && latestCommit.deployment) {
+      deploymentForLatestCommit = branch.latestCommit
+        && Deployments.selectors.getDeployment(state, latestCommit.deployment);
+    }
+  }
 
   return {
     latestSuccessfulDeployment,
