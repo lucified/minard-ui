@@ -1,10 +1,10 @@
-// TODO: @import '../mixins';
+@import '../mixins';
 
 .box {
   border-radius: 3px;
   padding: 2px 16px;
 
-  //TODO: @include nitti-grotesk-medium;
+  @include nitti-grotesk-medium;
   font-size: 14px;
   color: #FFFFFF;
   letter-spacing: -0.23px;
