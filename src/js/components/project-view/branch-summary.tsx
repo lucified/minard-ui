@@ -8,10 +8,10 @@ import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
+import BuildStatus from '../common/build-status';
 import DeploymentScreenshot from '../common/deployment-screenshot';
 import MinardLink from '../common/minard-link';
 import SingleCommit from '../common/single-commit';
-import BuildStatus from './build-status';
 
 const styles = require('./branch-summary.scss');
 
@@ -81,7 +81,7 @@ const BranchSummary = (props: PassedProps & GeneratedProps) => {
         <MinardLink branch={branch}>
           <div className={styles.header}>
             <div className={styles.title}>{branch.name}</div>
-            <BuildStatus className={styles['build-status']} deployment={deploymentForLatestCommit} />
+            <BuildStatus className={styles['build-status']} deployment={deploymentForLatestCommit} latest={true} />
           </div>
           <div className={styles.description}>{branch.description}</div>
         </MinardLink>

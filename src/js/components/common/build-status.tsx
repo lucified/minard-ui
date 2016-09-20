@@ -10,9 +10,10 @@ const styles = require('./build-status.scss');
 interface PassedProps {
   deployment?: Deployment | FetchError;
   className?: string;
+  latest?: boolean;
 }
 
-const BuildStatus = ({ className, deployment }: PassedProps) => {
+const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
   if (!deployment || isFetchError(deployment) || deployment.status === DeploymentStatus.Success) {
     return <span />;
   }
@@ -22,14 +23,14 @@ const BuildStatus = ({ className, deployment }: PassedProps) => {
       return (
         <span className={classNames(styles.box, styles.error, className)}>
           <Icon name="times" className={styles.icon} />
-          Latest build canceled
+           {latest ? <span>Latest build canceled</span> : <span>Build canceled</span>}
         </span>
       );
     case DeploymentStatus.Failed:
       return (
         <span className={classNames(styles.box, styles.error, className)}>
           <Icon name="times" className={styles.icon} />
-          Latest build failed
+           {latest ? <span>Latest build failed</span> : <span>Build failed</span>}
         </span>
       );
     case DeploymentStatus.Pending:

@@ -42,3 +42,12 @@
     @include nitti;
   }
 }
+
+.build-status-outer {
+  margin-left: 18px;
+}
+
+.build-status {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
