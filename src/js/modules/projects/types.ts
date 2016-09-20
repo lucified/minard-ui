@@ -3,7 +3,7 @@ import { Action } from 'redux';
 import { FetchError } from '../errors';
 
 // State
-interface ProjectUser {
+export interface ProjectUser {
   email: string;
   name?: string;
 }
@@ -64,4 +64,40 @@ export interface DeleteProjectAction extends Action {
   id: string;
   resolve: () => void;
   reject: () => void;
+}
+
+// UPDATE_PROJECT
+export interface UpdateProjectAction extends Action {
+  id: string;
+  name: string;
+  description?: string;
+  repoUrl: string;
+}
+
+// REMOVE_PROJECT
+export interface RemoveProjectAction extends Action {
+  id: string;
+}
+
+// STORE_AUTHORS_TO_PROJECT
+export interface StoreAuthorsToProjectAction extends Action {
+  id: string;
+  authors: ProjectUser[];
+}
+
+// UPDATE_LATEST_ACTIVITY_TIMESTAMP
+export interface UpdateLatestActivityTimestampAction extends Action {
+  id: string;
+  timestamp: number;
+}
+
+// REMOVE_BRANCH
+export interface RemoveBranchAction extends Action {
+  id: string;
+  branch: string;
+}
+
+export interface UpdateLatestDeployedCommitAction extends Action {
+  id: string;
+  commit: string;
 }

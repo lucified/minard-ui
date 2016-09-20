@@ -1219,6 +1219,14 @@ describe('reducers', () => {
       expectedStateWithoutExistingEntity,
       stateWithExistingEntity,
     );*/
+
+    describe('store commits to branch', () => {
+      it('TODO');
+    });
+
+    describe('remove branch', () => {
+      it('TODO');
+    });
   });
 
   describe('commits', () => {
@@ -1339,6 +1347,10 @@ describe('reducers', () => {
       stateWithExistingEntity,
       failedRequestObject,
     );
+
+    describe('adding a deployment to a commit', () => {
+      it('TODO');
+    });
   });
 
   describe('deployments', () => {
@@ -1542,6 +1554,18 @@ describe('reducers', () => {
         expect(newState).to.equal(initialState);
       });
     });
+
+    describe('removing a project', () => {
+      it('TODO');
+    });
+
+    describe('updating a project', () => {
+      it('TODO');
+    });
+
+    describe('add authors to project', () => {
+      it('TODO');
+    })
   });
 
   describe('streaming', () => {

@@ -3,4 +3,11 @@ import reducer from './reducer';
 import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
-export { Project, ProjectState, LoadAllProjectsAction, DeleteProjectAction, StoreProjectsAction } from './types';
+export {
+  Project,
+  ProjectState,
+  ProjectUser,
+  LoadAllProjectsAction,
+  DeleteProjectAction,
+  StoreProjectsAction
+} from './types';

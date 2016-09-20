@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 
+import { Commit } from '../commits';
 import { FetchError } from '../errors';
 
 // State
@@ -41,4 +42,22 @@ export interface AddCommitsToBranchAction extends Action {
 // STORE_BRANCHES
 export interface StoreBranchesAction extends Action {
   entities: Branch[];
+}
+
+// REMOVE_BRANCH
+export interface RemoveBranchAction extends Action {
+  id: string;
+}
+
+// STORE_COMMITS_TO_BRANCH
+export interface StoreCommitsToBranchAction extends Action {
+  id: string;
+  commits: Commit[];
+  parentCommits: string[];
+}
+
+// UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH
+export interface UpdateLatestDeployedCommitAction extends Action {
+  id: string;
+  commit: string;
 }
