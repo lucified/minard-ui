@@ -33,8 +33,8 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
           newCommit.deployment = action.deployment;
           return Object.assign({}, state, { [id]: newCommit });
         }
+        return state;
       }
-
       console.log('Error: trying to add deployment to commit that does not exist.'); // tslint:disable-line:no-console
       return state;
     case STORE_COMMITS:
