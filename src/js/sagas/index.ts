@@ -187,7 +187,10 @@ export default function createSagas(api: Api) {
         }
       }
       if (branch.latestCommit) {
-        yield call(fetchIfMissing, 'commits', branch.latestCommit);
+        const commit = <Commit | FetchError | undefined> (yield call(fetchIfMissing, 'commits', branch.latestCommit));
+        if (commit && !isFetchError(commit) && commit.deployment) {
+          yield call(fetchIfMissing, 'deployments', commit.deployment);
+        }
       }
     }
   }

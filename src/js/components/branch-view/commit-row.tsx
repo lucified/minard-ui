@@ -37,7 +37,7 @@ const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
         {getDeploymentScreenshot(deployment)}
       </div>
       <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-        <SingleCommit className={styles.commit} commit={commit} />
+        <SingleCommit className={styles.commit} commit={commit} deployment={deployment} />
       </div>
     </div>
   );

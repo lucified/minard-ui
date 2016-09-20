@@ -3,9 +3,11 @@ import * as moment from 'moment';
 import * as React from 'react';
 
 import { Commit } from '../../modules/commits';
+import { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 
 import Avatar from './avatar';
+import BuildStatus from './build-status';
 import PlaceholderCommit from './placeholder-commit';
 
 const styles = require('./single-commit.scss');
@@ -13,9 +15,10 @@ const styles = require('./single-commit.scss');
 interface Props {
   commit?: Commit | FetchError;
   className?: string;
+  deployment?: Deployment | FetchError;
 }
 
-const SingleCommit = ({ commit, className }: Props) => {
+const SingleCommit = ({ commit, className, deployment }: Props) => {
   if (!commit) {
     return <PlaceholderCommit className={classNames(className)} />;
   }
@@ -31,6 +34,9 @@ const SingleCommit = ({ commit, className }: Props) => {
 
   const { author, committer } = commit;
   const otherAuthorEmail = author.email !== committer.email ? committer.email : undefined;
+
+  const buildStatus = deployment && !isFetchError(deployment) ?
+    <BuildStatus deployment={deployment} className={styles['build-status']} latest={false} /> : undefined;
 
   return (
     <div className={classNames(styles['commit-content'], className)}>
@@ -51,6 +57,9 @@ const SingleCommit = ({ commit, className }: Props) => {
           <div className={classNames(styles.message, 'commit-message')}>{commit.message}</div>
           {commit.description && <div className={styles.description}>{commit.description}</div>}
         </div>
+      </div>
+      <div className={styles['build-status-outer']}>
+        {buildStatus}
       </div>
     </div>
   );

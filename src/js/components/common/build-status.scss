@@ -1,0 +1,24 @@
+@import '../mixins';
+
+.box {
+  border-radius: 3px;
+  padding: 2px 16px;
+
+  @include nitti-grotesk-medium;
+  font-size: 14px;
+  color: #FFFFFF;
+  letter-spacing: -0.23px;
+  line-height: 25px;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.error {
+  background: #D0021B;
+}
+
+.building {
+  background: #2EBDB1;
+}
