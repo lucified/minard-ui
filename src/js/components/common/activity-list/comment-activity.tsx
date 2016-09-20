@@ -9,7 +9,7 @@ import { Project } from '../../../modules/projects';
 import Avatar from '../avatar';
 import MinardLink from '../minard-link';
 
-const styles = require('./comment-activity.scss');
+const styles = require('./activity.scss');
 
 interface Props {
   activity: Activity;

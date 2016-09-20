@@ -43,7 +43,9 @@ class SubHeader extends React.Component<GeneratedProps, any> {
       centerContent = (
         <span>
           Sort projects by
-          <a className={styles['sorting-dropdown']} href="#">Recent <Icon name="caret-down" /></a>
+          <a className={styles['sorting-dropdown']} href="#">
+            Recent <Icon className={styles.caret} name="caret-down" />
+          </a>
         </span>
       );
     }

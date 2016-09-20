@@ -1,3 +1,5 @@
+@import '../../mixins';
+
 .activity-group {
   padding: 30px 36px 28px 42px;
   background: #FFFFFF;
@@ -15,9 +17,10 @@
 }
 
 .timestamp {
-  font-size: 12px;
-  color: #95a5a6;
-  line-height: 2.08;
+  font-size: 14px;
+  color: #95A5A6;
+  letter-spacing: -0.5px;
+  line-height: 25px;
 }
 
 .screenshot {
@@ -45,7 +48,7 @@
   color: #4A4A4A;
 
   small {
-    font-family: "Lucida Console", Monaco, monospace;
+    @include nitti;
   }
 
   a {

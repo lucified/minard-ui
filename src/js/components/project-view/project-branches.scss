@@ -1,5 +1,7 @@
+@import '../mixins';
+
 .empty {
-  font-weight: 200;
+  @include nitti-grotesk-light;
   text-align: center;
   color: #7F8C8D;
 
@@ -9,12 +11,12 @@
 }
 
 .error {
+  @include nitti-grotesk-light;
   text-align: center;
-  font-weight: 200;
   color: #4A4A4A;
 
   small {
-    font-family: "Lucida Console", Monaco, monospace;
+    @include nitti;
   }
 }
 
@@ -23,10 +25,10 @@
 }
 
 .show-all-branches-link {
-  font-size: 15px;
-  font-weight: 600;
+  @include nitti-grotesk-medium;
+  font-size: 17px;
+  color: #2EBDB1;
   text-align: right;
-  color: #2ebdb1;
 }
 
 .loading {

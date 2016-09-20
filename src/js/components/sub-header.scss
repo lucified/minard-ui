@@ -1,16 +1,20 @@
+@import 'mixins';
+
 .sub-header-background {
   background-color: white;
 }
 
 .sub-header {
+  @include nitti-grotesk-regular;
+  font-size: 17px;
+  letter-spacing: -0.3px;
+
   height: 60px;
-  font-size: 14px;
   color: #7f8c8d;
   display: flex;
   align-items: center;
 
   a {
-    font-weight: 600;
     color: #2c3e50;
   }
 
@@ -20,13 +24,17 @@
 }
 
 .sub-header-link {
-  font-size: 14px;
-  font-weight: 600;
+  @include nitti-grotesk-medium;
+  font-size: 16px;
   line-height: 1.79;
-  color: #2c3e50;
 }
 
 .sorting-dropdown {
   margin-left: 24px;
-  color: #2c3e50;
+}
+
+.caret {
+  padding-left: 6px;
+  position: relative;
+  top: 2px;
 }

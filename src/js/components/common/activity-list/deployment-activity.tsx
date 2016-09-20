@@ -8,7 +8,7 @@ import { isSuccessful } from '../../../modules/deployments';
 import MinardLink from '../minard-link';
 import SingleCommit from '../single-commit';
 
-const styles = require('./deployment-activity.scss');
+const styles = require('./activity.scss');
 
 interface Props {
   activity: Activity;

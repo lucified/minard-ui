@@ -90,7 +90,7 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => {
           </div>
           <div className={classNames(styles['profile-container'], 'col-xs')}>
             <a className={styles['team-dropdown']} href="#">
-              Team Lucify <Icon name="caret-down" />
+              Team Lucify <Icon className={styles.caret} name="caret-down" />
             </a>
             <a href="#">
               <Avatar size="lg" email="ville.saarinen@gmail.com" />

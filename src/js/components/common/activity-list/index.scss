@@ -1,5 +1,7 @@
+@import '../../mixins';
+
 .empty {
-  font-weight: 200;
+  @include nitti-grotesk-light;
   text-align: center;
   color: #7F8C8D;
   margin-bottom: 70px;

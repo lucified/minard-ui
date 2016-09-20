@@ -1,3 +1,5 @@
+@import '../mixins';
+
 .branch {
   padding: 30px 36px 28px 32px;
   background: #FFFFFF;
@@ -14,8 +16,8 @@
   :global {
     // This prevents a flicker on Safari once opacity reaches 1
     & .commit-message {
-      -webkit-transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      backface-visibility: hidden;
     }
 
     & .commit-message::after {
@@ -41,10 +43,9 @@
 
 .empty, .error {
   color: #919D9F;
-  font-weight: 200;
 
   small {
-    font-family: "Lucida Console", Monaco, monospace;
+    @include nitti;
   }
 
   a {
@@ -68,14 +69,15 @@
 }
 
 .title {
-  font-size: 21px;
-  color: #2c3e50;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  color: #2C3E50;
 }
 
 .description {
-  font-size: 14px;
-  line-height: 1.71;
-  color: #4a4a4a;
+  font-size: 16px;
+  line-height: 24px;
+  color: #4A4A4A;
 }
 
 .line {

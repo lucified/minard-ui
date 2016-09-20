@@ -1,3 +1,5 @@
+@import '../../mixins';
+
 .dialog {
   z-index: 100;
   position: relative;
@@ -31,12 +33,13 @@
 }
 
 .header {
+  height: 72px;
   background-color: #4A4A4A;
   color: #FBFBFB;
 
-  font-size: 16px;
-  height: 72px;
-  font-weight: 600;
+  @include nitti-grotesk-medium;
+  font-size: 20px;
+  letter-spacing: −0.11px;
 
   .close {
     color: #2EBDB1;
@@ -60,6 +63,7 @@
   flex-direction: row-reverse;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
+  @include nitti-grotesk-medium;
 
   .primary-actions {
     display: flex;
@@ -74,8 +78,7 @@
     padding: 14px 24px;
     cursor: pointer;
 
-    font-weight: 600;
-    font-size: 14px;
+    font-size: 18px;
     color: #2EBDB1;
 
     &:hover {
@@ -93,8 +96,7 @@
 
   .cancel {
     margin-right: 28px;
-    font-weight: 600;
-    font-size: 12px;
+    font-size: 16px;
     color: #7F8C8D;
     cursor: pointer;
 

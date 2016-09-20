@@ -53,7 +53,7 @@ const getDeploymentSummary = (deployment?: Deployment) => {
         </div>
       </div>
       <div className={styles.open}>
-        Open <Icon name="external-link" />
+        Open <Icon className={styles['open-icon']} name="external-link" />
       </div>
     </div>
   );

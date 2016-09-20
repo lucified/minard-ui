@@ -1,8 +1,11 @@
+@import '../mixins';
+
 .add-project-link {
-  font-size: 14px;
-  font-weight: 600;
+  @include nitti-grotesk-bold;
+  font-size: 18px;
+  color: #2EBDB1;
+
   text-align: right;
-  color: #2ebdb1;
   cursor: pointer;
 
   &:hover {
@@ -11,7 +14,7 @@
 }
 
 .team {
-  font-weight: 400;
+  @include nitti-grotesk-regular;
 }
 
 .project-card {
@@ -27,8 +30,14 @@
 }
 
 .show-all-projects-link {
-  font-size: 15px;
-  font-weight: 600;
+  @include nitti-grotesk-medium;
+  font-size: 17px;
+  color: #2EBDB1;
+
   text-align: right;
-  color: #2ebdb1;
+  cursor: pointer;
+
+  &:hover {
+    color: #0F807E;
+  }
 }
