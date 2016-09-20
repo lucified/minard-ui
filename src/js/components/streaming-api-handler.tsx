@@ -10,9 +10,11 @@ import { toProjects } from '../api/convert';
 declare var EventSource: any;
 
 let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
-// Remove trailing /
-streamingAPIUrl = streamingAPIUrl.replace(/\/$/, '');
-streamingAPIUrl = `${streamingAPIUrl}/events/1`; // TODO: add actual team ID
+if (streamingAPIUrl) {
+  // Remove trailing /
+  streamingAPIUrl = streamingAPIUrl.replace(/\/$/, '');
+  streamingAPIUrl = `${streamingAPIUrl}/events/1`; // TODO: add actual team ID
+}
 
 const toConnectionState = (state: any): ConnectionState => {
   switch (state) {
