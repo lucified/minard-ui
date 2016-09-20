@@ -134,7 +134,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private handleProjectEdited(e: EventSourceEvent) {
-    console.log('project edited', e.data);
     try {
       const response = JSON.parse(e.data) as EditProjectResponse;
       const { id, name, description, 'repo-url': repoUrl } = response;
@@ -145,7 +144,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private handleProjectDeleted(e: EventSourceEvent) {
-    console.log('project deleted', e.data);
     try {
       const response = JSON.parse(e.data) as DeleteProjectResponse;
       const { id } = response;
@@ -156,7 +154,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private handleProjectCreated(e: EventSourceEvent) {
-    console.log('project created', e.data);
     try {
       const response = JSON.parse(e.data) as NewProjectResponse;
       this.props.storeProjects(toProjects(response.data));
@@ -166,7 +163,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private handleDeploymentUpdate(e: EventSourceEvent) {
-    console.log('deployment updated', e.data);
     try {
       const response = JSON.parse(e.data) as DeploymentUpdateResponse;
       const { deployment: deploymentResponse, commit, project, branch } = response;
@@ -183,7 +179,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private handleNewActivity(e: EventSourceEvent) {
-    console.log('new activity', e.data);
     try {
       const response = JSON.parse(e.data) as NewActivityResponse;
       this.props.storeActivities(toActivities(response));
@@ -193,7 +188,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private handleCodePush(e: EventSourceEvent) {
-    console.log('code pushed', e.data);
     try {
       const response = JSON.parse(e.data) as CodePushResponse;
       const { after, before, commits: commitsResponse, parents, project } = response;
@@ -229,7 +223,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private restartConnection() {
-    console.log('opening new streaming connection to', streamingAPIUrl);
     this._source = new EventSource(streamingAPIUrl, { withCredentials: false });
 
     this._source.addEventListener('error', (e: EventSourceError) => {
@@ -248,7 +241,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       }
     }, false);
     this._source.addEventListener('open', () => {
-      console.log('onopen');
       this.props.setConnectionState(ConnectionState.OPEN);
     }, false);
     this._source.addEventListener('message', (e: EventSourceEvent) => {
