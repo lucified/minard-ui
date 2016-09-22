@@ -1,6 +1,5 @@
-const lucifyDeployConfig = require('lucify-deploy-config').default;
 
-const deployConfig = lucifyDeployConfig();
+const deployConfig = require('./deploy-config');
 const base = deployConfig.base;
 const env = process.env;
 
