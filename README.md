@@ -68,17 +68,19 @@ Deploy to Lucify's Minard Q/A environment with
 ```shell
 LUCIFY_ENV=staging \
 AWS_PROFILE=lucify-protected \
-GITHUB_TOKEN='' \
+GITHUB_USERNAME='' \
 CHARLES='https://charles-staging.lucify.com' \
-FLOW_TOKEN=$FLOW_TOKEN_MAIN \
+FLOWDOCK_FLOW_TOKEN=$FLOW_MAIN \
+FLOWDOCK_AUTHOR_NAME=$FLOWDOCK_AUTHOR \
 npm run deploy
 ```
 
-Where `$FLOW_TOKEN_MAIN` is the [Flow token](https://www.flowdock.com/account/tokens)
-to the Flowdock flow in which you wish to be notified once the
-deployment has finished.
+Where:
+- `$FLOW_MAIN` is the Flow token to the Flowdock flow in which you wish to be notified
+once the deployment has finished. You can get suitable tokens from the integrations menu of the relevant Flowdock flow.
+- `$FLOWDOCK_AUTHOR_NAME` is your name, to be shown on Flowdock in the notification.
 
-Note that we set `GITHUB_TOKEN` to an empty string to
+Note that we set `GITHUB_USERNAME` to an empty string to
 make sure it is not defined, so that we don't send any
 notifications of local deployments to GitHub deployment API.
 

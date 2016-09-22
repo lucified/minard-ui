@@ -6,6 +6,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const postcssReporter = require('postcss-reporter');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const failPlugin = require('webpack-fail-plugin');
 
 const deployConfig = require('./deploy-config');
 
@@ -128,6 +129,7 @@ const config = {
       'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
+    failPlugin,
   ],
 };
 
