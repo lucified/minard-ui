@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import * as moment from 'moment';
 
+import { teamId } from './team-id';
 import { Api, ApiPromise } from './types';
 
 if (!process.env.CHARLES) {
@@ -93,7 +94,7 @@ const patchApi = (path: string, payload: any): ApiPromise =>
 
 const Activity = {
   fetchAll: (count: number, until?: number): ApiPromise => {
-    const query: any = { count };
+    const query: any = { count, filter: `team[${teamId}]` };
 
     if (until) {
       query.until = moment(until).toISOString();
@@ -135,7 +136,7 @@ const Deployment = {
 };
 
 const Project = {
-  fetchAll: (): ApiPromise => getApi('/teams/1/relationships/projects'), // TODO: add actual team Id
+  fetchAll: (): ApiPromise => getApi(`/teams/${teamId}/relationships/projects`),
   fetch: (id: string): ApiPromise => getApi(`/projects/${id}`),
   create: (name: string, description?: string): ApiPromise =>
     postApi('/projects', {
@@ -149,7 +150,7 @@ const Project = {
           team: {
             data: {
               type: 'teams',
-              id: 1, // TODO: add actual team ID
+              id: teamId,
             },
           },
         },
