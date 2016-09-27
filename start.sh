@@ -1,2 +1,2 @@
 #!/bin/bash
-CHARLES=$1 npm run webpack-dev-server
+CHARLES=$1 TEAM_ID=$2 npm run webpack-dev-server

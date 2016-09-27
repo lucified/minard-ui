@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 require('event-source-polyfill');
 
 import { toActivities, toBranches, toCommits, toDeployments, toProjects } from '../api/convert';
+import { teamId } from '../api/team-id';
 import {
   ResponseActivityElement,
   ResponseBranchElement,
@@ -94,7 +95,7 @@ let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
 if (streamingAPIUrl) {
   // Remove trailing /
   streamingAPIUrl = streamingAPIUrl.replace(/\/$/, '');
-  streamingAPIUrl = `${streamingAPIUrl}/events/1`; // TODO: add actual team ID
+  streamingAPIUrl = `${streamingAPIUrl}/events/${teamId}`;
 }
 
 const toConnectionState = (state: any): ConnectionState => {

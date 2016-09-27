@@ -96,6 +96,16 @@ const htmlWebpackPluginConfig = {
   },
 };
 
+function getTeamId() {
+  if (process.env.TEAM_ID) {
+    return process.env.TEAM_ID;
+  }
+  if (deployConfig.env === 'production') {
+    return 4;
+  }
+  return 3;
+}
+
 const config = {
   resolve: {
     modulesDirectories: ['node_modules'],
@@ -127,6 +137,7 @@ const config = {
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
+      'process.env.TEAM_ID': JSON.stringify(getTeamId()),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
     failPlugin,
