@@ -4,7 +4,7 @@ const deployConfig = require('./deploy-config');
 const base = deployConfig.base;
 const env = process.env;
 
-function logObject(obj: any) {
+function logObject(obj) {
   console.log(util.inspect(obj, { colors: true, depth: 4 }));
 }
 
