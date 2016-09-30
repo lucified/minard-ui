@@ -144,7 +144,7 @@ const config = {
   },
   entry: [
     'babel-polyfill',
-    getEntrypoint(deployConfig.env, process.env.CHARLES),
+    getEntrypoint(deployConfig.env, getCharles()),
   ],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
