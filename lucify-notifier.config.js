@@ -1,7 +1,17 @@
+const util = require('util');
 
 const deployConfig = require('./deploy-config');
 const base = deployConfig.base;
 const env = process.env;
+
+function logObject(obj: any) {
+  console.log(util.inspect(obj, { colors: true, depth: 4 }));
+}
+
+logObject({
+  AWS_ACCESS_KEY_ID: env.AWS_ACCESS_KEY_ID,
+  AWS_SESSION_TOKEN: env.AWS_SESSION_TOKEN,
+});
 
 module.exports = {
   deployment: {
