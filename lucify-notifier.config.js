@@ -1,17 +1,6 @@
-const util = require('util');
-
 const deployConfig = require('./deploy-config');
 const base = deployConfig.base;
 const env = process.env;
-
-function logObject(obj) {
-  console.log(util.inspect(obj, { colors: true, depth: 4 }));
-}
-
-logObject({
-  AWS_ACCESS_KEY_ID: env.AWS_ACCESS_KEY_ID,
-  AWS_SESSION_TOKEN: env.AWS_SESSION_TOKEN,
-});
 
 module.exports = {
   deployment: {
@@ -20,7 +9,7 @@ module.exports = {
       owner: env.CIRCLE_PROJECT_USERNAME || 'lucified',
       repository: base.project,
     },
-    committer: env.CIRCLE_USERNAME || env.GITHUB_USERNAME,
+    committer: env.GITHUB_USERNAME || env.CIRCLE_USERNAME,
     url: base.url,
     build_url: env.CIRCLE_BUILD_URL,
     environment: deployConfig.env,
