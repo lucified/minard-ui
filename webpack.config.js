@@ -106,6 +106,19 @@ function getTeamId() {
   return 3;
 }
 
+function getCharles() {
+  if (process.env.CHARLES) {
+    return process.env.CHARLES;
+  }
+  if (deployConfig.env === 'production') {
+    return 'https://charles.lucify.com';
+  }
+  if (deployConfig.env === 'staging') {
+    return 'https://charles-staging.lucify.com';
+  }
+  return false;
+}
+
 const config = {
   resolve: {
     modulesDirectories: ['node_modules'],
@@ -136,7 +149,7 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
-      'process.env.CHARLES': JSON.stringify(process.env.CHARLES || false),
+      'process.env.CHARLES': JSON.stringify(getCharles()),
       'process.env.TEAM_ID': JSON.stringify(getTeamId()),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),

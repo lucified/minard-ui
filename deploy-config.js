@@ -30,6 +30,6 @@ const opts = {
 };
 
 const env = process.env.CIRCLE_BRANCH === 'master' ? process.env.LUCIFY_ENV || 'staging'
-  : process.env.NODE_ENV || 'development';
+  : process.env.LUCIFY_ENV || process.env.NODE_ENV || 'development';
 
 module.exports = lucifyDeployConfig(env, opts);
