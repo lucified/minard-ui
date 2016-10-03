@@ -14,16 +14,15 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "react-fontawesome": ["types/react-fontawesome.d.ts"],
-      "react-gravatar": ["types/react-gravatar.d.ts"],
-      "react-modal": ["types/react-modal/react-modal.d.ts"],
-      "react-redux": ["types/react-redux/index.d.ts"],
-      "react-router-redux": ["types/react-router-redux/index.d.ts"],
-      "react-textarea-autosize": ["types/react-textarea-autosize/react-textarea-autosize.d.ts"],
-      "react-waypoint": ["types/react-waypoint.d.ts"],
-      "redux-form": ["types/redux-form.d.ts"],
-      "history": ["types/history/index.d.ts"],
-      "classnames": ["types/classnames/index.d.ts"] // needed in order to be able to pass null/undefined
+      "react-fontawesome": ["types/react-fontawesome"],
+      "react-gravatar": ["types/react-gravatar"],
+      "react-modal": ["types/react-modal/react-modal"],
+      "react-redux": ["types/react-redux"],
+      "react-router-redux": ["types/react-router-redux"],
+      "react-textarea-autosize": ["types/react-textarea-autosize/react-textarea-autosize"],
+      "react-waypoint": ["types/react-waypoint"],
+      "redux-form": ["types/redux-form"],
+      "history": ["types/history"]
     }
   },
   "exclude": [
