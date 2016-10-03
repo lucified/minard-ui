@@ -17,12 +17,9 @@
       "react-fontawesome": ["types/react-fontawesome"],
       "react-gravatar": ["types/react-gravatar"],
       "react-modal": ["types/react-modal/react-modal"],
-      "react-redux": ["types/react-redux"],
-      "react-router-redux": ["types/react-router-redux"],
       "react-textarea-autosize": ["types/react-textarea-autosize/react-textarea-autosize"],
       "react-waypoint": ["types/react-waypoint"],
-      "redux-form": ["types/redux-form"],
-      "history": ["types/history"]
+      "redux-form": ["types/redux-form"]
     }
   },
   "exclude": [
