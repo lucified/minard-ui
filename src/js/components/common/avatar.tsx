@@ -40,9 +40,9 @@ const Avatar = ({ size, email, iconEmail, initials, title, shadow, className }: 
   if (email) {
     return (
       <figure title={title} className={classes}>
-        <Gravatar className={styles['avatar-img']} email={email} rating="pg" https size={pixelSize} />
+        <Gravatar className={styles['avatar-img']} email={email} rating="pg" size={pixelSize} />
         {iconEmail &&
-          <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" https size={pixelSize * 0.4} />
+          <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" size={pixelSize * 0.4} />
         }
       </figure>
     );
@@ -50,7 +50,7 @@ const Avatar = ({ size, email, iconEmail, initials, title, shadow, className }: 
     return (
       <figure title={title} className={classes} data-initial={initials}>
         {iconEmail &&
-          <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" https size={pixelSize * 0.4} />
+          <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" size={pixelSize * 0.4} />
         }
       </figure>
     );

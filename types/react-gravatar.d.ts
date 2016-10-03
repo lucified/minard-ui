@@ -6,7 +6,6 @@ interface ReactGravatarProps {
   email: string;
   size?: number;
   rating?: "g" | "pg" | "r" | "x"
-  https?: boolean;
   default?: string;
   className?: string;
 }
