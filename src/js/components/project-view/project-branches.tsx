@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import { Branch } from '../../modules/branches';
-import { FetchError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 
 import LoadingIcon from '../common/loading-icon';
@@ -26,7 +26,7 @@ const getEmptyContent = () => (
   </div>
 );
 
-const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
+const getBranches = (branches: (Branch | undefined)[]) => {
   return branches.map((branch, i) => {
     if (!branch) {
       return <LoadingIcon center key={i} />;
@@ -37,25 +37,30 @@ const getBranches = (branches: (Branch | FetchError | undefined)[]) => {
 };
 
 const ProjectBranches = ({ branches, project, showAll, count = 3 }: Props) => {
-  let content: JSX.Element | JSX.Element[];
-  if (branches) {
-    const branchesToShow = showAll ? branches : branches.slice(0, count);
-    content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
-  } else {
-    content = <LoadingIcon className={styles.loading} center />;
+  const title = showAll ? `All branches for ${project.name}` : 'Branches';
+
+  if (!branches) {
+    return (
+      <section className="container">
+        <SectionTitle><span>{title}</span></SectionTitle>
+        <LoadingIcon className={styles.loading} center />
+      </section>
+    );
   }
 
-  const title = showAll ? `All branches for ${project.name}` : 'Branches';
+  const filteredBranches = branches.filter(branch => !isFetchError(branch)) as (Branch | undefined)[];
+  const branchesToShow = showAll ? filteredBranches : filteredBranches.slice(0, count);
+  const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
 
   return (
     <section className="container">
       <SectionTitle><span>{title}</span></SectionTitle>
       {content}
-      {(!showAll && branches && branches.length > count) && (
+      {(!showAll && filteredBranches.length > count) && (
         <div className="row end-xs">
           <div className={classNames('col-xs-12', styles['show-all-branches-section'])}>
             <MinardLink className={styles['show-all-branches-link']} showAll project={project}>
-              Show all branches ({branches.length})
+              Show all branches ({filteredBranches.length})
             </MinardLink>
           </div>
         </div>
