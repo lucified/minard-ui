@@ -15,14 +15,13 @@ The Minard single page app. Technologies used:
 NPM must be installed.
 
 ```shell
-npm install -g typescript tslint tslint-react
+npm install -g tslint tslint-react
 ```
 
 ## Install
 
 ```shell
 npm install
-npm link typescript
 ```
 
 ## Development with bundled JSON files
