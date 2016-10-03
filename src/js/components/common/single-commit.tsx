@@ -35,9 +35,6 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
   const { author, committer } = commit;
   const otherAuthorEmail = author.email !== committer.email ? committer.email : undefined;
 
-  const buildStatus = deployment && !isFetchError(deployment) ?
-    <BuildStatus deployment={deployment} className={styles['build-status']} latest={false} /> : undefined;
-
   return (
     <div className={classNames(styles['commit-content'], className)}>
       <div className={styles.avatar}>
@@ -59,7 +56,7 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
         </div>
       </div>
       <div className={styles['build-status-outer']}>
-        {buildStatus}
+        <BuildStatus deployment={deployment} className={styles['build-status']} latest={false} />
       </div>
     </div>
   );
