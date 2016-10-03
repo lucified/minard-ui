@@ -35,8 +35,11 @@ const createProjectObject = (project: t.ResponseProjectElement): Project => {
     latestSuccessfullyDeployedCommitObject.data.id;
 
   const latestActivityTimestampString = project.attributes['latest-activity-timestamp'];
-  const latestActivityTimestamp = latestActivityTimestampString &&
-    moment(latestActivityTimestampString).valueOf();
+  let latestActivityTimestamp: number | undefined;
+
+  if (latestActivityTimestampString) {
+    latestActivityTimestamp = moment(latestActivityTimestampString).valueOf();
+  }
 
   return {
     id: project.id,
@@ -129,8 +132,12 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
   }
 
   const latestActivityTimestampString = branch.attributes['latest-activity-timestamp'];
-  const latestActivityTimestamp = latestActivityTimestampString &&
-    moment(latestActivityTimestampString).valueOf();
+  let latestActivityTimestamp: number | undefined;
+
+  if (latestActivityTimestampString) {
+    latestActivityTimestamp = moment(latestActivityTimestampString).valueOf();
+  }
+
   let errors: string[] = [];
   if (branch.attributes['minard-json'] && branch.attributes['minard-json']!.errors &&
     branch.attributes['minard-json']!.errors!.length > 0) {

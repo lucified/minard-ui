@@ -99,8 +99,11 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     return {};
   }
 
-  const latestSuccessfullyDeployedCommit = branch.latestSuccessfullyDeployedCommit &&
-    Commits.selectors.getCommit(state, branch.latestSuccessfullyDeployedCommit);
+  let latestSuccessfullyDeployedCommit: FetchError | Commit | undefined;
+
+  if (branch.latestSuccessfullyDeployedCommit) {
+    latestSuccessfullyDeployedCommit = Commits.selectors.getCommit(state, branch.latestSuccessfullyDeployedCommit);
+  }
 
   let latestSuccessfulDeployment: FetchError | Deployment | undefined;
   if (latestSuccessfullyDeployedCommit &&
@@ -116,8 +119,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     const latestCommit = branch.latestSuccessfullyDeployedCommit &&
       Commits.selectors.getCommit(state, branch.latestCommit);
     if (latestCommit && !isFetchError(latestCommit) && latestCommit.deployment) {
-      deploymentForLatestCommit = branch.latestCommit
-        && Deployments.selectors.getDeployment(state, latestCommit.deployment);
+      deploymentForLatestCommit = Deployments.selectors.getDeployment(state, latestCommit.deployment);
     }
   }
 
