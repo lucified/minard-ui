@@ -54,6 +54,7 @@
     "@types/react-redux": "^4.4.32",
     "@types/react-router": "^2.0.37",
     "@types/react-router-redux": "^4.0.33",
+    "@types/react-textarea-autosize": "^4.0.4",
     "atomic-s3": "^0.1.2",
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
