@@ -437,19 +437,39 @@ export default function createSagas(api: Api) {
 
   // WATCHERS: Watch for specific actions to begin async operations.
   function* watchForFormSubmit() {
-    yield* takeEvery(FORM_SUBMIT, formSubmitSaga);
+    yield takeEvery(FORM_SUBMIT, formSubmitSaga);
   }
 
   function* watchForCreateProject() {
-    yield* takeLatest(Projects.actions.CREATE_PROJECT, createProject);
+    yield takeLatest(Projects.actions.CREATE_PROJECT, createProject);
   }
 
   function* watchForDeleteProject() {
-    yield* takeLatest(Projects.actions.DELETE_PROJECT, deleteProject);
+    yield takeLatest(Projects.actions.DELETE_PROJECT, deleteProject);
   }
 
   function* watchForEditProject() {
-    yield* takeLatest(Projects.actions.EDIT_PROJECT, editProject);
+    yield takeLatest(Projects.actions.EDIT_PROJECT, editProject);
+  }
+
+  function* watchForLoadProject() {
+    yield takeEvery(Projects.actions.LOAD_PROJECT, loadProject);
+  }
+
+  function* watchForLoadBranch() {
+    yield takeEvery(Branches.actions.LOAD_BRANCH, loadBranch);
+  }
+
+  function* watchForLoadBranchesForProject() {
+    yield takeEvery(Branches.actions.LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject);
+  }
+
+  function* watchForLoadDeployment() {
+    yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
+  }
+
+  function* watchForLoadCommit() {
+    yield takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
 
   function* watchForLoadActivities(): IterableIterator<Effect> {
@@ -461,6 +481,7 @@ export default function createSagas(api: Api) {
   }
 
   function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
+    // TODO: use new throttle helper method once typings work
     while (true) {
       const action = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
       yield fork(loadActivitiesForProject, action);
@@ -477,27 +498,8 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* watchForLoadProject() {
-    yield* takeEvery(Projects.actions.LOAD_PROJECT, loadProject);
-  }
-
-  function* watchForLoadBranch() {
-    yield* takeEvery(Branches.actions.LOAD_BRANCH, loadBranch);
-  }
-
-  function* watchForLoadBranchesForProject() {
-    yield* takeEvery(Branches.actions.LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject);
-  }
-
-  function* watchForLoadDeployment() {
-    yield* takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
-  }
-
-  function* watchForLoadCommit() {
-    yield* takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
-  }
-
   function* watchForLoadCommitsForBranch(): IterableIterator<Effect> {
+    // TODO: use new throttle helper method once typings work
     while (true) {
       const action = yield take(Commits.actions.LOAD_COMMITS_FOR_BRANCH);
       yield fork(loadCommitsForBranch, action);

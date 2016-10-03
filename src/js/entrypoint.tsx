@@ -13,7 +13,7 @@ import sagaCreator from './sagas';
 export const createStoreAndRender = (
   configureStore: (initalState: Object) => Store<any>,
   api: Api,
-  history: any // TODO: fix (to History.History?) once type definitions fixed in react-router-redux
+  history: History.History
 ) => {
   const initialState = {};
   const store = configureStore(initialState);
@@ -22,7 +22,7 @@ export const createStoreAndRender = (
   const syncedHistory = syncHistoryWithStore(history, store);
 
   // Store current open project + branch into state
-  syncedHistory.listen((location: History.Location) => {
+  syncedHistory.listen((location: any) => { // TODO: better type definition
     const result = /^\/project\/([^/]+)(\/([^/]+))?/.exec(location.pathname);
     const project = (result && result[1]) || null;
     const branch = (result && result[3]) || null;

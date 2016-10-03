@@ -10,7 +10,6 @@ import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
 import { FetchError } from '../src/js/modules/errors';
-import { FORM_SUBMIT } from '../src/js/modules/forms';
 import Projects, { Project } from '../src/js/modules/projects';
 import Requests, { FetchEntityActionCreators } from '../src/js/modules/requests';
 import { StateTree } from '../src/js/reducers';
@@ -59,96 +58,7 @@ describe('sagas', () => {
   const api = createApi();
   const sagas = sagaCreator(api);
 
-  const testWatcher = (
-    name: string,
-    actionType: string,
-    iterator: IterableIterator<Effect | Effect[]>,
-    loader: (action: any) => IterableIterator<Effect>
-  ) => {
-    describe(name, () => {
-      const action = { type: actionType, id: 'id' };
-
-      it(`forks a new saga on ${actionType}`, () => {
-        expect(iterator.next().value).to.deep.equal(
-          take(actionType)
-        );
-
-        expect(iterator.next(action).value).to.deep.equal(
-          fork(loader, action)
-        );
-      });
-    });
-  };
-
-  testWatcher(
-    'watchForLoadDeployment',
-    Deployments.actions.LOAD_DEPLOYMENT,
-    sagas.watchForLoadDeployment(),
-    sagas.loadDeployment
-  );
-
-  testWatcher(
-    'watchForLoadBranch',
-    Branches.actions.LOAD_BRANCH,
-    sagas.watchForLoadBranch(),
-    sagas.loadBranch,
-  );
-
-  testWatcher(
-    'watchForLoadBranchesForProject',
-    Branches.actions.LOAD_BRANCHES_FOR_PROJECT,
-    sagas.watchForLoadBranchesForProject(),
-    sagas.loadBranchesForProject,
-  );
-
-  testWatcher(
-    'watchForLoadProject',
-    Projects.actions.LOAD_PROJECT,
-    sagas.watchForLoadProject(),
-    sagas.loadProject,
-  );
-
-  testWatcher(
-    'watchForLoadCommit',
-    Commits.actions.LOAD_COMMIT,
-    sagas.watchForLoadCommit(),
-    sagas.loadCommit,
-  );
-
-  testWatcher(
-    'watchForLoadCommitsForBranch',
-    Commits.actions.LOAD_COMMITS_FOR_BRANCH,
-    sagas.watchForLoadCommitsForBranch(),
-    sagas.loadCommitsForBranch,
-  );
-
-  testWatcher(
-    'watchForLoadActivitiesForProject',
-    Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT,
-    sagas.watchForLoadActivitiesForProject(),
-    sagas.loadActivitiesForProject
-  );
-
-  testWatcher(
-    'watchForCreateProject',
-    Projects.actions.CREATE_PROJECT,
-    sagas.watchForCreateProject(),
-    sagas.createProject
-  );
-
-  testWatcher(
-    'watchForEditProject',
-    Projects.actions.EDIT_PROJECT,
-    sagas.watchForEditProject(),
-    sagas.editProject
-  );
-
-  testWatcher(
-    'watchForDeleteProject',
-    Projects.actions.DELETE_PROJECT,
-    sagas.watchForDeleteProject(),
-    sagas.deleteProject
-  );
+  // No need to test watchers that make a single redux-saga helper call
 
   describe('watchForLoadAllProjects', () => {
     it(`calls a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
@@ -176,21 +86,6 @@ describe('sagas', () => {
 
       expect(iterator.next(action).value).to.deep.equal(
         call(sagas.loadActivities, action)
-      );
-    });
-  });
-
-  describe('watchForFormSubmit', () => {
-    it(`forks a new saga on ${FORM_SUBMIT}`, () => {
-      const iterator = sagas.watchForFormSubmit();
-      const action = { type: FORM_SUBMIT, values: 'foo' };
-
-      expect(iterator.next().value).to.deep.equal(
-        take(FORM_SUBMIT)
-      );
-
-      expect(iterator.next(action).value).to.deep.equal(
-        fork(sagas.formSubmitSaga, action)
       );
     });
   });
