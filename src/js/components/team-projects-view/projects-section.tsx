@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { FetchError } from '../../modules/errors';
+import { FetchError, isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import { Project } from '../../modules/projects';
 
@@ -33,9 +33,10 @@ interface GeneratedDispatchProps {
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 
 const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, showAll, count = 6 }: Props) => {
-  const projectsToShow = showAll ? projects : projects.slice(0, count);
+  const filteredProjects = projects.filter(project => !isFetchError(project)) as Project[];
+  const projectsToShow = showAll ? filteredProjects : filteredProjects.slice(0, count);
   // If we're only showing some of the projects, don't show the loading indicator if we have enough to show
-  const showLoadingIcon = isLoading && (showAll || (projects.length < count));
+  const showLoadingIcon = isLoading && (showAll || (filteredProjects.length < count));
 
   return (
     <section className="container">
@@ -63,11 +64,11 @@ const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, show
           </div>
         )}
       </div>
-      {(!showAll && projects.length > count) && (
+      {(!showAll && filteredProjects.length > count) && (
         <div className="row end-xs">
           <div className={classNames('col-xs-12', styles['show-all-projects-section'])}>
             <MinardLink className={styles['show-all-projects-link']} showAll homepage>
-              Show all projects ({projects.length})
+              Show all projects ({filteredProjects.length})
             </MinardLink>
           </div>
         </div>
