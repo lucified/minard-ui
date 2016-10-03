@@ -22,8 +22,7 @@
       "react-textarea-autosize": ["types/react-textarea-autosize/react-textarea-autosize"],
       "react-waypoint": ["types/react-waypoint"],
       "redux-form": ["types/redux-form"],
-      "history": ["types/history"],
-      "classnames": ["types/classnames"] // needed in order to be able to pass null/undefined
+      "history": ["types/history"]
     }
   },
   "exclude": [
