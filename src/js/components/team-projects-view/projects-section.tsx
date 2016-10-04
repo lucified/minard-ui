@@ -33,7 +33,8 @@ interface GeneratedDispatchProps {
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 
 const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, showAll, count = 6 }: Props) => {
-  const filteredProjects = projects.filter(project => !isFetchError(project)) as Project[];
+  const filteredProjects = (projects.filter(project => !isFetchError(project)) as Project[])
+    .sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp);
   const projectsToShow = showAll ? filteredProjects : filteredProjects.slice(0, count);
   // If we're only showing some of the projects, don't show the loading indicator if we have enough to show
   const showLoadingIcon = isLoading && (showAll || (filteredProjects.length < count));
