@@ -17,7 +17,7 @@ const styles = require('./project-card.scss');
 const noScreenshot = require('../../../images/no-screenshot.png');
 
 interface PassedProps {
-  project: Project | FetchError;
+  project: Project;
 }
 
 interface GeneratedProps {
@@ -60,16 +60,6 @@ const getDeploymentSummary = (deployment?: Deployment) => {
 };
 
 const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
-  if (isFetchError(project)) {
-    return (
-      <div className={classNames(styles.card, styles.error)} key={project.id}>
-        <h2>Unable to load project</h2>
-        <p>Refresh to retry</p>
-        <small>{project.prettyError}</small>
-      </div>
-    );
-  }
-
   const screenshot = (latestDeployment && latestDeployment.screenshot) || noScreenshot;
   const deploymentSummary = getDeploymentSummary(latestDeployment);
 
@@ -106,10 +96,6 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { project } = ownProps;
-
-  if (isFetchError(project)) {
-    return {};
-  }
 
   const latestSuccessfullyDeployedCommitId = project.latestSuccessfullyDeployedCommit;
   const latestDeployedCommit = latestSuccessfullyDeployedCommitId &&
