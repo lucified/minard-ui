@@ -38,7 +38,7 @@ const SetupInstructions = ({ project, hideLabels, styles: passedInStyles }: Prop
           Add it as a remote to your local repository with
         </div>
         <div className={styles.code}>
-          <pre>git remote add {project.repoUrl}</pre>
+          <pre>git remote add minard {project.repoUrl}</pre>
         </div>
         <div className={styles.text}>
           and start pushing some code. We'll handle the rest.
