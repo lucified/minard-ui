@@ -64,6 +64,11 @@ const ProjectsSection = ({ projects, isLoading, openCreateNewProjectDialog, show
             <LoadingIcon className={styles.loading} center />
           </div>
         )}
+        {!showLoadingIcon && projectsToShow.length === 0 && (
+          <div className={classNames('col-xs-12', styles.empty)}>
+            <h2>Create a new project to get started</h2>
+          </div>
+        )}
       </div>
       {(!showAll && filteredProjects.length > count) && (
         <div className="row end-xs">
