@@ -48,7 +48,18 @@ const ProjectBranches = ({ branches, project, showAll, count = 3 }: Props) => {
     );
   }
 
-  const filteredBranches = branches.filter(branch => !isFetchError(branch)) as (Branch | undefined)[];
+  const filteredBranches = (branches.filter(branch => !isFetchError(branch)) as (Branch | undefined)[])
+    .sort((a, b) => {
+      if (a === undefined) {
+        return -1;
+      }
+
+      if (b === undefined) {
+        return 1;
+      }
+
+      return b.latestActivityTimestamp - a.latestActivityTimestamp;
+    });
   const branchesToShow = showAll ? filteredBranches : filteredBranches.slice(0, count);
   const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
 
