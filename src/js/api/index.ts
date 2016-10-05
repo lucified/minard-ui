@@ -14,7 +14,7 @@ host = host.replace(/\/$/, '');
 host = `${host}/api`;
 
 const defaultOptions = {
-  credentials: 'same-origin',
+  credentials: 'include',
   headers: {
     Accept: 'application/vnd.api+json',
   },
