@@ -171,11 +171,13 @@ export const Activities = {
   LoadActivitiesForProject: fetchEntityActionCreators('ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT'),
 };
 
+// This action is created once all activities have been requested from the server
 export const ALL_ACTIVITIES_REQUESTED = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED';
 export const allActivitiesRequested = (): t.AllActivitiesRequestedAction => ({
   type: ALL_ACTIVITIES_REQUESTED,
 });
 
+// This action is created once all activities for a project have been requested from the server
 export const ALL_ACTIVITIES_REQUESTED_FOR_PROJECT = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED_FOR_PROJECT';
 export const allActivitiesRequestedForProject = (id: string): t.AllActivitiesRequestedForProjectAction => ({
   type: ALL_ACTIVITIES_REQUESTED_FOR_PROJECT,
