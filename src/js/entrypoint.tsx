@@ -33,7 +33,8 @@ export const createStoreAndRender = (
     // Update Intercom with page changed information
     const intercom = (window as any).Intercom;
     if (intercom) {
-      intercom('update');
+      // TODO: add proper user_id and user_email once known
+      intercom('update', { user_id: 'user1' });
     }
   });
 
