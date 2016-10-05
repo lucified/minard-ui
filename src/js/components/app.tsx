@@ -33,6 +33,7 @@ class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
     if (intercom) {
       intercom('boot', {
         app_id: 'i2twhziy',
+        user_id: 'user1',
       });
     }
   }
