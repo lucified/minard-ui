@@ -42,7 +42,7 @@ const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
         </span>
       );
     default:
-      console.log('Error: unknown deployment status:', deployment); // tslint:disable-line
+      console.error('Unknown deployment status:', deployment);
       return <span />;
   }
 };

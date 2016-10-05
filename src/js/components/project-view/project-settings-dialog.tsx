@@ -67,7 +67,9 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
       this.clearAndClose();
       router.push('/projects');
     })
-    .catch((e) => { console.log('Error deleting project:', e); }); // tslint:disable-line
+    .catch((e) => {
+      console.error('Error deleting project:', e);
+    });
   };
 
   private clearAndClose() {

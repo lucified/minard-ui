@@ -35,7 +35,7 @@ const SectionTitle = ({ children, leftContent, rightContent }: Props) => {
       ),
     });
   } else {
-    console.log('Error: Only one child expected in SectionTitle!'); // tslint:disable-line:no-console
+    console.error('Error: Only one child expected in SectionTitle!');
   }
 
   let rightContentWithBackgroundColor: any;

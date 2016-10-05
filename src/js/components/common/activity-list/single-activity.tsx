@@ -23,7 +23,7 @@ const SingleActivity = (props: Props) => {
         <CommentActivity activity={activity} showProjectName={showProjectName} />
       );
     default:
-      console.log('Error: Unknown activity type!'); // tslint:disable-line:no-console
+      console.error('Unknown activity type', activity);
       return <div />;
   }
 };

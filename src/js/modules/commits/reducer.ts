@@ -22,7 +22,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
+      console.error('Fetching failed! Not replacing existing entity.');
       return state;
     case ADD_DEPLOYMENT_TO_COMMIT:
       id = action.id;
@@ -35,7 +35,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         }
         return state;
       }
-      console.log('Error: trying to add deployment to commit that does not exist.'); // tslint:disable-line:no-console
+      console.error('Trying to add deployment to commit that does not exist.');
       return state;
     case STORE_COMMITS:
       commits = (<t.StoreCommitsAction> action).entities;

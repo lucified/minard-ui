@@ -30,7 +30,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
+      console.error('Fetching failed! Not replacing existing entity.');
       return state;
     case ADD_COMMITS_TO_BRANCH:
       const commitsAction = <t.AddCommitsToBranchAction> action;
@@ -45,7 +45,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [commitsAction.id]: newBranch });
       }
 
-      console.log('Error: trying to save commits to branch that does not exist.'); // tslint:disable-line:no-console
+      console.error('Trying to save commits to branch that does not exist.');
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH:
       const updateLatestDeployedAction = <t.UpdateLatestDeployedCommitAction> action;
@@ -62,7 +62,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return state;
       }
 
-      console.log('Error: trying to save deployed commit to branch that does not exist.'); // tslint:disable-line
+      console.error('Trying to save deployed commit to branch that does not exist.');
       return state;
     case REMOVE_BRANCH:
       const removeAction = <t.RemoveBranchAction> action;
@@ -71,7 +71,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return omit<t.BranchState, t.BranchState>(state, id);
       }
 
-      console.log('Error: trying to remove a branch that does not exist.'); // tslint:disable-line:no-console
+      console.error('Trying to remove a branch that does not exist.');
       return state;
     case STORE_COMMITS_TO_BRANCH:
       const storeCommitsAction = <t.StoreCommitsToBranchAction> action;
@@ -104,7 +104,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: newBranch });
       }
 
-      console.log('Error: trying to add commits to a branch that does not exist.'); // tslint:disable-line:no-console
+      console.error('Trying to add commits to a branch that does not exist.');
       return state;
     case STORE_BRANCHES:
       const storeAction = <t.StoreBranchesAction> action;

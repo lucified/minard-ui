@@ -34,7 +34,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
+      console.error('Fetching failed! Not replacing existing entity.');
       return state;
     case ADD_BRANCHES_TO_PROJECT:
       const { id: projectId, branches } = <t.AddBranchesToProjectAction> action;
@@ -56,7 +56,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [projectId]: newProject });
       }
 
-      console.log('Error: trying save branches to project that does not exist.'); // tslint:disable-line:no-console
+      console.error('Trying save branches to project that does not exist.');
       return state;
     case Requests.actions.Branches.LoadBranchesForProject.FAILURE.type:
       const fetchError = <FetchError> action;
@@ -76,7 +76,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return omit<t.ProjectState, t.ProjectState>(state, id);
       }
 
-      console.log('Error: trying to remove a project that does not exist.'); // tslint:disable-line:no-console
+      console.error('Trying to remove a project that does not exist.');
       return state;
     case UPDATE_PROJECT:
       const updateProjectAction = <t.UpdateProjectAction> action;
@@ -89,7 +89,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [id]: updatedProject });
       }
 
-      console.log('Error: trying to update nonexistant project.'); // tslint:disable-line:no-console
+      console.error('Trying to update nonexistant project.');
       return state;
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
@@ -127,7 +127,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         }
       }
 
-      console.log('Error: trying to add authors to nonexistant project.'); // tslint:disable-line:no-console
+      console.error('Trying to add authors to nonexistant project.');
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT:
       const updateActivityTimestampAction = <t.UpdateLatestActivityTimestampAction> action;
@@ -142,7 +142,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         }
       }
 
-      console.log('Error: trying to update timestamp on nonexistant project.'); // tslint:disable-line:no-console
+      console.error('Trying to update timestamp on nonexistant project.');
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT:
       const updateLatestCommitAction = <t.UpdateLatestDeployedCommitAction> action;
@@ -157,7 +157,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         }
       }
 
-      console.log('Error: trying to update latest deployed commit on nonexistant project.'); // tslint:disable-line
+      console.error('Trying to update latest deployed commit on nonexistant project.');
       return state;
     case REMOVE_BRANCH_FROM_PROJECT:
       const removeBranchAction = <t.RemoveBranchAction> action;
@@ -176,7 +176,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return state;
       }
 
-      console.log('Error: trying to remove branch from nonexistant project or project branches.'); // tslint:disable-line
+      console.error('Trying to remove branch from nonexistant project or project branches.'); // tslint:disable-line
       return state;
     default:
       return state;

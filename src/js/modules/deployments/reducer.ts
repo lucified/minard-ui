@@ -18,7 +18,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
+      console.error('Fetching failed! Not replacing existing entity.');
       return state;
     case STORE_DEPLOYMENTS:
       const deploymentsArray = (<t.StoreDeploymentsAction> action).entities;
