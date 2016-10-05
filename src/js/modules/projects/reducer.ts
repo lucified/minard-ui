@@ -1,6 +1,7 @@
 import * as difference from 'lodash/difference';
 import * as omit from 'lodash/omit';
 import * as unionBy from 'lodash/unionBy';
+import * as uniq from 'lodash/uniq';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
@@ -40,8 +41,17 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       project = state[projectId];
 
       if (project && !isFetchError(project)) {
-        const newBranches =
-          (!project.branches || isFetchError(project.branches)) ? branches : branches.concat(project.branches);
+        let newBranches: string[];
+        if (project.branches && !isFetchError(project.branches)) {
+          newBranches = uniq(branches.concat(project.branches));
+
+          if (difference(branches, newBranches).length === 0) {
+            // Branches already exist
+            return state;
+          }
+        } else {
+          newBranches = branches;
+        }
         const newProject = Object.assign({}, project, { branches: newBranches });
         return Object.assign({}, state, { [projectId]: newProject });
       }
