@@ -1,5 +1,6 @@
 import * as compact from 'lodash/compact';
 import * as moment from 'moment';
+import * as Raven from 'raven-js';
 
 import { Activity, ActivityType } from '../modules/activities';
 import { Branch } from '../modules/branches';
@@ -21,6 +22,9 @@ const toConvertedArray = <InputType, OutputType>(converter: (response: InputType
         return converter(responseEntity);
       } catch (e) {
         console.log('Error parsing response object:', responseEntity, e); // tslint:disable-line:no-console
+        if (Raven.isSetup()) {
+          Raven.captureException(e, { extra: responseEntity });
+        }
         return undefined;
       }
     })) as OutputType[];
