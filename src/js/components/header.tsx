@@ -80,9 +80,11 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => {
         <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
           <div className={classNames(styles['link-container'], 'col-xs')}>
             <ul className={styles.links}>
-              <li className={classNames(styles.link, { [styles.active]: selectedSection === 'homepage' })}>
-                <Link to="/">Home</Link>
-              </li>
+              <Link to="/">
+                <li className={classNames(styles.link, { [styles.active]: selectedSection === 'homepage' })}>
+                  Home
+                </li>
+              </Link>
             </ul>
           </div>
           <div className={classNames(styles.logo, 'col-xs')}>
