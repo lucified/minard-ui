@@ -12,10 +12,7 @@ const opts = {
     if (env === 'production') {
       return 'https://minard.lucify.com/';
     }
-    if (env === 'staging') {
-      return 'https://minard-staging.lucify.com/';
-    }
-    return null;
+    return 'https://minard-staging.lucify.com/';
   },
   publicPath: (env) => {
     if (env === 'production' || env === 'staging') {
