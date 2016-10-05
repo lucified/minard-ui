@@ -31,6 +31,14 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       console.error('Fetching failed! Not replacing existing entity.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action, state } });
+        }
+      }
+
       return state;
     case ADD_COMMITS_TO_BRANCH:
       const commitsAction = <t.AddCommitsToBranchAction> action;
@@ -46,6 +54,13 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       console.error('Trying to save commits to branch that does not exist.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Trying to save commits to branch that does not exist.', { extra: { action, state } });
+        }
+      }
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH:
       const updateLatestDeployedAction = <t.UpdateLatestDeployedCommitAction> action;
@@ -63,6 +78,16 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       console.error('Trying to save deployed commit to branch that does not exist.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage(
+            'Trying to save deployed commit to branch that does not exist.',
+            { extra: { action, state } }
+          );
+        }
+      }
       return state;
     case REMOVE_BRANCH:
       const removeAction = <t.RemoveBranchAction> action;
@@ -72,6 +97,13 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       console.error('Trying to remove a branch that does not exist.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Trying to remove a branch that does not exist.', { extra: { action, state } });
+        }
+      }
       return state;
     case STORE_COMMITS_TO_BRANCH:
       const storeCommitsAction = <t.StoreCommitsToBranchAction> action;
@@ -105,6 +137,13 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       console.error('Trying to add commits to a branch that does not exist.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Trying to add commits to a branch that does not exist.', { extra: { action, state } });
+        }
+      }
       return state;
     case STORE_BRANCHES:
       const storeAction = <t.StoreBranchesAction> action;

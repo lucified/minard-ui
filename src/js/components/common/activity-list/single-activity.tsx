@@ -1,3 +1,4 @@
+import * as Raven from 'raven-js';
 import * as React from 'react';
 
 import { Activity, ActivityType } from '../../../modules/activities';
@@ -24,6 +25,11 @@ const SingleActivity = (props: Props) => {
       );
     default:
       console.error('Unknown activity type', activity);
+
+      if (Raven.isSetup()) {
+        Raven.captureMessage('Unknown activity type', { extra: activity });
+      }
+
       return <div />;
   }
 };

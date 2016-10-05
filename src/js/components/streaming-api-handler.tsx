@@ -1,4 +1,5 @@
 import * as uniq from 'lodash/uniq';
+import * as Raven from 'raven-js';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -140,6 +141,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       this.props.updateProject(id, name, repoUrl, description);
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for project edited', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -150,6 +154,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       this.props.removeProject(id);
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for project deleted', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -159,6 +166,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       this.props.storeProjects(toProjects(response.data));
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for project created', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -175,6 +185,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       }
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for deployment updated', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -184,6 +197,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       this.props.storeActivities(toActivities(response));
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for new activity', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -219,6 +235,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       this.props.updateLatestActivityTimestampForProject(branch.project, commits[0].committer.timestamp);
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for code pushed', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 

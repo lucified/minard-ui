@@ -74,6 +74,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
 
   public render() {
     const { branch, commits, project, loadCommits, isLoadingCommits } = this.props;
+
     if (!branch) {
       return this.getLoadingContent();
     }

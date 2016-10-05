@@ -19,6 +19,14 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       }
 
       console.error('Fetching failed! Not replacing existing entity.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action, state } });
+        }
+      }
+
       return state;
     case STORE_DEPLOYMENTS:
       const deploymentsArray = (<t.StoreDeploymentsAction> action).entities;
