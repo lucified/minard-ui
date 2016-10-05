@@ -12,7 +12,7 @@ const deployConfig = require('./deploy-config');
 
 const getEntrypoint = (env, charles) => {
   let middle;
-  if (env === 'test' || !charles) {
+  if (!charles) {
     // No remote backend
     middle = 'development.local-json';
   } else if (['staging', 'production'].indexOf(env) > -1) {
