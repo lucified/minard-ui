@@ -151,6 +151,8 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(getCharles()),
       'process.env.TEAM_ID': JSON.stringify(getTeamId()),
+      'process.env.ENV': JSON.stringify(deployConfig.env),
+      'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
     failPlugin,
