@@ -28,6 +28,13 @@ interface GeneratedDispatchProps {
 class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
     this.props.loadAllProjects();
+
+    const intercom = (window as any).Intercom;
+    if (intercom) {
+      intercom('boot', {
+        app_id: 'i2twhziy',
+      });
+    }
   }
 
   public render() {

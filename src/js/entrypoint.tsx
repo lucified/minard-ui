@@ -29,6 +29,12 @@ export const createStoreAndRender = (
     const showAll = /\/all$/.exec(location.pathname); // This will break if we have an id that is "all"
 
     store.dispatch(Selected.actions.setSelected(project, branch, !!showAll));
+
+    // Update Intercom with page changed information
+    const intercom = (window as any).Intercom;
+    if (intercom) {
+      intercom('update');
+    }
   });
 
   ReactDOM.render(

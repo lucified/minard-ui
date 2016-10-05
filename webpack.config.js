@@ -91,6 +91,7 @@ const htmlWebpackPluginConfig = {
   filename: 'index.html',
   googleAnalytics: (deployConfig.env === 'production'),
   googleAnalyticsSendPageView: (deployConfig.env === 'production'),
+  enableIntercom: true, // TODO: only enable in production
   files: {
     css: ['bundled.css'],
   },
