@@ -18,11 +18,13 @@ interface Props {
 const BranchHeader = ({ branch, project }: Props) => (
   <section className="container">
     <SectionTitle
-        rightContent={(
-          <a href="#" className={styles['delete-branch-link']}>
-            <Icon className={styles.icon} name="trash-o" /> Delete branch
-          </a>
-        )}
+      /* TODO: Add this once we add support for deleting branches
+      rightContent={(
+        <a href="#" className={styles['delete-branch-link']}>
+          <Icon className={styles.icon} name="trash-o" /> Delete branch
+        </a>
+      )}
+      */
     >
       <span className={styles.title}>
         <MinardLink project={project}>
