@@ -108,14 +108,20 @@ function getTeamId() {
 }
 
 function getCharles() {
-  if (process.env.CHARLES) {
-    return process.env.CHARLES;
-  }
   if (deployConfig.env === 'production') {
+    if (process.env.CHARLES_PRODUCTION) {
+      return process.env.CHARLES_PRODUCTION;
+    }
     return 'https://charles.lucify.com';
   }
   if (deployConfig.env === 'staging') {
+    if (process.env.CHARLES_STAGING) {
+      return process.env.CHARLES_STAGING;
+    }
     return 'https://charles-staging.lucify.com';
+  }
+  if (process.env.CHARLES) {
+    return process.env.CHARLES;
   }
   return false;
 }
