@@ -22,7 +22,7 @@ const toConvertedArray = <InputType, OutputType>(converter: (response: InputType
       } catch (e) {
         console.error('Error parsing response object:', responseEntity, e);
         // We need to not load 'raven-js' when running tests
-        if (window) {
+        if (typeof window !== 'undefined') {
           const Raven = require('raven-js');
           if (Raven.isSetup()) {
             Raven.captureException(e, { extra: responseEntity });
