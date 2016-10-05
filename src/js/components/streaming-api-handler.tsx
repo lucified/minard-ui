@@ -223,7 +223,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private restartConnection() {
-    this._source = new EventSource(streamingAPIUrl, { withCredentials: false });
+    this._source = new EventSource(streamingAPIUrl, { withCredentials: true });
 
     this._source.addEventListener('error', (e: EventSourceError) => {
       console.log('onerror:', e); // tslint:disable-line:no-console
