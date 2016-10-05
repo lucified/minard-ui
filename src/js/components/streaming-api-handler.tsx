@@ -111,7 +111,6 @@ const toConnectionState = (state: any): ConnectionState => {
   }
 };
 
-// TODO: Remove console.logs
 class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   private _source: any; // tslint:disable-line
 
@@ -227,14 +226,14 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     this._source = new EventSource(streamingAPIUrl, { withCredentials: false });
 
     this._source.addEventListener('error', (e: EventSourceError) => {
-      console.log('onerror:', e);
+      console.log('onerror:', e); // tslint:disable-line:no-console
       const source = e.target;
       this.props.setConnectionState(toConnectionState(source.readyState));
 
       // Once the connection state is CLOSED, the browser will no longer try to reconnect.
       // We'll recreate the EventSource to start the reconnection loop again after 5 seconds.
       if (source.readyState === EventSource.CLOSED) {
-        console.log('triggering connection restart');
+        console.log('triggering connection restart'); // tslint:disable-line:no-console
         this._source.close();
         this._source = null;
 
@@ -246,7 +245,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     }, false);
     this._source.addEventListener('message', (e: EventSourceEvent) => {
       // Generic message with no type. Not used.
-      console.log('received message:', e.data);
+      console.log('received generic message:', e.data); // tslint:disable-line:no-console
     }, false);
 
     this._source.addEventListener('PROJECT_CREATED', this.handleProjectCreated, false);
@@ -276,7 +275,6 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
 
   public componentWillUnmount() {
     if (this._source) {
-      console.log('closing');
       this._source.close();
     }
   }
