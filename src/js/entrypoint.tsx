@@ -5,6 +5,7 @@ import { History, Router } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Store } from 'redux';
 
+import { teamId } from './api/team-id';
 import { Api } from './api/types';
 import Selected from './modules/selected';
 import routes from './routes';
@@ -29,6 +30,13 @@ export const createStoreAndRender = (
     const showAll = /\/all$/.exec(location.pathname); // This will break if we have an id that is "all"
 
     store.dispatch(Selected.actions.setSelected(project, branch, !!showAll));
+
+    // Update Intercom with page changed information
+    const intercom = (window as any).Intercom;
+    if (intercom) {
+      // TODO: add proper user_id and user_email once known
+      intercom('update', { user_id: teamId });
+    }
   });
 
   ReactDOM.render(

@@ -8,6 +8,7 @@ import './styles.scss';
 
 import Projects from '../modules/projects';
 
+import { teamId } from '../api/team-id';
 import Footer from './footer';
 import Header from './header';
 import StreamingAPIHandler from './streaming-api-handler';
@@ -28,6 +29,14 @@ interface GeneratedDispatchProps {
 class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
   public componentWillMount() {
     this.props.loadAllProjects();
+
+    const intercom = (window as any).Intercom;
+    if (intercom) {
+      intercom('boot', {
+        app_id: 'i2twhziy',
+        user_id: teamId, // TODO: add proper user_id and user_email once known
+      });
+    }
   }
 
   public render() {
