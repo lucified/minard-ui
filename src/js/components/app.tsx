@@ -8,6 +8,7 @@ import './styles.scss';
 
 import Projects from '../modules/projects';
 
+import { teamId } from '../api/team-id';
 import Footer from './footer';
 import Header from './header';
 import StreamingAPIHandler from './streaming-api-handler';
@@ -33,7 +34,7 @@ class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
     if (intercom) {
       intercom('boot', {
         app_id: 'i2twhziy',
-        user_id: 'user1', // TODO: add proper user_id and user_email once known
+        user_id: teamId, // TODO: add proper user_id and user_email once known
       });
     }
   }

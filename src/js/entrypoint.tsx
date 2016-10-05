@@ -5,6 +5,7 @@ import { History, Router } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Store } from 'redux';
 
+import { teamId } from './api/team-id';
 import { Api } from './api/types';
 import Selected from './modules/selected';
 import routes from './routes';
@@ -34,7 +35,7 @@ export const createStoreAndRender = (
     const intercom = (window as any).Intercom;
     if (intercom) {
       // TODO: add proper user_id and user_email once known
-      intercom('update', { user_id: 'user1' });
+      intercom('update', { user_id: teamId });
     }
   });
 
