@@ -1,4 +1,4 @@
-import { values } from 'lodash';
+import * as values from 'lodash/values';
 
 import { StateTree } from '../../reducers';
 import { FetchError, isFetchError } from '../errors';

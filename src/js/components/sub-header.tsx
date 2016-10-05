@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
+// import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
 import { FetchError, isFetchError } from '../modules/errors';
@@ -39,6 +39,7 @@ class SubHeader extends React.Component<GeneratedProps, any> {
       leftContent = <MinardLink className={styles['sub-header-link']} homepage>‹ {teamName}</MinardLink>;
     }
 
+    /* TODO: uncomment this once we add sorting
     if (openPageType === PageType.TeamProjectsView || openPageType === PageType.ProjectsList) {
       centerContent = (
         <span>
@@ -49,6 +50,7 @@ class SubHeader extends React.Component<GeneratedProps, any> {
         </span>
       );
     }
+    */
 
     return (
       <section className={classNames(styles['sub-header-background'])}>

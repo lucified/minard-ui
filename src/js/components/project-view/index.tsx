@@ -48,6 +48,17 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
     loadActivities(projectId, 10);
   }
 
+  public componentWillReceiveProps(nextProps: PassedProps & GeneratedStateProps & GeneratedDispatchProps) {
+    const { loadProject, loadActivities, loadBranches } = this.props;
+    const { projectId } = nextProps.params;
+
+    if (projectId !== this.props.params.projectId) {
+      loadProject(projectId);
+      loadBranches(projectId);
+      loadActivities(projectId, 10);
+    }
+  }
+
   private reloadPage(e: any) {
     location.reload(true);
     return false;

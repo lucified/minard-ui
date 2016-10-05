@@ -26,7 +26,7 @@ export interface Api {
 }
 
 // Response formats
-export type ApiEntityTypeString = "commits" | "deployments" | "projects" | "branches" | "activities";
+export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities';
 
 export interface ApiEntity {
   type: ApiEntityTypeString;
@@ -48,22 +48,22 @@ export interface ApiUser {
 
 // References
 interface ResponseBranchReference {
-  type: "branches";
+  type: 'branches';
   id: string;
 }
 
 interface ResponseCommitReference {
-  type: "commits";
+  type: 'commits';
   id: string;
 }
 
 interface ResponseDeploymentReference {
-  type: "deployments";
+  type: 'deployments';
   id: string;
 }
 
 interface ResponseProjectReference {
-  type: "projects";
+  type: 'projects';
   id: string;
 }
 
@@ -74,7 +74,7 @@ interface ProjectUser {
 
 // Project
 export interface ResponseProjectElement {
-  type: "projects";
+  type: 'projects';
   id: string;
   attributes: {
     name: string;
@@ -94,7 +94,7 @@ export interface ResponseProjectElement {
 type ActivityTypeString = 'deployment' | 'comment';
 
 export interface ResponseActivityElement {
-  type: "activities";
+  type: 'activities';
   id: string;
   attributes: {
     'activity-type': ActivityTypeString;
@@ -139,7 +139,7 @@ export interface ResponseActivityElement {
 
 // Branch
 export interface ResponseBranchElement {
-  type: "branches";
+  type: 'branches';
   id: string;
   attributes: {
     name: string;
@@ -164,7 +164,7 @@ export interface ResponseBranchElement {
 
 // Commit
 export interface ResponseCommitElement {
-  type: "commits";
+  type: 'commits';
   id: string;
   attributes: {
     hash: string;
@@ -183,7 +183,7 @@ export interface ResponseCommitElement {
 type DeploymentStatusString = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
 
 export interface ResponseDeploymentElement {
-  type: "deployments";
+  type: 'deployments';
   id: string;
   attributes: {
     creator: ApiUser;

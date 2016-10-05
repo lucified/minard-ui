@@ -23,7 +23,7 @@ export const createStoreAndRender = (
 
   // Store current open project + branch into state
   syncedHistory.listen((location: any) => { // TODO: better type definition
-    const result = /^\/project\/([^/]+)(\/([^/]+))?/.exec(location.pathname);
+    const result = /^\/project\/([^/]+)(\/branch\/([^/]+))?/.exec(location.pathname);
     const project = (result && result[1]) || null;
     const branch = (result && result[3]) || null;
     const showAll = /\/all$/.exec(location.pathname); // This will break if we have an id that is "all"

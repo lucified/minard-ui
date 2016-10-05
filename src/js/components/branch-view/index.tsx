@@ -42,6 +42,17 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     loadCommits(branchId, 10);
   }
 
+  public componentWillReceiveProps(nextProps: GeneratedStateProps & PassedProps & GeneratedDispatchProps) {
+    const { loadBranch, loadCommits } = this.props;
+    const { branchId } = nextProps.params;
+
+    // This happens if the user manually opens a new branch when another branch is open
+    if (branchId !== this.props.params.branchId) {
+      loadBranch(branchId);
+      loadCommits(branchId, 10);
+    }
+  }
+
   private reloadPage(e: any) {
     location.reload(true);
     return false;
