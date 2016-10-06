@@ -65,6 +65,11 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
       deleteProject(project.id, resolve, reject);
     })
     .then(() => {
+      const intercom = (window as any).Intercom;
+      if (intercom) {
+        intercom('trackEvent', 'deleted-project');
+      }
+
       this.clearAndClose();
       router.push('/projects');
     })
@@ -80,6 +85,15 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
   private clearAndClose() {
     this.props.clearDeletionErrors();
     this.props.closeDialog();
+  }
+
+  private editSuccess() {
+    const intercom = (window as any).Intercom;
+    if (intercom) {
+      intercom('trackEvent', 'edited-project');
+    }
+
+    this.clearAndClose();
   }
 
   public render() {
@@ -100,7 +114,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
         </header>
         <ProjectSettingsForm
           existingProjectNames={existingProjectNames}
-          onSubmitSuccess={this.clearAndClose}
+          onSubmitSuccess={this.editSuccess}
           initialValues={project}
           closeDialog={this.clearAndClose}
           deletionInProgress={deletionInProgress}
