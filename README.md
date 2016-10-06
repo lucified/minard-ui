@@ -31,13 +31,13 @@ npm start # then open http://localhost:3000/ in a browser
 ## Development with backend
 
 ```shell
-npm start -- <API URL>
+npm start -- <API URL> <Team ID>
 ```
 
 By default, the minard-backed (charles) API runs on `http://localhost:8000`:
 
 ```shell
-npm start -- http://localhost:8000
+npm start -- http://localhost:8000 2
 ```
 
 ## Building for production
