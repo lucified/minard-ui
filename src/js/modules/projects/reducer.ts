@@ -1,7 +1,7 @@
-import * as difference from 'lodash/difference';
 import * as omit from 'lodash/omit';
 import * as unionBy from 'lodash/unionBy';
 import * as uniq from 'lodash/uniq';
+import * as xor from 'lodash/xor';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
@@ -53,7 +53,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         if (project.branches && !isFetchError(project.branches) && project.branches.length > 0) {
           newBranches = uniq(branches.concat(project.branches));
 
-          if (difference(project.branches, newBranches).length === 0) {
+          if (xor(project.branches, newBranches).length === 0) {
             // Branches already exist
             return state;
           }
@@ -146,7 +146,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       project = state[id];
 
       if (project && !isFetchError(project)) {
-        if (difference(
+        if (xor(
           storeAuthorsAction.authors.map(user => user.email),
           project.activeUsers.map(user => user.email)
         ).length === 0) {
