@@ -22,7 +22,15 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.log('Error: fetching failed! Not replacing existing entity.'); // tslint:disable-line:no-console
+      console.error('Fetching failed! Not replacing existing entity.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action, state } });
+        }
+      }
+
       return state;
     case ADD_DEPLOYMENT_TO_COMMIT:
       id = action.id;
@@ -35,7 +43,15 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         }
         return state;
       }
-      console.log('Error: trying to add deployment to commit that does not exist.'); // tslint:disable-line:no-console
+      console.error('Trying to add deployment to commit that does not exist.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Trying to add deployment to commit that does not exist.', { extra: { action, state } });
+        }
+      }
+
       return state;
     case STORE_COMMITS:
       commits = (<t.StoreCommitsAction> action).entities;

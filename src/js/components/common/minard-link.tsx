@@ -73,7 +73,7 @@ class MinardLink extends React.Component<Props, any> {
         path = '/projects';
       }
     } else {
-      console.log('Error: no link handler found'); // tslint:disable-line:no-console
+      console.error('Error: no link handler found');
       return <span>{children}</span>;
     }
 

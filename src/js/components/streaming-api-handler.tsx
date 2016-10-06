@@ -1,4 +1,5 @@
 import * as uniq from 'lodash/uniq';
+import * as Raven from 'raven-js';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -139,7 +140,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const { id, name, description, 'repo-url': repoUrl } = response;
       this.props.updateProject(id, name, repoUrl, description);
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for project edited', e.data); // tslint:disable-line
+      console.error('Error: Unable to parse Streaming API response for project edited', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -149,7 +153,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const { id } = response;
       this.props.removeProject(id);
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for project deleted', e.data); // tslint:disable-line
+      console.error('Error: Unable to parse Streaming API response for project deleted', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -158,7 +165,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const response = JSON.parse(e.data) as NewProjectResponse;
       this.props.storeProjects(toProjects(response.data));
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for project created', e.data); // tslint:disable-line
+      console.error('Error: Unable to parse Streaming API response for project created', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -174,7 +184,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         this.props.updateLatestDeployedCommitForBranch(branch, commit);
       }
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for deployment updated', e.data); // tslint:disable-line
+      console.error('Error: Unable to parse Streaming API response for deployment updated', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -183,7 +196,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const response = JSON.parse(e.data) as NewActivityResponse;
       this.props.storeActivities(toActivities(response));
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for new activity', e.data); // tslint:disable-line
+      console.error('Error: Unable to parse Streaming API response for new activity', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -218,7 +234,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       );
       this.props.updateLatestActivityTimestampForProject(branch.project, commits[0].committer.timestamp);
     } catch (e) {
-      console.log('Error: Unable to parse Streaming API response for code pushed', e.data); // tslint:disable-line
+      console.error('Error: Unable to parse Streaming API response for code pushed', e.data);
+      if (Raven.isSetup()) {
+        Raven.captureException(e);
+      }
     }
   }
 
@@ -226,14 +245,14 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     this._source = new EventSource(streamingAPIUrl, { withCredentials: false });
 
     this._source.addEventListener('error', (e: EventSourceError) => {
-      console.log('onerror:', e); // tslint:disable-line:no-console
+      console.log('EventSource: error:', e); // tslint:disable-line:no-console
       const source = e.target;
       this.props.setConnectionState(toConnectionState(source.readyState));
 
       // Once the connection state is CLOSED, the browser will no longer try to reconnect.
       // We'll recreate the EventSource to start the reconnection loop again after 5 seconds.
       if (source.readyState === EventSource.CLOSED) {
-        console.log('triggering connection restart'); // tslint:disable-line:no-console
+        console.log('EventSource: Restarting connection'); // tslint:disable-line:no-console
         this._source.close();
         this._source = null;
 

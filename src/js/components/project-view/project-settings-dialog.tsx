@@ -1,3 +1,4 @@
+import * as Raven from 'raven-js';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import * as ModalDialog from 'react-modal';
@@ -67,7 +68,13 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
       this.clearAndClose();
       router.push('/projects');
     })
-    .catch((e) => { console.log('Error deleting project:', e); }); // tslint:disable-line
+    .catch((e) => {
+      if (Raven.isSetup()) {
+        Raven.captureException(e, { extra: project });
+      }
+
+      console.error('Error deleting project:', e);
+    });
   };
 
   private clearAndClose() {

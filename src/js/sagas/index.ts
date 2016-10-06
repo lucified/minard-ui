@@ -206,7 +206,7 @@ export default function createSagas(api: Api) {
     }
 
     if (isFetchError(project)) {
-      console.log('Error: Not fetching branches for project.');
+      console.error('Project not found. Not fetching branches for project.');
     } else {
       const fetchSuccess = yield call(fetchBranchesForProject, id);
       if (fetchSuccess) {
@@ -290,7 +290,7 @@ export default function createSagas(api: Api) {
     }
 
     if (isFetchError(branch)) {
-      console.log('Error: Not fetching commits for branch.');
+      console.error('Branch not found. Not fetching commits for branch.');
     } else {
       const fetchSuccess = yield call(fetchCommitsForBranch, id, count, until);
       if (fetchSuccess) {

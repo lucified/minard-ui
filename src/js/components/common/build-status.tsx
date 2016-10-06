@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import * as Raven from 'raven-js';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
@@ -42,7 +43,12 @@ const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
         </span>
       );
     default:
-      console.log('Error: unknown deployment status:', deployment); // tslint:disable-line
+      console.error('Unknown deployment status:', deployment);
+
+      if (Raven.isSetup()) {
+        Raven.captureMessage('Unknown deployment status', { extra: deployment });
+      }
+
       return <span />;
   }
 };
