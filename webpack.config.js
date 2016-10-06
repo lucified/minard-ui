@@ -127,15 +127,11 @@ function getCharles() {
 }
 
 function getStreamingAPI() {
-  if (deployConfig.env === 'production') {
-    if (process.env.CHARLES_STREAMING_PRODUCTION) {
-      return process.env.CHARLES_STREAMING_PRODUCTION;
-    }
+  if (deployConfig.env === 'production' && process.env.CHARLES_STREAMING_PRODUCTION) {
+    return process.env.CHARLES_STREAMING_PRODUCTION;
   }
-  if (deployConfig.env === 'staging') {
-    if (process.env.CHARLES_STREAMING_STAGING) {
-      return process.env.CHARLES_STREAMING_STAGING;
-    }
+  if (deployConfig.env === 'staging' && process.env.CHARLES_STREAMING_STAGING) {
+    return process.env.CHARLES_STREAMING_STAGING;
   }
   if (process.env.CHARLES_STREAMING) {
     return process.env.CHARLES_STREAMING;
