@@ -180,6 +180,8 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
           const newProject = Object.assign({}, project, { latestActivityTimestamp: timestamp });
           return Object.assign({}, state, { [id]: newProject });
         }
+
+        return state;
       }
 
       console.error('Trying to update timestamp on nonexistant project.');
@@ -203,6 +205,8 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
           const newProject = Object.assign({}, project, { latestSuccessfullyDeployedCommit: commit });
           return Object.assign({}, state, { [id]: newProject });
         }
+
+        return state;
       }
 
       console.error('Trying to update latest deployed commit on nonexistant project.');
