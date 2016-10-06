@@ -642,8 +642,8 @@ describe('sagas', () => {
       iterator.next(); // request action
       iterator.next(); // API call
       iterator.next({ response }); // request success
-      iterator.next(); // convert
-      iterator.next(objects); // store
+      iterator.next(objects); // convert
+      iterator.next(); // store
 
       const result = iterator.next();
 
@@ -746,8 +746,8 @@ describe('sagas', () => {
       iterator.next(); // request action
       iterator.next(); // API call
       iterator.next({ response }); // request success
-      iterator.next(); // convert
-      iterator.next(objects); // store
+      iterator.next(objects); // convert
+      iterator.next(); // store
 
       const result = iterator.next();
 

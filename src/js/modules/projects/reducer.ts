@@ -1,7 +1,7 @@
-import * as difference from 'lodash/difference';
 import * as omit from 'lodash/omit';
 import * as unionBy from 'lodash/unionBy';
 import * as uniq from 'lodash/uniq';
+import * as xor from 'lodash/xor';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
@@ -50,10 +50,10 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       if (project && !isFetchError(project)) {
         let newBranches: string[];
-        if (project.branches && !isFetchError(project.branches)) {
+        if (project.branches && !isFetchError(project.branches) && project.branches.length > 0) {
           newBranches = uniq(branches.concat(project.branches));
 
-          if (difference(branches, newBranches).length === 0) {
+          if (xor(project.branches, newBranches).length === 0) {
             // Branches already exist
             return state;
           }
@@ -64,12 +64,12 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [projectId]: newProject });
       }
 
-      console.error('Trying save branches to project that does not exist.');
+      console.error('Trying to save branches to project that does not exist.');
       // We need to not load 'raven-js' when running tests
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Trying save branches to project that does not exist.', { extra: { action, state } });
+          Raven.captureMessage('Trying to save branches to project that does not exist.', { extra: { action, state } });
         }
       }
 
@@ -146,7 +146,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       project = state[id];
 
       if (project && !isFetchError(project)) {
-        if (difference(
+        if (xor(
           storeAuthorsAction.authors.map(user => user.email),
           project.activeUsers.map(user => user.email)
         ).length === 0) {
@@ -180,6 +180,8 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
           const newProject = Object.assign({}, project, { latestActivityTimestamp: timestamp });
           return Object.assign({}, state, { [id]: newProject });
         }
+
+        return state;
       }
 
       console.error('Trying to update timestamp on nonexistant project.');
@@ -203,6 +205,8 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
           const newProject = Object.assign({}, project, { latestSuccessfullyDeployedCommit: commit });
           return Object.assign({}, state, { [id]: newProject });
         }
+
+        return state;
       }
 
       console.error('Trying to update latest deployed commit on nonexistant project.');

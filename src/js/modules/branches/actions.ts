@@ -59,3 +59,13 @@ export const updateLatestDeployedCommit = (id: string, commit: string): t.Update
   id,
   commit,
 });
+
+export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH = 'BRANCHES/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH';
+export const updateLatestActivityTimestampForBranch = (
+  id: string,
+  timestamp: number,
+): t.UpdateLatestActivityTimestampAction => ({
+  type: UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH,
+  id,
+  timestamp,
+});

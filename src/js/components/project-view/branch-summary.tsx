@@ -94,8 +94,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
 
   let deploymentForLatestCommit: Deployment | FetchError | undefined;
   if (branch.latestCommit) {
-    const latestCommit = branch.latestSuccessfullyDeployedCommit &&
-      Commits.selectors.getCommit(state, branch.latestCommit);
+    const latestCommit = Commits.selectors.getCommit(state, branch.latestCommit);
     if (latestCommit && !isFetchError(latestCommit) && latestCommit.deployment) {
       deploymentForLatestCommit = Deployments.selectors.getDeployment(state, latestCommit.deployment);
     }

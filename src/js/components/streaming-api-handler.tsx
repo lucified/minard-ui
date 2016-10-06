@@ -39,6 +39,7 @@ interface GeneratedDispatchProps {
   addBranchToProject: (id: string, branch: string) => void;
   updateLatestActivityTimestampForProject: (id: string, timestamp: number) => void;
   updateLatestDeployedCommitForProject: (id: string, commit: string) => void;
+  updateLatestActivityTimestampForBranch: (id: string, timestamp: number) => void;
   updateLatestDeployedCommitForBranch: (id: string, commit: string) => void;
   removeBranchFromProject: (id: string, branch: string) => void;
 }
@@ -233,6 +234,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
       );
       this.props.updateLatestActivityTimestampForProject(branch.project, commits[0].committer.timestamp);
+      this.props.updateLatestActivityTimestampForBranch(branch.id, commits[0].committer.timestamp);
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for code pushed', e.data);
       if (Raven.isSetup()) {
@@ -322,6 +324,7 @@ export default connect<{}, GeneratedDispatchProps, {}>(
     addBranchToProject: Projects.actions.addBranchesToProject,
     updateLatestActivityTimestampForProject: Projects.actions.updateLatestActivityTimestampForProject,
     updateLatestDeployedCommitForProject: Projects.actions.updateLatestDeployedCommitForProject,
+    updateLatestActivityTimestampForBranch: Branches.actions.updateLatestActivityTimestampForBranch,
     removeBranchFromProject: Projects.actions.removeBranchFromProject,
   }
 )(StreamingAPIHandler);

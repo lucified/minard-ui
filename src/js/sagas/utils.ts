@@ -62,7 +62,9 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
       }
 
       const entities = yield call(converter, response.data);
-      yield put(storeEntitiesActionCreator(entities));
+      if (entities && entities.length > 0) {
+        yield put(storeEntitiesActionCreator(entities));
+      }
 
       if (postStoreEffects) {
         yield* postStoreEffects(id, response, ...args);

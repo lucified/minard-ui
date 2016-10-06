@@ -61,3 +61,9 @@ export interface UpdateLatestDeployedCommitAction extends Action {
   id: string;
   commit: string;
 }
+
+// UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH
+export interface UpdateLatestActivityTimestampAction extends Action {
+  id: string;
+  timestamp: number;
+}
