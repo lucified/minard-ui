@@ -64,6 +64,7 @@ const SetupInstructions = ({ project, hideLabels, styles: passedInStyles }: Prop
   "build": {
     "commands": ["npm install", "npm run build"],
     "cache": {
+      "key": "%CI_PROJECT_PATH%",
       "paths": ["node_modules/"]
     }
   }
