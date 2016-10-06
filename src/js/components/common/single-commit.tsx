@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
 import * as React from 'react';
+import TimeAgo from 'react-timeago';
 
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
@@ -45,7 +45,9 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
           <span>
             <span className={styles.author}>{author.name || author.email}</span>
             {' · '}
-            <span className={styles.timestamp}>{moment(author.timestamp).fromNow()}</span>
+            <span className={styles.timestamp}>
+              <TimeAgo minPeriod={10} date={author.timestamp} />
+            </span>
             {' · '}
             <span className={styles.hash}>{commit.hash.slice(0, 8)}</span>
           </span>

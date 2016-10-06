@@ -17,6 +17,7 @@
       "react-fontawesome": ["types/react-fontawesome"],
       "react-gravatar": ["types/react-gravatar"],
       "react-modal": ["types/react-modal/react-modal"],
+      "react-timeago": ["types/react-timeago"],
       "react-waypoint": ["types/react-waypoint"],
       "redux-form": ["types/redux-form"]
     }
