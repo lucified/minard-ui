@@ -131,7 +131,6 @@ function getStreamingAPI() {
     if (process.env.CHARLES_STREAMING_PRODUCTION) {
       return process.env.CHARLES_STREAMING_PRODUCTION;
     }
-    return getCharles();
   }
   if (deployConfig.env === 'staging') {
     if (process.env.CHARLES_STREAMING_STAGING) {
