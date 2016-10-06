@@ -60,8 +60,10 @@ const SetupInstructions = ({ project, hideLabels, styles: passedInStyles }: Prop
         <div className={styles.code}>
           <pre>
 {`{
-  "publicRoot": "dist/",
-  "build": {...}
+  "publicRoot": "dist",
+  "build": {
+    "commands": ["npm install", "npm run build"]
+  }
 }`}
           </pre>
         </div>
