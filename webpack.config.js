@@ -108,16 +108,35 @@ function getTeamId() {
 }
 
 function getCharles() {
-  if (process.env.CHARLES) {
-    return process.env.CHARLES;
-  }
   if (deployConfig.env === 'production') {
+    if (process.env.CHARLES_PRODUCTION) {
+      return process.env.CHARLES_PRODUCTION;
+    }
     return 'https://charles.lucify.com';
   }
   if (deployConfig.env === 'staging') {
+    if (process.env.CHARLES_STAGING) {
+      return process.env.CHARLES_STAGING;
+    }
     return 'https://charles-staging.lucify.com';
   }
+  if (process.env.CHARLES) {
+    return process.env.CHARLES;
+  }
   return false;
+}
+
+function getStreamingAPI() {
+  if (deployConfig.env === 'production' && process.env.CHARLES_STREAMING_PRODUCTION) {
+    return process.env.CHARLES_STREAMING_PRODUCTION;
+  }
+  if (deployConfig.env === 'staging' && process.env.CHARLES_STREAMING_STAGING) {
+    return process.env.CHARLES_STREAMING_STAGING;
+  }
+  if (process.env.CHARLES_STREAMING) {
+    return process.env.CHARLES_STREAMING;
+  }
+  return getCharles();
 }
 
 const config = {
@@ -151,6 +170,7 @@ const config = {
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(getCharles()),
+      'process.env.STREAMING_API': JSON.stringify(getStreamingAPI()),
       'process.env.TEAM_ID': JSON.stringify(getTeamId()),
       'process.env.ENV': JSON.stringify(deployConfig.env),
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),

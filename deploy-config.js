@@ -6,19 +6,13 @@ const opts = {
     if (env === 'production') {
       return 'minard-ui-production';
     }
-    if (env === 'staging') {
-      return 'minard-ui-staging';
-    }
-    return null;
+    return 'minard-ui-staging';
   },
   baseUrl: (env) => {
     if (env === 'production') {
       return 'https://minard.lucify.com/';
     }
-    if (env === 'staging') {
-      return 'https://minard-staging.lucify.com/';
-    }
-    return null;
+    return 'https://minard-staging.lucify.com/';
   },
   publicPath: (env) => {
     if (env === 'production' || env === 'staging') {
