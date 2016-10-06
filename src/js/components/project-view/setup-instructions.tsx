@@ -62,7 +62,10 @@ const SetupInstructions = ({ project, hideLabels, styles: passedInStyles }: Prop
 {`{
   "publicRoot": "dist",
   "build": {
-    "commands": ["npm install", "npm run build"]
+    "commands": ["npm install", "npm run build"],
+    "cache": {
+      "paths": ["node_modules/"]
+    }
   }
 }`}
           </pre>
