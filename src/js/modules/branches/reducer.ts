@@ -10,6 +10,7 @@ import {
   REMOVE_BRANCH,
   STORE_BRANCHES,
   STORE_COMMITS_TO_BRANCH,
+  UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH,
   UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH,
 } from './actions';
 import * as t from './types';
@@ -131,7 +132,6 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         }
 
         newBranch.latestCommit = commitIds[0];
-        newBranch.latestActivityTimestamp = storeCommitsAction.commits[0].committer.timestamp;
 
         return Object.assign({}, state, { [id]: newBranch });
       }
@@ -144,6 +144,29 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
           Raven.captureMessage('Trying to add commits to a branch that does not exist.', { extra: { action, state } });
         }
       }
+      return state;
+    case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH:
+      const updateActivityTimestampAction = <t.UpdateLatestActivityTimestampAction> action;
+      id = updateActivityTimestampAction.id;
+      branch = state[id];
+
+      if (branch && !isFetchError(branch)) {
+        const { timestamp } = updateActivityTimestampAction;
+        if (branch.latestActivityTimestamp !== timestamp) {
+          const newBranch = Object.assign({}, branch, { latestActivityTimestamp: timestamp });
+          return Object.assign({}, state, { [id]: newBranch });
+        }
+      }
+
+      console.error('Trying to update timestamp on nonexistant branch.');
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Trying to update timestamp on nonexistant branch.', { extra: { action, state } });
+        }
+      }
+
       return state;
     case STORE_BRANCHES:
       const storeAction = <t.StoreBranchesAction> action;
