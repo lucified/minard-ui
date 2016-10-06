@@ -126,6 +126,24 @@ function getCharles() {
   return false;
 }
 
+function getStreamingAPI() {
+  if (deployConfig.env === 'production') {
+    if (process.env.CHARLES_STREAMING_PRODUCTION) {
+      return process.env.CHARLES_STREAMING_PRODUCTION;
+    }
+    return getCharles();
+  }
+  if (deployConfig.env === 'staging') {
+    if (process.env.CHARLES_STREAMING_STAGING) {
+      return process.env.CHARLES_STREAMING_STAGING;
+    }
+  }
+  if (process.env.CHARLES_STREAMING) {
+    return process.env.CHARLES_STREAMING;
+  }
+  return getCharles();
+}
+
 const config = {
   resolve: {
     modulesDirectories: ['node_modules'],
@@ -157,6 +175,7 @@ const config = {
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(getCharles()),
+      'process.env.STREAMING_API': JSON.stringify(getStreamingAPI()),
       'process.env.TEAM_ID': JSON.stringify(getTeamId()),
       'process.env.ENV': JSON.stringify(deployConfig.env),
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
