@@ -50,10 +50,10 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       if (project && !isFetchError(project)) {
         let newBranches: string[];
-        if (project.branches && !isFetchError(project.branches)) {
+        if (project.branches && !isFetchError(project.branches) && project.branches.length > 0) {
           newBranches = uniq(branches.concat(project.branches));
 
-          if (difference(branches, newBranches).length === 0) {
+          if (difference(project.branches, newBranches).length === 0) {
             // Branches already exist
             return state;
           }
