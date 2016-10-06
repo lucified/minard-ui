@@ -64,12 +64,12 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [projectId]: newProject });
       }
 
-      console.error('Trying save branches to project that does not exist.');
+      console.error('Trying to save branches to project that does not exist.');
       // We need to not load 'raven-js' when running tests
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Trying save branches to project that does not exist.', { extra: { action, state } });
+          Raven.captureMessage('Trying to save branches to project that does not exist.', { extra: { action, state } });
         }
       }
 
