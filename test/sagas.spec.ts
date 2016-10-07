@@ -1433,11 +1433,13 @@ describe('sagas', () => {
   describe('createProject', () => {
     const name = 'projectName';
     const description = 'projectDescription';
+    const projectTemplate = null;
     const action = {
       type: 'SUBMITACTION',
       payload: {
         name,
         description,
+        projectTemplate,
       },
     };
 
@@ -1500,6 +1502,8 @@ describe('sagas', () => {
       expect(val.value).to.equal(false);
       expect(val.done).to.equal(true);
     });
+
+    it('with template project');
   });
 
   describe('deleteProject', () => {
