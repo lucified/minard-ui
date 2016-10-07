@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { findDOMNode } from 'react-dom';
 
 const styles = require('./confirmable.scss');
@@ -67,18 +68,24 @@ class Confirmable extends React.Component<Props, any> {
     const { title, message, action, children } = this.props;
     return (
       <div className={styles.confirmable}>
-        {this.state.open && (
-          <div className={classNames(styles.popup, styles['arrow-box'])}>
-            <div className={styles.content}>
-              <div className={styles.title}>{title}</div>
-              <div className={styles.message}>{message}</div>
+        <ReactCSSTransitionGroup
+          transitionName="confirm-popup"
+          transitionEnterTimeout={150}
+          transitionLeaveTimeout={150}
+        >
+          {this.state.open && (
+            <div key="confirm-popup" className={classNames(styles.popup, styles['arrow-box'])}>
+              <div className={styles.content}>
+                <div className={styles.title}>{title}</div>
+                <div className={styles.message}>{message}</div>
+              </div>
+              <div className={styles.actions}>
+                <button className={styles.confirm} onClick={this.confirm}>{action}</button>
+                <a className={styles.cancel} onClick={this.hidePopup}>Cancel</a>
+              </div>
             </div>
-            <div className={styles.actions}>
-              <button className={styles.confirm} onClick={this.confirm}>{action}</button>
-              <a className={styles.cancel} onClick={this.hidePopup}>Cancel</a>
-            </div>
-          </div>
-        )}
+          )}
+        </ReactCSSTransitionGroup>
         {React.cloneElement(React.Children.only(children!), { onClick: this.showPopup })}
       </div>
     );

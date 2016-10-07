@@ -92,3 +92,28 @@
     }
   }
 }
+
+:global {
+  .confirm-popup-enter {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.3);
+    transform-origin: bottom;
+  }
+
+  .confirm-popup-enter.confirm-popup-enter-active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    transition: all 150ms;
+  }
+
+  .confirm-popup-leave {
+    opacity: 1;
+  }
+
+  .confirm-popup-leave.confirm-popup-leave-active {
+    opacity: 0.01;
+    transition: opacity 150ms;
+  }
+}
