@@ -63,6 +63,7 @@ class NewProjectDialog extends React.Component<Props, any> {
       <ModalDialog
         isOpen={isOpen}
         onRequestClose={closeDialog}
+        closeTimeoutMS={150}
         className={styles.dialog}
         overlayClassName={styles.overlay}
       >
