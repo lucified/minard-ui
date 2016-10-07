@@ -4,7 +4,7 @@ export interface Api {
   Project: {
     fetchAll: () => ApiPromise;
     fetch: (id: string) => ApiPromise;
-    create: (name: string, description?: string) => ApiPromise;
+    create: (name: string, description?: string, projectTemplate?: string) => ApiPromise;
     edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise;
     delete: (id: string) => ApiPromise;
   };

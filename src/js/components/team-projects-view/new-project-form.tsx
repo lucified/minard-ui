@@ -1,8 +1,10 @@
 import * as React from 'react';
+import * as Select from 'react-select';
+import 'react-select/dist/react-select.css';
 import { Field, FormProps, reduxForm } from 'redux-form';
 
 import { onSubmitActions } from '../../modules/forms';
-import Projects from '../../modules/projects';
+import Projects, { Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
 
 import FormField from '../common/forms/field';
@@ -10,7 +12,7 @@ import FormField from '../common/forms/field';
 const styles = require('../common/forms/modal-dialog.scss');
 
 interface PassedProps {
-  existingProjectNames: string[];
+  existingProjects: Project[];
   onSubmitSuccess: (projectId: string) => void;
   closeDialog: () => void;
 }
@@ -28,13 +30,15 @@ const validate = (values: FormData, props: Props) => {
 
   const { name, description } = values;
 
+  const existingProjectNames = props.existingProjects.map(project => project.name);
+
   if (!name) {
     errors.name = 'Required';
   } else if (!projectNameRegex.test(name)) {
     errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (name[0] === '-') {
     errors.name = 'Project name can\'t start with a hyphen';
-  } else if (props.existingProjectNames.indexOf(name) > -1) {
+  } else if (existingProjectNames.indexOf(name) > -1) {
     errors.name = 'Project name already exists';
   }
 
@@ -49,9 +53,42 @@ const toLowerCase = (value?: string): string | undefined => value && value.toLow
 const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
+// From https://github.com/erikras/redux-form/issues/82#issuecomment-238599783
+class SelectInput extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  private onChange(event: any) {
+    if (this.props.input.onChange) {
+      // To be aligned with how redux-form publishes its CHANGE action payload.
+      // The event received is an object with 2 keys: "value" and "label".
+      // Will be null if the selection is cleared.
+      this.props.input.onChange(event && event.value);
+    }
+  }
+
+  public render() {
+    return (
+      <Select
+        {...this.props}
+        value={this.props.input.value || ''}
+        onBlur={() => this.props.input.onBlur(this.props.input.value)}
+        onChange={this.onChange}
+        options={this.props.options}
+        autosize={false}
+        disabled={this.props.meta.submitting || this.props.options.length === 0}
+      />
+    );
+  }
+}
+
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid, closeDialog } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid, closeDialog, existingProjects } = this.props;
+    const dropdownValues = existingProjects.sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp)
+      .map(project => ({ value: project.id, label: project.name }));
 
     return (
       <form onSubmit={handleSubmit}>
@@ -87,6 +124,12 @@ class NewProjectForm extends React.Component<Props, any> {
             <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
               {submitting ? 'Creating...' : 'Create project'}
             </button>
+          </div>
+          <div>
+            <Field
+              name="projectTemplate"
+              component={field => <SelectInput {...field} options={dropdownValues} /> }
+            />
           </div>
         </footer>
       </form>
