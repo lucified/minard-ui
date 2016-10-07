@@ -18,9 +18,10 @@ interface Props {
   project: Project;
   styles?: Styles;
   hideLabels?: boolean;
+  showClone?: boolean;
 }
 
-const SetupInstructions = ({ project, hideLabels, styles: passedInStyles }: Props) => {
+const SetupInstructions = ({ project, hideLabels, showClone, styles: passedInStyles }: Props) => {
   const styles = passedInStyles || defaultStyles;
   return (
     <div className={styles.instructions}>
@@ -34,8 +35,18 @@ const SetupInstructions = ({ project, hideLabels, styles: passedInStyles }: Prop
           The URL for this project's Git repository is
           <div className={styles.url}>{project.repoUrl}</div>
         </div>
+        {showClone && (
+          <div>
+            <div className={styles.text}>
+              Clone the repo with
+            </div>
+            <div className={styles.code}>
+              <pre>git clone {project.repoUrl}</pre>
+            </div>
+          </div>
+        )}
         <div className={styles.text}>
-          Add it as a remote to your local repository with
+          {showClone ? 'Or you can add' : 'Add'} it as a remote to your existing repository with
         </div>
         <div className={styles.code}>
           <pre>git remote add minard {project.repoUrl}</pre>

@@ -131,7 +131,7 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, a
             label="Description"
             placeholder="Describe your project"
           />
-          <SetupInstructions project={project} />
+          <SetupInstructions project={project} showClone={true} />
         </div>
         <footer className={styles.footer}>
           <div className={styles['primary-actions']}>
