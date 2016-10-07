@@ -70,7 +70,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
     })
     .catch((e) => {
       if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: project });
+        Raven.captureException(e, { extra: { project } });
       }
 
       console.error('Error deleting project:', e);

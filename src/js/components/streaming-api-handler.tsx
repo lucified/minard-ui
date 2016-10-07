@@ -59,8 +59,8 @@ interface EventSourceError {
 }
 
 interface CodePushResponse {
-  after: string;
-  before: string;
+  after?: string;
+  before?: string;
   commits: ResponseCommitElement[]; // oldest is first
   parents: string[];
   branch: ResponseBranchElement | string;
@@ -135,47 +135,47 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     }
   }
 
-  private handleProjectEdited(e: EventSourceEvent) {
+  private handleProjectEdited(event: EventSourceEvent) {
     try {
-      const response = JSON.parse(e.data) as EditProjectResponse;
+      const response = JSON.parse(event.data) as EditProjectResponse;
       const { id, name, description, 'repo-url': repoUrl } = response;
       this.props.updateProject(id, name, repoUrl, description);
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for project edited', e.data);
+      console.error('Error: Unable to parse Streaming API response for project edited', e, event.data);
       if (Raven.isSetup()) {
-        Raven.captureException(e);
+        Raven.captureException(e, { extra: { event } });
       }
     }
   }
 
-  private handleProjectDeleted(e: EventSourceEvent) {
+  private handleProjectDeleted(event: EventSourceEvent) {
     try {
-      const response = JSON.parse(e.data) as DeleteProjectResponse;
+      const response = JSON.parse(event.data) as DeleteProjectResponse;
       const { id } = response;
       this.props.removeProject(id);
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for project deleted', e.data);
+      console.error('Error: Unable to parse Streaming API response for project deleted', e, event.data);
       if (Raven.isSetup()) {
-        Raven.captureException(e);
+        Raven.captureException(e, { extra: { event } });
       }
     }
   }
 
-  private handleProjectCreated(e: EventSourceEvent) {
+  private handleProjectCreated(event: EventSourceEvent) {
     try {
-      const response = JSON.parse(e.data) as NewProjectResponse;
+      const response = JSON.parse(event.data) as NewProjectResponse;
       this.props.storeProjects(toProjects(response.data));
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for project created', e.data);
+      console.error('Error: Unable to parse Streaming API response for project created', e, event.data);
       if (Raven.isSetup()) {
-        Raven.captureException(e);
+        Raven.captureException(e, { extra: { event } });
       }
     }
   }
 
-  private handleDeploymentUpdate(e: EventSourceEvent) {
+  private handleDeploymentUpdate(event: EventSourceEvent) {
     try {
-      const response = JSON.parse(e.data) as DeploymentUpdateResponse;
+      const response = JSON.parse(event.data) as DeploymentUpdateResponse;
       const { deployment: deploymentResponse, commit, project, branch } = response;
       const deployments = toDeployments(deploymentResponse);
       this.props.storeDeployments(deployments);
@@ -185,35 +185,35 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         this.props.updateLatestDeployedCommitForBranch(branch, commit);
       }
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for deployment updated', e.data);
+      console.error('Error: Unable to parse Streaming API response for deployment updated', e, event.data);
       if (Raven.isSetup()) {
-        Raven.captureException(e);
+        Raven.captureException(e, { extra: { event } });
       }
     }
   }
 
-  private handleNewActivity(e: EventSourceEvent) {
+  private handleNewActivity(event: EventSourceEvent) {
     try {
-      const response = JSON.parse(e.data) as NewActivityResponse;
+      const response = JSON.parse(event.data) as NewActivityResponse;
       this.props.storeActivities(toActivities(response));
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for new activity', e.data);
+      console.error('Error: Unable to parse Streaming API response for new activity', e, event.data);
       if (Raven.isSetup()) {
-        Raven.captureException(e);
+        Raven.captureException(e, { extra: { event } });
       }
     }
   }
 
-  private handleCodePush(e: EventSourceEvent) {
+  private handleCodePush(event: EventSourceEvent) {
     try {
-      const response = JSON.parse(e.data) as CodePushResponse;
+      const response = JSON.parse(event.data) as CodePushResponse;
       const { after, before, commits: commitsResponse, parents, project } = response;
 
       if (!after) {
         const branchId = response.branch as string;
         // branch deleted
-        this.props.removeBranch(branchId);
         this.props.removeBranchFromProject(project, branchId);
+        this.props.removeBranch(branchId);
         return;
       }
 
@@ -236,9 +236,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       this.props.updateLatestActivityTimestampForProject(branch.project, commits[0].committer.timestamp);
       this.props.updateLatestActivityTimestampForBranch(branch.id, commits[0].committer.timestamp);
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for code pushed', e.data);
+      console.error('Error: Unable to parse Streaming API response for code pushed', e, event.data);
       if (Raven.isSetup()) {
-        Raven.captureException(e);
+        Raven.captureException(e, { extra: { event } });
       }
     }
   }
@@ -264,9 +264,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     this._source.addEventListener('open', () => {
       this.props.setConnectionState(ConnectionState.OPEN);
     }, false);
-    this._source.addEventListener('message', (e: EventSourceEvent) => {
+    this._source.addEventListener('message', (event: EventSourceEvent) => {
       // Generic message with no type. Not used.
-      console.log('received generic message:', e.data); // tslint:disable-line:no-console
+      console.log('received generic message:', event.data); // tslint:disable-line:no-console
     }, false);
 
     this._source.addEventListener('PROJECT_CREATED', this.handleProjectCreated, false);
