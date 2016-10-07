@@ -85,11 +85,17 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
           <p className={styles.description}>{project.description}</p>
         </div>
       </MinardLink>
-      <MinardLink openInNewWindow deployment={latestDeployment}>
-        <div className={classNames(styles['card-bottom'], { [styles['hover-effect']]: !!deploymentSummary })}>
-          {deploymentSummary}
-        </div>
-      </MinardLink>
+      {deploymentSummary ? (
+        <MinardLink openInNewWindow deployment={latestDeployment}>
+          <div className={classNames(styles['card-bottom'], styles['hover-effect'])}>
+            {deploymentSummary}
+          </div>
+        </MinardLink>
+      ) : (
+        <MinardLink project={project}>
+          <div className={styles['card-bottom']} />
+        </MinardLink>
+      )}
     </div>
   );
 };
