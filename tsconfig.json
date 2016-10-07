@@ -14,6 +14,7 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
+      "react-flip-move": ["types/react-flip-move"],
       "react-fontawesome": ["types/react-fontawesome"],
       "react-gravatar": ["types/react-gravatar"],
       "react-modal": ["types/react-modal/react-modal"],

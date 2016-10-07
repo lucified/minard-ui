@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as FlipMove from 'react-flip-move';
 import * as Icon from 'react-fontawesome';
 import * as Waypoint from 'react-waypoint';
 
@@ -39,7 +40,9 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
 
   return (
     <section className={classNames(styles['commit-list'], 'container')}>
-      {commits.map((commit, i) => <CommitRow key={i} commit={commit} />)}
+      <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+        {commits.map((commit, i) => <CommitRow key={(commit && commit.id) || i} commit={commit} />)}
+      </FlipMove>
       {isLoading && <LoadingIcon className={styles.loading} center />}
       {!isLoading && !allLoaded && lastCommit && !isFetchError(lastCommit) &&
         <Waypoint
