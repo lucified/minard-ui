@@ -30,15 +30,13 @@ const validate = (values: FormData, props: Props) => {
 
   const { name, description } = values;
 
-  const existingProjectNames = props.existingProjects.map(project => project.name);
-
   if (!name) {
     errors.name = 'Required';
   } else if (!projectNameRegex.test(name)) {
     errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (name[0] === '-') {
     errors.name = 'Project name can\'t start with a hyphen';
-  } else if (existingProjectNames.indexOf(name) > -1) {
+  } else if (props.existingProjects.find(project => project.name === name)) {
     errors.name = 'Project name already exists';
   }
 
