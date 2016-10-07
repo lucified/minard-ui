@@ -1457,7 +1457,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.create, name, description)
+        call(api.Project.create, name, description, projectTemplate)
       );
     });
 
