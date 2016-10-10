@@ -52,6 +52,11 @@ class NewProjectDialog extends React.Component<Props, any> {
   }
 
   private onSuccessfulCreation(projectId: string) {
+    const intercom = (window as any).Intercom;
+    if (intercom) {
+      intercom('trackEvent', 'project-created');
+    }
+
     this.props.closeDialog();
     this.props.router.push(`/project/${projectId}`);
   }
