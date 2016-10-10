@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
 import * as React from 'react';
+import TimeAgo from 'react-timeago';
 
 import { Activity } from '../../../modules/activities';
 import { isSuccessful } from '../../../modules/deployments';
@@ -24,7 +24,7 @@ const ActivityGroup = (props: PassedProps) => {
   return (
     <div className={classNames('row', styles['activity-group'])}>
       <div className={classNames('col-xs-1', styles.timestamp)}>
-        {moment(firstActivity.timestamp).fromNow()}
+        <TimeAgo minPeriod={10} date={firstActivity.timestamp} />
       </div>
       <div className={classNames('col-xs-2', styles.screenshot)}>
         {isSuccessful(firstActivity.deployment) && (

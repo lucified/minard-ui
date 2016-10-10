@@ -1,5 +1,5 @@
-import * as moment from 'moment';
 import * as React from 'react';
+import TimeAgo from 'react-timeago';
 import * as Icon from 'react-fontawesome';
 
 import { Activity } from '../../../modules/activities';
@@ -28,7 +28,9 @@ const getCommentMetadata = (activity: Activity, comment?: any): JSX.Element | nu
     <span>
       <span className={styles.author}>{author.name || author.email}</span>
       {' · '}
-      <span className={styles.timestamp}>{moment(author.timestamp).fromNow()}</span>
+      <span className={styles.timestamp}>
+        <TimeAgo minPeriod={10} date={author.timestamp} />
+      </span>
     </span>
   );
 };

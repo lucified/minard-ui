@@ -1,8 +1,8 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
+import TimeAgo from 'react-timeago';
 
 import Commits from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
@@ -48,7 +48,7 @@ const getDeploymentSummary = (deployment?: Deployment) => {
             </span>
           </div>
           <div className={styles.timestamp}>
-            {moment(creator.timestamp).fromNow()}
+            <TimeAgo minPeriod={10} date={creator.timestamp} />
           </div>
         </div>
       </div>
