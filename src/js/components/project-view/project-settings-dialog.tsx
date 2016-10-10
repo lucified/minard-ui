@@ -67,7 +67,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
     .then(() => {
       const intercom = (window as any).Intercom;
       if (intercom) {
-        intercom('trackEvent', 'deleted-project');
+        intercom('trackEvent', 'project-deleted');
       }
 
       this.clearAndClose();
@@ -90,7 +90,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
   private editSuccess() {
     const intercom = (window as any).Intercom;
     if (intercom) {
-      intercom('trackEvent', 'edited-project');
+      intercom('trackEvent', 'project-edited');
     }
 
     this.clearAndClose();
