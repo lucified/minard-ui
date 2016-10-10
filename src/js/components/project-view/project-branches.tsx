@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as FlipMove from 'react-flip-move';
 
 import { Branch } from '../../modules/branches';
 import { FetchError, isFetchError } from '../../modules/errors';
@@ -26,58 +27,60 @@ const getEmptyContent = () => (
   </div>
 );
 
-const getBranches = (branches: (Branch | undefined)[]) => {
-  return branches.map((branch, i) => {
-    if (!branch) {
-      return <LoadingIcon center key={i} />;
+const getBranches = (branches: (Branch | undefined)[]) => (
+  <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+    {branches.map((branch, i) => branch ?
+      <BranchSummary key={branch.id} branch={branch} /> :
+      <LoadingIcon center key={i} />
+    )}
+  </FlipMove>
+);
+
+class ProjectBranches extends React.Component<Props, any> {
+  public render() {
+    const { branches, project, showAll, count = 3 } = this.props;
+    const title = showAll ? `All branches for ${project.name}` : 'Branches';
+
+    if (!branches) {
+      return (
+        <section className="container">
+          <SectionTitle><span>{title}</span></SectionTitle>
+          <LoadingIcon className={styles.loading} center />
+        </section>
+      );
     }
 
-    return <BranchSummary key={branch.id} branch={branch} />;
-  });
-};
+    const filteredBranches = (branches.filter(branch => !isFetchError(branch)) as (Branch | undefined)[])
+      .sort((a, b) => {
+        if (a === undefined) {
+          return -1;
+        }
 
-const ProjectBranches = ({ branches, project, showAll, count = 3 }: Props) => {
-  const title = showAll ? `All branches for ${project.name}` : 'Branches';
+        if (b === undefined) {
+          return 1;
+        }
 
-  if (!branches) {
+        return b.latestActivityTimestamp - a.latestActivityTimestamp;
+      });
+    const branchesToShow = showAll ? filteredBranches : filteredBranches.slice(0, count);
+    const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
+
     return (
       <section className="container">
         <SectionTitle><span>{title}</span></SectionTitle>
-        <LoadingIcon className={styles.loading} center />
+        {content}
+        {(!showAll && filteredBranches.length > count) && (
+          <div className="row end-xs">
+            <div className={classNames('col-xs-12', styles['show-all-branches-section'])}>
+              <MinardLink className={styles['show-all-branches-link']} showAll project={project}>
+                Show all branches ({filteredBranches.length})
+              </MinardLink>
+            </div>
+          </div>
+        )}
       </section>
     );
   }
-
-  const filteredBranches = (branches.filter(branch => !isFetchError(branch)) as (Branch | undefined)[])
-    .sort((a, b) => {
-      if (a === undefined) {
-        return -1;
-      }
-
-      if (b === undefined) {
-        return 1;
-      }
-
-      return b.latestActivityTimestamp - a.latestActivityTimestamp;
-    });
-  const branchesToShow = showAll ? filteredBranches : filteredBranches.slice(0, count);
-  const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
-
-  return (
-    <section className="container">
-      <SectionTitle><span>{title}</span></SectionTitle>
-      {content}
-      {(!showAll && filteredBranches.length > count) && (
-        <div className="row end-xs">
-          <div className={classNames('col-xs-12', styles['show-all-branches-section'])}>
-            <MinardLink className={styles['show-all-branches-link']} showAll project={project}>
-              Show all branches ({filteredBranches.length})
-            </MinardLink>
-          </div>
-        </div>
-      )}
-    </section>
-  );
-};
+}
 
 export default ProjectBranches;

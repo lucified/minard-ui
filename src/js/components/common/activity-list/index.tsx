@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as FlipMove from 'react-flip-move';
 import * as Waypoint from 'react-waypoint';
 
 import { Activity } from '../../../modules/activities';
@@ -41,34 +42,45 @@ const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
   return groupedActivities;
 };
 
-const ActivityList = (props: Props) => {
-  const { activities, emptyContentHeader, emptyContentBody } = props;
-  const { showProjectName, loadActivities, allLoaded, isLoading } = props;
+class ActivityList extends React.Component<Props, any> {
+  public render() {
+    const { activities, emptyContentHeader, emptyContentBody } = this.props;
+    const { showProjectName, loadActivities, allLoaded, isLoading } = this.props;
 
-  if (activities.length === 0) {
-    if (isLoading) {
-      return <LoadingActivityGroup />;
+    if (activities.length === 0) {
+      if (isLoading) {
+        return <LoadingActivityGroup />;
+      }
+
+      return getEmptyContent(emptyContentHeader, emptyContentBody);
     }
 
-    return getEmptyContent(emptyContentHeader, emptyContentBody);
+    const groupedActivities = generateDeploymentGroups(activities);
+
+    return (
+      <div>
+        <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+          {groupedActivities.map((activityGroup, i) => {
+            const firstActivity = activityGroup[0];
+            return (
+              <ActivityGroup
+                key={`${firstActivity.deployment}-${firstActivity.timestamp}`}
+                activities={activityGroup}
+                showProjectName={showProjectName}
+              />
+            );
+          })}
+        </FlipMove>
+        {isLoading && <LoadingActivityGroup />}
+        {!isLoading && !allLoaded &&
+          <Waypoint
+            bottomOffset="-200px" // Start loading new activities when the waypoint is 200px below the bottom edge
+            onEnter={() => { loadActivities(10, activities[activities.length - 1].timestamp); }}
+          />
+        }
+      </div>
+    );
   }
-
-  const groupedActivities = generateDeploymentGroups(activities);
-
-  return (
-    <div>
-      {groupedActivities.map((activityGroup, i) => // TODO: key should be a bit smarter
-        <ActivityGroup key={i} activities={activityGroup} showProjectName={showProjectName} />
-      )}
-      {isLoading && <LoadingActivityGroup />}
-      {!isLoading && !allLoaded &&
-        <Waypoint
-          bottomOffset="-200px" // Start loading new activities when the waypoint is 200px below the bottom edge
-          onEnter={() => { loadActivities(10, activities[activities.length - 1].timestamp); }}
-        />
-      }
-    </div>
-  );
-};
+}
 
 export default ActivityList;

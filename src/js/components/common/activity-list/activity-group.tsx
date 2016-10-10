@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as FlipMove from 'react-flip-move';
 import TimeAgo from 'react-timeago';
 
 import { Activity } from '../../../modules/activities';
@@ -17,42 +18,46 @@ interface PassedProps {
   showProjectName?: boolean;
 }
 
-const ActivityGroup = (props: PassedProps) => {
-  const { activities, showProjectName } = props;
-  const firstActivity = activities[0];
+class ActivityGroup extends React.Component<PassedProps, any> {
+  public render() {
+    const { activities, showProjectName } = this.props;
+    const firstActivity = activities[0];
 
-  return (
-    <div className={classNames('row', styles['activity-group'])}>
-      <div className={classNames('col-xs-1', styles.timestamp)}>
-        <TimeAgo minPeriod={10} date={firstActivity.timestamp} />
-      </div>
-      <div className={classNames('col-xs-2', styles.screenshot)}>
-        {isSuccessful(firstActivity.deployment) && (
-          <MinardLink deployment={firstActivity.deployment} openInNewWindow>
-            <DeploymentScreenshot deployment={firstActivity.deployment} />
-          </MinardLink>
-        )}
-      </div>
-      <div className={classNames('col-xs-9', styles['activity-content'])}>
-        <div>
-          <SingleActivity
-            activity={firstActivity}
-            showProjectName={showProjectName}
-          />
+    return (
+      <div className={classNames('row', styles['activity-group'])}>
+        <div className={classNames('col-xs-1', styles.timestamp)}>
+          <TimeAgo minPeriod={10} date={firstActivity.timestamp} />
         </div>
-        {activities.slice(1).map(activity =>
-          <div key={activity.id}>
-            <hr className={styles.line} />
+        <div className={classNames('col-xs-2', styles.screenshot)}>
+          {isSuccessful(firstActivity.deployment) && (
+            <MinardLink deployment={firstActivity.deployment} openInNewWindow>
+              <DeploymentScreenshot deployment={firstActivity.deployment} />
+            </MinardLink>
+          )}
+        </div>
+        <div className={classNames('col-xs-9', styles['activity-content'])}>
+          <div>
             <SingleActivity
-              activity={activity}
+              activity={firstActivity}
               showProjectName={showProjectName}
             />
           </div>
-        )}
+          <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+            {activities.slice(1).map(activity =>
+              <div key={activity.id}>
+                <hr className={styles.line} />
+                <SingleActivity
+                  activity={activity}
+                  showProjectName={showProjectName}
+                />
+              </div>
+            )}
+          </FlipMove>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default ActivityGroup;
 
