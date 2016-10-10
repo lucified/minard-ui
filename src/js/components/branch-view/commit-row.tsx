@@ -31,22 +31,18 @@ const getDeploymentScreenshot = (deployment?: Deployment) => {
 };
 
 const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
-  const content = (
-    <div className="row">
-      <div className="col-xs-2 end-xs">
-        {getDeploymentScreenshot(deployment)}
+  return (
+    <MinardLink deployment={deployment} openInNewWindow>
+      <div className="row">
+        <div className="col-xs-2 end-xs">
+          {getDeploymentScreenshot(deployment)}
+        </div>
+        <div className={classNames(styles['commit-container'], 'col-xs-10')}>
+          <SingleCommit className={styles.commit} commit={commit} deployment={deployment} />
+        </div>
       </div>
-      <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-        <SingleCommit className={styles.commit} commit={commit} deployment={deployment} />
-      </div>
-    </div>
+    </MinardLink>
   );
-
-  if (deployment) {
-    return <MinardLink deployment={deployment} openInNewWindow>{content}</MinardLink>;
-  }
-
-  return content;
 };
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {

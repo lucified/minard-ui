@@ -58,7 +58,7 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
         </div>
       </div>
       <div className={styles['build-status-outer']}>
-        <BuildStatus deployment={deployment} className={styles['build-status']} latest={false} />
+        <BuildStatus deployment={deployment} latest={false} />
       </div>
     </div>
   );
