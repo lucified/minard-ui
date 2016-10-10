@@ -2,7 +2,7 @@
 
 .box {
   border-radius: 3px;
-  padding: 2px 16px;
+  padding: 6px 16px;
 
   @include nitti-grotesk-medium;
   font-size: 14px;
@@ -21,4 +21,24 @@
 
 .building {
   background: #2EBDB1;
+}
+
+:global {
+  .build-status-enter {
+    opacity: 0.01;
+  }
+
+  .build-status-enter.build-status-enter-active {
+    opacity: 1;
+    transition: all 150ms;
+  }
+
+  .build-status-leave {
+    opacity: 1;
+  }
+
+  .build-status-leave.build-status-leave-active {
+    opacity: 0.01;
+    transition: all 150ms;
+  }
 }
