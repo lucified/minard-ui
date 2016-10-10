@@ -1,5 +1,35 @@
 @import '../../mixins';
 
+:global {
+  .ReactModal__Overlay {
+    opacity: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .ReactModal__Overlay--after-open {
+    opacity: 1;
+    transition: opacity 150ms ease-out;
+  }
+
+  .ReactModal__Overlay--before-close {
+    opacity: 0;
+  }
+
+  .ReactModal__Content {
+    // transform: scale(0.5) rotateX(-30deg);
+  }
+
+  .ReactModal__Content--after-open {
+    // transform: scale(1) rotateX(0deg);
+    // transition: all 150ms ease-in;
+  }
+
+  .ReactModal__Content--before-close {
+    // transform: scale(0.5) rotateX(30deg);
+  }
+}
+
 .dialog {
   z-index: 100;
   position: relative;
