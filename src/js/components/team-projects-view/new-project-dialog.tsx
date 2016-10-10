@@ -24,7 +24,7 @@ interface InjectedProps {
 
 interface GeneratedStateProps {
   isOpen: boolean;
-  existingProjectNames: string[];
+  existingProjects: Project[];
 }
 
 interface GeneratedDispatchProps {
@@ -57,7 +57,7 @@ class NewProjectDialog extends React.Component<Props, any> {
   }
 
   public render() {
-    const { isOpen, closeDialog, existingProjectNames } = this.props;
+    const { isOpen, closeDialog, existingProjects } = this.props;
 
     return (
       <ModalDialog
@@ -73,7 +73,7 @@ class NewProjectDialog extends React.Component<Props, any> {
           </div>
         </header>
         <NewProjectForm
-          existingProjectNames={existingProjectNames}
+          existingProjects={existingProjects}
           onSubmitSuccess={this.onSuccessfulCreation}
           closeDialog={closeDialog}
         />
@@ -84,9 +84,8 @@ class NewProjectDialog extends React.Component<Props, any> {
 
 const mapStateToProps = (state: StateTree) => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.NewProject),
-  existingProjectNames: Projects.selectors.getProjects(state)
-    .filter(projectOrError => !isFetchError(projectOrError))
-    .map(project => (project as Project).name),
+  existingProjects: Projects.selectors.getProjects(state)
+    .filter(projectOrError => !isFetchError(projectOrError)) as Project[],
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({

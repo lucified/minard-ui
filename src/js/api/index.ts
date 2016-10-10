@@ -138,13 +138,14 @@ const Deployment = {
 const Project = {
   fetchAll: (): ApiPromise => getApi(`/teams/${teamId}/relationships/projects`),
   fetch: (id: string): ApiPromise => getApi(`/projects/${id}`),
-  create: (name: string, description?: string): ApiPromise =>
+  create: (name: string, description?: string, projectTemplate?: string): ApiPromise =>
     postApi('/projects', {
       data: {
         type: 'projects',
         attributes: {
           name,
           description,
+          templateProjectId: projectTemplate,
         },
         relationships: {
           team: {
