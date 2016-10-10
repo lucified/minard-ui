@@ -10,9 +10,9 @@ const opts = {
   },
   baseUrl: (env) => {
     if (env === 'production') {
-      return 'https://minard.lucify.com/';
+      return 'https://minard.io/';
     }
-    return 'https://minard-staging.lucify.com/';
+    return 'https://staging.minard.io/';
   },
   publicPath: (env) => {
     if (env === 'production' || env === 'staging') {
