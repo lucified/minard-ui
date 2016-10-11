@@ -233,8 +233,15 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         branch.project,
         uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
       );
-      this.props.updateLatestActivityTimestampForProject(branch.project, commits[0].committer.timestamp);
-      this.props.updateLatestActivityTimestampForBranch(branch.id, commits[0].committer.timestamp);
+
+      const latestActivityTimestamp: number | undefined = commits[0] ?
+        commits[0].committer.timestamp :
+        branch.latestActivityTimestamp;
+
+      if (latestActivityTimestamp) {
+        this.props.updateLatestActivityTimestampForProject(branch.project, latestActivityTimestamp);
+        this.props.updateLatestActivityTimestampForBranch(branch.id, latestActivityTimestamp);
+      }
     } catch (e) {
       console.error('Error: Unable to parse Streaming API response for code pushed', e, event.data);
       if (Raven.isSetup()) {
