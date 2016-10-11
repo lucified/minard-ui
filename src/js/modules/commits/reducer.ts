@@ -43,14 +43,8 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         }
         return state;
       }
-      console.error('Trying to add deployment to commit that does not exist.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to add deployment to commit that does not exist.', { extra: { action, state } });
-        }
-      }
+
+      console.log('Trying to add deployment to commit that does not exist.', action); // tslint:disable-line
 
       return state;
     case STORE_COMMITS:

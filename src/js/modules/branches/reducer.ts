@@ -54,14 +54,8 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [commitsAction.id]: newBranch });
       }
 
-      console.error('Trying to save commits to branch that does not exist.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to save commits to branch that does not exist.', { extra: { action, state } });
-        }
-      }
+      console.log('Trying to save commits to branch that does not exist.', action); // tslint:disable-line
+
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH:
       const updateLatestDeployedAction = <t.UpdateLatestDeployedCommitAction> action;
@@ -78,17 +72,8 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return state;
       }
 
-      console.error('Trying to save deployed commit to branch that does not exist.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage(
-            'Trying to save deployed commit to branch that does not exist.',
-            { extra: { action, state } }
-          );
-        }
-      }
+      console.log('Trying to save deployed commit to branch that does not exist.', action); // tslint:disable-line
+
       return state;
     case REMOVE_BRANCH:
       const removeAction = <t.RemoveBranchAction> action;
@@ -97,14 +82,8 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return omit<t.BranchState, t.BranchState>(state, id);
       }
 
-      console.error('Trying to remove a branch that does not exist.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to remove a branch that does not exist.', { extra: { action, state } });
-        }
-      }
+      console.log('Trying to remove a branch that does not exist.', action); // tslint:disable-line
+
       return state;
     case STORE_COMMITS_TO_BRANCH:
       const storeCommitsAction = <t.StoreCommitsToBranchAction> action;
@@ -136,14 +115,8 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: newBranch });
       }
 
-      console.error('Trying to add commits to a branch that does not exist.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to add commits to a branch that does not exist.', { extra: { action, state } });
-        }
-      }
+      console.log('Trying to add commits to a branch that does not exist.', action); // tslint:disable-line
+
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH:
       const updateActivityTimestampAction = <t.UpdateLatestActivityTimestampAction> action;
@@ -158,14 +131,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         }
       }
 
-      console.error('Trying to update timestamp on nonexistant branch.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to update timestamp on nonexistant branch.', { extra: { action, state } });
-        }
-      }
+      console.log('Trying to update timestamp on nonexistant branch.', action); // tslint:disable-line
 
       return state;
     case STORE_BRANCHES:
