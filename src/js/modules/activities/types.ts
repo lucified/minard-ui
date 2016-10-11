@@ -16,6 +16,7 @@ export interface Activity {
     id: string;
     hash: string;
     message: string;
+    description?: string;
     author: {
       name?: string;
       email: string;

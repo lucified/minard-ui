@@ -34,6 +34,18 @@ const toConvertedArray = <InputType, OutputType>(converter: (response: InputType
     })) as OutputType[];
   };
 
+const splitCommitMessage = (rawMessage: string): { message: string, description?: string } => {
+  const commitMessageLines = rawMessage.match(/[^\r\n]+/g);
+  const message = commitMessageLines ? commitMessageLines[0] : '';
+  const description = commitMessageLines && commitMessageLines.length > 1 ?
+    commitMessageLines.slice(1).join('\n') : undefined;
+
+  return {
+    message,
+    description,
+  };
+};
+
 // Projects
 const createProjectObject = (project: t.ResponseProjectElement): Project => {
   const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = project.relationships &&
@@ -77,6 +89,7 @@ const toActivityType = (activityString: string): ActivityType => {
 const createActivityObject = (activity: t.ResponseActivityElement): Activity => {
   const commit = activity.attributes.commit;
   const deployment = activity.attributes.deployment;
+  const { message, description } = splitCommitMessage(commit.message);
 
   return {
     id: activity.id,
@@ -86,7 +99,8 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
     commit: {
       id: commit.id,
       hash: commit.hash,
-      message: commit.message,
+      message,
+      description,
       author: {
         name: commit.author.name,
         email: commit.author.email,
@@ -170,10 +184,7 @@ export const toBranches = toConvertedArray(createBranchObject);
 
 // Commits
 const createCommitObject = (commit: t.ResponseCommitElement): Commit => {
-  const commitMessageLines = commit.attributes.message.match(/[^\r\n]+/g);
-  const commitMessage = commitMessageLines ? commitMessageLines[0] : '';
-  const commitDescription = commitMessageLines && commitMessageLines.length > 1 ?
-    commitMessageLines.slice(1).join('\n') : undefined;
+  const { message, description } = splitCommitMessage(commit.attributes.message);
   const deployments = commit.relationships && commit.relationships.deployments;
   const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
   const committer = commit.attributes.committer;
@@ -181,8 +192,8 @@ const createCommitObject = (commit: t.ResponseCommitElement): Commit => {
   return {
     id: commit.id,
     hash: commit.attributes.hash,
-    message: commitMessage,
-    description: commitDescription,
+    message,
+    description,
     deployment: latestDeployment,
     committer: {
       name: committer.name,
