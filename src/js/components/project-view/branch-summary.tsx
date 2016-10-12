@@ -60,11 +60,13 @@ const BranchSummary = (props: PassedProps & GeneratedProps) => {
         </MinardLink>
       </div>
       <div className={classNames('col-xs-10', styles['activity-content'])}>
-        <MinardLink branch={branch}>
-          <div className={styles.header}>
+        <div className={styles.header}>
+          <MinardLink branch={branch}>
             <div className={styles.title}>{branch.name}</div>
-            <BuildStatus className={styles['build-status']} deployment={deploymentForLatestCommit} latest={true} />
-          </div>
+          </MinardLink>
+          <BuildStatus className={styles['build-status']} deployment={deploymentForLatestCommit} latest={true} />
+        </div>
+        <MinardLink branch={branch}>
           <div className={styles.description}>{branch.description}</div>
         </MinardLink>
         <hr className={styles.line} />

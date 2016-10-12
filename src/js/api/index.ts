@@ -11,7 +11,9 @@ if (!process.env.CHARLES) {
 let host: string = process.env.CHARLES;
 // Remove trailing /
 host = host.replace(/\/$/, '');
-host = `${host}/api`;
+
+export const getBuildLogURL = (deploymentId: string): string =>
+  `${host}/ci/deployments/${deploymentId}/trace`;
 
 const defaultOptions = {
   credentials: 'same-origin',
@@ -100,7 +102,7 @@ const Activity = {
       query.until = moment(until).toISOString();
     }
 
-    return getApi('/activity', query);
+    return getApi('/api/activity', query);
   },
   fetchAllForProject: (id: string, count: number, until?: number): ApiPromise => {
     const query: any = { count, filter: `project[${id}]` };
@@ -109,17 +111,17 @@ const Activity = {
       query.until = moment(until).toISOString();
     }
 
-    return getApi('/activity', query);
+    return getApi('/api/activity', query);
   },
 };
 
 const Branch = {
-  fetch: (id: string): ApiPromise => getApi(`/branches/${id}`),
-  fetchForProject: (id: string): ApiPromise => getApi(`/projects/${id}/relationships/branches`),
+  fetch: (id: string): ApiPromise => getApi(`/api/branches/${id}`),
+  fetchForProject: (id: string): ApiPromise => getApi(`/api/projects/${id}/relationships/branches`),
 };
 
 const Commit = {
-  fetch: (id: string): ApiPromise => getApi(`/commits/${id}`),
+  fetch: (id: string): ApiPromise => getApi(`/api/commits/${id}`),
   fetchForBranch: (id: string, count: number, until?: number): ApiPromise => {
     const query: any = { count };
 
@@ -127,19 +129,19 @@ const Commit = {
       query.until = moment(until).toISOString();
     }
 
-    return getApi(`/branches/${id}/relationships/commits`, query);
+    return getApi(`/api/branches/${id}/relationships/commits`, query);
   },
 };
 
 const Deployment = {
-  fetch: (id: string): ApiPromise => getApi(`/deployments/${id}`),
+  fetch: (id: string): ApiPromise => getApi(`/api/deployments/${id}`),
 };
 
 const Project = {
-  fetchAll: (): ApiPromise => getApi(`/teams/${teamId}/relationships/projects`),
-  fetch: (id: string): ApiPromise => getApi(`/projects/${id}`),
+  fetchAll: (): ApiPromise => getApi(`/api/teams/${teamId}/relationships/projects`),
+  fetch: (id: string): ApiPromise => getApi(`/api/projects/${id}`),
   create: (name: string, description?: string, projectTemplate?: string): ApiPromise =>
-    postApi('/projects', {
+    postApi('/api/projects', {
       data: {
         type: 'projects',
         attributes: {
@@ -158,14 +160,14 @@ const Project = {
       },
     }),
   edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
-    patchApi(`/projects/${id}`, {
+    patchApi(`/api/projects/${id}`, {
       data: {
         type: 'projects',
         id,
         attributes: newAttributes,
       },
     }),
-  delete: (id: string): ApiPromise => deleteApi(`/projects/${id}`),
+  delete: (id: string): ApiPromise => deleteApi(`/api/projects/${id}`),
 };
 
 const API: Api = {
