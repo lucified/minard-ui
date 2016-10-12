@@ -13,6 +13,17 @@
   <link rel="canonical" href="{{{htmlWebpackPlugin.options.url}}}" />
   {{/if}}
 
+  {{#if htmlWebpackPlugin.options.icon}}
+
+    {{#if htmlWebpackPlugin.options.touchIcon}}
+      <!-- Touch Icons - iOS and Android 2.1+ 180x180 pixels in size. -->
+      <link rel="apple-touch-icon-precomposed" href="{{{touchicon}}}">
+    {{/if}}
+
+    <!-- Firefox, Chrome, Safari, IE 11+ and Opera. 196x196 pixels in size. -->
+    <link rel="icon" href="{{{favicon}}}">
+
+  {{/if}}
 
   {{#if htmlWebpackPlugin.options.description}}
     <meta name="description" content="{{{htmlWebpackPlugin.options.description}}}" />
