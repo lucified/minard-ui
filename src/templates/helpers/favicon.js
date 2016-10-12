@@ -1,3 +1,3 @@
 module.exports = function favicon() {
-  return require('../../images/minard-icon-196.png'); //eslint-disable-line
+  return require('../../images/favicon-192x192.png'); //eslint-disable-line
 };

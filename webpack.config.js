@@ -92,8 +92,7 @@ const htmlWebpackPluginConfig = {
   googleAnalytics: (deployConfig.env === 'production'),
   googleAnalyticsSendPageView: (deployConfig.env === 'production'),
   enableIntercom: (deployConfig.env === 'production'),
-  icon: true,
-  touchIcon: true,
+  icons: true,
   files: {
     css: ['bundled.css'],
   },
