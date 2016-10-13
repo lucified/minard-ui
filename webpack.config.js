@@ -49,7 +49,7 @@ const loaders = [
   },
   {
     test: /\.hbs$/,
-    loader: 'handlebars-loader',
+    loader: `handlebars-loader?helperDirs[]=${__dirname}/src/templates/helpers`,
   },
   {
     test: /\.scss$/,
@@ -92,6 +92,7 @@ const htmlWebpackPluginConfig = {
   googleAnalytics: (deployConfig.env === 'production'),
   googleAnalyticsSendPageView: (deployConfig.env === 'production'),
   enableIntercom: (deployConfig.env === 'production'),
+  icons: true,
   files: {
     css: ['bundled.css'],
   },
