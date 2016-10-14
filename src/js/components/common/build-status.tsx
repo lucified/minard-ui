@@ -7,6 +7,10 @@ import * as Icon from 'react-fontawesome';
 import { Deployment, DeploymentStatus } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 
+const getBuildLogURL = process.env.CHARLES ?
+  require('../../api').getBuildLogURL :
+  require('../../api/static-json').getBuildLogURL;
+
 const styles = require('./build-status.scss');
 
 interface PassedProps {
@@ -25,27 +29,33 @@ const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
         break;
       case DeploymentStatus.Canceled:
         content = (
-          <span key="canceled" className={classNames(styles.box, styles.error)}>
-            <Icon name="times" className={styles.icon} />
-            {latest ? <span>Latest build canceled</span> : <span>Build canceled</span>}
-          </span>
+          <a href={getBuildLogURL(deployment.id)} target="_blank">
+            <span key="canceled" className={classNames(styles.box, styles.error)}>
+              <Icon name="times" className={styles.icon} />
+              {latest ? <span>Latest build canceled</span> : <span>Build canceled</span>}
+            </span>
+          </a>
         );
         break;
       case DeploymentStatus.Failed:
         content = (
-          <span key="failed" className={classNames(styles.box, styles.error)}>
-            <Icon name="times" className={styles.icon} />
-            {latest ? <span>Latest build failed</span> : <span>Build failed</span>}
-          </span>
+          <a href={getBuildLogURL(deployment.id)} target="_blank">
+            <span key="failed" className={classNames(styles.box, styles.error)}>
+              <Icon name="times" className={styles.icon} />
+              {latest ? <span>Latest build failed</span> : <span>Build failed</span>}
+            </span>
+          </a>
         );
         break;
       case DeploymentStatus.Pending:
       case DeploymentStatus.Running:
         content = (
-          <span key="running" className={classNames(styles.box, styles.building)}>
-            <Icon name="circle-o-notch" spin className={styles.icon} />
-            Generating preview
-          </span>
+          <a href={getBuildLogURL(deployment.id)} target="_blank">
+            <span key="running" className={classNames(styles.box, styles.building)}>
+              <Icon name="circle-o-notch" spin className={styles.icon} />
+              Generating preview
+            </span>
+          </a>
         );
         break;
       default:

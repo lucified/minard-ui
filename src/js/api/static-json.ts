@@ -4,6 +4,8 @@ import { Api, ApiPromise } from './types';
 
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
+export const getBuildLogURL = (deploymentId: string): string => '#';
+
 const activitiesJSON = require('file!../../../json/activities.json');
 const allProjectsJSON = require('file!../../../json/projects.json');
 const projectJSON: { [id: string]: string } = {
