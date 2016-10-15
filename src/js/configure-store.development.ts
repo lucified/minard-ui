@@ -4,18 +4,16 @@ import createSagaMiddleware, { END } from 'redux-saga';
 import rootReducer from './reducers';
 
 declare var module: { hot: any }; // An ugly hack
-declare var window: { devToolsExtension: any };
+declare var window: { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
 
 function configureStore(initialState: Object) {
   const sagaMiddleware = createSagaMiddleware();
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const store = createStore(
     rootReducer,
     initialState,
-    compose(
-      applyMiddleware(sagaMiddleware),
-      window.devToolsExtension ? window.devToolsExtension() : (f: any) => f
-    )
+    composeEnhancers(applyMiddleware(sagaMiddleware))
   );
 
   if (module.hot) {
