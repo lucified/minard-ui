@@ -3,6 +3,7 @@ import * as React from 'react';
 // import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
+import { teamName } from '../api/team-id';
 import { FetchError, isFetchError } from '../modules/errors';
 import Projects, { Project } from '../modules/projects';
 import Selected from '../modules/selected';
@@ -101,7 +102,7 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   return {
     openPageType,
     project,
-    teamName: 'Team Lucify', // TODO: use actual team name
+    teamName,
   };
 };
 

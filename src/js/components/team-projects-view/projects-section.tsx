@@ -4,6 +4,7 @@ import * as FlipMove from 'react-flip-move';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
+import { teamName } from '../../api/team-id';
 import { FetchError, isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import { Project } from '../../modules/projects';
@@ -53,7 +54,7 @@ class ProjectsSection extends React.Component<Props, any> {
           )}
         >
           <span>
-            {showAll ? 'All' : 'Latest'} projects for <span className={styles.team}>Team Lucify</span>
+            {showAll ? 'All' : 'Latest'} projects for <span className={styles.team}>{teamName}</span>
           </span>
         </SectionTitle>
         <FlipMove className="row center-xs start-sm" enterAnimation="elevator" leaveAnimation="elevator">
