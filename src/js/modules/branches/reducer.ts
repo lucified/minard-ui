@@ -1,5 +1,4 @@
-import * as omit from 'lodash/omit';
-import * as uniq from 'lodash/uniq';
+import { omit, uniq, xor } from 'lodash';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
@@ -45,13 +44,18 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       const commitsAction = <t.AddCommitsToBranchAction> action;
       branch = state[commitsAction.id];
       if (branch && !isFetchError(branch)) {
-        // Note: the commits list might not be sorted by time now
-        const newCommitsList = uniq(branch.commits.concat(commitsAction.commits));
-        const newBranch = Object.assign({}, branch, {
-          commits: newCommitsList,
-          allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
-        });
-        return Object.assign({}, state, { [commitsAction.id]: newBranch });
+        // Note: we assume we always get older commits, sorted by time in reverse
+
+        if (xor(branch.commits, commitsAction.commits).length > 0) {
+          const newCommitsList = uniq(branch.commits.concat(commitsAction.commits));
+          const newBranch = Object.assign({}, branch, {
+            commits: newCommitsList,
+            allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
+          });
+          return Object.assign({}, state, { [commitsAction.id]: newBranch });
+        }
+
+        return state;
       }
 
       console.log('Trying to save commits to branch that does not exist.', action); // tslint:disable-line
@@ -140,12 +144,6 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       if (branches && branches.length > 0) {
         const newBranchesObject: t.BranchState =
           branches.reduce<t.BranchState>((obj: t.BranchState, newBranch: t.Branch) => {
-            // If existing branch has commits, merge these
-            const existingBranch = state[newBranch.id];
-            if (existingBranch && !isFetchError(existingBranch) && existingBranch.commits.length > 0) {
-              newBranch.commits = uniq(newBranch.commits.concat(existingBranch.commits));
-            }
-
             return Object.assign(obj, { [newBranch.id]: newBranch });
           }, {});
 
