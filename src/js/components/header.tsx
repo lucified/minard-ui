@@ -1,15 +1,16 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
+// import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+import { teamName } from '../api/team-id';
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Selected from '../modules/selected';
 import Streaming, { ConnectionState } from '../modules/streaming';
 import { StateTree } from '../reducers';
 
-import Avatar from './common/avatar';
+// import Avatar from './common/avatar';
 
 const styles = require('./header.scss');
 const errorImage = require('../../images/icon-no-network.svg');
@@ -91,12 +92,10 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => {
             <h1 title="Minard" className={styles.minard}>m</h1>
           </div>
           <div className={classNames(styles['profile-container'], 'col-xs')}>
-            <a className={styles['team-dropdown']} href="#">
-              Team Lucify <Icon className={styles.caret} name="caret-down" />
-            </a>
-            <a href="#">
-              <Avatar size="lg" email="ville.saarinen@gmail.com" />
-            </a>
+            <span className={styles['team-dropdown']}>
+              {teamName /* TODO: add link and <Icon className={styles.caret} name="caret-down" /> */}
+            </span>
+            {/* TODO: <Avatar size="lg" email="ville.saarinen@gmail.com" />*/}
           </div>
         </div>
       </div>
