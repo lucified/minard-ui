@@ -4,7 +4,7 @@ import { SubmissionError } from 'redux-form';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../src/js/api/convert';
-import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
+import { Api, ApiEntity, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
 import Activities from '../src/js/modules/activities';
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
@@ -94,7 +94,7 @@ describe('sagas', () => {
     name: string,
     loader: (action: any) => IterableIterator<Effect>,
     selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError | undefined,
-    fetcher: (id: string) => IterableIterator<Effect>,
+    fetcher: (id: string) => IterableIterator<Effect | Effect[]>,
     ensurer: (id: string) => IterableIterator<Effect | Effect[]>,
   ) => {
     describe(name, () => {
@@ -450,7 +450,7 @@ describe('sagas', () => {
     response: ApiResponse,
     responseNoInclude: ApiResponse,
     requestActionCreators: FetchEntityActionCreators,
-    fetcher: (id: string, ...args: ApiParams[]) => IterableIterator<Effect>,
+    fetcher: (id: string, ...args: ApiParams[]) => IterableIterator<Effect | Effect[]>,
     apiCall: (id: string) => ApiPromise,
     converter: (responseEntities: any[]) => any[],
     storeActionCreator: (entities: any[]) => StoreAction,
@@ -917,11 +917,48 @@ describe('sagas', () => {
     const id = 'id';
 
     it('fetches, converts and stores commits', () => {
-      const response = { data: testData.branchCommitsResponse.data };
+      const response = { data: <ApiEntity[]> testData.branchCommitsResponse.data };
       const count = 10;
       const until = undefined;
       const iterator = sagas.fetchCommitsForBranch(id, count, until);
-      const objects = [{ id: '1' }, { id: '2' }, { id: '3' }];
+      const objects = [
+        {
+          id: 'aacceeff02',
+          committer: {
+            timestamp: 6,
+          },
+        },
+        {
+          id: '12354124',
+          committer: {
+            timestamp: 5,
+          },
+        },
+        {
+          id: '2543452',
+          committer: {
+            timestamp: 4,
+          },
+        },
+        {
+          id: '29832572fc1',
+          committer: {
+            timestamp: 2,
+          },
+        },
+        {
+          id: '098325343',
+          committer: {
+            timestamp: 3,
+          },
+        },
+        {
+          id: '29752a385',
+          committer: {
+            timestamp: 1,
+          },
+        },
+      ];
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id))
@@ -940,10 +977,18 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Branches.actions.addCommitsToBranch(
+        select(Branches.selectors.getBranch, id)
+      );
+
+      expect(iterator.next().value).to.deep.equal(
+        response.data.map(obj => select(Commits.selectors.getCommit, obj.id))
+      );
+
+      expect(iterator.next(objects).value).to.deep.equal(
+        put(Branches.actions.replaceCommitsInBranch(
           id,
           ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
-          count,
+          true,
         ))
       );
 
@@ -1346,7 +1391,7 @@ describe('sagas', () => {
     const testFetchIfMissing = (
       type: ApiEntityTypeString,
       selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError | undefined,
-      fetcher: (id: string) => IterableIterator<Effect>,
+      fetcher: (id: string) => IterableIterator<Effect | Effect[]>,
     ) => {
       it(`fetches missing ${type}`, () => {
         const id = '1';

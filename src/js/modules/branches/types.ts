@@ -33,10 +33,10 @@ export interface LoadBranchesForProjectAction extends Action {
 }
 
 // ADD_COMMITS_TO_BRANCH
-export interface AddCommitsToBranchAction extends Action {
+export interface ReplaceCommitsInBranchAction extends Action {
   id: string;
   commits: string[];
-  requestedCount: number;
+  allCommitsLoaded: boolean;
 }
 
 // STORE_BRANCHES

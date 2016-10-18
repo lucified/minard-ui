@@ -25,7 +25,7 @@ interface StoreEntityAction extends Action {
 
 export const createLoader = (
   selector: (state: StateTree, id: string) => SelectorResponse,
-  fetcher: (id: string) => IterableIterator<Effect>,
+  fetcher: (id: string) => IterableIterator<Effect | Effect[]>,
   dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>
 ) => {
   return function* (action: LoadEntityAction): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
@@ -48,9 +48,9 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
   apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise,
-  postStoreEffects?: (id: string, response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
+  postStoreEffects?: (id: string, response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect | Effect[]>,
 ) => {
-  return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
+  return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect | Effect[]> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
     const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =

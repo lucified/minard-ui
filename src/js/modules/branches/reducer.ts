@@ -1,13 +1,12 @@
-import * as omit from 'lodash/omit';
-import * as uniq from 'lodash/uniq';
+import { omit, uniq, xor } from 'lodash';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 
 import {
-  ADD_COMMITS_TO_BRANCH,
   REMOVE_BRANCH,
+  REPLACE_COMMITS_IN_BRANCH,
   STORE_BRANCHES,
   STORE_COMMITS_TO_BRANCH,
   UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH,
@@ -41,17 +40,21 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       return state;
-    case ADD_COMMITS_TO_BRANCH:
-      const commitsAction = <t.AddCommitsToBranchAction> action;
+    case REPLACE_COMMITS_IN_BRANCH:
+      // We expect the commit list that is passed here to be sorted
+      const commitsAction = <t.ReplaceCommitsInBranchAction> action;
       branch = state[commitsAction.id];
       if (branch && !isFetchError(branch)) {
-        // Note: the commits list might not be sorted by time now
-        const newCommitsList = uniq(branch.commits.concat(commitsAction.commits));
-        const newBranch = Object.assign({}, branch, {
-          commits: newCommitsList,
-          allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
-        });
-        return Object.assign({}, state, { [commitsAction.id]: newBranch });
+        const { commits: newCommitIds, allCommitsLoaded } = commitsAction;
+        if (xor(newCommitIds, branch.commits).length > 0) {
+          const newBranch = Object.assign({}, branch, {
+            commits: newCommitIds,
+            allCommitsLoaded,
+          });
+          return Object.assign({}, state, { [commitsAction.id]: newBranch });
+        }
+
+        return state;
       }
 
       console.log('Trying to save commits to branch that does not exist.', action); // tslint:disable-line
