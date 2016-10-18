@@ -1,4 +1,4 @@
-import { compact, uniq } from 'lodash';
+import { compact, union, uniq } from 'lodash';
 import { SubmissionError } from 'redux-form';
 import { delay, takeEvery, takeLatest } from 'redux-saga';
 import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
@@ -307,9 +307,36 @@ export default function createSagas(api: Api) {
     addCommitsToBranch,
   );
 
-  function* addCommitsToBranch(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
-    const commitIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
-    yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));
+  function* addCommitsToBranch(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect | Effect[]> {
+    let existingCommitIds: string[] = [];
+    let existingCommits: (Commit | FetchError)[] = [];
+
+    const branch = <Branch | undefined | FetchError> (yield select(Branches.selectors.getBranch, id));
+    if (branch && !isFetchError(branch)) {
+      existingCommitIds = branch.commits;
+      const possiblyCommits = <(Commit | FetchError | undefined)[]> (yield existingCommitIds.map(commitId => select(Commits.selectors.getCommit, commitId)));
+      existingCommits = <(Commit | FetchError)[]>possiblyCommits.filter(possiblyUndefined => !!possiblyUndefined);
+    }
+
+    const newCommitIds = (<ApiEntity[]> response.data).map((apiCommit: any) => <string> apiCommit.id);
+    const possiblyNewCommits = <(Commit | FetchError | undefined)[]> (yield newCommitIds.map(commitId => select(Commits.selectors.getCommit, commitId)));
+    const newCommits = <(Commit | FetchError)[]>possiblyNewCommits.filter(possiblyUndefined => !!possiblyUndefined);
+    const allCommitsLoaded = newCommitIds.length < count;
+    const sortedCommitIdsWithFetchErrorsAtTheEnd = newCommits.concat(existingCommits).sort((a, b) => {
+      // Move fetch errors to the end
+      if (isFetchError(a)) {
+        return -1;
+      }
+
+      if (isFetchError(b)) {
+        return 1;
+      }
+
+      return b.committer.timestamp - a.committer.timestamp;
+    }).map((commitOrFetchError: any) => commitOrFetchError.id);
+    const sortedCommitIdsWithUndefinedsAtTheEnd = union<string>(sortedCommitIdsWithFetchErrorsAtTheEnd, newCommitIds, existingCommitIds);
+
+    yield put(Branches.actions.replaceCommitsInBranch(id, sortedCommitIdsWithUndefinedsAtTheEnd, allCommitsLoaded));
   }
 
   function* ensureCommitsForBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
