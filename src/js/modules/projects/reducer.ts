@@ -227,25 +227,27 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       id = removeBranchAction.id;
       project = state[id];
 
-      if (project && !isFetchError(project) && project.branches && !isFetchError(project.branches)) {
-        const { branch } = removeBranchAction;
-        if (project.branches.indexOf(branch) > -1) {
-          const newProject = Object.assign({}, project, {
-            branches: project.branches.filter(branchId => branchId !== branch),
-          });
-          return Object.assign({}, state, { [id]: newProject });
+      if (project && !isFetchError(project)) {
+        if (project.branches && !isFetchError(project.branches)) {
+          const { branch } = removeBranchAction;
+          if (project.branches.indexOf(branch) > -1) {
+            const newProject = Object.assign({}, project, {
+              branches: project.branches.filter(branchId => branchId !== branch),
+            });
+            return Object.assign({}, state, { [id]: newProject });
+          }
         }
 
         return state;
       }
 
-      console.error('Trying to remove branch from nonexistant project or project branches.'); // tslint:disable-line
+      console.error('Trying to remove branch from nonexistant project.');
       // We need to not load 'raven-js' when running tests
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
           Raven.captureMessage(
-            'Trying to remove branch from nonexistant project or project branches.',
+            'Trying to remove branch from nonexistant project.',
             { extra: { action, state } },
           );
         }
