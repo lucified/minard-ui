@@ -144,15 +144,6 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
     latestCommitObject.data &&
     latestCommitObject.data.id;
 
-  const commits: string[] = [];
-  // Make sure latestSuccessfullyDeployedCommit and latestCommit are included in the list
-  if (latestCommit) {
-    commits.push(latestCommit);
-  }
-  if (latestSuccessfullyDeployedCommit && latestSuccessfullyDeployedCommit !== latestCommit) {
-    commits.push(latestSuccessfullyDeployedCommit);
-  }
-
   const latestActivityTimestampString = branch.attributes['latest-activity-timestamp'];
   let latestActivityTimestamp: number | undefined;
 
@@ -173,8 +164,8 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
     project: branch.relationships.project.data.id,
     buildErrors: errors,
     latestActivityTimestamp,
-    commits,
-    allCommitsLoaded: commits.length === 0,
+    commits: [],
+    allCommitsLoaded: !latestCommit,
     latestCommit,
     latestSuccessfullyDeployedCommit,
   };
