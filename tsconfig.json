@@ -19,6 +19,7 @@
       "react-gravatar": ["types/react-gravatar"],
       "react-modal": ["types/react-modal/react-modal"],
       "react-timeago": ["types/react-timeago"],
+      "react-truncate": ["types/react-truncate"],
       "react-waypoint": ["types/react-waypoint"],
       "redux-form": ["types/redux-form"]
     }

@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
+import * as Truncate from 'react-truncate';
 
 import Commits from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
@@ -82,7 +83,11 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
             )}
           </div>
           <h3 className={styles.title}>{project.name}</h3>
-          <p className={styles.description}>{project.description}</p>
+          <p className={styles.description}>
+            <Truncate lines={3}>
+              {project.description}
+            </Truncate>
+          </p>
         </div>
       </MinardLink>
       {deploymentSummary ? (
