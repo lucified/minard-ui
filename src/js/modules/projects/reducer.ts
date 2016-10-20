@@ -92,14 +92,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return omit<t.ProjectState, t.ProjectState>(state, id);
       }
 
-      console.error('Trying to remove a project that does not exist.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to remove a project that does not exist.', { extra: { action, state } });
-        }
-      }
+      console.log('Tried to remove a project that does not exist.'); // tslint:disable-line
 
       return state;
     case UPDATE_PROJECT:
