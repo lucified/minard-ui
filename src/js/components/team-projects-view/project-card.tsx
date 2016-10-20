@@ -13,6 +13,8 @@ import { StateTree } from '../../reducers';
 import Avatar from '../common/avatar';
 import MinardLink from '../common/minard-link';
 
+const Truncate = require('react-truncate');
+
 const styles = require('./project-card.scss');
 const noScreenshot = require('../../../images/no-screenshot.png');
 
@@ -82,7 +84,11 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
             )}
           </div>
           <h3 className={styles.title}>{project.name}</h3>
-          <p className={styles.description}>{project.description}</p>
+          <p className={styles.description}>
+            <Truncate lines={3}>
+              {project.description}
+            </Truncate>
+          </p>
         </div>
       </MinardLink>
       {deploymentSummary ? (
