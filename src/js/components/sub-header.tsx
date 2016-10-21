@@ -81,9 +81,9 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   let project: Project | FetchError | undefined;
 
   if (selectedProject !== null) {
+    project = Projects.selectors.getProject(state, selectedProject);
     if (selectedBranch !== null) {
       openPageType = PageType.BranchView;
-      project = Projects.selectors.getProject(state, selectedProject);
     } else {
       if (isShowingAll) {
         openPageType = PageType.BranchesList;
