@@ -149,7 +149,7 @@ export default function createSagas(api: Api) {
       project = projectOrId;
     }
 
-    if (!project) {
+    if (project) {
       throw new Error('No project found!');
     }
 
@@ -157,12 +157,12 @@ export default function createSagas(api: Api) {
       throw new Error('Unable to fetch project!');
     }
 
-    if (project.latestSuccessfullyDeployedCommit) {
+    /*if (project.latestSuccessfullyDeployedCommit) {
       const commit = <Commit | FetchError | undefined> (yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit));
       if (commit && !isFetchError(commit) && commit.deployment) {
         yield call(fetchIfMissing, 'deployments', commit.deployment);
       }
-    }
+    }*/
   }
 
   // BRANCH
