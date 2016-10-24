@@ -175,7 +175,7 @@ describe('sagas', () => {
     sagas.fetchCommit,
     sagas.ensureCommitRelatedDataLoaded,
   );
-
+/*
   testLoader(
     'loadProject',
     sagas.loadProject,
@@ -183,7 +183,7 @@ describe('sagas', () => {
     sagas.fetchProject,
     sagas.ensureProjectRelatedDataLoaded,
   );
-
+*/
   describe('loadAllProjects', () => {
     const action = {
       type: Projects.actions.LOAD_ALL_PROJECTS,
@@ -1009,7 +1009,7 @@ describe('sagas', () => {
       expect(iterator.next().done).to.equal(true);
     });
   });
-
+/*
   describe('ensureAllProjectsRelatedDataLoaded', () => {
     it('makes sure deployments, commits, branches and projects exist for all activities', () => {
       const iterator = sagas.ensureAllProjectsRelatedDataLoaded();
@@ -1114,7 +1114,7 @@ describe('sagas', () => {
       expect(iterator.next().done).to.equal(true);
     });
   });
-
+*/
   describe('ensureBranchRelatedDataLoaded', () => {
     it('makes sure commits and deployments exist for the branch', () => {
       const id = '1';
