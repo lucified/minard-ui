@@ -38,7 +38,18 @@ export const createLoader = (
     }
 
     if (existingEntity || fetchSucceeded) {
-      yield fork(dataEnsurer, id);
+      try {
+        yield fork(dataEnsurer, id);
+      } catch (e) {
+        console.error('Error ensuring data exists:', e);
+        // We need to not load 'raven-js' when running tests
+        if (typeof window !== 'undefined') {
+          const Raven = require('raven-js');
+          if (Raven.isSetup()) {
+            Raven.captureException(e, { extra: { action } });
+          }
+        }
+      }
     }
   };
 };
@@ -57,20 +68,33 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
       yield call(apiFetchFunction, id, ...args);
 
     if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
-      }
+      try {
+        if (response.included) {
+          yield call(storeIncludedEntities, response.included);
+        }
 
-      const entities = yield call(converter, response.data);
-      if (entities && entities.length > 0) {
-        yield put(storeEntitiesActionCreator(entities));
-      }
+        const entities = yield call(converter, response.data);
+        if (entities && entities.length > 0) {
+          yield put(storeEntitiesActionCreator(entities));
+        }
 
-      if (postStoreEffects) {
-        yield* postStoreEffects(id, response, ...args);
-      }
+        if (postStoreEffects) {
+          yield* postStoreEffects(id, response, ...args);
+        }
 
-      yield put(requestActionCreators.SUCCESS.actionCreator(id));
+        yield put(requestActionCreators.SUCCESS.actionCreator(id));
+      } catch (e) {
+        console.error('Error storing new project', e);
+        // We need to not load 'raven-js' when running tests
+        if (typeof window !== 'undefined') {
+          const Raven = require('raven-js');
+          if (Raven.isSetup()) {
+            Raven.captureException(e, { extra: { id, args, response } });
+          }
+        }
+
+        return false;
+      }
 
       return true;
     } else {
@@ -95,18 +119,31 @@ export const createCollectionFetcher = <ResponseEntity, ApiParams>(
       yield call(apiFetchFunction, ...args);
 
     if (response) {
-      if (response.included) {
-        yield call(storeIncludedEntities, response.included);
+      try {
+        if (response.included) {
+          yield call(storeIncludedEntities, response.included);
+        }
+
+        const entities = yield call(converter, response.data);
+        yield put(storeEntitiesActionCreator(entities));
+
+        if (postStoreEffects) {
+          yield* postStoreEffects(response, ...args);
+        }
+
+        yield put(requestActionCreators.SUCCESS.actionCreator());
+      } catch (e) {
+        console.error('Error fetching collection', e);
+        // We need to not load 'raven-js' when running tests
+        if (typeof window !== 'undefined') {
+          const Raven = require('raven-js');
+          if (Raven.isSetup()) {
+            Raven.captureException(e, { extra: { args, response } });
+          }
+        }
+
+        return false;
       }
-
-      const entities = yield call(converter, response.data);
-      yield put(storeEntitiesActionCreator(entities));
-
-      if (postStoreEffects) {
-        yield* postStoreEffects(response, ...args);
-      }
-
-      yield put(requestActionCreators.SUCCESS.actionCreator());
 
       return true;
     } else {

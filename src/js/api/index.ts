@@ -58,7 +58,17 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
     ).then(json => ({
       response: json,
     }))
-    .catch(errorResponse => generateErrorObject(errorResponse));
+    .catch(errorResponse => {
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureMessage('Error while calling API', { extra: { errorResponse } });
+        }
+      }
+
+      return generateErrorObject(errorResponse);
+    });
 
 const getApi = (path: string, query?: any): ApiPromise => {
   let queryString = '';
