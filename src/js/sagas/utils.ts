@@ -38,18 +38,7 @@ export const createLoader = (
     }
 
     if (existingEntity || fetchSucceeded) {
-      try {
-        yield fork(dataEnsurer, id);
-      } catch (e) {
-        console.error('Error ensuring data exists:', e);
-        // We need to not load 'raven-js' when running tests
-        if (typeof window !== 'undefined') {
-          const Raven = require('raven-js');
-          if (Raven.isSetup()) {
-            Raven.captureException(e, { extra: { action } });
-          }
-        }
-      }
+      yield fork(dataEnsurer, id);
     }
   };
 };

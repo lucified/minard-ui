@@ -123,7 +123,17 @@ export default function createSagas(api: Api) {
     const projects = <Project[]> (yield select(Projects.selectors.getProjects));
 
     if (!projects) {
-      throw new Error('No projects found!');
+      const e = new Error('No projects found!');
+      console.error('Error ensuring project', e);
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureException(e);
+        }
+      }
+
+      return;
     }
 
     for (let i = 0; i < projects.length; i++) {
@@ -150,11 +160,31 @@ export default function createSagas(api: Api) {
     }
 
     if (project) {
-      throw new Error('No project found!');
+      const e = new Error('No project found!');
+      console.error('Error ensuring project', e);
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureException(e, { extra: { project } });
+        }
+      }
+
+      return;
     }
 
     if (isFetchError(project)) {
-      throw new Error('Unable to fetch project!');
+      const e = new Error('Unable to fetch project!');
+      console.error('Error fetching project', e);
+      // We need to not load 'raven-js' when running tests
+      if (typeof window !== 'undefined') {
+        const Raven = require('raven-js');
+        if (Raven.isSetup()) {
+          Raven.captureException(e, { extra: { project } });
+        }
+      }
+
+      return;
     }
 
     /*if (project.latestSuccessfullyDeployedCommit) {
