@@ -159,7 +159,7 @@ export default function createSagas(api: Api) {
       project = projectOrId;
     }
 
-    if (project) {
+    if (!project) {
       const e = new Error('No project found!');
       console.error('Error ensuring project', e);
       // We need to not load 'raven-js' when running tests
@@ -187,12 +187,12 @@ export default function createSagas(api: Api) {
       return;
     }
 
-    /*if (project.latestSuccessfullyDeployedCommit) {
+    if (project.latestSuccessfullyDeployedCommit) {
       const commit = <Commit | FetchError | undefined> (yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit));
       if (commit && !isFetchError(commit) && commit.deployment) {
         yield call(fetchIfMissing, 'deployments', commit.deployment);
       }
-    }*/
+    }
   }
 
   // BRANCH
