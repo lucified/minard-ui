@@ -41,7 +41,7 @@ const SetupInstructions = ({ project, hideLabels, showClone, styles: passedInSty
               Clone the repo with
             </div>
             <div className={styles.code}>
-              <pre>git clone {project.repoUrl}</pre>
+              <pre>git clone -o minard {project.repoUrl}</pre>
             </div>
           </div>
         )}
