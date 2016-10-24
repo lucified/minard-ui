@@ -366,24 +366,11 @@ export default function createSagas(api: Api) {
       }
 
       // Store new project
-      try {
-        const projectObject = <Project[]>(yield call(Converter.toProjects, response.data));
-        yield put(Projects.actions.storeProjects(projectObject));
+      const projectObject = <Project[]>(yield call(Converter.toProjects, response.data));
+      yield put(Projects.actions.storeProjects(projectObject));
 
-        // Notify form that creation was a success
-        yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0].id, name));
-      } catch (e) {
-        console.error('Error storing new project', e);
-        // We need to not load 'raven-js' when running tests
-        if (typeof window !== 'undefined') {
-          const Raven = require('raven-js');
-          if (Raven.isSetup()) {
-            Raven.captureException(e, { extra: { action, response } });
-          }
-        }
-
-        return false;
-      }
+      // Notify form that creation was a success
+      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0].id, name));
 
       return true;
     } else {
@@ -426,26 +413,12 @@ export default function createSagas(api: Api) {
     const { response, error, details } = yield call(api.Project.edit, id, { name, description });
 
     if (response) {
-      try {
-        // Store edited project
-        const projectObject = yield call(Converter.toProjects, response.data);
-        yield put(Projects.actions.storeProjects(projectObject));
+      // Store edited project
+      const projectObject = yield call(Converter.toProjects, response.data);
+      yield put(Projects.actions.storeProjects(projectObject));
 
-        // Notify form that creation was a success
-        yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
-      } catch (e) {
-        console.error('Error editing project', e);
-        // We need to not load 'raven-js' when running tests
-        if (typeof window !== 'undefined') {
-          const Raven = require('raven-js');
-          if (Raven.isSetup()) {
-            Raven.captureException(e, { extra: { action, response } });
-          }
-        }
-
-        return false;
-      }
-
+      // Notify form that creation was a success
+      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
 
       return true;
     } else {
