@@ -50,6 +50,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
 
     this.deleteProject = this.deleteProject.bind(this);
     this.clearAndClose = this.clearAndClose.bind(this);
+    this.editSuccess = this.editSuccess.bind(this);
   }
 
   public componentWillMount() {
