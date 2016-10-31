@@ -6,6 +6,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const postcssReporter = require('postcss-reporter');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const failPlugin = require('webpack-fail-plugin');
 
 const deployConfig = require('./deploy-config');
@@ -177,6 +178,10 @@ const config = {
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
+    new CopyWebpackPlugin([{
+      from: 'src/images/favicon-*.png',
+      flatten: true,
+    }]),
     failPlugin,
   ],
 };
