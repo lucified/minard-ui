@@ -8,6 +8,7 @@ interface ReactGravatarProps {
   rating?: "g" | "pg" | "r" | "x"
   default?: string;
   className?: string;
+  protocol?: string;
 }
 
 declare var ReactGravatarType: typeof ReactGravatar;
