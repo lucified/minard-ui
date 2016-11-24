@@ -56,6 +56,12 @@ export interface StoreCommitsToBranchAction extends Action {
   parentCommits: string[];
 }
 
+// SET_BRANCH_TO_COMMIT
+export interface SetBranchToCommitAction extends Action {
+  id: string;
+  commitId: string;
+}
+
 // UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH
 export interface UpdateLatestDeployedCommitAction extends Action {
   id: string;

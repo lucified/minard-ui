@@ -40,7 +40,7 @@ export const removeBranch = (id: string): t.RemoveBranchAction => ({
 });
 
 // This action is used when a push event is received from the Streaming API.
-// Because it might be a force push, we might need to
+// Because it might be a force push, we might need to... [TODO]
 export const STORE_COMMITS_TO_BRANCH = 'BRANCHES/STORE_COMMITS_TO_BRANCH';
 export const storeCommitsToBranch = (
   id: string,
@@ -51,6 +51,16 @@ export const storeCommitsToBranch = (
   id,
   commits,
   parentCommits,
+});
+
+export const SET_BRANCH_TO_COMMIT = 'BRANCHES/SET_BRANCH_TO_COMMIT';
+export const setBranchToCommit = (
+  id: string,
+  commitId: string,
+): t.SetBranchToCommitAction => ({
+  type: SET_BRANCH_TO_COMMIT,
+  id,
+  commitId,
 });
 
 export const UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH = 'BRANCHES/UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH';

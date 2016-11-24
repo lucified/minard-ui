@@ -7,6 +7,7 @@ import Requests from '../requests';
 import {
   ADD_COMMITS_TO_BRANCH,
   REMOVE_BRANCH,
+  SET_BRANCH_TO_COMMIT,
   STORE_BRANCHES,
   STORE_COMMITS_TO_BRANCH,
   UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH,
@@ -120,6 +121,32 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       console.log('Trying to add commits to a branch that does not exist.', action); // tslint:disable-line
+
+      return state;
+
+    case SET_BRANCH_TO_COMMIT:
+      const setBranchToCommitAction = <t.SetBranchToCommitAction> action;
+      id = setBranchToCommitAction.id;
+      branch = state[id];
+      if (branch && !isFetchError(branch)) {
+        if (branch.latestCommit !== setBranchToCommitAction.commitId) {
+          // FIXME: What if Commit doesn't exist in state?
+          let commits = [setBranchToCommitAction.commitId];
+          const commitIndex = branch.commits.indexOf(setBranchToCommitAction.commitId);
+          if (commitIndex > -1) {
+            commits = branch.commits.slice(commitIndex);
+          }
+          const newBranch = Object.assign({}, branch, {
+            latestCommit: setBranchToCommitAction.commitId,
+            commits,
+          });
+          return Object.assign({}, state, { [id]: newBranch });
+        }
+
+        return state;
+      }
+
+      console.log('Trying to set branch that does not exist to a commit.', action); // tslint:disable-line
 
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH:
