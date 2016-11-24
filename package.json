@@ -104,7 +104,7 @@
     "react-addons-css-transition-group": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-flip-move": "^2.7.1",
-    "react-fontawesome": "^1.4.0",
+    "react-fontawesome": "^1.2.0",
     "react-gravatar": "^2.6.1",
     "react-modal": "1.2.1",
     "react-redux": "^4.4.6",
