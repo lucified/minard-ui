@@ -219,7 +219,7 @@ describe('reducers', () => {
         const action = {
           type: Requests.actions.Projects.LoadAllProjects.SUCCESS.type,
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -234,7 +234,7 @@ describe('reducers', () => {
         const action = {
           type: Requests.actions.Projects.LoadAllProjects.FAILURE.type,
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -264,7 +264,7 @@ describe('reducers', () => {
         const action = {
           type: Requests.actions.Activities.LoadAllActivities.SUCCESS.type,
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -279,7 +279,7 @@ describe('reducers', () => {
         const action = {
           type: Requests.actions.Activities.LoadAllActivities.FAILURE.type,
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -312,7 +312,7 @@ describe('reducers', () => {
           type: Requests.actions.Activities.LoadActivitiesForProject.SUCCESS.type,
           id: 'foo',
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -329,7 +329,7 @@ describe('reducers', () => {
           type: Requests.actions.Activities.LoadActivitiesForProject.FAILURE.type,
           id: 'foo',
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -362,7 +362,7 @@ describe('reducers', () => {
           type: Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.type,
           id: 'foo',
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -379,7 +379,7 @@ describe('reducers', () => {
           type: Requests.actions.Commits.LoadCommitsForBranch.FAILURE.type,
           id: 'foo',
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -412,7 +412,7 @@ describe('reducers', () => {
           type: Requests.actions.Projects.DeleteProject.SUCCESS.type,
           id: 'foo',
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -429,7 +429,7 @@ describe('reducers', () => {
           type: Requests.actions.Projects.DeleteProject.FAILURE.type,
           id: 'foo',
         };
-        const expectedState = [];
+        const expectedState: any[] = [];
 
         const endState = reducer(initialState, action);
 
@@ -689,7 +689,7 @@ describe('reducers', () => {
         type: Requests.actions.Projects.DeleteProject.REQUEST.type,
         id: 'foo',
       };
-      const expectedState = [];
+      const expectedState: any[] = [];
 
       const newState = reducer(initialState, action);
       expect(newState).to.deep.equal(expectedState);
@@ -1565,7 +1565,7 @@ describe('reducers', () => {
 
     describe('add authors to project', () => {
       it('TODO');
-    })
+    });
   });
 
   describe('streaming', () => {

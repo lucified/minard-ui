@@ -40,7 +40,7 @@ function callApi(url: string) {
       response.json().then(json => ({
         json,
         response,
-      }))
+      })) as Promise<{ json: any, response: IResponse}>
     ).then(({ json, response }) =>
       response.ok ? json : Promise.reject(json)
     ).then(json => ({
@@ -77,7 +77,7 @@ const Project = {
   create: (name: string, description?: string): ApiPromise => callApi(newProjectJSON),
   edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
     callApi(editedProjectJSON),
-  delete: (id: string): ApiPromise => Promise.resolve({ response: 'ok!' }),
+  delete: (id: string): ApiPromise => Promise.resolve({ response: { data: [] } }),
     // Promise.resolve({ error: 'sad face :(' });
 };
 

@@ -27,29 +27,30 @@ const testData = {
 };
 
 const createApi = (): Api => {
+  const emptyResponse = { response: { data: [] }};
   return {
     Project: {
-      fetchAll: () => Promise.resolve({ response: {} }),
-      fetch: (id: string) => Promise.resolve({ response: {} }),
-      create: (name: string, description?: string) => Promise.resolve({ response: {} }),
+      fetchAll: () => Promise.resolve(emptyResponse),
+      fetch: (id: string) => Promise.resolve(emptyResponse),
+      create: (name: string, description?: string) => Promise.resolve(emptyResponse),
       edit: (id: string, newAttributes: { description?: string, name?: string }) =>
-        Promise.resolve({ response: {} }),
-      delete: (id: string) => Promise.resolve({ response: {} }),
+        Promise.resolve(emptyResponse),
+      delete: (id: string) => Promise.resolve(emptyResponse),
     },
     Activity: {
-      fetchAll: () => Promise.resolve({ response: {} }),
-      fetchAllForProject: (id: string) => Promise.resolve({ response: {} }),
+      fetchAll: () => Promise.resolve(emptyResponse),
+      fetchAllForProject: (id: string) => Promise.resolve(emptyResponse),
     },
     Deployment: {
-      fetch: (id: string) => Promise.resolve({ response: {} }),
+      fetch: (id: string) => Promise.resolve(emptyResponse),
     },
     Branch: {
-      fetch: (id: string) => Promise.resolve({ response: {} }),
-      fetchForProject: (id: string) => Promise.resolve({ response: {} }),
+      fetch: (id: string) => Promise.resolve(emptyResponse),
+      fetchForProject: (id: string) => Promise.resolve(emptyResponse),
     },
     Commit: {
-      fetch: (id: string) => Promise.resolve({ response: {} }),
-      fetchForBranch: (id: string) => Promise.resolve({ response: {} }),
+      fetch: (id: string) => Promise.resolve(emptyResponse),
+      fetchForBranch: (id: string) => Promise.resolve(emptyResponse),
     },
   };
 };
