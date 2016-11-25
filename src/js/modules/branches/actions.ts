@@ -43,7 +43,7 @@ export const removeBranch = (id: string): t.RemoveBranchAction => ({
 // Because it might be a force push, we might need to reset the commit back
 // to a previous commit or replace some existing commits with new ones.
 export const UPDATE_BRANCH_WITH_COMMITS = 'BRANCHES/UPDATE_BRANCH_WITH_COMMITS';
-export const storeCommitsToBranch = (
+export const updateBranchWithCommits = (
   id: string,
   latestCommitId: string,
   newCommits: Commit[],

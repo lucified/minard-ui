@@ -320,7 +320,7 @@ export default connect<{}, GeneratedDispatchProps, {}>(
     setConnectionState: Streaming.actions.setConnectionState,
     storeActivities: Activities.actions.storeActivities,
     removeBranch: Branches.actions.removeBranch,
-    storeCommitsToBranch: Branches.actions.storeCommitsToBranch,
+    updateBranchWithCommits: Branches.actions.updateBranchWithCommits,
     updateLatestDeployedCommitForBranch: Branches.actions.updateLatestDeployedCommit,
     storeBranches: Branches.actions.storeBranches,
     addDeploymentToCommit: Commits.actions.addDeploymentToCommit,
