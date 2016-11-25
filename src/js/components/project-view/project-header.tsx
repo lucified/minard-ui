@@ -23,7 +23,7 @@ const ProjectHeader = ({ project, openProjectSettingsDialog }: PassedProps & Gen
   <section className="container">
     <div className={classNames(styles.avatars, 'row', 'top-xs')}>
       <div className="col-xs-12 center-xs">
-        {project.activeUsers.map(user =>
+        {project.activeUsers.map(user => (
           <Avatar
             key={user.email}
             className={styles.avatar}
@@ -31,7 +31,7 @@ const ProjectHeader = ({ project, openProjectSettingsDialog }: PassedProps & Gen
             title={user.name || user.email}
             shadow
           />
-        )}
+        ))}
       </div>
     </div>
     <div className="row top-xs">
@@ -56,5 +56,5 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 
 export default connect<{}, GeneratedDispatchProps, PassedProps>(
   () => ({}),
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ProjectHeader);

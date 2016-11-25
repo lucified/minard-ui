@@ -10,7 +10,19 @@ interface PassedProps {
   instructions: string;
 }
 
-const Field = ({ instructions, input, name, label, placeholder, type, meta: { dirty, error, touched }}: BaseFieldProps & PassedProps) => {
+const Field = ({
+  instructions,
+  input,
+  name,
+  label,
+  placeholder,
+  type,
+  meta: {
+    dirty,
+    error,
+    touched,
+  },
+}: BaseFieldProps & PassedProps) => {
   const inputComponent = type === 'textarea' ?
     <Textarea {...input} placeholder={placeholder} type={type} /> :
     <input {...input} placeholder={placeholder} type={type} />;
@@ -28,6 +40,6 @@ const Field = ({ instructions, input, name, label, placeholder, type, meta: { di
       {instructions && <div className={styles.instructions}>{instructions}</div>}
     </div>
   );
-}
+};
 
 export default Field;

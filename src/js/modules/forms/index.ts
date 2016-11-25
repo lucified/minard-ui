@@ -9,7 +9,7 @@ export function formSubmit(
   failureAction: string,
   values: any,
   resolve: (result: any) => void,
-  reject: (error: any) => void
+  reject: (error: any) => void,
 ) {
   return {
     type: FORM_SUBMIT,

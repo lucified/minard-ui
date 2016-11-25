@@ -97,5 +97,5 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   () => ({}),
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ProjectsSection);

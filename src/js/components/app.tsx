@@ -56,5 +56,5 @@ class App extends React.Component<PassedProps & GeneratedDispatchProps, any> {
 
 export default connect<{}, GeneratedDispatchProps, PassedProps>(
   () => ({}),
-  { loadAllProjects: Projects.actions.loadAllProjects }
+  { loadAllProjects: Projects.actions.loadAllProjects },
 )(App);

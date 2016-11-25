@@ -1,6 +1,6 @@
 import * as React from 'react';
-import TimeAgo from 'react-timeago';
 import * as Icon from 'react-fontawesome';
+import TimeAgo from 'react-timeago';
 
 import { Activity } from '../../../modules/activities';
 import { FetchError, isFetchError } from '../../../modules/errors';

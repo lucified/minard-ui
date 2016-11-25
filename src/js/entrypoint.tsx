@@ -14,7 +14,7 @@ import sagaCreator from './sagas';
 export const createStoreAndRender = (
   configureStore: (initalState: Object) => Store<any>,
   api: Api,
-  history: History.History
+  history: History.History,
 ) => {
   const initialState = {};
   const store = configureStore(initialState);
@@ -43,6 +43,6 @@ export const createStoreAndRender = (
     <Provider store={store}>
       <Router history={syncedHistory} routes={routes} />
     </Provider>,
-    document.getElementById('content')
+    document.getElementById('content'),
   );
 };

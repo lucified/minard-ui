@@ -81,5 +81,5 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>
   {
     loadAllProjects: Projects.actions.loadAllProjects,
     loadActivities: Activities.actions.loadActivities,
-  }
+  },
 )(TeamProjectsView);

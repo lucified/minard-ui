@@ -13,7 +13,7 @@ function configureStore(initialState: Object) {
   const store = createStore(
     rootReducer,
     initialState,
-    composeEnhancers(applyMiddleware(sagaMiddleware))
+    composeEnhancers(applyMiddleware(sagaMiddleware)),
   );
 
   if (module.hot) {

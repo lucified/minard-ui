@@ -129,5 +129,5 @@ export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>
   {
     loadBranch: Branches.actions.loadBranch,
     loadCommits: Commits.actions.loadCommitsForBranch,
-  }
+  },
 )(BranchView);

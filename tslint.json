@@ -1,16 +1,20 @@
 {
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
-    "object-literal-sort-keys": false,
+    "arrow-parens": false,
+    "array-type": [true, "array"],
     "interface-name": [false, "always-prefix"],
-    "quotemark": [true, "single", "avoid-escape", "jsx-double"],
-    "no-var-requires": false,
-    "member-ordering": [false],
     "jsx-alignment": true,
     "jsx-no-lambda": true,
+    "jsx-no-multiline-js": false,
     "jsx-no-string-ref": true,
     "jsx-self-close": true,
-    "jsx-no-multiline-js": false
+    "max-classes-per-file": [false],
+    "member-ordering": [false],
+    "no-var-requires": false,
+    "object-literal-key-quotes": [true, "as-needed"],
+    "object-literal-sort-keys": false,
+    "quotemark": [true, "single", "avoid-escape", "jsx-double"]
   },
   "rulesDirectory": []
 }

@@ -19,7 +19,7 @@ export const ADD_COMMITS_TO_BRANCH = 'BRANCHES/ADD_COMMITS_TO_BRANCH';
 export const addCommitsToBranch = (
   id: string,
   commitIds: string[],
-  requestedCount: number
+  requestedCount: number,
 ): t.AddCommitsToBranchAction => ({
   type: ADD_COMMITS_TO_BRANCH,
   id,
@@ -47,7 +47,7 @@ export const updateBranchWithCommits = (
   id: string,
   latestCommitId: string,
   newCommits: Commit[],
-  parentCommitIds: string[]
+  parentCommitIds: string[],
 ): t.UpdateBranchWithCommitsAction => ({
   type: UPDATE_BRANCH_WITH_COMMITS,
   id,

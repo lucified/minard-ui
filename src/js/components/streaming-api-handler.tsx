@@ -335,5 +335,5 @@ export default connect<{}, GeneratedDispatchProps, {}>(
     updateLatestDeployedCommitForProject: Projects.actions.updateLatestDeployedCommitForProject,
     updateLatestActivityTimestampForBranch: Branches.actions.updateLatestActivityTimestampForBranch,
     removeBranchFromProject: Projects.actions.removeBranchFromProject,
-  }
+  },
 )(StreamingAPIHandler);

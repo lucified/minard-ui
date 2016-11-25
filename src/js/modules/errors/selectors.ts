@@ -16,7 +16,7 @@ export const getFetchCollectionErrors =
         Requests.actions.Activities.LoadAllActivities.FAILURE.type,
         Requests.actions.Activities.LoadActivitiesForProject.FAILURE.type,
       ].indexOf(error.type) > -1,
-    )
+    ),
   );
 
 export const getProjectDeletionError = (state: StateTree, id: string): t.DeleteError | undefined =>

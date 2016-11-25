@@ -1,17 +1,27 @@
 import { compact, uniq } from 'lodash';
 import { SubmissionError } from 'redux-form';
 import { delay, takeEvery, takeLatest } from 'redux-saga';
-import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
+import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
 import { Api, ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
-import Activities, { Activity, LoadActivitiesForProjectAction, LoadActivitiesAction } from '../modules/activities';
-import Branches, { Branch, LoadBranchesForProjectAction, StoreBranchesAction, UpdateBranchWithCommitsAction } from '../modules/branches';
+import Activities, { Activity, LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
+import Branches, {
+  Branch,
+  LoadBranchesForProjectAction,
+  StoreBranchesAction,
+  UpdateBranchWithCommitsAction,
+} from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
-import { isFetchError, FetchError } from '../modules/errors';
-import { onSubmitActions, FORM_SUBMIT } from '../modules/forms';
-import Projects, { Project, DeleteProjectAction, LoadAllProjectsAction, StoreProjectsAction } from '../modules/projects';
+import { FetchError, isFetchError } from '../modules/errors';
+import { FORM_SUBMIT, onSubmitActions } from '../modules/forms';
+import Projects, {
+  DeleteProjectAction,
+  LoadAllProjectsAction,
+  Project,
+  StoreProjectsAction,
+} from '../modules/projects';
 import Requests from '../modules/requests';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
@@ -98,7 +108,12 @@ export default function createSagas(api: Api) {
     checkIfAllActivitiesLoadedForProject,
   );
 
-  function* checkIfAllActivitiesLoadedForProject(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+  function* checkIfAllActivitiesLoadedForProject(
+    id: string,
+    response: ApiResponse,
+    count: number,
+    until?: number,
+  ): IterableIterator<Effect> {
     if ((<ApiEntity[]> response.data).length < count) {
       yield put(Requests.actions.allActivitiesRequestedForProject(id));
     }
@@ -116,7 +131,7 @@ export default function createSagas(api: Api) {
     Requests.actions.Projects.LoadAllProjects,
     Converter.toProjects,
     Projects.actions.storeProjects,
-    api.Project.fetchAll
+    api.Project.fetchAll,
   );
 
   function* ensureAllProjectsRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
@@ -136,8 +151,8 @@ export default function createSagas(api: Api) {
       return;
     }
 
-    for (let i = 0; i < projects.length; i++) {
-      yield call(ensureProjectRelatedDataLoaded, projects[i]);
+    for (const project of projects) {
+      yield call(ensureProjectRelatedDataLoaded, project);
     }
   }
 
@@ -146,7 +161,7 @@ export default function createSagas(api: Api) {
     Requests.actions.Projects.LoadProject,
     Converter.toProjects,
     Projects.actions.storeProjects,
-    api.Project.fetch
+    api.Project.fetch,
   );
   const loadProject = createLoader(Projects.selectors.getProject, fetchProject, ensureProjectRelatedDataLoaded);
 
@@ -188,7 +203,9 @@ export default function createSagas(api: Api) {
     }
 
     if (project.latestSuccessfullyDeployedCommit) {
-      const commit = <Commit | FetchError | undefined> (yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit));
+      const commit = <Commit | FetchError | undefined> (
+        yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit)
+      );
       if (commit && !isFetchError(commit) && commit.deployment) {
         yield call(fetchIfMissing, 'deployments', commit.deployment);
       }
@@ -200,7 +217,7 @@ export default function createSagas(api: Api) {
     Requests.actions.Branches.LoadBranch,
     Converter.toBranches,
     Branches.actions.storeBranches,
-    api.Branch.fetch
+    api.Branch.fetch,
   );
   const loadBranch = createLoader(Branches.selectors.getBranch, fetchBranch, ensureBranchRelatedDataLoaded);
 
@@ -228,11 +245,11 @@ export default function createSagas(api: Api) {
   // BRANCHES_FOR_PROJECT
   function* loadBranchesForProject(action: LoadBranchesForProjectAction): IterableIterator<Effect> {
     const id = action.id;
-    let project = <Project | FetchError | undefined>(yield select(Projects.selectors.getProject, id));
+    let project = <Project | FetchError | undefined> (yield select(Projects.selectors.getProject, id));
 
     while (!project) {
-      const { entities: projects } = <StoreProjectsAction>(yield take(Projects.actions.STORE_PROJECTS));
-      project = projects.find(project => project.id === id);
+      const { entities: projects } = <StoreProjectsAction> (yield take(Projects.actions.STORE_PROJECTS));
+      project = projects.find(p => p.id === id);
     }
 
     if (isFetchError(project)) {
@@ -282,7 +299,7 @@ export default function createSagas(api: Api) {
     Requests.actions.Deployments.LoadDeployment,
     Converter.toDeployments,
     Deployments.actions.storeDeployments,
-    api.Deployment.fetch
+    api.Deployment.fetch,
   );
   const loadDeployment =
     createLoader(Deployments.selectors.getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
@@ -296,7 +313,7 @@ export default function createSagas(api: Api) {
     Requests.actions.Commits.LoadCommit,
     Converter.toCommits,
     Commits.actions.storeCommits,
-    api.Commit.fetch
+    api.Commit.fetch,
   );
   const loadCommit =
     createLoader(Commits.selectors.getCommit, fetchCommit, ensureCommitRelatedDataLoaded);
@@ -312,11 +329,11 @@ export default function createSagas(api: Api) {
   // COMMITS_FOR_BRANCH
   function* loadCommitsForBranch(action: LoadCommitsForBranchAction): IterableIterator<Effect> {
     const { id, count, until } = action;
-    let branch = <Branch | FetchError | undefined>(yield select(Branches.selectors.getBranch, id));
+    let branch = <Branch | FetchError | undefined> (yield select(Branches.selectors.getBranch, id));
 
     while (!branch) {
-      const { entities: branches } = <StoreBranchesAction>(yield take(Branches.actions.STORE_BRANCHES));
-      branch = branches.find(branch => branch.id === id);
+      const { entities: branches } = <StoreBranchesAction> (yield take(Branches.actions.STORE_BRANCHES));
+      branch = branches.find(b => b.id === id);
     }
 
     // Return if we're already requesting
@@ -342,7 +359,12 @@ export default function createSagas(api: Api) {
     addCommitsToBranch,
   );
 
-  function* addCommitsToBranch(id: string, response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+  function* addCommitsToBranch(
+    id: string,
+    response: ApiResponse,
+    count: number,
+    until?: number,
+  ): IterableIterator<Effect> {
     const commitIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
     yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));
   }
@@ -350,7 +372,7 @@ export default function createSagas(api: Api) {
   function* ensureCommitsForBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
     const branch = <Branch | undefined | FetchError> (yield select(Branches.selectors.getBranch, id));
     if (branch && !isFetchError(branch)) {
-      const commits = <Commit[]> (yield branch.commits.map(id => call(fetchIfMissing, 'commits', id)));
+      const commits = <Commit[]> (yield branch.commits.map(commitId => call(fetchIfMissing, 'commits', commitId)));
       yield compact(commits.map(commit => commit.deployment))
         .map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
     }
@@ -371,7 +393,7 @@ export default function createSagas(api: Api) {
       }
 
       // Store new project
-      const projectObject = <Project[]>(yield call(Converter.toProjects, response.data));
+      const projectObject = <Project[]> (yield call(Converter.toProjects, response.data));
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success

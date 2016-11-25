@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { Effect, call, fork, put, select } from 'redux-saga/effects';
+import { call, Effect, fork, put, select } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
 import { ApiEntity, ApiEntityTypeString, ApiPromise, ApiResponse } from '../api/types';
@@ -26,7 +26,7 @@ interface StoreEntityAction extends Action {
 export const createLoader = (
   selector: (state: StateTree, id: string) => SelectorResponse,
   fetcher: (id: string) => IterableIterator<Effect>,
-  dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>
+  dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>,
 ) => {
   return function* (action: LoadEntityAction): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     const id: string = action.id;
@@ -132,8 +132,7 @@ const storingMetadata: {
 export function* storeIncludedEntities(entities: ApiEntity[] | undefined): IterableIterator<Effect> {
   if (entities && entities.length > 0) {
     // Can't use forEach because of generators
-    for (let i = 0; i < storingMetadata.length; i++) {
-      const currentType = storingMetadata[i];
+    for (const currentType of storingMetadata) {
       const includedEntities = entities.filter(entity => entity.type === currentType.type);
       if (includedEntities.length > 0) {
         const objects = yield call(currentType.converter, includedEntities);

@@ -126,7 +126,7 @@ class NewProjectForm extends React.Component<Props, any> {
           <div>
             <Field
               name="projectTemplate"
-              component={field => <SelectInput {...field} options={dropdownValues} /> }
+              component={field => <SelectInput {...field} options={dropdownValues} />}
             />
           </div>
         </footer>

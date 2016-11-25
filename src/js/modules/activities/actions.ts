@@ -11,7 +11,7 @@ export const LOAD_ACTIVITIES_FOR_PROJECT = 'ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJE
 export const loadActivitiesForProject = (
   id: string,
   count: number,
-  until?: number
+  until?: number,
 ): t.LoadActivitiesForProjectAction => ({
   type: LOAD_ACTIVITIES_FOR_PROJECT,
   id,

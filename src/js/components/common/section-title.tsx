@@ -59,13 +59,13 @@ const SectionTitle = ({ children, leftContent, rightContent }: Props) => {
       <hr className={styles.line} />
       <div className={classNames(styles['section-title'], 'row', 'middle-xs', 'between-xs')}>
         <div className={classNames(styles.left, 'col-xs-6', 'col-sm-3', 'first-sm')}>
-          { leftContentWithBackgroundColor }
+          {leftContentWithBackgroundColor}
         </div>
         <div className={classNames(styles.title, 'col-xs-12', 'col-sm-6', 'first-xs')}>
-          { childrenWithBackgroundColor }
+          {childrenWithBackgroundColor}
         </div>
         <div className={classNames(styles.right, 'col-xs-6', 'col-sm-3')}>
-          { rightContentWithBackgroundColor }
+          {rightContentWithBackgroundColor}
         </div>
       </div>
     </section>
