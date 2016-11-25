@@ -64,6 +64,8 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
   const screenshot = (latestDeployment && latestDeployment.screenshot) || noScreenshot;
   const deploymentSummary = getDeploymentSummary(latestDeployment);
 
+  const maxAvatarCount = 8;
+
   return (
     <div className={styles.card}>
       <MinardLink project={project}>
@@ -72,7 +74,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
         </div>
         <div className={styles['card-middle']}>
           <div className={styles.avatars}>
-            {project.activeUsers.map(user => // TODO: have an upper range for this
+            {project.activeUsers.slice(0, maxAvatarCount).map(user => (
               <Avatar
                 key={`avatar-${user.email}`}
                 className={styles.avatar}
@@ -80,7 +82,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
                 email={user.email}
                 shadow
               />
-            )}
+            ))}
           </div>
           <h3 className={styles.title}>{project.name}</h3>
           <p className={styles.description}>
