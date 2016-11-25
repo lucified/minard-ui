@@ -34,8 +34,7 @@ interface GeneratedDispatchProps {
   updateProject: (id: string, name: string, repoUrl: string, description?: string) => void;
   addDeploymentToCommit: (commitId: string, deploymentId: string) => void;
   removeBranch: (id: string) => void;
-  storeCommitsToBranch: (id: string, commits: Commit[], parentCommits: string[]) => void;
-  setBranchToCommit: (id: string, commitId: string) => void;
+  updateBranchWithCommits: (id: string, latestCommitId: string, newCommits: Commit[], parentCommits: string[]) => void;
   storeAuthorsToProject: (id: string, authors: ProjectUser[]) => void;
   addBranchToProject: (id: string, branch: string) => void;
   updateLatestActivityTimestampForProject: (id: string, timestamp: number) => void;
@@ -230,15 +229,13 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
 
       if (commits.length > 0) {
         this.props.storeCommits(commits);
-        this.props.storeCommitsToBranch(branch.id, commits, response.parents);
         this.props.storeAuthorsToProject(
           branch.project,
           uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
         );
-      } else {
-        // We're setting the branch to an older commit
-        this.props.setBranchToCommit(branch.id, after);
       }
+
+      this.props.updateBranchWithCommits(branch.id, after, commits, parents);
 
       const latestActivityTimestamp: number | undefined = commits.length > 0 ?
         commits[0].committer.timestamp : branch.latestActivityTimestamp;
@@ -324,7 +321,6 @@ export default connect<{}, GeneratedDispatchProps, {}>(
     storeActivities: Activities.actions.storeActivities,
     removeBranch: Branches.actions.removeBranch,
     storeCommitsToBranch: Branches.actions.storeCommitsToBranch,
-    setBranchToCommit: Branches.actions.setBranchToCommit,
     updateLatestDeployedCommitForBranch: Branches.actions.updateLatestDeployedCommit,
     storeBranches: Branches.actions.storeBranches,
     addDeploymentToCommit: Commits.actions.addDeploymentToCommit,
