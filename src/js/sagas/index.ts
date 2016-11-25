@@ -6,7 +6,7 @@ import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects'
 import * as Converter from '../api/convert';
 import { Api, ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
 import Activities, { Activity, LoadActivitiesForProjectAction, LoadActivitiesAction } from '../modules/activities';
-import Branches, { Branch, LoadBranchesForProjectAction, StoreBranchesAction } from '../modules/branches';
+import Branches, { Branch, LoadBranchesForProjectAction, StoreBranchesAction, UpdateBranchWithCommitsAction } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { isFetchError, FetchError } from '../modules/errors';
@@ -243,6 +243,11 @@ export default function createSagas(api: Api) {
         yield fork(ensureBranchesForProjectRelatedDataLoaded, id);
       }
     }
+  }
+
+  // UPDATE_BRANCH_WITH_COMMITS
+  function* loadLatestCommitForBranch(action: UpdateBranchWithCommitsAction): IterableIterator<Effect> {
+    yield call(fetchIfMissing, 'commits', action.latestCommitId);
   }
 
   const fetchBranchesForProject = createEntityFetcher(
@@ -494,6 +499,10 @@ export default function createSagas(api: Api) {
     yield takeEvery(Branches.actions.LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject);
   }
 
+  function* watchForUpdateBranchWithCommits() {
+    yield takeEvery(Branches.actions.UPDATE_BRANCH_WITH_COMMITS, loadLatestCommitForBranch);
+  }
+
   function* watchForLoadDeployment() {
     yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
   }
@@ -553,6 +562,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadActivities),
       fork(watchForLoadActivitiesForProject),
       fork(watchForFormSubmit),
+      fork(watchForUpdateBranchWithCommits),
     ];
   }
 
@@ -571,6 +581,7 @@ export default function createSagas(api: Api) {
     watchForCreateProject,
     watchForDeleteProject,
     watchForEditProject,
+    watchForUpdateBranchWithCommits,
     formSubmitSaga,
     createProject,
     editProject,
@@ -588,6 +599,7 @@ export default function createSagas(api: Api) {
     loadActivitiesForProject,
     loadAllProjects,
     loadBranch,
+    loadLatestCommitForBranch,
     loadBranchesForProject,
     loadDeployment,
     loadProject,

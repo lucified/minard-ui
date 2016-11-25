@@ -34,7 +34,7 @@ interface GeneratedDispatchProps {
   updateProject: (id: string, name: string, repoUrl: string, description?: string) => void;
   addDeploymentToCommit: (commitId: string, deploymentId: string) => void;
   removeBranch: (id: string) => void;
-  storeCommitsToBranch: (id: string, commits: Commit[], parentCommits: string[]) => void;
+  updateBranchWithCommits: (id: string, latestCommitId: string, newCommits: Commit[], parentCommits: string[]) => void;
   storeAuthorsToProject: (id: string, authors: ProjectUser[]) => void;
   addBranchToProject: (id: string, branch: string) => void;
   updateLatestActivityTimestampForProject: (id: string, timestamp: number) => void;
@@ -227,16 +227,18 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         this.props.addBranchToProject(branch.project, branch.id);
       }
 
-      this.props.storeCommits(commits);
-      this.props.storeCommitsToBranch(branch.id, commits, response.parents);
-      this.props.storeAuthorsToProject(
-        branch.project,
-        uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
-      );
+      if (commits.length > 0) {
+        this.props.storeCommits(commits);
+        this.props.storeAuthorsToProject(
+          branch.project,
+          uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
+        );
+      }
 
-      const latestActivityTimestamp: number | undefined = commits[0] ?
-        commits[0].committer.timestamp :
-        branch.latestActivityTimestamp;
+      this.props.updateBranchWithCommits(branch.id, after, commits, parents);
+
+      const latestActivityTimestamp: number | undefined = commits.length > 0 ?
+        commits[0].committer.timestamp : branch.latestActivityTimestamp;
 
       if (latestActivityTimestamp) {
         this.props.updateLatestActivityTimestampForProject(branch.project, latestActivityTimestamp);
@@ -318,7 +320,7 @@ export default connect<{}, GeneratedDispatchProps, {}>(
     setConnectionState: Streaming.actions.setConnectionState,
     storeActivities: Activities.actions.storeActivities,
     removeBranch: Branches.actions.removeBranch,
-    storeCommitsToBranch: Branches.actions.storeCommitsToBranch,
+    updateBranchWithCommits: Branches.actions.updateBranchWithCommits,
     updateLatestDeployedCommitForBranch: Branches.actions.updateLatestDeployedCommit,
     storeBranches: Branches.actions.storeBranches,
     addDeploymentToCommit: Commits.actions.addDeploymentToCommit,

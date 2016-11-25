@@ -49,11 +49,12 @@ export interface RemoveBranchAction extends Action {
   id: string;
 }
 
-// STORE_COMMITS_TO_BRANCH
-export interface StoreCommitsToBranchAction extends Action {
+// UPDATE_BRANCH_WITH_COMMITS
+export interface UpdateBranchWithCommitsAction extends Action {
   id: string;
-  commits: Commit[];
-  parentCommits: string[];
+  latestCommitId: string;
+  newCommits: Commit[];
+  parentCommitIds: string[];
 }
 
 // UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH

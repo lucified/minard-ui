@@ -8,7 +8,7 @@ import {
   ADD_COMMITS_TO_BRANCH,
   REMOVE_BRANCH,
   STORE_BRANCHES,
-  STORE_COMMITS_TO_BRANCH,
+  UPDATE_BRANCH_WITH_COMMITS,
   UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH,
   UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH,
 } from './actions';
@@ -89,32 +89,36 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       console.log('Trying to remove a branch that does not exist.', action); // tslint:disable-line
 
       return state;
-    case STORE_COMMITS_TO_BRANCH:
-      const storeCommitsAction = <t.StoreCommitsToBranchAction> action;
+    // Saves any new commits and sets the latestCommit of the branch
+    case UPDATE_BRANCH_WITH_COMMITS:
+      const storeCommitsAction = <t.UpdateBranchWithCommitsAction> action;
       id = storeCommitsAction.id;
       branch = state[id];
       if (branch && !isFetchError(branch)) {
-        const newBranch = Object.assign({}, branch);
+        const newBranch = Object.assign({}, branch, { latestCommit: storeCommitsAction.latestCommitId });
 
         // Try to find any of the parentIds in the commits of the branch
         let foundIndex = -1;
-        storeCommitsAction.parentCommits.forEach((commitId: string) => {
-          if (foundIndex === -1) {
-            foundIndex = newBranch.commits.indexOf(commitId);
-          }
-        });
+        if (storeCommitsAction.parentCommitIds.length > 0) {
+          storeCommitsAction.parentCommitIds.forEach((parentCommitId: string) => {
+            if (foundIndex === -1) {
+              foundIndex = newBranch.commits.indexOf(parentCommitId);
+            }
+          });
+        } else {
+          // The event has no parents if the branch was reset to an older commit
+          foundIndex = newBranch.commits.indexOf(storeCommitsAction.latestCommitId);
+        }
 
-        const commitIds = storeCommitsAction.commits.map(commit => commit.id);
+        const newCommitIds = storeCommitsAction.newCommits.map(commit => commit.id);
 
         if (foundIndex === -1) {
           // Not found, replace
-          newBranch.commits = commitIds;
+          newBranch.commits = newCommitIds.length > 0 ? newCommitIds : [storeCommitsAction.latestCommitId];
         } else {
-          // Cut off any possibly replaced commits and add parent commit(s) to end
-          newBranch.commits = commitIds.concat(newBranch.commits.slice(foundIndex));
+          // Cut off any possibly replaced commits and add existing commit(s) to end
+          newBranch.commits = newCommitIds.concat(newBranch.commits.slice(foundIndex));
         }
-
-        newBranch.latestCommit = commitIds[0];
 
         return Object.assign({}, state, { [id]: newBranch });
       }
