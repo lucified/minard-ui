@@ -99,10 +99,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
         // Try to find any of the parentIds in the commits of the branch
         let foundIndex = -1;
-        if (storeCommitsAction.parentCommitIds.length > 1) {
-          storeCommitsAction.parentCommitIds.forEach((commitId: string) => {
+        if (storeCommitsAction.parentCommitIds.length > 0) {
+          storeCommitsAction.parentCommitIds.forEach((parentCommitId: string) => {
             if (foundIndex === -1) {
-              foundIndex = newBranch.commits.indexOf(commitId);
+              foundIndex = newBranch.commits.indexOf(parentCommitId);
             }
           });
         } else {
