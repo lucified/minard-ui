@@ -442,6 +442,11 @@ describe('sagas', () => {
     });
   });
 
+  describe('loadLatestCommitForBranch', () => {
+    it('fetches latest commit if it is missing');
+    it('does not fetch latest commit if it already exists');
+  });
+
   interface StoreAction extends Action {
     entities: any[];
   }
