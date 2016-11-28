@@ -123,14 +123,16 @@ class NewProjectForm extends React.Component<Props, any> {
               {submitting ? 'Creating...' : 'Create project'}
             </button>
           </div>
-          <div>
-            <Field
-              name="projectTemplate"
-              component={field =>
-                <SelectInput {...field} options={dropdownValues} placeholder="Clone existing project…" />
-              }
-            />
-          </div>
+          {dropdownValues.length > 0 && (
+            <div>
+              <Field
+                name="projectTemplate"
+                component={field =>
+                  <SelectInput {...field} options={dropdownValues} placeholder="Clone existing project…" />
+                }
+              />
+            </div>
+          )}
         </footer>
       </form>
     );
