@@ -51,37 +51,6 @@ const toLowerCase = (value?: string): string | undefined => value && value.toLow
 const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
-// From https://github.com/erikras/redux-form/issues/82#issuecomment-238599783
-class SelectInput extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-  }
-
-  private onChange(event: any) {
-    if (this.props.input.onChange) {
-      // To be aligned with how redux-form publishes its CHANGE action payload.
-      // The event received is an object with 2 keys: "value" and "label".
-      // Will be null if the selection is cleared.
-      this.props.input.onChange(event && event.value);
-    }
-  }
-
-  public render() {
-    return (
-      <Select
-        {...this.props}
-        value={this.props.input.value || ''}
-        onBlur={() => this.props.input.onBlur(this.props.input.value)}
-        onChange={this.onChange}
-        options={this.props.options}
-        autosize={false}
-        disabled={this.props.meta.submitting || this.props.options.length === 0}
-      />
-    );
-  }
-}
-
 class NewProjectForm extends React.Component<Props, any> {
   public render() {
     const { handleSubmit, pristine, submitting, error, invalid, closeDialog, existingProjects } = this.props;
@@ -128,7 +97,16 @@ class NewProjectForm extends React.Component<Props, any> {
               <Field
                 name="projectTemplate"
                 component={field =>
-                  <SelectInput {...field} options={dropdownValues} placeholder="Clone existing project…" />
+                  <Select
+                    value={field.input.value}
+                    onChange={field.input.onChange}
+                    onBlur={() => field.input.onBlur(field.input.value)}
+                    options={dropdownValues}
+                    placeholder="Clone existing project…"
+                    autosize={false}
+                    disabled={field.meta.submitting}
+                    simpleValue
+                  />
                 }
               />
             </div>
