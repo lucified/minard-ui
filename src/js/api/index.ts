@@ -63,7 +63,10 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Error while calling API', { extra: { errorResponse } });
+          Raven.captureMessage('Error while calling API', {
+            extra: { errorResponse },
+            level: 'info', // one of 'info', 'warning', or 'error'
+          });
         }
       }
 
