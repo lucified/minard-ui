@@ -4,6 +4,9 @@
   font-size: 60px;
   letter-spacing: -2px;
   color: #2C3E50;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .description {
