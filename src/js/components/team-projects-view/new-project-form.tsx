@@ -105,6 +105,7 @@ class NewProjectForm extends React.Component<Props, any> {
                     placeholder="Clone existing project…"
                     autosize={false}
                     disabled={field.meta.submitting}
+                    className={styles['template-dropdown']}
                     simpleValue
                   />
                 }
