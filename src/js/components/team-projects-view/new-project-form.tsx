@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Select from 'react-select';
 import 'react-select/dist/react-select.css';
@@ -14,7 +15,7 @@ const styles = require('../common/forms/modal-dialog.scss');
 interface PassedProps {
   existingProjects: Project[];
   onSubmitSuccess: (projectId: string) => void;
-  closeDialog: () => void;
+  closeDialog: (e?: any) => void;
 }
 
 interface FormData {
@@ -52,6 +53,19 @@ const spaceToHyphen = (value?: string): string | undefined => value && value.rep
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
 class NewProjectForm extends React.Component<Props, any> {
+  constructor(props: Props) {
+    super(props);
+    this.handleCancel = this.handleCancel.bind(this);
+  }
+
+  private handleCancel(e: any) {
+    const { submitting, closeDialog } = this.props;
+
+    if (!submitting) {
+      closeDialog(e);
+    }
+  }
+
   public render() {
     const { handleSubmit, pristine, submitting, error, invalid, closeDialog, existingProjects } = this.props;
     const dropdownValues = existingProjects.sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp)
@@ -84,7 +98,10 @@ class NewProjectForm extends React.Component<Props, any> {
         </div>
         <footer className={styles.footer}>
           <div>
-            <a className={styles.cancel} onClick={closeDialog}>
+            <a
+              className={classNames(styles.cancel, { [styles['disabled-link']]: submitting })}
+              onClick={this.handleCancel}
+            >
               Cancel
             </a>
 

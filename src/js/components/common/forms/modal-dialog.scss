@@ -133,6 +133,14 @@
     &:hover {
       color: #2C3E50;
     }
+
+    &.disabled-link {
+      cursor: default;
+    }
+
+    &.disabled-link:hover {
+      color: #7F8C8D;
+    }
   }
 
   .delete {
