@@ -28,7 +28,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: () => void;
+  closeDialog: (e?: any) => void;
 }
 
 interface FormData {
@@ -94,13 +94,13 @@ const mapStateToProps = (state: StateTree) => ({
     .filter(projectOrError => !isFetchError(projectOrError)) as Project[],
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   closeDialog: (e?: any) => {
     if (e) {
       e.preventDefault();
     }
 
-    return dispatch(Modal.actions.closeModal(ModalType.NewProject));
+    dispatch(Modal.actions.closeModal(ModalType.NewProject));
   },
 });
 

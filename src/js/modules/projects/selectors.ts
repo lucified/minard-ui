@@ -9,7 +9,7 @@ const selectProjectTree = (state: StateTree) => state.entities.projects;
 
 export const getProjects = createSelector(
   selectProjectTree,
-  projects => values<Project | FetchError>(projects)
+  projects => values<Project | FetchError>(projects),
 );
 
 export const getProject = (state: StateTree, id: string): Project | FetchError | undefined =>

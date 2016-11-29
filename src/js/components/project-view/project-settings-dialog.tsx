@@ -32,7 +32,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: () => void;
+  closeDialog: (e?: any) => void;
   deleteProject: (id: string, resolve: () => void, reject: () => void) => void;
   clearDeletionErrors: () => void;
 }
@@ -143,9 +143,15 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: () => dispatch(Modal.actions.closeModal(ModalType.ProjectSettings)),
-  deleteProject: (id, resolve, reject) => dispatch(Projects.actions.deleteProjectPromiseResolver(id, resolve, reject)),
-  clearDeletionErrors: () => dispatch(Errors.actions.clearProjectDeletionErrors()),
+  closeDialog: (e?: any) => {
+    dispatch(Modal.actions.closeModal(ModalType.ProjectSettings));
+  },
+  deleteProject: (id, resolve, reject) => {
+    dispatch(Projects.actions.deleteProjectPromiseResolver(id, resolve, reject));
+  },
+  clearDeletionErrors: () => {
+    dispatch(Errors.actions.clearProjectDeletionErrors())
+  },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

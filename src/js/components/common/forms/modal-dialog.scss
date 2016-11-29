@@ -106,6 +106,7 @@
     outline: none;
     border-radius: 5px;
     padding: 14px 24px;
+    width: 164px;
     cursor: pointer;
 
     font-size: 18px;
@@ -132,6 +133,15 @@
 
     &:hover {
       color: #2C3E50;
+    }
+
+    &.disabled-link {
+      cursor: default;
+      color: #D8D8D8;
+    }
+
+    &.disabled-link:hover {
+      color: #D8D8D8;
     }
   }
 
@@ -160,4 +170,8 @@
   color: #FFFFFF;
   letter-spacing: -0.21px;
   line-height: 21px;
+}
+
+.template-dropdown {
+  width: 210px;
 }

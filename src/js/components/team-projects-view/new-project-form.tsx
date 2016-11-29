@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Select from 'react-select';
 import 'react-select/dist/react-select.css';
@@ -14,7 +15,7 @@ const styles = require('../common/forms/modal-dialog.scss');
 interface PassedProps {
   existingProjects: Project[];
   onSubmitSuccess: (projectId: string) => void;
-  closeDialog: () => void;
+  closeDialog: (e?: any) => void;
 }
 
 interface FormData {
@@ -51,38 +52,20 @@ const toLowerCase = (value?: string): string | undefined => value && value.toLow
 const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
-// From https://github.com/erikras/redux-form/issues/82#issuecomment-238599783
-class SelectInput extends React.Component<any, any> {
-  constructor(props: any) {
+class NewProjectForm extends React.Component<Props, any> {
+  constructor(props: Props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
-  private onChange(event: any) {
-    if (this.props.input.onChange) {
-      // To be aligned with how redux-form publishes its CHANGE action payload.
-      // The event received is an object with 2 keys: "value" and "label".
-      // Will be null if the selection is cleared.
-      this.props.input.onChange(event && event.value);
+  private handleCancel(e: any) {
+    const { submitting, closeDialog } = this.props;
+
+    if (!submitting) {
+      closeDialog(e);
     }
   }
 
-  public render() {
-    return (
-      <Select
-        {...this.props}
-        value={this.props.input.value || ''}
-        onBlur={() => this.props.input.onBlur(this.props.input.value)}
-        onChange={this.onChange}
-        options={this.props.options}
-        autosize={false}
-        disabled={this.props.meta.submitting || this.props.options.length === 0}
-      />
-    );
-  }
-}
-
-class NewProjectForm extends React.Component<Props, any> {
   public render() {
     const { handleSubmit, pristine, submitting, error, invalid, closeDialog, existingProjects } = this.props;
     const dropdownValues = existingProjects.sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp)
@@ -115,7 +98,10 @@ class NewProjectForm extends React.Component<Props, any> {
         </div>
         <footer className={styles.footer}>
           <div>
-            <a className={styles.cancel} onClick={closeDialog}>
+            <a
+              className={classNames(styles.cancel, { [styles['disabled-link']]: submitting })}
+              onClick={this.handleCancel}
+            >
               Cancel
             </a>
 
@@ -123,12 +109,26 @@ class NewProjectForm extends React.Component<Props, any> {
               {submitting ? 'Creating...' : 'Create project'}
             </button>
           </div>
-          <div>
-            <Field
-              name="projectTemplate"
-              component={field => <SelectInput {...field} options={dropdownValues} />}
-            />
-          </div>
+          {dropdownValues.length > 0 && (
+            <div>
+              <Field
+                name="projectTemplate"
+                component={field =>
+                  <Select
+                    value={field.input.value}
+                    onChange={field.input.onChange}
+                    onBlur={() => field.input.onBlur(field.input.value)}
+                    options={dropdownValues}
+                    placeholder="Clone existing project…"
+                    autosize={false}
+                    disabled={field.meta.submitting}
+                    className={styles['template-dropdown']}
+                    simpleValue
+                  />
+                }
+              />
+            </div>
+          )}
         </footer>
       </form>
     );
