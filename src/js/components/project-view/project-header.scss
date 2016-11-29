@@ -4,12 +4,17 @@
   font-size: 60px;
   letter-spacing: -2px;
   color: #2C3E50;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .description {
   font-size: 26px;
   color: #2C3E50;
   line-height: 34px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .settings {
