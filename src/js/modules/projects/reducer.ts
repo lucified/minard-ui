@@ -148,7 +148,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
           // TODO: Remove this. used for debugging
           if (!isArray(newProject.activeUsers)) {
-            console.error('activeUsers is not an array when updating authors in project!', newProject.activeUsers);
+            console.error('activeUsers is not an array when updating authors in project!', newProject.activeUsers, action, project);
           }
 
           return Object.assign({}, state, { [id]: newProject });
