@@ -137,10 +137,11 @@
 
     &.disabled-link {
       cursor: default;
+      color: #D8D8D8;
     }
 
     &.disabled-link:hover {
-      color: #7F8C8D;
+      color: #D8D8D8;
     }
   }
 
