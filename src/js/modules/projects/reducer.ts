@@ -1,7 +1,4 @@
-import * as omit from 'lodash/omit';
-import * as unionBy from 'lodash/unionBy';
-import * as uniq from 'lodash/uniq';
-import * as xor from 'lodash/xor';
+import { isArray, omit, unionBy, uniq, xor } from 'lodash';
 import { Reducer } from 'redux';
 
 import { FetchError, isFetchError } from '../errors';
@@ -141,13 +138,19 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (project && !isFetchError(project)) {
         if (xor(
           storeAuthorsAction.authors.map(user => user.email),
-          project.activeUsers.map(user => user.email)
+          project.activeUsers.map(user => user.email),
         ).length === 0) {
           // All users already included
           return state;
         } else {
           const newProject = Object.assign({}, project);
           newProject.activeUsers = unionBy(action.authors, project.activeUsers, (user: t.ProjectUser) => user.email);
+
+          // TODO: Remove this. used for debugging
+          if (!isArray(newProject.activeUsers)) {
+            console.error('activeUsers is not an array when updating authors in project!', newProject.activeUsers);
+          }
+
           return Object.assign({}, state, { [id]: newProject });
         }
       }
@@ -209,7 +212,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         if (Raven.isSetup()) {
           Raven.captureMessage(
             'Trying to update latest deployed commit on nonexistant project.',
-            { extra: { action, state } }
+            { extra: { action, state } },
           );
         }
       }
