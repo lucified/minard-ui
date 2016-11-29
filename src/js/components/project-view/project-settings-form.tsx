@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Field, FormProps, formValueSelector, reduxForm } from 'redux-form';
@@ -63,6 +64,19 @@ const spaceToHyphen = (value?: string): string | undefined => value && value.rep
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
 class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, any> {
+  constructor(props: GeneratedStateProps & Props) {
+    super(props);
+    this.handleCancel = this.handleCancel.bind(this);
+  }
+
+  private handleCancel(e: any) {
+    const { submitting, closeDialog } = this.props;
+
+    if (!submitting) {
+      closeDialog(e);
+    }
+  }
+
   public render() {
     const {
       handleSubmit,
@@ -135,7 +149,10 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, a
         </div>
         <footer className={styles.footer}>
           <div className={styles['primary-actions']}>
-            <a className={styles.cancel} onClick={closeDialog}>
+            <a
+              className={classNames(styles.cancel, { [styles['disabled-link']]: submitting || deletionInProgress })}
+              onClick={this.handleCancel}
+            >
               Cancel
             </a>
             {submitButtonToShow}
