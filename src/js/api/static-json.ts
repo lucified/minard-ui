@@ -36,20 +36,21 @@ const editedProjectJSON = require('file!../../../json/edited-project.json');
 
 function callApi(url: string) {
   return fetch(url, { credentials: 'same-origin' })
-    .then(response =>
-      response.json().then(json => ({
+    .then(
+      response => response.json().then(json => ({
         json,
         response,
-      })) as Promise<{ json: any, response: IResponse}>
-    ).then(({ json, response }) =>
-      response.ok ? json : Promise.reject(json)
-    ).then(json => ({
-      response: json,
-    }))
-    .catch(error => ({
-      error: error.message || 'An error occurred',
-      details: '',
-    }));
+      })) as Promise<{ json: any, response: IResponse}>,
+    ).then(
+      ({ json, response }) => response.ok ? json : Promise.reject(json),
+    ).then(
+      json => ({ response: json }),
+    ).catch(
+      error => ({
+        error: error.message || 'An error occurred',
+        details: '',
+      }),
+    );
 }
 
 const Activity = {
