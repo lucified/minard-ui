@@ -136,6 +136,11 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       project = state[id];
 
       if (project && !isFetchError(project)) {
+        // TODO: Remove this. used for debugging
+        if (!isArray(project.activeUsers)) {
+          console.error('old activeUsers is not an array when updating authors in project!', action, project);
+        }
+
         if (xor(
           storeAuthorsAction.authors.map(user => user.email),
           project.activeUsers.map(user => user.email),
