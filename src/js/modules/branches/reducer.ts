@@ -58,8 +58,6 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return state;
       }
 
-      console.log('Trying to save commits to branch that does not exist.', action); // tslint:disable-line
-
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH:
       const updateLatestDeployedAction = <t.UpdateLatestDeployedCommitAction> action;
@@ -76,8 +74,6 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return state;
       }
 
-      console.log('Trying to save deployed commit to branch that does not exist.', action); // tslint:disable-line
-
       return state;
     case REMOVE_BRANCH:
       const removeAction = <t.RemoveBranchAction> action;
@@ -85,8 +81,6 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       if (state[id]) {
         return omit<t.BranchState, t.BranchState>(state, id);
       }
-
-      console.log('Trying to remove a branch that does not exist.', action); // tslint:disable-line
 
       return state;
     // Saves any new commits and sets the latestCommit of the branch
@@ -123,8 +117,6 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: newBranch });
       }
 
-      console.log('Trying to add commits to a branch that does not exist.', action); // tslint:disable-line
-
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH:
       const updateActivityTimestampAction = <t.UpdateLatestActivityTimestampAction> action;
@@ -138,8 +130,6 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
           return Object.assign({}, state, { [id]: newBranch });
         }
       }
-
-      console.log('Trying to update timestamp on nonexistant branch.', action); // tslint:disable-line
 
       return state;
     case STORE_BRANCHES:
