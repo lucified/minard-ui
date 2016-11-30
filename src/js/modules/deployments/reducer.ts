@@ -23,7 +23,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action, state } });
+          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action } });
         }
       }
 

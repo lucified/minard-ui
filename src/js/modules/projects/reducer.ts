@@ -36,7 +36,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action, state } });
+          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action } });
         }
       }
 
@@ -66,7 +66,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to save branches to project that does not exist.', { extra: { action, state } });
+          Raven.captureMessage('Trying to save branches to project that does not exist.', { extra: { action } });
         }
       }
 
@@ -108,7 +108,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to update nonexistant project.', { extra: { action, state } });
+          Raven.captureMessage('Trying to update nonexistant project.', { extra: { action } });
         }
       }
 
@@ -165,7 +165,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to add authors to nonexistant project.', { extra: { action, state } });
+          Raven.captureMessage('Trying to add authors to nonexistant project.', { extra: { action } });
         }
       }
 
@@ -190,7 +190,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');
         if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to update timestamp on nonexistant project.', { extra: { action, state } });
+          Raven.captureMessage('Trying to update timestamp on nonexistant project.', { extra: { action } });
         }
       }
 
@@ -217,7 +217,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         if (Raven.isSetup()) {
           Raven.captureMessage(
             'Trying to update latest deployed commit on nonexistant project.',
-            { extra: { action, state } },
+            { extra: { action } },
           );
         }
       }
@@ -249,7 +249,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         if (Raven.isSetup()) {
           Raven.captureMessage(
             'Trying to remove branch from nonexistant project.',
-            { extra: { action, state } },
+            { extra: { action } },
           );
         }
       }
