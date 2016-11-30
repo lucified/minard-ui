@@ -206,6 +206,9 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
 
   private handleCodePush(event: EventSourceEvent) {
     try {
+      // TODO: remove. for debugging
+      console.log('code push event:', event.data);
+
       const response = JSON.parse(event.data) as CodePushResponse;
       const { after, before, commits: commitsResponse, parents, project } = response;
 
