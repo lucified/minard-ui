@@ -4,7 +4,7 @@ import { Api, ApiPromise } from './types';
 
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
-export const getBuildLogURL = (deploymentId: string): string => '#';
+export const getBuildLogURL = (_deploymentId: string): string => '#';
 
 const activitiesJSON = require('file!../../../json/activities.json');
 const allProjectsJSON = require('file!../../../json/projects.json');
@@ -53,8 +53,8 @@ function callApi(url: string) {
 }
 
 const Activity = {
-  fetchAll: (count: number, until?: number): ApiPromise => callApi(activitiesJSON),
-  fetchAllForProject: (id: string, count: number, until?: number): ApiPromise => callApi(activitiesJSON),
+  fetchAll: (_count: number, _until?: number): ApiPromise => callApi(activitiesJSON),
+  fetchAllForProject: (_id: string, _count: number, _until?: number): ApiPromise => callApi(activitiesJSON),
 };
 
 const Branch = {
@@ -63,8 +63,8 @@ const Branch = {
 };
 
 const Commit = {
-  fetch: (id: string): ApiPromise => callApi(commitJSON),
-  fetchForBranch: (id: string, count: number, until?: number): ApiPromise => callApi(branchCommitsJSON[id]),
+  fetch: (_id: string): ApiPromise => callApi(commitJSON),
+  fetchForBranch: (id: string, _count: number, _until?: number): ApiPromise => callApi(branchCommitsJSON[id]),
 };
 
 const Deployment = {
@@ -74,10 +74,10 @@ const Deployment = {
 const Project = {
   fetchAll: (): ApiPromise => callApi(allProjectsJSON),
   fetch: (id: string): ApiPromise => callApi(projectJSON[id]),
-  create: (name: string, description?: string): ApiPromise => callApi(newProjectJSON),
-  edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
+  create: (_name: string, _description?: string): ApiPromise => callApi(newProjectJSON),
+  edit: (_id: string, _newAttributes: { name?: string, description?: string }): ApiPromise =>
     callApi(editedProjectJSON),
-  delete: (id: string): ApiPromise => Promise.resolve({ response: { data: [] } }),
+  delete: (_id: string): ApiPromise => Promise.resolve({ response: { data: [] } }),
     // Promise.resolve({ error: 'sad face :(' });
 };
 

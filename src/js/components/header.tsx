@@ -31,7 +31,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-const reloadPage = (e: any) => {
+const reloadPage = (_e: any) => {
   location.reload(true);
   return false;
 };
@@ -93,7 +93,7 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => {
           </div>
           <div className={classNames(styles['profile-container'], 'col-xs')}>
             <span className={styles['team-dropdown']}>
-              {teamName /* TODO: add link and <Icon className={styles.caret} name="caret-down" /> */}
+              {teamName/* TODO: add link and <Icon className={styles.caret} name="caret-down" /> */}
             </span>
             {/* TODO: <Avatar size="lg" email="ville.saarinen@gmail.com" />*/}
           </div>
@@ -103,7 +103,7 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => {
   );
 };
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (state: StateTree): GeneratedStateProps => {
   const selectedSection =
     Selected.selectors.getSelectedBranch(state) === null &&
     Selected.selectors.getSelectedProject(state) === null &&

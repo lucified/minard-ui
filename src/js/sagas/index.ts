@@ -1,11 +1,11 @@
-import { compact, uniq } from 'lodash';
+import { compact } from 'lodash';
 import { SubmissionError } from 'redux-form';
 import { delay, takeEvery, takeLatest } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
 import { Api, ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
-import Activities, { Activity, LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
+import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
   Branch,
   LoadBranchesForProjectAction,
@@ -13,9 +13,9 @@ import Branches, {
   UpdateBranchWithCommitsAction,
 } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
-import Deployments, { Deployment } from '../modules/deployments';
+import Deployments from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
-import { FORM_SUBMIT, onSubmitActions } from '../modules/forms';
+import { FORM_SUBMIT } from '../modules/forms';
 import Projects, {
   DeleteProjectAction,
   LoadAllProjectsAction,
@@ -75,7 +75,11 @@ export default function createSagas(api: Api) {
     checkIfAllActivitiesLoaded,
   );
 
-  function* checkIfAllActivitiesLoaded(response: ApiResponse, count: number, until?: number): IterableIterator<Effect> {
+  function* checkIfAllActivitiesLoaded(
+    response: ApiResponse,
+    count: number,
+    _until?: number,
+  ): IterableIterator<Effect> {
     if ((<ApiEntity[]> response.data).length < count) {
       yield put(Requests.actions.allActivitiesRequested());
     }
@@ -112,7 +116,7 @@ export default function createSagas(api: Api) {
     id: string,
     response: ApiResponse,
     count: number,
-    until?: number,
+    _until?: number,
   ): IterableIterator<Effect> {
     if ((<ApiEntity[]> response.data).length < count) {
       yield put(Requests.actions.allActivitiesRequestedForProject(id));
@@ -120,7 +124,7 @@ export default function createSagas(api: Api) {
   }
 
   // ALL PROJECTS
-  function* loadAllProjects(action: LoadAllProjectsAction): IterableIterator<Effect> {
+  function* loadAllProjects(_action: LoadAllProjectsAction): IterableIterator<Effect> {
     const fetchSuccess = yield call(fetchAllProjects);
     if (fetchSuccess) {
       yield fork(ensureAllProjectsRelatedDataLoaded);
@@ -304,7 +308,7 @@ export default function createSagas(api: Api) {
   const loadDeployment =
     createLoader(Deployments.selectors.getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
 
-  function* ensureDeploymentRelatedDataLoaded(id: string): IterableIterator<Effect> {
+  function* ensureDeploymentRelatedDataLoaded(_id: string): IterableIterator<Effect> {
     // Nothing to do
   }
 
@@ -363,7 +367,7 @@ export default function createSagas(api: Api) {
     id: string,
     response: ApiResponse,
     count: number,
-    until?: number,
+    _until?: number,
   ): IterableIterator<Effect> {
     const commitIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
     yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));

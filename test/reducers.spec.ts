@@ -1,9 +1,8 @@
 import { expect } from 'chai';
-import { Action, Reducer } from 'redux';
+import { Reducer } from 'redux';
 
-import { ApiResponse } from '../src/js/api/types';
-import Activities, { ActivityState, ActivityType } from '../src/js/modules/activities';
-import Branches, { BranchState } from '../src/js/modules/branches';
+import { ActivityState } from '../src/js/modules/activities';
+import { BranchState } from '../src/js/modules/branches';
 import Commits, { CommitState } from '../src/js/modules/commits';
 import Deployments, { DeploymentState, DeploymentStatus } from '../src/js/modules/deployments';
 import Errors, { DeleteError, ErrorState } from '../src/js/modules/errors';
@@ -13,7 +12,7 @@ import Projects, { ProjectState } from '../src/js/modules/projects';
 import Requests, { RequestsState } from '../src/js/modules/requests';
 import Selected, { SelectedState, SetSelectedAction } from '../src/js/modules/selected';
 
-const testData = {
+/*const testData = {
   allProjectsResponse: require('../json/projects.json') as ApiResponse,
   deploymentResponse: require('../json/deployment-7.json') as ApiResponse,
   branchResponse: require('../json/branch-1.json') as ApiResponse,
@@ -23,19 +22,19 @@ const testData = {
   projectBranchesResponse: require('../json/project-1-branches.json') as ApiResponse,
   branchCommitsResponse: require('../json/branch-2-commits.json') as ApiResponse,
 };
-
+*/
 type ModuleState = BranchState | CommitState | DeploymentState | ProjectState | ActivityState;
-interface AnyAction extends Action {
+/*interface AnyAction extends Action {
   [field: string]: any;
 };
-
+*/
 const testInitialState = (reducer: Reducer<ModuleState>, expectedState: ModuleState) => {
   it('returns the correct default state', () => {
     expect(reducer(<any> undefined, { type: 'foobar' })).to.deep.equal(expectedState);
   });
 };
 
-const testStoreEntities = (
+/*const testStoreEntities = (
   reducer: Reducer<ModuleState>,
   action: AnyAction,
   expectedStateFromEmpty: ModuleState,
@@ -95,23 +94,23 @@ const testFailedRequest = (
       expect(newState).to.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
-};
+};*/
 
 const testReducer = (
   reducer: Reducer<ModuleState>,
-  storeAction: { type: string, entities: any },
-  expectedObjectsToStore: ModuleState,
-  stateWithoutExistingEntity: ModuleState,
-  stateWithExistingEntity: ModuleState,
-  failedRequestAction: FetchError,
+  _storeAction: { type: string, entities: any },
+  _expectedObjectsToStore: ModuleState,
+  _stateWithoutExistingEntity: ModuleState,
+  _stateWithExistingEntity: ModuleState,
+  _failedRequestAction: FetchError,
 ) => {
   testInitialState(reducer, {});
 
+  /* TODO
   let expectedStateFromEmpty = expectedObjectsToStore;
   let expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
   let expectedStateWithExistingEntity = Object.assign({}, stateWithExistingEntity, expectedObjectsToStore);
 
-  /* TODO
   testStoreEntities(
     reducer,
     storeAction,
@@ -802,7 +801,7 @@ describe('reducers', () => {
   });
 
   describe('activities', () => {
-    const { reducer } = Activities;
+    /*const { reducer } = Activities;
 
     const successfulActivitiesRequestAction = {
       type: Requests.actions.Activities.LoadAllActivities.SUCCESS.type,
@@ -880,7 +879,8 @@ describe('reducers', () => {
             email: 'juho@lucify.com',
             timestamp: 1469634681802,
           },
-          message: 'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases',
+          message: 'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. ' +
+            'It should be truncated in some cases',
           deployment: '8',
         },
         deployment: {
@@ -1028,7 +1028,6 @@ describe('reducers', () => {
     const expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
     const expectedStateWithExistingEntity = Object.assign({}, stateWithExistingEntity, expectedObjectsToStore);
 
-    /* TODO
     testStoreEntities(
       reducer,
       storeAction,
@@ -1064,7 +1063,6 @@ describe('reducers', () => {
       });
     });
 
-
     describe(`successful request activities for project (${successfulActivitiesForProjectRequestAction.type})`, () => {
       it('with an empty initial state', () => {
         expect(reducer(<any> undefined, successfulActivitiesForProjectRequestAction)).to.deep.equal(
@@ -1095,6 +1093,7 @@ describe('reducers', () => {
   });
 
   describe('branches', () => {
+    /* TODO: fix
     const { reducer } = Branches;
 
     const expectedObjectsToStore: BranchState = {
@@ -1197,7 +1196,6 @@ describe('reducers', () => {
       5: stateWithExistingEntity['5'],
     };
 
-    /* TODO: fix
     testStoreEntities(
       reducer,
       storeAction,
@@ -1265,7 +1263,8 @@ describe('reducers', () => {
         },
         message: 'Try to do something',
         deployment: '8',
-        description: 'This is a longer commit explanation for whatever was done to the commit. It should be truncated in some cases',
+        description: 'This is a longer commit explanation for whatever was done to the commit. ' +
+          'It should be truncated in some cases',
       },
     };
 
@@ -1539,7 +1538,7 @@ describe('reducers', () => {
           const newState = reducer(initialState, action);
           expect(newState).to.deep.equal(expectedNewState);
           expect(newState).to.not.equal(initialState);
-        }
+        },
       );
 
       it('does nothing if the project does not exist', () => {

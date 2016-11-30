@@ -60,7 +60,7 @@ class ActivityList extends React.Component<Props, any> {
     return (
       <div>
         <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
-          {groupedActivities.map((activityGroup, i) => {
+          {groupedActivities.map(activityGroup => {
             const firstActivity = activityGroup[0];
             return (
               <ActivityGroup

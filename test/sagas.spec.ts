@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Action } from 'redux';
 import { SubmissionError } from 'redux-form';
-import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
+import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../src/js/api/convert';
 import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
@@ -31,26 +31,26 @@ const createApi = (): Api => {
   return {
     Project: {
       fetchAll: () => Promise.resolve(emptyResponse),
-      fetch: (id: string) => Promise.resolve(emptyResponse),
-      create: (name: string, description?: string) => Promise.resolve(emptyResponse),
-      edit: (id: string, newAttributes: { description?: string, name?: string }) =>
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      create: (_name: string, _description?: string) => Promise.resolve(emptyResponse),
+      edit: (_id: string, _newAttributes: { description?: string, name?: string }) =>
         Promise.resolve(emptyResponse),
-      delete: (id: string) => Promise.resolve(emptyResponse),
+      delete: (_id: string) => Promise.resolve(emptyResponse),
     },
     Activity: {
       fetchAll: () => Promise.resolve(emptyResponse),
-      fetchAllForProject: (id: string) => Promise.resolve(emptyResponse),
+      fetchAllForProject: (_id: string) => Promise.resolve(emptyResponse),
     },
     Deployment: {
-      fetch: (id: string) => Promise.resolve(emptyResponse),
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
     },
     Branch: {
-      fetch: (id: string) => Promise.resolve(emptyResponse),
-      fetchForProject: (id: string) => Promise.resolve(emptyResponse),
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchForProject: (_id: string) => Promise.resolve(emptyResponse),
     },
     Commit: {
-      fetch: (id: string) => Promise.resolve(emptyResponse),
-      fetchForBranch: (id: string) => Promise.resolve(emptyResponse),
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchForBranch: (_id: string) => Promise.resolve(emptyResponse),
     },
   };
 };

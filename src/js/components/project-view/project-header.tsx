@@ -49,7 +49,7 @@ const ProjectHeader = ({ project, openProjectSettingsDialog }: PassedProps & Gen
 );
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  openProjectSettingsDialog: (e: any) => {
+  openProjectSettingsDialog: (_e: any) => {
     dispatch(Modal.actions.openModal(ModalType.ProjectSettings));
   },
 });
