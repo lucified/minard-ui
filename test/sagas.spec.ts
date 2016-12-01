@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Action } from 'redux';
 import { SubmissionError } from 'redux-form';
-import { Effect, call, fork, put, race, select, take } from 'redux-saga/effects';
+import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../src/js/api/convert';
 import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
@@ -31,26 +31,26 @@ const createApi = (): Api => {
   return {
     Project: {
       fetchAll: () => Promise.resolve(emptyResponse),
-      fetch: (id: string) => Promise.resolve(emptyResponse),
-      create: (name: string, description?: string) => Promise.resolve(emptyResponse),
-      edit: (id: string, newAttributes: { description?: string, name?: string }) =>
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      create: (_name: string, _description?: string) => Promise.resolve(emptyResponse),
+      edit: (_id: string, _newAttributes: { description?: string, name?: string }) =>
         Promise.resolve(emptyResponse),
-      delete: (id: string) => Promise.resolve(emptyResponse),
+      delete: (_id: string) => Promise.resolve(emptyResponse),
     },
     Activity: {
       fetchAll: () => Promise.resolve(emptyResponse),
-      fetchAllForProject: (id: string) => Promise.resolve(emptyResponse),
+      fetchAllForProject: (_id: string) => Promise.resolve(emptyResponse),
     },
     Deployment: {
-      fetch: (id: string) => Promise.resolve(emptyResponse),
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
     },
     Branch: {
-      fetch: (id: string) => Promise.resolve(emptyResponse),
-      fetchForProject: (id: string) => Promise.resolve(emptyResponse),
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchForProject: (_id: string) => Promise.resolve(emptyResponse),
     },
     Commit: {
-      fetch: (id: string) => Promise.resolve(emptyResponse),
-      fetchForBranch: (id: string) => Promise.resolve(emptyResponse),
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchForBranch: (_id: string) => Promise.resolve(emptyResponse),
     },
   };
 };
@@ -67,11 +67,11 @@ describe('sagas', () => {
       const action = { type: Projects.actions.LOAD_ALL_PROJECTS };
 
       expect(iterator.next().value).to.deep.equal(
-        take(Projects.actions.LOAD_ALL_PROJECTS)
+        take(Projects.actions.LOAD_ALL_PROJECTS),
       );
 
       expect(iterator.next(action).value).to.deep.equal(
-        call(sagas.loadAllProjects, action)
+        call(sagas.loadAllProjects, action),
       );
     });
   });
@@ -82,11 +82,11 @@ describe('sagas', () => {
       const action = { type: Activities.actions.LOAD_ACTIVITIES };
 
       expect(iterator.next().value).to.deep.equal(
-        take(Activities.actions.LOAD_ACTIVITIES)
+        take(Activities.actions.LOAD_ACTIVITIES),
       );
 
       expect(iterator.next(action).value).to.deep.equal(
-        call(sagas.loadActivities, action)
+        call(sagas.loadActivities, action),
       );
     });
   });
@@ -109,15 +109,15 @@ describe('sagas', () => {
         const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
-          select(selector, id)
+          select(selector, id),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          call(fetcher, id)
+          call(fetcher, id),
         );
 
         expect(iterator.next(true).value).to.deep.equal(
-          fork(ensurer, id)
+          fork(ensurer, id),
         );
 
         expect(iterator.next().done).to.equal(true);
@@ -127,11 +127,11 @@ describe('sagas', () => {
         const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
-          select(selector, id)
+          select(selector, id),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          call(fetcher, id)
+          call(fetcher, id),
         );
 
         expect(iterator.next(false).done).to.equal(true);
@@ -141,11 +141,11 @@ describe('sagas', () => {
         const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(
-          select(selector, id)
+          select(selector, id),
         );
 
         expect(iterator.next({ id }).value).to.deep.equal(
-          fork(ensurer, id)
+          fork(ensurer, id),
         );
 
         expect(iterator.next().done).to.equal(true);
@@ -194,11 +194,11 @@ describe('sagas', () => {
       const iterator = sagas.loadAllProjects(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchAllProjects)
+        call(sagas.fetchAllProjects),
       );
 
       expect(iterator.next(true).value).to.deep.equal(
-        fork(sagas.ensureAllProjectsRelatedDataLoaded)
+        fork(sagas.ensureAllProjectsRelatedDataLoaded),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -208,7 +208,7 @@ describe('sagas', () => {
       const iterator = sagas.loadAllProjects(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchAllProjects)
+        call(sagas.fetchAllProjects),
       );
 
       expect(iterator.next(false).done).to.equal(true);
@@ -226,11 +226,11 @@ describe('sagas', () => {
       const iterator = sagas.loadActivities(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivities, action.count, action.until)
+        call(sagas.fetchActivities, action.count, action.until),
       );
 
       expect(iterator.next(true).value).to.deep.equal(
-        fork(sagas.ensureActivitiesRelatedDataLoaded)
+        fork(sagas.ensureActivitiesRelatedDataLoaded),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -240,7 +240,7 @@ describe('sagas', () => {
       const iterator = sagas.loadActivities(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivities, action.count, action.until)
+        call(sagas.fetchActivities, action.count, action.until),
       );
 
       expect(iterator.next(false).done).to.equal(true);
@@ -262,15 +262,15 @@ describe('sagas', () => {
       const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Requests.selectors.isLoadingActivitiesForProject, id)
+        select(Requests.selectors.isLoadingActivitiesForProject, id),
       );
 
       expect(iterator.next(false).value).to.deep.equal(
-        call(sagas.fetchActivitiesForProject, id, count, until)
+        call(sagas.fetchActivitiesForProject, id, count, until),
       );
 
       expect(iterator.next(true).value).to.deep.equal(
-        fork(sagas.ensureActivitiesRelatedDataLoaded)
+        fork(sagas.ensureActivitiesRelatedDataLoaded),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -280,11 +280,11 @@ describe('sagas', () => {
       const iterator = sagas.loadActivitiesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Requests.selectors.isLoadingActivitiesForProject, id)
+        select(Requests.selectors.isLoadingActivitiesForProject, id),
       );
 
       expect(iterator.next(false).value).to.deep.equal(
-        call(sagas.fetchActivitiesForProject, id, count, until)
+        call(sagas.fetchActivitiesForProject, id, count, until),
       );
 
       expect(iterator.next(false).done).to.equal(true);
@@ -301,11 +301,11 @@ describe('sagas', () => {
       const iterator = sagas.loadBranchesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Projects.selectors.getProject, action.id)
+        select(Projects.selectors.getProject, action.id),
       );
 
       expect(iterator.next({ id: action.id }).value).to.deep.equal(
-        call(sagas.fetchBranchesForProject, action.id)
+        call(sagas.fetchBranchesForProject, action.id),
       );
     });
 
@@ -313,19 +313,19 @@ describe('sagas', () => {
       const iterator = sagas.loadBranchesForProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Projects.selectors.getProject, action.id)
+        select(Projects.selectors.getProject, action.id),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        take(Projects.actions.STORE_PROJECTS)
+        take(Projects.actions.STORE_PROJECTS),
       );
 
       expect(iterator.next({ entities: [{ id: 'foo' }]}).value).to.deep.equal(
-        take(Projects.actions.STORE_PROJECTS)
+        take(Projects.actions.STORE_PROJECTS),
       );
 
       expect(iterator.next({ entities: [{ id: 'bar' }, { id: action.id }]}).value).to.deep.equal(
-        call(sagas.fetchBranchesForProject, action.id)
+        call(sagas.fetchBranchesForProject, action.id),
       );
     });
 
@@ -335,7 +335,7 @@ describe('sagas', () => {
       iterator.next();
       iterator.next({ id: action.id });
       expect(iterator.next(true).value).to.deep.equal(
-        fork(sagas.ensureBranchesForProjectRelatedDataLoaded, action.id)
+        fork(sagas.ensureBranchesForProjectRelatedDataLoaded, action.id),
       );
       expect(iterator.next().done).to.equal(true);
     });
@@ -361,15 +361,15 @@ describe('sagas', () => {
       const iterator = sagas.loadCommitsForBranch(action);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, action.id)
+        select(Branches.selectors.getBranch, action.id),
       );
 
       expect(iterator.next({ id: action.id }).value).to.deep.equal(
-        select(Requests.selectors.isLoadingCommitsForBranch, action.id)
+        select(Requests.selectors.isLoadingCommitsForBranch, action.id),
       );
 
       expect(iterator.next(false).value).to.deep.equal(
-        call(sagas.fetchCommitsForBranch, action.id, action.count, action.until)
+        call(sagas.fetchCommitsForBranch, action.id, action.count, action.until),
       );
     });
 
@@ -377,11 +377,11 @@ describe('sagas', () => {
       const iterator = sagas.loadCommitsForBranch(action);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, action.id)
+        select(Branches.selectors.getBranch, action.id),
       );
 
       expect(iterator.next({ id: action.id }).value).to.deep.equal(
-        select(Requests.selectors.isLoadingCommitsForBranch, action.id)
+        select(Requests.selectors.isLoadingCommitsForBranch, action.id),
       );
 
       expect(iterator.next(true).done).to.equal(true);
@@ -391,23 +391,23 @@ describe('sagas', () => {
       const iterator = sagas.loadCommitsForBranch(action);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, action.id)
+        select(Branches.selectors.getBranch, action.id),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        take(Branches.actions.STORE_BRANCHES)
+        take(Branches.actions.STORE_BRANCHES),
       );
 
       expect(iterator.next({ entities: [{ id: 'foo' }]}).value).to.deep.equal(
-        take(Branches.actions.STORE_BRANCHES)
+        take(Branches.actions.STORE_BRANCHES),
       );
 
       expect(iterator.next({ entities: [{ id: 'bar' }, { id: action.id }]}).value).to.deep.equal(
-        select(Requests.selectors.isLoadingCommitsForBranch, action.id)
+        select(Requests.selectors.isLoadingCommitsForBranch, action.id),
       );
 
       expect(iterator.next(false).value).to.deep.equal(
-        call(sagas.fetchCommitsForBranch, action.id, action.count, action.until)
+        call(sagas.fetchCommitsForBranch, action.id, action.count, action.until),
       );
     });
 
@@ -427,7 +427,7 @@ describe('sagas', () => {
       iterator.next({ id: action.id }); // Select
       iterator.next(false);
       expect(iterator.next(true).value).to.deep.equal(
-        fork(sagas.ensureCommitsForBranchRelatedDataLoaded, action.id)
+        fork(sagas.ensureCommitsForBranchRelatedDataLoaded, action.id),
       );
       expect(iterator.next().done).to.equal(true);
     });
@@ -469,23 +469,23 @@ describe('sagas', () => {
         const objectsToStore = [{ id: '1' }, { id: '2' }];
 
         expect(iterator.next().value).to.deep.equal(
-          put(requestActionCreators.REQUEST.actionCreator(id))
+          put(requestActionCreators.REQUEST.actionCreator(id)),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          call(apiCall, id)
+          call(apiCall, id),
         );
 
         expect(iterator.next({ response: responseNoInclude }).value).to.deep.equal(
-          call(converter, responseNoInclude.data)
+          call(converter, responseNoInclude.data),
         );
 
         expect(iterator.next(objectsToStore).value).to.deep.equal(
-          put(storeActionCreator(objectsToStore))
+          put(storeActionCreator(objectsToStore)),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          put(requestActionCreators.SUCCESS.actionCreator(id))
+          put(requestActionCreators.SUCCESS.actionCreator(id)),
         );
 
         const endResult = iterator.next();
@@ -497,16 +497,16 @@ describe('sagas', () => {
         const iterator = fetcher(id);
 
         expect(iterator.next().value).to.deep.equal(
-          put(requestActionCreators.REQUEST.actionCreator(id))
+          put(requestActionCreators.REQUEST.actionCreator(id)),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          call(apiCall, id)
+          call(apiCall, id),
         );
 
         if (response.included && response.included.length > 0) {
           expect(iterator.next({ response }).value).to.deep.equal(
-            call(sagas.storeIncludedEntities, response.included)
+            call(sagas.storeIncludedEntities, response.included),
           );
         }
       });
@@ -517,15 +517,15 @@ describe('sagas', () => {
         const iterator = fetcher(id);
 
         expect(iterator.next().value).to.deep.equal(
-          put(requestActionCreators.REQUEST.actionCreator(id))
+          put(requestActionCreators.REQUEST.actionCreator(id)),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          call(apiCall, id)
+          call(apiCall, id),
         );
 
         expect(iterator.next({ error: errorMessage, details }).value).to.deep.equal(
-          put(requestActionCreators.FAILURE.actionCreator(id, errorMessage, details))
+          put(requestActionCreators.FAILURE.actionCreator(id, errorMessage, details)),
         );
 
         const endResult = iterator.next();
@@ -589,23 +589,23 @@ describe('sagas', () => {
       const iterator = sagas.fetchActivities(count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator())
+        put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator()),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAll, count, until)
+        call(api.Activity.fetchAll, count, until),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toActivities, response.data)
+        call(Converter.toActivities, response.data),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
-        put(Activities.actions.storeActivities(objects as any))
+        put(Activities.actions.storeActivities(objects as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.SUCCESS.actionCreator())
+        put(Requests.actions.Activities.LoadAllActivities.SUCCESS.actionCreator()),
       );
 
       const result = iterator.next();
@@ -627,7 +627,7 @@ describe('sagas', () => {
       iterator.next(objects); // store
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.allActivitiesRequested())
+        put(Requests.actions.allActivitiesRequested()),
       );
 
       iterator.next();
@@ -664,15 +664,15 @@ describe('sagas', () => {
       const iterator = sagas.fetchActivities(count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator())
+        put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator()),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAll, count, until)
+        call(api.Activity.fetchAll, count, until),
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.FAILURE.actionCreator(errorMessage))
+        put(Requests.actions.Activities.LoadAllActivities.FAILURE.actionCreator(errorMessage)),
       );
 
       const result = iterator.next();
@@ -693,23 +693,23 @@ describe('sagas', () => {
       const iterator = sagas.fetchActivitiesForProject(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id))
+        put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAllForProject, id, count, until)
+        call(api.Activity.fetchAllForProject, id, count, until),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toActivities, response.data)
+        call(Converter.toActivities, response.data),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
-        put(Activities.actions.storeActivities(objects as any))
+        put(Activities.actions.storeActivities(objects as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.SUCCESS.actionCreator(id))
+        put(Requests.actions.Activities.LoadActivitiesForProject.SUCCESS.actionCreator(id)),
       );
 
       const result = iterator.next();
@@ -731,7 +731,7 @@ describe('sagas', () => {
       iterator.next(objects); // store
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.allActivitiesRequestedForProject(id))
+        put(Requests.actions.allActivitiesRequestedForProject(id)),
       );
 
       iterator.next();
@@ -768,15 +768,15 @@ describe('sagas', () => {
       const iterator = sagas.fetchActivitiesForProject(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id))
+        put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAllForProject, id, count, until)
+        call(api.Activity.fetchAllForProject, id, count, until),
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.FAILURE.actionCreator(id, errorMessage))
+        put(Requests.actions.Activities.LoadActivitiesForProject.FAILURE.actionCreator(id, errorMessage)),
       );
 
       const result = iterator.next();
@@ -793,23 +793,23 @@ describe('sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }];
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.LoadAllProjects.REQUEST.actionCreator())
+        put(Requests.actions.Projects.LoadAllProjects.REQUEST.actionCreator()),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.fetchAll)
+        call(api.Project.fetchAll),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toProjects, response.data)
+        call(Converter.toProjects, response.data),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
-        put(Projects.actions.storeProjects(objects as any))
+        put(Projects.actions.storeProjects(objects as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.LoadAllProjects.SUCCESS.actionCreator())
+        put(Requests.actions.Projects.LoadAllProjects.SUCCESS.actionCreator()),
       );
 
       const result = iterator.next();
@@ -823,15 +823,15 @@ describe('sagas', () => {
       const iterator = sagas.fetchAllProjects();
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.LoadAllProjects.REQUEST.actionCreator())
+        put(Requests.actions.Projects.LoadAllProjects.REQUEST.actionCreator()),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.fetchAll)
+        call(api.Project.fetchAll),
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Projects.LoadAllProjects.FAILURE.actionCreator(errorMessage))
+        put(Requests.actions.Projects.LoadAllProjects.FAILURE.actionCreator(errorMessage)),
       );
 
       const result = iterator.next();
@@ -850,27 +850,27 @@ describe('sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id))
+        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Branch.fetchForProject, id)
+        call(api.Branch.fetchForProject, id),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toBranches, response.data)
+        call(Converter.toBranches, response.data),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
-        put(Branches.actions.storeBranches(objects as any))
+        put(Branches.actions.storeBranches(objects as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Projects.actions.addBranchesToProject(id, ['1', '2', '3']))
+        put(Projects.actions.addBranchesToProject(id, ['1', '2', '3'])),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.SUCCESS.actionCreator(id))
+        put(Requests.actions.Branches.LoadBranchesForProject.SUCCESS.actionCreator(id)),
       );
 
       const result = iterator.next();
@@ -884,15 +884,15 @@ describe('sagas', () => {
       const iterator = sagas.fetchBranchesForProject(id);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id))
+        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Branch.fetchForProject, id)
+        call(api.Branch.fetchForProject, id),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(sagas.storeIncludedEntities, response.included)
+        call(sagas.storeIncludedEntities, response.included),
       );
     });
 
@@ -901,15 +901,15 @@ describe('sagas', () => {
       const iterator = sagas.fetchBranchesForProject(id);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id))
+        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Branch.fetchForProject, id)
+        call(api.Branch.fetchForProject, id),
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.FAILURE.actionCreator(id, errorMessage))
+        put(Requests.actions.Branches.LoadBranchesForProject.FAILURE.actionCreator(id, errorMessage)),
       );
 
       const result = iterator.next();
@@ -930,19 +930,19 @@ describe('sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id))
+        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Commit.fetchForBranch, id, count, until)
+        call(api.Commit.fetchForBranch, id, count, until),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toCommits, response.data)
+        call(Converter.toCommits, response.data),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
-        put(Commits.actions.storeCommits(objects as any))
+        put(Commits.actions.storeCommits(objects as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -950,11 +950,11 @@ describe('sagas', () => {
           id,
           ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
           count,
-        ))
+        )),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(id))
+        put(Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(id)),
       );
 
       const result = iterator.next();
@@ -970,15 +970,15 @@ describe('sagas', () => {
       const iterator = sagas.fetchCommitsForBranch(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id))
+        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Commit.fetchForBranch, id, count, until)
+        call(api.Commit.fetchForBranch, id, count, until),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(sagas.storeIncludedEntities, response.included)
+        call(sagas.storeIncludedEntities, response.included),
       );
     });
 
@@ -990,15 +990,15 @@ describe('sagas', () => {
       const iterator = sagas.fetchCommitsForBranch(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id))
+        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Commit.fetchForBranch, id, count, until)
+        call(api.Commit.fetchForBranch, id, count, until),
       );
 
       expect(iterator.next({ error: errorMessage, details: detailedMessage }).value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.FAILURE.actionCreator(id, errorMessage, detailedMessage))
+        put(Requests.actions.Commits.LoadCommitsForBranch.FAILURE.actionCreator(id, errorMessage, detailedMessage)),
       );
 
       const result = iterator.next();
@@ -1037,15 +1037,15 @@ describe('sagas', () => {
       ];
 
       expect(iterator.next().value).to.deep.equal(
-        select(Projects.selectors.getProjects)
+        select(Projects.selectors.getProjects),
       );
 
       expect(iterator.next(projects).value).to.deep.equal(
-        call(sagas.ensureProjectRelatedDataLoaded, projects[0])
+        call(sagas.ensureProjectRelatedDataLoaded, projects[0]),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.ensureProjectRelatedDataLoaded, projects[1])
+        call(sagas.ensureProjectRelatedDataLoaded, projects[1]),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1074,15 +1074,15 @@ describe('sagas', () => {
       };
 
       expect(iterator.next().value).to.deep.equal(
-        select(Projects.selectors.getProject, id)
+        select(Projects.selectors.getProject, id),
       );
 
       expect(iterator.next(project).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit)
+        call(sagas.fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit),
       );
 
       expect(iterator.next(commit).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'deployments', commit.deployment)
+        call(sagas.fetchIfMissing, 'deployments', commit.deployment),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1110,11 +1110,11 @@ describe('sagas', () => {
       };
 
       expect(iterator.next(project).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit)
+        call(sagas.fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit),
       );
 
       expect(iterator.next(commit).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'deployments', commit.deployment)
+        call(sagas.fetchIfMissing, 'deployments', commit.deployment),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1145,23 +1145,23 @@ describe('sagas', () => {
       };
 
       expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, id)
+        select(Branches.selectors.getBranch, id),
       );
 
       expect(iterator.next(branch).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'projects', '1')
+        call(sagas.fetchIfMissing, 'projects', '1'),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit)
+        call(sagas.fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit),
       );
 
       expect(iterator.next(latestSuccessfullyDeployedCommit).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'deployments', latestSuccessfullyDeployedCommit.deployment)
+        call(sagas.fetchIfMissing, 'deployments', latestSuccessfullyDeployedCommit.deployment),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'commits', branch.latestCommit)
+        call(sagas.fetchIfMissing, 'commits', branch.latestCommit),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1222,28 +1222,28 @@ describe('sagas', () => {
 
       const iterator = sagas.ensureBranchesForProjectRelatedDataLoaded(projectId);
       expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranchesForProject, projectId)
+        select(Branches.selectors.getBranchesForProject, projectId),
       );
 
       expect(iterator.next(branches).value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'commits', branches[0].latestSuccessfullyDeployedCommit),
           call(sagas.fetchIfMissing, 'commits', branches[1].latestSuccessfullyDeployedCommit),
-        ]
+        ],
       );
 
       expect(iterator.next(deployedCommits).value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'deployments', deployedCommits[0].deployment),
           call(sagas.fetchIfMissing, 'deployments', deployedCommits[1].deployment),
-        ]
+        ],
       );
 
       expect(iterator.next().value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'commits', branches[0].latestCommit),
           call(sagas.fetchIfMissing, 'commits', branches[1].latestCommit),
-        ]
+        ],
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1274,11 +1274,11 @@ describe('sagas', () => {
       };
 
       expect(iterator.next().value).to.deep.equal(
-        select(Commits.selectors.getCommit, id)
+        select(Commits.selectors.getCommit, id),
       );
 
       expect(iterator.next(commit).value).to.deep.equal(
-        call(sagas.fetchIfMissing, 'deployments', 'd1')
+        call(sagas.fetchIfMissing, 'deployments', 'd1'),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1326,7 +1326,7 @@ describe('sagas', () => {
 
       const iterator = sagas.ensureCommitsForBranchRelatedDataLoaded(branchId);
       expect(iterator.next().value).to.deep.equal(
-        select(Branches.selectors.getBranch, branchId)
+        select(Branches.selectors.getBranch, branchId),
       );
 
       expect(iterator.next(branch).value).to.deep.equal(
@@ -1334,14 +1334,14 @@ describe('sagas', () => {
           call(sagas.fetchIfMissing, 'commits', branch.commits[0]),
           call(sagas.fetchIfMissing, 'commits', branch.commits[1]),
           call(sagas.fetchIfMissing, 'commits', branch.commits[2]),
-        ]
+        ],
       );
 
       expect(iterator.next(commits).value).to.deep.equal(
         [
           call(sagas.fetchIfMissing, 'deployments', commits[0].deployment),
           call(sagas.fetchIfMissing, 'deployments', commits[2].deployment),
-        ]
+        ],
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1359,15 +1359,15 @@ describe('sagas', () => {
         const iterator = sagas.fetchIfMissing(type, id);
 
         expect(iterator.next().value).to.deep.equal(
-          select(selector, id)
+          select(selector, id),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          call(fetcher, id)
+          call(fetcher, id),
         );
 
         expect(iterator.next().value).to.deep.equal(
-          select(selector, id)
+          select(selector, id),
         );
 
         const obj = { id };
@@ -1388,7 +1388,7 @@ describe('sagas', () => {
       const iterator = sagas.fetchIfMissing('commits', id);
 
       expect(iterator.next().value).to.deep.equal(
-        select(Commits.selectors.getCommit, id)
+        select(Commits.selectors.getCommit, id),
       );
 
       const obj = { id };
@@ -1409,19 +1409,19 @@ describe('sagas', () => {
       const commitObjects = [{ id: '2' }];
 
       expect(iterator.next().value).to.deep.equal(
-        call(Converter.toDeployments, deploymentsEntities)
+        call(Converter.toDeployments, deploymentsEntities),
       );
 
       expect(iterator.next(deploymentObjects).value).to.deep.equal(
-        put(Deployments.actions.storeDeployments(<any> deploymentObjects))
+        put(Deployments.actions.storeDeployments(<any> deploymentObjects)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(Converter.toCommits, commitsEntities)
+        call(Converter.toCommits, commitsEntities),
       );
 
       expect(iterator.next(commitObjects).value).to.deep.equal(
-        put(Commits.actions.storeCommits(<any> commitObjects))
+        put(Commits.actions.storeCommits(<any> commitObjects)),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1453,7 +1453,7 @@ describe('sagas', () => {
       const iterator = sagas.createProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name))
+        put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name)),
       );
     });
 
@@ -1463,7 +1463,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.create, name, description, projectTemplate)
+        call(api.Project.create, name, description, projectTemplate),
       );
     });
 
@@ -1477,15 +1477,15 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toProjects, response.data)
+        call(Converter.toProjects, response.data),
       );
 
       expect(iterator.next(object).value).to.deep.equal(
-        put(Projects.actions.storeProjects(object as any))
+        put(Projects.actions.storeProjects(object as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(object[0].id, name))
+        put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(object[0].id, name)),
       );
 
       const val = iterator.next();
@@ -1501,7 +1501,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ error }).value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error))
+        put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error)),
       );
 
       const val = iterator.next();
@@ -1527,7 +1527,7 @@ describe('sagas', () => {
       const iterator = sagas.deleteProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.DeleteProject.REQUEST.actionCreator(id))
+        put(Requests.actions.Projects.DeleteProject.REQUEST.actionCreator(id)),
       );
     });
 
@@ -1537,7 +1537,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.delete, id)
+        call(api.Project.delete, id),
       );
     });
 
@@ -1549,11 +1549,11 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(resolve)
+        call(resolve),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id))
+        put(Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id)),
       );
 
       const val = iterator.next();
@@ -1569,11 +1569,11 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ error }).value).to.deep.equal(
-        call(reject)
+        call(reject),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error))
+        put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error)),
       );
 
       const val = iterator.next();
@@ -1599,7 +1599,7 @@ describe('sagas', () => {
       const iterator = sagas.editProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id))
+        put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id)),
       );
     });
 
@@ -1609,7 +1609,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.edit, id, { name, description })
+        call(api.Project.edit, id, { name, description }),
       );
     });
 
@@ -1622,15 +1622,15 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toProjects, response.data)
+        call(Converter.toProjects, response.data),
       );
 
       expect(iterator.next(object).value).to.deep.equal(
-        put(Projects.actions.storeProjects(object as any))
+        put(Projects.actions.storeProjects(object as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id))
+        put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id)),
       );
 
       const val = iterator.next();
@@ -1646,7 +1646,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ error }).value).to.deep.equal(
-        put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error))
+        put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error)),
       );
 
       const val = iterator.next();
@@ -1676,7 +1676,7 @@ describe('sagas', () => {
       const iterator = sagas.formSubmitSaga({ payload });
 
       expect(iterator.next().value).to.deep.equal(
-        put({ type: submitAction, payload: values })
+        put({ type: submitAction, payload: values }),
       );
     });
 
@@ -1689,11 +1689,11 @@ describe('sagas', () => {
         race({
           success: take(successAction),
           failure: take(failureAction),
-        })
+        }),
       );
 
       expect(iterator.next({ success: { id: 3 } }).value).to.deep.equal(
-        call(resolve, 3)
+        call(resolve, 3),
       );
 
       expect(iterator.next().done).to.equal(true);
@@ -1708,11 +1708,11 @@ describe('sagas', () => {
         race({
           success: take(successAction),
           failure: take(failureAction),
-        })
+        }),
       );
 
       expect(iterator.next({ failure: { prettyError: 'foobar' } }).value).to.deep.equal(
-        call(reject, new SubmissionError({ _error: 'foobar' }))
+        call(reject, new SubmissionError({ _error: 'foobar' })),
       );
 
       expect(iterator.next().done).to.equal(true);

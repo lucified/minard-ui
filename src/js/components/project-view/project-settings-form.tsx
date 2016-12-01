@@ -84,7 +84,6 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, a
       submitting,
       error,
       invalid,
-      closeDialog,
       submitFailed,
       deletionInProgress,
       deletionError,

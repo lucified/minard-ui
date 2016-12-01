@@ -43,7 +43,7 @@ class ActivityGroup extends React.Component<PassedProps, any> {
             />
           </div>
           <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
-            {activities.slice(1).map(activity =>
+            {activities.slice(1).map(activity => (
               <div key={activity.id}>
                 <hr className={styles.line} />
                 <SingleActivity
@@ -51,7 +51,7 @@ class ActivityGroup extends React.Component<PassedProps, any> {
                   showProjectName={showProjectName}
                 />
               </div>
-            )}
+            ))}
           </FlipMove>
         </div>
       </div>

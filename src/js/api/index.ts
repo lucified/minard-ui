@@ -48,17 +48,16 @@ const generateErrorObject = (errorResponse: any) => {
 
 const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
   fetch(`${host}${path}`, Object.assign({}, defaultOptions, options))
-    .then(response =>
-      response.json().then(json => ({
+    .then(
+      response => response.json().then(json => ({
         json,
         response,
-      })) as Promise<{ json: any, response: IResponse}>
-    ).then(({ json, response }) =>
-      response.ok ? json : Promise.reject(json)
-    ).then(json => ({
-      response: json,
-    }))
-    .catch(errorResponse => {
+      })) as Promise<{ json: any, response: IResponse}>,
+    ).then(
+      ({ json, response }) => response.ok ? json : Promise.reject(json),
+    ).then(
+      json => ({ response: json }),
+    ).catch(errorResponse => {
       // We need to not load 'raven-js' when running tests
       if (typeof window !== 'undefined') {
         const Raven = require('raven-js');

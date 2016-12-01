@@ -37,11 +37,6 @@ interface GeneratedDispatchProps {
   clearDeletionErrors: () => void;
 }
 
-interface FormData {
-  name?: string;
-  description?: string;
-}
-
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
 
 class ProjectSettingsDialog extends React.Component<Props, any> {
@@ -143,14 +138,14 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: (e?: any) => {
+  closeDialog: (_e?: any) => {
     dispatch(Modal.actions.closeModal(ModalType.ProjectSettings));
   },
   deleteProject: (id, resolve, reject) => {
     dispatch(Projects.actions.deleteProjectPromiseResolver(id, resolve, reject));
   },
   clearDeletionErrors: () => {
-    dispatch(Errors.actions.clearProjectDeletionErrors())
+    dispatch(Errors.actions.clearProjectDeletionErrors());
   },
 });
 

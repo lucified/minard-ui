@@ -31,11 +31,6 @@ interface GeneratedDispatchProps {
   closeDialog: (e?: any) => void;
 }
 
-interface FormData {
-  name?: string;
-  description?: string;
-}
-
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
 
 class NewProjectDialog extends React.Component<Props, any> {

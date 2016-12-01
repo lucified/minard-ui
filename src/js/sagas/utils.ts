@@ -43,7 +43,7 @@ export const createLoader = (
   };
 };
 
-export const createEntityFetcher = <ResponseEntity, ApiParams>(
+export const createEntityFetcher = <ApiParams>(
   requestActionCreators: FetchEntityActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
@@ -81,7 +81,7 @@ export const createEntityFetcher = <ResponseEntity, ApiParams>(
   };
 };
 
-export const createCollectionFetcher = <ResponseEntity, ApiParams>(
+export const createCollectionFetcher = <ApiParams>(
   requestActionCreators: CollectionActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,

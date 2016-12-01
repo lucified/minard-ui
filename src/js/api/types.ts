@@ -47,11 +47,6 @@ export interface ApiUser {
 }
 
 // References
-interface ResponseBranchReference {
-  type: 'branches';
-  id: string;
-}
-
 interface ResponseCommitReference {
   type: 'commits';
   id: string;

@@ -53,7 +53,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     }
   }
 
-  private reloadPage(e: any) {
+  private reloadPage(_e: any) {
     location.reload(true);
     return false;
   }
