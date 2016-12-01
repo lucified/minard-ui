@@ -9,6 +9,10 @@ import { StateTree } from '../../reducers';
 
 import PreviewDialog from './preview-dialog';
 
+const getBuildLogURL = process.env.CHARLES ?
+  require('../../api').getBuildLogURL :
+  require('../../api/static-json').getBuildLogURL;
+
 const styles = require('./index.scss');
 
 interface PassedProps {
@@ -71,10 +75,18 @@ class ProjectsFrame extends React.Component<Props, any> {
       );
     }
 
+    const showPreview = deployment.url && this.props.params.show !== 'log';
+
     return (
       <div className={styles['preview-container']}>
-        <PreviewDialog className={styles.dialog} commit={commit} deployment={deployment} preview={preview} />
-        <iframe className={styles.preview} src={deployment.url} />
+        <PreviewDialog
+          className={styles.dialog}
+          commit={commit}
+          deployment={deployment}
+          preview={preview}
+          buildLogSelected={!showPreview}
+        />
+        <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
       </div>
     );
   }

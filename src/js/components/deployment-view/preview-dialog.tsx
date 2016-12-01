@@ -11,6 +11,7 @@ import Header from './header';
 const styles = require('./preview-dialog.scss');
 
 interface Props {
+  buildLogSelected: boolean;
   commit: Commit;
   deployment: Deployment;
   preview: Preview;
@@ -41,12 +42,18 @@ class PreviewDialog extends React.Component<Props, State> {
   }
 
   public render() {
-    const { className, commit, deployment, preview } = this.props;
+    const { buildLogSelected, className, commit, deployment, preview } = this.props;
     const { dialogOpen } = this.state;
 
     return (
       <div className={classNames(styles.dialog, className)}>
-        <Header className={styles.header} isOpen={dialogOpen} onToggleOpen={this.toggleOpen} />
+        <Header
+          className={styles.header}
+          deployment={deployment}
+          isOpen={dialogOpen}
+          onToggleOpen={this.toggleOpen}
+          buildLogSelected={buildLogSelected}
+        />
         {dialogOpen && (
           <CommitSummary
             key="dialog"

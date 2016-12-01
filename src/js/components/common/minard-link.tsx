@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { Link } from 'react-router';
 
@@ -8,29 +7,40 @@ import { Project } from '../../modules/projects';
 
 interface Props {
   deployment?: Deployment;
+  preview?: Deployment;
   branch?: Branch | string;
   project?: Project | string;
   openInNewWindow?: boolean;
   homepage?: boolean;
   className?: string;
   showAll?: boolean;
+  buildLog?: boolean;
 }
 
 class MinardLink extends React.Component<Props, any> {
   public render() {
-    const { children, deployment, branch, homepage, project, showAll, openInNewWindow } = this.props;
+    const {
+      buildLog,
+      className,
+      children,
+      deployment,
+      branch,
+      homepage,
+      preview,
+      project,
+      showAll,
+      openInNewWindow,
+    } = this.props;
     const target = openInNewWindow ? '_blank' : undefined;
     let path: string;
 
+    // Raw deployment
     if (deployment) {
-      // path = `/deployment/${deployment.id}`;
-
-      // TODO: link to deployment view instead of actual deployment
       path = deployment.url || '';
 
       if (path) {
         return (
-          <a className={classNames(this.props.className)} href={path} target={target}>
+          <a className={className} href={path} target={target}>
             {children}
           </a>
         );
@@ -39,6 +49,9 @@ class MinardLink extends React.Component<Props, any> {
       return (
         <span>{children}</span>
       );
+    } else if (preview) {
+      // Link to build log if preview is not ready
+      path = (preview.url && !buildLog) ? `/preview/${preview.id}` : `/preview/${preview.id}/log`;
     } else if (branch) {
       let projectId: string;
       let branchId: string;
@@ -77,7 +90,7 @@ class MinardLink extends React.Component<Props, any> {
     }
 
     return (
-      <Link className={classNames(this.props.className)} target={target} to={path}>
+      <Link className={className} target={target} to={path}>
         {children}
       </Link>
     );
