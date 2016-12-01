@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { FetchError } from '../../modules/errors';
+import Commits, { Commit } from '../../modules/commits';
+import Deployments, { Deployment } from '../../modules/deployments';
+import { FetchError, isFetchError } from '../../modules/errors';
 import Previews, { Preview } from '../../modules/previews';
 import { StateTree } from '../../reducers';
 
@@ -13,6 +15,8 @@ interface PassedProps {
 
 interface GeneratedStateProps {
   preview?: Preview | FetchError;
+  commit?: Commit | FetchError;
+  deployment?: Deployment | FetchError;
 }
 
 interface GeneratedDispatchProps {
@@ -39,20 +43,34 @@ class ProjectsFrame extends React.Component<Props, any> {
   }
 
   public render() {
-    const { deploymentId } = this.props.params;
+    const { commit, deployment, preview } = this.props;
 
-    return (
+    return preview && !isFetchError(preview) ? (
       <div>
-        {deploymentId}
+        Deployment: {deployment ? deployment.id : 'Deployment not fetched'}<br />
+        Commit: {commit ? commit.id : 'Commit not fetched'}<br />
+        Project: {preview.project.name}<br />
+        Branch: {preview.branch.name}
       </div>
-    );
+    ) : <div>Loading...</div>;
   }
 };
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { deploymentId } = ownProps.params;
+  const preview = Previews.selectors.getPreview(state, deploymentId);
+  let commit: Commit | FetchError | undefined;
+  let deployment: Deployment | FetchError | undefined;
+
+  if (preview && !isFetchError(preview)) {
+    commit = Commits.selectors.getCommit(state, preview.commit);
+    deployment = Deployments.selectors.getDeployment(state, preview.deployment);
+  }
+
   return {
-    preview: Previews.selectors.getPreview(state, deploymentId),
+    preview,
+    commit,
+    deployment,
   };
 };
 
