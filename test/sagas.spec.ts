@@ -450,6 +450,11 @@ describe('sagas', () => {
     it('does not fetch latest commit if it already exists');
   });
 
+  describe('loadPreview', () => {
+    it('fetches preview if it is missing');
+    it('does not fetch preview if it already exists');
+  });
+
   interface StoreAction extends Action {
     entities: any[];
   }
@@ -1009,6 +1014,17 @@ describe('sagas', () => {
       expect(result.value).to.equal(false);
       expect(result.done).to.equal(true);
     });
+  });
+
+  describe('fetchPreview', () => {
+    it('sends a request started action');
+    it('fetches the preview');
+    it('converts and stores the included commit');
+    it('converts and stores the included deployment');
+    it('stores the preview');
+    it('converts and stores the included commit');
+    it('sends a request completed action once finished');
+    it('sends a request failed action if an error occurs');
   });
 
   describe('ensureActivitiesRelatedDataLoaded', () => {
