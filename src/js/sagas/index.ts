@@ -13,9 +13,10 @@ import Branches, {
   UpdateBranchWithCommitsAction,
 } from '../modules/branches';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
-import Deployments from '../modules/deployments';
+import Deployments, { Deployment } from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
 import { FORM_SUBMIT } from '../modules/forms';
+import Previews, { LoadPreviewAction, Preview } from '../modules/previews';
 import Projects, {
   DeleteProjectAction,
   LoadAllProjectsAction,
@@ -382,6 +383,43 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // PREVIEW
+  function* loadPreview(action: LoadPreviewAction): IterableIterator<Effect> {
+    const id: string = action.id;
+    const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
+
+    if (!existingPreview) {
+      yield call(fetchPreview, id);
+    }
+  }
+
+  function* fetchPreview(id: string): IterableIterator<Effect> {
+    yield put(Requests.actions.Previews.LoadPreview.REQUEST.actionCreator(id));
+
+    const { response, error, details }: { response?: ApiPreviewResponse, error?: string, details?: string } =
+      yield call(api.Preview.fetch, id);
+
+    if (response) {
+      const commit: Commit[] = yield call(Converter.toCommits, response.commit);
+      yield put(Commits.actions.storeCommits(commit));
+
+      const deployment: Deployment[] = yield call(Converter.toDeployments, response.deployment);
+      yield put(Deployments.actions.storeDeployments(deployment));
+
+      // only store IDs into Preview, not the actual Commit and Deployment objects
+      const preview: Preview = Object.assign({}, response, { commit: commit[0].id, deployment: deployment[0].id });
+      yield put(Previews.actions.storePreviews(preview));
+
+      yield put(Requests.actions.Previews.LoadPreview.SUCCESS.actionCreator(id));
+
+      return true;
+    } else {
+      yield put(Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(id, error!, details));
+
+      return false;
+    }
+  }
+
   // CREATE PROJECT
   function* createProject(action: { type: string, payload: any }): IterableIterator<Effect> {
     const { name, description, projectTemplate } = action.payload;
@@ -537,6 +575,10 @@ export default function createSagas(api: Api) {
     yield takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
 
+  function* watchForLoadPreview() {
+    yield takeEvery(Previews.actions.LOAD_PREVIEW, loadPreview);
+  }
+
   function* watchForLoadActivities(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Activities.actions.LOAD_ACTIVITIES);
@@ -587,6 +629,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadCommitsForBranch),
       fork(watchForLoadActivities),
       fork(watchForLoadActivitiesForProject),
+      fork(watchForLoadPreview),
       fork(watchForFormSubmit),
       fork(watchForUpdateBranchWithCommits),
     ];

@@ -4,6 +4,7 @@ import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
 export {
+  LoadPreviewAction,
   Preview,
   PreviewState,
 } from './types';

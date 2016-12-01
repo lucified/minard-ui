@@ -22,9 +22,9 @@ const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => 
 
       return state;
     case STORE_PREVIEW:
-      const preview = (<t.StorePreviewAction> action).preview;
+      const preview: t.Preview = (<t.StorePreviewAction> action).preview;
       if (preview) {
-        return Object.assign({}, state, { [preview.id]: preview });
+        return Object.assign({}, state, { [preview.deployment]: preview });
       }
 
       console.error('No preview found when storing preview.', action);

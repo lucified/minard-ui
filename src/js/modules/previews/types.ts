@@ -4,7 +4,6 @@ import { FetchError } from '../errors';
 
 // State
 export interface Preview {
-  id: string;
   commit: string;
   deployment: string;
   project: {
