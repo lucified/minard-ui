@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-import { Api, ApiPromise } from './types';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise } from './types';
 
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
@@ -33,6 +33,7 @@ const deploymentJSON: { [id: string]: string } = {
 const commitJSON = require('file!../../../json/commit.json');
 const newProjectJSON = require('file!../../../json/new-project.json');
 const editedProjectJSON = require('file!../../../json/edited-project.json');
+const previewJSON = require('file!../../../json/preview.json');
 
 function callApi(url: string) {
   return fetch(url, { credentials: 'same-origin' })
@@ -54,31 +55,37 @@ function callApi(url: string) {
 }
 
 const Activity = {
-  fetchAll: (_count: number, _until?: number): ApiPromise => callApi(activitiesJSON),
-  fetchAllForProject: (_id: string, _count: number, _until?: number): ApiPromise => callApi(activitiesJSON),
+  fetchAll: (_count: number, _until?: number): ApiPromise<ApiEntityResponse> => callApi(activitiesJSON),
+  fetchAllForProject: (_id: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
+    callApi(activitiesJSON),
 };
 
 const Branch = {
-  fetch: (id: string): ApiPromise => callApi(branchJSON[id]),
-  fetchForProject: (id: string): ApiPromise => callApi(projectBranchesJSON[id]),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> => callApi(branchJSON[id]),
+  fetchForProject: (id: string): ApiPromise<ApiEntityResponse> => callApi(projectBranchesJSON[id]),
 };
 
 const Commit = {
-  fetch: (_id: string): ApiPromise => callApi(commitJSON),
-  fetchForBranch: (id: string, _count: number, _until?: number): ApiPromise => callApi(branchCommitsJSON[id]),
+  fetch: (_id: string): ApiPromise<ApiEntityResponse> => callApi(commitJSON),
+  fetchForBranch: (id: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
+    callApi(branchCommitsJSON[id]),
 };
 
 const Deployment = {
-  fetch: (id: string): ApiPromise => callApi(deploymentJSON[id]),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> => callApi(deploymentJSON[id]),
+};
+
+const Preview = {
+  fetch: (_id: string): ApiPromise<ApiPreviewResponse> => callApi(previewJSON),
 };
 
 const Project = {
-  fetchAll: (): ApiPromise => callApi(allProjectsJSON),
-  fetch: (id: string): ApiPromise => callApi(projectJSON[id]),
-  create: (_name: string, _description?: string): ApiPromise => callApi(newProjectJSON),
-  edit: (_id: string, _newAttributes: { name?: string, description?: string }): ApiPromise =>
+  fetchAll: (): ApiPromise<ApiEntityResponse> => callApi(allProjectsJSON),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> => callApi(projectJSON[id]),
+  create: (_name: string, _description?: string): ApiPromise<ApiEntityResponse> => callApi(newProjectJSON),
+  edit: (_id: string, _newAttributes: { name?: string, description?: string }): ApiPromise<ApiEntityResponse> =>
     callApi(editedProjectJSON),
-  delete: (_id: string): ApiPromise => Promise.resolve({ response: { data: [] } }),
+  delete: (_id: string): ApiPromise<ApiEntityResponse> => Promise.resolve({ response: { data: [] } }),
     // Promise.resolve({ error: 'sad face :(' });
 };
 
@@ -87,6 +94,7 @@ const API: Api = {
   Branch,
   Commit,
   Deployment,
+  Preview,
   Project,
 };
 

@@ -4,7 +4,7 @@ import { delay, takeEvery, takeLatest } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
-import { Api, ApiEntity, ApiEntityTypeString, ApiResponse } from '../api/types';
+import { Api, ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPreviewResponse } from '../api/types';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
   Branch,
@@ -76,7 +76,7 @@ export default function createSagas(api: Api) {
   );
 
   function* checkIfAllActivitiesLoaded(
-    response: ApiResponse,
+    response: ApiEntityResponse,
     count: number,
     _until?: number,
   ): IterableIterator<Effect> {
@@ -114,7 +114,7 @@ export default function createSagas(api: Api) {
 
   function* checkIfAllActivitiesLoadedForProject(
     id: string,
-    response: ApiResponse,
+    response: ApiEntityResponse,
     count: number,
     _until?: number,
   ): IterableIterator<Effect> {
@@ -279,7 +279,7 @@ export default function createSagas(api: Api) {
     addBranchesToProject,
   );
 
-  function* addBranchesToProject(id: string, response: ApiResponse): IterableIterator<Effect> {
+  function* addBranchesToProject(id: string, response: ApiEntityResponse): IterableIterator<Effect> {
     const branchIds = (<ApiEntity[]> response.data).map((branch: any) => branch.id);
     yield put(Projects.actions.addBranchesToProject(id, branchIds));
   }
@@ -365,7 +365,7 @@ export default function createSagas(api: Api) {
 
   function* addCommitsToBranch(
     id: string,
-    response: ApiResponse,
+    response: ApiEntityResponse,
     count: number,
     _until?: number,
   ): IterableIterator<Effect> {

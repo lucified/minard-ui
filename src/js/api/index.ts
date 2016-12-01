@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 import * as moment from 'moment';
 
 import { teamId } from './team-id';
-import { Api, ApiPromise } from './types';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise } from './types';
 
 if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
@@ -46,7 +46,7 @@ const generateErrorObject = (errorResponse: any) => {
   };
 };
 
-const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
+const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> =>
   fetch(`${host}${path}`, Object.assign({}, defaultOptions, options))
     .then(
       response => response.json().then(json => ({
@@ -72,7 +72,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise =>
       return generateErrorObject(errorResponse);
     });
 
-const getApi = (path: string, query?: any): ApiPromise => {
+const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
   let queryString = '';
 
   if (query) {
@@ -83,7 +83,7 @@ const getApi = (path: string, query?: any): ApiPromise => {
   return connectToApi(`${path}${queryString}`);
 };
 
-const postApi = (path: string, payload: any): ApiPromise =>
+const postApi = (path: string, payload: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse> =>
   connectToApi(path, {
     method: 'POST',
     headers: {
@@ -93,10 +93,10 @@ const postApi = (path: string, payload: any): ApiPromise =>
     body: JSON.stringify(payload),
   });
 
-const deleteApi = (path: string): ApiPromise =>
+const deleteApi = (path: string): ApiPromise<ApiEntityResponse> =>
   connectToApi(path, { method: 'DELETE' });
 
-const patchApi = (path: string, payload: any): ApiPromise =>
+const patchApi = (path: string, payload: any): ApiPromise<ApiEntityResponse> =>
   connectToApi(path, {
     method: 'PATCH',
     headers: {
@@ -107,7 +107,7 @@ const patchApi = (path: string, payload: any): ApiPromise =>
   });
 
 const Activity = {
-  fetchAll: (count: number, until?: number): ApiPromise => {
+  fetchAll: (count: number, until?: number): ApiPromise<ApiEntityResponse> => {
     const query: any = { count, filter: `team[${teamId}]` };
 
     if (until) {
@@ -116,7 +116,7 @@ const Activity = {
 
     return getApi('/api/activity', query);
   },
-  fetchAllForProject: (id: string, count: number, until?: number): ApiPromise => {
+  fetchAllForProject: (id: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
     const query: any = { count, filter: `project[${id}]` };
 
     if (until) {
@@ -128,13 +128,13 @@ const Activity = {
 };
 
 const Branch = {
-  fetch: (id: string): ApiPromise => getApi(`/api/branches/${id}`),
-  fetchForProject: (id: string): ApiPromise => getApi(`/api/projects/${id}/relationships/branches`),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/branches/${id}`),
+  fetchForProject: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}/relationships/branches`),
 };
 
 const Commit = {
-  fetch: (id: string): ApiPromise => getApi(`/api/commits/${id}`),
-  fetchForBranch: (id: string, count: number, until?: number): ApiPromise => {
+  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/commits/${id}`),
+  fetchForBranch: (id: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
     const query: any = { count };
 
     if (until) {
@@ -146,13 +146,13 @@ const Commit = {
 };
 
 const Deployment = {
-  fetch: (id: string): ApiPromise => getApi(`/api/deployments/${id}`),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/deployments/${id}`),
 };
 
 const Project = {
-  fetchAll: (): ApiPromise => getApi(`/api/teams/${teamId}/relationships/projects`),
-  fetch: (id: string): ApiPromise => getApi(`/api/projects/${id}`),
-  create: (name: string, description?: string, projectTemplate?: string): ApiPromise =>
+  fetchAll: (): ApiPromise<ApiEntityResponse> => getApi(`/api/teams/${teamId}/relationships/projects`),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}`),
+  create: (name: string, description?: string, projectTemplate?: string): ApiPromise<ApiEntityResponse> =>
     postApi('/api/projects', {
       data: {
         type: 'projects',
@@ -171,7 +171,7 @@ const Project = {
         },
       },
     }),
-  edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise =>
+  edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise<ApiEntityResponse> =>
     patchApi(`/api/projects/${id}`, {
       data: {
         type: 'projects',
@@ -179,7 +179,11 @@ const Project = {
         attributes: newAttributes,
       },
     }),
-  delete: (id: string): ApiPromise => deleteApi(`/api/projects/${id}`),
+  delete: (id: string): ApiPromise<ApiEntityResponse> => deleteApi(`/api/projects/${id}`),
+};
+
+const Preview = {
+  fetch: (id: string): ApiPromise<ApiPreviewResponse> => getApi(`/api/preview/${id}`),
 };
 
 const API: Api = {
@@ -187,6 +191,7 @@ const API: Api = {
   Branch,
   Commit,
   Deployment,
+  Preview,
   Project,
 };
 

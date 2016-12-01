@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { call, Effect, fork, put, select } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
-import { ApiEntity, ApiEntityTypeString, ApiPromise, ApiResponse } from '../api/types';
+import { ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPromise } from '../api/types';
 import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
@@ -47,13 +47,13 @@ export const createEntityFetcher = <ApiParams>(
   requestActionCreators: FetchEntityActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise,
-  postStoreEffects?: (id: string, response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
+  apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise<ApiEntityResponse>,
+  postStoreEffects?: (id: string, response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
   return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
-    const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =
+    const { response, error, details }: { response?: ApiEntityResponse, error?: string, details?: string } =
       yield call(apiFetchFunction, id, ...args);
 
     if (response) {
@@ -85,13 +85,13 @@ export const createCollectionFetcher = <ApiParams>(
   requestActionCreators: CollectionActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (...args: ApiParams[]) => ApiPromise,
-  postStoreEffects?: (response: ApiResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
+  apiFetchFunction: (...args: ApiParams[]) => ApiPromise<ApiEntityResponse>,
+  postStoreEffects?: (response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
   return function* (...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.REQUEST.actionCreator());
 
-    const { response, error, details }: { response?: ApiResponse, error?: string, details?: string } =
+    const { response, error, details }: { response?: ApiEntityResponse, error?: string, details?: string } =
       yield call(apiFetchFunction, ...args);
 
     if (response) {

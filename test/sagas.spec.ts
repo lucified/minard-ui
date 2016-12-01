@@ -4,7 +4,7 @@ import { SubmissionError } from 'redux-form';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../src/js/api/convert';
-import { Api, ApiEntityTypeString, ApiPromise, ApiResponse } from '../src/js/api/types';
+import { Api, ApiEntityResponse, ApiEntityTypeString, ApiPromise } from '../src/js/api/types';
 import Activities from '../src/js/modules/activities';
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
@@ -16,18 +16,18 @@ import { StateTree } from '../src/js/reducers';
 import sagaCreator from '../src/js/sagas';
 
 const testData = {
-  allProjectsResponse: require('../json/projects.json') as ApiResponse,
-  deploymentResponse: require('../json/deployment-7.json') as ApiResponse,
-  branchResponse: require('../json/branch-1.json') as ApiResponse,
-  commitResponse: require('../json/commit.json') as ApiResponse,
-  projectResponse: require('../json/project-1.json') as ApiResponse,
-  activitiesResponse: require('../json/activities.json') as ApiResponse,
-  projectBranchesResponse: require('../json/project-1-branches.json') as ApiResponse,
-  branchCommitsResponse: require('../json/branch-1-commits.json') as ApiResponse,
+  allProjectsResponse: require('../json/projects.json') as ApiEntityResponse,
+  deploymentResponse: require('../json/deployment-7.json') as ApiEntityResponse,
+  branchResponse: require('../json/branch-1.json') as ApiEntityResponse,
+  commitResponse: require('../json/commit.json') as ApiEntityResponse,
+  projectResponse: require('../json/project-1.json') as ApiEntityResponse,
+  activitiesResponse: require('../json/activities.json') as ApiEntityResponse,
+  projectBranchesResponse: require('../json/project-1-branches.json') as ApiEntityResponse,
+  branchCommitsResponse: require('../json/branch-1-commits.json') as ApiEntityResponse,
 };
 
 const createApi = (): Api => {
-  const emptyResponse = { response: { data: [] }};
+  const emptyResponse = { response: {} as any };
   return {
     Project: {
       fetchAll: () => Promise.resolve(emptyResponse),
@@ -42,6 +42,9 @@ const createApi = (): Api => {
       fetchAllForProject: (_id: string) => Promise.resolve(emptyResponse),
     },
     Deployment: {
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+    },
+    Preview: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
     },
     Branch: {
@@ -453,11 +456,11 @@ describe('sagas', () => {
 
   const testEntityFetcher = <ApiParams>(
     name: string,
-    response: ApiResponse,
-    responseNoInclude: ApiResponse,
+    response: ApiEntityResponse,
+    responseNoInclude: ApiEntityResponse,
     requestActionCreators: FetchEntityActionCreators,
     fetcher: (id: string, ...args: ApiParams[]) => IterableIterator<Effect>,
-    apiCall: (id: string) => ApiPromise,
+    apiCall: (id: string) => ApiPromise<ApiEntityResponse>,
     converter: (responseEntities: any[]) => any[],
     storeActionCreator: (entities: any[]) => StoreAction,
   ) => {
