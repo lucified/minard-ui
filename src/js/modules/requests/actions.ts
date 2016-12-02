@@ -166,6 +166,10 @@ export const Deployments = {
   LoadDeployment: fetchEntityActionCreators('DEPLOYMENTS/LOAD_DEPLOYMENT'),
 };
 
+export const Previews = {
+  LoadPreview: fetchEntityActionCreators('PREVIEWS/LOAD_PREVIEW'),
+};
+
 export const Activities = {
   LoadAllActivities: fetchCollectionActionCreators('ACTIVITIES/LOAD_ALL_ACTIVITIES'),
   LoadActivitiesForProject: fetchEntityActionCreators('ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT'),

@@ -1,27 +1,30 @@
-export type ApiPromise = Promise<{ response: ApiResponse; } | { error: string; details?: string; }>;
+export type ApiPromise<T> = Promise<{ response: T; } | { error: string; details?: string; }>;
 
 export interface Api {
+  Preview: {
+    fetch: (id: string) => ApiPromise<ApiPreviewResponse>;
+  };
   Project: {
-    fetchAll: () => ApiPromise;
-    fetch: (id: string) => ApiPromise;
-    create: (name: string, description?: string, projectTemplate?: string) => ApiPromise;
-    edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise;
-    delete: (id: string) => ApiPromise;
+    fetchAll: () => ApiPromise<ApiEntityResponse>;
+    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
+    create: (name: string, description?: string, projectTemplate?: string) => ApiPromise<ApiEntityResponse>;
+    edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise<ApiEntityResponse>;
+    delete: (id: string) => ApiPromise<ApiEntityResponse>;
   };
   Activity: {
-    fetchAll: (count: number, until?: number) => ApiPromise;
-    fetchAllForProject: (id: string, count: number, until?: number) => ApiPromise;
+    fetchAll: (count: number, until?: number) => ApiPromise<ApiEntityResponse>;
+    fetchAllForProject: (id: string, count: number, until?: number) => ApiPromise<ApiEntityResponse>;
   };
   Deployment: {
-    fetch: (id: string) => ApiPromise;
+    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
   };
   Branch: {
-    fetch: (id: string) => ApiPromise;
-    fetchForProject: (id: string) => ApiPromise;
+    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
+    fetchForProject: (id: string) => ApiPromise<ApiEntityResponse>;
   };
   Commit: {
-    fetch: (id: string) => ApiPromise;
-    fetchForBranch: (id: string, count: number, until?: number) => ApiPromise;
+    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
+    fetchForBranch: (id: string, count: number, until?: number) => ApiPromise<ApiEntityResponse>;
   };
 }
 
@@ -35,9 +38,24 @@ export interface ApiEntity {
   relationships?: any;
 }
 
-export interface ApiResponse {
+export interface ApiEntityResponse {
   data: ApiEntity | ApiEntity[];
   included?: ApiEntity[];
+}
+
+export interface ApiPreviewResponse {
+  project: {
+    id: string;
+    name: string;
+  };
+  branch: {
+    id: string;
+    name: string;
+  };
+  commit: ResponseCommitElement;
+  deployment: ResponseDeploymentElement;
+  next?: string;
+  previous?: string;
 }
 
 export interface ApiUser {
