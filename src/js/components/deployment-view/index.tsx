@@ -7,6 +7,14 @@ import { FetchError, isFetchError } from '../../modules/errors';
 import Previews, { Preview } from '../../modules/previews';
 import { StateTree } from '../../reducers';
 
+import PreviewDialog from './preview-dialog';
+
+const getBuildLogURL = process.env.CHARLES ?
+  require('../../api').getBuildLogURL :
+  require('../../api/static-json').getBuildLogURL;
+
+const styles = require('./index.scss');
+
 interface PassedProps {
   location: any;
   route: any;
@@ -45,14 +53,42 @@ class ProjectsFrame extends React.Component<Props, any> {
   public render() {
     const { commit, deployment, preview } = this.props;
 
-    return preview && !isFetchError(preview) ? (
-      <div>
-        Deployment: {deployment ? deployment.id : 'Deployment not fetched'}<br />
-        Commit: {commit ? commit.id : 'Commit not fetched'}<br />
-        Project: {preview.project.name}<br />
-        Branch: {preview.branch.name}
+    if (!preview) {
+      return <div>Loading...</div>;
+    }
+
+    if (isFetchError(preview)) {
+      return (
+        <div>
+          <strong>Error!</strong>
+          <p>Unable to load preview.</p>
+        </div>
+      );
+    }
+
+    if (!commit || isFetchError(commit) || !deployment || isFetchError(deployment)) {
+      return (
+        <div>
+          <strong>Error!</strong>
+          <p>Unable to load commit and deployment information.</p>
+        </div>
+      );
+    }
+
+    const showPreview = deployment.url && this.props.params.show !== 'log';
+
+    return (
+      <div className={styles['preview-container']}>
+        <PreviewDialog
+          className={styles.dialog}
+          commit={commit}
+          deployment={deployment}
+          preview={preview}
+          buildLogSelected={!showPreview}
+        />
+        <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
       </div>
-    ) : <div>Loading...</div>;
+    );
   }
 };
 

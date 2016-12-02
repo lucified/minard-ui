@@ -1,0 +1,36 @@
+@import '../mixins';
+
+.header {
+  height: 53px;
+  padding: 15px 24px;
+  border-bottom: 1px solid #EFEFEF;
+  line-height: 24px;
+}
+
+.tab {
+  @include nitti-grotesk-medium;
+  font-size: 18px;
+  color: #95A5A6;
+  margin-right: 22px;
+  padding-bottom: 13px;
+
+  &.selected {
+    color: #2C3E50;
+    border-bottom: 3px solid #2C3E50;
+  }
+
+  &.disabled {
+    color: #D8D8D8;
+  }
+}
+
+.toggle-open {
+  float: right;
+  font-size: 14px;
+  color: #95A5A6;
+}
+
+.icon {
+  margin-right: 4px;
+  font-size: 12px;
+}

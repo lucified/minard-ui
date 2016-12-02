@@ -1,0 +1,19 @@
+.preview-container {
+  z-index: 1;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  border: 0;
+  z-index: 2;
+  background-color: #ffffff;
+}
+
+.dialog {
+  z-index: 100;
+}

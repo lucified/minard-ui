@@ -1,0 +1,31 @@
+@import '../mixins';
+
+.commit-summary {
+  padding: 15px 23px;
+  color: #2C3E50;
+  line-height: 24px;
+}
+
+.metadata {
+  @include nitti-grotesk-medium;
+  font-size: 18px;
+
+  a {
+    color: #2EBDB1;
+  }
+}
+
+.commit-message {
+  @include nitti-grotesk-regular;
+  font-size: 14px;
+}
+
+.bottom {
+  margin-top: 20px;
+}
+
+.open-link {
+  @include nitti-grotesk-medium;
+  font-size: 14px;
+  color: #95A5A6;
+}
