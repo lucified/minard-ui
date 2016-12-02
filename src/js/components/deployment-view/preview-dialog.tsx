@@ -29,7 +29,7 @@ class PreviewDialog extends React.Component<Props, State> {
     this.toggleOpen = this.toggleOpen.bind(this);
 
     this.state = {
-      dialogOpen: true,
+      dialogOpen: false,
     };
   }
 
