@@ -1,22 +1,9 @@
 export type ApiPromise<T> = Promise<{ response: T; } | { error: string; details?: string; }>;
 
 export interface Api {
-  Preview: {
-    fetch: (id: string) => ApiPromise<ApiPreviewResponse>;
-  };
-  Project: {
-    fetchAll: () => ApiPromise<ApiEntityResponse>;
-    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
-    create: (name: string, description?: string, projectTemplate?: string) => ApiPromise<ApiEntityResponse>;
-    edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise<ApiEntityResponse>;
-    delete: (id: string) => ApiPromise<ApiEntityResponse>;
-  };
   Activity: {
     fetchAll: (count: number, until?: number) => ApiPromise<ApiEntityResponse>;
     fetchAllForProject: (id: string, count: number, until?: number) => ApiPromise<ApiEntityResponse>;
-  };
-  Deployment: {
-    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
   };
   Branch: {
     fetch: (id: string) => ApiPromise<ApiEntityResponse>;
@@ -25,6 +12,19 @@ export interface Api {
   Commit: {
     fetch: (id: string) => ApiPromise<ApiEntityResponse>;
     fetchForBranch: (id: string, count: number, until?: number) => ApiPromise<ApiEntityResponse>;
+  };
+  Deployment: {
+    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
+  };
+  Preview: {
+    fetch: (id: string) => ApiPromise<ApiPreviewResponse>;
+  };
+  Project: {
+    fetchAll: () => ApiPromise<ApiEntityResponse>;
+    fetch: (id: string) => ApiPromise<ApiEntityResponse>;
+    create: (name: string, description?: string, projectTemplate?: string) => ApiPromise<ApiEntityResponse>;
+    edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise<ApiEntityResponse>;
+    delete: (id: string) => ApiPromise<{}>;
   };
 }
 

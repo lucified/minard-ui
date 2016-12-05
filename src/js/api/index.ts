@@ -85,7 +85,7 @@ const postApi = (path: string, payload: any): ApiPromise<ApiEntityResponse | Api
     body: JSON.stringify(payload),
   });
 
-const deleteApi = (path: string): ApiPromise<ApiEntityResponse> =>
+const deleteApi = (path: string): ApiPromise<{}> =>
   connectToApi(path, { method: 'DELETE' });
 
 const patchApi = (path: string, payload: any): ApiPromise<ApiEntityResponse> =>
@@ -171,7 +171,7 @@ const Project = {
         attributes: newAttributes,
       },
     }),
-  delete: (id: string): ApiPromise<ApiEntityResponse> => deleteApi(`/api/projects/${id}`),
+  delete: (id: string): ApiPromise<{}> => deleteApi(`/api/projects/${id}`),
 };
 
 const Preview = {

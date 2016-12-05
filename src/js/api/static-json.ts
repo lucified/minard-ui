@@ -85,7 +85,7 @@ const Project = {
   create: (_name: string, _description?: string): ApiPromise<ApiEntityResponse> => callApi(newProjectJSON),
   edit: (_id: string, _newAttributes: { name?: string, description?: string }): ApiPromise<ApiEntityResponse> =>
     callApi(editedProjectJSON),
-  delete: (_id: string): ApiPromise<ApiEntityResponse> => Promise.resolve({ response: { data: [] } }),
+  delete: (_id: string): ApiPromise<{}> => Promise.resolve({ response: {} }),
     // Promise.resolve({ error: 'sad face :(' });
 };
 
