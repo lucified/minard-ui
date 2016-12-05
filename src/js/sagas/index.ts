@@ -329,7 +329,8 @@ export default function createSagas(api: Api) {
     id: string,
     response: ApiEntityResponse,
   ): IterableIterator<Effect> {
-    const commentIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
+    // The response contains the comments in reverse chronological order
+    const commentIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id).reverse();
     yield put(Deployments.actions.addCommentsToDeployment(id, commentIds));
   }
 
