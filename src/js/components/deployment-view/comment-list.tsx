@@ -20,9 +20,9 @@ interface GeneratedStateProps {
 
 type Props = PassedProps & GeneratedStateProps;
 
-const CommentList = ({ comments, className }: Props) => (
+const CommentList = ({ commentIds, comments, className }: Props) => (
   <div className={classNames(styles['comment-list'], className)}>
-    {comments.map((comment, i) => <SingleComment key={`comment-${i}`} comment={comment} />)}
+    {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
   </div>
 );
 
