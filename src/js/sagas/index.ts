@@ -303,7 +303,7 @@ export default function createSagas(api: Api) {
     }
 
     // Return if we're already requesting
-    if (yield select(Requests.selectors.isLoadingCommitsForBranch, id)) {
+    if (yield select(Requests.selectors.isLoadingCommentsForDeployment, id)) {
       return;
     }
 
