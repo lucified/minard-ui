@@ -1,0 +1,32 @@
+@import '../mixins';
+
+.single-comment {
+  @include nitti-grotesk-regular;
+  margin-bottom: 24px;
+  display: flex;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+.avatar {
+  margin-right: 14px;
+}
+
+.metadata {
+  line-height: 20px;
+  color: #919D9F;
+  font-size: 15px;
+}
+
+.author-name {
+  color: #4A4A4A;
+}
+
+.comment-message {
+  color: #2C3E50;
+  line-height: 24px;
+  font-size: 18px;
+  letter-spacing: -0.31px;
+}
