@@ -9,6 +9,11 @@ export interface Api {
     fetch: (id: string) => ApiPromise<ApiEntityResponse>;
     fetchForProject: (id: string) => ApiPromise<ApiEntityResponse>;
   };
+  Comment: {
+    fetchForDeployment: (id: string) => ApiPromise<ApiEntityResponse>;
+    create: (deployment: string, message: string, email: string, name?: string) => ApiPromise<ApiEntityResponse>;
+    delete: (id: string) => ApiPromise<{}>;
+  };
   Commit: {
     fetch: (id: string) => ApiPromise<ApiEntityResponse>;
     fetchForBranch: (id: string, count: number, until?: number) => ApiPromise<ApiEntityResponse>;
@@ -29,7 +34,7 @@ export interface Api {
 }
 
 // Response formats
-export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities';
+export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities' | 'comments';
 
 export interface ApiEntity {
   type: ApiEntityTypeString;
@@ -172,6 +177,18 @@ export interface ResponseBranchElement {
     project: {
       data: ResponseProjectReference;
     }
+  };
+}
+
+export interface ResponseCommentElement {
+  type: 'comments';
+  id: string;
+  attributes: {
+    email: string;
+    name?: string;
+    message: string;
+    deployment: string;
+    'created-at': string;
   };
 }
 

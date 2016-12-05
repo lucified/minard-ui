@@ -37,6 +37,11 @@ const createApi = (): Api => {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
       fetchForProject: (_id: string) => Promise.resolve(emptyResponse),
     },
+    Comment: {
+      fetchForDeployment: (_id: string) => Promise.resolve(emptyResponse),
+      create: (_deployment: string, _message: string, _email: string, _name: string) => Promise.resolve(emptyResponse),
+      delete: (_id: string) => Promise.resolve({ response: {}}),
+    },
     Commit: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
       fetchForBranch: (_id: string) => Promise.resolve(emptyResponse),

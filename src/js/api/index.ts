@@ -124,6 +124,23 @@ const Branch = {
   fetchForProject: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}/relationships/branches`),
 };
 
+const Comment = {
+  fetchForDeployment: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/comments/deployment/${id}`),
+  create: (deployment: string, message: string, email: string, name?: string): ApiPromise<ApiEntityResponse> =>
+    postApi('/api/comments', {
+      data: {
+        type: 'comments',
+        attributes: {
+          email,
+          name,
+          message,
+          deployment,
+        },
+      },
+    }),
+  delete: (id: string): ApiPromise<{}> => deleteApi(`/api/comments/${id}`),
+};
+
 const Commit = {
   fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/commits/${id}`),
   fetchForBranch: (id: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
@@ -181,6 +198,7 @@ const Preview = {
 const API: Api = {
   Activity,
   Branch,
+  Comment,
   Commit,
   Deployment,
   Preview,
