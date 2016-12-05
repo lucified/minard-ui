@@ -11,3 +11,10 @@ export const storeDeployments = (deployments: t.Deployment[]): t.StoreDeployment
   type: STORE_DEPLOYMENTS,
   entities: deployments,
 });
+
+export const ADD_COMMENTS_TO_DEPLOYMENT = 'DEPLOYMENTS/ADD_COMMENTS_TO_DEPLOYMENT';
+export const addCommentsToDeployment = (id: string, comments: string[]) => ({
+  type: ADD_COMMENTS_TO_DEPLOYMENT,
+  id,
+  comments,
+});
