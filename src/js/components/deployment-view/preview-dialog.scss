@@ -6,4 +6,10 @@
 
   background: #FFFFFF;
   box-shadow: 0 0 24px 0 rgba(0,0,0,0.20);
+
+  @media only screen and (max-width: 500px) {
+    right: auto;
+    left: 5%;
+    width: 90%;
+  }
 }
