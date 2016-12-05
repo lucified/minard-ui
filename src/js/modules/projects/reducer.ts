@@ -1,6 +1,7 @@
 import { isArray, omit, unionBy, uniq, xor } from 'lodash';
 import { Reducer } from 'redux';
 
+import { logMessage } from '../../logger';
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 
@@ -31,14 +32,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.error('Fetching failed! Not replacing existing entity.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action } });
-        }
-      }
+      logMessage('Fetching failed! Not replacing existing entity.', { action });
 
       return state;
     case ADD_BRANCHES_TO_PROJECT:
@@ -61,14 +55,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [projectId]: newProject });
       }
 
-      console.error('Trying to save branches to project that does not exist.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to save branches to project that does not exist.', { extra: { action } });
-        }
-      }
+      logMessage('Trying to save branches to project that does not exist.', { action });
 
       return state;
     case Requests.actions.Branches.LoadBranchesForProject.FAILURE.type:
@@ -103,14 +90,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [id]: updatedProject });
       }
 
-      console.error('Trying to update nonexistant project.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to update nonexistant project.', { extra: { action } });
-        }
-      }
+      logMessage('Trying to update nonexistant project.', { action });
 
       return state;
     case STORE_PROJECTS:
@@ -160,14 +140,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         }
       }
 
-      console.error('Trying to add authors to nonexistant project.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to add authors to nonexistant project.', { extra: { action } });
-        }
-      }
+      logMessage('Trying to add authors to nonexistant project.', { action });
 
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT:
@@ -185,14 +158,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return state;
       }
 
-      console.error('Trying to update timestamp on nonexistant project.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Trying to update timestamp on nonexistant project.', { extra: { action } });
-        }
-      }
+      logMessage('Trying to update timestamp on nonexistant project.', { action });
 
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT:
@@ -210,17 +176,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return state;
       }
 
-      console.error('Trying to update latest deployed commit on nonexistant project.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage(
-            'Trying to update latest deployed commit on nonexistant project.',
-            { extra: { action } },
-          );
-        }
-      }
+      logMessage('Trying to update latest deployed commit on nonexistant project.', { action });
 
       return state;
     case REMOVE_BRANCH_FROM_PROJECT:
@@ -242,17 +198,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return state;
       }
 
-      console.error('Trying to remove branch from nonexistant project.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage(
-            'Trying to remove branch from nonexistant project.',
-            { extra: { action } },
-          );
-        }
-      }
+      logMessage('Trying to remove branch from nonexistant project.', { action });
 
       return state;
     default:

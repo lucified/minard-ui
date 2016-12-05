@@ -1,6 +1,6 @@
-import * as Raven from 'raven-js';
 import * as React from 'react';
 
+import { logMessage } from '../../../logger';
 import { Activity, ActivityType } from '../../../modules/activities';
 
 import CommentActivity from './comment-activity';
@@ -24,11 +24,7 @@ const SingleActivity = (props: Props) => {
         <CommentActivity activity={activity} showProjectName={showProjectName} />
       );
     default:
-      console.error('Unknown activity type', activity);
-
-      if (Raven.isSetup()) {
-        Raven.captureMessage('Unknown activity type', { extra: activity });
-      }
+      logMessage('Unknown activity type', { activity });
 
       return <div />;
   }

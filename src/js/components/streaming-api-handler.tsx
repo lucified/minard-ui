@@ -1,5 +1,4 @@
 import * as uniq from 'lodash/uniq';
-import * as Raven from 'raven-js';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -14,6 +13,7 @@ import {
   ResponseDeploymentElement,
   ResponseProjectElement,
 } from '../api/types';
+import { logException } from '../logger';
 import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Commits, { Commit } from '../modules/commits';
@@ -141,10 +141,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const { id, name, description, 'repo-url': repoUrl } = response;
       this.props.updateProject(id, name, repoUrl, description);
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for project edited', e, event.data);
-      if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: { event } });
-      }
+      logException('Error: Unable to parse Streaming API response for project edited', e, { event });
     }
   }
 
@@ -154,10 +151,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const { id } = response;
       this.props.removeProject(id);
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for project deleted', e, event.data);
-      if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: { event } });
-      }
+      logException('Error: Unable to parse Streaming API response for project deleted', e, { event });
     }
   }
 
@@ -166,10 +160,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const response = JSON.parse(event.data) as NewProjectResponse;
       this.props.storeProjects(toProjects(response.data));
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for project created', e, event.data);
-      if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: { event } });
-      }
+      logException('Error: Unable to parse Streaming API response for project created', e, { event });
     }
   }
 
@@ -185,10 +176,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         this.props.updateLatestDeployedCommitForBranch(branch, commit);
       }
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for deployment updated', e, event.data);
-      if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: { event } });
-      }
+      logException('Error: Unable to parse Streaming API response for deployment updated', e, { event });
     }
   }
 
@@ -197,10 +185,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       const response = JSON.parse(event.data) as NewActivityResponse;
       this.props.storeActivities(toActivities(response));
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for new activity', e, event.data);
-      if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: { event } });
-      }
+      logException('Error: Unable to parse Streaming API response for new activity', e, { event });
     }
   }
 
@@ -248,10 +233,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
         this.props.updateLatestActivityTimestampForBranch(branch.id, latestActivityTimestamp);
       }
     } catch (e) {
-      console.error('Error: Unable to parse Streaming API response for code pushed', e, event.data);
-      if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: { event } });
-      }
+      logException('Error: Unable to parse Streaming API response for code pushed', e, { event });
     }
   }
 

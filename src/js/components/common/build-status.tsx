@@ -1,9 +1,9 @@
 import * as classNames from 'classnames';
-import * as Raven from 'raven-js';
 import * as React from 'react';
 import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import * as Icon from 'react-fontawesome';
 
+import { logMessage } from '../../logger';
 import { Deployment, DeploymentStatus } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 
@@ -61,11 +61,7 @@ const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
         );
         break;
       default:
-        console.error('Unknown deployment status:', deployment);
-
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Unknown deployment status', { extra: { deployment } });
-        }
+        logMessage('Unknown deployment status', { deployment });
     }
   }
 

@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
-import * as Raven from 'raven-js';
 import * as React from 'react';
+
+import { logMessage } from '../../logger';
 
 const styles = require('./section-title.scss');
 
@@ -36,11 +37,7 @@ const SectionTitle = ({ children, leftContent, rightContent }: Props) => {
       ),
     });
   } else {
-    console.error('Error: Only one child expected in SectionTitle!');
-
-    if (Raven.isSetup()) {
-      Raven.captureMessage('Only one child expected in SectionTitle', { extra: children });
-    }
+    logMessage('Error: Only one child expected in SectionTitle', { children });
   }
 
   let rightContentWithBackgroundColor: any;

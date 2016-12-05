@@ -1,4 +1,3 @@
-import * as Raven from 'raven-js';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 import * as ModalDialog from 'react-modal';
@@ -6,6 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Dispatch } from 'redux';
 
+import { logException } from '../../logger';
 import Errors, { DeleteError, isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import Projects, { Project } from '../../modules/projects';
@@ -70,11 +70,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
       router.push('/projects');
     })
     .catch((e) => {
-      if (Raven.isSetup()) {
-        Raven.captureException(e, { extra: { project } });
-      }
-
-      console.error('Error deleting project:', e);
+      logException('Error deleting project:', e, { project });
     });
   };
 

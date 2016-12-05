@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 
+import { logMessage } from '../../logger';
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 
@@ -22,14 +23,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         return Object.assign({}, state, { [id]: responseAction });
       }
 
-      console.error('Fetching failed! Not replacing existing entity.');
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Fetching failed! Not replacing existing entity.', { extra: { action } });
-        }
-      }
+      logMessage('Fetching failed! Not replacing existing commit entity', { action });
 
       return state;
     case ADD_DEPLOYMENT_TO_COMMIT:
