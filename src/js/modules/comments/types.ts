@@ -1,7 +1,5 @@
 import { Action } from 'redux';
 
-import { FetchError } from '../errors';
-
 // State
 export interface Comment {
   id: string;
@@ -13,7 +11,7 @@ export interface Comment {
 }
 
 export interface CommentState {
-  [id: string]: Comment | FetchError;
+  [id: string]: Comment;
 };
 
 // Actions
