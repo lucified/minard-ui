@@ -42,7 +42,7 @@ export interface Deployment {
   url?: string;
   screenshot?: string;
   status: DeploymentStatus;
-  comments: string[];
+  comments: string[] | FetchError;
 }
 
 export interface DeploymentState {

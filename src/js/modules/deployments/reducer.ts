@@ -10,16 +10,38 @@ import * as t from './types';
 const initialState: t.DeploymentState = {};
 
 const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
+  let fetchErrorAction: FetchError;
+  let id: string;
+  let existingDeployment: t.Deployment | FetchError;
+
   switch (action.type) {
     case Requests.actions.Deployments.LoadDeployment.FAILURE.type:
-      const responseAction = <FetchError> action;
-      const id = responseAction.id;
-      const existingEntity = state[id];
-      if (!existingEntity || isFetchError(existingEntity)) {
-        return Object.assign({}, state, { [id]: responseAction });
+      fetchErrorAction = <FetchError> action;
+      id = fetchErrorAction.id;
+      existingDeployment = state[id];
+      if (!existingDeployment || isFetchError(existingDeployment)) {
+        return Object.assign({}, state, { [id]: fetchErrorAction });
       }
 
       logMessage('Fetching failed! Not replacing existing deployment entity', { action });
+
+      return state;
+    case Requests.actions.Comments.LoadCommentsForDeployment.FAILURE.type:
+      fetchErrorAction = <FetchError> action;
+      id = fetchErrorAction.id;
+      existingDeployment = state[id];
+      if (existingDeployment && !isFetchError(existingDeployment)) {
+        if (isFetchError(existingDeployment.comments) || existingDeployment.comments.length > 0) {
+          const newDeploymentObject = Object.assign({}, existingDeployment, { comments: fetchErrorAction });
+          return Object.assign({}, state, { [id]: newDeploymentObject });
+        }
+
+        logMessage('Not replacing existing comments with FetchError', { action });
+
+        return state;
+      }
+
+      logMessage('Deployment entity does not exist when setting comments', { action });
 
       return state;
     case STORE_DEPLOYMENTS:
@@ -36,9 +58,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       return state;
     case ADD_COMMENTS_TO_DEPLOYMENT:
       const commentsAction = <t.AddCommentsToDeploymentAction> action;
-      const deployment = state[commentsAction.id];
-      if (deployment && !isFetchError(deployment)) {
-        const newDeployment = Object.assign({}, deployment, { comments: commentsAction.comments });
+      existingDeployment = state[commentsAction.id];
+      if (existingDeployment && !isFetchError(existingDeployment)) {
+        const newDeployment = Object.assign({}, existingDeployment, { comments: commentsAction.comments });
         return Object.assign({}, state, { [commentsAction.id]: newDeployment });
       }
 
