@@ -311,6 +311,7 @@ export default function createSagas(api: Api) {
       logMessage('Deployment not found. Not fetching comments for deployment.', { action });
     } else if (deployment.comments) {
       // Comments already exist. Do nothing.
+      // TODO: remove this eventually once we make sure everything works ok
       console.log('Comments already exist in deployment.', deployment);
     } else {
       yield call(fetchCommentsForDeployment, id);
