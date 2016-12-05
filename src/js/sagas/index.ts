@@ -5,6 +5,7 @@ import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects'
 
 import * as Converter from '../api/convert';
 import { Api, ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPreviewResponse } from '../api/types';
+import { logException } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
   Branch,
@@ -143,15 +144,7 @@ export default function createSagas(api: Api) {
     const projects = <Project[]> (yield select(Projects.selectors.getProjects));
 
     if (!projects) {
-      const e = new Error('No projects found!');
-      console.error('Error ensuring project', e);
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureException(e);
-        }
-      }
+      logException('Error ensuring project', new Error('No projects found!'));
 
       return;
     }
@@ -180,29 +173,13 @@ export default function createSagas(api: Api) {
     }
 
     if (!project) {
-      const e = new Error('No project found!');
-      console.error('Error ensuring project', e);
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureException(e, { extra: { project } });
-        }
-      }
+      logException('Error ensuring project', new Error('No project found!'), { project });
 
       return;
     }
 
     if (isFetchError(project)) {
-      const e = new Error('Unable to fetch project!');
-      console.error('Error fetching project', e);
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureException(e, { extra: { project } });
-        }
-      }
+      logException('Error fetching project', new Error('Unable to fetch project!'), { project });
 
       return;
     }

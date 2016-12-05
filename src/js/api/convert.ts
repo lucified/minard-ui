@@ -1,6 +1,7 @@
-import { compact, isArray } from 'lodash';
+import { compact } from 'lodash';
 import * as moment from 'moment';
 
+import { logException } from '../logger';
 import { Activity, ActivityType } from '../modules/activities';
 import { Branch } from '../modules/branches';
 import { Commit } from '../modules/commits';
@@ -20,14 +21,7 @@ const toConvertedArray = <InputType, OutputType>(converter: (response: InputType
       try {
         return converter(responseEntity);
       } catch (e) {
-        console.error('Error parsing response object:', responseEntity, e);
-        // We need to not load 'raven-js' when running tests
-        if (typeof window !== 'undefined') {
-          const Raven = require('raven-js');
-          if (Raven.isSetup()) {
-            Raven.captureException(e, { extra: responseEntity });
-          }
-        }
+        logException('Error parsing response object:', e, { responseEntity });
 
         return undefined;
       }
@@ -59,11 +53,6 @@ const createProjectObject = (project: t.ResponseProjectElement): Project => {
 
   if (latestActivityTimestampString) {
     latestActivityTimestamp = moment(latestActivityTimestampString).valueOf();
-  }
-
-  // TODO: Remove this. used for debugging
-  if (!isArray(project.attributes['active-committers'])) {
-    console.error('activeUsers is not an array when creating project!', project.attributes['active-committers']);
   }
 
   return {

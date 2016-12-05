@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import * as moment from 'moment';
 
+import { logMessage } from '../logger';
 import { teamId } from './team-id';
 import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise } from './types';
 
@@ -58,16 +59,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
     ).then(
       json => ({ response: json }),
     ).catch(errorResponse => {
-      // We need to not load 'raven-js' when running tests
-      if (typeof window !== 'undefined') {
-        const Raven = require('raven-js');
-        if (Raven.isSetup()) {
-          Raven.captureMessage('Error while calling API', {
-            extra: { errorResponse },
-            level: 'info', // one of 'info', 'warning', or 'error'
-          });
-        }
-      }
+      logMessage('Error while calling API', { errorResponse }, 'info');
 
       return generateErrorObject(errorResponse);
     });
