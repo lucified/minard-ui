@@ -313,10 +313,7 @@ export default function createSagas(api: Api) {
       // Comments already exist. Do nothing.
       console.log('Comments already exist in deployment.', deployment);
     } else {
-      const fetchSuccess = yield call(fetchCommentsForDeployment, id);
-      if (fetchSuccess) {
-        yield fork(ensureCommentsForDeploymentRelatedDataLoaded, id);
-      }
+      yield call(fetchCommentsForDeployment, id);
     }
   }
 
@@ -334,10 +331,6 @@ export default function createSagas(api: Api) {
   ): IterableIterator<Effect> {
     const commentIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
     yield put(Deployments.actions.addCommentsToDeployment(id, commentIds));
-  }
-
-  function* ensureCommentsForDeploymentRelatedDataLoaded(_id: string): IterableIterator<Effect | Effect[]> {
-    // Do nothing
   }
 
   // COMMIT
