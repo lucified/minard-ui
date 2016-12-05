@@ -1366,7 +1366,6 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        comments: [],
       },
     };
 
@@ -1386,7 +1385,6 @@ describe('reducers', () => {
           email: 'juho@lucify.com',
           timestamp: 1470131581802,
         },
-        comments: [],
       },
     };
 
@@ -1401,7 +1399,6 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
-        comments: [],
       },
     };
 

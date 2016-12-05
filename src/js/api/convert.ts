@@ -113,7 +113,6 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
       id: deployment.id,
       url: deployment.url,
       screenshot: deployment.screenshot,
-      comments: [],
       creator: {
         name: deployment.creator.name,
         email: deployment.creator.email,
@@ -224,7 +223,6 @@ const createDeploymentObject = (deployment: t.ResponseDeploymentElement): Deploy
     email: deployment.attributes.creator.email,
     timestamp: moment(deployment.attributes.creator.timestamp).valueOf(),
   },
-  comments: [],
 });
 
 export const toDeployments = toConvertedArray(createDeploymentObject);

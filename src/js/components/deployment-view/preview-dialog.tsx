@@ -64,7 +64,7 @@ class PreviewDialog extends React.Component<Props, State> {
             preview={preview}
           />
         )}
-        {!isFetchError(deployment.comments) && deployment.comments.length > 0 && (
+        {deployment.comments && !isFetchError(deployment.comments) && (
           <span>Comments: {deployment.comments.length}</span>
         )}
       </div>
