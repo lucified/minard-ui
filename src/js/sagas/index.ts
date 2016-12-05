@@ -5,7 +5,7 @@ import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects'
 
 import * as Converter from '../api/convert';
 import { Api, ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPreviewResponse } from '../api/types';
-import { logException } from '../logger';
+import { logException, logMessage } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
   Branch,
@@ -13,8 +13,9 @@ import Branches, {
   StoreBranchesAction,
   UpdateBranchWithCommitsAction,
 } from '../modules/branches';
+import Comments, { LoadCommentsForDeploymentAction } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
-import Deployments, { Deployment } from '../modules/deployments';
+import Deployments, { Deployment, StoreDeploymentsAction } from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
 import { FORM_SUBMIT } from '../modules/forms';
 import Previews, { LoadPreviewAction, Preview } from '../modules/previews';
@@ -290,6 +291,52 @@ export default function createSagas(api: Api) {
     // Nothing to do
   }
 
+  // COMMENTS_FOR_DEPLOYMENT
+  function* loadCommentsForDeployment(action: LoadCommentsForDeploymentAction): IterableIterator<Effect> {
+    const { id } = action;
+    let deployment = <Deployment | FetchError | undefined> (yield select(Deployments.selectors.getDeployment, id));
+
+    // Wait until we've received the deployment before continuing
+    while (!deployment) {
+      const { entities: deployments } = <StoreDeploymentsAction> (yield take(Deployments.actions.STORE_DEPLOYMENTS));
+      deployment = deployments.find(d => d.id === id);
+    }
+
+    // Return if we're already requesting
+    if (yield select(Requests.selectors.isLoadingCommitsForBranch, id)) {
+      return;
+    }
+
+    if (isFetchError(deployment)) {
+      logMessage('Deployment not found. Not fetching comments for deployment.', { action });
+    } else {
+      const fetchSuccess = yield call(fetchCommentsForDeployment, id);
+      if (fetchSuccess) {
+        yield fork(ensureCommentsForDeploymentRelatedDataLoaded, id);
+      }
+    }
+  }
+
+  const fetchCommentsForDeployment = createEntityFetcher(
+    Requests.actions.Comments.LoadCommentsForDeployment,
+    Converter.toComments,
+    Comments.actions.storeComments,
+    api.Comment.fetchForDeployment,
+    addCommentsToDeployment,
+  );
+
+  function* addCommentsToDeployment(
+    id: string,
+    response: ApiEntityResponse,
+  ): IterableIterator<Effect> {
+    const commentIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
+    yield put(Deployments.actions.addCommentsToDeployment(id, commentIds));
+  }
+
+  function* ensureCommentsForDeploymentRelatedDataLoaded(_id: string): IterableIterator<Effect | Effect[]> {
+    // Do nothing
+  }
+
   // COMMIT
   const fetchCommit = createEntityFetcher(
     Requests.actions.Commits.LoadCommit,
@@ -548,6 +595,10 @@ export default function createSagas(api: Api) {
     yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
   }
 
+  function* watchForLoadCommentsForDeployment() {
+    yield takeEvery(Comments.actions.LOAD_COMMENTS_FOR_DEPLOYMENT, loadCommentsForDeployment);
+  }
+
   function* watchForLoadCommit() {
     yield takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
@@ -602,6 +653,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadBranch),
       fork(watchForLoadBranchesForProject),
       fork(watchForLoadDeployment),
+      fork(watchForLoadCommentsForDeployment),
       fork(watchForLoadCommit),
       fork(watchForLoadCommitsForBranch),
       fork(watchForLoadActivities),
@@ -619,6 +671,7 @@ export default function createSagas(api: Api) {
     watchForLoadBranchesForProject,
     watchForLoadProject,
     watchForLoadAllProjects,
+    watchForLoadCommentsForDeployment,
     watchForLoadCommit,
     watchForLoadCommitsForBranch,
     watchForLoadActivities,
