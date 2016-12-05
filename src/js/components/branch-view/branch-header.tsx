@@ -33,13 +33,6 @@ const BranchHeader = ({ branch, project }: Props) => (
         {` / ${branch.name}`}
       </span>
     </SectionTitle>
-    {/* TODO: Add this once we add support for branch descriptions
-    <div className="row">
-      <div className={classNames(styles.description, 'col-xs-12', 'center-xs')}>
-        {branch.description}
-      </div>
-    </div>
-    */}
   </section>
 );
 

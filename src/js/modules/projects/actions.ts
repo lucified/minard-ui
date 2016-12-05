@@ -50,7 +50,7 @@ export const DELETE_PROJECT = 'PROJECTS/DELETE_PROJECT';
 export const deleteProjectPromiseResolver = (
   id: string,
   resolve: () => void,
-  reject: () => void
+  reject: () => void,
 ) => ({
   type: DELETE_PROJECT,
   id,
@@ -91,7 +91,7 @@ export const storeAuthorsToProject = (id: string, authors: t.ProjectUser[]): t.S
 export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT = 'PROJECTS/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT';
 export const updateLatestActivityTimestampForProject = (
   id: string,
-  timestamp: number
+  timestamp: number,
 ): t.UpdateLatestActivityTimestampAction => ({
   type: UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT,
   id,
