@@ -1,4 +1,4 @@
-import { isArray, omit, unionBy, uniq, xor } from 'lodash';
+import { omit, unionBy, uniq, xor } from 'lodash';
 import { Reducer } from 'redux';
 
 import { logMessage } from '../../logger';
@@ -116,11 +116,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       project = state[id];
 
       if (project && !isFetchError(project)) {
-        // TODO: Remove this. used for debugging
-        if (!isArray(project.activeUsers)) {
-          console.error('old activeUsers is not an array when updating authors in project!', action, project);
-        }
-
         if (xor(
           storeAuthorsAction.authors.map(user => user.email),
           project.activeUsers.map(user => user.email),
@@ -130,11 +125,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         } else {
           const newProject = Object.assign({}, project);
           newProject.activeUsers = unionBy(action.authors, project.activeUsers, (user: t.ProjectUser) => user.email);
-
-          // TODO: Remove this. used for debugging
-          if (!isArray(newProject.activeUsers)) {
-            console.error('activeUsers is not an array when updating authors in project!', newProject.activeUsers, action, project);
-          }
 
           return Object.assign({}, state, { [id]: newProject });
         }

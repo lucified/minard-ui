@@ -1,4 +1,4 @@
-import { compact, isArray } from 'lodash';
+import { compact } from 'lodash';
 import * as moment from 'moment';
 
 import { logException } from '../logger';
@@ -53,11 +53,6 @@ const createProjectObject = (project: t.ResponseProjectElement): Project => {
 
   if (latestActivityTimestampString) {
     latestActivityTimestamp = moment(latestActivityTimestampString).valueOf();
-  }
-
-  // TODO: Remove this. used for debugging
-  if (!isArray(project.attributes['active-committers'])) {
-    console.error('activeUsers is not an array when creating project!', project.attributes['active-committers']);
   }
 
   return {
