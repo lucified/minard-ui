@@ -30,6 +30,8 @@ const deploymentJSON: { [id: string]: string } = {
   7: require('file!../../../json/deployment-7.json'),
   8: require('file!../../../json/deployment-8.json'),
 };
+const commentsJSON = require('file!../../../json/comments.json');
+const newCommentJSON = require('file!../../../json/new-comment.json');
 const commitJSON = require('file!../../../json/commit.json');
 const newProjectJSON = require('file!../../../json/new-project.json');
 const editedProjectJSON = require('file!../../../json/edited-project.json');
@@ -65,6 +67,13 @@ const Branch = {
   fetchForProject: (id: string): ApiPromise<ApiEntityResponse> => callApi(projectBranchesJSON[id]),
 };
 
+const Comment = {
+  fetchForDeployment: (_id: string): ApiPromise<ApiEntityResponse> => callApi(commentsJSON),
+  create: (_deployment: string, _message: string, _email: string, _name?: string): ApiPromise<ApiEntityResponse> =>
+    callApi(newCommentJSON),
+  delete: (_id: string): ApiPromise<{}> => Promise.resolve({ response: {} }),
+};
+
 const Commit = {
   fetch: (_id: string): ApiPromise<ApiEntityResponse> => callApi(commitJSON),
   fetchForBranch: (id: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
@@ -85,13 +94,14 @@ const Project = {
   create: (_name: string, _description?: string): ApiPromise<ApiEntityResponse> => callApi(newProjectJSON),
   edit: (_id: string, _newAttributes: { name?: string, description?: string }): ApiPromise<ApiEntityResponse> =>
     callApi(editedProjectJSON),
-  delete: (_id: string): ApiPromise<ApiEntityResponse> => Promise.resolve({ response: { data: [] } }),
+  delete: (_id: string): ApiPromise<{}> => Promise.resolve({ response: {} }),
     // Promise.resolve({ error: 'sad face :(' });
 };
 
 const API: Api = {
   Activity,
   Branch,
+  Comment,
   Commit,
   Deployment,
   Preview,

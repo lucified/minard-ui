@@ -29,17 +29,22 @@ const testData = {
 const createApi = (): Api => {
   const emptyResponse = { response: {} as any };
   return {
-    Project: {
-      fetchAll: () => Promise.resolve(emptyResponse),
-      fetch: (_id: string) => Promise.resolve(emptyResponse),
-      create: (_name: string, _description?: string) => Promise.resolve(emptyResponse),
-      edit: (_id: string, _newAttributes: { description?: string, name?: string }) =>
-        Promise.resolve(emptyResponse),
-      delete: (_id: string) => Promise.resolve(emptyResponse),
-    },
     Activity: {
       fetchAll: () => Promise.resolve(emptyResponse),
       fetchAllForProject: (_id: string) => Promise.resolve(emptyResponse),
+    },
+    Branch: {
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchForProject: (_id: string) => Promise.resolve(emptyResponse),
+    },
+    Comment: {
+      fetchForDeployment: (_id: string) => Promise.resolve(emptyResponse),
+      create: (_deployment: string, _message: string, _email: string, _name: string) => Promise.resolve(emptyResponse),
+      delete: (_id: string) => Promise.resolve({ response: {}}),
+    },
+    Commit: {
+      fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchForBranch: (_id: string) => Promise.resolve(emptyResponse),
     },
     Deployment: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
@@ -47,13 +52,13 @@ const createApi = (): Api => {
     Preview: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
     },
-    Branch: {
+    Project: {
+      fetchAll: () => Promise.resolve(emptyResponse),
       fetch: (_id: string) => Promise.resolve(emptyResponse),
-      fetchForProject: (_id: string) => Promise.resolve(emptyResponse),
-    },
-    Commit: {
-      fetch: (_id: string) => Promise.resolve(emptyResponse),
-      fetchForBranch: (_id: string) => Promise.resolve(emptyResponse),
+      create: (_name: string, _description?: string) => Promise.resolve(emptyResponse),
+      edit: (_id: string, _newAttributes: { description?: string, name?: string }) =>
+        Promise.resolve(emptyResponse),
+      delete: (_id: string) => Promise.resolve({ response: {}}),
     },
   };
 };

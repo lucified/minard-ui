@@ -42,6 +42,7 @@ export interface Deployment {
   url?: string;
   screenshot?: string;
   status: DeploymentStatus;
+  comments?: string[] | FetchError;
 }
 
 export interface DeploymentState {
@@ -57,4 +58,10 @@ export interface LoadDeploymentAction extends Action {
 // STORE_DEPLOYMENTS
 export interface StoreDeploymentsAction extends Action {
   entities: Deployment[];
+}
+
+// ADD_COMMENTS_TO_DEPLOYMENT
+export interface AddCommentsToDeploymentAction extends Action {
+  id: string;
+  comments: string[];
 }

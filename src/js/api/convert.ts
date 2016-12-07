@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { logException } from '../logger';
 import { Activity, ActivityType } from '../modules/activities';
 import { Branch } from '../modules/branches';
+import { Comment } from '../modules/comments';
 import { Commit } from '../modules/commits';
 import { Deployment, toDeploymentStatus } from '../modules/deployments';
 import { Project } from '../modules/projects';
@@ -166,6 +167,22 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
 };
 
 export const toBranches = toConvertedArray(createBranchObject);
+
+const createCommentObject = (comment: t.ResponseCommentElement): Comment => {
+  const { id } = comment;
+  const { name, email, message, 'created-at': timestamp, deployment } = comment.attributes;
+
+  return {
+    id,
+    message,
+    email,
+    name,
+    timestamp: moment(timestamp).valueOf(),
+    deployment,
+  };
+};
+
+export const toComments = toConvertedArray(createCommentObject);
 
 // Commits
 const createCommitObject = (commit: t.ResponseCommitElement): Commit => {

@@ -10,5 +10,6 @@ export {
   isSuccessful,
   isFailed,
   isPending,
+  StoreDeploymentsAction,
   toDeploymentStatus,
 } from './types';

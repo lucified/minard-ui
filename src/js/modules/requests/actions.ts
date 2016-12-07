@@ -157,6 +157,12 @@ export const Branches = {
   LoadBranchesForProject: fetchEntityActionCreators('BRANCHES/LOAD_BRANCHES_FOR_PROJECT'),
 };
 
+export const Comments = {
+  LoadCommentsForDeployment: fetchEntityActionCreators('COMMENTS/LOAD_COMMENTS_FOR_DEPLOYMENT'),
+  CreateComment: createEntityActionCreators('COMMENTS/CREATE_COMMENT'),
+  DeleteComment: deleteEntityActionCreators('COMMENTS/DELETE_ENTITY'),
+};
+
 export const Commits = {
   LoadCommit: fetchEntityActionCreators('COMMITS/LOAD_COMMIT'),
   LoadCommitsForBranch: fetchEntityActionCreators('COMMITS/LOAD_COMMITS_FOR_BRANCH'),

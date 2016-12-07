@@ -42,6 +42,7 @@ export interface Activity {
     id: string;
     url?: string;
     screenshot?: string;
+    comments?: string[];
     creator: {
       name?: string;
       email: string;

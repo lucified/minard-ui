@@ -5,6 +5,7 @@ import * as Converter from '../api/convert';
 import { ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPromise } from '../api/types';
 import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
+import Comments, { Comment } from '../modules/comments';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
 import { FetchError } from '../modules/errors';
@@ -12,8 +13,8 @@ import Projects, { Project } from '../modules/projects';
 import { CollectionActionCreators, FetchEntityActionCreators } from '../modules/requests';
 import { StateTree } from '../reducers';
 
-type SelectorResponse = Commit | Project | Deployment | Branch | Activity | FetchError | undefined;
-type EntityType = Activity | Commit | Project | Deployment | Branch;
+type SelectorResponse = Commit | Comment | Project | Deployment | Branch | Activity | FetchError | undefined;
+type EntityType = Activity | Commit | Project | Deployment | Branch | Comment;
 
 interface LoadEntityAction extends Action {
   id: string;
@@ -124,6 +125,7 @@ const storingMetadata: {
 }[] = [
   { type: 'projects', storeActionCreator: Projects.actions.storeProjects, converter: Converter.toProjects },
   { type: 'deployments', storeActionCreator: Deployments.actions.storeDeployments, converter: Converter.toDeployments },
+  { type: 'comments', storeActionCreator: Comments.actions.storeComments, converter: Converter.toComments },
   { type: 'commits', storeActionCreator: Commits.actions.storeCommits, converter: Converter.toCommits },
   { type: 'branches', storeActionCreator: Branches.actions.storeBranches, converter: Converter.toBranches },
   { type: 'activities', storeActionCreator: Activities.actions.storeActivities, converter: Converter.toActivities },

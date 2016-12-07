@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import Comments from '../../modules/comments';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
@@ -29,24 +30,27 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadPreview: (deploymentId: string) => void;
+  loadCommentsForDeployment: (deploymentId: string) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 class ProjectsFrame extends React.Component<Props, any> {
   public componentWillMount() {
-    const { loadPreview } = this.props;
+    const { loadCommentsForDeployment, loadPreview } = this.props;
     const { deploymentId } = this.props.params;
 
     loadPreview(deploymentId);
+    loadCommentsForDeployment(deploymentId);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadPreview } = nextProps;
+    const { loadCommentsForDeployment, loadPreview } = nextProps;
     const { deploymentId } = nextProps.params;
 
     if (deploymentId !== this.props.params.deploymentId) {
       loadPreview(deploymentId);
+      loadCommentsForDeployment(deploymentId);
     }
   }
 
@@ -112,5 +116,8 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  { loadPreview: Previews.actions.loadPreview },
+  {
+    loadPreview: Previews.actions.loadPreview,
+    loadCommentsForDeployment: Comments.actions.loadCommentsForDeployment,
+  },
 )(ProjectsFrame);

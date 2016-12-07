@@ -85,7 +85,7 @@ const postApi = (path: string, payload: any): ApiPromise<ApiEntityResponse | Api
     body: JSON.stringify(payload),
   });
 
-const deleteApi = (path: string): ApiPromise<ApiEntityResponse> =>
+const deleteApi = (path: string): ApiPromise<{}> =>
   connectToApi(path, { method: 'DELETE' });
 
 const patchApi = (path: string, payload: any): ApiPromise<ApiEntityResponse> =>
@@ -122,6 +122,23 @@ const Activity = {
 const Branch = {
   fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/branches/${id}`),
   fetchForProject: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}/relationships/branches`),
+};
+
+const Comment = {
+  fetchForDeployment: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/comments/deployment/${id}`),
+  create: (deployment: string, message: string, email: string, name?: string): ApiPromise<ApiEntityResponse> =>
+    postApi('/api/comments', {
+      data: {
+        type: 'comments',
+        attributes: {
+          email,
+          name,
+          message,
+          deployment,
+        },
+      },
+    }),
+  delete: (id: string): ApiPromise<{}> => deleteApi(`/api/comments/${id}`),
 };
 
 const Commit = {
@@ -171,7 +188,7 @@ const Project = {
         attributes: newAttributes,
       },
     }),
-  delete: (id: string): ApiPromise<ApiEntityResponse> => deleteApi(`/api/projects/${id}`),
+  delete: (id: string): ApiPromise<{}> => deleteApi(`/api/projects/${id}`),
 };
 
 const Preview = {
@@ -181,6 +198,7 @@ const Preview = {
 const API: Api = {
   Activity,
   Branch,
+  Comment,
   Commit,
   Deployment,
   Preview,
