@@ -6,6 +6,7 @@ import { Deployment } from '../../modules/deployments';
 import { isFetchError } from '../../modules/errors';
 import { Preview } from '../../modules/previews';
 
+import CommentList from './comment-list';
 import CommitSummary from './commit-summary';
 import Header from './header';
 
@@ -64,8 +65,8 @@ class PreviewDialog extends React.Component<Props, State> {
             preview={preview}
           />
         )}
-        {deployment.comments && !isFetchError(deployment.comments) && (
-          <span>Comments: {deployment.comments.length}</span>
+        {dialogOpen && deployment.comments && !isFetchError(deployment.comments) && deployment.comments.length > 0 && (
+          <CommentList commentIds={deployment.comments} />
         )}
       </div>
     );
