@@ -1038,7 +1038,7 @@ export function focus(form: string, field: string): Action;
  * The data parameter may contain deep nested array and object values that match the shape of your form fields.
  * IMPORTANT: The fields array passed must be the same as the one given as a config parameter to reduxForm().
  */
-export function initialize(form: string, data: Object, fields: string[]): Action;
+export function initialize(form: string, data: Object, keepDirty: boolean): Action;
 
 /**
  * Resets the values in the form back to the values past in with the most recent initialize action.
