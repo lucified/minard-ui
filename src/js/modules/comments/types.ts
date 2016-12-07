@@ -24,3 +24,15 @@ export interface LoadCommentsForDeploymentAction extends Action {
 export interface StoreCommentsAction extends Action {
   entities: Comment[];
 }
+
+// CREATE_COMMENT
+export interface CreateCommentFormData {
+  name?: string;
+  email?: string; // Required
+  message?: string; // Required
+  deployment?: string; // Required
+}
+
+export interface CreateCommentAction extends Action {
+  payload: CreateCommentFormData;
+}

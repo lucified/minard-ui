@@ -3,4 +3,10 @@ import reducer from './reducer';
 import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
-export { Comment, CommentState, LoadCommentsForDeploymentAction } from './types';
+export {
+  Comment,
+  CommentState,
+  CreateCommentAction,
+  CreateCommentFormData,
+  LoadCommentsForDeploymentAction,
+} from './types';

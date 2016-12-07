@@ -13,7 +13,7 @@ import Branches, {
   StoreBranchesAction,
   UpdateBranchWithCommitsAction,
 } from '../modules/branches';
-import Comments, { LoadCommentsForDeploymentAction } from '../modules/comments';
+import Comments, { Comment, CreateCommentAction, LoadCommentsForDeploymentAction } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment, StoreDeploymentsAction } from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
@@ -337,6 +337,33 @@ export default function createSagas(api: Api) {
     yield put(Deployments.actions.addCommentsToDeployment(id, commentIds));
   }
 
+  // CREATE_COMMENT
+  function* createComment(action: CreateCommentAction): IterableIterator<Effect> {
+    const { name, deployment, email, message } = action.payload;
+    const requestName = `${deployment}-${message}`;
+
+    yield put(Requests.actions.Comments.CreateComment.REQUEST.actionCreator(requestName));
+
+    const { response, error, details }: { response?: any, error?: string, details?: string } =
+      yield call(api.Comment.create, deployment, message, email, name);
+
+    if (response) {
+      // Store new comment
+      const commentObject = <Comment[]> (yield call(Converter.toComments, response.data));
+      yield put(Comments.actions.storeComments(commentObject));
+
+      // Notify form that creation was a success
+      yield put(Requests.actions.Comments.CreateComment.SUCCESS.actionCreator(commentObject[0].id, requestName));
+
+      return true;
+    } else {
+      // Notify form that creation failed
+      yield put(Requests.actions.Comments.CreateComment.FAILURE.actionCreator(requestName, error!, details));
+
+      return false;
+    }
+  }
+
   // COMMIT
   const fetchCommit = createEntityFetcher(
     Requests.actions.Commits.LoadCommit,
@@ -586,6 +613,10 @@ export default function createSagas(api: Api) {
     yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
   }
 
+  function* watchForCreateComment() {
+    yield takeLatest(Comments.actions.CREATE_COMMENT, createComment);
+  }
+
   function* watchForLoadCommentsForDeployment() {
     yield takeEvery(Comments.actions.LOAD_COMMENTS_FOR_DEPLOYMENT, loadCommentsForDeployment);
   }
@@ -644,6 +675,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadBranch),
       fork(watchForLoadBranchesForProject),
       fork(watchForLoadDeployment),
+      fork(watchForCreateComment),
       fork(watchForLoadCommentsForDeployment),
       fork(watchForLoadCommit),
       fork(watchForLoadCommitsForBranch),

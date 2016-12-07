@@ -11,3 +11,6 @@ export const storeComments = (comments: t.Comment[]): t.StoreCommentsAction => (
   type: STORE_COMMENTS,
   entities: comments,
 });
+
+// Action creators are handled by redux-form
+export const CREATE_COMMENT = 'COMMENTS/CREATE_COMMENT';
