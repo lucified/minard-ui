@@ -12,5 +12,11 @@ export const storeComments = (comments: t.Comment[]): t.StoreCommentsAction => (
   entities: comments,
 });
 
+export const REMOVE_COMMENT = 'COMMENTS/REMOVE_COMMENT';
+export const removeComment = (id: string): t.RemoveCommentAction => ({
+  type: REMOVE_COMMENT,
+  id,
+});
+
 // Action creators are handled by redux-form
 export const CREATE_COMMENT = 'COMMENTS/CREATE_COMMENT';

@@ -25,3 +25,10 @@ export const addCommentsToDeployment = (id: string, comments: string[]) => ({
   id,
   comments,
 });
+
+export const REMOVE_COMMENT_FROM_DEPLOYMENT = 'DEPLOYMENTS/REMOVE_COMMENT_FROM_DEPLOYMENT';
+export const removeCommentFromDeployment = (id: string, comment: string) => ({
+  type: REMOVE_COMMENT_FROM_DEPLOYMENT,
+  id,
+  comment,
+});

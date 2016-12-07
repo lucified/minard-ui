@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 
 require('event-source-polyfill');
 
-import { toActivities, toBranches, toCommits, toDeployments, toProjects } from '../api/convert';
+import { toActivities, toBranches, toComments, toCommits, toDeployments, toProjects } from '../api/convert';
 import { teamId } from '../api/team-id';
 import {
   ResponseActivityElement,
   ResponseBranchElement,
+  ResponseCommentElement,
   ResponseCommitElement,
   ResponseDeploymentElement,
   ResponseProjectElement,
@@ -16,6 +17,7 @@ import {
 import { logException } from '../logger';
 import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
+import Comments, { Comment } from '../modules/comments';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
 import Projects, { Project, ProjectUser } from '../modules/projects';
@@ -26,12 +28,16 @@ declare var EventSource: any;
 interface GeneratedDispatchProps {
   setConnectionState: (state: ConnectionState, error?: string) => void;
   storeProjects: (projects: Project[]) => void;
+  storeComments: (comments: Comment[]) => void;
+  removeComment: (comment: string) => void;
   storeCommits: (commits: Commit[]) => void;
   storeActivities: (activities: Activity[]) => void;
   storeBranches: (branches: Branch[]) => void;
   storeDeployments: (deployments: Deployment[]) => void;
   removeProject: (id: string) => void;
   updateProject: (id: string, name: string, repoUrl: string, description?: string) => void;
+  addCommentsToDeployment: (id: string, comments: string[]) => void;
+  removeCommentFromDeployment: (id: string, comment: string) => void;
   addDeploymentToCommit: (commitId: string, deploymentId: string) => void;
   removeBranch: (id: string) => void;
   updateBranchWithCommits: (id: string, latestCommitId: string, newCommits: Commit[], parentCommits: string[]) => void;
@@ -68,6 +74,14 @@ interface CodePushResponse {
 }
 
 interface NewActivityResponse extends ResponseActivityElement {}
+
+interface CommentCreatedResponse extends ResponseCommentElement {}
+
+interface CommentDeletedResponse {
+  comment: string;
+  teamId: string;
+  deployment: string;
+}
 
 interface DeploymentUpdateResponse {
   commit: string;
@@ -127,6 +141,8 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     this.handleProjectCreated = this.handleProjectCreated.bind(this);
     this.handleProjectDeleted = this.handleProjectDeleted.bind(this);
     this.handleProjectEdited = this.handleProjectEdited.bind(this);
+    this.handleCommentCreated = this.handleCommentCreated.bind(this);
+    this.handleCommentDeleted = this.handleCommentDeleted.bind(this);
   }
 
   private changeStateToConnecting() {
@@ -177,6 +193,27 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
       }
     } catch (e) {
       logException('Error: Unable to parse Streaming API response for deployment updated', e, { event });
+    }
+  }
+
+  private handleCommentCreated(event: EventSourceEvent) {
+    try {
+      const response = JSON.parse(event.data) as CommentCreatedResponse;
+      const comments = toComments(response);
+      this.props.storeComments(comments);
+      this.props.addCommentsToDeployment(comments[0].deployment, comments.map(comment => comment.id));
+    } catch (e) {
+      logException('Error: Unable to parse Streaming API response for comment created', e, { event });
+    }
+  }
+
+  private handleCommentDeleted(event: EventSourceEvent) {
+    try {
+      const response = JSON.parse(event.data) as CommentDeletedResponse;
+      this.props.removeCommentFromDeployment(response.deployment, response.comment);
+      this.props.removeComment(response.comment);
+    } catch (e) {
+      logException('Error: Unable to parse Streaming API response for comment deleted', e, { event });
     }
   }
 
@@ -266,6 +303,8 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     this._source.addEventListener('CODE_PUSHED', this.handleCodePush, false);
     this._source.addEventListener('NEW_ACTIVITY', this.handleNewActivity, false);
     this._source.addEventListener('DEPLOYMENT_UPDATED', this.handleDeploymentUpdate, false);
+    this._source.addEventListener('COMMENT_ADDED', this.handleCommentCreated, false);
+    this._source.addEventListener('COMMENT_DELETED', this.handleCommentDeleted, false);
     // TODO: handle refresh UI
 
     if (this._source.readyState === EventSource.CONNECTING) {
@@ -306,6 +345,10 @@ export default connect<{}, GeneratedDispatchProps, {}>(
     updateLatestDeployedCommitForBranch: Branches.actions.updateLatestDeployedCommit,
     storeBranches: Branches.actions.storeBranches,
     addDeploymentToCommit: Commits.actions.addDeploymentToCommit,
+    storeComments: Comments.actions.storeComments,
+    removeComment: Comments.actions.removeComment,
+    addCommentsToDeployment: Deployments.actions.addCommentsToDeployment,
+    removeCommentFromDeployment: Deployments.actions.removeCommentFromDeployment,
     storeCommits: Commits.actions.storeCommits,
     storeDeployments: Deployments.actions.storeDeployments,
     updateProject: Projects.actions.updateProject,

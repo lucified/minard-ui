@@ -4,7 +4,12 @@ import { logMessage } from '../../logger';
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 
-import { ADD_COMMENTS_TO_DEPLOYMENT, SET_COMMENTS_FOR_DEPLOYMENT, STORE_DEPLOYMENTS } from './actions';
+import {
+  ADD_COMMENTS_TO_DEPLOYMENT,
+  REMOVE_COMMENT_FROM_DEPLOYMENT,
+  SET_COMMENTS_FOR_DEPLOYMENT,
+  STORE_DEPLOYMENTS,
+} from './actions';
 import * as t from './types';
 
 const initialState: t.DeploymentState = {};
@@ -82,6 +87,20 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       }
 
       logMessage('Trying to add comments to a deployment that does not exist', { action });
+
+      return state;
+    case REMOVE_COMMENT_FROM_DEPLOYMENT:
+      const removeCommentAction = <t.RemoveCommentFromDeploymentAction> action;
+      existingDeployment = state[removeCommentAction.id];
+      if (existingDeployment && !isFetchError(existingDeployment)) {
+        if (existingDeployment.comments && !isFetchError(existingDeployment.comments)) {
+          if (existingDeployment.comments.indexOf(removeCommentAction.comment) > -1) {
+            const newComments = existingDeployment.comments.filter(comment => comment !== removeCommentAction.comment);
+            const newDeployment = Object.assign({}, existingDeployment, { comments: newComments });
+            return Object.assign({}, state, { [removeCommentAction.id]: newDeployment });
+          }
+        }
+      }
 
       return state;
     default:
