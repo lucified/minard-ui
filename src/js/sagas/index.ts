@@ -475,7 +475,7 @@ export default function createSagas(api: Api) {
   function* createProject(action: CreateProjectAction): IterableIterator<Effect> {
     const { name, description, projectTemplate } = action.payload;
 
-    yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name!));
+    yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
 
     const { response, error, details }: { response?: any, error?: string, details?: string } =
       yield call(api.Project.create, name, description, projectTemplate);
@@ -490,12 +490,12 @@ export default function createSagas(api: Api) {
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0].id, name!));
+      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0].id, name));
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name!, error!, details));
+      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error!, details));
 
       return false;
     }
@@ -528,7 +528,7 @@ export default function createSagas(api: Api) {
     // If we don't force description to exist, there would be no way to clear it when editing
     const description = action.payload.description || '';
 
-    yield put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id!));
+    yield put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id));
 
     const { response, error, details } = yield call(api.Project.edit, id, { name, description });
 
@@ -538,12 +538,12 @@ export default function createSagas(api: Api) {
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id!));
+      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id!, error, details));
+      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error, details));
 
       return false;
     }

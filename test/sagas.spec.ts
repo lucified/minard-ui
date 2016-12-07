@@ -1616,6 +1616,8 @@ describe('sagas', () => {
         id,
         name,
         description,
+        activeUsers: [],
+        repoUrl: '',
       },
     };
 

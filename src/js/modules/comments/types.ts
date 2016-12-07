@@ -28,9 +28,9 @@ export interface StoreCommentsAction extends Action {
 // CREATE_COMMENT
 export interface CreateCommentFormData {
   name?: string;
-  email?: string; // Required
-  message?: string; // Required
-  deployment?: string; // Required
+  email: string;
+  message: string;
+  deployment: string;
 }
 
 export interface CreateCommentAction extends Action {

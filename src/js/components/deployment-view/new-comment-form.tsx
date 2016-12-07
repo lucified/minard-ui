@@ -10,15 +10,19 @@ import FormField from '../common/forms/field';
 const styles = require('./new-comment-form.scss');
 
 interface PassedProps {
-  // This object needs to have the deployment ID passed in as 'deployment'
-  initialValues: CreateCommentFormData;
+  initialValues: {
+    deployment: string;
+    name?: string;
+    email?: string;
+    message?: string;
+  };
 }
 
 type Props = PassedProps & FormProps<CreateCommentFormData, any>;
 
 const validate = (values: CreateCommentFormData) => {
   const { email, message } = values;
-  const errors: CreateCommentFormData = {};
+  const errors: any = {};
 
   if (!email) {
     errors.email = 'Required';
