@@ -45,6 +45,7 @@ class NewCommentForm extends React.Component<Props, any> {
 
     return (
       <div className={styles['new-comment-form']}>
+        <h4 className={styles.title}>Add a comment</h4>
         <form className={styles.form} onSubmit={handleSubmit}>
           {error && (
             <div className={styles['general-error']}>
