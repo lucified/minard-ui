@@ -86,8 +86,10 @@ class NewCommentForm extends React.Component<Props, any> {
   }
 };
 
+const formName = 'newComment';
+
 export default reduxForm({
-  form: 'newComment',
+  form: formName,
   validate,
   onSubmit: onSubmitPromiseCreator(
     Comments.actions.CREATE_COMMENT,
@@ -95,6 +97,6 @@ export default reduxForm({
     Requests.actions.Comments.CreateComment.FAILURE.type,
   ),
   onSubmitSuccess: (_values: any, dispatch: Dispatch<any>) => {
-    dispatch(reset('newComment'));
+    dispatch(reset(formName));
   },
 })(NewCommentForm);
