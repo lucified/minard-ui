@@ -1,0 +1,34 @@
+.new-comment-form {
+  background: #FDFDFD;
+  padding: 20px 24px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.submit {
+  background: #FFFFFF;
+  border: 1px solid #D8D8D8;
+  outline: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  // width: 164px;
+  cursor: pointer;
+
+  font-size: 15px;
+  color: #2EBDB1;
+
+  &:hover {
+    background: #2EBDB1;
+    color: #FBFBFB;
+  }
+
+  &[disabled=disabled], &:disabled {
+    cursor: default;
+    pointer-events: none;
+    color: rgba(127, 140, 141, 0.6);
+    background: #FFFFFF;
+  }
+}

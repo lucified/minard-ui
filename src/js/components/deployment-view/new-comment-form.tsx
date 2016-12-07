@@ -6,7 +6,7 @@ import Comments, { CreateCommentFormData } from '../../modules/comments';
 import { onSubmitPromiseCreator } from '../../modules/forms';
 import Requests from '../../modules/requests';
 
-import FormField from '../common/forms/field';
+import FormField from '../common/forms/comment-field';
 
 const styles = require('./new-comment-form.scss');
 
@@ -44,8 +44,8 @@ class NewCommentForm extends React.Component<Props, any> {
     const { handleSubmit, pristine, submitting, error, invalid } = this.props;
 
     return (
-      <form onSubmit={handleSubmit}>
-        <div className={styles.form}>
+      <div className={styles['new-comment-form']}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           {error && (
             <div className={styles['general-error']}>
               {error}
@@ -55,7 +55,6 @@ class NewCommentForm extends React.Component<Props, any> {
             name="name"
             component={FormField}
             type="text"
-            label="Name"
             placeholder="Name (optional)"
             disabled={submitting}
           />
@@ -63,7 +62,6 @@ class NewCommentForm extends React.Component<Props, any> {
             name="email"
             component={FormField}
             type="text"
-            label="Email"
             placeholder="Email"
             disabled={submitting}
           />
@@ -71,17 +69,16 @@ class NewCommentForm extends React.Component<Props, any> {
             name="message"
             component={FormField}
             type="textarea"
-            label="Comment"
-            placeholder="Add a comment"
+            placeholder="Comment"
             disabled={submitting}
           />
-        </div>
-        <div>
-          <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
-            {submitting ? 'Sending...' : 'Add comment'}
-          </button>
-        </div>
-      </form>
+          <footer className={styles.footer}>
+            <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
+              {submitting ? 'Sending...' : 'Add comment'}
+            </button>
+          </footer>
+        </form>
+      </div>
     );
   }
 };
