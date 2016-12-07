@@ -13,14 +13,16 @@ import Branches, {
   StoreBranchesAction,
   UpdateBranchWithCommitsAction,
 } from '../modules/branches';
-import Comments, { LoadCommentsForDeploymentAction } from '../modules/comments';
+import Comments, { Comment, CreateCommentAction, LoadCommentsForDeploymentAction } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment, StoreDeploymentsAction } from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
-import { FORM_SUBMIT } from '../modules/forms';
+import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
 import Previews, { LoadPreviewAction, Preview } from '../modules/previews';
 import Projects, {
+  CreateProjectAction,
   DeleteProjectAction,
+  EditProjectAction,
   LoadAllProjectsAction,
   Project,
   StoreProjectsAction,
@@ -323,16 +325,44 @@ export default function createSagas(api: Api) {
     Converter.toComments,
     Comments.actions.storeComments,
     api.Comment.fetchForDeployment,
-    addCommentsToDeployment,
+    setCommentsForDeployment,
   );
 
-  function* addCommentsToDeployment(
+  function* setCommentsForDeployment(
     id: string,
     response: ApiEntityResponse,
   ): IterableIterator<Effect> {
     // The response contains the comments in reverse chronological order
     const commentIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id).reverse();
-    yield put(Deployments.actions.addCommentsToDeployment(id, commentIds));
+    yield put(Deployments.actions.setCommentsForDeployment(id, commentIds));
+  }
+
+  // CREATE_COMMENT
+  function* createComment(action: CreateCommentAction): IterableIterator<Effect> {
+    const { name, deployment, email, message } = action.payload;
+    const requestName = `${deployment}-${message}`;
+
+    yield put(Requests.actions.Comments.CreateComment.REQUEST.actionCreator(requestName));
+
+    const { response, error, details }: { response?: any, error?: string, details?: string } =
+      yield call(api.Comment.create, deployment, message, email, name);
+
+    if (response) {
+      // Store new comment
+      const commentObjects = <Comment[]> (yield call(Converter.toComments, response.data));
+      yield put(Comments.actions.storeComments(commentObjects));
+      yield put(Deployments.actions.addCommentsToDeployment(deployment, commentObjects.map(comment => comment.id)));
+
+      // Notify form that creation was a success
+      yield put(Requests.actions.Comments.CreateComment.SUCCESS.actionCreator(commentObjects[0].id, requestName));
+
+      return true;
+    } else {
+      // Notify form that creation failed
+      yield put(Requests.actions.Comments.CreateComment.FAILURE.actionCreator(requestName, error!, details));
+
+      return false;
+    }
   }
 
   // COMMIT
@@ -443,7 +473,7 @@ export default function createSagas(api: Api) {
   }
 
   // CREATE PROJECT
-  function* createProject(action: { type: string, payload: any }): IterableIterator<Effect> {
+  function* createProject(action: CreateProjectAction): IterableIterator<Effect> {
     const { name, description, projectTemplate } = action.payload;
 
     yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
@@ -494,7 +524,7 @@ export default function createSagas(api: Api) {
   }
 
   // Edit PROJECT
-  function* editProject(action: { type: string, payload: any }): IterableIterator<Effect> {
+  function* editProject(action: EditProjectAction): IterableIterator<Effect> {
     const { id, name } = action.payload;
     // If we don't force description to exist, there would be no way to clear it when editing
     const description = action.payload.description || '';
@@ -521,15 +551,6 @@ export default function createSagas(api: Api) {
   }
 
   // FORMS
-  interface FormSubmitPayload {
-    submitAction: string;
-    successAction: string;
-    failureAction: string;
-    values: any;
-    resolve: (id: string) => void;
-    reject: (error: any) => void;
-  }
-
   function* formSubmitSaga({
     payload: {
       submitAction,
@@ -539,7 +560,7 @@ export default function createSagas(api: Api) {
       resolve,
       reject,
     },
-  }: { payload: FormSubmitPayload }): IterableIterator<Effect> {
+  }: FormSubmitAction): IterableIterator<Effect> {
     yield put({ type: submitAction, payload: values });
 
     const { success, failure } = yield race({
@@ -591,6 +612,10 @@ export default function createSagas(api: Api) {
 
   function* watchForLoadDeployment() {
     yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
+  }
+
+  function* watchForCreateComment() {
+    yield takeLatest(Comments.actions.CREATE_COMMENT, createComment);
   }
 
   function* watchForLoadCommentsForDeployment() {
@@ -651,6 +676,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadBranch),
       fork(watchForLoadBranchesForProject),
       fork(watchForLoadDeployment),
+      fork(watchForCreateComment),
       fork(watchForLoadCommentsForDeployment),
       fork(watchForLoadCommit),
       fork(watchForLoadCommitsForBranch),

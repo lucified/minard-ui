@@ -65,3 +65,9 @@ export interface AddCommentsToDeploymentAction extends Action {
   id: string;
   comments: string[];
 }
+
+// SET_COMMENTS_FOR_DEPLOYMENT
+export interface SetCommentsForDeploymentAction extends Action {
+  id: string;
+  comments: string[];
+}

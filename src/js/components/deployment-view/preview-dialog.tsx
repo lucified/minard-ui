@@ -9,6 +9,7 @@ import { Preview } from '../../modules/previews';
 import CommentList from './comment-list';
 import CommitSummary from './commit-summary';
 import Header from './header';
+import NewCommentForm from './new-comment-form';
 
 const styles = require('./preview-dialog.scss');
 
@@ -66,7 +67,10 @@ class PreviewDialog extends React.Component<Props, State> {
           />
         )}
         {dialogOpen && deployment.comments && !isFetchError(deployment.comments) && deployment.comments.length > 0 && (
-          <CommentList commentIds={deployment.comments} />
+          <CommentList className={styles['commit-list']} commentIds={deployment.comments} />
+        )}
+        {dialogOpen && (
+          <NewCommentForm initialValues={{ deployment: deployment.id }} />
         )}
       </div>
     );

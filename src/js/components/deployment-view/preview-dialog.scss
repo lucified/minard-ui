@@ -3,6 +3,8 @@
   position: absolute;
   top: 0;
   right: 24px;
+  max-height: 99vh;
+  overflow-y: auto;
 
   background: #FFFFFF;
   box-shadow: 0 0 24px 0 rgba(0,0,0,0.20);
@@ -12,4 +14,9 @@
     left: 5%;
     width: 90%;
   }
+}
+
+.commit-list {
+  max-height: 30vh;
+  overflow-y: auto;
 }

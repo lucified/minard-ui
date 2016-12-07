@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Field, FormProps, formValueSelector, reduxForm } from 'redux-form';
 
 import { DeleteError } from '../../modules/errors';
-import { onSubmitActions } from '../../modules/forms';
-import Projects, { Project } from '../../modules/projects';
+import { onSubmitPromiseCreator } from '../../modules/forms';
+import Projects, { EditProjectFormData, Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
@@ -29,15 +29,10 @@ interface GeneratedStateProps {
   isProjectNameEdited: boolean;
 }
 
-interface FormData {
-  name?: string;
-  description?: string;
-}
+type Props = PassedProps & FormProps<EditProjectFormData, any>;
 
-type Props = PassedProps & FormProps<FormData, any>;
-
-const validate = (values: FormData, props: Props) => {
-  const errors: FormData = {};
+const validate = (values: EditProjectFormData, props: Props) => {
+  const errors: any = {};
   const projectNameRegex = /^[a-z0-9\-]+$/;
 
   const { name, description } = values;
@@ -187,7 +182,7 @@ const mapStateToProps = (state: StateTree, ownProps: Props) => {
 export default reduxForm({
   form: 'editProject',
   validate,
-  onSubmit: onSubmitActions(
+  onSubmit: onSubmitPromiseCreator(
     Projects.actions.EDIT_PROJECT,
     Requests.actions.Projects.EditProject.SUCCESS.type,
     Requests.actions.Projects.EditProject.FAILURE.type,

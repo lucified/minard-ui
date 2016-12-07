@@ -1,0 +1,42 @@
+@import '../../mixins';
+
+.field {
+  margin-bottom: 4px;
+  position: relative;
+
+  input, textarea {
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 3px;
+    outline: none;
+
+    width: 100%;
+    padding: 2px 8px;
+
+    @include nitti-grotesk-regular;
+    font-size: 15px;
+    line-height: 22px;
+    color: #2C3E50;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  ::placeholder {
+    color: #95A5A6;
+  }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #95A5A6;
+  }
+
+  .error {
+    position: absolute;
+    right: 8px;
+    top: 2px;
+    font-size: 15px;
+    color: #D0021B;
+    letter-spacing: -0.21px;
+    line-height: 22px;
+  }
+}
