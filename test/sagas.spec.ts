@@ -1509,7 +1509,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(object[0].id, name)),
+        put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(object[0], name)),
       );
 
       const val = iterator.next();
@@ -1656,7 +1656,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id)),
+        put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(object[0])),
       );
 
       const val = iterator.next();
@@ -1721,8 +1721,8 @@ describe('sagas', () => {
         }),
       );
 
-      expect(iterator.next({ success: { id: 3 } }).value).to.deep.equal(
-        call(resolve, 3),
+      expect(iterator.next({ success: { result: { id: 3 }}}).value).to.deep.equal(
+        call(resolve, { id: 3 }),
       );
 
       expect(iterator.next().done).to.equal(true);
