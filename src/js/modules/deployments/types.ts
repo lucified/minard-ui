@@ -71,3 +71,8 @@ export interface SetCommentsForDeploymentAction extends Action {
   id: string;
   comments: string[];
 }
+
+export interface RemoveCommentFromDeploymentAction extends Action {
+  id: string;
+  comment: string;
+}

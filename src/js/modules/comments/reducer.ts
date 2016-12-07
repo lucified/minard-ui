@@ -1,6 +1,7 @@
+import { omit } from 'lodash';
 import { Reducer } from 'redux';
 
-import { STORE_COMMENTS } from './actions';
+import { REMOVE_COMMENT, STORE_COMMENTS } from './actions';
 import * as t from './types';
 
 const initialState: t.CommentState = {};
@@ -16,6 +17,13 @@ const reducer: Reducer<t.CommentState> = (state = initialState, action: any) => 
           {});
 
         return Object.assign({}, state, newCommentsObject);
+      }
+
+      return state;
+    case REMOVE_COMMENT:
+      const id = (<t.RemoveCommentAction> action).id;
+      if (state[id]) {
+        return omit<t.CommentState, t.CommentState>(state, id);
       }
 
       return state;

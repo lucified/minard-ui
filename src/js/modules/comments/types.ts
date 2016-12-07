@@ -25,6 +25,10 @@ export interface StoreCommentsAction extends Action {
   entities: Comment[];
 }
 
+export interface RemoveCommentAction extends Action {
+  id: string;
+}
+
 // CREATE_COMMENT
 export interface CreateCommentFormData {
   name?: string;
