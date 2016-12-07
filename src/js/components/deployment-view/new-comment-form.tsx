@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Field, FormProps, reduxForm } from 'redux-form';
+import { Dispatch } from 'redux';
+import { Field, FormProps, reduxForm, reset } from 'redux-form';
 
 import Comments, { CreateCommentFormData } from '../../modules/comments';
 import { onSubmitPromiseCreator } from '../../modules/forms';
@@ -93,4 +94,7 @@ export default reduxForm({
     Requests.actions.Comments.CreateComment.SUCCESS.type,
     Requests.actions.Comments.CreateComment.FAILURE.type,
   ),
+  onSubmitSuccess: (_values: any, dispatch: Dispatch<any>) => {
+    dispatch(reset('newComment'));
+  },
 })(NewCommentForm);
