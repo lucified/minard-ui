@@ -325,16 +325,16 @@ export default function createSagas(api: Api) {
     Converter.toComments,
     Comments.actions.storeComments,
     api.Comment.fetchForDeployment,
-    addCommentsToDeployment,
+    setCommentsForDeployment,
   );
 
-  function* addCommentsToDeployment(
+  function* setCommentsForDeployment(
     id: string,
     response: ApiEntityResponse,
   ): IterableIterator<Effect> {
     // The response contains the comments in reverse chronological order
     const commentIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id).reverse();
-    yield put(Deployments.actions.addCommentsToDeployment(id, commentIds));
+    yield put(Deployments.actions.setCommentsForDeployment(id, commentIds));
   }
 
   // CREATE_COMMENT
@@ -349,11 +349,12 @@ export default function createSagas(api: Api) {
 
     if (response) {
       // Store new comment
-      const commentObject = <Comment[]> (yield call(Converter.toComments, response.data));
-      yield put(Comments.actions.storeComments(commentObject));
+      const commentObjects = <Comment[]> (yield call(Converter.toComments, response.data));
+      yield put(Comments.actions.storeComments(commentObjects));
+      yield put(Deployments.actions.addCommentsToDeployment(deployment, commentObjects.map(comment => comment.id)));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Comments.CreateComment.SUCCESS.actionCreator(commentObject[0].id, requestName));
+      yield put(Requests.actions.Comments.CreateComment.SUCCESS.actionCreator(commentObjects[0].id, requestName));
 
       return true;
     } else {
