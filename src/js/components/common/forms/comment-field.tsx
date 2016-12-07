@@ -22,9 +22,7 @@ const Field = ({
       <div>
         {touched && error && <span className={styles.error}>{error}</span>}
       </div>
-      <div className={styles.input}>
-        {inputComponent}
-      </div>
+      {inputComponent}
     </div>
   );
 };
