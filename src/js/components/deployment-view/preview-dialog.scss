@@ -13,3 +13,8 @@
     width: 90%;
   }
 }
+
+.commit-list {
+  max-height: 30vh;
+  overflow-y: auto;
+}

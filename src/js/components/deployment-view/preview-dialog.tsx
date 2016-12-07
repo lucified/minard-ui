@@ -67,7 +67,7 @@ class PreviewDialog extends React.Component<Props, State> {
           />
         )}
         {dialogOpen && deployment.comments && !isFetchError(deployment.comments) && deployment.comments.length > 0 && (
-          <CommentList commentIds={deployment.comments} />
+          <CommentList className={styles['commit-list']} commentIds={deployment.comments} />
         )}
         {dialogOpen && (
           <NewCommentForm initialValues={{ deployment: deployment.id }} />
