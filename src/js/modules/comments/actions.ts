@@ -6,6 +6,12 @@ export const loadCommentsForDeployment = (id: string): t.LoadCommentsForDeployme
   id,
 });
 
+export const DELETE_COMMENT = 'COMMENTS/DELETE_COMMENT';
+export const deleteComment = (id: string): t.DeleteCommentAction => ({
+  type: DELETE_COMMENT,
+  id,
+});
+
 export const STORE_COMMENTS = 'COMMENTS/STORE_COMMENTS';
 export const storeComments = (comments: t.Comment[]): t.StoreCommentsAction => ({
   type: STORE_COMMENTS,

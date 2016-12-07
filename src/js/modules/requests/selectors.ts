@@ -44,6 +44,13 @@ export const isLoadingCommentsForDeployment = (state: StateTree, id: string): bo
       (requestInfo.id === id),
   );
 
+export const isDeletingComment = (state: StateTree, id: string): boolean =>
+  !!selectRequestsTree(state).find(
+    requestInfo =>
+      (requestInfo.type === actions.Comments.DeleteComment.REQUEST.type) &&
+      (requestInfo.id === id),
+  );
+
 export const isLoadingCommitsForBranch = (state: StateTree, id: string): boolean =>
   !!selectRequestsTree(state).find(
     requestInfo =>

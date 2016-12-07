@@ -20,6 +20,11 @@ export interface LoadCommentsForDeploymentAction extends Action {
   id: string;
 }
 
+// DELETE_COMMENT
+export interface DeleteCommentAction extends Action {
+  id: string;
+}
+
 // STORE_COMMENTS
 export interface StoreCommentsAction extends Action {
   entities: Comment[];
