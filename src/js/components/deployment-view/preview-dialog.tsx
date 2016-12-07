@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
+import { getValue } from '../../cookie';
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 import { isFetchError } from '../../modules/errors';
@@ -70,7 +71,13 @@ class PreviewDialog extends React.Component<Props, State> {
           <CommentList className={styles['commit-list']} commentIds={deployment.comments} />
         )}
         {dialogOpen && (
-          <NewCommentForm initialValues={{ deployment: deployment.id }} />
+          <NewCommentForm
+            initialValues={{
+              deployment: deployment.id,
+              name: getValue('commentName'),
+              email: getValue('commentEmail'),
+            }}
+          />
         )}
       </div>
     );
