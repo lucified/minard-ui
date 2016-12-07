@@ -1463,7 +1463,7 @@ describe('sagas', () => {
   describe('createProject', () => {
     const name = 'projectName';
     const description = 'projectDescription';
-    const projectTemplate = null;
+    const projectTemplate = undefined;
     const action = {
       type: 'SUBMITACTION',
       payload: {
@@ -1687,17 +1687,20 @@ describe('sagas', () => {
     const resolve = () => {}; // tslint:disable-line
     const reject = () => {}; // tslint:disable-line
 
-    const payload = {
-      submitAction,
-      successAction,
-      failureAction,
-      values,
-      resolve,
-      reject,
+    const action = {
+      type: 'FORM_SUBMIT',
+      payload: {
+        submitAction,
+        successAction,
+        failureAction,
+        values,
+        resolve,
+        reject,
+      },
     };
 
     it('starts submitting form data', () => {
-      const iterator = sagas.formSubmitSaga({ payload });
+      const iterator = sagas.formSubmitSaga(action);
 
       expect(iterator.next().value).to.deep.equal(
         put({ type: submitAction, payload: values }),
@@ -1705,7 +1708,7 @@ describe('sagas', () => {
     });
 
     it('resolves the supplied promise if submitting is successful', () => {
-      const iterator = sagas.formSubmitSaga({ payload });
+      const iterator = sagas.formSubmitSaga(action);
 
       iterator.next();
 
@@ -1724,7 +1727,7 @@ describe('sagas', () => {
     });
 
     it('rejects the promise with a SubmissionError if submitting the form fails', () => {
-      const iterator = sagas.formSubmitSaga({ payload });
+      const iterator = sagas.formSubmitSaga(action);
 
       iterator.next();
 

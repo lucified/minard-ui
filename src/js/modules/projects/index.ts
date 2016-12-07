@@ -4,6 +4,10 @@ import * as selectors from './selectors';
 
 export default { actions, reducer, selectors };
 export {
+  CreateProjectAction,
+  CreateProjectFormData,
+  EditProjectAction,
+  EditProjectFormData,
   Project,
   ProjectState,
   ProjectUser,

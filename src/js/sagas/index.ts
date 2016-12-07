@@ -17,10 +17,12 @@ import Comments, { LoadCommentsForDeploymentAction } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment, StoreDeploymentsAction } from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
-import { FORM_SUBMIT } from '../modules/forms';
+import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
 import Previews, { LoadPreviewAction, Preview } from '../modules/previews';
 import Projects, {
+  CreateProjectAction,
   DeleteProjectAction,
+  EditProjectAction,
   LoadAllProjectsAction,
   Project,
   StoreProjectsAction,
@@ -443,10 +445,10 @@ export default function createSagas(api: Api) {
   }
 
   // CREATE PROJECT
-  function* createProject(action: { type: string, payload: any }): IterableIterator<Effect> {
+  function* createProject(action: CreateProjectAction): IterableIterator<Effect> {
     const { name, description, projectTemplate } = action.payload;
 
-    yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
+    yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name!));
 
     const { response, error, details }: { response?: any, error?: string, details?: string } =
       yield call(api.Project.create, name, description, projectTemplate);
@@ -461,12 +463,12 @@ export default function createSagas(api: Api) {
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0].id, name));
+      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0].id, name!));
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error!, details));
+      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name!, error!, details));
 
       return false;
     }
@@ -494,12 +496,12 @@ export default function createSagas(api: Api) {
   }
 
   // Edit PROJECT
-  function* editProject(action: { type: string, payload: any }): IterableIterator<Effect> {
+  function* editProject(action: EditProjectAction): IterableIterator<Effect> {
     const { id, name } = action.payload;
     // If we don't force description to exist, there would be no way to clear it when editing
     const description = action.payload.description || '';
 
-    yield put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id));
+    yield put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id!));
 
     const { response, error, details } = yield call(api.Project.edit, id, { name, description });
 
@@ -509,27 +511,18 @@ export default function createSagas(api: Api) {
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id));
+      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(id!));
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error, details));
+      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id!, error, details));
 
       return false;
     }
   }
 
   // FORMS
-  interface FormSubmitPayload {
-    submitAction: string;
-    successAction: string;
-    failureAction: string;
-    values: any;
-    resolve: (id: string) => void;
-    reject: (error: any) => void;
-  }
-
   function* formSubmitSaga({
     payload: {
       submitAction,
@@ -539,7 +532,7 @@ export default function createSagas(api: Api) {
       resolve,
       reject,
     },
-  }: { payload: FormSubmitPayload }): IterableIterator<Effect> {
+  }: FormSubmitAction): IterableIterator<Effect> {
     yield put({ type: submitAction, payload: values });
 
     const { success, failure } = yield race({

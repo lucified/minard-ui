@@ -4,8 +4,8 @@ import * as Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { Field, FormProps, reduxForm } from 'redux-form';
 
-import { onSubmitActions } from '../../modules/forms';
-import Projects, { Project } from '../../modules/projects';
+import { onSubmitPromiseCreator } from '../../modules/forms';
+import Projects, { CreateProjectFormData, Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
 
 import FormField from '../common/forms/field';
@@ -18,15 +18,10 @@ interface PassedProps {
   closeDialog: (e?: any) => void;
 }
 
-interface FormData {
-  name?: string;
-  description?: string;
-}
+type Props = PassedProps & FormProps<CreateProjectFormData, any>;
 
-type Props = PassedProps & FormProps<FormData, any>;
-
-const validate = (values: FormData, props: Props) => {
-  const errors: FormData = {};
+const validate = (values: CreateProjectFormData, props: Props) => {
+  const errors: CreateProjectFormData = {};
   const projectNameRegex = /^[a-z0-9\-]+$/;
 
   const { name, description } = values;
@@ -138,7 +133,7 @@ class NewProjectForm extends React.Component<Props, any> {
 export default reduxForm({
   form: 'newProject',
   validate,
-  onSubmit: onSubmitActions(
+  onSubmit: onSubmitPromiseCreator(
     Projects.actions.CREATE_PROJECT,
     Requests.actions.Projects.CreateProject.SUCCESS.type,
     Requests.actions.Projects.CreateProject.FAILURE.type,

@@ -44,19 +44,30 @@ export interface AddBranchesToProjectAction extends Action {
 }
 
 // CREATE_PROJECT
+export interface CreateProjectFormData {
+  name?: string; // Required
+  description?: string;
+  projectTemplate?: string;
+}
+
 export interface CreateProjectAction extends Action {
-  payload: {
-    name: string;
-    description?: string;
-  };
+  payload: CreateProjectFormData;
 }
 
 // EDIT_PROJECT
+export interface EditProjectFormData {
+  id?: string; // Required
+  name?: string; // Required
+  description?: string;
+  branches?: string[] | FetchError;
+  latestActivityTimestamp?: number;
+  latestSuccessfullyDeployedCommit?: string;
+  activeUsers?: ProjectUser[];
+  repoUrl?: string;
+}
+
 export interface EditProjectAction extends Action {
-  payload: {
-    name: string;
-    description?: string;
-  };
+  payload: EditProjectFormData;
 }
 
 // DELETE_PROJECT
