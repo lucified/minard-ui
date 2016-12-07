@@ -37,7 +37,7 @@ export interface EntityRequestAction extends Action {
 }
 
 export interface EntitySuccessAction extends Action {
-  id: string;
+  result: string;
 }
 
 interface CreateEntityRequestAction extends Action {
@@ -58,12 +58,20 @@ interface CreateEntityRequestActionCreator {
 
 // When request succeeds
 interface CreateEntitySuccessAction extends Action {
-  id: string;
+  result: Object;
   name: string;
 }
 
 interface CreateEntitySuccessActionCreator {
-  (id: string, name: string): CreateEntitySuccessAction;
+  (entity: any, name: string): CreateEntitySuccessAction;
+}
+
+interface EditEntitySuccessAction extends Action {
+  result: Object;
+}
+
+interface EditEntitySuccessActionCreator {
+  (entity: any): EditEntitySuccessAction;
 }
 
 // When request fails
@@ -97,7 +105,7 @@ export type CreateEntityActionCreators = RequestActionCreators<
 
 export type EditEntityActionCreators = RequestActionCreators<
   EntityRequestActionCreator,
-  EntitySuccessActionCreator,
+  EditEntitySuccessActionCreator,
   EditEntityFailureActionCreator
 >;
 

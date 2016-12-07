@@ -30,7 +30,7 @@ const fetchEntityActionCreators = (prefix: string): t.FetchEntityActionCreators 
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (id: string) => ({ type: successAction, id }),
+      actionCreator: (id: string) => ({ type: successAction, result: id }),
     },
     FAILURE: {
       type: failureAction,
@@ -55,7 +55,7 @@ const createEntityActionCreators = (prefix: string): t.CreateEntityActionCreator
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (id: string, name: string) => ({ type: successAction, id, name }),
+      actionCreator: (entity: any, name: string) => ({ type: successAction, result: entity, name }),
     },
     FAILURE: {
       type: failureAction,
@@ -80,7 +80,7 @@ const editEntityActionCreators = (prefix: string): t.EditEntityActionCreators =>
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (id: string) => ({ type: successAction, id }),
+      actionCreator: (entity: any) => ({ type: successAction, result: entity }),
     },
     FAILURE: {
       type: failureAction,
@@ -105,7 +105,7 @@ const deleteEntityActionCreators = (prefix: string): t.DeleteEntityActionCreator
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (id: string) => ({ type: successAction, id }),
+      actionCreator: (id: string) => ({ type: successAction, result: id }),
     },
     FAILURE: {
       type: failureAction,

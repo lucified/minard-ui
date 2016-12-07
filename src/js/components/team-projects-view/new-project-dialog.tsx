@@ -46,14 +46,15 @@ class NewProjectDialog extends React.Component<Props, any> {
     (ModalDialog as any).setAppElement('#minard-app');
   }
 
-  private onSuccessfulCreation(projectId: string) {
+  private onSuccessfulCreation(result: any) {
+    const project = result as Project;
     const intercom = (window as any).Intercom;
     if (intercom) {
       intercom('trackEvent', 'project-created');
     }
 
     this.props.closeDialog();
-    this.props.router.push(`/project/${projectId}`);
+    this.props.router.push(`/project/${project.id}`);
   }
 
   public render() {
