@@ -125,7 +125,7 @@ export interface ResponseActivityElement {
       id: string;
       name: string;
     };
-    commit: {
+    commit?: { // Only for deployments
       id: string;
       hash: string;
       message: string;
@@ -152,6 +152,9 @@ export interface ResponseActivityElement {
         timestamp: string;
       };
     };
+    message?: string; // Only for comments
+    name?: string; // Only for comments (optional)
+    email?: string // Only for comments
   };
 }
 

@@ -82,16 +82,33 @@ const toActivityType = (activityString: string): ActivityType => {
 };
 
 const createActivityObject = (activity: t.ResponseActivityElement): Activity => {
-  const commit = activity.attributes.commit;
+  const type = toActivityType(activity.attributes['activity-type']);
   const deployment = activity.attributes.deployment;
-  const { message, description } = splitCommitMessage(commit.message);
 
-  return {
+  const activityObject: Activity = {
     id: activity.id,
-    type: toActivityType(activity.attributes['activity-type']),
+    type,
     project: activity.attributes.project,
     branch: activity.attributes.branch,
-    commit: {
+    deployment: {
+      status: toDeploymentStatus(deployment.status),
+      id: deployment.id,
+      url: deployment.url,
+      screenshot: deployment.screenshot,
+      creator: {
+        name: deployment.creator.name,
+        email: deployment.creator.email,
+        timestamp: moment(deployment.creator.timestamp).valueOf(),
+      },
+    },
+    timestamp: moment(activity.attributes.timestamp).valueOf(),
+  };
+
+  if (type === ActivityType.Deployment) {
+    const commit = activity.attributes.commit!;
+    const { message, description } = splitCommitMessage(commit.message);
+
+    activityObject.commit = {
       id: commit.id,
       hash: commit.hash,
       message,
@@ -107,20 +124,14 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
         timestamp: moment(commit.committer.timestamp).valueOf(),
       },
       deployment: commit.deployments && commit.deployments.length > 0 ? commit.deployments[0] : undefined,
-    },
-    deployment: {
-      status: toDeploymentStatus(deployment.status),
-      id: deployment.id,
-      url: deployment.url,
-      screenshot: deployment.screenshot,
-      creator: {
-        name: deployment.creator.name,
-        email: deployment.creator.email,
-        timestamp: moment(deployment.creator.timestamp).valueOf(),
-      },
-    },
-    timestamp: moment(activity.attributes.timestamp).valueOf(),
-  };
+    };
+  } else if (type === ActivityType.Comment) {
+    activityObject.message = activity.attributes.message;
+    activityObject.name = activity.attributes.name;
+    activityObject.email = activity.attributes.email;
+  }
+
+  return activityObject;
 };
 
 export const toActivities = toConvertedArray(createActivityObject);
