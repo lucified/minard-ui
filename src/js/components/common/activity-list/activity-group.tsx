@@ -18,6 +18,30 @@ interface PassedProps {
   showProjectName?: boolean;
 }
 
+const getProjectLabel = ({ project }: Activity) => {
+  return (
+    <span>
+      {' in '}
+      <MinardLink className={styles['metadata-project']} project={project.id}>
+        {project.name}
+      </MinardLink>
+    </span>
+  );
+};
+
+const getMetadata = (activity: Activity) => {
+  const { branch, project } = activity;
+
+  return (
+    <span>
+      {'Activity in '}
+      <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
+        {branch.name}
+      </MinardLink>
+    </span>
+  );
+};
+
 class ActivityGroup extends React.Component<PassedProps, any> {
   public render() {
     const { activities, showProjectName } = this.props;
@@ -36,23 +60,28 @@ class ActivityGroup extends React.Component<PassedProps, any> {
           )}
         </div>
         <div className={classNames('col-xs-9', styles['activity-content'])}>
-          <div>
-            <SingleActivity
-              activity={firstActivity}
-              showProjectName={showProjectName}
-            />
-          </div>
-          <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
-            {activities.slice(1).map(activity => (
-              <div key={activity.id}>
-                <hr className={styles.line} />
-                <SingleActivity
-                  activity={activity}
-                  showProjectName={showProjectName}
-                />
+          <div className={styles.activity}>
+            <div className={styles.metadata}>
+              <div className={styles.action}>
+                {getMetadata(firstActivity)}
+                {showProjectName && getProjectLabel(firstActivity)}
               </div>
-            ))}
-          </FlipMove>
+              <div className={styles.share}>
+                {/* TODO: add share link */}
+              </div>
+            </div>
+            <div>
+              <SingleActivity activity={firstActivity} />
+            </div>
+            <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+              {activities.slice(1).map(activity => (
+                <div key={activity.id}>
+                  <hr className={styles.line} />
+                  <SingleActivity activity={activity} />
+                </div>
+              ))}
+            </FlipMove>
+          </div>
         </div>
       </div>
     );

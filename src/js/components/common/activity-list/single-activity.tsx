@@ -8,20 +8,19 @@ import DeploymentActivity from './deployment-activity';
 
 interface Props {
   activity: Activity;
-  showProjectName?: boolean;
 }
 
 const SingleActivity = (props: Props) => {
-  const { activity, showProjectName } = props;
+  const { activity } = props;
 
   switch (activity.type) {
     case ActivityType.Deployment:
       return (
-        <DeploymentActivity activity={activity} showProjectName={showProjectName} />
+        <DeploymentActivity activity={activity} />
       );
     case ActivityType.Comment:
       return (
-        <CommentActivity activity={activity} showProjectName={showProjectName} />
+        <CommentActivity activity={activity} />
       );
     default:
       logMessage('Unknown activity type', { activity });
