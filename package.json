@@ -46,7 +46,7 @@
     "@types/chai": "^3.4.34",
     "@types/classnames": "0.0.32",
     "@types/isomorphic-fetch": "0.0.31",
-    "@types/lodash": "^4.14.42",
+    "@types/lodash": "^4.14.43",
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.51",
     "@types/raven-js": "0.0.18",
