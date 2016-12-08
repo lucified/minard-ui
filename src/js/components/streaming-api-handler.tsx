@@ -1,4 +1,4 @@
-import * as uniq from 'lodash/uniq';
+import { uniq } from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
