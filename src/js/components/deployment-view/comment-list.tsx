@@ -32,8 +32,13 @@ class CommentList extends React.Component<Props, any> {
     this.scrollToBottom();
   }
 
-  public componentDidUpdate() {
-    this.scrollToBottom();
+  public componentDidUpdate(prevProps: Props) {
+    if (this.props.comments.length > prevProps.comments.length) {
+      // We don't want to scroll to the bottom if e.g. deleting an old comment.
+      // This method (only scrolling if the comments list is longer) is not
+      // foolproof, but should cover most cases.
+      this.scrollToBottom();
+    }
   }
 
   private scrollToBottom() {
