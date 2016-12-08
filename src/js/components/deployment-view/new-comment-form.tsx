@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
-import { Field, FormProps, reduxForm, reset } from 'redux-form';
+import { Field, FormProps, initialize, reduxForm } from 'redux-form';
 
-import Comments, { CreateCommentFormData } from '../../modules/comments';
+import { removeValue, setValue } from '../../cookie';
+import Comments, { Comment, CreateCommentFormData } from '../../modules/comments';
 import { onSubmitPromiseCreator } from '../../modules/forms';
 import Requests from '../../modules/requests';
 
@@ -89,12 +90,34 @@ const formName = 'newComment';
 export default reduxForm({
   form: formName,
   validate,
-  onSubmit: onSubmitPromiseCreator(
-    Comments.actions.CREATE_COMMENT,
-    Requests.actions.Comments.CreateComment.SUCCESS.type,
-    Requests.actions.Comments.CreateComment.FAILURE.type,
-  ),
-  onSubmitSuccess: (_values: any, dispatch: Dispatch<any>) => {
-    dispatch(reset(formName));
+  onSubmit: (values: CreateCommentFormData, dispatch: Dispatch<any>) => {
+    // Set cookies
+    if (values.name) {
+      setValue('commentName', values.name);
+    } else {
+      removeValue('commentName');
+    }
+    setValue('commentEmail', values.email);
+
+    return onSubmitPromiseCreator(
+      Comments.actions.CREATE_COMMENT,
+      Requests.actions.Comments.CreateComment.SUCCESS.type,
+      Requests.actions.Comments.CreateComment.FAILURE.type,
+    )(values, dispatch);
+  },
+  onSubmitSuccess: (comment: Comment, dispatch: Dispatch<any>) => {
+    // Clear message field
+    dispatch(
+      initialize(
+        formName,
+        {
+          deployment: comment.deployment,
+          name: comment.name,
+          email: comment.email,
+          message: '',
+        },
+        false,
+      ),
+    );
   },
 })(NewCommentForm);
