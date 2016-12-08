@@ -80,7 +80,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
         if (!existingDeployment.comments || isFetchError(existingDeployment.comments)) {
           newComments = addCommentsAction.comments;
         } else {
-          newComments = existingDeployment.comments.concat(addCommentsAction.comments);
+          const existingComments = existingDeployment.comments;
+          const commentsToAdd = addCommentsAction.comments.filter(comment => existingComments.indexOf(comment) === -1);
+          newComments = existingDeployment.comments.concat(commentsToAdd);
         }
         const newDeployment = Object.assign({}, existingDeployment, { comments: newComments });
         return Object.assign({}, state, { [addCommentsAction.id]: newDeployment });
