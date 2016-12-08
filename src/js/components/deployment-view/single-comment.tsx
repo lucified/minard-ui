@@ -10,7 +10,7 @@ import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
 import Avatar from '../common/avatar';
-import Confirmable from '../common/confirmable';
+import SimpleConfirmable from '../common/simple-confirmable';
 
 const styles = require('./single-comment.scss');
 
@@ -46,19 +46,14 @@ const SingleComment = ({ comment, className, deletionInProgress, deleteComment }
       <div className={styles['comment-content']}>
         <div className={styles.actions}>
           {deletionInProgress ? 'Deleting...' : (
-            <Confirmable
-              title="Warning!"
-              message={
-                'Deleting a comment cannot be undone. ' +
-                'Are you sure you want to delete this comment for everyone?'
-              }
-              action="Delete comment"
+            <SimpleConfirmable
+              action="Delete"
               onConfirm={deleteComment}
             >
               <a className={styles.delete}>
                 Delete
               </a>
-            </Confirmable>
+            </SimpleConfirmable>
           )}
         </div>
         <div className={styles.metadata}>
