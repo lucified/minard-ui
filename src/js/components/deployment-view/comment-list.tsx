@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as FlipMove from 'react-flip-move';
 import { connect } from 'react-redux';
 
 import Comments, { Comment } from '../../modules/comments';
@@ -50,7 +51,9 @@ class CommentList extends React.Component<Props, any> {
     const { commentIds, comments, className } = this.props;
     return (
       <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
-        {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
+        <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+          {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
+        </FlipMove>
       </div>
     );
   }
