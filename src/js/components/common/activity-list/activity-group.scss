@@ -70,7 +70,7 @@
   }
 }
 
-.metadata-author, .metadata-branch, .metadata-project {
+.metadata-author, .metadata-branch, .metadata-project, .metdata-deployment {
   @include nitti-grotesk-bold;
 }
 
@@ -80,6 +80,10 @@
   &:hover {
     color: #0F807E !important;
   }
+}
+
+.icon {
+  margin-right: 6px;
 }
 
 .activity {

@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as FlipMove from 'react-flip-move';
+import * as Icon from 'react-fontawesome';
 import TimeAgo from 'react-timeago';
 
-import { Activity } from '../../../modules/activities';
+import { Activity, ActivityType } from '../../../modules/activities';
 import { isSuccessful } from '../../../modules/deployments';
 
 import DeploymentScreenshot from '../deployment-screenshot';
@@ -30,11 +31,47 @@ const getProjectLabel = ({ project }: Activity) => {
 };
 
 const getMetadata = (activity: Activity) => {
-  const { branch, project } = activity;
+  const { branch, commit, deployment, project, type } = activity;
+
+  if (type === ActivityType.Comment) {
+    return (
+      <span>
+        <Icon className={styles.icon} name="comment-o" />
+        {'New comments for '}
+        <MinardLink className={styles['metadata-deployment']} preview={deployment}>
+          {commit.hash.substr(0, 8)}
+        </MinardLink>
+        {' in '}
+        <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
+          {branch.name}
+        </MinardLink>
+      </span>
+    );
+  }
+
+  if (isSuccessful(deployment)) {
+    return (
+      <span>
+        <Icon className={styles.icon} name="eye" />
+        <span className={styles['metadata-author']}>
+          {deployment.creator.name || deployment.creator.email}
+        </span>
+        {' generated a preview for '}
+        <MinardLink className={styles['metadata-deployment']} preview={deployment}>
+          {commit.hash.substr(0, 8)}
+        </MinardLink>
+        {' in '}
+        <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
+          {branch.name}
+        </MinardLink>
+      </span>
+    );
+  }
 
   return (
     <span>
-      {'Activity in '}
+      <Icon className={styles.icon} name="times" />
+      {`Preview generation for ${commit.hash.substring(0, 8)} failed in `}
       <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
         {branch.name}
       </MinardLink>
