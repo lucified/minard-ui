@@ -5,13 +5,14 @@
 }
 
 .section {
-  margin-bottom: 36px;
+  margin-bottom: 24px;
 }
 
 .text {
   font-size: 24px;
   line-height: 1.62;
   color: #2c3e50;
+  margin-top: 12px;
 }
 
 .smaller-text {
@@ -25,7 +26,7 @@
   @include nitti-grotesk-medium;
   color: #2EBDB1;
   font-size: 21px;
-  padding-bottom: 32px;
+  padding-bottom: 20px;
 }
 
 .code {
