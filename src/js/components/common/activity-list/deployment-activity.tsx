@@ -11,7 +11,6 @@ const styles = require('./activity.scss');
 
 interface Props {
   activity: Activity;
-  showProjectName?: boolean;
 }
 
 const DeploymentActivity = (props: Props) => {

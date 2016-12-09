@@ -14,8 +14,13 @@ import SimpleConfirmable from '../common/simple-confirmable';
 
 const styles = require('./single-comment.scss');
 
+// Need to either pass in a Comment object or the values separately
 interface PassedProps {
-  comment: Comment | undefined;
+  comment?: Comment;
+  name?: string;
+  email?: string;
+  message?: string;
+  timestamp?: number;
   className?: string;
 }
 
@@ -29,44 +34,58 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-const SingleComment = ({ comment, className, deletionInProgress, deleteComment }: Props) => {
-  if (!comment) {
-    // Note: this shouldn't happen since we only store comment IDs to deployments
-    // once we receive the actual comment.
+const SingleComment = (props: Props) => {
+  const { comment, className, deletionInProgress, deleteComment } = props;
+  let name;
+  let email;
+  let message;
+  let timestamp;
 
-    // TODO
-    return <div>Loading...</div>;
+  if (comment) {
+    ({ name, email, message, timestamp } = comment);
+  } else {
+    ({ name, email, message, timestamp} = props);
+
+    if (!message || !email || !timestamp) {
+      // Note: this shouldn't happen since we only store comment IDs to deployments
+      // once we receive the actual comment.
+
+      // TODO: Make this nicer
+      return <div>Loading...</div>;
+    }
   }
 
   return (
     <div className={classNames(styles['single-comment'], className)}>
       <div className={styles.avatar}>
-        <Avatar email={comment.email} size="40" title={comment.name} />
+        <Avatar email={email} size="40" title={name} />
       </div>
       <div className={styles['comment-content']}>
         <div className={styles.actions}>
-          {deletionInProgress ? 'Deleting...' : (
-            <SimpleConfirmable
-              action="Delete"
-              onConfirm={deleteComment}
-            >
-              <a className={styles.delete}>
-                Delete
-              </a>
-            </SimpleConfirmable>
+          {comment && (
+            deletionInProgress ? 'Deleting...' : (
+              <SimpleConfirmable
+                action="Delete"
+                onConfirm={deleteComment}
+              >
+                <a className={styles.delete}>
+                  Delete
+                </a>
+              </SimpleConfirmable>
+            )
           )}
         </div>
         <div className={styles.metadata}>
           <span className={styles['author-name']}>
-            {comment.name || comment.email}
+            {name || email}
           </span>
           {` · `}
           <span className={styles.timestamp}>
-            <TimeAgo minPeriod={10} date={comment.timestamp} />
+            <TimeAgo minPeriod={10} date={timestamp} />
           </span>
         </div>
         <div className={styles['comment-message']}>
-          {comment.message}
+          {message}
         </div>
       </div>
     </div>

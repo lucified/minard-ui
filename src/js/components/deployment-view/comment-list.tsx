@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Comments, { Comment } from '../../modules/comments';
 import { StateTree } from '../../reducers';
 
-import SingleComment from './single-comment';
+import SingleComment from '../common/single-comment';
 
 const styles = require('./comment-list.scss');
 
