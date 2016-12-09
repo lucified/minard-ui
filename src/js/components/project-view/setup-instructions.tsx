@@ -71,8 +71,8 @@ const SetupInstructions = ({ project, hideLabels, showClone, styles: passedInSty
           <pre onClick={selectText}>git remote add minard {project.repoUrl}</pre>
         </div>
         <div className={styles.text}>
-          If you use another repository (such as GitHub) as your origin, automatically push to Minard
-          using the following command.
+          If you use another repository (such as GitHub) as your origin, set up Git to automatically
+          also push to Minard with the following command.
         </div>
         <div className={styles.code}>
           <pre onClick={selectText}>git remote set-url --add origin {project.repoUrl}</pre>
