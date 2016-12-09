@@ -14,7 +14,6 @@ import SimpleConfirmable from '../common/simple-confirmable';
 
 const styles = require('./single-comment.scss');
 
-// Need to either pass in a Comment object or the values separately
 interface PassedProps {
   comment?: Comment;
   hideDelete?: boolean;
