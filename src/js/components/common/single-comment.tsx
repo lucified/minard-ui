@@ -30,9 +30,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-const SingleComment = (props: Props) => {
-  const { comment, className, deletionInProgress, deleteComment, hideDelete } = props;
-
+const SingleComment = ({ comment, className, deletionInProgress, deleteComment, hideDelete }: Props) => {
   if (!comment) {
     // Note: this shouldn't happen since we only store comment IDs to deployments
     // once we receive the actual comment.
