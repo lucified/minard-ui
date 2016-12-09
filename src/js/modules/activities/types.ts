@@ -32,7 +32,7 @@ export interface Activity {
       timestamp: number;
     };
   };
-  commit?: { // Only in deployments
+  commit: {
     id: string;
     hash: string;
     message: string;

@@ -83,32 +83,15 @@ const toActivityType = (activityString: string): ActivityType => {
 
 const createActivityObject = (activity: t.ResponseActivityElement): Activity => {
   const type = toActivityType(activity.attributes['activity-type']);
-  const deployment = activity.attributes.deployment;
+  const { commit, deployment } = activity.attributes;
+  const { message, description } = splitCommitMessage(commit.message);
 
   const activityObject: Activity = {
     id: activity.id,
     type,
     project: activity.attributes.project,
     branch: activity.attributes.branch,
-    deployment: {
-      status: toDeploymentStatus(deployment.status),
-      id: deployment.id,
-      url: deployment.url,
-      screenshot: deployment.screenshot,
-      creator: {
-        name: deployment.creator.name,
-        email: deployment.creator.email,
-        timestamp: moment(deployment.creator.timestamp).valueOf(),
-      },
-    },
-    timestamp: moment(activity.attributes.timestamp).valueOf(),
-  };
-
-  if (type === ActivityType.Deployment) {
-    const commit = activity.attributes.commit!;
-    const { message, description } = splitCommitMessage(commit.message);
-
-    activityObject.commit = {
+    commit: {
       id: commit.id,
       hash: commit.hash,
       message,
@@ -124,8 +107,22 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
         timestamp: moment(commit.committer.timestamp).valueOf(),
       },
       deployment: commit.deployments && commit.deployments.length > 0 ? commit.deployments[0] : undefined,
-    };
-  } else if (type === ActivityType.Comment) {
+    },
+    deployment: {
+      status: toDeploymentStatus(deployment.status),
+      id: deployment.id,
+      url: deployment.url,
+      screenshot: deployment.screenshot,
+      creator: {
+        name: deployment.creator.name,
+        email: deployment.creator.email,
+        timestamp: moment(deployment.creator.timestamp).valueOf(),
+      },
+    },
+    timestamp: moment(activity.attributes.timestamp).valueOf(),
+  };
+
+  if (type === ActivityType.Comment) {
     activityObject.message = activity.attributes.message;
     activityObject.name = activity.attributes.name;
     activityObject.email = activity.attributes.email;

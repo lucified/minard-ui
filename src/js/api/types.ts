@@ -125,7 +125,7 @@ export interface ResponseActivityElement {
       id: string;
       name: string;
     };
-    commit?: { // Only for deployments
+    commit: {
       id: string;
       hash: string;
       message: string;
