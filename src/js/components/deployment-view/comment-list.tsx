@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as FlipMove from 'react-flip-move';
 import { connect } from 'react-redux';
 
 import Comments, { Comment } from '../../modules/comments';
@@ -31,8 +32,13 @@ class CommentList extends React.Component<Props, any> {
     this.scrollToBottom();
   }
 
-  public componentDidUpdate() {
-    this.scrollToBottom();
+  public componentDidUpdate(prevProps: Props) {
+    if (this.props.comments.length > prevProps.comments.length) {
+      // We don't want to scroll to the bottom if e.g. deleting an old comment.
+      // This method (only scrolling if the comments list is longer) is not
+      // foolproof, but should cover most cases.
+      this.scrollToBottom();
+    }
   }
 
   private scrollToBottom() {
@@ -50,7 +56,9 @@ class CommentList extends React.Component<Props, any> {
     const { commentIds, comments, className } = this.props;
     return (
       <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
-        {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
+        <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+          {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
+        </FlipMove>
       </div>
     );
   }

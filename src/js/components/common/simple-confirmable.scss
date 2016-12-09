@@ -1,0 +1,114 @@
+.simple-confirmable {
+  position: relative;
+}
+
+.arrow-box:after, .arrow-box:before {
+  top: 50%;
+  left: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.arrow-box:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-left-color: #ffffff;
+  border-width: 8px;
+  margin-top: -8px;
+}
+.arrow-box:before {
+  border-color: rgba(216, 216, 216, 0);
+  border-left-color: #D8D8D8;
+  border-width: 9px;
+  margin-top: -9px;
+}
+
+$height: 82px;
+$width: 160px;
+
+.popup {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-left: -($width + 12px);
+  margin-top: -$height / 2;
+  width: $width;
+  height: $height;
+
+  background: #FFFFFF;
+  border: 1px solid #D8D8D8;
+  box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.10);
+  border-radius: 4px;
+
+  color: #7F8C8D;
+
+  .content {
+    padding: 11px 12px 3px;
+    text-align: center;
+
+    font-size: 16px;
+    color: #2C3E50;
+    margin-bottom: 8px;
+  }
+
+  .actions {
+    height: 30px;
+    padding: 0 6px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+
+    .confirm {
+      cursor: pointer;
+      margin-left: 18px;
+      padding: 6px 12px;
+      border: none;
+      outline: none;
+      background: #D0021B;
+      border-radius: 3px;
+      font-size: 14px;
+      color: #FFFFFF;
+
+      &:hover {
+        background: #540006;
+      }
+    }
+
+    .cancel {
+      font-size: 12px;
+      color: #7F8C8D;
+
+      &:hover {
+        color: #2C3E50;
+      }
+    }
+  }
+}
+
+:global {
+  .simple-confirm-popup-enter {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.3);
+    transform-origin: right;
+  }
+
+  .simple-confirm-popup-enter.simple-confirm-popup-enter-active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    transition: all 150ms;
+  }
+
+  .simple-confirm-popup-leave {
+    opacity: 1;
+  }
+
+  .simple-confirm-popup-leave.simple-confirm-popup-leave-active {
+    opacity: 0.01;
+    transition: opacity 150ms;
+  }
+}

@@ -13,7 +13,12 @@ import Branches, {
   StoreBranchesAction,
   UpdateBranchWithCommitsAction,
 } from '../modules/branches';
-import Comments, { Comment, CreateCommentAction, LoadCommentsForDeploymentAction } from '../modules/comments';
+import Comments, {
+  Comment,
+  CreateCommentAction,
+  DeleteCommentAction,
+  LoadCommentsForDeploymentAction,
+} from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment, StoreDeploymentsAction } from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
@@ -337,6 +342,25 @@ export default function createSagas(api: Api) {
     yield put(Deployments.actions.setCommentsForDeployment(id, commentIds));
   }
 
+  // DELETE_COMMENT
+  function* deleteComment(action: DeleteCommentAction): IterableIterator<Effect> {
+    const { id } = action;
+
+    yield put(Requests.actions.Comments.DeleteComment.REQUEST.actionCreator(id));
+
+    const { response, error, details } = yield call(api.Comment.delete, id);
+
+    if (response) {
+      yield put(Requests.actions.Comments.DeleteComment.SUCCESS.actionCreator(id));
+
+      return true;
+    } else {
+      yield put(Requests.actions.Comments.DeleteComment.FAILURE.actionCreator(id, error, details));
+
+      return false;
+    }
+  }
+
   // CREATE_COMMENT
   function* createComment(action: CreateCommentAction): IterableIterator<Effect> {
     const { name, deployment, email, message } = action.payload;
@@ -614,6 +638,10 @@ export default function createSagas(api: Api) {
     yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
   }
 
+  function* watchForDeleteComment() {
+    yield takeEvery(Comments.actions.DELETE_COMMENT, deleteComment);
+  }
+
   function* watchForCreateComment() {
     yield takeLatest(Comments.actions.CREATE_COMMENT, createComment);
   }
@@ -677,6 +705,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadBranchesForProject),
       fork(watchForLoadDeployment),
       fork(watchForCreateComment),
+      fork(watchForDeleteComment),
       fork(watchForLoadCommentsForDeployment),
       fork(watchForLoadCommit),
       fork(watchForLoadCommitsForBranch),
