@@ -83,11 +83,12 @@ class ActivityGroup extends React.Component<PassedProps, any> {
   public render() {
     const { activities, showProjectName } = this.props;
     const firstActivity = activities[activities.length - 1];
+    const latestActivity = activities[0];
 
     return (
       <div className={classNames('row', styles['activity-group'])}>
         <div className={classNames('col-xs-1', styles.timestamp)}>
-          <TimeAgo minPeriod={10} date={firstActivity.timestamp} />
+          <TimeAgo minPeriod={10} date={latestActivity.timestamp} />
         </div>
         <div className={classNames('col-xs-2', styles.screenshot)}>
           {isSuccessful(firstActivity.deployment) && (
