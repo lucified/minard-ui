@@ -21,6 +21,22 @@ interface Props {
   showClone?: boolean;
 }
 
+const selectText = (e: any) => {
+  const node = e.target;
+  const doc = document as any;
+
+  if (doc.selection) {
+    const range = doc.body.createTextRange();
+    range.moveToElementText(node);
+    range.select();
+  } else if (window.getSelection) {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+  }
+};
+
 const SetupInstructions = ({ project, hideLabels, showClone, styles: passedInStyles }: Props) => {
   const styles = passedInStyles || defaultStyles;
   return (
@@ -41,7 +57,7 @@ const SetupInstructions = ({ project, hideLabels, showClone, styles: passedInSty
               Clone the repo with
             </div>
             <div className={styles.code}>
-              <pre>git clone -o minard {project.repoUrl}</pre>
+              <pre onClick={selectText}>git clone -o minard {project.repoUrl}</pre>
             </div>
           </div>
         )}
@@ -49,7 +65,7 @@ const SetupInstructions = ({ project, hideLabels, showClone, styles: passedInSty
           {showClone ? 'Or you can add' : 'Add'} it as a remote to your existing repository with
         </div>
         <div className={styles.code}>
-          <pre>git remote add minard {project.repoUrl}</pre>
+          <pre onClick={selectText}>git remote add minard {project.repoUrl}</pre>
         </div>
         <div className={styles.text}>
           and start pushing some code. We'll handle the rest.
