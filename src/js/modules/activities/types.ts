@@ -49,9 +49,12 @@ export interface Activity {
     };
     deployment?: string;
   };
-  message?: string; // Only in comments
-  name?: string; // Only in comments (optional)
-  email?: string; // Only in comments
+  comment?: {
+    id: string;
+    message: string;
+    name?: string;
+    email: string;
+  };
 }
 
 export interface ActivityState {

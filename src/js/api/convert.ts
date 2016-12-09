@@ -123,9 +123,7 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
   };
 
   if (type === ActivityType.Comment) {
-    activityObject.message = activity.attributes.message;
-    activityObject.name = activity.attributes.name;
-    activityObject.email = activity.attributes.email;
+    activityObject.comment = { ...activity.attributes.comment };
   }
 
   return activityObject;

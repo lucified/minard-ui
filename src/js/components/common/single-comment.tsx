@@ -17,10 +17,7 @@ const styles = require('./single-comment.scss');
 // Need to either pass in a Comment object or the values separately
 interface PassedProps {
   comment?: Comment;
-  name?: string;
-  email?: string;
-  message?: string;
-  timestamp?: number;
+  hideDelete?: boolean;
   className?: string;
 }
 
@@ -35,25 +32,17 @@ interface GeneratedDispatchProps {
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 const SingleComment = (props: Props) => {
-  const { comment, className, deletionInProgress, deleteComment } = props;
-  let name;
-  let email;
-  let message;
-  let timestamp;
+  const { comment, className, deletionInProgress, deleteComment, hideDelete } = props;
 
-  if (comment) {
-    ({ name, email, message, timestamp } = comment);
-  } else {
-    ({ name, email, message, timestamp} = props);
+  if (!comment) {
+    // Note: this shouldn't happen since we only store comment IDs to deployments
+    // once we receive the actual comment.
 
-    if (!message || !email || !timestamp) {
-      // Note: this shouldn't happen since we only store comment IDs to deployments
-      // once we receive the actual comment.
-
-      // TODO: Make this nicer
-      return <div>Loading...</div>;
-    }
+    // TODO: Make this nicer
+    return <div>Loading...</div>;
   }
+
+  const { name, email, message, timestamp } = comment;
 
   return (
     <div className={classNames(styles['single-comment'], className)}>
@@ -62,7 +51,7 @@ const SingleComment = (props: Props) => {
       </div>
       <div className={styles['comment-content']}>
         <div className={styles.actions}>
-          {comment && (
+          {!hideDelete && (
             deletionInProgress ? 'Deleting...' : (
               <SimpleConfirmable
                 action="Delete"

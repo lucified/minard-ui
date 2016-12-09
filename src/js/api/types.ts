@@ -152,9 +152,12 @@ export interface ResponseActivityElement {
         timestamp: string;
       };
     };
-    message?: string; // Only for comments
-    name?: string; // Only for comments (optional)
-    email?: string // Only for comments
+    comment?: { // Only for comments
+      id: string;
+      message: string;
+      name?: string;
+      email: string;
+    };
   };
 }
 

@@ -12,10 +12,12 @@ interface Props {
 const CommentActivity = ({ activity }: Props) => (
   <MinardLink preview={activity.deployment}>
     <SingleComment
-      name={activity.name}
-      email={activity.email}
-      message={activity.message}
-      timestamp={activity.timestamp}
+      comment={{
+        ...activity.comment,
+        deployment: activity.deployment.id,
+        timestamp: activity.timestamp,
+      }}
+      hideDelete
     />
   </MinardLink>
 );
