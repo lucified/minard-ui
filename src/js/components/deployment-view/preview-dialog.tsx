@@ -19,6 +19,7 @@ interface Props {
   commit: Commit;
   deployment: Deployment;
   preview: Preview;
+  highlightComment?: string;
   className?: string;
 }
 
@@ -33,7 +34,7 @@ class PreviewDialog extends React.Component<Props, State> {
     this.toggleOpen = this.toggleOpen.bind(this);
 
     this.state = {
-      dialogOpen: false,
+      dialogOpen: !!props.highlightComment,
     };
   }
 
@@ -46,7 +47,7 @@ class PreviewDialog extends React.Component<Props, State> {
   }
 
   public render() {
-    const { buildLogSelected, className, commit, deployment, preview } = this.props;
+    const { buildLogSelected, className, commit, deployment, highlightComment, preview } = this.props;
     const { dialogOpen } = this.state;
 
     return (
@@ -68,7 +69,11 @@ class PreviewDialog extends React.Component<Props, State> {
           />
         )}
         {dialogOpen && deployment.comments && !isFetchError(deployment.comments) && deployment.comments.length > 0 && (
-          <CommentList className={styles['commit-list']} commentIds={deployment.comments} />
+          <CommentList
+            className={styles['commit-list']}
+            commentIds={deployment.comments}
+            highlightComment={highlightComment}
+          />
         )}
         {dialogOpen && (
           <NewCommentForm

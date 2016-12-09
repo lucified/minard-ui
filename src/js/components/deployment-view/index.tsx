@@ -55,7 +55,7 @@ class ProjectsFrame extends React.Component<Props, any> {
   }
 
   public render() {
-    const { commit, deployment, preview } = this.props;
+    const { commit, deployment, preview, params } = this.props;
 
     if (!preview) {
       return <div>Loading...</div>;
@@ -79,7 +79,7 @@ class ProjectsFrame extends React.Component<Props, any> {
       );
     }
 
-    const showPreview = deployment.url && this.props.params.show !== 'log';
+    const showPreview = deployment.url && params.view !== 'log';
 
     return (
       <div className={styles['preview-container']}>
@@ -89,6 +89,7 @@ class ProjectsFrame extends React.Component<Props, any> {
           deployment={deployment}
           preview={preview}
           buildLogSelected={!showPreview}
+          highlightComment={params.commentId}
         />
         <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
       </div>

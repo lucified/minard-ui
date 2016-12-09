@@ -13,6 +13,7 @@ const styles = require('./comment-list.scss');
 interface PassedProps {
   commentIds: string[];
   className?: string;
+  highlightComment?: string;
 }
 
 interface GeneratedStateProps {
@@ -53,11 +54,17 @@ class CommentList extends React.Component<Props, any> {
   }
 
   public render() {
-    const { commentIds, comments, className } = this.props;
+    const { commentIds, comments, className, highlightComment } = this.props;
     return (
       <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
         <FlipMove enterAnimation="fade" leaveAnimation="fade">
-          {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
+          {comments.map((comment, i) => (
+            <SingleComment
+              key={`comment-${commentIds[i]}`}
+              comment={comment}
+              className={comment && highlightComment === comment.id && styles.highlighted}
+            />
+          ))}
         </FlipMove>
       </div>
     );

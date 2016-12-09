@@ -16,6 +16,9 @@ export default (
       <Route path="project/:projectId/branch/:branchId" component={BranchView} />
       <Route path="project/:projectId(/:show)" component={ProjectView} />
     </Route>
-    <Route path="preview/:deploymentId(/:show)" component={DeploymentView} />
+    <Route path="preview/:deploymentId" component={DeploymentView}>
+      <Route path="view/:view" />
+      <Route path="comment/:commentId" />
+    </Route>
   </Route>
 );
