@@ -82,7 +82,7 @@ const getMetadata = (activity: Activity) => {
 class ActivityGroup extends React.Component<PassedProps, any> {
   public render() {
     const { activities, showProjectName } = this.props;
-    const firstActivity = activities[0];
+    const firstActivity = activities[activities.length - 1];
 
     return (
       <div className={classNames('row', styles['activity-group'])}>
@@ -107,17 +107,17 @@ class ActivityGroup extends React.Component<PassedProps, any> {
                 {/* TODO: add share link */}
               </div>
             </div>
-            <div>
-              <SingleActivity activity={firstActivity} />
-            </div>
-            <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
-              {activities.slice(1).map(activity => (
+            <FlipMove enterAnimation="fade" leaveAnimation="fade">
+              {activities.slice(0, -1).map(activity => (
                 <div key={activity.id}>
-                  <hr className={styles.line} />
                   <SingleActivity activity={activity} />
+                  <hr className={styles.line} />
                 </div>
               ))}
             </FlipMove>
+            <div>
+              <SingleActivity activity={firstActivity} />
+            </div>
           </div>
         </div>
       </div>

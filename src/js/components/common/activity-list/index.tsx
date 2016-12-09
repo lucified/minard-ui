@@ -61,10 +61,10 @@ class ActivityList extends React.Component<Props, any> {
       <div>
         <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
           {groupedActivities.map(activityGroup => {
-            const firstActivity = activityGroup[0];
+            const firstActivity = activityGroup[activityGroup.length - 1];
             return (
               <ActivityGroup
-                key={`${firstActivity.deployment}-${firstActivity.timestamp}`}
+                key={`${firstActivity.deployment.id}-${firstActivity.timestamp}`}
                 activities={activityGroup}
                 showProjectName={showProjectName}
               />
