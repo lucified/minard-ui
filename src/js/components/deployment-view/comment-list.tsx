@@ -56,7 +56,7 @@ class CommentList extends React.Component<Props, any> {
     const { commentIds, comments, className } = this.props;
     return (
       <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
-        <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+        <FlipMove enterAnimation="fade" leaveAnimation="fade">
           {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
         </FlipMove>
       </div>
