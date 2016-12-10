@@ -40,9 +40,17 @@ class CommentList extends React.Component<Props, any> {
   }
 
   public componentDidUpdate(prevProps: Props) {
-    if (this.props.comments.length > prevProps.comments.length) {
+    const { comments, highlightComment, commentIds } = this.props;
+
+    if (comments.length > prevProps.comments.length) {
       // Only scroll to bottom if a new comment was added
       this.scrollToBottom();
+    } else if (
+      highlightComment !== prevProps.highlightComment &&
+      highlightComment &&
+      commentIds.indexOf(highlightComment) > -1
+    ) {
+      this.scrollToElement(document.getElementById(this.commentIdString(highlightComment)));
     }
   }
 
