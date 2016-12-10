@@ -30,21 +30,43 @@ class CommentList extends React.Component<Props, any> {
   }
 
   public componentDidMount() {
-    this.scrollToBottom();
+    this.scrollToHighlightedOrBottom();
   }
 
   public componentDidUpdate(prevProps: Props) {
-    if (this.props.comments.length > prevProps.comments.length) {
-      // We don't want to scroll to the bottom if e.g. deleting an old comment.
-      // This method (only scrolling if the comments list is longer) is not
-      // foolproof, but should cover most cases.
-      this.scrollToBottom();
+    // If we were previously at the bottom of the list, scroll to the bottom
+    this.scrollToBottomIfAtComment(prevProps.commentIds[prevProps.commentIds.length - 1]);
+  }
+
+  private scrollToHighlightedOrBottom() {
+    const { commentIds, highlightComment } = this.props;
+
+    if (highlightComment && commentIds.indexOf(highlightComment) > -1) {
+      const commentElement = document.getElementById(this.commentIdString(highlightComment));
+      if (commentElement) {
+        this.listRef.scrollTop = commentElement.offsetTop - 50;
+      } else {
+        console.error('Unable to find highlighted comment element.');
+      }
+    } else {
+      // Scroll to bottom of div
+      this.listRef.scrollTop = this.listRef.scrollHeight;
     }
   }
 
-  private scrollToBottom() {
-    // Scroll to bottom of div
-    this.listRef.scrollTop = this.listRef.scrollHeight;
+  private scrollToBottomIfAtComment(commentId: string) {
+    const commentElement = document.getElementById(this.commentIdString(commentId));
+    if (!commentElement) {
+      return;
+    }
+
+    const elementBottom = commentElement.offsetTop + commentElement.offsetHeight;
+    const scrolledBottom = this.listRef.scrollTop + this.listRef.clientHeight;
+
+    if (scrolledBottom >= elementBottom) {
+      // Scroll to the bottom
+      this.listRef.scrollTop = this.listRef.scrollHeight;
+    }
   }
 
   private listRef: HTMLElement;
