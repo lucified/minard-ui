@@ -30,43 +30,33 @@ class CommentList extends React.Component<Props, any> {
   }
 
   public componentDidMount() {
-    this.scrollToHighlightedOrBottom();
-  }
-
-  public componentDidUpdate(prevProps: Props) {
-    // If we were previously at the bottom of the list, scroll to the bottom
-    this.scrollToBottomIfAtComment(prevProps.commentIds[prevProps.commentIds.length - 1]);
-  }
-
-  private scrollToHighlightedOrBottom() {
     const { commentIds, highlightComment } = this.props;
 
     if (highlightComment && commentIds.indexOf(highlightComment) > -1) {
-      const commentElement = document.getElementById(this.commentIdString(highlightComment));
-      if (commentElement) {
-        this.listRef.scrollTop = commentElement.offsetTop - 50;
-      } else {
-        console.error('Unable to find highlighted comment element.');
-      }
+      this.scrollToElement(document.getElementById(this.commentIdString(highlightComment)));
     } else {
-      // Scroll to bottom of div
-      this.listRef.scrollTop = this.listRef.scrollHeight;
+      this.scrollToBottom();
     }
   }
 
-  private scrollToBottomIfAtComment(commentId: string) {
-    const commentElement = document.getElementById(this.commentIdString(commentId));
-    if (!commentElement) {
-      return;
+  public componentDidUpdate(prevProps: Props) {
+    if (this.props.comments.length > prevProps.comments.length) {
+      // Only scroll to bottom if a new comment was added
+      this.scrollToBottom();
     }
+  }
 
-    const elementBottom = commentElement.offsetTop + commentElement.offsetHeight;
-    const scrolledBottom = this.listRef.scrollTop + this.listRef.clientHeight;
-
-    if (scrolledBottom >= elementBottom) {
-      // Scroll to the bottom
-      this.listRef.scrollTop = this.listRef.scrollHeight;
+  private scrollToElement(element: HTMLElement | null) {
+    if (element) {
+      this.listRef.scrollTop = element.offsetTop - 50;
+    } else {
+      console.error('Unable to find highlighted comment element.');
     }
+  }
+
+  private scrollToBottom() {
+    // Scroll to bottom of div
+    this.listRef.scrollTop = this.listRef.scrollHeight;
   }
 
   private listRef: HTMLElement;
