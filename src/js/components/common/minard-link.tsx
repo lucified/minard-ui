@@ -54,7 +54,7 @@ class MinardLink extends React.Component<Props, any> {
       );
     } else if (preview) {
       // Link to build log if preview is not ready
-      path = (preview.url && !buildLog) ? `/preview/${preview.id}` : `/preview/${preview.id}/view/log`;
+      path = (preview.url && !buildLog) ? `/preview/${preview.id}` : `/preview/${preview.id}/log`;
     } else if (comment) {
       path = `/preview/${comment.deployment}/comment/${comment.id}`;
     } else if (branch) {
