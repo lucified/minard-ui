@@ -53,18 +53,33 @@ class CommentList extends React.Component<Props, any> {
     this.listRef = ref;
   }
 
+  private commentIdString(id: string): string {
+    return `comment-${id}`;
+  }
+
   public render() {
     const { commentIds, comments, className, highlightComment } = this.props;
+
     return (
       <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
         <FlipMove enterAnimation="fade" leaveAnimation="fade">
-          {comments.map((comment, i) => (
-            <SingleComment
-              key={`comment-${commentIds[i]}`}
-              comment={comment}
-              className={comment && highlightComment === comment.id && styles.highlighted}
-            />
-          ))}
+          {comments.map((comment, i) => {
+            const isHighlighted: boolean = !!comment && highlightComment === comment.id;
+            const idString = this.commentIdString(commentIds[i]);
+
+            return (
+              <div
+                key={idString}
+                id={idString}
+                className={classNames(
+                  styles.comment,
+                  { [styles.highlighted]: isHighlighted },
+                )}
+              >
+                <SingleComment comment={comment} />
+              </div>
+            );
+          })}
         </FlipMove>
       </div>
     );
