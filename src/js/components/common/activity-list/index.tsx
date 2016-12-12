@@ -43,9 +43,21 @@ const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
 };
 
 class ActivityList extends React.Component<Props, any> {
+  constructor(props: Props) {
+    super(props);
+
+    this.loadMoreActivities = this.loadMoreActivities.bind(this);
+  }
+
+  private loadMoreActivities() {
+    const { loadActivities, activities } = this.props;
+
+    loadActivities(10, activities[activities.length - 1].timestamp);
+  }
+
   public render() {
     const { activities, emptyContentHeader, emptyContentBody } = this.props;
-    const { showProjectName, loadActivities, allLoaded, isLoading } = this.props;
+    const { showProjectName, allLoaded, isLoading } = this.props;
 
     if (activities.length === 0) {
       if (isLoading) {
@@ -74,8 +86,8 @@ class ActivityList extends React.Component<Props, any> {
         {isLoading && <LoadingActivityGroup />}
         {!isLoading && !allLoaded &&
           <Waypoint
-            bottomOffset="-200px" // Start loading new activities when the waypoint is 200px below the bottom edge
-            onEnter={() => { loadActivities(10, activities[activities.length - 1].timestamp); }}
+            bottomOffset="-300px" // Start loading new activities when the waypoint is 300px below the window
+            onEnter={this.loadMoreActivities}
           />
         }
       </div>
