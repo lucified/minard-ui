@@ -21,7 +21,7 @@ import Comments, {
 } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment, StoreDeploymentsAction } from '../modules/deployments';
-import { FetchError, isFetchError } from '../modules/errors';
+import { CreateError, EditError, FetchError, isFetchError } from '../modules/errors';
 import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
 import Previews, { LoadPreviewAction, Preview } from '../modules/previews';
 import Projects, {
@@ -32,7 +32,7 @@ import Projects, {
   Project,
   StoreProjectsAction,
 } from '../modules/projects';
-import Requests from '../modules/requests';
+import Requests, { CreateEntitySuccessAction, EditEntitySuccessAction } from '../modules/requests';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -587,7 +587,10 @@ export default function createSagas(api: Api) {
   }: FormSubmitAction): IterableIterator<Effect> {
     yield put({ type: submitAction, payload: values });
 
-    const { success, failure } = yield race({
+    const { success, failure }: {
+      success: CreateEntitySuccessAction | EditEntitySuccessAction,
+      failure: CreateError | EditError,
+    } = yield race({
       success: take(successAction),
       failure: take(failureAction),
     });
