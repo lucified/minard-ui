@@ -597,7 +597,7 @@ export default function createSagas(api: Api) {
     if (success) {
       yield call(resolve, success.result);
     } else { // _error indicates that it's a form-wide ("global") error
-      yield call(reject, new SubmissionError({ _error: failure.prettyError }));
+      yield call(reject, new SubmissionError({ _error: failure.details || failure.prettyError }));
     }
   }
 
