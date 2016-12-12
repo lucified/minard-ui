@@ -37,7 +37,7 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
     const { loadAllProjects, loadActivities } = this.props;
 
     loadAllProjects();
-    loadActivities(10);
+    loadActivities(15);
   }
 
   public render() {
