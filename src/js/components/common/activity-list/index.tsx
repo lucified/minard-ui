@@ -73,10 +73,21 @@ class ActivityList extends React.Component<Props, any> {
       <div>
         <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
           {groupedActivities.map(activityGroup => {
-            const latestActivity = activityGroup[0];
+           /* We need to generate a unique key for the activity group. We can't use
+            * just the deployment ID since we can have multiple activity groups per
+            * deployment, se we use a combination of the deployment ID and the
+            * timestamp of one of the activities in the group. Here lies the challenge:
+            * which activity do we pick? If we choose the latest activity, it will
+            * change when we get a new activity for the deployment. On the other hand,
+            * if we choose the oldest one, it will change if the group is "cut off" at
+            * the bottom and we load more activities when we scroll down.
+            *
+            * Since the latter option is less likely to occur, we'll go with that.
+            */
+            const oldestActivity = activityGroup[activityGroup.length - 1];
             return (
               <ActivityGroup
-                key={`${latestActivity.deployment.id}-${latestActivity.timestamp}`}
+                key={`${oldestActivity.deployment.id}-${oldestActivity.timestamp}`}
                 activities={activityGroup}
                 showProjectName={showProjectName}
               />
