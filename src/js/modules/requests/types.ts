@@ -37,7 +37,7 @@ export interface EntityRequestAction extends Action {
 }
 
 export interface EntitySuccessAction extends Action {
-  result: string;
+  id: string;
 }
 
 interface CreateEntityRequestAction extends Action {
