@@ -38,6 +38,7 @@
   height: 1px;
   font-size: 0;
   border: 0;
+  margin: 12px 0px;
 }
 
 .loading {
@@ -54,4 +55,47 @@
   a:hover {
     color: #000000;
   }
+}
+
+.metadata {
+  display: flex;
+  font-size: 16px;
+  color: #7F8C8D;
+  margin-bottom: 12px;
+  line-height: 25px;
+
+  a:hover {
+    color: #2C3E50;
+    text-decoration: underline;
+  }
+}
+
+.metadata-author, .metadata-branch, .metadata-project, .metdata-deployment {
+  @include nitti-grotesk-bold;
+}
+
+.metadata-project {
+  color: #2EBDB1;
+
+  &:hover {
+    color: #0F807E !important;
+  }
+}
+
+.icon {
+  margin-right: 6px;
+}
+
+.activity {
+  margin-left: 2rem;
+}
+
+.action {
+  margin-left: -18px;
+  align-self: flex-start;
+}
+
+.share {
+  margin-left: auto;
+  font-size: 11px;
 }

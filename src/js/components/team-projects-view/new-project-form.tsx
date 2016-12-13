@@ -21,7 +21,7 @@ interface PassedProps {
 type Props = PassedProps & FormProps<CreateProjectFormData, any>;
 
 const validate = (values: CreateProjectFormData, props: Props) => {
-  const errors: any = {};
+  const errors: Partial<CreateProjectFormData> = {};
   const projectNameRegex = /^[a-z0-9\-]+$/;
 
   const { name, description } = values;

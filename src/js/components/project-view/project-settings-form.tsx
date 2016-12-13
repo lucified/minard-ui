@@ -32,7 +32,7 @@ interface GeneratedStateProps {
 type Props = PassedProps & FormProps<EditProjectFormData, any>;
 
 const validate = (values: EditProjectFormData, props: Props) => {
-  const errors: any = {};
+  const errors: Partial<EditProjectFormData> = {};
   const projectNameRegex = /^[a-z0-9\-]+$/;
 
   const { name, description } = values;

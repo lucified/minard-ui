@@ -12,12 +12,7 @@ import FormField from '../common/forms/comment-field';
 const styles = require('./new-comment-form.scss');
 
 interface PassedProps {
-  initialValues: {
-    deployment: string;
-    name?: string;
-    email?: string;
-    message?: string;
-  };
+  initialValues: Partial<CreateCommentFormData>;
 }
 
 type Props = PassedProps & FormProps<CreateCommentFormData, any>;

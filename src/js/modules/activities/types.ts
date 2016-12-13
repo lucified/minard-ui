@@ -12,23 +12,6 @@ export interface Activity {
   id: string;
   type: ActivityType;
   timestamp: number;
-  commit: {
-    id: string;
-    hash: string;
-    message: string;
-    description?: string;
-    author: {
-      name?: string;
-      email: string;
-      timestamp: number;
-    };
-    committer: {
-      name?: string;
-      email: string;
-      timestamp: number;
-    };
-    deployment?: string;
-  };
   branch: {
     id: string;
     name: string;
@@ -48,6 +31,29 @@ export interface Activity {
       email: string;
       timestamp: number;
     };
+  };
+  commit: {
+    id: string;
+    hash: string;
+    message: string;
+    description?: string;
+    author: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+    committer: {
+      name?: string;
+      email: string;
+      timestamp: number;
+    };
+    deployment?: string;
+  };
+  comment?: {
+    id: string;
+    message: string;
+    name?: string;
+    email: string;
   };
 }
 

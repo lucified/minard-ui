@@ -82,15 +82,15 @@ const toActivityType = (activityString: string): ActivityType => {
 };
 
 const createActivityObject = (activity: t.ResponseActivityElement): Activity => {
-  const commit = activity.attributes.commit;
-  const deployment = activity.attributes.deployment;
+  const type = toActivityType(activity.attributes['activity-type']);
+  const { commit, deployment, project, branch, timestamp } = activity.attributes;
   const { message, description } = splitCommitMessage(commit.message);
 
-  return {
+  const activityObject: Activity = {
     id: activity.id,
-    type: toActivityType(activity.attributes['activity-type']),
-    project: activity.attributes.project,
-    branch: activity.attributes.branch,
+    type,
+    project,
+    branch,
     commit: {
       id: commit.id,
       hash: commit.hash,
@@ -119,8 +119,14 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
         timestamp: moment(deployment.creator.timestamp).valueOf(),
       },
     },
-    timestamp: moment(activity.attributes.timestamp).valueOf(),
+    timestamp: moment(timestamp).valueOf(),
   };
+
+  if (type === ActivityType.Comment) {
+    activityObject.comment = { ...activity.attributes.comment };
+  }
+
+  return activityObject;
 };
 
 export const toActivities = toConvertedArray(createActivityObject);
