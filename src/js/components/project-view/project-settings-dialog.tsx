@@ -43,7 +43,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
   constructor(props: Props) {
     super(props);
 
-    this.deleteProject = this.deleteProject.bind(this);
+    this.handleDeleteProject = this.handleDeleteProject.bind(this);
     this.clearAndClose = this.clearAndClose.bind(this);
     this.editSuccess = this.editSuccess.bind(this);
   }
@@ -54,7 +54,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
     (ModalDialog as any).setAppElement('#minard-app');
   }
 
-  private deleteProject() {
+  private handleDeleteProject() {
     const { project, deleteProject, router } = this.props;
 
     new Promise((resolve, reject) => {
@@ -72,7 +72,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
     .catch((e) => {
       logException('Error deleting project:', e, { project });
     });
-  };
+  }
 
   private clearAndClose() {
     this.props.clearDeletionErrors();
@@ -112,7 +112,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
           closeDialog={this.clearAndClose}
           deletionInProgress={deletionInProgress}
           deletionError={deletionError}
-          deleteProject={this.deleteProject}
+          deleteProject={this.handleDeleteProject}
         />
       </ModalDialog>
     );
