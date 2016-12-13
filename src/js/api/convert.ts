@@ -224,6 +224,7 @@ const createDeploymentObject = (deployment: t.ResponseDeploymentElement): Deploy
   status: toDeploymentStatus(deployment.attributes.status),
   url: deployment.attributes.url,
   screenshot: deployment.attributes.screenshot,
+  commentCount: deployment.attributes['comment-count'],
   creator: {
     name: deployment.attributes.creator.name,
     email: deployment.attributes.creator.email,

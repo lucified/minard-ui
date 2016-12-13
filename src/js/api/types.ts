@@ -186,6 +186,7 @@ export interface ResponseBranchElement {
   };
 }
 
+// Comment
 export interface ResponseCommentElement {
   type: 'comments';
   id: string;
@@ -225,6 +226,7 @@ export interface ResponseDeploymentElement {
     creator: ApiUser;
     url?: string;
     screenshot?: string;
+    'comment-count': number;
     status: DeploymentStatusString;
   };
 }

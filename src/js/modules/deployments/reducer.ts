@@ -77,15 +77,26 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       existingDeployment = state[addCommentsAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         let newComments: string[];
+        let newCommentCount = existingDeployment.commentCount || 0;
+
         if (!existingDeployment.comments || isFetchError(existingDeployment.comments)) {
           newComments = addCommentsAction.comments;
+          newCommentCount += addCommentsAction.comments.length;
         } else {
           const existingComments = existingDeployment.comments;
           const commentsToAdd = addCommentsAction.comments.filter(comment => existingComments.indexOf(comment) === -1);
           newComments = existingDeployment.comments.concat(commentsToAdd);
+          newCommentCount += commentsToAdd.length;
         }
-        const newDeployment = Object.assign({}, existingDeployment, { comments: newComments });
-        return Object.assign({}, state, { [addCommentsAction.id]: newDeployment });
+
+        return {
+          ...state,
+          [addCommentsAction.id]: {
+            ...existingDeployment,
+            comments: newComments,
+            commentCount: newCommentCount,
+          },
+        };
       }
 
       logMessage('Trying to add comments to a deployment that does not exist', { action });
@@ -98,8 +109,14 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
         if (existingDeployment.comments && !isFetchError(existingDeployment.comments)) {
           if (existingDeployment.comments.indexOf(removeCommentAction.comment) > -1) {
             const newComments = existingDeployment.comments.filter(comment => comment !== removeCommentAction.comment);
-            const newDeployment = Object.assign({}, existingDeployment, { comments: newComments });
-            return Object.assign({}, state, { [removeCommentAction.id]: newDeployment });
+            return {
+              ...state,
+              [removeCommentAction.id]: {
+                ...existingDeployment,
+                comments: newComments,
+                commentCount: existingDeployment.commentCount - 1,
+              },
+            };
           }
         }
       }
