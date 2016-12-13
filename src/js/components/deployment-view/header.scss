@@ -30,6 +30,14 @@
   color: #95A5A6;
 }
 
+.open {
+  color: #2EBDB1;
+
+  &:hover {
+    color: #000000;
+  }
+}
+
 .icon {
   margin-right: 4px;
   font-size: 12px;

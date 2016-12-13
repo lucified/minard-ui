@@ -45,9 +45,9 @@ const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen 
     )}
     <a className={styles['toggle-open']} onClick={onToggleOpen}>
       {isOpen ? (
-        <span><Icon name="times" className={styles.icon} /> Close</span>
+        <span className={styles.close}><Icon name="times" className={styles.icon} /> Close</span>
       ) : (
-        <span><Icon name="plus" className={styles.icon} /> Open</span>
+        <span className={styles.open}><Icon name="plus" className={styles.icon} /> Open</span>
       )}
     </a>
   </div>
