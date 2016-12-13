@@ -2,7 +2,7 @@ import { omit, unionBy, uniq, xor } from 'lodash';
 import { Reducer } from 'redux';
 
 import { logMessage } from '../../logger';
-import { FetchError, isFetchError } from '../errors';
+import { DeleteError, FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 
 import {
@@ -71,7 +71,8 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       return state;
     case Requests.actions.Projects.DeleteProject.SUCCESS.type:
     case REMOVE_PROJECT:
-      id = action.id;
+      const deleteAction = <DeleteError | t.RemoveProjectAction> action;
+      id = deleteAction.id;
       if (state[id]) {
         return omit<t.ProjectState, t.ProjectState>(state, id);
       }
