@@ -53,7 +53,7 @@ class NewProjectForm extends React.Component<Props, any> {
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  private handleCancel(e: any) {
+  private handleCancel(e: React.MouseEvent<HTMLElement>) {
     const { submitting, closeDialog } = this.props;
 
     if (!submitting) {

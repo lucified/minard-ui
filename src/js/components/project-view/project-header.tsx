@@ -16,7 +16,7 @@ interface PassedProps {
 }
 
 interface GeneratedDispatchProps {
-  openProjectSettingsDialog: (e: any) => void;
+  openProjectSettingsDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const ProjectHeader = ({ project, openProjectSettingsDialog }: PassedProps & GeneratedDispatchProps) => (
@@ -49,7 +49,7 @@ const ProjectHeader = ({ project, openProjectSettingsDialog }: PassedProps & Gen
 );
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  openProjectSettingsDialog: (_e: any) => {
+  openProjectSettingsDialog: (_e: React.MouseEvent<HTMLElement>) => {
     dispatch(Modal.actions.openModal(ModalType.ProjectSettings));
   },
 });

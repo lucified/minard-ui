@@ -26,7 +26,7 @@ class SimpleConfirmable extends React.Component<Props, any> {
     };
   }
 
-  private closePopupIfNotClickingSelf(e: any) {
+  private closePopupIfNotClickingSelf(e: MouseEvent) {
     if (e.target !== findDOMNode(this)) {
       this.hidePopup();
     }

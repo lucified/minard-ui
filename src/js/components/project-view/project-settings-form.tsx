@@ -22,7 +22,7 @@ interface PassedProps {
   deletionInProgress: boolean;
   deletionError?: DeleteError;
   deleteProject: () => void;
-  closeDialog: (e: any) => void;
+  closeDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 interface GeneratedStateProps {
@@ -64,7 +64,7 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, a
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  private handleCancel(e: any) {
+  private handleCancel(e: React.MouseEvent<HTMLElement>) {
     const { submitting, closeDialog } = this.props;
 
     if (!submitting) {
