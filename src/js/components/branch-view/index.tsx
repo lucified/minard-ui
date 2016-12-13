@@ -53,9 +53,11 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     }
   }
 
-  private reloadPage(_e: any) {
+  private reloadPage(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
     location.reload(true);
-    return false;
   }
 
   private getLoadingContent() {

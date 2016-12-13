@@ -31,9 +31,11 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-const reloadPage = (_e: any) => {
+const reloadPage = (e: React.MouseEvent<HTMLElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+
   location.reload(true);
-  return false;
 };
 
 const Header = ({ errors, selectedSection, connectionState }: Props) => {

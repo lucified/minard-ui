@@ -37,12 +37,13 @@ class PreviewDialog extends React.Component<Props, State> {
     };
   }
 
-  private toggleOpen(_e: any) {
+  private toggleOpen(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
     this.setState({
       dialogOpen: !this.state.dialogOpen,
     });
-
-    return false;
   }
 
   public render() {
