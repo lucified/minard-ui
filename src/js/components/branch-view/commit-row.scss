@@ -5,6 +5,11 @@
   padding-top: 15px;
 }
 
+.build-status {
+  position: relative;
+  top: 20px;
+}
+
 .commit-container {
   display: flex;
   align-content: stretch;
@@ -16,4 +21,3 @@
   border-bottom: 1px #f0f0f0 solid;
   flex: 1;
 }
-

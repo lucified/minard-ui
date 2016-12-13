@@ -7,7 +7,6 @@ import { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 
 import Avatar from './avatar';
-import BuildStatus from './build-status';
 import PlaceholderCommit from './placeholder-commit';
 
 const styles = require('./single-commit.scss');
@@ -62,9 +61,6 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
           <div className={classNames(styles.message, 'commit-message')}>{commit.message}</div>
           {commit.description && <div className={styles.description}>{commit.description}</div>}
         </div>
-      </div>
-      <div className={styles['build-status-outer']}>
-        <BuildStatus deployment={deployment} latest={false} />
       </div>
     </div>
   );

@@ -32,20 +32,20 @@ const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
       case DeploymentStatus.Canceled:
         content = (
           <a href={getBuildLogURL(deployment.id)} target="_blank">
-            <span key="canceled" className={classNames(styles.box, styles.error)}>
+            <div key="canceled" className={classNames(styles.box, styles.error)}>
               <Icon name="times" className={styles.icon} />
               {latest ? <span>Latest build canceled</span> : <span>Build canceled</span>}
-            </span>
+            </div>
           </a>
         );
         break;
       case DeploymentStatus.Failed:
         content = (
           <a href={getBuildLogURL(deployment.id)} target="_blank">
-            <span key="failed" className={classNames(styles.box, styles.error)}>
+            <div key="failed" className={classNames(styles.box, styles.error)}>
               <Icon name="times" className={styles.icon} />
               {latest ? <span>Latest build failed</span> : <span>Build failed</span>}
-            </span>
+            </div>
           </a>
         );
         break;
@@ -53,10 +53,10 @@ const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
       case DeploymentStatus.Running:
         content = (
           <a href={getBuildLogURL(deployment.id)} target="_blank">
-            <span key="running" className={classNames(styles.box, styles.building)}>
+            <div key="running" className={classNames(styles.box, styles.building)}>
               <Icon name="circle-o-notch" spin className={styles.icon} />
               Generating preview
-            </span>
+            </div>
           </a>
         );
         break;

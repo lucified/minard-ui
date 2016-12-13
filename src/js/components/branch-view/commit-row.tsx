@@ -3,10 +3,11 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Commit } from '../../modules/commits';
-import Deployments, { Deployment } from '../../modules/deployments';
+import Deployments, { Deployment, isSuccessful } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
+import BuildStatus from '../common/build-status';
 import MinardLink from '../common/minard-link';
 import SingleCommit from '../common/single-commit';
 
@@ -21,29 +22,29 @@ interface GeneratedProps {
 }
 
 const getDeploymentScreenshot = (deployment?: Deployment) => {
-  if (!deployment || !deployment.screenshot) {
-    return null;
+  if (!deployment || !isSuccessful(deployment)) {
+    return <BuildStatus className={styles['build-status']} deployment={deployment} latest={false} />;
   }
 
   return (
-    <img className={styles.screenshot} src={deployment.screenshot} />
-  );
-};
-
-const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
-  return (
-    <MinardLink preview={deployment} commit={isFetchError(commit) ? undefined : commit}>
-      <div className="row">
-        <div className="col-xs-2 end-xs">
-          {getDeploymentScreenshot(deployment)}
-        </div>
-        <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-          <SingleCommit className={styles.commit} commit={commit} deployment={deployment} />
-        </div>
-      </div>
+    <MinardLink deployment={deployment} openInNewWindow>
+      <img className={styles.screenshot} src={deployment.screenshot} />
     </MinardLink>
   );
 };
+
+const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
+  <div className="row">
+    <div className="col-xs-2 end-xs">
+      {getDeploymentScreenshot(deployment)}
+    </div>
+    <div className={classNames(styles['commit-container'], 'col-xs-10')}>
+      <MinardLink deployment={deployment} openInNewWindow>
+        <SingleCommit className={styles.commit} commit={commit} deployment={deployment} />
+      </MinardLink>
+    </div>
+  </div>
+);
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { commit } = ownProps;
