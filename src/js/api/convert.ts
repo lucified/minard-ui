@@ -174,6 +174,7 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
 
 export const toBranches = toConvertedArray(createBranchObject);
 
+// Comments
 const createCommentObject = (comment: t.ResponseCommentElement): Comment => {
   const { id } = comment;
   const { name, email, message, 'created-at': timestamp, deployment } = comment.attributes;

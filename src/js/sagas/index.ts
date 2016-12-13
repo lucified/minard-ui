@@ -483,7 +483,7 @@ export default function createSagas(api: Api) {
       yield put(Deployments.actions.storeDeployments(deployment));
 
       // only store IDs into Preview, not the actual Commit and Deployment objects
-      const preview: Preview = Object.assign({}, response, { commit: commit[0].id, deployment: deployment[0].id });
+      const preview: Preview = { ...response, commit: commit[0].id, deployment: deployment[0].id };
       yield put(Previews.actions.storePreviews(preview));
 
       yield put(Requests.actions.Previews.LoadPreview.SUCCESS.actionCreator(id));
