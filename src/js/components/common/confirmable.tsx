@@ -40,7 +40,7 @@ class Confirmable extends React.Component<Props, any> {
     }
   }
 
-  private showPopup(e?: any) {
+  private showPopup(e: React.MouseEvent<HTMLElement>) {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -57,7 +57,7 @@ class Confirmable extends React.Component<Props, any> {
     this.setState({ open: false });
   }
 
-  private confirm(e?: any) {
+  private confirm(e: React.MouseEvent<HTMLElement>) {
     this.hidePopup();
 
     if (this.props.onConfirm) {

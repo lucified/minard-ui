@@ -7,7 +7,7 @@ const styles = require('./simple-confirmable.scss');
 
 interface Props {
   action: string;
-  onConfirm?: (e?: any) => void;
+  onConfirm?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 // Adds (or replaces if one exists) the onClick handler to the passed in element that

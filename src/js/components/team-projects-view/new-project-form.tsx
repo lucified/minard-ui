@@ -15,7 +15,7 @@ const styles = require('../common/forms/modal-dialog.scss');
 interface PassedProps {
   existingProjects: Project[];
   onSubmitSuccess: (projectId: string) => void;
-  closeDialog: (e?: any) => void;
+  closeDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & FormProps<CreateProjectFormData, any>;

@@ -28,7 +28,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: (e?: any) => void;
+  closeDialog: (e?: React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
@@ -91,7 +91,7 @@ const mapStateToProps = (state: StateTree) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: (e?: any) => {
+  closeDialog: (e?: React.MouseEvent<HTMLElement>) => {
     if (e) {
       e.preventDefault();
     }

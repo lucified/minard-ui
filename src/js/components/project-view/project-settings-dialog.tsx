@@ -32,7 +32,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: (e?: any) => void;
+  closeDialog: (e?: React.MouseEvent<HTMLElement>) => void;
   deleteProject: (id: string, resolve: () => void, reject: () => void) => void;
   clearDeletionErrors: () => void;
 }
@@ -134,7 +134,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: (_e?: any) => {
+  closeDialog: (_e?: React.MouseEvent<HTMLElement>) => {
     dispatch(Modal.actions.closeModal(ModalType.ProjectSettings));
   },
   deleteProject: (id, resolve, reject) => {
