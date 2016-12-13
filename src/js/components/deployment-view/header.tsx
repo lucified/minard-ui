@@ -44,6 +44,11 @@ const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen 
       </span>
     )}
     <a className={styles['toggle-open']} onClick={onToggleOpen}>
+      {deployment.commentCount !== undefined && deployment.commentCount > 0 && (
+        <span>
+          {deployment.commentCount} <Icon className={styles.icon} name="comment-o" />
+        </span>
+      )}
       {isOpen ? (
         <span className={styles.close}><Icon name="times" className={styles.icon} /> Close</span>
       ) : (
