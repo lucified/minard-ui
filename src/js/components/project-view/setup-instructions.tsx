@@ -21,7 +21,7 @@ interface Props {
   showClone?: boolean;
 }
 
-const selectText = (e: any) => {
+const selectText = (e: React.MouseEvent<HTMLElement>) => {
   const node = e.target;
   const doc = document as any;
 
@@ -31,7 +31,7 @@ const selectText = (e: any) => {
     range.select();
   } else if (window.getSelection) {
     const range = document.createRange();
-    range.selectNodeContents(node);
+    range.selectNodeContents(node as Node);
     window.getSelection().removeAllRanges();
     window.getSelection().addRange(range);
   }

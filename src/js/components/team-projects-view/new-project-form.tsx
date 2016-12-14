@@ -15,7 +15,7 @@ const styles = require('../common/forms/modal-dialog.scss');
 interface PassedProps {
   existingProjects: Project[];
   onSubmitSuccess: (projectId: string) => void;
-  closeDialog: (e?: any) => void;
+  closeDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & FormProps<CreateProjectFormData, any>;
@@ -53,7 +53,7 @@ class NewProjectForm extends React.Component<Props, any> {
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  private handleCancel(e: any) {
+  private handleCancel(e: React.MouseEvent<HTMLElement>) {
     const { submitting, closeDialog } = this.props;
 
     if (!submitting) {

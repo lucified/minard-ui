@@ -11,7 +11,7 @@ const styles = require('./header.scss');
 interface Props {
   buildLogSelected: boolean;
   deployment: Deployment;
-  onToggleOpen: (e: any) => boolean;
+  onToggleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   isOpen: boolean;
   className?: string;
 }

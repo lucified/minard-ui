@@ -29,7 +29,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  openCreateNewProjectDialog: (e: any) => void;
+  openCreateNewProjectDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
@@ -89,7 +89,7 @@ class ProjectsSection extends React.Component<Props, any> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  openCreateNewProjectDialog: (e: any) => {
+  openCreateNewProjectDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(Modal.actions.openModal(ModalType.NewProject));
   },

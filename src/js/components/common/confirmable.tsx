@@ -9,7 +9,7 @@ interface Props {
   title: string;
   message: string;
   action: string;
-  onConfirm?: (e?: any) => void;
+  onConfirm?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 // Adds (or replaces if one exists) the onClick handler to the passed in element that
@@ -28,7 +28,7 @@ class Confirmable extends React.Component<Props, any> {
     };
   }
 
-  private closePopupIfNotClickingSelf(e: any) {
+  private closePopupIfNotClickingSelf(e: MouseEvent) {
     if (e.target !== findDOMNode(this)) {
       this.hidePopup();
     }
@@ -40,7 +40,7 @@ class Confirmable extends React.Component<Props, any> {
     }
   }
 
-  private showPopup(e?: any) {
+  private showPopup(e: React.MouseEvent<HTMLElement>) {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -57,10 +57,11 @@ class Confirmable extends React.Component<Props, any> {
     this.setState({ open: false });
   }
 
-  private confirm() {
+  private confirm(e: React.MouseEvent<HTMLElement>) {
     this.hidePopup();
+
     if (this.props.onConfirm) {
-      this.props.onConfirm();
+      this.props.onConfirm(e);
     }
   }
 

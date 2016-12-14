@@ -59,9 +59,11 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
     }
   }
 
-  private reloadPage(_e: any) {
+  private reloadPage(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
     location.reload(true);
-    return false;
   }
 
   public render() {
