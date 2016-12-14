@@ -43,6 +43,7 @@ export interface Deployment {
   screenshot?: string;
   status: DeploymentStatus;
   comments?: string[] | FetchError;
+  commentCount?: number;
 }
 
 export interface DeploymentState {

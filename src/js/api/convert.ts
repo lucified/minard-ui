@@ -174,6 +174,7 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
 
 export const toBranches = toConvertedArray(createBranchObject);
 
+// Comments
 const createCommentObject = (comment: t.ResponseCommentElement): Comment => {
   const { id } = comment;
   const { name, email, message, 'created-at': timestamp, deployment } = comment.attributes;
@@ -224,6 +225,7 @@ const createDeploymentObject = (deployment: t.ResponseDeploymentElement): Deploy
   status: toDeploymentStatus(deployment.attributes.status),
   url: deployment.attributes.url,
   screenshot: deployment.attributes.screenshot,
+  commentCount: deployment.attributes['comment-count'],
   creator: {
     name: deployment.attributes.creator.name,
     email: deployment.attributes.creator.email,

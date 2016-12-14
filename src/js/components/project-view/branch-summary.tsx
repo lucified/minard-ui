@@ -45,8 +45,12 @@ const BranchSummary = (props: PassedProps & GeneratedProps) => {
       );
     } else {
       commitContent = (
-        <MinardLink openInNewWindow deployment={latestSuccessfulDeployment}>
-          <SingleCommit className={styles.hover} commit={latestSuccessfullyDeployedCommit} />
+        <MinardLink preview={latestSuccessfulDeployment}>
+          <SingleCommit
+            className={styles.hover}
+            deployment={latestSuccessfulDeployment}
+            commit={latestSuccessfullyDeployedCommit}
+          />
         </MinardLink>
       );
     }

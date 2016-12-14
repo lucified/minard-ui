@@ -50,6 +50,12 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
             </span>
             {' · '}
             <span className={styles.hash}>{commit.hash.slice(0, 8)}</span>
+            {deployment && !isFetchError(deployment) && deployment.commentCount !== undefined && (
+              <span>
+                {' · '}
+                <span className={styles['comment-count']}>{deployment.commentCount} comments</span>
+              </span>
+            )}
           </span>
         </div>
         <div className={styles['commit-body']}>
