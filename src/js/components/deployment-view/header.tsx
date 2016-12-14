@@ -12,11 +12,12 @@ interface Props {
   buildLogSelected: boolean;
   deployment: Deployment;
   onToggleOpen: (e: React.MouseEvent<HTMLElement>) => void;
+  onOpen: (e: React.MouseEvent<HTMLElement>) => void;
   isOpen: boolean;
   className?: string;
 }
 
-const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen }: Props) => (
+const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen, onOpen }: Props) => (
   <div className={classNames(styles.header, className)}>
     {buildLogSelected ? (
       <span>
@@ -43,12 +44,13 @@ const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen 
         </MinardLink>
       </span>
     )}
+    <span className={styles['comment-count']}>
+      <a onClick={onOpen}>
+        {deployment.commentCount !== undefined && deployment.commentCount > 0 && deployment.commentCount}
+        <Icon className={styles.icon} name="comment-o" />
+      </a>
+    </span>
     <a className={styles['toggle-open']} onClick={onToggleOpen}>
-      {deployment.commentCount !== undefined && deployment.commentCount > 0 && (
-        <span>
-          {deployment.commentCount} <Icon className={styles.icon} name="comment-o" />
-        </span>
-      )}
       {isOpen ? (
         <span className={styles.close}><Icon name="times" className={styles.icon} /> Close</span>
       ) : (

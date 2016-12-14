@@ -31,20 +31,25 @@ class PreviewDialog extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.toggleOpen = this.toggleOpen.bind(this);
+    this.handleToggleOpen = this.handleToggleOpen.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
 
     this.state = {
       dialogOpen: !!props.highlightComment,
     };
   }
 
-  private toggleOpen(e: React.MouseEvent<HTMLElement>) {
+  private handleToggleOpen(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
     e.stopPropagation();
 
     this.setState({
       dialogOpen: !this.state.dialogOpen,
     });
+  }
+
+  private handleOpen(_e: React.MouseEvent<HTMLElement>) {
+    this.setState({ dialogOpen: true });
   }
 
   public render() {
@@ -57,7 +62,8 @@ class PreviewDialog extends React.Component<Props, State> {
           className={styles.header}
           deployment={deployment}
           isOpen={dialogOpen}
-          onToggleOpen={this.toggleOpen}
+          onToggleOpen={this.handleToggleOpen}
+          onOpen={this.handleOpen}
           buildLogSelected={buildLogSelected}
         />
         {dialogOpen && (
