@@ -6,8 +6,10 @@ export default { actions, reducer, selectors };
 export {
   CollectionActionCreators,
   CreateEntityActionCreators,
+  CreateEntitySuccessAction,
   DeleteEntityActionCreators,
   EditEntityActionCreators,
+  EditEntitySuccessAction,
   EntityRequestAction,
   EntitySuccessAction,
   FetchEntityActionCreators,

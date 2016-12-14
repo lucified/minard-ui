@@ -57,7 +57,7 @@ interface CreateEntityRequestActionCreator {
 }
 
 // When request succeeds
-interface CreateEntitySuccessAction extends Action {
+export interface CreateEntitySuccessAction extends Action {
   result: Object;
   name: string;
 }
@@ -66,7 +66,7 @@ interface CreateEntitySuccessActionCreator {
   (entity: any, name: string): CreateEntitySuccessAction;
 }
 
-interface EditEntitySuccessAction extends Action {
+export interface EditEntitySuccessAction extends Action {
   result: Object;
 }
 
