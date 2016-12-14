@@ -16,8 +16,20 @@ interface Props {
   preview: Preview;
 }
 
-const CommitSummary = ({ className, commit, deployment, preview }: Props) => (
-  <div className={classNames(styles['commit-summary'], className)}>
+const CommitSummary = ({ className, commit, deployment, preview }: Props) => {
+  // The absolute links don't work in local or test environments
+  // TODO: Use MinardLinks once we have users and ACL in place
+  const metadata = ['production', 'staging'].indexOf(process.env.ENV) > -1 ? (
+    <div className={styles.metadata}>
+      <a href={`/project/${preview.project.id}/branch/${preview.branch.id}`}>
+        {preview.branch.name}
+      </a>
+      {' in '}
+      <a href={`/project/${preview.project.id}`}>
+        {preview.project.name}
+      </a>
+    </div>
+  ) : (
     <div className={styles.metadata}>
       <MinardLink branch={preview.branch.id} project={preview.project.id}>
         {preview.branch.name}
@@ -27,15 +39,21 @@ const CommitSummary = ({ className, commit, deployment, preview }: Props) => (
         {preview.project.name}
       </MinardLink>
     </div>
-    <div className={styles['commit-message']}>
-      {commit.message}
+  );
+
+  return (
+    <div className={classNames(styles['commit-summary'], className)}>
+      {metadata}
+      <div className={styles['commit-message']}>
+        {commit.message}
+      </div>
+      <div className={styles.bottom}>
+        <MinardLink className={styles['open-link']} openInNewWindow deployment={deployment}>
+          Open in new window
+        </MinardLink>
+      </div>
     </div>
-    <div className={styles.bottom}>
-      <MinardLink className={styles['open-link']} openInNewWindow deployment={deployment}>
-        Open in new window
-      </MinardLink>
-    </div>
-  </div>
-);
+  );
+};
 
 export default CommitSummary;
