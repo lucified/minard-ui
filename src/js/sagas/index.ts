@@ -598,7 +598,7 @@ export default function createSagas(api: Api) {
 
     // Resolve and reject tell the redux-form that submitting is done and if it was successful or not
     if (success) {
-      yield call(resolve, success.result);
+      yield call(resolve, success.result || success.id);
     } else { // _error indicates that it's a form-wide ("global") error
       yield call(reject, new SubmissionError({ _error: failure.details || failure.prettyError }));
     }

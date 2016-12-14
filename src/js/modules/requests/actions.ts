@@ -1,3 +1,5 @@
+import { CreateError, DeleteError, EditError, FetchCollectionError, FetchError } from '../errors';
+
 import * as t from './types';
 
 const createActionNames = (prefix: string) => ({
@@ -30,11 +32,11 @@ const fetchEntityActionCreators = (prefix: string): t.FetchEntityActionCreators 
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (id: string) => ({ type: successAction, result: id }),
+      actionCreator: (id: string) => ({ type: successAction, id }),
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string) => ({
+      actionCreator: (id: string, error: string, details: string): FetchError => ({
         type: failureAction,
         id,
         error,
@@ -59,7 +61,7 @@ const createEntityActionCreators = (prefix: string): t.CreateEntityActionCreator
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (name: string, error: string, details: string) => ({
+      actionCreator: (name: string, error: string, details: string): CreateError => ({
         type: failureAction,
         name,
         error,
@@ -84,7 +86,7 @@ const editEntityActionCreators = (prefix: string): t.EditEntityActionCreators =>
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string) => ({
+      actionCreator: (id: string, error: string, details: string): EditError => ({
         type: failureAction,
         id,
         error,
@@ -105,11 +107,11 @@ const deleteEntityActionCreators = (prefix: string): t.DeleteEntityActionCreator
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (id: string) => ({ type: successAction, result: id }),
+      actionCreator: (id: string) => ({ type: successAction, id }),
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string) => ({
+      actionCreator: (id: string, error: string, details: string): DeleteError => ({
         type: failureAction,
         id,
         error,
@@ -134,7 +136,7 @@ const fetchCollectionActionCreators = (prefix: string): t.CollectionActionCreato
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (error: string, details: string) => ({
+      actionCreator: (error: string, details: string): FetchCollectionError => ({
         type: failureAction,
         error,
         details,

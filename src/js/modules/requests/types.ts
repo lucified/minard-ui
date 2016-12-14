@@ -37,10 +37,10 @@ export interface EntityRequestAction extends Action {
 }
 
 export interface EntitySuccessAction extends Action {
-  result: string;
+  id: string;
 }
 
-interface CreateEntityRequestAction extends Action {
+export interface CreateEntityRequestAction extends Action {
   name: string;
 }
 
@@ -116,8 +116,8 @@ export type DeleteEntityActionCreators = RequestActionCreators<
 >;
 
 // When requesting all entities of a certain type
-interface CollectionRequestAction extends Action {}
-interface CollectionSuccessAction extends Action {}
+export interface CollectionRequestAction extends Action {}
+export interface CollectionSuccessAction extends Action {}
 
 interface CollectionRequestActionCreator {
   (): CollectionRequestAction;

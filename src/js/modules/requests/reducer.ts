@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 
+import { DeleteError, FetchError } from '../errors';
 import * as actions from './actions';
 import * as t from './types';
 
@@ -28,10 +29,11 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
 
     case actions.Activities.LoadActivitiesForProject.FAILURE.type:
     case actions.Activities.LoadActivitiesForProject.SUCCESS.type:
+      const loadActivitiesAction = <t.EntitySuccessAction | FetchError> action;
       return returnFilteredStateIfChanged(
         state,
         requestInfo => (requestInfo.type !== actions.Activities.LoadActivitiesForProject.REQUEST.type) ||
-          (requestInfo.id !== action.id),
+          (requestInfo.id !== loadActivitiesAction.id),
       );
     case actions.Activities.LoadAllActivities.FAILURE.type:
     case actions.Activities.LoadAllActivities.SUCCESS.type:
@@ -41,24 +43,27 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
       );
     case actions.Comments.LoadCommentsForDeployment.FAILURE.type:
     case actions.Comments.LoadCommentsForDeployment.SUCCESS.type:
+      const loadCommentsAction = <t.EntitySuccessAction | FetchError> action;
       return returnFilteredStateIfChanged(
         state,
         requestInfo => (requestInfo.type !== actions.Comments.LoadCommentsForDeployment.REQUEST.type) ||
-          (requestInfo.id !== action.id),
+          (requestInfo.id !== loadCommentsAction.id),
       );
     case actions.Comments.DeleteComment.FAILURE.type:
     case actions.Comments.DeleteComment.SUCCESS.type:
+      const deleteCommentAction = <t.EntitySuccessAction | DeleteError> action;
       return returnFilteredStateIfChanged(
         state,
         requestInfo => (requestInfo.type !== actions.Comments.DeleteComment.REQUEST.type) ||
-          (requestInfo.id !== action.id),
+          (requestInfo.id !== deleteCommentAction.id),
       );
     case actions.Commits.LoadCommitsForBranch.FAILURE.type:
     case actions.Commits.LoadCommitsForBranch.SUCCESS.type:
+      const loadCommitsForBranchAction = <t.EntitySuccessAction | FetchError> action;
       return returnFilteredStateIfChanged(
         state,
         requestInfo => (requestInfo.type !== actions.Commits.LoadCommitsForBranch.REQUEST.type) ||
-          (requestInfo.id !== action.id),
+          (requestInfo.id !== loadCommitsForBranchAction.id),
       );
     case actions.Projects.LoadAllProjects.FAILURE.type:
     case actions.Projects.LoadAllProjects.SUCCESS.type:
@@ -68,10 +73,11 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
       );
     case actions.Projects.DeleteProject.SUCCESS.type:
     case actions.Projects.DeleteProject.FAILURE.type:
+      const deleteProjectAction = <t.EntitySuccessAction | DeleteError> action;
       return returnFilteredStateIfChanged(
         state,
         requestInfo => (requestInfo.type !== actions.Projects.DeleteProject.REQUEST.type) ||
-          (requestInfo.id !== action.id),
+          (requestInfo.id !== deleteProjectAction.id),
       );
     default:
       return state;
