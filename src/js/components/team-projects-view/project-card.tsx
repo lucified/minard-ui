@@ -93,7 +93,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
         </div>
       </MinardLink>
       {deploymentSummary ? (
-        <MinardLink openInNewWindow deployment={latestDeployment}>
+        <MinardLink preview={latestDeployment}>
           <div className={classNames(styles['card-bottom'], styles['hover-effect'])}>
             {deploymentSummary}
           </div>

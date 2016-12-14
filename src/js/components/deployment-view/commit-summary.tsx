@@ -31,7 +31,7 @@ const CommitSummary = ({ className, commit, deployment, preview }: Props) => (
       {commit.message}
     </div>
     <div className={styles.bottom}>
-      <MinardLink className={styles['open-link']} openInNewWindow deployment={deployment}>
+      <MinardLink className={styles['open-link']} preview={deployment}>
         Open in new window
       </MinardLink>
     </div>
