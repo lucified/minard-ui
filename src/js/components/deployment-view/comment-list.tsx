@@ -13,6 +13,7 @@ const styles = require('./comment-list.scss');
 interface PassedProps {
   commentIds: string[];
   className?: string;
+  highlightComment?: string;
 }
 
 interface GeneratedStateProps {
@@ -29,15 +30,35 @@ class CommentList extends React.Component<Props, any> {
   }
 
   public componentDidMount() {
-    this.scrollToBottom();
+    const { commentIds, highlightComment } = this.props;
+
+    if (highlightComment && commentIds.indexOf(highlightComment) > -1) {
+      this.scrollToElement(document.getElementById(this.commentIdString(highlightComment)));
+    } else {
+      this.scrollToBottom();
+    }
   }
 
   public componentDidUpdate(prevProps: Props) {
-    if (this.props.comments.length > prevProps.comments.length) {
-      // We don't want to scroll to the bottom if e.g. deleting an old comment.
-      // This method (only scrolling if the comments list is longer) is not
-      // foolproof, but should cover most cases.
+    const { comments, highlightComment, commentIds } = this.props;
+
+    if (comments.length > prevProps.comments.length) {
+      // Only scroll to bottom if a new comment was added
       this.scrollToBottom();
+    } else if (
+      highlightComment !== prevProps.highlightComment &&
+      highlightComment &&
+      commentIds.indexOf(highlightComment) > -1
+    ) {
+      this.scrollToElement(document.getElementById(this.commentIdString(highlightComment)));
+    }
+  }
+
+  private scrollToElement(element: HTMLElement | null) {
+    if (element) {
+      this.listRef.scrollTop = element.offsetTop - 50;
+    } else {
+      console.error('Unable to find highlighted comment element.');
     }
   }
 
@@ -52,12 +73,33 @@ class CommentList extends React.Component<Props, any> {
     this.listRef = ref;
   }
 
+  private commentIdString(id: string): string {
+    return `comment-${id}`;
+  }
+
   public render() {
-    const { commentIds, comments, className } = this.props;
+    const { commentIds, comments, className, highlightComment } = this.props;
+
     return (
       <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
         <FlipMove enterAnimation="fade" leaveAnimation="fade">
-          {comments.map((comment, i) => <SingleComment key={`comment-${commentIds[i]}`} comment={comment} />)}
+          {comments.map((comment, i) => {
+            const isHighlighted: boolean = !!comment && highlightComment === comment.id;
+            const idString = this.commentIdString(commentIds[i]);
+
+            return (
+              <div
+                key={idString}
+                id={idString}
+                className={classNames(
+                  styles.comment,
+                  { [styles.highlighted]: isHighlighted },
+                )}
+              >
+                <SingleComment comment={comment} />
+              </div>
+            );
+          })}
         </FlipMove>
       </div>
     );

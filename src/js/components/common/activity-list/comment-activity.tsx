@@ -9,17 +9,18 @@ interface Props {
   activity: Activity;
 }
 
-const CommentActivity = ({ activity }: Props) => (
-  <MinardLink preview={activity.deployment}>
-    <SingleComment
-      comment={{
-        ...activity.comment,
-        deployment: activity.deployment.id,
-        timestamp: activity.timestamp,
-      }}
-      hideDelete
-    />
-  </MinardLink>
-);
+const CommentActivity = ({ activity }: Props) => {
+  const comment = {
+    ...activity.comment,
+    deployment: activity.deployment.id,
+    timestamp: activity.timestamp,
+  };
+
+  return (
+    <MinardLink comment={comment}>
+      <SingleComment comment={comment} hideDelete />
+    </MinardLink>
+  );
+};
 
 export default CommentActivity;

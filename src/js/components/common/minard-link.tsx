@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router';
 
 import { Branch } from '../../modules/branches';
+import { Comment } from '../../modules/comments';
 import { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
 
@@ -10,6 +11,7 @@ interface Props {
   preview?: Deployment;
   branch?: Branch | string;
   project?: Project | string;
+  comment?: Comment;
   openInNewWindow?: boolean;
   homepage?: boolean;
   className?: string;
@@ -22,6 +24,7 @@ class MinardLink extends React.Component<Props, any> {
     const {
       buildLog,
       className,
+      comment,
       children,
       deployment,
       branch,
@@ -52,6 +55,8 @@ class MinardLink extends React.Component<Props, any> {
     } else if (preview) {
       // Link to build log if preview is not ready
       path = (preview.url && !buildLog) ? `/preview/${preview.id}` : `/preview/${preview.id}/log`;
+    } else if (comment) {
+      path = `/preview/${comment.deployment}/comment/${comment.id}`;
     } else if (branch) {
       let projectId: string;
       let branchId: string;
