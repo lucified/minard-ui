@@ -70,6 +70,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       }
 
       return state;
+    // Replaces comments in the deployment
     case SET_COMMENTS_FOR_DEPLOYMENT:
       const commentsAction = <t.SetCommentsForDeploymentAction> action;
       existingDeployment = state[commentsAction.id];
@@ -86,6 +87,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       logMessage('Trying to add comments to a deployment that does not exist', { action });
 
       return state;
+    // Appends comment to deployment
     case ADD_COMMENTS_TO_DEPLOYMENT:
       const addCommentsAction = <t.AddCommentsToDeploymentAction> action;
       existingDeployment = state[addCommentsAction.id];
@@ -112,8 +114,6 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
           },
         };
       }
-
-      logMessage('Trying to add comments to a deployment that does not exist', { action });
 
       return state;
     case REMOVE_COMMENT_FROM_DEPLOYMENT:
