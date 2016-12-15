@@ -32,12 +32,14 @@ const validate = (values: CreateProjectFormData, props: Props) => {
     errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (name[0] === '-') {
     errors.name = 'Project name can\'t start with a hyphen';
+  } else if (name.length > 251) {
+    errors.name = 'Maximum length of 251 characters';
   } else if (props.existingProjects.find(project => project.name === name)) {
     errors.name = 'Project name already exists';
   }
 
   if (description && description.length > 2000) {
-    errors.description = 'The description can be up to 2000 characters long';
+    errors.description = 'Maximum length of 2000 characters';
   }
 
   return errors;
