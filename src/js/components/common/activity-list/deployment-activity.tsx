@@ -17,7 +17,7 @@ const DeploymentActivity = (props: Props) => {
   const { activity } = props;
 
   return (
-    <MinardLink preview={activity.deployment}>
+    <MinardLink preview={activity.deployment} commit={activity.commit}>
       <SingleCommit
         className={classNames({ [styles.hover]: isSuccessful(activity.deployment) })}
         commit={activity.commit}

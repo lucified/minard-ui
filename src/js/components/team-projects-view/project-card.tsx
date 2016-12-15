@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import * as Truncate from 'react-truncate';
 
-import Commits from '../../modules/commits';
+import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
@@ -23,6 +23,7 @@ interface PassedProps {
 
 interface GeneratedProps {
   latestDeployment?: Deployment;
+  latestDeployedCommit?: Commit;
 }
 
 const getDeploymentSummary = (deployment?: Deployment) => {
@@ -60,7 +61,7 @@ const getDeploymentSummary = (deployment?: Deployment) => {
   );
 };
 
-const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
+const ProjectCard = ({ project, latestDeployedCommit, latestDeployment }: PassedProps & GeneratedProps) => {
   const screenshot = (latestDeployment && latestDeployment.screenshot) || noScreenshot;
   const deploymentSummary = getDeploymentSummary(latestDeployment);
 
@@ -93,7 +94,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
         </div>
       </MinardLink>
       {deploymentSummary ? (
-        <MinardLink preview={latestDeployment}>
+        <MinardLink preview={latestDeployment} commit={latestDeployedCommit}>
           <div className={classNames(styles['card-bottom'], styles['hover-effect'])}>
             {deploymentSummary}
           </div>
@@ -111,8 +112,8 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   const { project } = ownProps;
 
   const latestSuccessfullyDeployedCommitId = project.latestSuccessfullyDeployedCommit;
-  const latestDeployedCommit = latestSuccessfullyDeployedCommitId &&
-    Commits.selectors.getCommit(state, latestSuccessfullyDeployedCommitId);
+  const latestDeployedCommit = latestSuccessfullyDeployedCommitId ?
+    Commits.selectors.getCommit(state, latestSuccessfullyDeployedCommitId) : undefined;
   let latestDeployment: Deployment | FetchError | undefined;
 
   if (latestDeployedCommit && !isFetchError(latestDeployedCommit) && latestDeployedCommit.deployment) {
@@ -122,6 +123,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   // TODO: Don't convert error state to loading state?
   return {
     latestDeployment: isFetchError(latestDeployment) ? undefined : latestDeployment,
+    latestDeployedCommit: isFetchError(latestDeployedCommit) ? undefined : latestDeployedCommit,
   };
 };
 

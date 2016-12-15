@@ -3,12 +3,14 @@ import { Link } from 'react-router';
 
 import { Branch } from '../../modules/branches';
 import { Comment } from '../../modules/comments';
+import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
 
 interface Props {
   deployment?: Deployment;
   preview?: Deployment;
+  commit?: Commit;
   branch?: Branch | string;
   project?: Project | string;
   comment?: Comment;
@@ -25,6 +27,7 @@ class MinardLink extends React.Component<Props, any> {
       buildLog,
       className,
       comment,
+      commit,
       children,
       deployment,
       branch,
@@ -53,10 +56,21 @@ class MinardLink extends React.Component<Props, any> {
         <span>{children}</span>
       );
     } else if (preview) {
+      if (!commit) {
+        console.error('Missing commit information for preview link!', preview);
+        return <span>{children}</span>;
+      }
+
       // Link to build log if preview is not ready
-      path = (preview.url && !buildLog) ? `/preview/${preview.id}` : `/preview/${preview.id}/log`;
+      path = (preview.url && !buildLog) ?
+        `/preview/${commit.hash}/${preview.id}` : `/preview/${commit.hash}/${preview.id}/log`;
     } else if (comment) {
-      path = `/preview/${comment.deployment}/comment/${comment.id}`;
+      if (!commit) {
+        console.error('Missing commit information for comment link!', comment);
+        return <span>{children}</span>;
+      }
+
+      path = `/preview/${commit.hash}/${comment.deployment}/comment/${comment.id}`;
     } else if (branch) {
       let projectId: string;
       let branchId: string;
