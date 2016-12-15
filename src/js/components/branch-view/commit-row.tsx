@@ -34,13 +34,13 @@ const getDeploymentScreenshot = (deployment?: Deployment) => {
 };
 
 const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
-  <div className="row">
+  <div className={classNames('row', styles['commit-row'])}>
     <div className="col-xs-2 end-xs">
       {getDeploymentScreenshot(deployment)}
     </div>
     <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-      <MinardLink deployment={deployment} openInNewWindow>
-        <SingleCommit className={styles.commit} commit={commit} deployment={deployment} />
+      <MinardLink className={styles.commit} deployment={deployment} openInNewWindow>
+        <SingleCommit commit={commit} deployment={deployment} />
       </MinardLink>
     </div>
   </div>
