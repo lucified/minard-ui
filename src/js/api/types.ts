@@ -22,7 +22,7 @@ export interface Api {
     fetch: (id: string) => ApiPromise<ApiEntityResponse>;
   };
   Preview: {
-    fetch: (id: string) => ApiPromise<ApiPreviewResponse>;
+    fetch: (id: string, commitHash: string) => ApiPromise<ApiPreviewResponse>;
   };
   Project: {
     fetchAll: () => ApiPromise<ApiEntityResponse>;

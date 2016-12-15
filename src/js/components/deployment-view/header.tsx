@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Icon from 'react-fontawesome';
 
+import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 
 import MinardLink from '../common/minard-link';
@@ -11,17 +12,18 @@ const styles = require('./header.scss');
 interface Props {
   buildLogSelected: boolean;
   deployment: Deployment;
+  commit: Commit;
   onToggleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   isOpen: boolean;
   className?: string;
 }
 
-const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen }: Props) => (
+const Header = ({ buildLogSelected, className, commit, deployment, isOpen, onToggleOpen }: Props) => (
   <div className={classNames(styles.header, className)}>
     {buildLogSelected ? (
       <span>
         {deployment.url ? (
-          <MinardLink preview={deployment} className={styles.tab}>
+          <MinardLink preview={deployment} commit={commit} className={styles.tab}>
             Preview
           </MinardLink>
         ) : (
@@ -38,7 +40,7 @@ const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen 
         <span className={classNames(styles.tab, styles.selected)}>
           Preview
         </span>
-        <MinardLink preview={deployment} buildLog className={styles.tab}>
+        <MinardLink preview={deployment} commit={commit} buildLog className={styles.tab}>
           Build log
         </MinardLink>
       </span>

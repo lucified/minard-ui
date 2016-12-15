@@ -32,7 +32,7 @@ const getDeploymentScreenshot = (deployment?: Deployment) => {
 
 const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
   return (
-    <MinardLink preview={deployment}>
+    <MinardLink preview={deployment} commit={isFetchError(commit) ? undefined : commit}>
       <div className="row">
         <div className="col-xs-2 end-xs">
           {getDeploymentScreenshot(deployment)}

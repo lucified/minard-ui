@@ -38,7 +38,7 @@ const getMetadata = (activity: Activity) => {
       <span>
         <Icon className={styles.icon} name="comment-o" />
         {'New comments for '}
-        <MinardLink className={styles['metadata-deployment']} preview={deployment}>
+        <MinardLink className={styles['metadata-deployment']} preview={deployment} commit={commit}>
           {commit.hash.substr(0, 8)}
         </MinardLink>
         {' in '}
@@ -57,7 +57,7 @@ const getMetadata = (activity: Activity) => {
           {deployment.creator.name || deployment.creator.email}
         </span>
         {' generated a preview for '}
-        <MinardLink className={styles['metadata-deployment']} preview={deployment}>
+        <MinardLink className={styles['metadata-deployment']} preview={deployment} commit={commit}>
           {commit.hash.substr(0, 8)}
         </MinardLink>
         {' in '}
@@ -92,7 +92,7 @@ class ActivityGroup extends React.Component<PassedProps, any> {
         </div>
         <div className={classNames('col-xs-2', styles.screenshot)}>
           {isSuccessful(firstActivity.deployment) && (
-            <MinardLink preview={firstActivity.deployment}>
+            <MinardLink preview={firstActivity.deployment} commit={firstActivity.commit}>
               <DeploymentScreenshot deployment={firstActivity.deployment} />
             </MinardLink>
           )}
