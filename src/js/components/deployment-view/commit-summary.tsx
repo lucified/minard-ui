@@ -29,6 +29,9 @@ const CommitSummary = ({ className, commit, deployment, preview }: Props) => (
     </div>
     <div className={styles['commit-message']}>
       {commit.message}
+      {commit.description && (
+        <p>{commit.description}</p>
+      )}
     </div>
     <div className={styles.bottom}>
       <MinardLink className={styles['open-link']} openInNewWindow deployment={deployment}>

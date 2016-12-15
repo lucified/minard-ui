@@ -43,11 +43,17 @@ const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen 
         </MinardLink>
       </span>
     )}
+    <span className={styles['comment-count']}>
+      <a onClick={onToggleOpen}>
+        {deployment.commentCount !== undefined && deployment.commentCount > 0 && deployment.commentCount}
+        <Icon className={styles.icon} name="comment-o" />
+      </a>
+    </span>
     <a className={styles['toggle-open']} onClick={onToggleOpen}>
       {isOpen ? (
-        <span><Icon name="times" className={styles.icon} /> Close</span>
+        <span className={styles.close}><Icon name="times" className={styles.icon} /> Close</span>
       ) : (
-        <span><Icon name="plus" className={styles.icon} /> Open</span>
+        <span className={styles.open}><Icon name="plus" className={styles.icon} /> Open</span>
       )}
     </a>
   </div>
