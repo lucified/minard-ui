@@ -12,12 +12,11 @@ interface Props {
   buildLogSelected: boolean;
   deployment: Deployment;
   onToggleOpen: (e: React.MouseEvent<HTMLElement>) => void;
-  onOpen: (e: React.MouseEvent<HTMLElement>) => void;
   isOpen: boolean;
   className?: string;
 }
 
-const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen, onOpen }: Props) => (
+const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen }: Props) => (
   <div className={classNames(styles.header, className)}>
     {buildLogSelected ? (
       <span>
@@ -45,7 +44,7 @@ const Header = ({ buildLogSelected, className, deployment, isOpen, onToggleOpen,
       </span>
     )}
     <span className={styles['comment-count']}>
-      <a onClick={onOpen}>
+      <a onClick={onToggleOpen}>
         {deployment.commentCount !== undefined && deployment.commentCount > 0 && deployment.commentCount}
         <Icon className={styles.icon} name="comment-o" />
       </a>

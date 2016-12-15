@@ -48,10 +48,6 @@ class PreviewDialog extends React.Component<Props, State> {
     });
   }
 
-  private handleOpen(_e: React.MouseEvent<HTMLElement>) {
-    this.setState({ dialogOpen: true });
-  }
-
   public render() {
     const { buildLogSelected, className, commit, deployment, highlightComment, preview } = this.props;
     const { dialogOpen } = this.state;
@@ -63,7 +59,6 @@ class PreviewDialog extends React.Component<Props, State> {
           deployment={deployment}
           isOpen={dialogOpen}
           onToggleOpen={this.handleToggleOpen}
-          onOpen={this.handleOpen}
           buildLogSelected={buildLogSelected}
         />
         {dialogOpen && (
