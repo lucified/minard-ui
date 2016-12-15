@@ -32,7 +32,6 @@ class PreviewDialog extends React.Component<Props, State> {
     super(props);
 
     this.handleToggleOpen = this.handleToggleOpen.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
 
     this.state = {
       dialogOpen: !!props.highlightComment,
