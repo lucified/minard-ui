@@ -19,6 +19,8 @@ interface Props {
 }
 
 const CommitSummary = ({ className, commit, deployment, preview }: Props) => {
+  // This cookie is set in ProjectsFrame.
+  // TODO: Remove this once we have proper user authentication in place.
   const metadata = getValue('teamUser') === `${teamId}` ? (
     <div className={styles.metadata}>
       <MinardLink branch={preview.branch.id} project={preview.project.id}>
