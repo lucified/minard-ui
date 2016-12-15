@@ -92,7 +92,7 @@ class ActivityGroup extends React.Component<PassedProps, any> {
         </div>
         <div className={classNames('col-xs-2', styles.screenshot)}>
           {isSuccessful(firstActivity.deployment) && (
-            <MinardLink deployment={firstActivity.deployment} openInNewWindow>
+            <MinardLink preview={firstActivity.deployment}>
               <DeploymentScreenshot deployment={firstActivity.deployment} />
             </MinardLink>
           )}

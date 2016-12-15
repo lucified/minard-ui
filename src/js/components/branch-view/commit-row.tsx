@@ -32,7 +32,7 @@ const getDeploymentScreenshot = (deployment?: Deployment) => {
 
 const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => {
   return (
-    <MinardLink deployment={deployment} openInNewWindow>
+    <MinardLink preview={deployment}>
       <div className="row">
         <div className="col-xs-2 end-xs">
           {getDeploymentScreenshot(deployment)}
