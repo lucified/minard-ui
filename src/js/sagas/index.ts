@@ -461,19 +461,19 @@ export default function createSagas(api: Api) {
 
   // PREVIEW
   function* loadPreview(action: LoadPreviewAction): IterableIterator<Effect> {
-    const id: string = action.id;
+    const { id, commitHash } = action;
     const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
 
     if (!existingPreview) {
-      yield call(fetchPreview, id);
+      yield call(fetchPreview, id, commitHash);
     }
   }
 
-  function* fetchPreview(id: string): IterableIterator<Effect> {
+  function* fetchPreview(id: string, commitHash: string): IterableIterator<Effect> {
     yield put(Requests.actions.Previews.LoadPreview.REQUEST.actionCreator(id));
 
     const { response, error, details }: { response?: ApiPreviewResponse, error?: string, details?: string } =
-      yield call(api.Preview.fetch, id);
+      yield call(api.Preview.fetch, id, commitHash);
 
     if (response) {
       const commit: Commit[] = yield call(Converter.toCommits, response.commit);

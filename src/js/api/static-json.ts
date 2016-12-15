@@ -85,7 +85,7 @@ const Deployment = {
 };
 
 const Preview = {
-  fetch: (_id: string): ApiPromise<ApiPreviewResponse> => callApi(previewJSON),
+  fetch: (_id: string, _commitHash: string): ApiPromise<ApiPreviewResponse> => callApi(previewJSON),
 };
 
 const Project = {

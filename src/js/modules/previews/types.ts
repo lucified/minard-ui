@@ -26,6 +26,7 @@ export interface PreviewState {
 // LOAD_PREVIEW
 export interface LoadPreviewAction extends Action {
   id: string;
+  commitHash: string;
 }
 
 // STORE_PREVIEW

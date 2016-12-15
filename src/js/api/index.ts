@@ -192,7 +192,8 @@ const Project = {
 };
 
 const Preview = {
-  fetch: (id: string): ApiPromise<ApiPreviewResponse> => getApi(`/api/preview/${id}`),
+  fetch: (id: string, commitHash: string): ApiPromise<ApiPreviewResponse> =>
+    getApi(`/api/preview/${id}`, { sha: commitHash }),
 };
 
 const API: Api = {

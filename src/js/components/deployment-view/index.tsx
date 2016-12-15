@@ -19,7 +19,12 @@ const styles = require('./index.scss');
 interface PassedProps {
   location: any;
   route: any;
-  params: any;
+  params: {
+    commitHash: string;
+    deploymentId: string;
+    commentId?: string;
+    view?: string;
+  };
 }
 
 interface GeneratedStateProps {
@@ -29,7 +34,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadPreview: (deploymentId: string) => void;
+  loadPreview: (deploymentId: string, commitHash: string) => void;
   loadCommentsForDeployment: (deploymentId: string) => void;
 }
 
@@ -38,18 +43,18 @@ type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 class ProjectsFrame extends React.Component<Props, any> {
   public componentWillMount() {
     const { loadCommentsForDeployment, loadPreview } = this.props;
-    const { deploymentId } = this.props.params;
+    const { deploymentId, commitHash } = this.props.params;
 
-    loadPreview(deploymentId);
+    loadPreview(deploymentId, commitHash);
     loadCommentsForDeployment(deploymentId);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
     const { loadCommentsForDeployment, loadPreview } = nextProps;
-    const { deploymentId } = nextProps.params;
+    const { commitHash, deploymentId } = nextProps.params;
 
     if (deploymentId !== this.props.params.deploymentId) {
-      loadPreview(deploymentId);
+      loadPreview(deploymentId, commitHash);
       loadCommentsForDeployment(deploymentId);
     }
   }
