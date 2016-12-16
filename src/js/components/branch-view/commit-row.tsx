@@ -21,13 +21,13 @@ interface GeneratedProps {
   deployment?: Deployment;
 }
 
-const getDeploymentScreenshot = (deployment?: Deployment) => {
+const getScreenshotOrBuildBadge = (deployment?: Deployment, commit?: FetchError | Commit) => {
   if (!deployment || !isSuccessful(deployment)) {
     return <BuildStatus className={styles['build-status']} deployment={deployment} latest={false} />;
   }
 
   return (
-    <MinardLink deployment={deployment} openInNewWindow>
+    <MinardLink preview={deployment} commit={isFetchError(commit) ? undefined : commit}>
       <img className={styles.screenshot} src={deployment.screenshot} />
     </MinardLink>
   );
@@ -36,10 +36,10 @@ const getDeploymentScreenshot = (deployment?: Deployment) => {
 const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
   <div className={classNames('row', styles['commit-row'])}>
     <div className="col-xs-2 end-xs">
-      {getDeploymentScreenshot(deployment)}
+      {getScreenshotOrBuildBadge(deployment)}
     </div>
     <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-      <MinardLink className={styles.commit} deployment={deployment} openInNewWindow>
+      <MinardLink className={styles.commit} deployment={deployment} commit={isFetchError(commit) ? undefined : commit}>
         <SingleCommit commit={commit} deployment={deployment} />
       </MinardLink>
     </div>
