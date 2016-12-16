@@ -60,6 +60,7 @@
     "@types/react-select": "^1.0.37",
     "@types/react-textarea-autosize": "^4.0.5",
     "atomic-s3": "^0.1.2",
+    "autoprefixer": "^6.5.4",
     "babel-core": "^6.20.0",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-regenerator": "^6.20.0",
