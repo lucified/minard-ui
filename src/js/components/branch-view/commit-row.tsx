@@ -36,10 +36,10 @@ const getScreenshotOrBuildBadge = (deployment?: Deployment, commit?: FetchError 
 const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
   <div className={classNames('row', styles['commit-row'])}>
     <div className="col-xs-2 end-xs">
-      {getScreenshotOrBuildBadge(deployment)}
+      {getScreenshotOrBuildBadge(deployment, commit)}
     </div>
     <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-      <MinardLink className={styles.commit} deployment={deployment} commit={isFetchError(commit) ? undefined : commit}>
+      <MinardLink className={styles.commit} preview={deployment} commit={isFetchError(commit) ? undefined : commit}>
         <SingleCommit commit={commit} deployment={deployment} />
       </MinardLink>
     </div>
