@@ -53,12 +53,12 @@ class MinardLink extends React.Component<Props, any> {
       }
 
       return (
-        <span>{children}</span>
+        <span className={className}>{children}</span>
       );
     } else if (preview) {
       if (!commit) {
         console.error('Missing commit information for preview link!', preview);
-        return <span>{children}</span>;
+        return <span className={className}>{children}</span>;
       }
 
       // Link to build log if preview is not ready
@@ -67,7 +67,7 @@ class MinardLink extends React.Component<Props, any> {
     } else if (comment) {
       if (!commit) {
         console.error('Missing commit information for comment link!', comment);
-        return <span>{children}</span>;
+        return <span className={className}>{children}</span>;
       }
 
       path = `/preview/${commit.hash}/${comment.deployment}/comment/${comment.id}`;
@@ -105,7 +105,7 @@ class MinardLink extends React.Component<Props, any> {
         path = '/projects';
       }
     } else {
-      return <span>{children}</span>;
+      return <span className={className}>{children}</span>;
     }
 
     return (

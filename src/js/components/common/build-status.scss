@@ -1,18 +1,21 @@
 @import '../mixins';
 
 .box {
+  display: inline-block;
   border-radius: 3px;
-  padding: 6px 16px;
+  padding: 7px 16px;
 
   @include nitti-grotesk-medium;
   font-size: 14px;
   color: #FFFFFF;
   letter-spacing: -0.23px;
-  line-height: 25px;
+  line-height: 16px;
 }
 
 .icon {
-  margin-right: 8px;
+  position: relative;
+  top: 1px;
+  margin: 0 8px 4px 0;
 }
 
 .error {
