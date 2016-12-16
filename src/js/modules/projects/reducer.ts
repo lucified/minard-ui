@@ -77,8 +77,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return omit<t.ProjectState, t.ProjectState>(state, id);
       }
 
-      console.log('Tried to remove a project that does not exist.'); // tslint:disable-line
-
       return state;
     case UPDATE_PROJECT:
       const updateProjectAction = <t.UpdateProjectAction> action;
@@ -90,8 +88,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         const updatedProject = Object.assign({}, project, { name, description, repoUrl });
         return Object.assign({}, state, { [id]: updatedProject });
       }
-
-      logMessage('Trying to update nonexistant project.', { action });
 
       return state;
     case STORE_PROJECTS:
@@ -131,8 +127,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         }
       }
 
-      logMessage('Trying to add authors to nonexistant project.', { action });
-
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT:
       const updateActivityTimestampAction = <t.UpdateLatestActivityTimestampAction> action;
@@ -149,8 +143,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return state;
       }
 
-      logMessage('Trying to update timestamp on nonexistant project.', { action });
-
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT:
       const updateLatestCommitAction = <t.UpdateLatestDeployedCommitAction> action;
@@ -166,8 +158,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
         return state;
       }
-
-      logMessage('Trying to update latest deployed commit on nonexistant project.', { action });
 
       return state;
     case REMOVE_BRANCH_FROM_PROJECT:
@@ -188,8 +178,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
         return state;
       }
-
-      logMessage('Trying to remove branch from nonexistant project.', { action });
 
       return state;
     default:
