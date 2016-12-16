@@ -16,9 +16,12 @@ interface Props {
   onToggleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   isOpen: boolean;
   className?: string;
+  authenticatedUser: boolean;
 }
 
-const Header = ({ buildLogSelected, className, commit, deployment, isOpen, onToggleOpen }: Props) => (
+const Header = (
+  { authenticatedUser, buildLogSelected, className, commit, deployment, isOpen, onToggleOpen }: Props,
+) => (
   <div className={classNames(styles.header, className)}>
     {buildLogSelected ? (
       <span>
@@ -31,18 +34,32 @@ const Header = ({ buildLogSelected, className, commit, deployment, isOpen, onTog
             Preview
           </span>
         )}
-        <span className={classNames(styles.tab, styles.selected)}>
-          Build log
-        </span>
+        {isOpen ? (
+          <span className={classNames(styles.tab, styles.selected)}>
+            Build log
+          </span>
+        ) : (
+          <a className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
+            Build log
+          </a>
+        )}
       </span>
     ) : (
       <span>
-        <span className={classNames(styles.tab, styles.selected)}>
-          Preview
-        </span>
-        <MinardLink preview={deployment} commit={commit} buildLog className={styles.tab}>
-          Build log
-        </MinardLink>
+        {isOpen ? (
+          <span className={classNames(styles.tab, styles.selected)}>
+            Preview
+          </span>
+        ) : (
+          <a className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
+            Preview
+          </a>
+        )}
+        {authenticatedUser && (
+          <MinardLink preview={deployment} commit={commit} buildLog className={styles.tab}>
+            Build log
+          </MinardLink>
+        )}
       </span>
     )}
     <span className={styles['comment-count']}>
