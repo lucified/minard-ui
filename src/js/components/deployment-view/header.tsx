@@ -34,15 +34,27 @@ const Header = (
             Preview
           </span>
         )}
-        <span className={classNames(styles.tab, styles.selected)}>
-          Build log
-        </span>
+        {isOpen ? (
+          <span className={classNames(styles.tab, styles.selected)}>
+            Build log
+          </span>
+        ) : (
+          <a className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
+            Build log
+          </a>
+        )}
       </span>
     ) : (
       <span>
-        <span className={classNames(styles.tab, styles.selected)}>
-          Preview
-        </span>
+        {isOpen ? (
+          <span className={classNames(styles.tab, styles.selected)}>
+            Preview
+          </span>
+        ) : (
+          <a className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
+            Preview
+          </a>
+        )}
         {authenticatedUser && (
           <MinardLink preview={deployment} commit={commit} buildLog className={styles.tab}>
             Build log
