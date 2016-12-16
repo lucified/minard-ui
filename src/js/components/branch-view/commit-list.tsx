@@ -40,7 +40,7 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
 
   return (
     <section className={classNames(styles['commit-list'], 'container')}>
-      <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+      <FlipMove enterAnimation="fade" leaveAnimation="fade">
         {commits.map((commit, i) => <CommitRow key={(commit && commit.id) || i} commit={commit} />)}
       </FlipMove>
       {isLoading && <LoadingIcon className={styles.loading} center />}
