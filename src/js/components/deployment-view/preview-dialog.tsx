@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
+import { teamId } from '../../api/team-id';
 import { getValue } from '../../cookie';
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
@@ -51,6 +52,10 @@ class PreviewDialog extends React.Component<Props, State> {
     const { buildLogSelected, className, commit, deployment, highlightComment, preview } = this.props;
     const { dialogOpen } = this.state;
 
+    // This cookie is set in ProjectsFrame.
+    // TODO: Remove this once we have proper user authentication in place.
+    const authenticatedUser = getValue('teamUser') === `${teamId}`;
+
     return (
       <div className={classNames(styles.dialog, className)}>
         <Header
@@ -60,6 +65,7 @@ class PreviewDialog extends React.Component<Props, State> {
           isOpen={dialogOpen}
           onToggleOpen={this.handleToggleOpen}
           buildLogSelected={buildLogSelected}
+          authenticatedUser={authenticatedUser}
         />
         {dialogOpen && (
           <CommitSummary
@@ -68,6 +74,7 @@ class PreviewDialog extends React.Component<Props, State> {
             commit={commit}
             deployment={deployment}
             preview={preview}
+            authenticatedUser={authenticatedUser}
           />
         )}
         {dialogOpen && deployment.comments && !isFetchError(deployment.comments) && deployment.comments.length > 0 && (
@@ -75,6 +82,7 @@ class PreviewDialog extends React.Component<Props, State> {
             className={styles['commit-list']}
             commentIds={deployment.comments}
             highlightComment={highlightComment}
+            authenticatedUser={authenticatedUser}
           />
         )}
         {dialogOpen && (

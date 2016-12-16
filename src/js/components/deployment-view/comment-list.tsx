@@ -14,6 +14,7 @@ interface PassedProps {
   commentIds: string[];
   className?: string;
   highlightComment?: string;
+  authenticatedUser: boolean;
 }
 
 interface GeneratedStateProps {
@@ -78,7 +79,7 @@ class CommentList extends React.Component<Props, any> {
   }
 
   public render() {
-    const { commentIds, comments, className, highlightComment } = this.props;
+    const { authenticatedUser, commentIds, comments, className, highlightComment } = this.props;
 
     return (
       <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
@@ -96,7 +97,7 @@ class CommentList extends React.Component<Props, any> {
                   { [styles.highlighted]: isHighlighted },
                 )}
               >
-                <SingleComment comment={comment} />
+                <SingleComment comment={comment} hideDelete={!authenticatedUser} />
               </div>
             );
           })}

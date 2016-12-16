@@ -1,8 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { teamId } from '../../api/team-id';
-import { getValue } from '../../cookie';
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 import { Preview } from '../../modules/previews';
@@ -16,12 +14,11 @@ interface Props {
   commit: Commit;
   deployment: Deployment;
   preview: Preview;
+  authenticatedUser: boolean;
 }
 
-const CommitSummary = ({ className, commit, deployment, preview }: Props) => {
-  // This cookie is set in ProjectsFrame.
-  // TODO: Remove this once we have proper user authentication in place.
-  const metadata = getValue('teamUser') === `${teamId}` ? (
+const CommitSummary = ({ authenticatedUser, className, commit, deployment, preview }: Props) => {
+  const metadata = authenticatedUser ? (
     <div className={styles.metadata}>
       <MinardLink branch={preview.branch.id} project={preview.project.id}>
         {preview.branch.name}
