@@ -59,7 +59,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
     ).then(
       json => ({ response: json }),
     ).catch(errorResponse => {
-      logMessage('Error while calling API', { errorResponse }, 'info');
+      logMessage('Error while calling API', { path, errorResponse }, 'info');
 
       return generateErrorObject(errorResponse);
     });
