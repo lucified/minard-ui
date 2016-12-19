@@ -55,8 +55,6 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         return Object.assign({}, state, { [projectId]: newProject });
       }
 
-      logMessage('Trying to save branches to project that does not exist.', { action });
-
       return state;
     case Requests.actions.Branches.LoadBranchesForProject.FAILURE.type:
       const fetchError = <FetchError> action;
