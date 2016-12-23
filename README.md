@@ -1,7 +1,15 @@
 
 # Minard UI single-page app
 
-The Minard single page app. Technologies used:
+[Minard](https://www.lucify.com/minard) is a preview service that
+integrates with version control, automatically
+building and deploying each version of your project. Minard makes it easy
+to share functional versions of quick web projects for feedback.
+
+This repository contains the Minard UI single page app. It is meant to be
+used together with [minard-backend](https://github.com/lucified/minard-backend).
+
+The main technologies used to build minard-ui are:
 
 - TypeScript 2.0
 - React + react-router
@@ -10,83 +18,69 @@ The Minard single page app. Technologies used:
 
 ## Requirements
 
-NPM must be installed.
+Node 6, NPM and tslint must be installed.
 
 ```shell
 npm install -g tslint tslint-react
 ```
 
-## Install
+## Development
+
+Set up the development environment with:
 
 ```shell
 npm install
 ```
 
-## Development with bundled JSON files
+### Standalone development using the bundled JSON files
 
 ```shell
 npm start # then open http://localhost:3000/ in a browser
 ```
 
-## Development with backend
+### Development with minard-backend
+
+Install minard-backend locally or on a separate server and start
+minard-ui with:
 
 ```shell
-npm start -- <API URL> <Team ID>
+npm start -- <minard-backend API URL> <Team ID> # then open http://localhost:3000/ in a browser
 ```
 
-By default, the minard-backed (charles) API runs on `http://localhost:8000`:
+By default, when run locally, the minard-backend (charles) API runs
+on `http://localhost:8000`:
 
 ```shell
-npm start -- http://localhost:8000 2
+npm start -- http://localhost:8000 3
 ```
+
+Note that the team ID needs to match the ID of a team that has been
+created in [minard-backend](https://github.com/lucified/minard-backend).
 
 ## Building for production
 
-You can build the project into `dist/` by running:
+Build a production version of the app into `dist/` by running:
 
 ```shell
 NODE_ENV=production CHARLES=<API URL> npm run build
 ```
 
-To have it watch for changes and update the build accordingly, run:
+To watch for changes and update the build accordingly, run:
 
 ```shell
 NODE_ENV=production CHARLES=<API URL> npm run watch
 ```
 
-## Local deployment
+## Testing
 
-Prerequisites:
- - The AWS profile `lucify-protected` is defined `~/.aws/credentials`.
-
-### To the Q/A environment
-
-Deploy to Lucify's Minard Q/A environment with
-```shell
-LUCIFY_ENV=staging \
-AWS_PROFILE=lucify-protected \
-GITHUB_USERNAME='' \
-CHARLES='https://charles-staging.lucify.com' \
-FLOWDOCK_FLOW_TOKEN=$FLOW_MAIN \
-FLOWDOCK_AUTHOR_NAME=$FLOWDOCK_AUTHOR \
-npm run deploy
-```
-
-Where:
-- `$FLOW_MAIN` is the Flow token to the Flowdock flow in which you wish to be notified
-once the deployment has finished. You can get suitable tokens from the integrations menu of the relevant Flowdock flow.
-- `$FLOWDOCK_AUTHOR_NAME` is your name, to be shown on Flowdock in the notification.
-
-Note that we set `GITHUB_USERNAME` to an empty string to
-make sure it is not defined, so that we don't send any
-notifications of local deployments to GitHub deployment API.
-
-Note that commits to `master` will automatically deploy to the Q/A environment.
-
-# Test
-
-Run `npm test`. To start a watcher, run `npm run test:auto`.
+Run `npm test`. To start a test watcher, run `npm run test:watch`.
 
 ## Other commands
 
 Run `npm run` to see other available commands.
+
+## Acknowledgements
+
+Thank you to the [Google Digital News Inititiative](https://www.digitalnewsinitiative.com/) and
+[Helsingin Sanomat Foundation](http://www.hssaatio.fi/en/) for supporting our work
+on the Minard prototype.

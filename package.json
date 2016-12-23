@@ -10,7 +10,7 @@
     "build": "npm run clean && webpack",
     "compiled-test": "npm run clean-compile && npm run compile && cp -R json lib/ && mocha lib/test",
     "test": "mocha --opts mocha.opts",
-    "test:auto": "mocha --opts mocha.auto.opts --watch",
+    "test:watch": "mocha --opts mocha.auto.opts --watch",
     "deploy": "lucify-notifier npm run deploy-plain",
     "deploy-plain": "npm run build && npm run atomic-s3",
     "atomic-s3": "atomic-s3 --verbose",
