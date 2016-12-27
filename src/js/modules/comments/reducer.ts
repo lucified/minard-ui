@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { mapKeys, omit } from 'lodash';
 import { Reducer } from 'redux';
 
 import { REMOVE_COMMENT, STORE_COMMENTS } from './actions';
@@ -11,10 +11,7 @@ const reducer: Reducer<t.CommentState> = (state = initialState, action: any) => 
     case STORE_COMMENTS:
       const comments = (<t.StoreCommentsAction> action).entities;
       if (comments && comments.length > 0) {
-        const newCommentsObject: t.CommentState =
-          comments.reduce<t.CommentState>((obj: t.CommentState, newComment: t.Comment) =>
-            Object.assign(obj, { [newComment.id]: newComment }),
-          {});
+        const newCommentsObject: t.CommentState = mapKeys(comments, c => c.id);
 
         return {
           ...state,

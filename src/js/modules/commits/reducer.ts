@@ -1,3 +1,4 @@
+import { mapKeys } from 'lodash';
 import { Reducer } from 'redux';
 
 import { logMessage } from '../../logger';
@@ -52,10 +53,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
     case STORE_COMMITS:
       commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
-        const newCommitsObject: t.CommitState =
-          commits.reduce<t.CommitState>((obj: t.CommitState, newCommit: t.Commit) =>
-            Object.assign(obj, { [newCommit.id]: newCommit }),
-          {});
+        const newCommitsObject: t.CommitState = mapKeys(commits, c => c.id);
 
         return {
           ...state,

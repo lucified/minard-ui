@@ -1,4 +1,4 @@
-import { omit, uniq, xor } from 'lodash';
+import { mapKeys, omit, uniq, xor } from 'lodash';
 import { Reducer } from 'redux';
 
 import { logMessage } from '../../logger';
@@ -152,10 +152,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       const storeAction = <t.StoreBranchesAction> action;
       branches = storeAction.entities;
       if (branches && branches.length > 0) {
-        const newBranchesObject: t.BranchState =
-          branches.reduce<t.BranchState>((obj: t.BranchState, newBranch: t.Branch) => {
-            return Object.assign(obj, { [newBranch.id]: newBranch });
-          }, {});
+        const newBranchesObject: t.BranchState = mapKeys(branches, b => b.id);
 
         return {
           ...state,
