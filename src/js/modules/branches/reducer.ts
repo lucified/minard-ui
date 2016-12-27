@@ -28,7 +28,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
-        return Object.assign({}, state, { [id]: responseAction });
+        return {
+          ...state,
+          [id]: responseAction,
+        };
       }
 
       logMessage('Fetching failed! Not replacing existing branch entity', { action });
@@ -42,11 +45,14 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
         if (xor(branch.commits, commitsAction.commits).length > 0) {
           const newCommitsList = uniq(branch.commits.concat(commitsAction.commits));
-          const newBranch = Object.assign({}, branch, {
-            commits: newCommitsList,
-            allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
-          });
-          return Object.assign({}, state, { [commitsAction.id]: newBranch });
+          return {
+            ...state,
+            [commitsAction.id]: {
+              ...branch,
+              commits: newCommitsList,
+              allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
+            },
+          };
         }
 
         return state;
@@ -61,8 +67,13 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       if (branch && !isFetchError(branch)) {
         const { commit } = updateLatestDeployedAction;
         if (branch.latestSuccessfullyDeployedCommit !== commit) {
-          const newBranch = Object.assign({}, branch, { latestSuccessfullyDeployedCommit: commit });
-          return Object.assign({}, state, { [id]: newBranch });
+          return {
+            ...state,
+            [id]: {
+              ...branch,
+              latestSuccessfullyDeployedCommit: commit,
+            },
+          };
         }
 
         return state;
@@ -83,7 +94,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       id = storeCommitsAction.id;
       branch = state[id];
       if (branch && !isFetchError(branch)) {
-        const newBranch = Object.assign({}, branch, { latestCommit: storeCommitsAction.latestCommitId });
+        const newBranch = {
+          ...branch,
+          latestCommit: storeCommitsAction.latestCommitId,
+        };
 
         // Try to find any of the parentIds in the commits of the branch
         let foundIndex = -1;
@@ -108,7 +122,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
           newBranch.commits = newCommitIds.concat(newBranch.commits.slice(foundIndex));
         }
 
-        return Object.assign({}, state, { [id]: newBranch });
+        return {
+          ...state,
+          [id]: newBranch,
+        };
       }
 
       return state;
@@ -120,8 +137,13 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       if (branch && !isFetchError(branch)) {
         const { timestamp } = updateActivityTimestampAction;
         if (branch.latestActivityTimestamp !== timestamp) {
-          const newBranch = Object.assign({}, branch, { latestActivityTimestamp: timestamp });
-          return Object.assign({}, state, { [id]: newBranch });
+          return {
+            ...state,
+            [id]: {
+              ...branch,
+              latestActivityTimestamp: timestamp,
+            },
+          };
         }
       }
 
@@ -135,7 +157,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
             return Object.assign(obj, { [newBranch.id]: newBranch });
           }, {});
 
-        return Object.assign({}, state, newBranchesObject);
+        return {
+          ...state,
+          ...newBranchesObject,
+        };
       }
 
       return state;

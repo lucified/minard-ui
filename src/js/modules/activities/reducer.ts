@@ -15,7 +15,10 @@ const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState
             Object.assign(obj, { [newActivity.id]: newActivity }),
           {});
 
-        return Object.assign({}, state, newActivitiesObject);
+        return {
+          ...state,
+          ...newActivitiesObject,
+        };
       }
 
       return state;

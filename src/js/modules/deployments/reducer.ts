@@ -40,10 +40,12 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       existingDeployment = state[id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         if (!existingDeployment.comments || isFetchError(existingDeployment.comments)) {
-          const newDeploymentObject = Object.assign({}, existingDeployment, { comments: fetchErrorAction });
           return {
             ...state,
-            [id]: newDeploymentObject,
+            [id]: {
+              ...existingDeployment,
+              comments: fetchErrorAction,
+            },
           };
         }
 

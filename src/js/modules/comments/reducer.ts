@@ -16,7 +16,10 @@ const reducer: Reducer<t.CommentState> = (state = initialState, action: any) => 
             Object.assign(obj, { [newComment.id]: newComment }),
           {});
 
-        return Object.assign({}, state, newCommentsObject);
+        return {
+          ...state,
+          ...newCommentsObject,
+        };
       }
 
       return state;

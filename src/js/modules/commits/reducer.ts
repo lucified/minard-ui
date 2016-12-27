@@ -20,7 +20,10 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       id = responseAction.id;
       commit = state[id];
       if (!commit || isFetchError(commit)) {
-        return Object.assign({}, state, { [id]: responseAction });
+        return {
+          ...state,
+          [id]: responseAction,
+        };
       }
 
       logMessage('Fetching failed! Not replacing existing commit entity', { action });
@@ -31,10 +34,15 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       commit = state[id];
       if (commit && !isFetchError(commit)) {
         if (commit.deployment !== action.deployment) {
-          const newCommit = Object.assign({}, commit);
-          newCommit.deployment = action.deployment;
-          return Object.assign({}, state, { [id]: newCommit });
+          return {
+            ...state,
+            [id]: {
+              ...commit,
+              deployment: action.deployment,
+            },
+          };
         }
+
         return state;
       }
 
@@ -49,7 +57,10 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
             Object.assign(obj, { [newCommit.id]: newCommit }),
           {});
 
-        return Object.assign({}, state, newCommitsObject);
+        return {
+          ...state,
+          ...newCommitsObject,
+        };
       }
 
       return state;

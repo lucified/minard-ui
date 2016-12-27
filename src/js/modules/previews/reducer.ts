@@ -15,7 +15,10 @@ const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => 
       const id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
-        return Object.assign({}, state, { [id]: responseAction });
+        return {
+          ...state,
+          [id]: responseAction,
+        };
       }
 
       console.error('Fetching of preview failed! Not replacing existing entity.');
@@ -24,7 +27,10 @@ const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => 
     case STORE_PREVIEW:
       const preview: t.Preview = (<t.StorePreviewAction> action).preview;
       if (preview) {
-        return Object.assign({}, state, { [preview.deployment]: preview });
+        return {
+          ...state,
+          [preview.deployment]: preview,
+        };
       }
 
       console.error('No preview found when storing preview.', action);
