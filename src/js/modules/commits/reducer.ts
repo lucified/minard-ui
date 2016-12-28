@@ -1,3 +1,4 @@
+import { mapKeys } from 'lodash';
 import { Reducer } from 'redux';
 
 import { logMessage } from '../../logger';
@@ -20,7 +21,10 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       id = responseAction.id;
       commit = state[id];
       if (!commit || isFetchError(commit)) {
-        return Object.assign({}, state, { [id]: responseAction });
+        return {
+          ...state,
+          [id]: responseAction,
+        };
       }
 
       logMessage('Fetching failed! Not replacing existing commit entity', { action });
@@ -31,10 +35,15 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       commit = state[id];
       if (commit && !isFetchError(commit)) {
         if (commit.deployment !== action.deployment) {
-          const newCommit = Object.assign({}, commit);
-          newCommit.deployment = action.deployment;
-          return Object.assign({}, state, { [id]: newCommit });
+          return {
+            ...state,
+            [id]: {
+              ...commit,
+              deployment: action.deployment,
+            },
+          };
         }
+
         return state;
       }
 
@@ -44,12 +53,12 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
     case STORE_COMMITS:
       commits = (<t.StoreCommitsAction> action).entities;
       if (commits && commits.length > 0) {
-        const newCommitsObject: t.CommitState =
-          commits.reduce<t.CommitState>((obj: t.CommitState, newCommit: t.Commit) =>
-            Object.assign(obj, { [newCommit.id]: newCommit }),
-          {});
+        const newCommitsObject: t.CommitState = mapKeys(commits, c => c.id);
 
-        return Object.assign({}, state, newCommitsObject);
+        return {
+          ...state,
+          ...newCommitsObject,
+        };
       }
 
       return state;

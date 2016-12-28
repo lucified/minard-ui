@@ -1,3 +1,4 @@
+import { mapKeys } from 'lodash';
 import { Reducer } from 'redux';
 
 import { logMessage } from '../../logger';
@@ -40,10 +41,12 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       existingDeployment = state[id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         if (!existingDeployment.comments || isFetchError(existingDeployment.comments)) {
-          const newDeploymentObject = Object.assign({}, existingDeployment, { comments: fetchErrorAction });
           return {
             ...state,
-            [id]: newDeploymentObject,
+            [id]: {
+              ...existingDeployment,
+              comments: fetchErrorAction,
+            },
           };
         }
 
@@ -58,10 +61,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
     case STORE_DEPLOYMENTS:
       const deploymentsArray = (<t.StoreDeploymentsAction> action).entities;
       if (deploymentsArray && deploymentsArray.length > 0) {
-        const newDeploymentsObject: t.DeploymentState =
-          deploymentsArray.reduce<t.DeploymentState>((obj: t.DeploymentState, newDeployment: t.Deployment) =>
-            Object.assign(obj, { [newDeployment.id]: newDeployment }),
-          {});
+        const newDeploymentsObject: t.DeploymentState = mapKeys(deploymentsArray, d => d.id);
 
         return {
           ...state,

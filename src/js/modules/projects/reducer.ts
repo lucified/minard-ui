@@ -29,7 +29,10 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
-        return Object.assign({}, state, { [id]: responseAction });
+        return {
+          ...state,
+          [id]: responseAction,
+        };
       }
 
       logMessage('Fetching failed! Not replacing existing entity.', { action });
@@ -51,8 +54,14 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         } else {
           newBranches = branches;
         }
-        const newProject = Object.assign({}, project, { branches: newBranches });
-        return Object.assign({}, state, { [projectId]: newProject });
+
+        return {
+          ...state,
+          [projectId]: {
+            ...project,
+            branches: newBranches,
+          },
+        };
       }
 
       return state;
@@ -62,8 +71,13 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       // Only store the FetchError if branches does not exist or it's an error
       if (project && !isFetchError(project) && (!project.branches || isFetchError(project.branches))) {
-        const newProject = Object.assign({}, project, { branches: fetchError });
-        return Object.assign({}, state, { [fetchError.id]: newProject });
+        return {
+          ...state,
+          [fetchError.id]: {
+            ...project,
+            branches: fetchError,
+          },
+        };
       }
 
       return state;
@@ -83,15 +97,22 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       if (project && !isFetchError(project)) {
         const { name, description, repoUrl } = updateProjectAction;
-        const updatedProject = Object.assign({}, project, { name, description, repoUrl });
-        return Object.assign({}, state, { [id]: updatedProject });
+        return {
+          ...state,
+          [id]: {
+            ...project,
+            name,
+            description,
+            repoUrl,
+          },
+        };
       }
 
       return state;
     case STORE_PROJECTS:
       const projects = (<t.StoreProjectsAction> action).entities;
       if (projects && projects.length > 0) {
-        const newProjects = projects.reduce<t.ProjectState>((obj: t.ProjectState, newProject: t.Project) => {
+        const newProjects = projects.reduce<t.ProjectState>((obj, newProject) => {
           // If existing project has branches, store those
           const existingProject = state[newProject.id];
           if (existingProject && !isFetchError(existingProject) && existingProject.branches) {
@@ -101,7 +122,10 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
           return Object.assign(obj, { [newProject.id]: newProject });
         }, {});
 
-        return Object.assign({}, state, newProjects);
+        return {
+          ...state,
+          ...newProjects,
+        };
       }
 
       return state;
@@ -118,10 +142,13 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
           // All users already included
           return state;
         } else {
-          const newProject = Object.assign({}, project);
-          newProject.activeUsers = unionBy(action.authors, project.activeUsers, (user: t.ProjectUser) => user.email);
-
-          return Object.assign({}, state, { [id]: newProject });
+          return {
+            ...state,
+            [id]: {
+              ...project,
+              activeUsers: unionBy(action.authors, project.activeUsers, (user: t.ProjectUser) => user.email),
+            },
+          };
         }
       }
 
@@ -134,8 +161,13 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (project && !isFetchError(project)) {
         const { timestamp } = updateActivityTimestampAction;
         if (project.latestActivityTimestamp !== timestamp) {
-          const newProject = Object.assign({}, project, { latestActivityTimestamp: timestamp });
-          return Object.assign({}, state, { [id]: newProject });
+          return {
+            ...state,
+            [id]: {
+              ...project,
+              latestActivityTimestamp: timestamp,
+            },
+          };
         }
 
         return state;
@@ -150,8 +182,13 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       if (project && !isFetchError(project)) {
         const { commit } = updateLatestCommitAction;
         if (project.latestSuccessfullyDeployedCommit !== commit) {
-          const newProject = Object.assign({}, project, { latestSuccessfullyDeployedCommit: commit });
-          return Object.assign({}, state, { [id]: newProject });
+          return {
+            ...state,
+            [id]: {
+              ...project,
+              latestSuccessfullyDeployedCommit: commit,
+            },
+          };
         }
 
         return state;
@@ -167,10 +204,13 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
         if (project.branches && !isFetchError(project.branches)) {
           const { branch } = removeBranchAction;
           if (project.branches.indexOf(branch) > -1) {
-            const newProject = Object.assign({}, project, {
-              branches: project.branches.filter(branchId => branchId !== branch),
-            });
-            return Object.assign({}, state, { [id]: newProject });
+            return {
+              ...state,
+              [id]: {
+                ...project,
+                branches: project.branches.filter(branchId => branchId !== branch),
+              },
+            };
           }
         }
 

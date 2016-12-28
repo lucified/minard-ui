@@ -1,3 +1,4 @@
+import { mapKeys } from 'lodash';
 import { Reducer } from 'redux';
 
 import { STORE_ACTIVITIES } from './actions';
@@ -10,12 +11,12 @@ const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState
     case STORE_ACTIVITIES:
       const activities = (<t.StoreActivitiesAction> action).entities;
       if (activities && activities.length > 0) {
-        const newActivitiesObject: t.ActivityState =
-          activities.reduce<t.ActivityState>((obj: t.ActivityState, newActivity: t.Activity) =>
-            Object.assign(obj, { [newActivity.id]: newActivity }),
-          {});
+        const newActivitiesObject: t.ActivityState = mapKeys(activities, activity => activity.id);
 
-        return Object.assign({}, state, newActivitiesObject);
+        return {
+          ...state,
+          ...newActivitiesObject,
+        };
       }
 
       return state;
