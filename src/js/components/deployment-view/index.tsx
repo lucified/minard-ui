@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import Comments from '../../modules/comments';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
@@ -34,28 +33,25 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadPreview: (deploymentId: string, commitHash: string) => void;
-  loadCommentsForDeployment: (deploymentId: string) => void;
+  loadPreviewAndComments: (deploymentId: string, commitHash: string) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 class ProjectsFrame extends React.Component<Props, any> {
   public componentWillMount() {
-    const { loadCommentsForDeployment, loadPreview } = this.props;
+    const { loadPreviewAndComments } = this.props;
     const { deploymentId, commitHash } = this.props.params;
 
-    loadPreview(deploymentId, commitHash);
-    loadCommentsForDeployment(deploymentId);
+    loadPreviewAndComments(deploymentId, commitHash);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadCommentsForDeployment, loadPreview } = nextProps;
+    const { loadPreviewAndComments } = nextProps;
     const { commitHash, deploymentId } = nextProps.params;
 
     if (deploymentId !== this.props.params.deploymentId) {
-      loadPreview(deploymentId, commitHash);
-      loadCommentsForDeployment(deploymentId);
+      loadPreviewAndComments(deploymentId, commitHash);
     }
   }
 
@@ -123,7 +119,6 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   {
-    loadPreview: Previews.actions.loadPreview,
-    loadCommentsForDeployment: Comments.actions.loadCommentsForDeployment,
+    loadPreviewAndComments: Previews.actions.loadPreviewAndComments,
   },
 )(ProjectsFrame);

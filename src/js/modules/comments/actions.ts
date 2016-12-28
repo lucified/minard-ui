@@ -1,11 +1,5 @@
 import * as t from './types';
 
-export const LOAD_COMMENTS_FOR_DEPLOYMENT = 'COMMENTS/LOAD_COMMENTS_FOR_DEPLOYMENT';
-export const loadCommentsForDeployment = (id: string): t.LoadCommentsForDeploymentAction => ({
-  type: LOAD_COMMENTS_FOR_DEPLOYMENT,
-  id,
-});
-
 export const DELETE_COMMENT = 'COMMENTS/DELETE_COMMENT';
 export const deleteComment = (id: string): t.DeleteCommentAction => ({
   type: DELETE_COMMENT,
