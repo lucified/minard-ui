@@ -23,8 +23,8 @@ export interface PreviewState {
 };
 
 // Actions
-// LOAD_PREVIEW
-export interface LoadPreviewAction extends Action {
+// LOAD_PREVIEW_AND_COMMENTS
+export interface LoadPreviewAndCommentsAction extends Action {
   id: string;
   commitHash: string;
 }

@@ -17,13 +17,12 @@ import Comments, {
   Comment,
   CreateCommentAction,
   DeleteCommentAction,
-  LoadCommentsForDeploymentAction,
 } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
-import Deployments, { Deployment, StoreDeploymentsAction } from '../modules/deployments';
+import Deployments, { Deployment } from '../modules/deployments';
 import { CreateError, EditError, FetchError, isFetchError } from '../modules/errors';
 import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
-import Previews, { LoadPreviewAction, Preview } from '../modules/previews';
+import Previews, { LoadPreviewAndCommentsAction, Preview } from '../modules/previews';
 import Projects, {
   CreateProjectAction,
   DeleteProjectAction,
@@ -299,23 +298,16 @@ export default function createSagas(api: Api) {
   }
 
   // COMMENTS_FOR_DEPLOYMENT
-  function* loadCommentsForDeployment(action: LoadCommentsForDeploymentAction): IterableIterator<Effect> {
-    const { id } = action;
+  function* loadCommentsForDeployment(id: string): IterableIterator<Effect> {
     let deployment = <Deployment | FetchError | undefined> (yield select(Deployments.selectors.getDeployment, id));
-
-    // Wait until we've received the deployment before continuing
-    while (!deployment) {
-      const { entities: deployments } = <StoreDeploymentsAction> (yield take(Deployments.actions.STORE_DEPLOYMENTS));
-      deployment = deployments.find(d => d.id === id);
-    }
 
     // Return if we're already requesting
     if (yield select(Requests.selectors.isLoadingCommentsForDeployment, id)) {
       return;
     }
 
-    if (isFetchError(deployment)) {
-      logMessage('Deployment not found. Not fetching comments for deployment.', { action });
+    if (!deployment || isFetchError(deployment)) {
+      logMessage('Deployment not found. Not fetching comments for deployment.', { id });
     } else if (deployment.comments) {
       // Comments already exist. Do nothing.
       // TODO: remove this eventually once we make sure everything works ok
@@ -460,12 +452,17 @@ export default function createSagas(api: Api) {
   }
 
   // PREVIEW
-  function* loadPreview(action: LoadPreviewAction): IterableIterator<Effect> {
+  function* loadPreviewAndComments(action: LoadPreviewAndCommentsAction): IterableIterator<Effect> {
     const { id, commitHash } = action;
     const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
+    let previewExists = !!existingPreview;
 
     if (!existingPreview) {
-      yield call(fetchPreview, id, commitHash);
+      previewExists = yield call(fetchPreview, id, commitHash);
+    }
+
+    if (previewExists) {
+      yield call(loadCommentsForDeployment, id);
     }
   }
 
@@ -649,16 +646,12 @@ export default function createSagas(api: Api) {
     yield takeLatest(Comments.actions.CREATE_COMMENT, createComment);
   }
 
-  function* watchForLoadCommentsForDeployment() {
-    yield takeEvery(Comments.actions.LOAD_COMMENTS_FOR_DEPLOYMENT, loadCommentsForDeployment);
-  }
-
   function* watchForLoadCommit() {
     yield takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
   }
 
-  function* watchForLoadPreview() {
-    yield takeEvery(Previews.actions.LOAD_PREVIEW, loadPreview);
+  function* watchForLoadPreviewAndComments() {
+    yield takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments);
   }
 
   function* watchForLoadActivities(): IterableIterator<Effect> {
@@ -709,12 +702,11 @@ export default function createSagas(api: Api) {
       fork(watchForLoadDeployment),
       fork(watchForCreateComment),
       fork(watchForDeleteComment),
-      fork(watchForLoadCommentsForDeployment),
       fork(watchForLoadCommit),
       fork(watchForLoadCommitsForBranch),
       fork(watchForLoadActivities),
       fork(watchForLoadActivitiesForProject),
-      fork(watchForLoadPreview),
+      fork(watchForLoadPreviewAndComments),
       fork(watchForFormSubmit),
       fork(watchForUpdateBranchWithCommits),
     ];
@@ -727,7 +719,7 @@ export default function createSagas(api: Api) {
     watchForLoadBranchesForProject,
     watchForLoadProject,
     watchForLoadAllProjects,
-    watchForLoadCommentsForDeployment,
+    watchForLoadPreviewAndComments,
     watchForLoadCommit,
     watchForLoadCommitsForBranch,
     watchForLoadActivities,

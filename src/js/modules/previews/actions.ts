@@ -6,9 +6,9 @@ export const storePreviews = (preview: t.Preview): t.StorePreviewAction => ({
   preview,
 });
 
-export const LOAD_PREVIEW = 'PREVIEW/LOAD_PREVIEW';
-export const loadPreview = (id: string, commitHash: string): t.LoadPreviewAction => ({
-  type: LOAD_PREVIEW,
+export const LOAD_PREVIEW_AND_COMMENTS = 'PREVIEW/LOAD_PREVIEW_AND_COMMENTS';
+export const loadPreviewAndComments = (id: string, commitHash: string): t.LoadPreviewAndCommentsAction => ({
+  type: LOAD_PREVIEW_AND_COMMENTS,
   id,
   commitHash,
 });

@@ -9,5 +9,4 @@ export {
   CreateCommentAction,
   CreateCommentFormData,
   DeleteCommentAction,
-  LoadCommentsForDeploymentAction,
 } from './types';

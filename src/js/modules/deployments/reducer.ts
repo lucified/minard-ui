@@ -58,6 +58,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       logMessage('Deployment entity does not exist when setting comments', { action });
 
       return state;
+    // Add/replace deployments into state
     case STORE_DEPLOYMENTS:
       const deploymentsArray = (<t.StoreDeploymentsAction> action).entities;
       if (deploymentsArray && deploymentsArray.length > 0) {

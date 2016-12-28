@@ -15,11 +15,6 @@ export interface CommentState {
 };
 
 // Actions
-// LOAD_COMMENTS_FOR_DEPLOYMENT
-export interface LoadCommentsForDeploymentAction extends Action {
-  id: string;
-}
-
 // DELETE_COMMENT
 export interface DeleteCommentAction extends Action {
   id: string;
