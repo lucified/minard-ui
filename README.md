@@ -6,6 +6,9 @@ integrates with version control, automatically
 building and deploying each version of your project. Minard makes it easy
 to share functional versions of quick web projects for feedback.
 
+Minard is still being prototyped, and thus might not be ready for production.
+Any part of the app may change.
+
 This repository contains the Minard UI single page app. It is meant to be
 used together with [minard-backend](https://github.com/lucified/minard-backend).
 
