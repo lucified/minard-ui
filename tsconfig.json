@@ -16,6 +16,7 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
+      "react-autosize-textarea": ["types/react-autosize-textarea"],
       "react-flip-move": ["types/react-flip-move"],
       "react-fontawesome": ["types/react-fontawesome"],
       "react-modal": ["types/react-modal/react-modal"],

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Textarea from 'react-textarea-autosize';
+import * as Textarea from 'react-autosize-textarea';
 import { BaseFieldProps } from 'redux-form';
 
 const styles = require('./comment-field.scss');
