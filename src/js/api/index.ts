@@ -17,7 +17,7 @@ export const getBuildLogURL = (deploymentId: string): string =>
   `${host}/ci/deployments/${deploymentId}/trace`;
 
 const defaultOptions = {
-  credentials: 'same-origin',
+  credentials: 'include',
   headers: {
     Accept: 'application/vnd.api+json',
   },
