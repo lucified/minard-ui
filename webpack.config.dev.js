@@ -9,7 +9,6 @@ const productionConfig = require('./webpack.config.js'); // eslint-disable-line
 
 const devOptions = {
   cache: true,
-
   // For server path
   output: {
     publicPath: '/',
@@ -44,7 +43,6 @@ const devOptions = {
     ],
   },
   devtool: 'cheap-module-eval-source-map',
-
   plugins: [
     // For awesome-typescript-loader's async error reporting, i.e. watch mode
     new CheckerPlugin(),
