@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
@@ -35,52 +33,72 @@ const name = '[name]-[hash:8].[ext]';
 /*
  * Get the webpack loaders object for the webpack configuration
  */
-const loaders = [
+const rules = [
   { // NOTE: babel-loader + ts-loader needs to be first in the array. See webpack.config.dev.js
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
-    loaders: [
+    use: [
       'babel-loader?presets[]=es2015&plugins[]=transform-regenerator',
       'ts-loader',
     ],
   },
   {
     test: /\.(jpeg|jpg|gif|png)$/,
-    loader: `file-loader?name=${name}`,
+    use: [`file-loader?name=${name}`],
   },
   {
     test: /\.hbs$/,
-    loader: `handlebars-loader?helperDirs[]=${__dirname}/src/templates/helpers`,
+    use: [`handlebars-loader?helperDirs[]=${__dirname}/src/templates/helpers`],
   },
   {
     test: /\.scss$/,
-    loaders: [
+    use: [
       'style-loader',
-      'css-loader?modules&importLoaders=2&localIdentName=[name]__[local]___[hash:base64:5]',
-      'postcss-loader',
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 2,
+          localIdentName: '[name]__[local]___[hash:base64:5]',
+        },
+      },
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: () => [
+            autoprefixer,
+            postcssReporter,
+          ],
+        },
+      },
       'sass-loader',
     ],
   },
   // For Font Awesome. From https://gist.github.com/Turbo87/e8e941e68308d3b40ef6
   {
     test: /\.css$/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
+    // Note: Currently, this only works if you use the `loader` syntax.
+    // might need to switch to new `use` syntax at some point.
+    loader: ExtractTextPlugin.extract({
+      fallbackLoader: 'style-loader',
+      loader: 'css-loader',
+    }),
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    loader: `url-loader?limit=10000&mimetype=application/font-woff&name=${name}`,
+    use: [`url-loader?limit=10000&mimetype=application/font-woff&name=${name}`],
   },
   {
     test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-    loader: `url?limit=10000&mimetype=application/octet-stream&name=${name}`,
+    use: [`url-loader?limit=10000&mimetype=application/octet-stream&name=${name}`],
   },
   {
     test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-    loader: `file?name=${name}`,
+    use: [`file-loader?name=${name}`],
   },
   {
     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-    loader: `url?limit=10000&mimetype=image/svg+xml&name=${name}`,
+    use: [`url-loader?limit=10000&mimetype=image/svg+xml&name=${name}`],
   },
 ];
 
@@ -143,26 +161,15 @@ function getStreamingAPI() {
 
 const config = {
   resolve: {
-    modulesDirectories: ['node_modules'],
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
   },
   module: {
-    loaders,
-    preloaders: [],
-  },
-  resolveLoader: {
-    root: [path.resolve(__dirname, '../node_modules')],
+    rules,
   },
   output: {
     filename: 'index-[hash].js',
     path: deployConfig.base.dest,
     publicPath: deployConfig.base.publicPath,
-  },
-  postcss: function postcss() {
-    return [
-      autoprefixer,
-      postcssReporter,
-    ];
   },
   entry: [
     'babel-polyfill',
@@ -193,13 +200,16 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
+    // LopaderOptionsPlugin with minimize:true will be removed in Webpack 3.
+    // Will need to add minimize: true to loaders at that point.
+    // See https://webpack.js.org/guides/migrating/#uglifyjsplugin-minimize-loaders
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
     new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
+      sourceMap: false,
     }),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
   ]);
 }
 
