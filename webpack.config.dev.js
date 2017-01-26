@@ -4,7 +4,11 @@ const config = require('./webpack.config.js'); // eslint-disable-line
 config.output.publicPath = '/';
 
 // For source maps
-config.module.preloaders.push({ test: /\.js$/, loader: 'source-map-loader' });
+config.module.rules.push({
+  test: /\.js$/,
+  use: ["source-map-loader"],
+  enforce: "pre"
+});
 config.devtool = 'source-map';
 
 // For dev server
@@ -13,11 +17,11 @@ config.devServer = {
 };
 
 // For Hot module reloading
-config.module.loaders.shift();
-config.module.loaders.push({
+config.module.rules.shift();
+config.module.rules.push({
   test: /\.tsx?$/,
   exclude: /\.spec\.tsx?$/,
-  loaders: [
+  use: [
     'babel-loader?presets[]=es2015&presets[]=react-hmre&plugins[]=transform-regenerator',
     'ts-loader',
   ],

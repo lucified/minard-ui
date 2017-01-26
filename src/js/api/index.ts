@@ -53,7 +53,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
       response => response.json().then(json => ({
         json,
         response,
-      })) as Promise<{ json: any, response: IResponse}>,
+      })) as Promise<{ json: any, response: any }>,
     ).then(
       ({ json, response }) => response.ok ? json : Promise.reject(json),
     ).then(

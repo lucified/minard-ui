@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Select from 'react-select';
 import 'react-select/dist/react-select.css';
-import { Field, FormProps, reduxForm } from 'redux-form';
+import { Field, FormProps, reduxForm, WrappedFieldProps } from 'redux-form';
 
 import { onSubmitPromiseCreator } from '../../modules/forms';
 import Projects, { CreateProjectFormData, Project } from '../../modules/projects';
@@ -106,11 +106,12 @@ class NewProjectForm extends React.Component<Props, any> {
               {submitting ? 'Creating...' : 'Create project'}
             </button>
           </div>
+          {/* TODO: don't inline function below */}
           {dropdownValues.length > 0 && (
             <div>
               <Field
                 name="projectTemplate"
-                component={field =>
+                component={(field: WrappedFieldProps) =>
                   <Select
                     value={field.input.value}
                     onChange={field.input.onChange}
@@ -118,7 +119,7 @@ class NewProjectForm extends React.Component<Props, any> {
                     options={dropdownValues}
                     placeholder="Clone existing project…"
                     autosize={false}
-                    disabled={field.meta.submitting}
+                    disabled={(field.meta as any).submitting}
                     className={styles['template-dropdown']}
                     simpleValue
                   />

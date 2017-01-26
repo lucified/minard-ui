@@ -1,4 +1,3 @@
-
 const lucifyDeployConfig = require('lucify-deploy-config').default; // eslint-disable-line
 
 const opts = {
