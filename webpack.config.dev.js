@@ -14,6 +14,8 @@ config.devtool = 'source-map';
 // For dev server
 config.devServer = {
   publicPath: '/',
+  // For historyRouter
+  historyApiFallback: true,
 };
 
 // For Hot module reloading
