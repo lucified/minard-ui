@@ -77,9 +77,7 @@ const rules = [
   // For Font Awesome. From https://gist.github.com/Turbo87/e8e941e68308d3b40ef6
   {
     test: /\.css$/,
-    // Note: Currently, this only works if you use the `loader` syntax.
-    // might need to switch to new `use` syntax at some point.
-    loader: ExtractTextPlugin.extract({
+    use: ExtractTextPlugin.extract({
       fallbackLoader: 'style-loader',
       loader: 'css-loader',
     }),
