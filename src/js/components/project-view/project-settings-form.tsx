@@ -29,7 +29,7 @@ interface GeneratedStateProps {
   isProjectNameEdited: boolean;
 }
 
-type Props = PassedProps & FormProps<EditProjectFormData, any>;
+type Props = PassedProps & FormProps<EditProjectFormData, PassedProps & GeneratedStateProps, void>;
 
 const validate = (values: EditProjectFormData, props: Props) => {
   const errors: Partial<EditProjectFormData> = {};

@@ -2,13 +2,25 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as Textarea from 'react-autosize-textarea';
 import * as Icon from 'react-fontawesome';
-import { BaseFieldProps } from 'redux-form';
+import { BaseFieldProps, WrappedFieldMetaProps } from 'redux-form';
 
 const styles = require('./field.scss');
 
 interface PassedProps {
   instructions: string;
 }
+
+// These should come from redux-form typings somehow, but don't know how
+interface ReduxFormProps {
+  meta: WrappedFieldMetaProps<any>;
+  input: any; // WrappedFieldInputProps
+  // HTML props
+  type: string;
+  label: string;
+  placeholder: string;
+}
+
+type Props = BaseFieldProps & PassedProps & ReduxFormProps;
 
 const Field = ({
   instructions,
@@ -22,7 +34,7 @@ const Field = ({
     error,
     touched,
   },
-}: BaseFieldProps & PassedProps) => {
+}: Props) => {
   const inputComponent = type === 'textarea' ?
     <Textarea {...input} placeholder={placeholder} type={type} /> :
     <input {...input} placeholder={placeholder} type={type} />;
