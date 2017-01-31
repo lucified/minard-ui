@@ -54,8 +54,8 @@ export default function createSagas(api: Api) {
       projects: fetchProject,
     };
 
-    const selector = (<any> selectors)[type];
-    const fetcher = (<any> fetchers)[type];
+    const selector = (selectors as any)[type];
+    const fetcher = (fetchers as any)[type];
 
     let existingEntity = yield select(selector, id);
 
@@ -89,7 +89,7 @@ export default function createSagas(api: Api) {
     count: number,
     _until?: number,
   ): IterableIterator<Effect> {
-    if ((<ApiEntity[]> response.data).length < count) {
+    if ((response.data as ApiEntity[]).length < count) {
       yield put(Requests.actions.allActivitiesRequested());
     }
   }
@@ -127,7 +127,7 @@ export default function createSagas(api: Api) {
     count: number,
     _until?: number,
   ): IterableIterator<Effect> {
-    if ((<ApiEntity[]> response.data).length < count) {
+    if ((response.data as ApiEntity[]).length < count) {
       yield put(Requests.actions.allActivitiesRequestedForProject(id));
     }
   }
@@ -148,7 +148,7 @@ export default function createSagas(api: Api) {
   );
 
   function* ensureAllProjectsRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
-    const projects = <Project[]> (yield select(Projects.selectors.getProjects));
+    const projects = (yield select(Projects.selectors.getProjects)) as Project[];
 
     if (!projects) {
       logException('Error ensuring project', new Error('No projects found!'));
@@ -174,7 +174,7 @@ export default function createSagas(api: Api) {
     let project: Project | FetchError | undefined;
 
     if (typeof projectOrId === 'string') {
-      project = <Project | FetchError | undefined> (yield select(Projects.selectors.getProject, projectOrId));
+      project = (yield select(Projects.selectors.getProject, projectOrId)) as Project | FetchError | undefined;
     } else {
       project = projectOrId;
     }
@@ -192,9 +192,9 @@ export default function createSagas(api: Api) {
     }
 
     if (project.latestSuccessfullyDeployedCommit) {
-      const commit = <Commit | FetchError | undefined> (
+      const commit = (
         yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit)
-      );
+      ) as Commit | FetchError | undefined;
       if (commit && !isFetchError(commit) && commit.deployment) {
         yield call(fetchIfMissing, 'deployments', commit.deployment);
       }
@@ -211,19 +211,20 @@ export default function createSagas(api: Api) {
   const loadBranch = createLoader(Branches.selectors.getBranch, fetchBranch, ensureBranchRelatedDataLoaded);
 
   function* ensureBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const branch = <Branch | FetchError | undefined> (yield select(Branches.selectors.getBranch, id));
+    const branch = (yield select(Branches.selectors.getBranch, id)) as Branch | FetchError | undefined;
 
     if (branch && !isFetchError(branch)) {
       yield call(fetchIfMissing, 'projects', branch.project);
       if (branch.latestSuccessfullyDeployedCommit) {
-        const commit = <Commit | FetchError | undefined>
-          (yield call(fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit));
+        const commit = (
+          yield call(fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit)
+        ) as Commit | FetchError | undefined;
         if (commit && !isFetchError(commit) && commit.deployment) {
           yield call(fetchIfMissing, 'deployments', commit.deployment);
         }
       }
       if (branch.latestCommit) {
-        const commit = <Commit | FetchError | undefined> (yield call(fetchIfMissing, 'commits', branch.latestCommit));
+        const commit = (yield call(fetchIfMissing, 'commits', branch.latestCommit)) as Commit | FetchError | undefined;
         if (commit && !isFetchError(commit) && commit.deployment) {
           yield call(fetchIfMissing, 'deployments', commit.deployment);
         }
@@ -234,10 +235,10 @@ export default function createSagas(api: Api) {
   // BRANCHES_FOR_PROJECT
   function* loadBranchesForProject(action: LoadBranchesForProjectAction): IterableIterator<Effect> {
     const id = action.id;
-    let project = <Project | FetchError | undefined> (yield select(Projects.selectors.getProject, id));
+    let project = (yield select(Projects.selectors.getProject, id)) as Project | FetchError | undefined;
 
     while (!project) {
-      const { entities: projects } = <StoreProjectsAction> (yield take(Projects.actions.STORE_PROJECTS));
+      const { entities: projects } = (yield take(Projects.actions.STORE_PROJECTS)) as StoreProjectsAction;
       project = projects.find(p => p.id === id);
     }
 
@@ -265,17 +266,17 @@ export default function createSagas(api: Api) {
   );
 
   function* addBranchesToProject(id: string, response: ApiEntityResponse): IterableIterator<Effect> {
-    const branchIds = (<ApiEntity[]> response.data).map((branch: any) => branch.id);
+    const branchIds = (response.data as ApiEntity[]).map((branch: any) => branch.id);
     yield put(Projects.actions.addBranchesToProject(id, branchIds));
   }
 
   function* ensureBranchesForProjectRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const branches = <Branch[]> (yield select(Branches.selectors.getBranchesForProject, id));
+    const branches = (yield select(Branches.selectors.getBranchesForProject, id)) as Branch[];
 
     // Ensure latest deployed commits and deployments exist
     const deployedCommits =
-      <Commit[]> (yield compact(branches.map(branch => branch.latestSuccessfullyDeployedCommit))
-        .map(commitId => call(fetchIfMissing, 'commits', commitId)));
+      (yield compact(branches.map(branch => branch.latestSuccessfullyDeployedCommit))
+        .map(commitId => call(fetchIfMissing, 'commits', commitId))) as Commit[];
     yield deployedCommits.map(commit => call(fetchIfMissing, 'deployments', commit.deployment));
 
     // Ensure latest commits exist
@@ -299,7 +300,7 @@ export default function createSagas(api: Api) {
 
   // COMMENTS_FOR_DEPLOYMENT
   function* loadCommentsForDeployment(id: string): IterableIterator<Effect> {
-    let deployment = <Deployment | FetchError | undefined> (yield select(Deployments.selectors.getDeployment, id));
+    const deployment = (yield select(Deployments.selectors.getDeployment, id)) as Deployment | FetchError | undefined;
 
     // Return if we're already requesting
     if (yield select(Requests.selectors.isLoadingCommentsForDeployment, id)) {
@@ -330,7 +331,7 @@ export default function createSagas(api: Api) {
     response: ApiEntityResponse,
   ): IterableIterator<Effect> {
     // The response contains the comments in reverse chronological order
-    const commentIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id).reverse();
+    const commentIds = (response.data as ApiEntity[]).map((commit: any) => commit.id).reverse();
     yield put(Deployments.actions.setCommentsForDeployment(id, commentIds));
   }
 
@@ -365,7 +366,7 @@ export default function createSagas(api: Api) {
 
     if (response) {
       // Store new comment
-      const commentObjects = <Comment[]> (yield call(Converter.toComments, response.data));
+      const commentObjects = (yield call(Converter.toComments, response.data)) as Comment[];
       yield put(Comments.actions.storeComments(commentObjects));
       yield put(Deployments.actions.addCommentsToDeployment(deployment, commentObjects.map(comment => comment.id)));
 
@@ -392,7 +393,7 @@ export default function createSagas(api: Api) {
     createLoader(Commits.selectors.getCommit, fetchCommit, ensureCommitRelatedDataLoaded);
 
   function* ensureCommitRelatedDataLoaded(id: string): IterableIterator<Effect> {
-    const commit = <Commit | undefined | FetchError> (yield select(Commits.selectors.getCommit, id));
+    const commit = (yield select(Commits.selectors.getCommit, id)) as Commit | undefined | FetchError;
 
     if (commit && !isFetchError(commit) && commit.deployment) {
       yield call(fetchIfMissing, 'deployments', commit.deployment);
@@ -402,10 +403,10 @@ export default function createSagas(api: Api) {
   // COMMITS_FOR_BRANCH
   function* loadCommitsForBranch(action: LoadCommitsForBranchAction): IterableIterator<Effect> {
     const { id, count, until } = action;
-    let branch = <Branch | FetchError | undefined> (yield select(Branches.selectors.getBranch, id));
+    let branch = (yield select(Branches.selectors.getBranch, id)) as Branch | FetchError | undefined;
 
     while (!branch) {
-      const { entities: branches } = <StoreBranchesAction> (yield take(Branches.actions.STORE_BRANCHES));
+      const { entities: branches } = (yield take(Branches.actions.STORE_BRANCHES)) as StoreBranchesAction;
       branch = branches.find(b => b.id === id);
     }
 
@@ -438,14 +439,14 @@ export default function createSagas(api: Api) {
     count: number,
     _until?: number,
   ): IterableIterator<Effect> {
-    const commitIds = (<ApiEntity[]> response.data).map((commit: any) => commit.id);
+    const commitIds = (response.data as ApiEntity[]).map((commit: any) => commit.id);
     yield put(Branches.actions.addCommitsToBranch(id, commitIds, count));
   }
 
   function* ensureCommitsForBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const branch = <Branch | undefined | FetchError> (yield select(Branches.selectors.getBranch, id));
+    const branch = (yield select(Branches.selectors.getBranch, id)) as Branch | undefined | FetchError;
     if (branch && !isFetchError(branch)) {
-      const commits = <Commit[]> (yield branch.commits.map(commitId => call(fetchIfMissing, 'commits', commitId)));
+      const commits = (yield branch.commits.map(commitId => call(fetchIfMissing, 'commits', commitId))) as Commit[];
       yield compact(commits.map(commit => commit.deployment))
         .map(deploymentId => call(fetchIfMissing, 'deployments', deploymentId));
     }
@@ -508,7 +509,7 @@ export default function createSagas(api: Api) {
       }
 
       // Store new project
-      const projectObject = <Project[]> (yield call(Converter.toProjects, response.data));
+      const projectObject = (yield call(Converter.toProjects, response.data)) as Project[];
       yield put(Projects.actions.storeProjects(projectObject));
 
       // Notify form that creation was a success

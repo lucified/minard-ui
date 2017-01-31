@@ -11,7 +11,7 @@ const initialState: t.PreviewState = {};
 const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => {
   switch (action.type) {
     case Requests.actions.Previews.LoadPreview.FAILURE.type:
-      const responseAction = <FetchError> action;
+      const responseAction = action as FetchError;
       const id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
@@ -25,7 +25,7 @@ const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => 
 
       return state;
     case STORE_PREVIEW:
-      const preview: t.Preview = (<t.StorePreviewAction> action).preview;
+      const preview: t.Preview = (action as t.StorePreviewAction).preview;
       if (preview) {
         return {
           ...state,

@@ -26,7 +26,7 @@ export interface FetchError extends GenericError {
 }
 
 export const isFetchError = (obj: any): obj is FetchError => {
-  const possiblyError = (<FetchError> obj);
+  const possiblyError = obj as FetchError;
   return possiblyError &&
     possiblyError.type !== undefined &&
     possiblyError.error !== undefined &&
@@ -46,7 +46,7 @@ export interface DeleteError extends GenericError {
 }
 
 export const isDeleteError = (obj: any): obj is DeleteError => {
-  const possiblyError = (<DeleteError> obj);
+  const possiblyError = obj as DeleteError;
   return possiblyError &&
     possiblyError.type !== undefined &&
     possiblyError.error !== undefined &&

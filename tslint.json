@@ -12,6 +12,7 @@
     "max-classes-per-file": [false],
     "member-ordering": [false],
     "no-var-requires": false,
+    "no-empty-interface": false,
     "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "quotemark": [true, "single", "avoid-escape", "jsx-double"],

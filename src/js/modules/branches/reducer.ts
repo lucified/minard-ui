@@ -24,7 +24,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
   switch (action.type) {
     case Requests.actions.Branches.LoadBranch.FAILURE.type:
-      const responseAction = <FetchError> action;
+      const responseAction = action as FetchError;
       id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
@@ -38,7 +38,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case ADD_COMMITS_TO_BRANCH:
-      const commitsAction = <t.AddCommitsToBranchAction> action;
+      const commitsAction = action as t.AddCommitsToBranchAction;
       branch = state[commitsAction.id];
       if (branch && !isFetchError(branch)) {
         // Note: we assume we always get older commits, sorted by time in reverse
@@ -60,7 +60,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH:
-      const updateLatestDeployedAction = <t.UpdateLatestDeployedCommitAction> action;
+      const updateLatestDeployedAction = action as t.UpdateLatestDeployedCommitAction;
       id = updateLatestDeployedAction.id;
       branch = state[id];
 
@@ -81,7 +81,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case REMOVE_BRANCH:
-      const removeAction = <t.RemoveBranchAction> action;
+      const removeAction = action as t.RemoveBranchAction;
       id = removeAction.id;
       if (state[id]) {
         return omit<t.BranchState, t.BranchState>(state, id);
@@ -90,7 +90,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       return state;
     // Saves any new commits and sets the latestCommit of the branch
     case UPDATE_BRANCH_WITH_COMMITS:
-      const storeCommitsAction = <t.UpdateBranchWithCommitsAction> action;
+      const storeCommitsAction = action as t.UpdateBranchWithCommitsAction;
       id = storeCommitsAction.id;
       branch = state[id];
       if (branch && !isFetchError(branch)) {
@@ -130,7 +130,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH:
-      const updateActivityTimestampAction = <t.UpdateLatestActivityTimestampAction> action;
+      const updateActivityTimestampAction = action as t.UpdateLatestActivityTimestampAction;
       id = updateActivityTimestampAction.id;
       branch = state[id];
 
@@ -149,7 +149,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case STORE_BRANCHES:
-      const storeAction = <t.StoreBranchesAction> action;
+      const storeAction = action as t.StoreBranchesAction;
       branches = storeAction.entities;
       if (branches && branches.length > 0) {
         const newBranchesObject: t.BranchState = mapKeys(branches, b => b.id);

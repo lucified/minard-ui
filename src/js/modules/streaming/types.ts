@@ -8,7 +8,7 @@ export enum ConnectionState {
 }
 
 // State
-export type StreamingState = {
+export interface StreamingState {
   state: ConnectionState;
   error?: string;
 };

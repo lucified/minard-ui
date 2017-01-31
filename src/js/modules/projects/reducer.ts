@@ -25,7 +25,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
   switch (action.type) {
     case Requests.actions.Projects.LoadProject.FAILURE.type:
-      const responseAction = <FetchError> action;
+      const responseAction = action as FetchError;
       id = responseAction.id;
       const existingEntity = state[id];
       if (!existingEntity || isFetchError(existingEntity)) {
@@ -39,7 +39,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case ADD_BRANCHES_TO_PROJECT:
-      const { id: projectId, branches } = <t.AddBranchesToProjectAction> action;
+      const { id: projectId, branches } = action as t.AddBranchesToProjectAction;
       project = state[projectId];
 
       if (project && !isFetchError(project)) {
@@ -66,7 +66,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case Requests.actions.Branches.LoadBranchesForProject.FAILURE.type:
-      const fetchError = <FetchError> action;
+      const fetchError = action as FetchError;
       project = state[fetchError.id];
 
       // Only store the FetchError if branches does not exist or it's an error
@@ -83,7 +83,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       return state;
     case Requests.actions.Projects.DeleteProject.SUCCESS.type:
     case REMOVE_PROJECT:
-      const deleteAction = <DeleteError | t.RemoveProjectAction> action;
+      const deleteAction = action as DeleteError | t.RemoveProjectAction;
       id = deleteAction.id;
       if (state[id]) {
         return omit<t.ProjectState, t.ProjectState>(state, id);
@@ -91,7 +91,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case UPDATE_PROJECT:
-      const updateProjectAction = <t.UpdateProjectAction> action;
+      const updateProjectAction = action as t.UpdateProjectAction;
       id = updateProjectAction.id;
       project = state[id];
 
@@ -110,7 +110,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case STORE_PROJECTS:
-      const projects = (<t.StoreProjectsAction> action).entities;
+      const projects = (action as t.StoreProjectsAction).entities;
       if (projects && projects.length > 0) {
         const newProjects = projects.reduce<t.ProjectState>((obj, newProject) => {
           // If existing project has branches, store those
@@ -130,7 +130,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case STORE_AUTHORS_TO_PROJECT:
-      const storeAuthorsAction = <t.StoreAuthorsToProjectAction> action;
+      const storeAuthorsAction = action as t.StoreAuthorsToProjectAction;
       id = storeAuthorsAction.id;
       project = state[id];
 
@@ -154,7 +154,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT:
-      const updateActivityTimestampAction = <t.UpdateLatestActivityTimestampAction> action;
+      const updateActivityTimestampAction = action as t.UpdateLatestActivityTimestampAction;
       id = updateActivityTimestampAction.id;
       project = state[id];
 
@@ -175,7 +175,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT:
-      const updateLatestCommitAction = <t.UpdateLatestDeployedCommitAction> action;
+      const updateLatestCommitAction = action as t.UpdateLatestDeployedCommitAction;
       id = updateLatestCommitAction.id;
       project = state[id];
 
@@ -196,7 +196,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case REMOVE_BRANCH_FROM_PROJECT:
-      const removeBranchAction = <t.RemoveBranchAction> action;
+      const removeBranchAction = action as t.RemoveBranchAction;
       id = removeBranchAction.id;
       project = state[id];
 

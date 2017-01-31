@@ -44,17 +44,9 @@ export interface CreateEntityRequestAction extends Action {
   name: string;
 }
 
-interface EntityRequestActionCreator {
-  (id: string): EntityRequestAction;
-};
-
-interface EntitySuccessActionCreator {
-  (id: string): EntitySuccessAction;
-};
-
-interface CreateEntityRequestActionCreator {
-  (name: string): CreateEntityRequestAction;
-}
+type EntityRequestActionCreator = (id: string) => EntityRequestAction;
+type EntitySuccessActionCreator = (id: string) => EntitySuccessAction;
+type CreateEntityRequestActionCreator = (name: string) => CreateEntityRequestAction;
 
 // When request succeeds
 export interface CreateEntitySuccessAction extends Action {
@@ -62,34 +54,18 @@ export interface CreateEntitySuccessAction extends Action {
   name: string;
 }
 
-interface CreateEntitySuccessActionCreator {
-  (entity: any, name: string): CreateEntitySuccessAction;
-}
+type CreateEntitySuccessActionCreator = (entity: any, name: string) => CreateEntitySuccessAction;
 
 export interface EditEntitySuccessAction extends Action {
   result: Object;
 }
 
-interface EditEntitySuccessActionCreator {
-  (entity: any): EditEntitySuccessAction;
-}
-
+type EditEntitySuccessActionCreator = (entity: any) => EditEntitySuccessAction;
 // When request fails
-interface FetchEntityFailureActionCreator {
-  (id: string, error: string, detail?: string): FetchError;
-}
-
-interface CreateEntityFailureActionCreator {
-  (name: string, error: string, detail?: string): CreateError;
-}
-
-interface EditEntityFailureActionCreator {
-  (id: string, error: string, detail?: string): EditError;
-}
-
-interface DeleteEntityFailureActionCreator {
-  (id: string, error: string, detail?: string): DeleteError;
-}
+type FetchEntityFailureActionCreator = (id: string, error: string, detail?: string) => FetchError;
+type CreateEntityFailureActionCreator = (name: string, error: string, detail?: string) => CreateError;
+type EditEntityFailureActionCreator = (id: string, error: string, detail?: string) => EditError;
+type DeleteEntityFailureActionCreator = (id: string, error: string, detail?: string) => DeleteError;
 
 export type FetchEntityActionCreators = RequestActionCreators<
   EntityRequestActionCreator,
@@ -119,17 +95,9 @@ export type DeleteEntityActionCreators = RequestActionCreators<
 export interface CollectionRequestAction extends Action {}
 export interface CollectionSuccessAction extends Action {}
 
-interface CollectionRequestActionCreator {
-  (): CollectionRequestAction;
-}
-
-interface CollectionSuccessActionCreator {
-  (): CollectionSuccessAction;
-}
-
-interface CollectionFailureActionCreator {
-  (error: string, detail?: string): FetchCollectionError;
-}
+type CollectionRequestActionCreator = () => CollectionRequestAction;
+type CollectionSuccessActionCreator = () => CollectionSuccessAction;
+type CollectionFailureActionCreator = (error: string, detail?: string) => FetchCollectionError;
 
 export type CollectionActionCreators = RequestActionCreators<
   CollectionRequestActionCreator,

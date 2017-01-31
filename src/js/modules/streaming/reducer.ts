@@ -8,7 +8,7 @@ const initialState: t.StreamingState = { state: t.ConnectionState.INITIAL_CONNEC
 const reducer: Reducer<t.StreamingState> = (state = initialState, action: any) => {
   switch (action.type) {
     case SET_CONNECTION_STATE:
-      const { state: connectionState, error } = <t.SetConnectionStateAction> action;
+      const { state: connectionState, error } = action as t.SetConnectionStateAction;
       if (connectionState !== state.state || error !== state.error) {
         return { state: connectionState, error };
       }
