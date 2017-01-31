@@ -9,7 +9,7 @@ const initialState: t.CommentState = {};
 const reducer: Reducer<t.CommentState> = (state = initialState, action: any) => {
   switch (action.type) {
     case STORE_COMMENTS:
-      const comments = (<t.StoreCommentsAction> action).entities;
+      const comments = (action as t.StoreCommentsAction).entities;
       if (comments && comments.length > 0) {
         const newCommentsObject: t.CommentState = mapKeys(comments, c => c.id);
 
@@ -21,7 +21,7 @@ const reducer: Reducer<t.CommentState> = (state = initialState, action: any) => 
 
       return state;
     case REMOVE_COMMENT:
-      const id = (<t.RemoveCommentAction> action).id;
+      const id = (action as t.RemoveCommentAction).id;
       if (state[id]) {
         return omit<t.CommentState, t.CommentState>(state, id);
       }

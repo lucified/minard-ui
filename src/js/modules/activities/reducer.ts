@@ -9,7 +9,7 @@ const initialState: t.ActivityState = {};
 const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
   switch (action.type) {
     case STORE_ACTIVITIES:
-      const activities = (<t.StoreActivitiesAction> action).entities;
+      const activities = (action as t.StoreActivitiesAction).entities;
       if (activities && activities.length > 0) {
         const newActivitiesObject: t.ActivityState = mapKeys(activities, activity => activity.id);
 

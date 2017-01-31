@@ -29,7 +29,7 @@ export const createLoader = (
   fetcher: (id: string) => IterableIterator<Effect>,
   dataEnsurer: (id: string) => IterableIterator<Effect | Effect[]>,
 ) => {
-  return function* (action: LoadEntityAction): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function*(action: LoadEntityAction): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     const id: string = action.id;
     const existingEntity = yield select(selector, id);
     let fetchSucceeded: boolean = false;
@@ -89,7 +89,7 @@ export const createCollectionFetcher = <ApiParams>(
   apiFetchFunction: (...args: ApiParams[]) => ApiPromise<ApiEntityResponse>,
   postStoreEffects?: (response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
-  return function* (...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function*(...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.REQUEST.actionCreator());
 
     const { response, error, details }: { response?: ApiEntityResponse, error?: string, details?: string } =

@@ -20,7 +20,7 @@ export const getFetchCollectionErrors =
   );
 
 export const getProjectDeletionError = (state: StateTree, id: string): t.DeleteError | undefined =>
-  <t.DeleteError | undefined> selectErrorTree(state).find(
+  selectErrorTree(state).find(
     error => (error.type === Requests.actions.Projects.DeleteProject.FAILURE.type) &&
-      ((<t.DeleteError> error).id === id),
-  );
+      ((error as t.DeleteError).id === id),
+  ) as t.DeleteError | undefined;

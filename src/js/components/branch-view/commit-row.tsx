@@ -50,7 +50,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   const { commit } = ownProps;
 
   if (commit && !isFetchError(commit) && commit.deployment) {
-    let deploymentOrError = Deployments.selectors.getDeployment(state, commit.deployment);
+    const deploymentOrError = Deployments.selectors.getDeployment(state, commit.deployment);
 
     return {
       deployment: isFetchError(deploymentOrError) ? undefined : deploymentOrError,

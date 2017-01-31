@@ -152,7 +152,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   }
 
   let branches: (Branch | FetchError | undefined)[] | undefined | FetchError;
-  let branchIDs = project.branches;
+  const branchIDs = project.branches;
   if (branchIDs) {
     if (isFetchError(branchIDs)) {
       branches = branchIDs;

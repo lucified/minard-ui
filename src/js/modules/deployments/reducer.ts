@@ -22,7 +22,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
 
   switch (action.type) {
     case Requests.actions.Deployments.LoadDeployment.FAILURE.type:
-      fetchErrorAction = <FetchError> action;
+      fetchErrorAction = action as FetchError;
       id = fetchErrorAction.id;
       existingDeployment = state[id];
       if (!existingDeployment || isFetchError(existingDeployment)) {
@@ -36,7 +36,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
 
       return state;
     case Requests.actions.Comments.LoadCommentsForDeployment.FAILURE.type:
-      fetchErrorAction = <FetchError> action;
+      fetchErrorAction = action as FetchError;
       id = fetchErrorAction.id;
       existingDeployment = state[id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
@@ -60,7 +60,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       return state;
     // Add/replace deployments into state
     case STORE_DEPLOYMENTS:
-      const deploymentsArray = (<t.StoreDeploymentsAction> action).entities;
+      const deploymentsArray = (action as t.StoreDeploymentsAction).entities;
       if (deploymentsArray && deploymentsArray.length > 0) {
         const newDeploymentsObject: t.DeploymentState = mapKeys(deploymentsArray, d => d.id);
 
@@ -73,7 +73,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       return state;
     // Replaces comments in the deployment
     case SET_COMMENTS_FOR_DEPLOYMENT:
-      const commentsAction = <t.SetCommentsForDeploymentAction> action;
+      const commentsAction = action as t.SetCommentsForDeploymentAction;
       existingDeployment = state[commentsAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         return {
@@ -90,7 +90,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       return state;
     // Appends comment to deployment
     case ADD_COMMENTS_TO_DEPLOYMENT:
-      const addCommentsAction = <t.AddCommentsToDeploymentAction> action;
+      const addCommentsAction = action as t.AddCommentsToDeploymentAction;
       existingDeployment = state[addCommentsAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         let newComments: string[];
@@ -118,7 +118,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
 
       return state;
     case REMOVE_COMMENT_FROM_DEPLOYMENT:
-      const removeCommentAction = <t.RemoveCommentFromDeploymentAction> action;
+      const removeCommentAction = action as t.RemoveCommentFromDeploymentAction;
       existingDeployment = state[removeCommentAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         if (existingDeployment.comments && !isFetchError(existingDeployment.comments)) {

@@ -17,7 +17,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
 
   switch (action.type) {
     case Requests.actions.Commits.LoadCommit.FAILURE.type:
-      const responseAction = <FetchError> action;
+      const responseAction = action as FetchError;
       id = responseAction.id;
       commit = state[id];
       if (!commit || isFetchError(commit)) {
@@ -51,7 +51,7 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
 
       return state;
     case STORE_COMMITS:
-      commits = (<t.StoreCommitsAction> action).entities;
+      commits = (action as t.StoreCommitsAction).entities;
       if (commits && commits.length > 0) {
         const newCommitsObject: t.CommitState = mapKeys(commits, c => c.id);
 

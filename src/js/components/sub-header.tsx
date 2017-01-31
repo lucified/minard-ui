@@ -30,8 +30,8 @@ class SubHeader extends React.Component<GeneratedProps, any> {
   public render() {
     const { openPageType, project, teamName } = this.props;
     let leftContent: JSX.Element | null = null;
-    let centerContent: JSX.Element | null = null;
-    let rightContent: JSX.Element | null = null;
+    const centerContent: JSX.Element | null = null;
+    const rightContent: JSX.Element | null = null;
 
     if (project && !isFetchError(project) &&
       (openPageType === PageType.BranchView || openPageType === PageType.BranchesList)) {

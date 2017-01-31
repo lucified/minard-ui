@@ -31,7 +31,7 @@ const reducer: Reducer<t.ErrorState> = (state = initialState, action: any) => {
       return returnFilteredStateIfChanged(
         state,
         error => error.type !== Requests.actions.Projects.DeleteProject.FAILURE.type ||
-          (<any> error).id !== action.id,
+          (error as any).id !== action.id,
       );
     case Requests.actions.Projects.DeleteProject.FAILURE.type:
       return state.concat(action);
