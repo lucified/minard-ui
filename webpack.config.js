@@ -5,7 +5,6 @@ const autoprefixer = require('autoprefixer');
 const postcssReporter = require('postcss-reporter');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const failPlugin = require('webpack-fail-plugin');
 
 const deployConfig = require('./deploy-config');
 
@@ -187,7 +186,6 @@ const config = {
       from: 'src/images/favicon-*.png',
       flatten: true,
     }]),
-    failPlugin,
   ],
 };
 
