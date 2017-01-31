@@ -18,7 +18,7 @@ interface PassedProps {
   closeDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
-type Props = PassedProps & FormProps<CreateProjectFormData, any>;
+type Props = PassedProps & FormProps<CreateProjectFormData, PassedProps, void>;
 
 const validate = (values: CreateProjectFormData, props: Props) => {
   const errors: Partial<CreateProjectFormData> = {};
@@ -111,7 +111,7 @@ class NewProjectForm extends React.Component<Props, any> {
             <div>
               <Field
                 name="projectTemplate"
-                component={(field: WrappedFieldProps) =>
+                component={(field: WrappedFieldProps<void>) =>
                   <Select
                     value={field.input.value}
                     onChange={field.input.onChange}

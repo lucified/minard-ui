@@ -15,7 +15,7 @@ interface PassedProps {
   initialValues: Partial<CreateCommentFormData>;
 }
 
-type Props = PassedProps & FormProps<CreateCommentFormData, any>;
+type Props = PassedProps & FormProps<CreateCommentFormData, PassedProps, void>;
 
 const validate = (values: CreateCommentFormData) => {
   const { email, message } = values;
