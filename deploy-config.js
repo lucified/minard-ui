@@ -14,9 +14,15 @@ const opts = {
     return 'https://staging.minard.io/';
   },
   publicPath: (env) => {
-    if (['production', 'staging', 'test'].indexOf(env) > -1) {
+    // For Minard
+    if (process.env.GITLAB_CI) {
       return '/';
     }
+
+    if (['production', 'staging'].indexOf(env) > -1) {
+      return '/';
+    }
+
     return null;
   },
   flow: 'bdc6c13b-be3f-42a9-9f71-e9197dd8fb03', // The Main flow ID
