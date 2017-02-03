@@ -13,6 +13,7 @@
     "test:watch": "mocha --opts mocha.auto.opts --watch",
     "deploy": "lucify-notifier npm run deploy-plain",
     "deploy-plain": "npm run build && npm run atomic-s3",
+    "deploy-chatops": "[ \"$AWS_TEMPORARY\" ] && npm run deploy || echo 'Skipping deployment'",
     "atomic-s3": "atomic-s3 --verbose",
     "webpack-dev-server": "webpack-dev-server --config=webpack.config.dev.js --inline --hot --port 3000 --host 0.0.0.0",
     "clean-compile": "rm -rf lib",
