@@ -1,6 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const path = require('path');
 const autoprefixer = require('autoprefixer');
 const postcssReporter = require('postcss-reporter');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -200,7 +199,7 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
     // Will need to add minimize: true to loaders at that point.
     // See https://webpack.js.org/guides/migrating/#uglifyjsplugin-minimize-loaders
     new webpack.LoaderOptionsPlugin({
-      minimize: true
+      minimize: true,
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
