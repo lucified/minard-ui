@@ -272,10 +272,13 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private restartConnection() {
-    this._source = new EventSource(streamingAPIUrl, { withCredentials: false });
+    // TODO: improve architecture for getting access token
+    const accessToken = localStorage.getItem('access_token');
+    const url = accessToken ? `${streamingAPIUrl}?token=${encodeURIComponent(accessToken)}` : streamingAPIUrl;
+    this._source = new EventSource(url, { withCredentials: false });
 
     this._source.addEventListener('error', (e: EventSourceError) => {
-      console.log('EventSource: error:', e); // tslint:disable-line:no-console
+      console.error('EventSource error:', e);
       const source = e.target;
       this.props.setConnectionState(toConnectionState(source.readyState));
 

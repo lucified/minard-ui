@@ -16,7 +16,7 @@ host = host.replace(/\/$/, '');
 export const getBuildLogURL = (deploymentId: string): string =>
   `${host}/ci/deployments/${deploymentId}/trace`;
 
-const defaultOptions = {
+const defaultOptions: RequestInit = {
   credentials: 'same-origin',
   headers: {
     Accept: 'application/vnd.api+json',
@@ -47,8 +47,21 @@ const generateErrorObject = (errorResponse: any) => {
   };
 };
 
-const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> =>
-  fetch(`${host}${path}`, Object.assign({}, defaultOptions, options))
+// TODO: Improve the architecture for this
+const getAccessToken = () => localStorage.getItem('access_token');
+
+const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
+  const combinedOptions = {
+    ...defaultOptions,
+    ...options,
+  };
+
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    (combinedOptions.headers as any).Authorization = `Bearer ${accessToken}`;
+  }
+
+  return fetch(`${host}${path}`, combinedOptions)
     .then(
       response => response.json().then(json => ({
         json,
@@ -63,6 +76,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
 
       return generateErrorObject(errorResponse);
     });
+};
 
 const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
   let queryString = '';
