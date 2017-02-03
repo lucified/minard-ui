@@ -14,7 +14,7 @@ config.devtool = 'source-map';
 // For dev server
 config.devServer = {
   publicPath: '/',
-  // For historyRouter
+  // For react-router's browserHistory
   historyApiFallback: true,
 };
 
