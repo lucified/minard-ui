@@ -4,6 +4,7 @@ import { IndexRedirect, Route } from 'react-router';
 import App from './components/app';
 import BranchView from './components/branch-view';
 import DeploymentView from './components/deployment-view';
+import LoginView from './components/login-view';
 import ProjectView from './components/project-view';
 import ProjectsFrame from './components/projects-frame';
 import TeamProjectsView from './components/team-projects-view';
@@ -20,5 +21,6 @@ export default (
       <Route path="comment/:commentId" />
       <Route path=":view" />
     </Route>
+    <Route path="login" component={LoginView} />
   </Route>
 );
