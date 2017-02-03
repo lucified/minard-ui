@@ -14,7 +14,7 @@ const opts = {
     return 'https://staging.minard.io/';
   },
   publicPath: (env) => {
-    if (env === 'production' || env === 'staging') {
+    if (['production', 'staging', 'test'].indexOf(env) > -1) {
       return '/';
     }
     return null;
@@ -22,7 +22,10 @@ const opts = {
   flow: 'bdc6c13b-be3f-42a9-9f71-e9197dd8fb03', // The Main flow ID
 };
 
-const env = process.env.CIRCLE_BRANCH === 'master' ? process.env.LUCIFY_ENV || 'staging'
-  : process.env.LUCIFY_ENV || process.env.NODE_ENV || 'development';
+const env = process.env.LUCIFY_ENV || (
+  process.env.CIRCLE_BRANCH === 'master' ?
+    'staging' :
+    process.env.NODE_ENV || 'development'
+);
 
 module.exports = lucifyDeployConfig(env, opts);
