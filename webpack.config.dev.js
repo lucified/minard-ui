@@ -1,6 +1,6 @@
 // This can be removed once this issue is resolved:
 // https://github.com/webpack/webpack/issues/3460
-const { CheckerPlugin } = require('awesome-typescript-loader')
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const config = require('./webpack.config.js'); // eslint-disable-line
 
@@ -34,10 +34,9 @@ config.module.rules.push({
   exclude: /\.spec\.tsx?$/,
   use: {
     loader: 'awesome-typescript-loader',
-    query: {
+    options: {
       useBabel: true,
       useCache: true,
-      sourceMap: true,
       babelOptions: {
         presets: ['es2015', 'react-hmre'],
         plugins: ['transform-regenerator'],

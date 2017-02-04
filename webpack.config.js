@@ -37,12 +37,18 @@ const rules = [
     exclude: /\.spec\.tsx?$/,
     use: {
       loader: 'awesome-typescript-loader',
-      query: {
+      options: {
         useBabel: true,
         useCache: true,
-        sourceMap: false,
         babelOptions: {
-          presets: ['es2015'],
+          presets: [
+            // Make babel not transform modules since webpack 2 supports ES6 modules
+            // This should allow webpack to perform tree-shaking.
+            // TODO: Make sure tree-shaking is actually done
+            ['es2015', { modules: false }],
+          ],
+          // Needed in order to transform generators. Babelification can be removed
+          // once TypeScript supports generators, probably in TS 2.3.
           plugins: ['transform-regenerator'],
         },
       },
