@@ -35,18 +35,18 @@ const rules = [
   { // NOTE: babel-loader + ts-loader needs to be first in the array. See webpack.config.dev.js
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
-    use: [
-      {
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            ['es2015', { modules: false }],
-          ],
-          plugins: 'transform-regenerator',
+    use: {
+      loader: 'awesome-typescript-loader',
+      query: {
+        useBabel: true,
+        useCache: true,
+        sourceMap: false,
+        babelOptions: {
+          presets: ['es2015'],
+          plugins: ['babel-plugin-transform-regenerator'],
         },
       },
-      'ts-loader',
-    ],
+    },
   },
   {
     test: /\.(jpeg|jpg|gif|png)$/,

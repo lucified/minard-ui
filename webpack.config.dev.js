@@ -1,3 +1,5 @@
+const { CheckerPlugin } = require('awesome-typescript-loader')
+
 const config = require('./webpack.config.js'); // eslint-disable-line
 
 // For server path
@@ -13,6 +15,9 @@ config.module.rules.push({
 });
 config.devtool = 'source-map';
 
+// For async error reporting, i.e. watch mode
+config.plugins.push(new CheckerPlugin());
+
 // For dev server
 config.devServer = {
   publicPath: '/',
@@ -25,19 +30,18 @@ config.module.rules.shift();
 config.module.rules.push({
   test: /\.tsx?$/,
   exclude: /\.spec\.tsx?$/,
-  use: [
-    {
-      loader: 'babel-loader',
-      query: {
-        presets: [
-          'es2015',
-          'react-hmre',
-        ],
-        plugins: 'transform-regenerator',
+  use: {
+    loader: 'awesome-typescript-loader',
+    query: {
+      useBabel: true,
+      useCache: true,
+      sourceMap: true,
+      babelOptions: {
+        presets: ['es2015', 'react-hmre'],
+        plugins: ['babel-plugin-transform-regenerator'],
       },
     },
-    'ts-loader',
-  ],
+  },
 });
 
 module.exports = config;
