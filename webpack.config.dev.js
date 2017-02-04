@@ -26,7 +26,16 @@ config.module.rules.push({
   test: /\.tsx?$/,
   exclude: /\.spec\.tsx?$/,
   use: [
-    'babel-loader?presets[]=es2015&presets[]=react-hmre&plugins[]=transform-regenerator',
+    {
+      loader: 'babel-loader',
+      query: {
+        presets: [
+          'es2015',
+          'react-hmre',
+        ],
+        plugins: 'transform-regenerator',
+      },
+    },
     'ts-loader',
   ],
 });

@@ -36,7 +36,15 @@ const rules = [
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
     use: [
-      'babel-loader?presets[]=es2015&plugins[]=transform-regenerator',
+      {
+        loader: 'babel-loader',
+        query: {
+          presets: [
+            ['es2015', { modules: false }],
+          ],
+          plugins: 'transform-regenerator',
+        },
+      },
       'ts-loader',
     ],
   },
