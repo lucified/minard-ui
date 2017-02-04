@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
@@ -32,7 +33,7 @@ const name = '[name]-[hash:8].[ext]';
  * Get the webpack loaders object for the webpack configuration
  */
 const rules = [
-  { // NOTE: babel-loader + ts-loader needs to be first in the array. See webpack.config.dev.js
+  {
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
     use: {
