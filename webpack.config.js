@@ -208,9 +208,13 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
     // See https://webpack.js.org/guides/migrating/#uglifyjsplugin-minimize-loaders
     new webpack.LoaderOptionsPlugin({
       minimize: true,
+      debug: false,
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
+      output: {
+        comments: false,
+      },
     }),
     new webpack.optimize.DedupePlugin(),
   ]);
