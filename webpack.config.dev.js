@@ -8,6 +8,8 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 const productionConfig = require('./webpack.config.js'); // eslint-disable-line
 
 const devOptions = {
+  cache: true,
+
   // For server path
   output: {
     publicPath: '/',
