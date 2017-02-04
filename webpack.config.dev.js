@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 // This can be removed once this issue is resolved:
 // https://github.com/webpack/webpack/issues/3460
 const { CheckerPlugin } = require('awesome-typescript-loader');
@@ -19,6 +20,8 @@ config.devtool = 'source-map';
 
 // For async error reporting, i.e. watch mode
 config.plugins.push(new CheckerPlugin());
+// Named modules for hot module reloading
+config.plugins.push(new webpack.NamedModulesPlugin());
 
 // For dev server
 config.devServer = {
