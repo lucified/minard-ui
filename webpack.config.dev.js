@@ -40,7 +40,7 @@ config.module.rules.push({
       sourceMap: true,
       babelOptions: {
         presets: ['es2015', 'react-hmre'],
-        plugins: ['babel-plugin-transform-regenerator'],
+        plugins: ['transform-regenerator'],
       },
     },
   },

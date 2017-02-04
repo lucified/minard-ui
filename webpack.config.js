@@ -43,7 +43,7 @@ const rules = [
         sourceMap: false,
         babelOptions: {
           presets: ['es2015'],
-          plugins: ['babel-plugin-transform-regenerator'],
+          plugins: ['transform-regenerator'],
         },
       },
     },
