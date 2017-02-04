@@ -1,3 +1,5 @@
+// This can be removed once this issue is resolved:
+// https://github.com/webpack/webpack/issues/3460
 const { CheckerPlugin } = require('awesome-typescript-loader')
 
 const config = require('./webpack.config.js'); // eslint-disable-line
@@ -25,7 +27,7 @@ config.devServer = {
   historyApiFallback: true,
 };
 
-// For Hot module reloading
+// For Hot module reloading and sourceMap
 config.module.rules.shift();
 config.module.rules.push({
   test: /\.tsx?$/,
