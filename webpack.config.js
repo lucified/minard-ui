@@ -56,11 +56,21 @@ const rules = [
   },
   {
     test: /\.(jpeg|jpg|gif|png)$/,
-    use: [`file-loader?name=${name}`],
+    use: [{
+      loader: 'file-loader',
+      options: {
+        name,
+      },
+    }],
   },
   {
     test: /\.hbs$/,
-    use: [`handlebars-loader?helperDirs[]=${__dirname}/src/templates/helpers`],
+    use: [{
+      loader: 'handlebars-loader',
+      options: {
+        helperDirs: [`${__dirname}/src/templates/helpers`],
+      },
+    }],
   },
   {
     test: /\.scss$/,
@@ -96,19 +106,45 @@ const rules = [
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    use: [`url-loader?limit=10000&mimetype=application/font-woff&name=${name}`],
+    use: [{
+      loader: 'url-loader',
+      options: {
+        limit: 10000,
+        mimetype: 'application/font-woff',
+        name,
+      },
+    }],
   },
   {
     test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-    use: [`url-loader?limit=10000&mimetype=application/octet-stream&name=${name}`],
+    use: [{
+      loader: 'url-loader',
+      options: {
+        limit: 10000,
+        mimetype: 'application/octet-stream',
+        name,
+      },
+    }],
   },
   {
     test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-    use: [`file-loader?name=${name}`],
+    use: [{
+      loader: 'file-loader',
+      options: {
+        name,
+      },
+    }],
   },
   {
     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-    use: [`url-loader?limit=10000&mimetype=image/svg+xml&name=${name}`],
+    use: [{
+      loader: 'url-loader',
+      options: {
+        limit: 10000,
+        mimetype: 'image/svg+xml',
+        name,
+      },
+    }],
   },
 ];
 
