@@ -2,12 +2,14 @@ const config = require('./webpack.config.js'); // eslint-disable-line
 
 // For server path
 config.output.publicPath = '/';
+// path must be '/' or an absolute path for webpack-dev-server ver. 2
+config.output.path = '/';
 
 // For source maps
 config.module.rules.push({
   test: /\.js$/,
-  use: ["source-map-loader"],
-  enforce: "pre"
+  use: ['source-map-loader'],
+  enforce: 'pre',
 });
 config.devtool = 'source-map';
 

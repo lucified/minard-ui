@@ -15,7 +15,7 @@
     "deploy-plain": "npm run build && npm run atomic-s3",
     "deploy-chatops": "[ \"$AWS_TEMPORARY\" ] && npm run deploy || echo 'Skipping deployment'",
     "atomic-s3": "atomic-s3 --verbose",
-    "webpack-dev-server": "webpack-dev-server --config=webpack.config.dev.js --inline --hot --port 3000 --host 0.0.0.0",
+    "webpack-dev-server": "webpack-dev-server --config=webpack.config.dev.js --hot --port 3000 --host 0.0.0.0",
     "clean-compile": "rm -rf lib",
     "compile": "tsc",
     "lint": "tslint --format=verbose 'src/js/**/*.ts' 'src/js/**/*.tsx'",
@@ -94,7 +94,7 @@
     "typescript": "~2.1.5",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
     "classnames": "^2.2.5",
