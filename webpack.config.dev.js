@@ -16,7 +16,7 @@ config.module.rules.push({
   use: ['source-map-loader'],
   enforce: 'pre',
 });
-config.devtool = 'source-map';
+config.devtool = 'cheap-module-eval-source-map';
 
 // For async error reporting, i.e. watch mode
 config.plugins.push(new CheckerPlugin());
