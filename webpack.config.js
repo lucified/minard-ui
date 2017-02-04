@@ -216,7 +216,6 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
         comments: false,
       },
     }),
-    new webpack.optimize.DedupePlugin(),
   ]);
 }
 
