@@ -46,6 +46,7 @@ const rules = [
             // Make babel not transform modules since webpack 2 supports ES6 modules
             // This should allow webpack to perform tree-shaking.
             // TODO: Make sure tree-shaking is actually done
+            // See https://github.com/webpack/webpack/issues/2867
             ['es2015', { modules: false }],
           ],
           // Needed in order to transform generators. Babelification can be removed
