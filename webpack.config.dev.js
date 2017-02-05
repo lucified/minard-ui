@@ -17,14 +17,15 @@ const devOptions = {
     path: '/',
   },
 
-  // For source maps
   module: {
     rules: [
+      // For source maps
       {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre',
       },
+      // For hot module reloading
       {
         test: /\.tsx?$/,
         exclude: /\.spec\.tsx?$/,
