@@ -326,14 +326,15 @@ autosize@^3.0.15:
   version "3.0.20"
   resolved "https://registry.yarnpkg.com/autosize/-/autosize-3.0.20.tgz#e343ea7c5603834738169420f0349dc953e62a9e"
 
-awesome-typescript-loader@^3.0.0-beta.19:
-  version "3.0.0-beta.19"
-  resolved "https://registry.yarnpkg.com/awesome-typescript-loader/-/awesome-typescript-loader-3.0.0-beta.19.tgz#162757918103137bc8a159ef5bc0f4dad048759e"
+awesome-typescript-loader@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/awesome-typescript-loader/-/awesome-typescript-loader-3.0.3.tgz#83884dcd19eb7054b638bb34328fec9584783dde"
   dependencies:
     colors "^1.1.2"
     enhanced-resolve "^3.1.0"
     loader-utils "^0.2.16"
     lodash "^4.17.4"
+    mkdirp "^0.5.1"
     object-assign "^4.1.1"
     source-map-support "^0.4.11"
 
