@@ -2,16 +2,16 @@ import * as React from 'react';
 import { IndexRedirect, Route } from 'react-router';
 
 import App from './components/app';
+import AuthService from './components/auth-service';
 import BranchView from './components/branch-view';
 import DeploymentView from './components/deployment-view';
-import AuthService from './components/auth-service';
 import ProjectView from './components/project-view';
 import ProjectsFrame from './components/projects-frame';
 import TeamProjectsView from './components/team-projects-view';
 
 export default (
   <Route path="/" component={App}>
-    <IndexRedirect to="/projects" />
+    <IndexRedirect to="/login" />
     <Route path="login" component={AuthService}/>
     <Route path="auth-callback" component={AuthService}/>
     <Route component={ProjectsFrame}>
