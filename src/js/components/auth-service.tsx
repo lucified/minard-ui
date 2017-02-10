@@ -64,7 +64,7 @@ export default class AuthService extends React.Component<Props, State> {
   public login(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
     const _auth0 = this.getAuth0();
-    _auth0.authorize({group: '1233453xyx'});
+    _auth0.authorize({team_token: '1111222233334444'});
   }
 
   public componentDidMount() {
