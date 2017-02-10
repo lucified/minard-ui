@@ -48,7 +48,8 @@
     "url": "git+https://github.com/lucified/minard-ui.git"
   },
   "devDependencies": {
-    "@types/auth0-lock": "^10.9.0",
+    "@types/auth0-js": "0.0.7",
+    "@types/auth0-lock": "10.9.0",
     "@types/chai": "^3.4.34",
     "@types/classnames": "0.0.32",
     "@types/isomorphic-fetch": "0.0.32",

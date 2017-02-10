@@ -2,9 +2,19 @@
 # yarn lockfile v1
 
 
-"@types/auth0-lock@^10.9.0":
-  version "10.9.1"
-  resolved "https://registry.yarnpkg.com/@types/auth0-lock/-/auth0-lock-10.9.1.tgz#18a252783d8fb7ab95df9545f4de81311f45f4b6"
+"@types/auth0-js@*":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-8.1.0.tgz#3aaa2f8a12e66c1c06574be086400d84f67b7b43"
+
+"@types/auth0-js@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-0.0.7.tgz#bc5d251913d0f951318d337d30f0ad5cadea4cf1"
+
+"@types/auth0-lock@10.9.0":
+  version "10.9.0"
+  resolved "https://registry.yarnpkg.com/@types/auth0-lock/-/auth0-lock-10.9.0.tgz#2b0c5ff65836d8a4abd03ebd66e7c16d29b7980f"
+  dependencies:
+    "@types/auth0-js" "*"
 
 "@types/chai@^3.4.34":
   version "3.4.34"
