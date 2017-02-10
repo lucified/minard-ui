@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
@@ -32,21 +33,48 @@ const name = '[name]-[hash:8].[ext]';
  * Get the webpack loaders object for the webpack configuration
  */
 const rules = [
-  { // NOTE: babel-loader + ts-loader needs to be first in the array. See webpack.config.dev.js
+  {
     test: /\.tsx?$/,
     exclude: /\.spec\.tsx?$/,
-    use: [
-      'babel-loader?presets[]=es2015&plugins[]=transform-regenerator',
-      'ts-loader',
-    ],
+    use: {
+      loader: 'awesome-typescript-loader',
+      options: {
+        useBabel: true,
+        useCache: true,
+        babelOptions: {
+          presets: [
+            // Make babel not transform modules since webpack 2 supports ES6 modules
+            // This should allow webpack to perform tree-shaking.
+            // TODO: Tree-shaking doesn't seem to work. Change tsconfig to
+            // output ES6 modules once this is fixed:
+            // https://github.com/webpack/webpack/issues/2867
+            ['es2015', { modules: false }],
+          ],
+          // Needed in order to transform generators. Babelification can be removed
+          // once TypeScript supports generators, probably in TS 2.3.
+          // When that is done, also change the output of TS to 'es5' in tsconfig.json
+          plugins: ['transform-regenerator'],
+        },
+      },
+    },
   },
   {
     test: /\.(jpeg|jpg|gif|png)$/,
-    use: [`file-loader?name=${name}`],
+    use: [{
+      loader: 'file-loader',
+      options: {
+        name,
+      },
+    }],
   },
   {
     test: /\.hbs$/,
-    use: [`handlebars-loader?helperDirs[]=${__dirname}/src/templates/helpers`],
+    use: [{
+      loader: 'handlebars-loader',
+      options: {
+        helperDirs: [`${__dirname}/src/templates/helpers`],
+      },
+    }],
   },
   {
     test: /\.scss$/,
@@ -76,25 +104,51 @@ const rules = [
   {
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: 'css-loader',
+      fallback: 'style-loader',
+      use: 'css-loader',
     }),
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    use: [`url-loader?limit=10000&mimetype=application/font-woff&name=${name}`],
+    use: [{
+      loader: 'url-loader',
+      options: {
+        limit: 10000,
+        mimetype: 'application/font-woff',
+        name,
+      },
+    }],
   },
   {
     test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-    use: [`url-loader?limit=10000&mimetype=application/octet-stream&name=${name}`],
+    use: [{
+      loader: 'url-loader',
+      options: {
+        limit: 10000,
+        mimetype: 'application/octet-stream',
+        name,
+      },
+    }],
   },
   {
     test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-    use: [`file-loader?name=${name}`],
+    use: [{
+      loader: 'file-loader',
+      options: {
+        name,
+      },
+    }],
   },
   {
     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-    use: [`url-loader?limit=10000&mimetype=image/svg+xml&name=${name}`],
+    use: [{
+      loader: 'url-loader',
+      options: {
+        limit: 10000,
+        mimetype: 'image/svg+xml',
+        name,
+      },
+    }],
   },
 ];
 
@@ -200,11 +254,14 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
     // See https://webpack.js.org/guides/migrating/#uglifyjsplugin-minimize-loaders
     new webpack.LoaderOptionsPlugin({
       minimize: true,
+      debug: false,
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
+      output: {
+        comments: false,
+      },
     }),
-    new webpack.optimize.DedupePlugin(),
   ]);
 }
 

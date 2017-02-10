@@ -1,32 +1,63 @@
-const config = require('./webpack.config.js'); // eslint-disable-line
+/* eslint-disable import/no-extraneous-dependencies */
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+// This can be removed once this issue is resolved:
+// https://github.com/webpack/webpack/issues/3460
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
-// For server path
-config.output.publicPath = '/';
+const productionConfig = require('./webpack.config.js'); // eslint-disable-line
 
-// For source maps
-config.module.rules.push({
-  test: /\.js$/,
-  use: ["source-map-loader"],
-  enforce: "pre"
-});
-config.devtool = 'source-map';
+const devOptions = {
+  cache: true,
 
-// For dev server
-config.devServer = {
-  publicPath: '/',
-  // For react-router's browserHistory
-  historyApiFallback: true,
+  // For server path
+  output: {
+    publicPath: '/',
+    // path must be '/' or an absolute path for webpack-dev-server ver. 2
+    path: '/',
+  },
+
+  module: {
+    rules: [
+      // For source maps
+      {
+        test: /\.js$/,
+        use: ['source-map-loader'],
+        enforce: 'pre',
+      },
+      // For hot module reloading
+      {
+        test: /\.tsx?$/,
+        exclude: /\.spec\.tsx?$/,
+        use: {
+          loader: 'awesome-typescript-loader',
+          options: {
+            useBabel: true,
+            useCache: true,
+            babelOptions: {
+              presets: ['es2015', 'react-hmre'],
+              plugins: ['transform-regenerator'],
+            },
+          },
+        },
+      },
+    ],
+  },
+  devtool: 'cheap-module-eval-source-map',
+
+  plugins: [
+    // For awesome-typescript-loader's async error reporting, i.e. watch mode
+    new CheckerPlugin(),
+    // Named modules for hot module reloading
+    new webpack.NamedModulesPlugin(),
+  ],
+
+  // For dev server
+  devServer: {
+    publicPath: '/',
+    // For react-router's browserHistory
+    historyApiFallback: true,
+  },
 };
 
-// For Hot module reloading
-config.module.rules.shift();
-config.module.rules.push({
-  test: /\.tsx?$/,
-  exclude: /\.spec\.tsx?$/,
-  use: [
-    'babel-loader?presets[]=es2015&presets[]=react-hmre&plugins[]=transform-regenerator',
-    'ts-loader',
-  ],
-});
-
-module.exports = config;
+module.exports = merge.smart(productionConfig, devOptions);

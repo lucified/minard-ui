@@ -21,10 +21,12 @@ The main technologies used to build minard-ui are:
 
 ## Requirements
 
-Node 6, NPM and tslint must be installed.
+Node.js version 6, yarn and tslint must be installed.
 
 ```shell
-npm install -g tslint tslint-react
+brew update
+brew install yarn
+yarn global add tslint tslint-react
 ```
 
 ## Development
@@ -32,13 +34,13 @@ npm install -g tslint tslint-react
 Set up the development environment with:
 
 ```shell
-npm install
+yarn
 ```
 
 ### Standalone development using the bundled JSON files
 
 ```shell
-npm start # then open http://localhost:3000/ in a browser
+yarn start # then open http://localhost:3000/ in a browser
 ```
 
 ### Development with minard-backend
@@ -47,14 +49,14 @@ Install minard-backend locally or on a separate server and start
 minard-ui with:
 
 ```shell
-npm start -- <minard-backend API URL> <Team ID> # then open http://localhost:3000/ in a browser
+yarn start -- <minard-backend API URL> <Team ID> # then open http://localhost:3000/ in a browser
 ```
 
 By default, when run locally, the minard-backend (charles) API runs
 on `http://localhost:8000`:
 
 ```shell
-npm start -- http://localhost:8000 3
+yarn start -- http://localhost:8000 3
 ```
 
 Note that the team ID needs to match the ID of a team that has been
@@ -65,22 +67,22 @@ created in [minard-backend](https://github.com/lucified/minard-backend).
 Build a production version of the app into `dist/` by running:
 
 ```shell
-NODE_ENV=production CHARLES=<API URL> npm run build
+NODE_ENV=production CHARLES=<API URL> yarn run build
 ```
 
 To watch for changes and update the build accordingly, run:
 
 ```shell
-NODE_ENV=production CHARLES=<API URL> npm run watch
+NODE_ENV=production CHARLES=<API URL> yarn run watch
 ```
 
 ## Testing
 
-Run `npm test`. To start a test watcher, run `npm run test:watch`.
+Run `yarn test`. To start a test watcher, run `yarn run test:watch`.
 
 ## Other commands
 
-Run `npm run` to see other available commands.
+Run `yarn run` to see other available commands.
 
 ## Acknowledgements
 
