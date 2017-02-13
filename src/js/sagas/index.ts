@@ -1,6 +1,6 @@
 import { compact } from 'lodash';
 import { SubmissionError } from 'redux-form';
-import { delay, takeEvery, takeLatest } from 'redux-saga';
+import { takeEvery, takeLatest, throttle } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
@@ -603,73 +603,11 @@ export default function createSagas(api: Api) {
   }
 
   // WATCHERS: Watch for specific actions to begin async operations.
-  function* watchForFormSubmit() {
-    yield takeEvery(FORM_SUBMIT, formSubmitSaga);
-  }
-
-  function* watchForCreateProject() {
-    yield takeLatest(Projects.actions.CREATE_PROJECT, createProject);
-  }
-
-  function* watchForDeleteProject() {
-    yield takeLatest(Projects.actions.DELETE_PROJECT, deleteProject);
-  }
-
-  function* watchForEditProject() {
-    yield takeLatest(Projects.actions.EDIT_PROJECT, editProject);
-  }
-
-  function* watchForLoadProject() {
-    yield takeEvery(Projects.actions.LOAD_PROJECT, loadProject);
-  }
-
-  function* watchForLoadBranch() {
-    yield takeEvery(Branches.actions.LOAD_BRANCH, loadBranch);
-  }
-
-  function* watchForLoadBranchesForProject() {
-    yield takeEvery(Branches.actions.LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject);
-  }
-
-  function* watchForUpdateBranchWithCommits() {
-    yield takeEvery(Branches.actions.UPDATE_BRANCH_WITH_COMMITS, loadLatestCommitForBranch);
-  }
-
-  function* watchForLoadDeployment() {
-    yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
-  }
-
-  function* watchForDeleteComment() {
-    yield takeEvery(Comments.actions.DELETE_COMMENT, deleteComment);
-  }
-
-  function* watchForCreateComment() {
-    yield takeLatest(Comments.actions.CREATE_COMMENT, createComment);
-  }
-
-  function* watchForLoadCommit() {
-    yield takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
-  }
-
-  function* watchForLoadPreviewAndComments() {
-    yield takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments);
-  }
-
   function* watchForLoadActivities(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Activities.actions.LOAD_ACTIVITIES);
       // Block until it's done, skipping any further actions
       yield call(loadActivities, action);
-    }
-  }
-
-  function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
-    // TODO: use new throttle helper method once typings work
-    while (true) {
-      const action = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
-      yield fork(loadActivitiesForProject, action);
-      // throttle by 200ms
-      yield call(delay, 200);
     }
   }
 
@@ -681,55 +619,33 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* watchForLoadCommitsForBranch(): IterableIterator<Effect> {
-    // TODO: use new throttle helper method once typings work
-    while (true) {
-      const action = yield take(Commits.actions.LOAD_COMMITS_FOR_BRANCH);
-      yield fork(loadCommitsForBranch, action);
-      // throttle by 200ms
-      yield call(delay, 200);
-    }
-  }
 
   function* root() {
     yield [
-      fork(watchForCreateProject),
-      fork(watchForDeleteProject),
-      fork(watchForEditProject),
+      takeLatest(Projects.actions.CREATE_PROJECT, createProject),
+      takeLatest(Projects.actions.DELETE_PROJECT, deleteProject),
+      takeLatest(Projects.actions.EDIT_PROJECT, editProject),
+      takeEvery(Projects.actions.LOAD_PROJECT, loadProject),
+      takeEvery(Branches.actions.LOAD_BRANCH, loadBranch),
+      takeEvery(Branches.actions.LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject),
+      takeEvery(Branches.actions.UPDATE_BRANCH_WITH_COMMITS, loadLatestCommitForBranch),
+      takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment),
+      takeLatest(Comments.actions.CREATE_COMMENT, createComment),
+      takeEvery(Comments.actions.DELETE_COMMENT, deleteComment),
+      takeEvery(Commits.actions.LOAD_COMMIT, loadCommit),
+      throttle(200, Commits.actions.LOAD_COMMITS_FOR_BRANCH, loadCommitsForBranch),
+      takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments),
+      takeEvery(FORM_SUBMIT, formSubmitSaga),
+      throttle(200, Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
       fork(watchForLoadAllProjects),
-      fork(watchForLoadProject),
-      fork(watchForLoadBranch),
-      fork(watchForLoadBranchesForProject),
-      fork(watchForLoadDeployment),
-      fork(watchForCreateComment),
-      fork(watchForDeleteComment),
-      fork(watchForLoadCommit),
-      fork(watchForLoadCommitsForBranch),
       fork(watchForLoadActivities),
-      fork(watchForLoadActivitiesForProject),
-      fork(watchForLoadPreviewAndComments),
-      fork(watchForFormSubmit),
-      fork(watchForUpdateBranchWithCommits),
     ];
   }
 
   return {
     root,
-    watchForLoadDeployment,
-    watchForLoadBranch,
-    watchForLoadBranchesForProject,
-    watchForLoadProject,
     watchForLoadAllProjects,
-    watchForLoadPreviewAndComments,
-    watchForLoadCommit,
-    watchForLoadCommitsForBranch,
     watchForLoadActivities,
-    watchForLoadActivitiesForProject,
-    watchForFormSubmit,
-    watchForCreateProject,
-    watchForDeleteProject,
-    watchForEditProject,
-    watchForUpdateBranchWithCommits,
     formSubmitSaga,
     createProject,
     editProject,
