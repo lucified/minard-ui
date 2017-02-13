@@ -1437,7 +1437,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next(deploymentObjects).value).to.deep.equal(
-        put(Deployments.actions.storeDeployments(<any> deploymentObjects)),
+        put(Deployments.actions.storeDeployments(deploymentObjects as any)),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -1445,7 +1445,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next(commitObjects).value).to.deep.equal(
-        put(Commits.actions.storeCommits(<any> commitObjects)),
+        put(Commits.actions.storeCommits(commitObjects as any)),
       );
 
       expect(iterator.next().done).to.equal(true);
