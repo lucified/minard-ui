@@ -4,7 +4,6 @@ import * as React from 'react';
 require('font-awesome/css/font-awesome.css');
 import './styles.scss';
 
-import { teamId } from '../api/team-id';
 import StreamingAPIHandler from './streaming-api-handler';
 
 const styles = require('./app.scss');
@@ -19,10 +18,12 @@ class App extends React.Component<PassedProps, any> {
   public componentWillMount() {
     const intercom = (window as any).Intercom;
     if (intercom) {
-      intercom('boot', {
+      // TODO: fix this
+
+      /*intercom('boot', {
         app_id: 'i2twhziy',
         user_id: teamId, // TODO: add proper user_id and user_email once known
-      });
+      });*/
     }
   }
 

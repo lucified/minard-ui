@@ -110,7 +110,7 @@ const patchApi = (path: string, payload: any): ApiPromise<ApiEntityResponse> =>
   });
 
 const Activity = {
-  fetchAll: (count: number, until?: number): ApiPromise<ApiEntityResponse> => {
+  fetchAll: (teamId: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
     const query: any = { count, filter: `team[${teamId}]` };
 
     if (until) {
@@ -170,9 +170,14 @@ const Deployment = {
 };
 
 const Project = {
-  fetchAll: (): ApiPromise<ApiEntityResponse> => getApi(`/api/teams/${teamId}/relationships/projects`),
+  fetchAll: (teamId: string): ApiPromise<ApiEntityResponse> => getApi(`/api/teams/${teamId}/relationships/projects`),
   fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}`),
-  create: (name: string, description?: string, projectTemplate?: string): ApiPromise<ApiEntityResponse> =>
+  create: (
+    teamId: string,
+    name: string,
+    description?: string,
+    projectTemplate?: string,
+  ): ApiPromise<ApiEntityResponse> =>
     postApi('/api/projects', {
       data: {
         type: 'projects',

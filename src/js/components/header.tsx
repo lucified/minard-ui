@@ -4,13 +4,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { teamName } from '../api/team-id';
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Selected from '../modules/selected';
 import Streaming, { ConnectionState } from '../modules/streaming';
+import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
-// import Avatar from './common/avatar';
+import Avatar from './common/avatar';
 
 const styles = require('./header.scss');
 const errorImage = require('../../images/icon-no-network.svg');
@@ -23,6 +23,8 @@ interface GeneratedStateProps {
   selectedSection: string;
   errors: FetchCollectionError[];
   connectionState: ConnectionState;
+  team?: Team;
+  userEmail?: string;
 }
 
 interface GeneratedDispatchProps {
@@ -38,7 +40,7 @@ const reloadPage = (e: React.MouseEvent<HTMLElement>) => {
   location.reload(true);
 };
 
-const Header = ({ errors, selectedSection, connectionState }: Props) => {
+const Header = ({ errors, selectedSection, connectionState, team, userEmail }: Props) => {
   let error: JSX.Element | null = null;
   let errorContent: JSX.Element | null = null;
   let errorClass: string = '';
@@ -76,6 +78,8 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => {
     );
   }
 
+  // TODO: What if we don't have team?
+
   return (
     <section className={styles['header-background']}>
       {error}
@@ -95,9 +99,9 @@ const Header = ({ errors, selectedSection, connectionState }: Props) => {
           </div>
           <div className={classNames(styles['profile-container'], 'col-xs')}>
             <span className={styles['team-dropdown']}>
-              {teamName/* TODO: add link and <Icon className={styles.caret} name="caret-down" /> */}
+              {team!.name/* TODO: add link and <Icon className={styles.caret} name="caret-down" /> */}
             </span>
-            {/* TODO: <Avatar size="lg" email="ville.saarinen@gmail.com" />*/}
+            <Avatar size="lg" email={userEmail} />
           </div>
         </div>
       </div>
@@ -116,6 +120,8 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
     errors: Errors.selectors.getFetchCollectionErrors(state),
     selectedSection,
     connectionState: Streaming.selectors.getConnectionState(state),
+    team: User.selectors.getTeam(state),
+    userEmail: User.selectors.getUserEmail(state),
   };
 };
 

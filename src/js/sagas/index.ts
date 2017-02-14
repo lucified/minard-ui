@@ -77,8 +77,8 @@ export default function createSagas(api: Api) {
 
   // ALL ACTIVITIES
   function* loadActivities(action: LoadActivitiesAction): IterableIterator<Effect> {
-    const { count, until } = action;
-    const fetchSuccess = yield call(fetchActivities, count, until);
+    const { teamId, count, until } = action;
+    const fetchSuccess = yield call(fetchActivities, teamId, count, until);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
     }
@@ -141,8 +141,9 @@ export default function createSagas(api: Api) {
   }
 
   // ALL PROJECTS
-  function* loadAllProjects(_action: LoadAllProjectsAction): IterableIterator<Effect> {
-    const fetchSuccess = yield call(fetchAllProjects);
+  function* loadAllProjects(action: LoadAllProjectsAction): IterableIterator<Effect> {
+    const { teamId } = action;
+    const fetchSuccess = yield call(fetchAllProjects, teamId);
     if (fetchSuccess) {
       yield fork(ensureAllProjectsRelatedDataLoaded);
     }

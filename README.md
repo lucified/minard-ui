@@ -49,14 +49,14 @@ Install minard-backend locally or on a separate server and start
 minard-ui with:
 
 ```shell
-yarn start -- <minard-backend API URL> <Team ID> # then open http://localhost:3000/ in a browser
+yarn start -- <minard-backend API URL> # then open http://localhost:3000/ in a browser
 ```
 
 By default, when run locally, the minard-backend (charles) API runs
 on `http://localhost:8000`:
 
 ```shell
-yarn start -- http://localhost:8000 3
+yarn start -- http://localhost:8000
 ```
 
 Note that the team ID needs to match the ID of a team that has been

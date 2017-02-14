@@ -5,6 +5,7 @@ import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import Previews, { Preview } from '../../modules/previews';
+import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
 import PreviewDialog from './preview-dialog';
@@ -30,6 +31,7 @@ interface GeneratedStateProps {
   preview?: Preview | FetchError;
   commit?: Commit | FetchError;
   deployment?: Deployment | FetchError;
+  isUserLoggedIn: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -56,7 +58,7 @@ class ProjectsFrame extends React.Component<Props, any> {
   }
 
   public render() {
-    const { commit, deployment, preview, params } = this.props;
+    const { commit, deployment, preview, params, isUserLoggedIn } = this.props;
 
     if (!preview) {
       return <div>Loading...</div>;
@@ -82,6 +84,7 @@ class ProjectsFrame extends React.Component<Props, any> {
 
     const showPreview = deployment.url && params.view !== 'log';
 
+    // TODO: check that isUserLoggedIn is enough authentication
     return (
       <div className={styles['preview-container']}>
         <PreviewDialog
@@ -91,6 +94,7 @@ class ProjectsFrame extends React.Component<Props, any> {
           preview={preview}
           buildLogSelected={!showPreview}
           highlightComment={params.commentId}
+          authenticatedUser={isUserLoggedIn}
         />
         <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
       </div>
@@ -113,6 +117,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     preview,
     commit,
     deployment,
+    isUserLoggedIn: User.selectors.isUserLoggedIn(state),
   };
 };
 

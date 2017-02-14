@@ -25,7 +25,9 @@ export interface ProjectState {
 
 // Actions
 // LOAD_ALL_PROJECTS
-export interface LoadAllProjectsAction extends Action {}
+export interface LoadAllProjectsAction extends Action {
+  teamId: string;
+}
 
 // LOAD_PROJECT
 export interface LoadProjectAction extends Action {
