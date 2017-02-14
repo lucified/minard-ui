@@ -199,6 +199,7 @@ describe('sagas', () => {
   describe('loadAllProjects', () => {
     const action = {
       type: Projects.actions.LOAD_ALL_PROJECTS,
+      teamId: '1',
     };
 
     it('fetches projects and ensures data', () => {
@@ -229,6 +230,7 @@ describe('sagas', () => {
   describe('loadActivities', () => {
     const action = {
       type: Activities.actions.LOAD_ACTIVITIES,
+      teamId: '1',
       count: 10,
       until: 283751293,
     };
