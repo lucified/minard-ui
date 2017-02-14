@@ -505,12 +505,12 @@ export default function createSagas(api: Api) {
 
   // CREATE PROJECT
   function* createProject(action: CreateProjectAction): IterableIterator<Effect> {
-    const { name, description, projectTemplate } = action.payload;
+    const { name, description, projectTemplate, teamId } = action.payload;
 
     yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
 
     const { response, error, details }: { response?: any, error?: string, details?: string } =
-      yield call(api.Project.create, name, description, projectTemplate);
+      yield call(api.Project.create, teamId, name, description, projectTemplate);
 
     if (response) {
       if (response.included) {

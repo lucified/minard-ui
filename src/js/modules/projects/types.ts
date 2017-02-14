@@ -47,6 +47,7 @@ export interface AddBranchesToProjectAction extends Action {
 
 // CREATE_PROJECT
 export interface CreateProjectFormData {
+  teamId: string;
   name: string;
   description?: string;
   projectTemplate?: string;
