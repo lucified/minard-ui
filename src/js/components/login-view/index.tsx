@@ -3,8 +3,8 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import { clearCredentials, storeCredentials } from '../../api/auth';
-import { login as intercomLogin, logout as intercomLogout } from '../../intercom';
+import { storeCredentials } from '../../api/auth';
+import { login as intercomLogin } from '../../intercom';
 import User from '../../modules/user';
 
 const styles = require('./index.scss');
@@ -23,12 +23,6 @@ type Props = GeneratedDispatchProps;
 
 class LoginView extends React.Component<Props, void> {
   private lock: Auth0LockStatic;
-
-  constructor(props: Props) {
-    super(props);
-
-    this.logout = this.logout.bind(this);
-  }
 
   public componentDidMount() {
     this.lock = new Auth0Lock(CLIENT_ID, DOMAIN, {
@@ -93,19 +87,10 @@ class LoginView extends React.Component<Props, void> {
     });
   }
 
-  private logout() {
-    const { clearUserDetails } = this.props;
-
-    intercomLogout();
-    clearUserDetails();
-    clearCredentials();
-  }
-
   public render() {
     return (
       <div className={styles.root}>
         <div className={styles['login-container']} id="login-container" />
-        <button onClick={this.logout}>Logout</button>
       </div>
     );
   }
