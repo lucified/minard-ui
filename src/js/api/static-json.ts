@@ -101,7 +101,7 @@ const Project = {
 };
 
 const Team = {
-  fetch: () => Promise.resolve({ response: { id: '3', name: 'Dev team' } }),
+  fetch: () => Promise.resolve({ response: { id: 3, name: 'Dev team' } }),
 };
 
 const API: Api = {

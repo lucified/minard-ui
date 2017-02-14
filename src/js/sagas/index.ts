@@ -589,7 +589,7 @@ export default function createSagas(api: Api) {
 
     if (response) {
       const { id, name } = response as ApiTeamResponse;
-      yield put(User.actions.setTeam(id, name));
+      yield put(User.actions.setTeam(String(id), name));
       yield put(Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator());
 
       return true;

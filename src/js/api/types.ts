@@ -45,7 +45,7 @@ export interface Api {
 export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities' | 'comments';
 
 export interface ApiTeamResponse {
-  id: string;
+  id: number;
   name: string;
 }
 
