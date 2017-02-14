@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Dispatch } from 'redux';
 
+import { trackEvent } from '../../intercom';
 import { logException } from '../../logger';
 import Errors, { DeleteError, isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
@@ -61,10 +62,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
       deleteProject(project.id, resolve, reject);
     })
     .then(() => {
-      const intercom = (window as any).Intercom;
-      if (intercom) {
-        intercom('trackEvent', 'project-deleted');
-      }
+      trackEvent('project-deleted');
 
       this.clearAndClose();
       router.push('/projects');
@@ -80,10 +78,7 @@ class ProjectSettingsDialog extends React.Component<Props, any> {
   }
 
   private editSuccess() {
-    const intercom = (window as any).Intercom;
-    if (intercom) {
-      intercom('trackEvent', 'project-edited');
-    }
+    trackEvent('project-edited');
 
     this.clearAndClose();
   }

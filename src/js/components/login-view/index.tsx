@@ -4,6 +4,7 @@ import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import { clearCredentials, storeCredentials } from '../../api/auth';
+import { login as intercomLogin, logout as intercomLogout } from '../../intercom';
 import User from '../../modules/user';
 
 const styles = require('./index.scss');
@@ -82,6 +83,7 @@ class LoginView extends React.Component<Props, void> {
       } else {
         const { email } = profile;
 
+        intercomLogin(email);
         storeCredentials(idToken, accessToken, email, expiresIn);
         setUserEmail(email);
 
@@ -94,6 +96,7 @@ class LoginView extends React.Component<Props, void> {
   private logout() {
     const { clearUserDetails } = this.props;
 
+    intercomLogout();
     clearUserDetails();
     clearCredentials();
   }

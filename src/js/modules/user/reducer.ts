@@ -1,9 +1,16 @@
 import { getEmail } from '../../api/auth';
+import { login as intercomLogin } from '../../intercom';
 import { CLEAR_USER_DETAILS, SET_TEAM, SET_USER_EMAIL } from './actions';
 import { SetTeamAction, SetUserEmailAction, UserState } from './types';
 
+// TODO: Move Intercom stuff elsewhere?
+const existingUserEmail = getEmail();
+if (existingUserEmail) {
+  intercomLogin(existingUserEmail);
+}
+
 const initialState: UserState = {
-  email: getEmail() || undefined,
+  email: existingUserEmail || undefined,
 };
 
 const reducer = (state: UserState = initialState, action: any): UserState => {

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Dispatch } from 'redux';
 
+import { trackEvent } from '../../intercom';
 import { isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import Projects, { Project } from '../../modules/projects';
@@ -48,10 +49,7 @@ class NewProjectDialog extends React.Component<Props, any> {
 
   private onSuccessfulCreation(result: any) {
     const project = result as Project;
-    const intercom = (window as any).Intercom;
-    if (intercom) {
-      intercom('trackEvent', 'project-created');
-    }
+    trackEvent('project-created');
 
     this.props.closeDialog();
     this.props.router.push(`/project/${project.id}`);

@@ -6,6 +6,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { Store } from 'redux';
 
 import { Api } from './api/types';
+import { update as updateIntercom } from './intercom';
 import Selected from './modules/selected';
 import routes from './routes';
 import sagaCreator from './sagas';
@@ -31,11 +32,7 @@ export const createStoreAndRender = (
     store.dispatch(Selected.actions.setSelected(project, branch, !!showAll));
 
     // Update Intercom with page changed information
-    const intercom = (window as any).Intercom;
-    if (intercom) {
-      // TODO: fix this and add proper user_id and user_email once known
-      // intercom('update', { user_id: teamId });
-    }
+    updateIntercom();
   });
 
   ReactDOM.render(
