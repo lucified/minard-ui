@@ -47,6 +47,7 @@ const generateErrorObject = (errorResponse: any) => {
   };
 };
 
+// TODO: indicate whether the server returns unauthorized and react to it in sagas
 const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
   const combinedOptions = {
     ...defaultOptions,
