@@ -85,6 +85,7 @@
     "lucify-deploy-config": "^0.1.11",
     "lucify-notifier": "^0.1.9",
     "mocha": "^3.2.0",
+    "mock-local-storage": "^1.0.2",
     "node-sass": "^4.5.0",
     "postcss-loader": "^1.2.2",
     "postcss-reporter": "^3.0.0",

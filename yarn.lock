@@ -2,11 +2,7 @@
 # yarn lockfile v1
 
 
-"@types/auth0-js@*":
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-8.1.0.tgz#3aaa2f8a12e66c1c06574be086400d84f67b7b43"
-
-"@types/auth0-js@0.0.7":
+"@types/auth0-js@*", "@types/auth0-js@0.0.7":
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-0.0.7.tgz#bc5d251913d0f951318d337d30f0ad5cadea4cf1"
 
@@ -1324,6 +1320,10 @@ copy-webpack-plugin@^4.0.1:
     lodash "^4.3.0"
     minimatch "^3.0.0"
     node-dir "^0.1.10"
+
+core-js@^0.8.3:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-0.8.4.tgz#c22665f1e0d1b9c3c5e1b08dabd1f108695e4fcf"
 
 core-js@^1.0.0:
   version "1.2.7"
@@ -3523,6 +3523,12 @@ mocha@^3.2.0:
     lodash.create "3.1.1"
     mkdirp "0.5.1"
     supports-color "3.1.2"
+
+mock-local-storage@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/mock-local-storage/-/mock-local-storage-1.0.2.tgz#a65a65cddab4707433d52ba4e9f6b63084b8c298"
+  dependencies:
+    core-js "^0.8.3"
 
 moment@2.x.x, moment@^2.17.1:
   version "2.17.1"
