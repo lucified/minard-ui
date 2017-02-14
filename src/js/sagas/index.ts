@@ -594,6 +594,7 @@ export default function createSagas(api: Api) {
 
       return true;
     } else {
+      // TODO: handle failure, e.g. not authorized or member of team
       yield put(Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(error, details));
 
       return false;
