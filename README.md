@@ -67,13 +67,23 @@ created in [minard-backend](https://github.com/lucified/minard-backend).
 Build a production version of the app into `dist/` by running:
 
 ```shell
-NODE_ENV=production CHARLES=<API URL> yarn run build
+NODE_ENV=production \
+CHARLES=<API URL> \
+AUTH0_CLIENT_ID=<client ID> \
+AUTH0_DOMAIN=<domain> \
+AUTH0_AUDIENCE=<audience> \
+yarn run build
 ```
 
 To watch for changes and update the build accordingly, run:
 
 ```shell
-NODE_ENV=production CHARLES=<API URL> yarn run watch
+NODE_ENV=production \
+CHARLES=<API URL> \
+AUTH0_CLIENT_ID=<client ID> \
+AUTH0_DOMAIN=<domain> \
+AUTH0_AUDIENCE=<audience> \
+yarn run watch
 ```
 
 ## Testing
@@ -83,6 +93,20 @@ Run `yarn test`. To start a test watcher, run `yarn run test:watch`.
 ## Other commands
 
 Run `yarn run` to see other available commands.
+
+## Environment variables
+
+- **NODE_ENV**: Used to set the environment. Set it to 'production' to enable optimizations. Defaults to 'development'.
+- **LUCIFY_ENV**: Overrides NODEENV if set. Meant to be used for automatic deployments.
+- **CHARLES_PRODUCTION**: URL for the backend server API when the environment is set to 'production'. Defaults to `https://charles.lucify.com`.
+- **CHARLES_STAGING**: URL for the backend server API when the environment is set to 'staging'. Defaults to `https://charles-staging.lucify.com`.
+- **CHARLES**: Fallback URL of the backend server API.
+- **CHARLES_STREAMING_PRODUCTION**: URL for the streaming API when the environment is set to 'production'.
+- **CHARLES_STREAMING_STAGING**: URL for the streaming API when the environment is set to 'staging'.
+- **STREAMING_API**: Fallback URL of the streaming API. If no URL is set for the streaming API, falls back the charles API URL.
+- **AUTH0_CLIENT_ID**: The client ID for Auth0. Defaults to the client in Lucify's dev account.
+- **AUTH0_DOMAIN**: The domain used for Auth0 authentication. Defaults to Lucify's dev account domain.
+- **AUTH0_AUDIENCE**: The Auth0 audeince that we're requesting. Needs to match the correct API in Auth0. Defaults to `http://localhost:8000`.
 
 ## Acknowledgements
 
