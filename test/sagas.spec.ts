@@ -61,7 +61,7 @@ const createApi = (): Api => {
       delete: (_id: string) => Promise.resolve({ response: {}}),
     },
     Team: {
-      fetch: () => Promise.resolve({ response: { id: '1', name: 'name' } }),
+      fetch: () => Promise.resolve({ response: { id: 1, name: 'name' } }),
     },
   };
 };
@@ -197,16 +197,17 @@ describe('sagas', () => {
   );
 
   describe('loadAllProjects', () => {
+    const teamId = '1';
     const action = {
       type: Projects.actions.LOAD_ALL_PROJECTS,
-      teamId: '1',
+      teamId,
     };
 
     it('fetches projects and ensures data', () => {
       const iterator = sagas.loadAllProjects(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchAllProjects),
+        call(sagas.fetchAllProjects, teamId),
       );
 
       expect(iterator.next(true).value).to.deep.equal(
@@ -220,7 +221,7 @@ describe('sagas', () => {
       const iterator = sagas.loadAllProjects(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchAllProjects),
+        call(sagas.fetchAllProjects, teamId),
       );
 
       expect(iterator.next(false).done).to.equal(true);
@@ -228,9 +229,10 @@ describe('sagas', () => {
   });
 
   describe('loadActivities', () => {
+    const teamId = '1';
     const action = {
       type: Activities.actions.LOAD_ACTIVITIES,
-      teamId: '1',
+      teamId,
       count: 10,
       until: 283751293,
     };
@@ -239,7 +241,7 @@ describe('sagas', () => {
       const iterator = sagas.loadActivities(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivities, action.count, action.until),
+        call(sagas.fetchActivities, teamId, action.count, action.until),
       );
 
       expect(iterator.next(true).value).to.deep.equal(
@@ -253,7 +255,7 @@ describe('sagas', () => {
       const iterator = sagas.loadActivities(action);
 
       expect(iterator.next().value).to.deep.equal(
-        call(sagas.fetchActivities, action.count, action.until),
+        call(sagas.fetchActivities, teamId, action.count, action.until),
       );
 
       expect(iterator.next(false).done).to.equal(true);
@@ -1469,9 +1471,11 @@ describe('sagas', () => {
     const name = 'projectName';
     const description = 'projectDescription';
     const projectTemplate = undefined;
+    const teamId = '1';
     const action = {
       type: 'SUBMITACTION',
       payload: {
+        teamId,
         name,
         description,
         projectTemplate,
@@ -1492,7 +1496,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.create, name, description, projectTemplate),
+        call(api.Project.create, teamId, name, description, projectTemplate),
       );
     });
 
