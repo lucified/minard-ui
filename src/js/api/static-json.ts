@@ -98,6 +98,10 @@ const Project = {
     // Promise.resolve({ error: 'sad face :(' });
 };
 
+const Team = {
+  fetch: () => Promise.resolve({ response: { id: '3', name: 'Dev team' } }),
+};
+
 const API: Api = {
   Activity,
   Branch,
@@ -106,6 +110,7 @@ const API: Api = {
   Deployment,
   Preview,
   Project,
+  Team,
 };
 
 export default API;

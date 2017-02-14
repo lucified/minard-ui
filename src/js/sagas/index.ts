@@ -4,7 +4,14 @@ import { takeEvery, takeLatest, throttle } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
-import { Api, ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPreviewResponse } from '../api/types';
+import {
+  Api,
+  ApiEntity,
+  ApiEntityResponse,
+  ApiEntityTypeString,
+  ApiPreviewResponse,
+  ApiTeamResponse,
+} from '../api/types';
 import { logException, logMessage } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
@@ -32,6 +39,7 @@ import Projects, {
   StoreProjectsAction,
 } from '../modules/projects';
 import Requests, { CreateEntitySuccessAction, EditEntitySuccessAction } from '../modules/requests';
+import User, { LoadTeamInformationAction } from '../modules/user';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -76,7 +84,7 @@ export default function createSagas(api: Api) {
     }
   }
 
-  const fetchActivities = createCollectionFetcher(
+  const fetchActivities = createCollectionFetcher<string | number | undefined>(
     Requests.actions.Activities.LoadAllActivities,
     Converter.toActivities,
     Activities.actions.storeActivities,
@@ -572,6 +580,25 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // User
+  function *loadTeamInformation(_action: LoadTeamInformationAction): IterableIterator<Effect> {
+    yield put(Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator());
+
+    const { response, error, details } = yield call(api.Team.fetch);
+
+    if (response) {
+      const { id, name } = response as ApiTeamResponse;
+      yield put(User.actions.setTeam(id, name));
+      yield put(Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator());
+
+      return true;
+    } else {
+      yield put(Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(error, details));
+
+      return false;
+    }
+  }
+
   // FORMS
   function* formSubmitSaga({
     payload: {
@@ -619,6 +646,13 @@ export default function createSagas(api: Api) {
     }
   }
 
+  function* watchForLoadTeamInformation(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(User.actions.LOAD_TEAM_INFORMATION);
+      // Block until it's done, skipping any further actions
+      yield call(loadTeamInformation, action);
+    }
+  }
 
   function* root() {
     yield [
@@ -639,6 +673,7 @@ export default function createSagas(api: Api) {
       throttle(200, Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
       fork(watchForLoadAllProjects),
       fork(watchForLoadActivities),
+      fork(watchForLoadTeamInformation),
     ];
   }
 

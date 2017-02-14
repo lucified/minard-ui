@@ -1,19 +1,33 @@
 import Auth0Lock from 'auth0-lock';
 import * as React from 'react';
-import { InjectedRouter, withRouter } from 'react-router';
+import { connect, Dispatch } from 'react-redux';
+import { push } from 'react-router-redux';
+
+import { clearCredentials, storeCredentials } from '../../api/auth';
+import User from '../../modules/user';
 
 const styles = require('./index.scss');
 
-const CLIENT_ID = process.env.AUTH0_CLIENT_ID || 'ZaeiNyV7S7MpI69cKNHr8wXe5Bdr8tvW';
-const DOMAIN = process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com';
-const AUDIENCE = process.env.AUTH0_AUDIENCE || 'https://charles-staging.minard.io';
+const CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+const DOMAIN = process.env.AUTH0_DOMAIN;
+const AUDIENCE = process.env.AUTH0_AUDIENCE;
 
-interface Props {
-  router: InjectedRouter;
-};
+interface GeneratedDispatchProps {
+  navigateTo: (url: string) => void;
+  setUserEmail: (email: string) => void;
+  clearUserDetails: () => void;
+}
+
+type Props = GeneratedDispatchProps;
 
 class LoginView extends React.Component<Props, void> {
   private lock: Auth0LockStatic;
+
+  constructor(props: Props) {
+    super(props);
+
+    this.logout = this.logout.bind(this);
+  }
 
   public componentDidMount() {
     this.lock = new Auth0Lock(CLIENT_ID, DOMAIN, {
@@ -34,7 +48,7 @@ class LoginView extends React.Component<Props, void> {
       auth: {
         responseType: 'token',
         params: {
-          scope: 'openid profile',
+          scope: 'openid email', // TODO: get real name once we can (somehow)
           audience: AUDIENCE,
         },
       },
@@ -52,38 +66,36 @@ class LoginView extends React.Component<Props, void> {
     this.lock.show();
   }
 
-  private onError(error: Auth0Error) {;
+  private onError(error: Auth0Error) {
     console.error('Unable to login', error);
+    // TODO: handle this
   }
 
   private onAuthentication(authResult: any) {
-    const { idToken, accessToken } = authResult;
-
-    console.log('authResult', authResult);
-    this.setToken(idToken, accessToken);
+    const { navigateTo, setUserEmail } = this.props;
+    const { idToken, accessToken, expiresIn } = authResult;
 
     this.lock.getUserInfo(accessToken, (error: Auth0Error, profile: Auth0UserProfile) => {
       if (error) {
         console.error('Unable to get user information', error);
+        // TODO: handle this
       } else {
-        console.log(profile);
-      }
+        const { email } = profile;
 
-      // TODO: store information into Redux store
-      const { router } = this.props;
-      router.push('/projects');
-      // TODO: redirect to page where user came from
+        storeCredentials(idToken, accessToken, email, expiresIn);
+        setUserEmail(email);
+
+        navigateTo('/');
+        // TODO: redirect to page where user came from
+      }
     });
   }
 
-  private setToken(idToken: string, accessToken: string) {
-    localStorage.setItem('id_token', idToken);
-    localStorage.setItem('access_token', accessToken);
-  }
-
   private logout() {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('access_token');
+    const { clearUserDetails } = this.props;
+
+    clearUserDetails();
+    clearCredentials();
   }
 
   public render() {
@@ -96,4 +108,10 @@ class LoginView extends React.Component<Props, void> {
   }
 };
 
-export default withRouter(LoginView);
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  navigateTo: (url: string) => { dispatch(push(url)); },
+  setUserEmail: (email: string) => { dispatch(User.actions.setUserEmail(email)); },
+  clearUserDetails: () => { dispatch(User.actions.clearUserDetails()); },
+});
+
+export default connect(() => ({}), mapDispatchToProps)(LoginView);

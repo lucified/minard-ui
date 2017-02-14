@@ -23,6 +23,7 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
     case actions.Commits.LoadCommitsForBranch.REQUEST.type:
     case actions.Comments.LoadCommentsForDeployment.REQUEST.type:
     case actions.Comments.DeleteComment.REQUEST.type:
+    case actions.User.LoadTeamInformation.REQUEST.type:
     case actions.ALL_ACTIVITIES_REQUESTED:
     case actions.ALL_ACTIVITIES_REQUESTED_FOR_PROJECT:
       return state.concat(action);
@@ -40,6 +41,12 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
       return returnFilteredStateIfChanged(
         state,
         requestInfo => requestInfo.type !== actions.Activities.LoadAllActivities.REQUEST.type,
+      );
+    case actions.User.LoadTeamInformation.FAILURE.type:
+    case actions.User.LoadTeamInformation.SUCCESS.type:
+      return returnFilteredStateIfChanged(
+        state,
+        requestInfo => requestInfo.type !== actions.User.LoadTeamInformation.REQUEST.type,
       );
     case actions.Comments.LoadCommentsForDeployment.FAILURE.type:
     case actions.Comments.LoadCommentsForDeployment.SUCCESS.type:

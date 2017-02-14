@@ -31,10 +31,18 @@ export interface Api {
     edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise<ApiEntityResponse>;
     delete: (id: string) => ApiPromise<{}>;
   };
+  Team: {
+    fetch: () => ApiPromise<ApiTeamResponse>;
+  };
 }
 
 // Response formats
 export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities' | 'comments';
+
+export interface ApiTeamResponse {
+  id: string;
+  name: string;
+}
 
 export interface ApiEntity {
   type: ApiEntityTypeString;

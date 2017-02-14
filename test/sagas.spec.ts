@@ -60,6 +60,9 @@ const createApi = (): Api => {
         Promise.resolve(emptyResponse),
       delete: (_id: string) => Promise.resolve({ response: {}}),
     },
+    Team: {
+      fetch: () => Promise.resolve({ response: { id: '1', name: 'name' } }),
+    },
   };
 };
 

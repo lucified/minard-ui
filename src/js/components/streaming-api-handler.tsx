@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 require('event-source-polyfill');
 
+import { getAccessToken } from '../api/auth';
 import { toActivities, toBranches, toComments, toCommits, toDeployments, toProjects } from '../api/convert';
 import { teamId } from '../api/team-id';
 import {
@@ -272,9 +273,7 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   private restartConnection() {
-    // TODO: improve architecture for getting access token
-    const accessToken = localStorage.getItem('access_token');
-    const url = accessToken ? `${streamingAPIUrl}?token=${encodeURIComponent(accessToken)}` : streamingAPIUrl;
+    const accessToken = getAccessToken();
     this._source = new EventSource(url, { withCredentials: false });
 
     this._source.addEventListener('error', (e: EventSourceError) => {

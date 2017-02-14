@@ -183,6 +183,10 @@ export const Activities = {
   LoadActivitiesForProject: fetchEntityActionCreators('ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT'),
 };
 
+export const User = {
+  LoadTeamInformation: fetchCollectionActionCreators('USER/LOAD_TEAM_INFORMATION'),
+};
+
 // This action is created once all activities have been requested from the server
 export const ALL_ACTIVITIES_REQUESTED = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED';
 export const allActivitiesRequested = (): t.AllActivitiesRequestedAction => ({

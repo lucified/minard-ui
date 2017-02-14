@@ -2,8 +2,8 @@ import 'isomorphic-fetch';
 import * as moment from 'moment';
 
 import { logMessage } from '../logger';
-import { teamId } from './team-id';
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise } from './types';
+import { getAccessToken } from './auth';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise, ApiTeamResponse } from './types';
 
 if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
@@ -47,9 +47,6 @@ const generateErrorObject = (errorResponse: any) => {
   };
 };
 
-// TODO: Improve the architecture for this
-const getAccessToken = () => localStorage.getItem('access_token');
-
 const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
   const combinedOptions = {
     ...defaultOptions,
@@ -78,7 +75,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
     });
 };
 
-const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
+const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse | ApiTeamResponse> => {
   let queryString = '';
 
   if (query) {
@@ -210,6 +207,10 @@ const Preview = {
     getApi(`/api/preview/${id}`, { sha: commitHash }),
 };
 
+const Team = {
+  fetch: () => getApi('/team'),
+};
+
 const API: Api = {
   Activity,
   Branch,
@@ -218,6 +219,7 @@ const API: Api = {
   Deployment,
   Preview,
   Project,
+  Team,
 };
 
 export default API;
