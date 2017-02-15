@@ -74,16 +74,18 @@ class LoginView extends React.Component<Props, void> {
       if (error) {
         console.error('Unable to get user information', error);
         // TODO: handle this
-      } else {
-        const { email } = profile;
 
-        intercomLogin(email);
-        storeCredentials(idToken, accessToken, email, expiresIn);
-        setUserEmail(email);
-
-        navigateTo('/');
-        // TODO: redirect to page where user came from
+        return;
       }
+
+      const { email } = profile;
+
+      intercomLogin(email);
+      storeCredentials(idToken, accessToken, email, expiresIn);
+      setUserEmail(email);
+
+      navigateTo('/');
+      // TODO: redirect to page where user came from
     });
   }
 
