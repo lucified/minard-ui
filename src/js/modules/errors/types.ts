@@ -19,7 +19,7 @@ interface GenericError {
   prettyError: string;
 }
 
-export type Error = FetchError | FetchCollectionError | CreateError | DeleteError | EditError;
+export type Error = FetchError | FetchCollectionError | CreateError | DeleteError | EditError;
 
 export interface FetchError extends GenericError {
   id: string;

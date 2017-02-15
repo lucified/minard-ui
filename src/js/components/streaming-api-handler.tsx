@@ -138,7 +138,7 @@ const toConnectionState = (state: any): ConnectionState => {
 class StreamingAPIHandler extends React.Component<Props, any> {
   private _source: any;
 
-  constructor(props: GeneratedDispatchProps) {
+  constructor(props: GeneratedDispatchProps) {
     super(props);
 
     this.restartConnection = this.restartConnection.bind(this);

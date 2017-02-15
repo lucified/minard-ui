@@ -13,7 +13,7 @@ interface Props {
 }
 
 // TODO: handle FetchErrors somehow differently?
-const DeploymentScreenshot = ({ deployment, className }: Props) => (
+const DeploymentScreenshot = ({ deployment, className }: Props) => (
   <img
     src={(deployment && !isFetchError(deployment) && deployment.screenshot) || noScreenshot}
     className={classNames(styles.image, className)}

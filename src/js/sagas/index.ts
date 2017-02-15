@@ -309,7 +309,7 @@ export default function createSagas(api: Api) {
 
   // COMMENTS_FOR_DEPLOYMENT
   function* loadCommentsForDeployment(id: string): IterableIterator<Effect> {
-    const deployment = (yield select(Deployments.selectors.getDeployment, id)) as Deployment | FetchError | undefined;
+    const deployment = (yield select(Deployments.selectors.getDeployment, id)) as Deployment | FetchError | undefined;
 
     // Return if we're already requesting
     if (yield select(Requests.selectors.isLoadingCommentsForDeployment, id)) {
@@ -412,7 +412,7 @@ export default function createSagas(api: Api) {
   // COMMITS_FOR_BRANCH
   function* loadCommitsForBranch(action: LoadCommitsForBranchAction): IterableIterator<Effect> {
     const { id, count, until } = action;
-    let branch = (yield select(Branches.selectors.getBranch, id)) as Branch | FetchError | undefined;
+    let branch = (yield select(Branches.selectors.getBranch, id)) as Branch | FetchError | undefined;
 
     while (!branch) {
       const { entities: branches } = (yield take(Branches.actions.STORE_BRANCHES)) as StoreBranchesAction;

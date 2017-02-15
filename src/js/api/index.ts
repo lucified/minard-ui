@@ -79,7 +79,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
     });
 };
 
-const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse | ApiTeamResponse> => {
+const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse | ApiTeamResponse> => {
   let queryString = '';
 
   if (query) {

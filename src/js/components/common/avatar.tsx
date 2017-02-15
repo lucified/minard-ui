@@ -16,7 +16,7 @@ interface Props {
 
 // Get double the actual size (for retina displays)
 const getRetinaSize = (sizeLabel?: string): number => {
-  switch (sizeLabel) {
+  switch (sizeLabel) {
     case 'xs':
       return 32;
     case 'sm':

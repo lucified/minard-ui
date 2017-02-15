@@ -56,7 +56,7 @@ class CommentList extends React.Component<Props, any> {
   }
 
   private scrollToElement(element: HTMLElement | null) {
-    if (element) {
+    if (element) {
       this.listRef.scrollTop = element.offsetTop - 50;
     } else {
       console.error('Unable to find highlighted comment element.');
