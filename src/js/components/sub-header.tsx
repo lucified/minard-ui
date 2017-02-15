@@ -29,7 +29,7 @@ interface GeneratedProps {
 class SubHeader extends React.Component<GeneratedProps, any> {
   public render() {
     const { openPageType, project, team } = this.props;
-    let leftContent: JSX.Element | null = null;
+    let leftContent: JSX.Element | null = null;
     const centerContent: JSX.Element | null = null;
     const rightContent: JSX.Element | null = null;
 
