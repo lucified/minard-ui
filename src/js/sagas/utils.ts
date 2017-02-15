@@ -46,7 +46,7 @@ export const createLoader = (
 
 export const createEntityFetcher = <ApiParams>(
   requestActionCreators: FetchEntityActionCreators,
-  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
+  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
   apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise<ApiEntityResponse>,
   postStoreEffects?: (id: string, response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
@@ -84,7 +84,7 @@ export const createEntityFetcher = <ApiParams>(
 
 export const createCollectionFetcher = <ApiParams>(
   requestActionCreators: CollectionActionCreators,
-  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
+  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
   apiFetchFunction: (...args: ApiParams[]) => ApiPromise<ApiEntityResponse>,
   postStoreEffects?: (response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
@@ -121,7 +121,7 @@ export const createCollectionFetcher = <ApiParams>(
 const storingMetadata: {
   type: ApiEntityTypeString,
   storeActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
+  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
 }[] = [
   { type: 'projects', storeActionCreator: Projects.actions.storeProjects, converter: Converter.toProjects },
   { type: 'deployments', storeActionCreator: Deployments.actions.storeDeployments, converter: Converter.toDeployments },

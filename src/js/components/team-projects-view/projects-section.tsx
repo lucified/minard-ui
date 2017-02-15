@@ -4,10 +4,11 @@ import * as FlipMove from 'react-flip-move';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { teamName } from '../../api/team-id';
 import { FetchError, isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import { Project } from '../../modules/projects';
+import User, { Team } from '../../modules/user';
+import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
 import MinardLink from '../common/minard-link';
@@ -25,7 +26,7 @@ interface PassedProps {
 }
 
 interface GeneratedStateProps {
-
+  team?: Team;
 }
 
 interface GeneratedDispatchProps {
@@ -36,12 +37,14 @@ type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 
 class ProjectsSection extends React.Component<Props, any> {
   public render() {
-    const { projects, isLoading, openCreateNewProjectDialog, showAll, count = 6 } = this.props;
+    const { projects, isLoading, openCreateNewProjectDialog, team, showAll, count = 6 } = this.props;
     const filteredProjects = (projects.filter(project => !isFetchError(project)) as Project[])
       .sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp);
     const projectsToShow = showAll ? filteredProjects : filteredProjects.slice(0, count);
     // If we're only showing some of the projects, don't show the loading indicator if we have enough to show
     const showLoadingIcon = isLoading && (showAll || (filteredProjects.length < count));
+
+    // TODO: What if we don't have team?
 
     return (
       <section className="container">
@@ -54,7 +57,7 @@ class ProjectsSection extends React.Component<Props, any> {
           )}
         >
           <span>
-            {showAll ? 'All' : 'Latest'} projects for <span className={styles.team}>{teamName}</span>
+            {showAll ? 'All' : 'Latest'} projects for <span className={styles.team}>{team!.name}</span>
           </span>
         </SectionTitle>
         <FlipMove className="row center-xs start-sm" enterAnimation="elevator" leaveAnimation="elevator">
@@ -95,7 +98,11 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
+const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
+  team: User.selectors.getTeam(state),
+});
+
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  () => ({}),
+  mapStateToProps,
   mapDispatchToProps,
 )(ProjectsSection);

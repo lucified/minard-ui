@@ -64,6 +64,7 @@ export interface ActivityState {
 // Actions
 // ACTIVITIES
 export interface LoadActivitiesAction extends Action {
+  teamId: string;
   count: number;
   until?: number;
 }

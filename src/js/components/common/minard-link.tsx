@@ -64,7 +64,7 @@ class MinardLink extends React.Component<Props, any> {
       // Link to build log if preview is not ready
       path = (preview.url && !buildLog) ?
         `/preview/${commit.hash}/${preview.id}` : `/preview/${commit.hash}/${preview.id}/log`;
-    } else if (comment) {
+    } else if (comment) {
       if (!commit) {
         console.error('Missing commit information for comment link!', comment);
         return <span className={className}>{children}</span>;

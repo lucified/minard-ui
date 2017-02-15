@@ -2,7 +2,7 @@ export type ApiPromise<T> = Promise<{ response: T; } | { error: string; details?
 
 export interface Api {
   Activity: {
-    fetchAll: (count: number, until?: number) => ApiPromise<ApiEntityResponse>;
+    fetchAll: (teamId: string, count: number, until?: number) => ApiPromise<ApiEntityResponse>;
     fetchAllForProject: (id: string, count: number, until?: number) => ApiPromise<ApiEntityResponse>;
   };
   Branch: {
@@ -25,16 +25,29 @@ export interface Api {
     fetch: (id: string, commitHash: string) => ApiPromise<ApiPreviewResponse>;
   };
   Project: {
-    fetchAll: () => ApiPromise<ApiEntityResponse>;
+    fetchAll: (teamId: string) => ApiPromise<ApiEntityResponse>;
     fetch: (id: string) => ApiPromise<ApiEntityResponse>;
-    create: (name: string, description?: string, projectTemplate?: string) => ApiPromise<ApiEntityResponse>;
+    create: (
+      teamId: string,
+      name: string,
+      description?: string,
+      projectTemplate?: string,
+    ) => ApiPromise<ApiEntityResponse>;
     edit: (id: string, newAttributes: { description?: string, name?: string }) => ApiPromise<ApiEntityResponse>;
     delete: (id: string) => ApiPromise<{}>;
+  };
+  Team: {
+    fetch: () => ApiPromise<ApiTeamResponse>;
   };
 }
 
 // Response formats
 export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities' | 'comments';
+
+export interface ApiTeamResponse {
+  id: number;
+  name: string;
+}
 
 export interface ApiEntity {
   type: ApiEntityTypeString;

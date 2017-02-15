@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { teamId } from '../../api/team-id';
 import { getValue } from '../../cookie';
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
@@ -20,6 +19,7 @@ interface Props {
   commit: Commit;
   deployment: Deployment;
   preview: Preview;
+  authenticatedUser: boolean;
   highlightComment?: string;
   className?: string;
 }
@@ -49,12 +49,16 @@ class PreviewDialog extends React.Component<Props, State> {
   }
 
   public render() {
-    const { buildLogSelected, className, commit, deployment, highlightComment, preview } = this.props;
+    const {
+      buildLogSelected,
+      className,
+      commit,
+      deployment,
+      highlightComment,
+      preview,
+      authenticatedUser,
+    } = this.props;
     const { dialogOpen } = this.state;
-
-    // This cookie is set in ProjectsFrame.
-    // TODO: Remove this once we have proper user authentication in place.
-    const authenticatedUser = getValue('teamUser') === `${teamId}`;
 
     return (
       <div className={classNames(styles.dialog, className)}>
@@ -85,7 +89,7 @@ class PreviewDialog extends React.Component<Props, State> {
             authenticatedUser={authenticatedUser}
           />
         )}
-        {dialogOpen && (
+        {dialogOpen /* TODO: get email from user auth if available */ && (
           <NewCommentForm
             initialValues={{
               deployment: deployment.id,

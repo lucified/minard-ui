@@ -3,10 +3,10 @@ import * as React from 'react';
 // import * as Icon from 'react-fontawesome';
 import { connect } from 'react-redux';
 
-import { teamName } from '../api/team-id';
 import { FetchError, isFetchError } from '../modules/errors';
 import Projects, { Project } from '../modules/projects';
 import Selected from '../modules/selected';
+import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 import MinardLink from './common/minard-link';
 
@@ -22,22 +22,24 @@ enum PageType {
 
 interface GeneratedProps {
   openPageType: PageType;
-  teamName?: string;
+  team?: Team;
   project?: Project | FetchError;
 }
 
 class SubHeader extends React.Component<GeneratedProps, any> {
   public render() {
-    const { openPageType, project, teamName } = this.props;
-    let leftContent: JSX.Element | null = null;
-    const centerContent: JSX.Element | null = null;
-    const rightContent: JSX.Element | null = null;
+    const { openPageType, project, team } = this.props;
+    let leftContent: JSX.Element | null = null;
+    const centerContent: JSX.Element | null = null;
+    const rightContent: JSX.Element | null = null;
+
+    // TODO: what if we don't have team?
 
     if (project && !isFetchError(project) &&
       (openPageType === PageType.BranchView || openPageType === PageType.BranchesList)) {
       leftContent = <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>;
-    } else if (teamName && (openPageType === PageType.ProjectView || openPageType === PageType.ProjectsList)) {
-      leftContent = <MinardLink className={styles['sub-header-link']} homepage>‹ {teamName}</MinardLink>;
+    } else if (team!.name && (openPageType === PageType.ProjectView || openPageType === PageType.ProjectsList)) {
+      leftContent = <MinardLink className={styles['sub-header-link']} homepage>‹ {team!.name}</MinardLink>;
     }
 
     /* TODO: uncomment this once we add sorting
@@ -102,7 +104,7 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   return {
     openPageType,
     project,
-    teamName,
+    team: User.selectors.getTeam(state),
   };
 };
 

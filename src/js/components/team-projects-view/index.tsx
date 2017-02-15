@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
 import { FetchError } from '../../modules/errors';
 import Projects, { Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
+import User, { Team } from '../../modules/user';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
@@ -25,24 +26,41 @@ interface GeneratedStateProps {
   isLoadingProjects: boolean;
   isLoadingAllActivities: boolean;
   isAllActivitiesRequested: boolean;
+  team?: Team;
 }
 
 interface GeneratedDispatchProps {
-  loadAllProjects: () => void;
-  loadActivities: (count: number, until?: number) => void;
+  loadAllProjects: (teamId: string) => void;
+  loadActivities: (teamId: string, count: number, until?: number) => void;
 }
 
-class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDispatchProps & PassedProps, any> {
-  public componentWillMount() {
-    const { loadAllProjects, loadActivities } = this.props;
+type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
 
-    loadAllProjects();
-    loadActivities(15);
+class TeamProjectsView extends React.Component<Props, any> {
+  constructor(props: Props) {
+    super(props);
+
+    this.loadMoreActivities = this.loadMoreActivities.bind(this);
+  }
+
+  public componentWillMount() {
+    const { loadAllProjects, loadActivities, team } = this.props;
+
+    // TODO: What if team is missing?
+
+    loadAllProjects(team!.id);
+    loadActivities(team!.id, 15);
+  }
+
+  private loadMoreActivities(count: number, until?: number) {
+    const { loadActivities, team } = this.props;
+
+    loadActivities(team!.id, count, until);
   }
 
   public render() {
     const { activities, projects, params: { show } } = this.props;
-    const { isLoadingAllActivities, isLoadingProjects, isAllActivitiesRequested, loadActivities } = this.props;
+    const { isLoadingAllActivities, isLoadingProjects, isAllActivitiesRequested } = this.props;
 
     if (isLoadingProjects && projects.length === 0) {
       return <LoadingIcon className={styles.loading} center />;
@@ -59,7 +77,7 @@ class TeamProjectsView extends React.Component<GeneratedStateProps & GeneratedDi
         <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={6} />
         <ActivitySection
           activities={activities}
-          loadActivities={loadActivities}
+          loadActivities={this.loadMoreActivities}
           isLoading={isLoadingAllActivities}
           allLoaded={isAllActivitiesRequested}
         />
@@ -74,12 +92,17 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   isLoadingProjects: Requests.selectors.isLoadingAllProjects(state),
   isLoadingAllActivities: Requests.selectors.isLoadingAllActivities(state),
   isAllActivitiesRequested: Requests.selectors.isAllActivitiesRequested(state),
+  team: User.selectors.getTeam(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },
+  loadActivities: (teamId: string, count: number, until?: number) => {
+    dispatch(Activities.actions.loadActivities(teamId, count, until));
+  },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  {
-    loadAllProjects: Projects.actions.loadAllProjects,
-    loadActivities: Activities.actions.loadActivities,
-  },
+  mapDispatchToProps,
 )(TeamProjectsView);

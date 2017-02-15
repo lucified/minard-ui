@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Dispatch } from 'redux';
 
+import { trackEvent } from '../../intercom';
 import { isFetchError } from '../../modules/errors';
 import Modal, { ModalType } from '../../modules/modal';
 import Projects, { Project } from '../../modules/projects';
+import User, { Team } from '../../modules/user';
 import { StateTree } from '../../reducers';
 
 import NewProjectForm from './new-project-form';
@@ -24,6 +26,7 @@ interface InjectedProps {
 
 interface GeneratedStateProps {
   isOpen: boolean;
+  team?: Team;
   existingProjects: Project[];
 }
 
@@ -48,17 +51,14 @@ class NewProjectDialog extends React.Component<Props, any> {
 
   private onSuccessfulCreation(result: any) {
     const project = result as Project;
-    const intercom = (window as any).Intercom;
-    if (intercom) {
-      intercom('trackEvent', 'project-created');
-    }
+    trackEvent('project-created');
 
     this.props.closeDialog();
     this.props.router.push(`/project/${project.id}`);
   }
 
   public render() {
-    const { isOpen, closeDialog, existingProjects } = this.props;
+    const { isOpen, closeDialog, existingProjects, team } = this.props;
 
     return (
       <ModalDialog
@@ -76,6 +76,7 @@ class NewProjectDialog extends React.Component<Props, any> {
         </header>
         <NewProjectForm
           existingProjects={existingProjects}
+          initialValues={{ teamId: team!.id }}
           onSubmitSuccess={this.onSuccessfulCreation}
           closeDialog={closeDialog}
         />
@@ -86,6 +87,7 @@ class NewProjectDialog extends React.Component<Props, any> {
 
 const mapStateToProps = (state: StateTree) => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.NewProject),
+  team: User.selectors.getTeam(state),
   existingProjects: Projects.selectors.getProjects(state)
     .filter(projectOrError => !isFetchError(projectOrError)) as Project[],
 });

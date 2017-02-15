@@ -2,8 +2,8 @@ import 'isomorphic-fetch';
 import * as moment from 'moment';
 
 import { logMessage } from '../logger';
-import { teamId } from './team-id';
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise } from './types';
+import { getAccessToken } from './auth';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise, ApiTeamResponse } from './types';
 
 if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
@@ -16,7 +16,7 @@ host = host.replace(/\/$/, '');
 export const getBuildLogURL = (deploymentId: string): string =>
   `${host}/ci/deployments/${deploymentId}/trace`;
 
-const defaultOptions = {
+const defaultOptions: RequestInit = {
   credentials: 'same-origin',
   headers: {
     Accept: 'application/vnd.api+json',
@@ -47,8 +47,22 @@ const generateErrorObject = (errorResponse: any) => {
   };
 };
 
-const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> =>
-  fetch(`${host}${path}`, Object.assign({}, defaultOptions, options))
+// TODO: indicate whether the server returns unauthorized and react to it in sagas
+/**
+ * This method will overwrite the Authorization header if an access token exists.
+ */
+const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
+  const combinedOptions = {
+    ...defaultOptions,
+    ...options,
+  };
+
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    (combinedOptions.headers as any).Authorization = `Bearer ${accessToken}`;
+  }
+
+  return fetch(`${host}${path}`, combinedOptions)
     .then(
       response => response.json().then(json => ({
         json,
@@ -63,8 +77,9 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
 
       return generateErrorObject(errorResponse);
     });
+};
 
-const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
+const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse | ApiTeamResponse> => {
   let queryString = '';
 
   if (query) {
@@ -99,7 +114,7 @@ const patchApi = (path: string, payload: any): ApiPromise<ApiEntityResponse> =>
   });
 
 const Activity = {
-  fetchAll: (count: number, until?: number): ApiPromise<ApiEntityResponse> => {
+  fetchAll: (teamId: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
     const query: any = { count, filter: `team[${teamId}]` };
 
     if (until) {
@@ -159,9 +174,14 @@ const Deployment = {
 };
 
 const Project = {
-  fetchAll: (): ApiPromise<ApiEntityResponse> => getApi(`/api/teams/${teamId}/relationships/projects`),
+  fetchAll: (teamId: string): ApiPromise<ApiEntityResponse> => getApi(`/api/teams/${teamId}/relationships/projects`),
   fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}`),
-  create: (name: string, description?: string, projectTemplate?: string): ApiPromise<ApiEntityResponse> =>
+  create: (
+    teamId: string,
+    name: string,
+    description?: string,
+    projectTemplate?: string,
+  ): ApiPromise<ApiEntityResponse> =>
     postApi('/api/projects', {
       data: {
         type: 'projects',
@@ -196,6 +216,10 @@ const Preview = {
     getApi(`/api/preview/${id}`, { sha: commitHash }),
 };
 
+const Team = {
+  fetch: () => getApi('/team'),
+};
+
 const API: Api = {
   Activity,
   Branch,
@@ -204,6 +228,7 @@ const API: Api = {
   Deployment,
   Preview,
   Project,
+  Team,
 };
 
 export default API;

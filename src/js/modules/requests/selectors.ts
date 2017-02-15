@@ -7,6 +7,14 @@ import * as t from './types';
 
 const selectRequestsTree = (state: StateTree) => state.requests;
 
+export const isLoadingTeamInformation = createSelector<StateTree, boolean, t.RequestsState>(
+  selectRequestsTree,
+  (requestInformations) =>
+    !!requestInformations.find(
+      requestInfo => requestInfo.type === actions.User.LoadTeamInformation.REQUEST.type,
+    ),
+);
+
 export const isLoadingAllProjects = createSelector<StateTree, boolean, t.RequestsState>(
   selectRequestsTree,
   (requestInformations) =>

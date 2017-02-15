@@ -1,10 +1,17 @@
 import { compact } from 'lodash';
 import { SubmissionError } from 'redux-form';
-import { delay, takeEvery, takeLatest } from 'redux-saga';
+import { takeEvery, takeLatest, throttle } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
-import { Api, ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPreviewResponse } from '../api/types';
+import {
+  Api,
+  ApiEntity,
+  ApiEntityResponse,
+  ApiEntityTypeString,
+  ApiPreviewResponse,
+  ApiTeamResponse,
+} from '../api/types';
 import { logException, logMessage } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
@@ -32,6 +39,7 @@ import Projects, {
   StoreProjectsAction,
 } from '../modules/projects';
 import Requests, { CreateEntitySuccessAction, EditEntitySuccessAction } from '../modules/requests';
+import User, { LoadTeamInformationAction } from '../modules/user';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -69,14 +77,14 @@ export default function createSagas(api: Api) {
 
   // ALL ACTIVITIES
   function* loadActivities(action: LoadActivitiesAction): IterableIterator<Effect> {
-    const { count, until } = action;
-    const fetchSuccess = yield call(fetchActivities, count, until);
+    const { teamId, count, until } = action;
+    const fetchSuccess = yield call(fetchActivities, teamId, count, until);
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
     }
   }
 
-  const fetchActivities = createCollectionFetcher(
+  const fetchActivities = createCollectionFetcher<string | number | undefined>(
     Requests.actions.Activities.LoadAllActivities,
     Converter.toActivities,
     Activities.actions.storeActivities,
@@ -133,8 +141,9 @@ export default function createSagas(api: Api) {
   }
 
   // ALL PROJECTS
-  function* loadAllProjects(_action: LoadAllProjectsAction): IterableIterator<Effect> {
-    const fetchSuccess = yield call(fetchAllProjects);
+  function* loadAllProjects(action: LoadAllProjectsAction): IterableIterator<Effect> {
+    const { teamId } = action;
+    const fetchSuccess = yield call(fetchAllProjects, teamId);
     if (fetchSuccess) {
       yield fork(ensureAllProjectsRelatedDataLoaded);
     }
@@ -300,7 +309,7 @@ export default function createSagas(api: Api) {
 
   // COMMENTS_FOR_DEPLOYMENT
   function* loadCommentsForDeployment(id: string): IterableIterator<Effect> {
-    const deployment = (yield select(Deployments.selectors.getDeployment, id)) as Deployment | FetchError | undefined;
+    const deployment = (yield select(Deployments.selectors.getDeployment, id)) as Deployment | FetchError | undefined;
 
     // Return if we're already requesting
     if (yield select(Requests.selectors.isLoadingCommentsForDeployment, id)) {
@@ -403,7 +412,7 @@ export default function createSagas(api: Api) {
   // COMMITS_FOR_BRANCH
   function* loadCommitsForBranch(action: LoadCommitsForBranchAction): IterableIterator<Effect> {
     const { id, count, until } = action;
-    let branch = (yield select(Branches.selectors.getBranch, id)) as Branch | FetchError | undefined;
+    let branch = (yield select(Branches.selectors.getBranch, id)) as Branch | FetchError | undefined;
 
     while (!branch) {
       const { entities: branches } = (yield take(Branches.actions.STORE_BRANCHES)) as StoreBranchesAction;
@@ -496,12 +505,12 @@ export default function createSagas(api: Api) {
 
   // CREATE PROJECT
   function* createProject(action: CreateProjectAction): IterableIterator<Effect> {
-    const { name, description, projectTemplate } = action.payload;
+    const { name, description, projectTemplate, teamId } = action.payload;
 
     yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
 
     const { response, error, details }: { response?: any, error?: string, details?: string } =
-      yield call(api.Project.create, name, description, projectTemplate);
+      yield call(api.Project.create, teamId, name, description, projectTemplate);
 
     if (response) {
       if (response.included) {
@@ -572,6 +581,26 @@ export default function createSagas(api: Api) {
     }
   }
 
+  // User
+  function *loadTeamInformation(_action: LoadTeamInformationAction): IterableIterator<Effect> {
+    yield put(Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator());
+
+    const { response, error, details } = yield call(api.Team.fetch);
+
+    if (response) {
+      const { id, name } = response as ApiTeamResponse;
+      yield put(User.actions.setTeam(String(id), name));
+      yield put(Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator());
+
+      return true;
+    } else {
+      // TODO: handle failure, e.g. not authorized or member of team
+      yield put(Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(error, details));
+
+      return false;
+    }
+  }
+
   // FORMS
   function* formSubmitSaga({
     payload: {
@@ -603,73 +632,11 @@ export default function createSagas(api: Api) {
   }
 
   // WATCHERS: Watch for specific actions to begin async operations.
-  function* watchForFormSubmit() {
-    yield takeEvery(FORM_SUBMIT, formSubmitSaga);
-  }
-
-  function* watchForCreateProject() {
-    yield takeLatest(Projects.actions.CREATE_PROJECT, createProject);
-  }
-
-  function* watchForDeleteProject() {
-    yield takeLatest(Projects.actions.DELETE_PROJECT, deleteProject);
-  }
-
-  function* watchForEditProject() {
-    yield takeLatest(Projects.actions.EDIT_PROJECT, editProject);
-  }
-
-  function* watchForLoadProject() {
-    yield takeEvery(Projects.actions.LOAD_PROJECT, loadProject);
-  }
-
-  function* watchForLoadBranch() {
-    yield takeEvery(Branches.actions.LOAD_BRANCH, loadBranch);
-  }
-
-  function* watchForLoadBranchesForProject() {
-    yield takeEvery(Branches.actions.LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject);
-  }
-
-  function* watchForUpdateBranchWithCommits() {
-    yield takeEvery(Branches.actions.UPDATE_BRANCH_WITH_COMMITS, loadLatestCommitForBranch);
-  }
-
-  function* watchForLoadDeployment() {
-    yield takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment);
-  }
-
-  function* watchForDeleteComment() {
-    yield takeEvery(Comments.actions.DELETE_COMMENT, deleteComment);
-  }
-
-  function* watchForCreateComment() {
-    yield takeLatest(Comments.actions.CREATE_COMMENT, createComment);
-  }
-
-  function* watchForLoadCommit() {
-    yield takeEvery(Commits.actions.LOAD_COMMIT, loadCommit);
-  }
-
-  function* watchForLoadPreviewAndComments() {
-    yield takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments);
-  }
-
   function* watchForLoadActivities(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(Activities.actions.LOAD_ACTIVITIES);
       // Block until it's done, skipping any further actions
       yield call(loadActivities, action);
-    }
-  }
-
-  function* watchForLoadActivitiesForProject(): IterableIterator<Effect> {
-    // TODO: use new throttle helper method once typings work
-    while (true) {
-      const action = yield take(Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT);
-      yield fork(loadActivitiesForProject, action);
-      // throttle by 200ms
-      yield call(delay, 200);
     }
   }
 
@@ -681,55 +648,41 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* watchForLoadCommitsForBranch(): IterableIterator<Effect> {
-    // TODO: use new throttle helper method once typings work
+  function* watchForLoadTeamInformation(): IterableIterator<Effect> {
     while (true) {
-      const action = yield take(Commits.actions.LOAD_COMMITS_FOR_BRANCH);
-      yield fork(loadCommitsForBranch, action);
-      // throttle by 200ms
-      yield call(delay, 200);
+      const action = yield take(User.actions.LOAD_TEAM_INFORMATION);
+      // Block until it's done, skipping any further actions
+      yield call(loadTeamInformation, action);
     }
   }
 
   function* root() {
     yield [
-      fork(watchForCreateProject),
-      fork(watchForDeleteProject),
-      fork(watchForEditProject),
+      takeLatest(Projects.actions.CREATE_PROJECT, createProject),
+      takeLatest(Projects.actions.DELETE_PROJECT, deleteProject),
+      takeLatest(Projects.actions.EDIT_PROJECT, editProject),
+      takeEvery(Projects.actions.LOAD_PROJECT, loadProject),
+      takeEvery(Branches.actions.LOAD_BRANCH, loadBranch),
+      takeEvery(Branches.actions.LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject),
+      takeEvery(Branches.actions.UPDATE_BRANCH_WITH_COMMITS, loadLatestCommitForBranch),
+      takeEvery(Deployments.actions.LOAD_DEPLOYMENT, loadDeployment),
+      takeLatest(Comments.actions.CREATE_COMMENT, createComment),
+      takeEvery(Comments.actions.DELETE_COMMENT, deleteComment),
+      takeEvery(Commits.actions.LOAD_COMMIT, loadCommit),
+      throttle(200, Commits.actions.LOAD_COMMITS_FOR_BRANCH, loadCommitsForBranch),
+      takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments),
+      takeEvery(FORM_SUBMIT, formSubmitSaga),
+      throttle(200, Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
       fork(watchForLoadAllProjects),
-      fork(watchForLoadProject),
-      fork(watchForLoadBranch),
-      fork(watchForLoadBranchesForProject),
-      fork(watchForLoadDeployment),
-      fork(watchForCreateComment),
-      fork(watchForDeleteComment),
-      fork(watchForLoadCommit),
-      fork(watchForLoadCommitsForBranch),
       fork(watchForLoadActivities),
-      fork(watchForLoadActivitiesForProject),
-      fork(watchForLoadPreviewAndComments),
-      fork(watchForFormSubmit),
-      fork(watchForUpdateBranchWithCommits),
+      fork(watchForLoadTeamInformation),
     ];
   }
 
   return {
     root,
-    watchForLoadDeployment,
-    watchForLoadBranch,
-    watchForLoadBranchesForProject,
-    watchForLoadProject,
     watchForLoadAllProjects,
-    watchForLoadPreviewAndComments,
-    watchForLoadCommit,
-    watchForLoadCommitsForBranch,
     watchForLoadActivities,
-    watchForLoadActivitiesForProject,
-    watchForFormSubmit,
-    watchForCreateProject,
-    watchForDeleteProject,
-    watchForEditProject,
-    watchForUpdateBranchWithCommits,
     formSubmitSaga,
     createProject,
     editProject,

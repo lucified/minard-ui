@@ -2,8 +2,9 @@ import * as t from './types';
 
 // Load multiple projects
 export const LOAD_ALL_PROJECTS = 'PROJECTS/LOAD_ALL_PROJECTS';
-export const loadAllProjects = (): t.LoadAllProjectsAction => ({
+export const loadAllProjects = (teamId: string): t.LoadAllProjectsAction => ({
   type: LOAD_ALL_PROJECTS,
+  teamId,
 });
 
 // Load a single project

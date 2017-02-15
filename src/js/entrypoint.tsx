@@ -5,19 +5,19 @@ import { History, Router } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Store } from 'redux';
 
-import { teamId } from './api/team-id';
 import { Api } from './api/types';
+import { update as updateIntercom } from './intercom';
 import Selected from './modules/selected';
 import routes from './routes';
 import sagaCreator from './sagas';
 
 export const createStoreAndRender = (
-  configureStore: (initalState: Object) => Store<any>,
+  configureStore: (initalState: Object, history: History.History) => Store<any>,
   api: Api,
   history: History.History,
 ) => {
   const initialState = {};
-  const store = configureStore(initialState);
+  const store = configureStore(initialState, history);
   (store as any).runSaga(sagaCreator(api).root);
 
   const syncedHistory = syncHistoryWithStore(history, store);
@@ -32,11 +32,7 @@ export const createStoreAndRender = (
     store.dispatch(Selected.actions.setSelected(project, branch, !!showAll));
 
     // Update Intercom with page changed information
-    const intercom = (window as any).Intercom;
-    if (intercom) {
-      // TODO: add proper user_id and user_email once known
-      intercom('update', { user_id: teamId });
-    }
+    updateIntercom();
   });
 
   ReactDOM.render(

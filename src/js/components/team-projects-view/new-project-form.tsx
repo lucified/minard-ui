@@ -14,6 +14,8 @@ const styles = require('../common/forms/modal-dialog.scss');
 
 interface PassedProps {
   existingProjects: Project[];
+  // This is used to pass in the team ID
+  initialValues?: any;
   onSubmitSuccess: (projectId: string) => void;
   closeDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }

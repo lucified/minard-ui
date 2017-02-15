@@ -57,7 +57,8 @@ function callApi(url: string) {
 }
 
 const Activity = {
-  fetchAll: (_count: number, _until?: number): ApiPromise<ApiEntityResponse> => callApi(activitiesJSON),
+  fetchAll: (_teamId: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
+    callApi(activitiesJSON),
   fetchAllForProject: (_id: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
     callApi(activitiesJSON),
 };
@@ -89,13 +90,18 @@ const Preview = {
 };
 
 const Project = {
-  fetchAll: (): ApiPromise<ApiEntityResponse> => callApi(allProjectsJSON),
+  fetchAll: (_teamId: string): ApiPromise<ApiEntityResponse> => callApi(allProjectsJSON),
   fetch: (id: string): ApiPromise<ApiEntityResponse> => callApi(projectJSON[id]),
-  create: (_name: string, _description?: string): ApiPromise<ApiEntityResponse> => callApi(newProjectJSON),
+  create: (_teamId: string, _name: string, _description?: string): ApiPromise<ApiEntityResponse> =>
+    callApi(newProjectJSON),
   edit: (_id: string, _newAttributes: { name?: string, description?: string }): ApiPromise<ApiEntityResponse> =>
     callApi(editedProjectJSON),
   delete: (_id: string): ApiPromise<{}> => Promise.resolve({ response: {} }),
     // Promise.resolve({ error: 'sad face :(' });
+};
+
+const Team = {
+  fetch: () => Promise.resolve({ response: { id: 3, name: 'Dev team' } }),
 };
 
 const API: Api = {
@@ -106,6 +112,7 @@ const API: Api = {
   Deployment,
   Preview,
   Project,
+  Team,
 };
 
 export default API;

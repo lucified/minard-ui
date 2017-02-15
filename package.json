@@ -8,7 +8,7 @@
     "start": "./start.sh",
     "clean": "rm -rf dist",
     "build": "npm run clean && webpack",
-    "compiled-test": "npm run clean-compile && npm run compile && cp -R json lib/ && mocha lib/test",
+    "compiled-test": "npm run clean-compile && npm run compile && cp -R json lib/ && mocha --require mock-local-storage lib/test",
     "test": "mocha --opts mocha.opts",
     "test:watch": "mocha --opts mocha.auto.opts --watch",
     "deploy": "lucify-notifier npm run deploy-plain",
@@ -48,6 +48,8 @@
     "url": "git+https://github.com/lucified/minard-ui.git"
   },
   "devDependencies": {
+    "@types/auth0-js": "0.0.7",
+    "@types/auth0-lock": "10.9.0",
     "@types/chai": "^3.4.34",
     "@types/classnames": "0.0.32",
     "@types/isomorphic-fetch": "0.0.32",
@@ -83,6 +85,7 @@
     "lucify-deploy-config": "^0.1.11",
     "lucify-notifier": "^0.1.9",
     "mocha": "^3.2.0",
+    "mock-local-storage": "^1.0.2",
     "node-sass": "^4.5.0",
     "postcss-loader": "^1.2.2",
     "postcss-reporter": "^3.0.0",
@@ -99,6 +102,7 @@
     "webpack-merge": "^2.6.1"
   },
   "dependencies": {
+    "auth0-lock": "^10.10.2",
     "classnames": "^2.2.5",
     "event-source-polyfill": "^0.0.9",
     "flexboxgrid": "^6.3.1",

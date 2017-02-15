@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 require('event-source-polyfill');
 
+import { getAccessToken } from '../api/auth';
 import { toActivities, toBranches, toComments, toCommits, toDeployments, toProjects } from '../api/convert';
-import { teamId } from '../api/team-id';
 import {
   ResponseActivityElement,
   ResponseBranchElement,
@@ -22,6 +22,8 @@ import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
 import Projects, { Project, ProjectUser } from '../modules/projects';
 import Streaming, { ConnectionState } from '../modules/streaming';
+import User, { Team } from '../modules/user';
+import { StateTree } from '../reducers';
 
 declare var EventSource: any;
 
@@ -49,6 +51,12 @@ interface GeneratedDispatchProps {
   updateLatestDeployedCommitForBranch: (id: string, commit: string) => void;
   removeBranchFromProject: (id: string, branch: string) => void;
 }
+
+interface GeneratedStateProps {
+  team?: Team;
+}
+
+type Props = GeneratedDispatchProps & GeneratedStateProps;
 
 // Streaming API types
 interface EventSourceEvent {
@@ -111,7 +119,7 @@ let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
 if (streamingAPIUrl) {
   // Remove trailing /
   streamingAPIUrl = streamingAPIUrl.replace(/\/$/, '');
-  streamingAPIUrl = `${streamingAPIUrl}/events/${teamId}`;
+  streamingAPIUrl = `${streamingAPIUrl}/events`;
 }
 
 const toConnectionState = (state: any): ConnectionState => {
@@ -127,10 +135,10 @@ const toConnectionState = (state: any): ConnectionState => {
   }
 };
 
-class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
-  private _source: any; // tslint:disable-line
+class StreamingAPIHandler extends React.Component<Props, any> {
+  private _source: any;
 
-  constructor(props: GeneratedDispatchProps) {
+  constructor(props: GeneratedDispatchProps) {
     super(props);
 
     this.restartConnection = this.restartConnection.bind(this);
@@ -271,11 +279,15 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     }
   }
 
-  private restartConnection() {
-    this._source = new EventSource(streamingAPIUrl, { withCredentials: false });
+  private restartConnection(teamId: string) {
+    const accessToken = getAccessToken();
+    const url = accessToken ?
+      `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}` :
+      `${streamingAPIUrl}/${teamId}`;
+    this._source = new EventSource(url, { withCredentials: false });
 
     this._source.addEventListener('error', (e: EventSourceError) => {
-      console.log('EventSource: error:', e); // tslint:disable-line:no-console
+      console.error('EventSource error:', e);
       const source = e.target;
       this.props.setConnectionState(toConnectionState(source.readyState));
 
@@ -319,8 +331,16 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
   }
 
   public componentWillMount() {
-    if (streamingAPIUrl) {
-      this.restartConnection();
+    const { team } = this.props;
+    // TODO: handle situation when not an authenticated Minard user
+    if (streamingAPIUrl && team) {
+      this.restartConnection(team.id);
+    }
+  }
+
+  public componentWillReceiveProps(nextProps: Props) {
+    if (!this.props.team && nextProps.team) {
+      this.restartConnection(nextProps.team.id);
     }
   }
 
@@ -334,6 +354,10 @@ class StreamingAPIHandler extends React.Component<GeneratedDispatchProps, any> {
     return <span />;
   }
 };
+
+export const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
+  team: User.selectors.getTeam(state),
+});
 
 export default connect<{}, GeneratedDispatchProps, {}>(
   () => ({}),

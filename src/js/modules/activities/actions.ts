@@ -1,8 +1,9 @@
 import * as t from './types';
 
 export const LOAD_ACTIVITIES = 'ACTIVITIES/LOAD_ACTIVITIES';
-export const loadActivities = (count: number, until?: number): t.LoadActivitiesAction => ({
+export const loadActivities = (teamId: string, count: number, until?: number): t.LoadActivitiesAction => ({
   type: LOAD_ACTIVITIES,
+  teamId,
   count,
   until,
 });

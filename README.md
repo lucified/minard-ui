@@ -49,14 +49,14 @@ Install minard-backend locally or on a separate server and start
 minard-ui with:
 
 ```shell
-yarn start -- <minard-backend API URL> <Team ID> # then open http://localhost:3000/ in a browser
+yarn start -- <minard-backend API URL> # then open http://localhost:3000/ in a browser
 ```
 
 By default, when run locally, the minard-backend (charles) API runs
 on `http://localhost:8000`:
 
 ```shell
-yarn start -- http://localhost:8000 3
+yarn start -- http://localhost:8000
 ```
 
 Note that the team ID needs to match the ID of a team that has been
@@ -67,13 +67,23 @@ created in [minard-backend](https://github.com/lucified/minard-backend).
 Build a production version of the app into `dist/` by running:
 
 ```shell
-NODE_ENV=production CHARLES=<API URL> yarn run build
+NODE_ENV=production \
+CHARLES=<API URL> \
+AUTH0_CLIENT_ID=<client ID> \
+AUTH0_DOMAIN=<domain> \
+AUTH0_AUDIENCE=<audience> \
+yarn run build
 ```
 
 To watch for changes and update the build accordingly, run:
 
 ```shell
-NODE_ENV=production CHARLES=<API URL> yarn run watch
+NODE_ENV=production \
+CHARLES=<API URL> \
+AUTH0_CLIENT_ID=<client ID> \
+AUTH0_DOMAIN=<domain> \
+AUTH0_AUDIENCE=<audience> \
+yarn run watch
 ```
 
 ## Testing
@@ -83,6 +93,20 @@ Run `yarn test`. To start a test watcher, run `yarn run test:watch`.
 ## Other commands
 
 Run `yarn run` to see other available commands.
+
+## Environment variables
+
+- **NODE_ENV**: Used to set the environment. Set it to 'production' to enable optimizations. Defaults to 'development'.
+- **LUCIFY_ENV**: Overrides NODE_ENV if set. Meant to be used for automatic deployments.
+- **CHARLES_PRODUCTION**: URL for the backend server API when the environment is set to 'production'. Defaults to `https://charles.lucify.com`.
+- **CHARLES_STAGING**: URL for the backend server API when the environment is set to 'staging'. Defaults to `https://charles-staging.lucify.com`.
+- **CHARLES**: Fallback URL of the backend server API.
+- **CHARLES_STREAMING_PRODUCTION**: URL for the streaming API when the environment is set to 'production'.
+- **CHARLES_STREAMING_STAGING**: URL for the streaming API when the environment is set to 'staging'.
+- **STREAMING_API**: Fallback URL of the streaming API. If no URL is set for the streaming API, falls back the charles API URL.
+- **AUTH0_CLIENT_ID**: The client ID for Auth0. Defaults to the client in Lucify's dev account.
+- **AUTH0_DOMAIN**: The domain used for Auth0 authentication. Defaults to Lucify's dev account domain.
+- **AUTH0_AUDIENCE**: The Auth0 audience that we're requesting. Needs to match the correct API in Auth0. Defaults to `http://localhost:8000`.
 
 ## Acknowledgements
 

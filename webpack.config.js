@@ -167,33 +167,14 @@ const htmlWebpackPluginConfig = {
   },
 };
 
-function getTeamId() {
-  if (process.env.TEAM_ID) {
-    return process.env.TEAM_ID;
-  }
-  if (deployConfig.env === 'production') {
-    return 4;
-  }
-  return 3;
-}
-
 function getCharles() {
   if (deployConfig.env === 'production') {
-    if (process.env.CHARLES_PRODUCTION) {
-      return process.env.CHARLES_PRODUCTION;
-    }
-    return 'https://charles.lucify.com';
+    return process.env.CHARLES_PRODUCTION || 'https://charles.lucify.com';
   }
   if (deployConfig.env === 'staging') {
-    if (process.env.CHARLES_STAGING) {
-      return process.env.CHARLES_STAGING;
-    }
-    return 'https://charles-staging.lucify.com';
+    return process.env.CHARLES_STAGING || 'https://charles-staging.lucify.com';
   }
-  if (process.env.CHARLES) {
-    return process.env.CHARLES;
-  }
-  return false;
+  return process.env.CHARLES || false;
 }
 
 function getStreamingAPI() {
@@ -203,10 +184,7 @@ function getStreamingAPI() {
   if (deployConfig.env === 'staging' && process.env.CHARLES_STREAMING_STAGING) {
     return process.env.CHARLES_STREAMING_STAGING;
   }
-  if (process.env.CHARLES_STREAMING) {
-    return process.env.CHARLES_STREAMING;
-  }
-  return getCharles();
+  return process.env.CHARLES_STREAMING || getCharles();
 }
 
 const config = {
@@ -230,9 +208,11 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(getCharles()),
       'process.env.STREAMING_API': JSON.stringify(getStreamingAPI()),
-      'process.env.TEAM_ID': JSON.stringify(getTeamId()),
       'process.env.ENV': JSON.stringify(deployConfig.env),
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
+      'process.env.AUTH0_CLIENT_ID': JSON.stringify(process.env.AUTH0_CLIENT_ID || 'ZaeiNyV7S7MpI69cKNHr8wXe5Bdr8tvW'),
+      'process.env.AUTH0_DOMAIN': JSON.stringify(process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com'),
+      'process.env.AUTH0_AUDIENCE': JSON.stringify(process.env.AUTH0_AUDIENCE || 'http://localhost:8000'),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
     new CopyWebpackPlugin([{
