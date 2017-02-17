@@ -24,6 +24,7 @@ export const createStoreAndRender = (
 
   // Store current open project + branch into state
   syncedHistory.listen((location: any) => { // TODO: better type definition
+    // TODO: this is rather fragile and not in the best location. Refactor in some way?
     const result = /^\/project\/([^/]+)(\/branch\/([^/]+))?/.exec(location.pathname);
     const project = (result && result[1]) || null;
     const branch = (result && result[3]) || null;
