@@ -9,14 +9,9 @@ import User from '../../modules/user';
 
 const styles = require('./index.scss');
 
-const CLIENT_ID = process.env.AUTH0_CLIENT_ID;
-const DOMAIN = process.env.AUTH0_DOMAIN;
-const AUDIENCE = process.env.AUTH0_AUDIENCE;
-
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
   setUserEmail: (email: string) => void;
-  clearUserDetails: () => void;
 }
 
 type Props = GeneratedDispatchProps;
@@ -25,29 +20,19 @@ class LoginView extends React.Component<Props, void> {
   private lock: Auth0LockStatic;
 
   public componentDidMount() {
-    this.lock = new Auth0Lock(CLIENT_ID, DOMAIN, {
+    this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN, {
       // oidcConformant is still in preview stage, which is why it is not documented
       // or found in the typings. Remove the `as any` below once it's included.
       // Read more: https://auth0.com/forum/t/lock-not-always-passing-audience/5121/17
       oidcConformant: true,
-      additionalSignUpFields: [
-        {
-          name: 'full_name',
-          placeholder: 'Your name',
-          validator: (name: string) => ({
-            valid: name.length > 0,
-            hint: 'Required',
-          }),
-        },
-      ],
       auth: {
         responseType: 'token',
         params: {
           scope: 'openid email', // TODO: get real name once we can (somehow)
-          audience: AUDIENCE,
+          audience: process.env.AUTH0_AUDIENCE,
         },
       },
-      allowSignUp: true,  // TODO: change to false
+      allowSignUp: false,
       allowedConnections: [
         'Username-Password-Authentication',
       ],
@@ -101,7 +86,6 @@ class LoginView extends React.Component<Props, void> {
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   navigateTo: (url: string) => { dispatch(push(url)); },
   setUserEmail: (email: string) => { dispatch(User.actions.setUserEmail(email)); },
-  clearUserDetails: () => { dispatch(User.actions.clearUserDetails()); },
 });
 
 export default connect(() => ({}), mapDispatchToProps)(LoginView);
