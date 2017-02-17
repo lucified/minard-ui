@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise } from './types';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise, ApiTeam } from './types';
 
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
@@ -101,7 +101,18 @@ const Project = {
 };
 
 const Team = {
-  fetch: () => Promise.resolve({ response: { id: 3, name: 'Dev team' } }),
+  fetch: () => Promise.resolve({
+    response: { id: 3, name: 'Dev team' } as ApiTeam,
+  }),
+};
+
+const User = {
+  signup: () => Promise.resolve({
+    response: {
+      password: 'secretPassword',
+      team: { id: 3, name: 'teamName' } as ApiTeam,
+    },
+  }),
 };
 
 const API: Api = {
@@ -113,6 +124,7 @@ const API: Api = {
   Preview,
   Project,
   Team,
+  User,
 };
 
 export default API;

@@ -37,17 +37,15 @@ export interface Api {
     delete: (id: string) => ApiPromise<{}>;
   };
   Team: {
-    fetch: () => ApiPromise<ApiTeamResponse>;
+    fetch: () => ApiPromise<ApiTeam>;
+  };
+  User: {
+    signup: () => ApiPromise<SignupResponse>;
   };
 }
 
 // Response formats
 export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities' | 'comments';
-
-export interface ApiTeamResponse {
-  id: number;
-  name: string;
-}
 
 export interface ApiEntity {
   type: ApiEntityTypeString;
@@ -243,3 +241,20 @@ export interface ResponseDeploymentElement {
     status: DeploymentStatusString;
   };
 }
+
+// Team
+export interface ApiTeam {
+  id: number;
+  name: string;
+  path: string;
+  description?: string;
+  visibility_level: number;
+  avatar_url?: string;
+  web_url: string;
+}
+
+// User
+export interface SignupResponse {
+  password: string;
+  team: ApiTeam;
+};

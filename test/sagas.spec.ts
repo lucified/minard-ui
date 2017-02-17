@@ -4,7 +4,7 @@ import { SubmissionError } from 'redux-form';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../src/js/api/convert';
-import { Api, ApiEntityResponse, ApiEntityTypeString, ApiPromise } from '../src/js/api/types';
+import { Api, ApiEntityResponse, ApiEntityTypeString, ApiPromise, ApiTeam } from '../src/js/api/types';
 import Activities from '../src/js/modules/activities';
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
@@ -61,7 +61,13 @@ const createApi = (): Api => {
       delete: (_id: string) => Promise.resolve({ response: {}}),
     },
     Team: {
-      fetch: () => Promise.resolve({ response: { id: 1, name: 'name' } }),
+      fetch: () => Promise.resolve({ response: { id: 1, name: 'name' } as ApiTeam }),
+    },
+    User: {
+      signup: () => Promise.resolve({ response: {
+        password: 'secretPass',
+        team: { id: 1, name: 'name' } as ApiTeam },
+      }),
     },
   };
 };

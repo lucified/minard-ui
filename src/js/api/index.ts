@@ -3,7 +3,7 @@ import * as moment from 'moment';
 
 import { logMessage } from '../logger';
 import { getAccessToken } from './auth';
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise, ApiTeamResponse } from './types';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise, ApiTeam, SignupResponse } from './types';
 
 if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
@@ -51,7 +51,7 @@ const generateErrorObject = (errorResponse: any) => {
 /**
  * This method will overwrite the Authorization header if an access token exists.
  */
-const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntityResponse | ApiPreviewResponse> => {
+const connectToApi = <ResponseType>(path: string, options?: RequestInit): ApiPromise<ResponseType> => {
   const combinedOptions = {
     ...defaultOptions,
     ...options,
@@ -79,7 +79,7 @@ const connectToApi = (path: string, options?: RequestInit): ApiPromise<ApiEntity
     });
 };
 
-const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse | ApiTeamResponse> => {
+const getApi = <ResponseType>(path: string, query?: any): ApiPromise<ResponseType> => {
   let queryString = '';
 
   if (query) {
@@ -87,10 +87,10 @@ const getApi = (path: string, query?: any): ApiPromise<ApiEntityResponse | ApiPr
     queryString += Object.keys(query).map(param => `${param}=${encodeURIComponent(query[param])}`).join('&');
   }
 
-  return connectToApi(`${path}${queryString}`);
+  return connectToApi<ResponseType>(`${path}${queryString}`);
 };
 
-const postApi = (path: string, payload: any): ApiPromise<ApiEntityResponse | ApiPreviewResponse> =>
+const postApi = <ResponseType>(path: string, payload: any): ApiPromise<ResponseType> =>
   connectToApi(path, {
     method: 'POST',
     headers: {
@@ -121,7 +121,7 @@ const Activity = {
       query.until = moment(until).toISOString();
     }
 
-    return getApi('/api/activity', query);
+    return getApi<ApiEntityResponse>('/api/activity', query);
   },
   fetchAllForProject: (id: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
     const query: any = { count, filter: `project[${id}]` };
@@ -130,19 +130,22 @@ const Activity = {
       query.until = moment(until).toISOString();
     }
 
-    return getApi('/api/activity', query);
+    return getApi<ApiEntityResponse>('/api/activity', query);
   },
 };
 
 const Branch = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/branches/${id}`),
-  fetchForProject: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}/relationships/branches`),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+    getApi<ApiEntityResponse>(`/api/branches/${id}`),
+  fetchForProject: (id: string): ApiPromise<ApiEntityResponse> =>
+    getApi<ApiEntityResponse>(`/api/projects/${id}/relationships/branches`),
 };
 
 const Comment = {
-  fetchForDeployment: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/comments/deployment/${id}`),
+  fetchForDeployment: (id: string): ApiPromise<ApiEntityResponse> =>
+    getApi<ApiEntityResponse>(`/api/comments/deployment/${id}`),
   create: (deployment: string, message: string, email: string, name?: string): ApiPromise<ApiEntityResponse> =>
-    postApi('/api/comments', {
+    postApi<ApiEntityResponse>('/api/comments', {
       data: {
         type: 'comments',
         attributes: {
@@ -157,7 +160,8 @@ const Comment = {
 };
 
 const Commit = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/commits/${id}`),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+    getApi<ApiEntityResponse>(`/api/commits/${id}`),
   fetchForBranch: (id: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
     const query: any = { count };
 
@@ -165,24 +169,27 @@ const Commit = {
       query.until = moment(until).toISOString();
     }
 
-    return getApi(`/api/branches/${id}/relationships/commits`, query);
+    return getApi<ApiEntityResponse>(`/api/branches/${id}/relationships/commits`, query);
   },
 };
 
 const Deployment = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/deployments/${id}`),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+    getApi<ApiEntityResponse>(`/api/deployments/${id}`),
 };
 
 const Project = {
-  fetchAll: (teamId: string): ApiPromise<ApiEntityResponse> => getApi(`/api/teams/${teamId}/relationships/projects`),
-  fetch: (id: string): ApiPromise<ApiEntityResponse> => getApi(`/api/projects/${id}`),
+  fetchAll: (teamId: string): ApiPromise<ApiEntityResponse> =>
+    getApi<ApiEntityResponse>(`/api/teams/${teamId}/relationships/projects`),
+  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+    getApi<ApiEntityResponse>(`/api/projects/${id}`),
   create: (
     teamId: string,
     name: string,
     description?: string,
     projectTemplate?: string,
   ): ApiPromise<ApiEntityResponse> =>
-    postApi('/api/projects', {
+    postApi<ApiEntityResponse>('/api/projects', {
       data: {
         type: 'projects',
         attributes: {
@@ -213,11 +220,15 @@ const Project = {
 
 const Preview = {
   fetch: (id: string, commitHash: string): ApiPromise<ApiPreviewResponse> =>
-    getApi(`/api/preview/${id}`, { sha: commitHash }),
+    getApi<ApiPreviewResponse>(`/api/preview/${id}`, { sha: commitHash }),
 };
 
 const Team = {
-  fetch: () => getApi('/team'),
+  fetch: () => getApi<ApiTeam>('/team'),
+};
+
+const User = {
+  signup: () => getApi<SignupResponse>('/signup'),
 };
 
 const API: Api = {
@@ -229,6 +240,7 @@ const API: Api = {
   Preview,
   Project,
   Team,
+  User,
 };
 
 export default API;
