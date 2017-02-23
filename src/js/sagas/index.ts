@@ -586,7 +586,7 @@ export default function createSagas(api: Api) {
   function *loadTeamInformation(_action: LoadTeamInformationAction): IterableIterator<Effect> {
     yield put(Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator());
 
-    const { response, error, details } = yield call(api.User.signup);
+    const { response, error, details } = yield call(api.Team.fetch);
 
     if (response) {
       const { id, name } = response as ApiTeam;
