@@ -67,7 +67,17 @@ class NewProjectForm extends React.Component<Props, void> {
 
   public render() {
     const { handleSubmit, pristine, submitting, error, invalid, existingProjects } = this.props;
-    const dropdownValues = existingProjects.sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp)
+    const dropdownValues = existingProjects.sort((a, b) => {
+      if (a.latestActivityTimestamp === undefined) {
+        return -1;
+      }
+
+      if (b.latestActivityTimestamp === undefined) {
+        return 1;
+      }
+
+      return b.latestActivityTimestamp - a.latestActivityTimestamp;
+    })
       .map(project => ({ value: project.id, label: project.name }));
 
     return (

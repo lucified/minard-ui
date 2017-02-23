@@ -129,7 +129,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
               [removeCommentAction.id]: {
                 ...existingDeployment,
                 comments: newComments,
-                commentCount: existingDeployment.commentCount - 1,
+                commentCount: existingDeployment.commentCount ? existingDeployment.commentCount - 1 : 0,
               },
             };
           }

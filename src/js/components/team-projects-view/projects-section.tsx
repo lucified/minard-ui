@@ -39,7 +39,17 @@ class ProjectsSection extends React.Component<Props, void> {
   public render() {
     const { projects, isLoading, openCreateNewProjectDialog, team, showAll, count = 6 } = this.props;
     const filteredProjects = (projects.filter(project => !isFetchError(project)) as Project[])
-      .sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp);
+      .sort((a, b) => {
+        if (a.latestActivityTimestamp === undefined) {
+          return -1;
+        }
+
+        if (b.latestActivityTimestamp === undefined) {
+          return 1;
+        }
+
+        return b.latestActivityTimestamp - a.latestActivityTimestamp;
+      });
     const projectsToShow = showAll ? filteredProjects : filteredProjects.slice(0, count);
     // If we're only showing some of the projects, don't show the loading indicator if we have enough to show
     const showLoadingIcon = isLoading && (showAll || (filteredProjects.length < count));

@@ -53,11 +53,11 @@ class ProjectBranches extends React.Component<Props, void> {
 
     const filteredBranches = (branches.filter(branch => !isFetchError(branch)) as (Branch | undefined)[])
       .sort((a, b) => {
-        if (a === undefined) {
+        if (a === undefined || a.latestActivityTimestamp === undefined) {
           return -1;
         }
 
-        if (b === undefined) {
+        if (b === undefined || b.latestActivityTimestamp === undefined) {
           return 1;
         }
 
