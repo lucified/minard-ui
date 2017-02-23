@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise, ApiTeam } from './types';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiResult, ApiTeam } from './types';
 
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
@@ -57,46 +57,51 @@ function callApi(url: string) {
 }
 
 const Activity = {
-  fetchAll: (_teamId: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
+  fetchAll: (_teamId: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
     callApi(activitiesJSON),
-  fetchAllForProject: (_id: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
+  fetchAllForProject: (_id: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
     callApi(activitiesJSON),
 };
 
 const Branch = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> => callApi(branchJSON[id]),
-  fetchForProject: (id: string): ApiPromise<ApiEntityResponse> => callApi(projectBranchesJSON[id]),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(branchJSON[id]),
+  fetchForProject: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(projectBranchesJSON[id]),
 };
 
 const Comment = {
-  fetchForDeployment: (_id: string): ApiPromise<ApiEntityResponse> => callApi(commentsJSON),
-  create: (_deployment: string, _message: string, _email: string, _name?: string): ApiPromise<ApiEntityResponse> =>
+  fetchForDeployment: (_id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(commentsJSON),
+  create: (
+    _deployment: string,
+    _message: string,
+    _email: string,
+    _name?: string,
+  ): Promise<ApiResult<ApiEntityResponse>> =>
     callApi(newCommentJSON),
-  delete: (_id: string): ApiPromise<{}> => Promise.resolve({ response: {} }),
+  delete: (_id: string): Promise<ApiResult<{}>> => Promise.resolve({ response: {} }),
 };
 
 const Commit = {
-  fetch: (_id: string): ApiPromise<ApiEntityResponse> => callApi(commitJSON),
-  fetchForBranch: (id: string, _count: number, _until?: number): ApiPromise<ApiEntityResponse> =>
+  fetch: (_id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(commitJSON),
+  fetchForBranch: (id: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
     callApi(branchCommitsJSON[id]),
 };
 
 const Deployment = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> => callApi(deploymentJSON[id]),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(deploymentJSON[id]),
 };
 
 const Preview = {
-  fetch: (_id: string, _commitHash: string): ApiPromise<ApiPreviewResponse> => callApi(previewJSON),
+  fetch: (_id: string, _commitHash: string): Promise<ApiResult<ApiPreviewResponse>> => callApi(previewJSON),
 };
 
 const Project = {
-  fetchAll: (_teamId: string): ApiPromise<ApiEntityResponse> => callApi(allProjectsJSON),
-  fetch: (id: string): ApiPromise<ApiEntityResponse> => callApi(projectJSON[id]),
-  create: (_teamId: string, _name: string, _description?: string): ApiPromise<ApiEntityResponse> =>
+  fetchAll: (_teamId: string): Promise<ApiResult<ApiEntityResponse>> => callApi(allProjectsJSON),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(projectJSON[id]),
+  create: (_teamId: string, _name: string, _description?: string): Promise<ApiResult<ApiEntityResponse>> =>
     callApi(newProjectJSON),
-  edit: (_id: string, _newAttributes: { name?: string, description?: string }): ApiPromise<ApiEntityResponse> =>
+  edit: (_id: string, _newAttributes: { name?: string, description?: string }): Promise<ApiResult<ApiEntityResponse>> =>
     callApi(editedProjectJSON),
-  delete: (_id: string): ApiPromise<{}> => Promise.resolve({ response: {} }),
+  delete: (_id: string): Promise<ApiResult<{}>> => Promise.resolve({ response: {} }),
     // Promise.resolve({ error: 'sad face :(' });
 };
 

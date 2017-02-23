@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { call, Effect, fork, put, select } from 'redux-saga/effects';
 
 import * as Converter from '../api/convert';
-import { ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiPromise } from '../api/types';
+import { ApiEntity, ApiEntityResponse, ApiEntityTypeString, ApiResult } from '../api/types';
 import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Comments, { Comment } from '../modules/comments';
@@ -48,7 +48,7 @@ export const createEntityFetcher = <ApiParams>(
   requestActionCreators: FetchEntityActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (id: string, ...args: ApiParams[]) => ApiPromise<ApiEntityResponse>,
+  apiFetchFunction: (id: string, ...args: ApiParams[]) => Promise<ApiResult<ApiEntityResponse>>,
   postStoreEffects?: (id: string, response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
   return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
@@ -86,7 +86,7 @@ export const createCollectionFetcher = <ApiParams>(
   requestActionCreators: CollectionActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (...args: ApiParams[]) => ApiPromise<ApiEntityResponse>,
+  apiFetchFunction: (...args: ApiParams[]) => Promise<ApiResult<ApiEntityResponse>>,
   postStoreEffects?: (response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
   return function*(...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions

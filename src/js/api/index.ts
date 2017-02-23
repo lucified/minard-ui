@@ -3,7 +3,7 @@ import * as moment from 'moment';
 
 import { logMessage } from '../logger';
 import { getAccessToken } from './auth';
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiPromise, ApiTeam, SignupResponse } from './types';
+import { Api, ApiEntityResponse, ApiPreviewResponse, ApiResult, ApiTeam, SignupResponse } from './types';
 
 if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
@@ -51,7 +51,7 @@ const generateErrorObject = (errorResponse: any) => {
 /**
  * This method will overwrite the Authorization header if an access token exists.
  */
-const connectToApi = <ResponseType>(path: string, options?: RequestInit): ApiPromise<ResponseType> => {
+const connectToApi = <ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> => {
   const combinedOptions = {
     ...defaultOptions,
     ...options,
@@ -79,7 +79,7 @@ const connectToApi = <ResponseType>(path: string, options?: RequestInit): ApiPro
     });
 };
 
-const getApi = <ResponseType>(path: string, query?: any): ApiPromise<ResponseType> => {
+const getApi = <ResponseType>(path: string, query?: any): Promise<ApiResult<ResponseType>> => {
   let queryString = '';
 
   if (query) {
@@ -90,7 +90,7 @@ const getApi = <ResponseType>(path: string, query?: any): ApiPromise<ResponseTyp
   return connectToApi<ResponseType>(`${path}${queryString}`);
 };
 
-const postApi = <ResponseType>(path: string, payload: any): ApiPromise<ResponseType> =>
+const postApi = <ResponseType>(path: string, payload: any): Promise<ApiResult<ResponseType>> =>
   connectToApi(path, {
     method: 'POST',
     headers: {
@@ -100,10 +100,10 @@ const postApi = <ResponseType>(path: string, payload: any): ApiPromise<ResponseT
     body: JSON.stringify(payload),
   });
 
-const deleteApi = (path: string): ApiPromise<{}> =>
+const deleteApi = (path: string): Promise<ApiResult<{}>> =>
   connectToApi(path, { method: 'DELETE' });
 
-const patchApi = (path: string, payload: any): ApiPromise<ApiEntityResponse> =>
+const patchApi = (path: string, payload: any): Promise<ApiResult<ApiEntityResponse>> =>
   connectToApi(path, {
     method: 'PATCH',
     headers: {
@@ -114,7 +114,7 @@ const patchApi = (path: string, payload: any): ApiPromise<ApiEntityResponse> =>
   });
 
 const Activity = {
-  fetchAll: (teamId: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
+  fetchAll: (teamId: string, count: number, until?: number): Promise<ApiResult<ApiEntityResponse>> => {
     const query: any = { count, filter: `team[${teamId}]` };
 
     if (until) {
@@ -123,7 +123,7 @@ const Activity = {
 
     return getApi<ApiEntityResponse>('/api/activity', query);
   },
-  fetchAllForProject: (id: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
+  fetchAllForProject: (id: string, count: number, until?: number): Promise<ApiResult<ApiEntityResponse>> => {
     const query: any = { count, filter: `project[${id}]` };
 
     if (until) {
@@ -135,16 +135,16 @@ const Activity = {
 };
 
 const Branch = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
     getApi<ApiEntityResponse>(`/api/branches/${id}`),
-  fetchForProject: (id: string): ApiPromise<ApiEntityResponse> =>
+  fetchForProject: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
     getApi<ApiEntityResponse>(`/api/projects/${id}/relationships/branches`),
 };
 
 const Comment = {
-  fetchForDeployment: (id: string): ApiPromise<ApiEntityResponse> =>
+  fetchForDeployment: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
     getApi<ApiEntityResponse>(`/api/comments/deployment/${id}`),
-  create: (deployment: string, message: string, email: string, name?: string): ApiPromise<ApiEntityResponse> =>
+  create: (deployment: string, message: string, email: string, name?: string): Promise<ApiResult<ApiEntityResponse>> =>
     postApi<ApiEntityResponse>('/api/comments', {
       data: {
         type: 'comments',
@@ -156,13 +156,13 @@ const Comment = {
         },
       },
     }),
-  delete: (id: string): ApiPromise<{}> => deleteApi(`/api/comments/${id}`),
+  delete: (id: string): Promise<ApiResult<{}>> => deleteApi(`/api/comments/${id}`),
 };
 
 const Commit = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
     getApi<ApiEntityResponse>(`/api/commits/${id}`),
-  fetchForBranch: (id: string, count: number, until?: number): ApiPromise<ApiEntityResponse> => {
+  fetchForBranch: (id: string, count: number, until?: number): Promise<ApiResult<ApiEntityResponse>> => {
     const query: any = { count };
 
     if (until) {
@@ -174,21 +174,21 @@ const Commit = {
 };
 
 const Deployment = {
-  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
     getApi<ApiEntityResponse>(`/api/deployments/${id}`),
 };
 
 const Project = {
-  fetchAll: (teamId: string): ApiPromise<ApiEntityResponse> =>
+  fetchAll: (teamId: string): Promise<ApiResult<ApiEntityResponse>> =>
     getApi<ApiEntityResponse>(`/api/teams/${teamId}/relationships/projects`),
-  fetch: (id: string): ApiPromise<ApiEntityResponse> =>
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
     getApi<ApiEntityResponse>(`/api/projects/${id}`),
   create: (
     teamId: string,
     name: string,
     description?: string,
     projectTemplate?: string,
-  ): ApiPromise<ApiEntityResponse> =>
+  ): Promise<ApiResult<ApiEntityResponse>> =>
     postApi<ApiEntityResponse>('/api/projects', {
       data: {
         type: 'projects',
@@ -207,7 +207,7 @@ const Project = {
         },
       },
     }),
-  edit: (id: string, newAttributes: { name?: string, description?: string }): ApiPromise<ApiEntityResponse> =>
+  edit: (id: string, newAttributes: { name?: string, description?: string }): Promise<ApiResult<ApiEntityResponse>> =>
     patchApi(`/api/projects/${id}`, {
       data: {
         type: 'projects',
@@ -215,11 +215,11 @@ const Project = {
         attributes: newAttributes,
       },
     }),
-  delete: (id: string): ApiPromise<{}> => deleteApi(`/api/projects/${id}`),
+  delete: (id: string): Promise<ApiResult<{}>> => deleteApi(`/api/projects/${id}`),
 };
 
 const Preview = {
-  fetch: (id: string, commitHash: string): ApiPromise<ApiPreviewResponse> =>
+  fetch: (id: string, commitHash: string): Promise<ApiResult<ApiPreviewResponse>> =>
     getApi<ApiPreviewResponse>(`/api/preview/${id}`, { sha: commitHash }),
 };
 
