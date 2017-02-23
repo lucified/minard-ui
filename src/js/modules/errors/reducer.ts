@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 
 import Requests from '../requests';
 
-import { CLEAR_PROJECT_DELETION_ERRORS, CLEAR_SIGNUP_ERROR, SET_SIGNUP_ERROR } from './actions';
+import { CLEAR_PROJECT_DELETION_ERRORS, CLEAR_SIGNUP_ERROR, SIGNUP_ERROR } from './actions';
 import * as t from './types';
 
 const initialState: t.ErrorState = [];
@@ -17,7 +17,7 @@ const reducer: Reducer<t.ErrorState> = (state = initialState, action: any) => {
     case Requests.actions.Projects.LoadAllProjects.FAILURE.type:
     case Requests.actions.Activities.LoadAllActivities.FAILURE.type:
     case Requests.actions.Projects.DeleteProject.FAILURE.type:
-    case SET_SIGNUP_ERROR:
+    case SIGNUP_ERROR:
       return state.concat(action);
     case Requests.actions.Projects.LoadAllProjects.REQUEST.type:
       return returnFilteredStateIfChanged(
@@ -43,7 +43,7 @@ const reducer: Reducer<t.ErrorState> = (state = initialState, action: any) => {
     case CLEAR_SIGNUP_ERROR:
       return returnFilteredStateIfChanged(
         state,
-        error => error.type !== SET_SIGNUP_ERROR,
+        error => error.type !== SIGNUP_ERROR,
       );
     default:
       return state;

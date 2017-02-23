@@ -8,7 +8,7 @@ export interface ClearProjectDeletionErrorAction extends Action {
 }
 
 export interface ClearSignupErrorAction extends Action {}
-export interface SetSignupErrorAction extends Action {
+export interface SignupErrorAction extends Action {
   error: string;
   details?: string;
 }
