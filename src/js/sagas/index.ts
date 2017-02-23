@@ -28,7 +28,12 @@ import Comments, {
 } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
-import { CreateError, EditError, FetchError, isFetchError } from '../modules/errors';
+import Errors, {
+  CreateError,
+  EditError,
+  FetchError,
+  isFetchError,
+} from '../modules/errors';
 import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
 import Previews, { LoadPreviewAndCommentsAction, Preview } from '../modules/previews';
 import Projects, {
@@ -603,6 +608,7 @@ export default function createSagas(api: Api) {
   }
 
   function *signupUser(_action: SignupUserAction): IterableIterator<Effect> {
+    yield put(Errors.actions.clearSignupError());
     const { response , error, details } = yield call(api.User.signup);
 
     if (response) {
@@ -613,7 +619,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       console.error('signupUser error', error, details);
-      // TODO: handle failure and show it to user
+      yield put(Errors.actions.setSignupError(error, details));
 
       return false;
     }

@@ -6,6 +6,7 @@ import { push } from 'react-router-redux';
 
 import { storeCredentials } from '../../api/auth';
 import { login as intercomLogin } from '../../intercom';
+import Errors from '../../modules/errors';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
@@ -18,6 +19,7 @@ interface GeneratedDispatchProps {
 interface GeneratedStateProps {
   password?: string;
   email?: string;
+  error?: string;
 }
 
 interface PassedProps {
@@ -30,7 +32,7 @@ type Props = GeneratedDispatchProps & PassedProps & GeneratedStateProps;
 
 interface State {
   loadingStatus: LoadingStatus;
-  error?: string;
+  auth0Error?: string;
 }
 
 enum LoadingStatus {
@@ -64,17 +66,21 @@ class SignupView extends React.Component<Props, State> {
     });
 
     if (teamToken) {
-      this.setState({ error: undefined });
+      this.setState({ auth0Error: undefined });
       this.auth0.authorize({
         connection: 'Username-Password-Authentication',
         team_token: teamToken,
       });
     } else {
-      this.auth0.parseHash((error: Auth0Error, data: any) => {
-        console.log(error, data);
-        if (error) {
-          console.error('Unable to sign up', error);
-          this.setState({ error: error.message });
+      this.auth0.parseHash((auth0Error: Auth0Error, data: any) => {
+        console.log('data', data);
+        if (auth0Error) {
+          console.error('Unable to sign up', auth0Error);
+          this.setState({ auth0Error: auth0Error.message });
+        }
+
+        if (!data) {
+          return;
         }
 
         const { idToken, accessToken, expiresIn } = data;
@@ -83,7 +89,7 @@ class SignupView extends React.Component<Props, State> {
           this.auth0.client.userInfo(accessToken, (userInfoError: Auth0Error, profile: Auth0UserProfile) => {
             if (userInfoError) {
               console.error('Unable to get user information', userInfoError);
-              this.setState({ error: userInfoError.message });
+              this.setState({ auth0Error: userInfoError.message });
             } else {
               const { email } = profile;
 
@@ -101,7 +107,7 @@ class SignupView extends React.Component<Props, State> {
           });
         } else {
           console.error('Missing accessToken in payload', data);
-          this.setState({ error: 'Missing access token' });
+          this.setState({ auth0Error: 'Missing access token' });
         }
 
         window.location.hash = '';
@@ -114,15 +120,15 @@ class SignupView extends React.Component<Props, State> {
   }
 
   public render() {
-    const { password, email } = this.props;
-    const { loadingStatus, error } = this.state;
+    const { password, email, error } = this.props;
+    const { loadingStatus, auth0Error } = this.state;
 
-    if (error) {
-      // TODO: better error styling
+    if (auth0Error || error) {
+      // TODO: better auth0Error styling
       return (
         <div>
           <h2>Error</h2>
-          <p>{error}</p>
+          <p>{auth0Error || error}</p>
         </div>
       );
     }
@@ -159,14 +165,20 @@ class SignupView extends React.Component<Props, State> {
       );
     }
 
+    // TODO: Say something
     return null;
   }
 };
 
-const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  password: User.selectors.getUserGitPassword(state),
-  email: User.selectors.getUserEmail(state),
-});
+const mapStateToProps = (state: StateTree): GeneratedStateProps => {
+  const error = Errors.selectors.getSignupError(state);
+
+  return {
+    password: User.selectors.getUserGitPassword(state),
+    email: User.selectors.getUserEmail(state),
+    error: error && error.error,
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   signupUser: () => { dispatch(User.actions.signupUser()); },
