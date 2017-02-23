@@ -5,9 +5,9 @@ export const clearProjectDeletionErrors = (): t.ClearProjectDeletionErrorAction 
   type: CLEAR_PROJECT_DELETION_ERRORS,
 });
 
-export const SET_SIGNUP_ERROR = 'ERRORS/SET_SIGNUP_ERROR';
-export const setSignupError = (error: string, details: string): t.SetSignupErrorAction => ({
-  type: SET_SIGNUP_ERROR,
+export const SIGNUP_ERROR = 'ERRORS/SIGNUP_ERROR';
+export const signupError = (error: string, details: string): t.SignupErrorAction => ({
+  type: SIGNUP_ERROR,
   error,
   details,
 });

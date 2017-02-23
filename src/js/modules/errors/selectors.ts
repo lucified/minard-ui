@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 
 import { StateTree } from '../../reducers';
 import Requests from '../requests';
-import { SET_SIGNUP_ERROR } from './actions';
+import { SIGNUP_ERROR } from './actions';
 
 import * as t from './types';
 
@@ -27,4 +27,4 @@ export const getProjectDeletionError = (state: StateTree, id: string): t.DeleteE
   ) as t.DeleteError | undefined;
 
 export const getSignupError = (state: StateTree): t.SignupError | undefined =>
-  selectErrorTree(state).find(error => error.type === SET_SIGNUP_ERROR) as t.SignupError | undefined;
+  selectErrorTree(state).find(error => error.type === SIGNUP_ERROR) as t.SignupError | undefined;

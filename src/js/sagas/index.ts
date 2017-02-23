@@ -619,7 +619,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       console.error('signupUser error', error, details);
-      yield put(Errors.actions.setSignupError(error, details));
+      yield put(Errors.actions.signupError(error, details));
 
       return false;
     }
