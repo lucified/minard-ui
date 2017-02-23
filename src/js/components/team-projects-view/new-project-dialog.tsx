@@ -36,7 +36,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
 
-class NewProjectDialog extends React.Component<Props, any> {
+class NewProjectDialog extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
 

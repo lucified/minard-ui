@@ -79,7 +79,7 @@ const getMetadata = (activity: Activity) => {
   );
 };
 
-class ActivityGroup extends React.Component<PassedProps, any> {
+class ActivityGroup extends React.Component<PassedProps, void> {
   public render() {
     const { activities, showProjectName } = this.props;
     const firstActivity = activities[activities.length - 1];

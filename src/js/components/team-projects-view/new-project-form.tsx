@@ -51,7 +51,7 @@ const toLowerCase = (value?: string): string | undefined => value && value.toLow
 const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
-class NewProjectForm extends React.Component<Props, any> {
+class NewProjectForm extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);

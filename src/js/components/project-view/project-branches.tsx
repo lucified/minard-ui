@@ -37,7 +37,7 @@ const getBranches = (branches: (Branch | undefined)[]) => (
   </FlipMove>
 );
 
-class ProjectBranches extends React.Component<Props, any> {
+class ProjectBranches extends React.Component<Props, void> {
   public render() {
     const { branches, project, showAll, count = 3 } = this.props;
     const title = showAll ? `All branches for ${project.name}` : 'Branches';

@@ -12,10 +12,14 @@ interface Props {
   onConfirm?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
+interface State {
+  open: boolean;
+}
+
 // Adds (or replaces if one exists) the onClick handler to the passed in element that
 // displays a confirmation popup when clicked. If the user confirms the action, the
 // onConfirm handler is called. Must be passed (only) one child component.
-class Confirmable extends React.Component<Props, any> {
+class Confirmable extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
     this.showPopup = this.showPopup.bind(this);

@@ -36,7 +36,7 @@ interface GeneratedDispatchProps {
 
 type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
 
-class TeamProjectsView extends React.Component<Props, any> {
+class TeamProjectsView extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
 

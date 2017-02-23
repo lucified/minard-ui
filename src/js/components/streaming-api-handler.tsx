@@ -135,7 +135,7 @@ const toConnectionState = (state: any): ConnectionState => {
   }
 };
 
-class StreamingAPIHandler extends React.Component<Props, any> {
+class StreamingAPIHandler extends React.Component<Props, void> {
   private _source: any;
 
   constructor(props: GeneratedDispatchProps) {

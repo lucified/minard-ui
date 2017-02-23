@@ -35,7 +35,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 
-class ProjectsSection extends React.Component<Props, any> {
+class ProjectsSection extends React.Component<Props, void> {
   public render() {
     const { projects, isLoading, openCreateNewProjectDialog, team, showAll, count = 6 } = this.props;
     const filteredProjects = (projects.filter(project => !isFetchError(project)) as Project[])
