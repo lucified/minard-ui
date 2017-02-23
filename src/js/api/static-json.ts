@@ -37,7 +37,7 @@ const newProjectJSON = require('file-loader!../../../json/new-project.json');
 const editedProjectJSON = require('file-loader!../../../json/edited-project.json');
 const previewJSON = require('file-loader!../../../json/preview.json');
 
-function callApi(url: string) {
+function fetchFile(url: string) {
   return fetch(url, { credentials: 'same-origin' })
     .then(
       response => response.json().then(json => ({
@@ -58,49 +58,49 @@ function callApi(url: string) {
 
 const Activity = {
   fetchAll: (_teamId: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
-    callApi(activitiesJSON),
+    fetchFile(activitiesJSON),
   fetchAllForProject: (_id: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
-    callApi(activitiesJSON),
+    fetchFile(activitiesJSON),
 };
 
 const Branch = {
-  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(branchJSON[id]),
-  fetchForProject: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(projectBranchesJSON[id]),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(branchJSON[id]),
+  fetchForProject: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(projectBranchesJSON[id]),
 };
 
 const Comment = {
-  fetchForDeployment: (_id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(commentsJSON),
+  fetchForDeployment: (_id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(commentsJSON),
   create: (
     _deployment: string,
     _message: string,
     _email: string,
     _name?: string,
   ): Promise<ApiResult<ApiEntityResponse>> =>
-    callApi(newCommentJSON),
+    fetchFile(newCommentJSON),
   delete: (_id: string): Promise<ApiResult<{}>> => Promise.resolve({ response: {} }),
 };
 
 const Commit = {
-  fetch: (_id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(commitJSON),
+  fetch: (_id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(commitJSON),
   fetchForBranch: (id: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
-    callApi(branchCommitsJSON[id]),
+    fetchFile(branchCommitsJSON[id]),
 };
 
 const Deployment = {
-  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(deploymentJSON[id]),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(deploymentJSON[id]),
 };
 
 const Preview = {
-  fetch: (_id: string, _commitHash: string): Promise<ApiResult<ApiPreviewResponse>> => callApi(previewJSON),
+  fetch: (_id: string, _commitHash: string): Promise<ApiResult<ApiPreviewResponse>> => fetchFile(previewJSON),
 };
 
 const Project = {
-  fetchAll: (_teamId: string): Promise<ApiResult<ApiEntityResponse>> => callApi(allProjectsJSON),
-  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => callApi(projectJSON[id]),
+  fetchAll: (_teamId: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(allProjectsJSON),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(projectJSON[id]),
   create: (_teamId: string, _name: string, _description?: string): Promise<ApiResult<ApiEntityResponse>> =>
-    callApi(newProjectJSON),
+    fetchFile(newProjectJSON),
   edit: (_id: string, _newAttributes: { name?: string, description?: string }): Promise<ApiResult<ApiEntityResponse>> =>
-    callApi(editedProjectJSON),
+    fetchFile(editedProjectJSON),
   delete: (_id: string): Promise<ApiResult<{}>> => Promise.resolve({ response: {} }),
     // Promise.resolve({ error: 'sad face :(' });
 };
