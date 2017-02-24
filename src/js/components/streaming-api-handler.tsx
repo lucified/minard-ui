@@ -333,8 +333,6 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   public componentWillMount() {
     const { team } = this.props;
 
-    console.log('mounting. team:', team);
-
     // TODO: handle situation when not an authenticated Minard user
     if (streamingAPIUrl && team) {
       this.restartConnection(team.id);
@@ -342,8 +340,6 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    console.log('willreceiveprops. team:', nextProps.team);
-
     if (!this.props.team && nextProps.team) {
       this.restartConnection(nextProps.team.id);
     }
