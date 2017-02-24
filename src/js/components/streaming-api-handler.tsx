@@ -365,7 +365,7 @@ export const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
 });
 
 export default connect<{}, GeneratedDispatchProps, {}>(
-  () => ({}),
+  mapStateToProps,
   {
     setConnectionState: Streaming.actions.setConnectionState,
     storeActivities: Activities.actions.storeActivities,
