@@ -360,7 +360,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 };
 
-export const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
+const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),
 });
 
