@@ -1,4 +1,3 @@
-import { History } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware, { END } from 'redux-saga';
@@ -8,7 +7,7 @@ import rootReducer from './reducers';
 declare var module: { hot: any }; // An ugly hack
 declare var window: { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
 
-function configureStore(initialState: Object, history: History.History) {
+function configureStore(initialState: Object, history: any) { // TODO: improve typings
   const sagaMiddleware = createSagaMiddleware();
   const routerMiddlewareObject = routerMiddleware(history);
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

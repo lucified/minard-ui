@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { History, Router } from 'react-router';
+import { Router } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Store } from 'redux';
 
@@ -12,9 +12,9 @@ import routes from './routes';
 import sagaCreator from './sagas';
 
 export const createStoreAndRender = (
-  configureStore: (initalState: Object, history: History.History) => Store<any>,
+  configureStore: (initalState: Object, history: any) => Store<any>, // TODO: improve typing
   api: Api,
-  history: History.History,
+  history: any, // TODO: improve typing
 ) => {
   const initialState = {};
   const store = configureStore(initialState, history);
@@ -38,7 +38,7 @@ export const createStoreAndRender = (
 
   ReactDOM.render(
     <Provider store={store}>
-      <Router history={syncedHistory} routes={routes} />
+      <Router history={syncedHistory as any} routes={routes} />
     </Provider>,
     document.getElementById('content'),
   );

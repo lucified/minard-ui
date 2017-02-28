@@ -63,7 +63,7 @@
     "@types/react-gravatar": "^2.6.1",
     "@types/react-redux": "^4.4.36",
     "@types/react-router": "3.0.0",
-    "@types/react-router-redux": "4.0.39",
+    "@types/react-router-redux": "^4.0.41",
     "@types/react-select": "^1.0.42",
     "@types/redux-form": "^6.3.2",
     "atomic-s3": "^0.1.5",
