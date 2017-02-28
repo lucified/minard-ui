@@ -15,8 +15,7 @@
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./types",
-    "paths": {},
-    "skipLibCheck": true // TODO: remove once https://github.com/DefinitelyTyped/DefinitelyTyped/issues/14324 resolved
+    "paths": {}
   },
   "exclude": [
     "node_modules",

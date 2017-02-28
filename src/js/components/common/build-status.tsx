@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import * as Icon from 'react-fontawesome';
+import Icon = require('react-fontawesome');
 
 import { logMessage } from '../../logger';
 import { Deployment, DeploymentStatus } from '../../modules/deployments';
