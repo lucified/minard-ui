@@ -73,7 +73,6 @@ class SignupView extends React.Component<Props, State> {
       });
     } else {
       this.auth0.parseHash((auth0Error: Auth0Error, data: any) => {
-        console.log('data', data);
         if (auth0Error) {
           console.error('Unable to sign up', auth0Error);
           this.setState({ auth0Error: auth0Error.message });
