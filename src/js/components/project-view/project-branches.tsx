@@ -37,7 +37,7 @@ const getBranches = (branches: (Branch | undefined)[]) => (
   </FlipMove>
 );
 
-class ProjectBranches extends React.Component<Props, any> {
+class ProjectBranches extends React.Component<Props, void> {
   public render() {
     const { branches, project, showAll, count = 3 } = this.props;
     const title = showAll ? `All branches for ${project.name}` : 'Branches';
@@ -53,11 +53,11 @@ class ProjectBranches extends React.Component<Props, any> {
 
     const filteredBranches = (branches.filter(branch => !isFetchError(branch)) as (Branch | undefined)[])
       .sort((a, b) => {
-        if (a === undefined) {
+        if (a === undefined || a.latestActivityTimestamp === undefined) {
           return -1;
         }
 
-        if (b === undefined) {
+        if (b === undefined || b.latestActivityTimestamp === undefined) {
           return 1;
         }
 

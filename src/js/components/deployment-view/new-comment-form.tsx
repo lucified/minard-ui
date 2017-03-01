@@ -35,7 +35,7 @@ const validate = (values: CreateCommentFormData) => {
   return errors;
 };
 
-class NewCommentForm extends React.Component<Props, any> {
+class NewCommentForm extends React.Component<Props, void> {
   public render() {
     const { handleSubmit, pristine, submitting, error, invalid } = this.props;
 

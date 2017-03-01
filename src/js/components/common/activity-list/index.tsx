@@ -42,7 +42,7 @@ const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
   return groupedActivities;
 };
 
-class ActivityList extends React.Component<Props, any> {
+class ActivityList extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
 

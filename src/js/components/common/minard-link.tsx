@@ -21,7 +21,7 @@ interface Props {
   buildLog?: boolean;
 }
 
-class MinardLink extends React.Component<Props, any> {
+class MinardLink extends React.Component<Props, void> {
   public render() {
     const {
       buildLog,

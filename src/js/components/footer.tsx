@@ -4,7 +4,7 @@ interface Props {
 
 }
 
-class Footer extends React.Component<Props, any> {
+class Footer extends React.Component<Props, void> {
   public render() {
     return <div />;
   }

@@ -31,7 +31,7 @@ interface GeneratedStateProps {
 
 type Props = GeneratedDispatchProps & PassedProps & GeneratedStateProps;
 
-class ProjectsFrame extends React.Component<Props, any> {
+class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
     const { loadAllProjects, isUserLoggedIn, redirectTo, team, loadTeamInformation } = this.props;
 

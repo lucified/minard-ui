@@ -51,7 +51,7 @@ const toLowerCase = (value?: string): string | undefined => value && value.toLow
 const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
-class NewProjectForm extends React.Component<Props, any> {
+class NewProjectForm extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
@@ -67,7 +67,17 @@ class NewProjectForm extends React.Component<Props, any> {
 
   public render() {
     const { handleSubmit, pristine, submitting, error, invalid, existingProjects } = this.props;
-    const dropdownValues = existingProjects.sort((a, b) => b.latestActivityTimestamp - a.latestActivityTimestamp)
+    const dropdownValues = existingProjects.sort((a, b) => {
+      if (a.latestActivityTimestamp === undefined) {
+        return -1;
+      }
+
+      if (b.latestActivityTimestamp === undefined) {
+        return 1;
+      }
+
+      return b.latestActivityTimestamp - a.latestActivityTimestamp;
+    })
       .map(project => ({ value: project.id, label: project.name }));
 
     return (

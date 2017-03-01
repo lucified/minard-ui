@@ -26,7 +26,7 @@ interface GeneratedProps {
   project?: Project | FetchError;
 }
 
-class SubHeader extends React.Component<GeneratedProps, any> {
+class SubHeader extends React.Component<GeneratedProps, void> {
   public render() {
     const { openPageType, project, team } = this.props;
     let leftContent: JSX.Element | null = null;

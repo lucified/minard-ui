@@ -40,7 +40,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-class ProjectsFrame extends React.Component<Props, any> {
+class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
     const { loadPreviewAndComments } = this.props;
     const { deploymentId, commitHash } = this.props.params;

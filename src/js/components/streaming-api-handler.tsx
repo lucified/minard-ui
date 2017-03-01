@@ -135,7 +135,7 @@ const toConnectionState = (state: any): ConnectionState => {
   }
 };
 
-class StreamingAPIHandler extends React.Component<Props, any> {
+class StreamingAPIHandler extends React.Component<Props, void> {
   private _source: any;
 
   constructor(props: GeneratedDispatchProps) {
@@ -332,6 +332,7 @@ class StreamingAPIHandler extends React.Component<Props, any> {
 
   public componentWillMount() {
     const { team } = this.props;
+
     // TODO: handle situation when not an authenticated Minard user
     if (streamingAPIUrl && team) {
       this.restartConnection(team.id);
@@ -355,12 +356,12 @@ class StreamingAPIHandler extends React.Component<Props, any> {
   }
 };
 
-export const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
+const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),
 });
 
 export default connect<{}, GeneratedDispatchProps, {}>(
-  () => ({}),
+  mapStateToProps,
   {
     setConnectionState: Streaming.actions.setConnectionState,
     storeActivities: Activities.actions.storeActivities,

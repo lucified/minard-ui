@@ -7,6 +7,7 @@ import DeploymentView from './components/deployment-view';
 import LoginView from './components/login-view';
 import ProjectView from './components/project-view';
 import ProjectsFrame from './components/projects-frame';
+import SignupView from './components/signup-view';
 import TeamProjectsView from './components/team-projects-view';
 
 export default (
@@ -22,5 +23,6 @@ export default (
       <Route path=":view" />
     </Route>
     <Route path="login" component={LoginView} />
+    <Route path="signup(/:teamToken)" component={SignupView} />
   </Route>
 );

@@ -24,10 +24,6 @@
   version "2.0.46"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-2.0.46.tgz#0a62c9ddf4f37a9f7ff5fa27d63adc603a046fd9"
 
-"@types/isomorphic-fetch@0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.32.tgz#d76f29302aabb38d5caa39b54a96984ffb6bdba3"
-
 "@types/lodash@^4.14.52":
   version "4.14.52"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.52.tgz#de5c7ab14da1289733233c9b0ec6f9e377db90f5"
@@ -321,7 +317,7 @@ atomic-s3@^0.1.5:
     through2 "^2.0.1"
     vinyl-fs "^2.3.1"
 
-auth0-js@8.2.0:
+auth0-js@8.2.0, auth0-js@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-8.2.0.tgz#0fc7e916a3785da84090d5eed4ae08db75535fbe"
   dependencies:
@@ -5454,9 +5450,9 @@ type-is@~1.6.14:
     media-typer "0.3.0"
     mime-types "~2.1.13"
 
-typescript@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.1.6.tgz#40c7e6e9e5da7961b7718b55505f9cac9487a607"
+typescript@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.1.tgz#4862b662b988a4c8ff691cc7969622d24db76ae9"
 
 ua-parser-js@^0.7.9:
   version "0.7.12"

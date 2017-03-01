@@ -38,7 +38,7 @@ interface GeneratedDispatchProps {
   loadBranches: (id: string) => void;
 }
 
-class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, any> {
+class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, void> {
   public componentWillMount() {
     const { loadProject, loadActivities, loadBranches } = this.props;
     const { projectId } = this.props.params;

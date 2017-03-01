@@ -3,8 +3,14 @@ import { Action } from 'redux';
 // State
 export type ErrorState = Error[];
 
-export interface ClearErrorAction extends Action {
+export interface ClearProjectDeletionErrorAction extends Action {
   id?: string;
+}
+
+export interface ClearSignupErrorAction extends Action {}
+export interface SignupErrorAction extends Action {
+  error: string;
+  details?: string;
 }
 
 // Error types
@@ -56,3 +62,5 @@ export const isDeleteError = (obj: any): obj is DeleteError => {
 export interface EditError extends GenericError {
   id: string;
 }
+
+export interface SignupError extends GenericError {}

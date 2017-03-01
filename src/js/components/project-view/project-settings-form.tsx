@@ -60,7 +60,7 @@ const toLowerCase = (value?: string): string | undefined => value && value.toLow
 const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
 const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
 
-class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, any> {
+class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, void> {
   constructor(props: GeneratedStateProps & Props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);

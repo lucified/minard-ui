@@ -10,7 +10,8 @@ import {
   ApiEntityResponse,
   ApiEntityTypeString,
   ApiPreviewResponse,
-  ApiTeamResponse,
+  ApiTeam,
+  SignupResponse,
 } from '../api/types';
 import { logException, logMessage } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
@@ -27,7 +28,12 @@ import Comments, {
 } from '../modules/comments';
 import Commits, { Commit, LoadCommitsForBranchAction } from '../modules/commits';
 import Deployments, { Deployment } from '../modules/deployments';
-import { CreateError, EditError, FetchError, isFetchError } from '../modules/errors';
+import Errors, {
+  CreateError,
+  EditError,
+  FetchError,
+  isFetchError,
+} from '../modules/errors';
 import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
 import Previews, { LoadPreviewAndCommentsAction, Preview } from '../modules/previews';
 import Projects, {
@@ -39,7 +45,7 @@ import Projects, {
   StoreProjectsAction,
 } from '../modules/projects';
 import Requests, { CreateEntitySuccessAction, EditEntitySuccessAction } from '../modules/requests';
-import User, { LoadTeamInformationAction } from '../modules/user';
+import User, { LoadTeamInformationAction, SignupUserAction } from '../modules/user';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -588,7 +594,7 @@ export default function createSagas(api: Api) {
     const { response, error, details } = yield call(api.Team.fetch);
 
     if (response) {
-      const { id, name } = response as ApiTeamResponse;
+      const { id, name } = response as ApiTeam;
       yield put(User.actions.setTeam(String(id), name));
       yield put(Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator());
 
@@ -596,6 +602,24 @@ export default function createSagas(api: Api) {
     } else {
       // TODO: handle failure, e.g. not authorized or member of team
       yield put(Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(error, details));
+
+      return false;
+    }
+  }
+
+  function *signupUser(_action: SignupUserAction): IterableIterator<Effect> {
+    yield put(Errors.actions.clearSignupError());
+    const { response , error, details } = yield call(api.User.signup);
+
+    if (response) {
+      const { password, team: { id, name } } = response as SignupResponse;
+      yield put(User.actions.setTeam(String(id), name));
+      yield put(User.actions.setGitPassword(password));
+
+      return true;
+    } else {
+      console.error('signupUser error', error, details);
+      yield put(Errors.actions.signupError(error, details));
 
       return false;
     }
@@ -656,6 +680,14 @@ export default function createSagas(api: Api) {
     }
   }
 
+  function* watchForSignupUser(): IterableIterator<Effect> {
+    while (true) {
+      const action = yield take(User.actions.SIGNUP_USER);
+      // Block until it's done, skipping any further actions
+      yield call(signupUser, action);
+    }
+  }
+
   function* root() {
     yield [
       takeLatest(Projects.actions.CREATE_PROJECT, createProject),
@@ -676,6 +708,7 @@ export default function createSagas(api: Api) {
       fork(watchForLoadAllProjects),
       fork(watchForLoadActivities),
       fork(watchForLoadTeamInformation),
+      fork(watchForSignupUser),
     ];
   }
 

@@ -23,7 +23,7 @@ interface GeneratedStateProps {
 
 type Props = PassedProps & GeneratedStateProps;
 
-class CommentList extends React.Component<Props, any> {
+class CommentList extends React.Component<Props, void> {
   public constructor(props: Props) {
     super(props);
 
