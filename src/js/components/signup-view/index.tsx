@@ -146,8 +146,8 @@ class SignupView extends React.Component<Props, State> {
             </strong>
           </p>
           <p>
-            <strong>Username:</strong> <pre>{email}</pre><br />
-            <strong>Password:</strong> <pre>{password}</pre>
+            <strong>Username:</strong> <code>{email}</code><br />
+            <strong>Password:</strong> <code>{password}</code>
           </p>
           <p>
             Once you have stored this information, you can continue to Minard.
