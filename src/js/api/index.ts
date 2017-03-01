@@ -30,7 +30,7 @@ interface Error {
   detail: string;
 }
 
-const generateErrorObject = (errorResponse: any) => {
+function generateErrorObject(errorResponse: any) {
   let error: string = errorResponse.message || 'An error occurred';
   let details: string = '';
 
@@ -51,7 +51,7 @@ const generateErrorObject = (errorResponse: any) => {
 /**
  * This method will overwrite the Authorization header if an access token exists.
  */
-const connectToApi = <ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> => {
+function connectToApi<ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> {
   const combinedOptions = {
     ...defaultOptions,
     ...options,
@@ -79,7 +79,7 @@ const connectToApi = <ResponseType>(path: string, options?: RequestInit): Promis
     });
 };
 
-const getApi = <ResponseType>(path: string, query?: any): Promise<ApiResult<ResponseType>> => {
+function getApi<ResponseType>(path: string, query?: any): Promise<ApiResult<ResponseType>> {
   let queryString = '';
 
   if (query) {
@@ -90,8 +90,8 @@ const getApi = <ResponseType>(path: string, query?: any): Promise<ApiResult<Resp
   return connectToApi<ResponseType>(`${path}${queryString}`);
 };
 
-const postApi = <ResponseType>(path: string, payload: any): Promise<ApiResult<ResponseType>> =>
-  connectToApi(path, {
+function postApi<ResponseType>(path: string, payload: any): Promise<ApiResult<ResponseType>> {
+  return connectToApi(path, {
     method: 'POST',
     headers: {
       Accept: 'application/vnd.api+json',
@@ -99,12 +99,14 @@ const postApi = <ResponseType>(path: string, payload: any): Promise<ApiResult<Re
     },
     body: JSON.stringify(payload),
   });
+}
 
-const deleteApi = (path: string): Promise<ApiResult<{}>> =>
-  connectToApi(path, { method: 'DELETE' });
+function deleteApi(path: string): Promise<ApiResult<{}>> {
+  return connectToApi(path, { method: 'DELETE' });
+}
 
-const patchApi = (path: string, payload: any): Promise<ApiResult<ApiEntityResponse>> =>
-  connectToApi(path, {
+function patchApi(path: string, payload: any): Promise<ApiResult<ApiEntityResponse>> {
+  return connectToApi(path, {
     method: 'PATCH',
     headers: {
       Accept: 'application/vnd.api+json',
@@ -112,6 +114,7 @@ const patchApi = (path: string, payload: any): Promise<ApiResult<ApiEntityRespon
     },
     body: JSON.stringify(payload),
   });
+}
 
 const Activity = {
   fetchAll: (teamId: string, count: number, until?: number) => {
