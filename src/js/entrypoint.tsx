@@ -12,7 +12,7 @@ import routes from './routes';
 import sagaCreator from './sagas';
 
 export const createStoreAndRender = (
-  configureStore: (initalState: Object, history: any) => Store<any>, // TODO: improve typing
+  configureStore: (initalState: object, history: any) => Store<any>, // TODO: improve typing
   api: Api,
   history: any, // TODO: improve typing
 ) => {
