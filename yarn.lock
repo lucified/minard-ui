@@ -20,17 +20,13 @@
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-0.0.32.tgz#449abcd9a826807811ef101e58df9f83cfc61713"
 
-"@types/history@^2":
-  version "2.0.46"
-  resolved "https://registry.yarnpkg.com/@types/history/-/history-2.0.46.tgz#0a62c9ddf4f37a9f7ff5fa27d63adc603a046fd9"
-
 "@types/history@^3":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-3.2.1.tgz#0039ab0e0be2a0cc22bac171d27a44588103d123"
 
-"@types/lodash@^4.14.53":
-  version "4.14.53"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.53.tgz#c81ee7f2a551f92fb8692a2f6766d0430ccce9eb"
+"@types/lodash@^4.14.54":
+  version "4.14.54"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.54.tgz#287dbbcd97d5da69c25ca99fb5afa81c4839b7fa"
 
 "@types/mocha@^2.2.39":
   version "2.2.39"
@@ -82,18 +78,18 @@
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react-router-redux@^4.0.41":
-  version "4.0.41"
-  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.41.tgz#429d9ae7964240dd6d80fc006b406176ce5aa9b6"
+"@types/react-router-redux@^4.0.42":
+  version "4.0.42"
+  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.42.tgz#b6d723fd9d1a2ed2048d606a069440b855b620b5"
   dependencies:
     "@types/history" "^3"
     redux "^3.6.0"
 
-"@types/react-router@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.0.tgz#59168a10f9aa38fe88d6b66e1e0e4426798b7941"
+"@types/react-router@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.6.tgz#8e127d4b8bd9d816bd252b42abbbc95911e492f3"
   dependencies:
-    "@types/history" "^2"
+    "@types/history" "^3"
     "@types/react" "*"
 
 "@types/react-select@^1.0.42":
@@ -102,7 +98,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^15.0.13":
+"@types/react@*", "@types/react@15.0.13":
   version "15.0.13"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.13.tgz#7031530b0d1b77941551cda06e5b56b704505f12"
 
@@ -332,7 +328,7 @@ atomic-s3@^0.1.5:
     through2 "^2.0.1"
     vinyl-fs "^2.3.1"
 
-auth0-js@8.2.0, auth0-js@^8.2.0:
+auth0-js@8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-8.2.0.tgz#0fc7e916a3785da84090d5eed4ae08db75535fbe"
   dependencies:
@@ -341,6 +337,16 @@ auth0-js@8.2.0, auth0-js@^8.2.0:
     superagent "^3.3.1"
     url-join "^1.1.0"
     winchan "^0.1.4"
+
+auth0-js@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-8.3.0.tgz#1e7f939e3bd267b6a5fb87614255af4265a646f6"
+  dependencies:
+    base64-js "^1.2.0"
+    idtoken-verifier "^1.0.1"
+    superagent "^3.3.1"
+    url-join "^1.1.0"
+    winchan "^0.2.0"
 
 auth0-lock@^10.10.2:
   version "10.11.0"
@@ -4138,9 +4144,9 @@ postcss-load-plugins@^2.3.0:
     cosmiconfig "^2.1.1"
     object-assign "^4.1.0"
 
-postcss-loader@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/postcss-loader/-/postcss-loader-1.3.2.tgz#c568b61c2e48e274e1c224a2587fb566f4ec26f5"
+postcss-loader@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/postcss-loader/-/postcss-loader-1.3.3.tgz#a621ea1fa29062a83972a46f54486771301916eb"
   dependencies:
     loader-utils "^1.0.2"
     object-assign "^4.1.1"
@@ -5511,9 +5517,9 @@ tslint-react@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslint-react/-/tslint-react-2.4.0.tgz#82c314f2752c419c6e41d9789587ef42f64261ea"
 
-tslint@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.5.0.tgz#12b384a339d456ee1d3cc665f13f4e759bbe5d64"
+tslint@^4.5.1:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.5.1.tgz#05356871bef23a434906734006fc188336ba824b"
   dependencies:
     babel-code-frame "^6.20.0"
     colors "^1.1.2"
@@ -5933,6 +5939,10 @@ widest-line@^1.0.0:
 winchan@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/winchan/-/winchan-0.1.4.tgz#88fa12411cd542eb626018c38a196bcbb17993bb"
+
+winchan@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/winchan/-/winchan-0.2.0.tgz#3863028e7f974b0da1412f28417ba424972abd94"
 
 window-size@0.1.0:
   version "0.1.0"
