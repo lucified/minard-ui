@@ -71,9 +71,6 @@ const rules = [
     test: /\.hbs$/,
     use: [{
       loader: 'handlebars-loader',
-      options: {
-        helperDirs: [`${__dirname}/src/templates/helpers`],
-      },
     }],
   },
   {
@@ -216,7 +213,7 @@ const config = {
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
     new CopyWebpackPlugin([{
-      from: 'src/images/favicon-*.png',
+      from: 'static/*',
       flatten: true,
     }]),
   ],

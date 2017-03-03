@@ -7,7 +7,7 @@ import { storeCredentials } from '../../api/auth';
 import { login as intercomLogin } from '../../intercom';
 import User from '../../modules/user';
 
-const minardLogo = require('../../../images/minard_logo_auth0.png');
+const minardLogo = require('../../../../static/minard-logo-auth0.png');
 const styles = require('./index.scss');
 
 interface GeneratedDispatchProps {
