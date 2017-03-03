@@ -1,8 +1,8 @@
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
+import Icon = require('react-fontawesome');
 import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { InjectedRouter, withRouter } from 'react-router';
 import { Dispatch } from 'redux';
 
 import { trackEvent } from '../../intercom';
@@ -22,7 +22,7 @@ interface PassedProps {
 }
 
 interface InjectedProps {
-  router: ReactRouter.RouterOnContext;
+  router: InjectedRouter;
 }
 
 interface GeneratedStateProps {

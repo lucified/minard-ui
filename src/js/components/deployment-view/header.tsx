@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as Icon from 'react-fontawesome';
+import Icon = require('react-fontawesome');
 
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';

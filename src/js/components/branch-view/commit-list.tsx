@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as FlipMove from 'react-flip-move';
-import * as Icon from 'react-fontawesome';
+import Icon = require('react-fontawesome');
 import * as Waypoint from 'react-waypoint';
 
 import { Commit } from '../../modules/commits';
