@@ -103,7 +103,7 @@
   },
   "dependencies": {
     "auth0-js": "^8.3.0",
-    "auth0-lock": "^10.10.2",
+    "auth0-lock": "^10.12.1",
     "classnames": "^2.2.5",
     "event-source-polyfill": "^0.0.9",
     "flexboxgrid": "^6.3.1",
