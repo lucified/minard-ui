@@ -7,6 +7,7 @@ import { storeCredentials } from '../../api/auth';
 import { login as intercomLogin } from '../../intercom';
 import User from '../../modules/user';
 
+const minardLogo = require('../../../images/minard_logo_auth0.png');
 const styles = require('./index.scss');
 
 interface GeneratedDispatchProps {
@@ -38,6 +39,13 @@ class LoginView extends React.Component<Props, void> {
       ],
       closable: false,
       container: 'login-container',
+      theme: {
+        logo: minardLogo,
+        primaryColor: '#40C1AC',
+      },
+      languageDictionary: {
+        title: 'Minard by Lucify',
+      },
     } as any);
 
     this.lock.on('authenticated', this.onAuthentication.bind(this));
