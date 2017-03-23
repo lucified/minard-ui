@@ -131,7 +131,7 @@ class SignupView extends React.Component<Props, State> {
       return (
         <div className={styles['login-message']}>
           {this.getHeader()}
-          <ErrorDialog title="Oops">
+          <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
           </ErrorDialog>
         </div>
