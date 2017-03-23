@@ -1,0 +1,35 @@
+@import '../mixins';
+
+.header {
+  height: 64px;
+  margin: 0;
+
+  @include nitti-grotesk-medium;
+  font-size: 19px;
+  color: #fbfbfb;
+}
+
+.header-background {
+  background-image: linear-gradient(to left, #17b7b7, #54c6a8);
+}
+
+.logo {
+  text-align: center;
+}
+
+.minard {
+  @include nitti-grotesk-bold;
+  font-size: 46px;
+
+  display: inline-block;
+  margin: 0;
+  transition: transform 0.6s ease-in-out;
+  transform-origin: 50% 55%;
+  transform: rotate(0deg);
+  user-select: none;
+  cursor: default;
+
+  &:hover {
+    transform: rotate(360deg);
+  }
+}
