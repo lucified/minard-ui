@@ -10,6 +10,7 @@ import { login as intercomLogin } from '../../intercom';
 import Errors from '../../modules/errors';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
+import Spinner from '../common/spinner';
 import ErrorDialog from './error-dialog';
 
 const styles = require('./index.scss');
@@ -165,15 +166,10 @@ class SignupView extends React.Component<Props, State> {
     }
 
     if (loadingStatus === LoadingStatus.BACKEND) {
-      // TODO: better loading indicator
       return (
         <div>
           {this.getHeader()}
-          <ErrorDialog>
-            <p>
-              Creating user...
-            </p>
-          </ErrorDialog>
+          <Spinner />
         </div>
       );
     }
