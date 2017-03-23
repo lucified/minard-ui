@@ -5,6 +5,7 @@ const autoprefixer = require('autoprefixer');
 const postcssReporter = require('postcss-reporter');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
 const deployConfig = require('./deploy-config');
 
@@ -196,7 +197,7 @@ const config = {
   },
   output: {
     filename: 'index-[hash].js',
-    path: deployConfig.base.dest,
+    path: path.join(__dirname, deployConfig.base.dest),
     publicPath: deployConfig.base.publicPath,
   },
   entry: [
