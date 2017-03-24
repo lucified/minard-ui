@@ -1,3 +1,5 @@
+@import '../../mixins';
+
 .hover {
   :global {
     // This prevents a flicker on Safari once opacity reaches 1
@@ -10,7 +12,7 @@
       color: #2C3E50;
       transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
       font-family: "FontAwesome";
-      font-size: 13px;
+      @include font-size-S;
       content: "\f08e";
       opacity: 0;
       padding-left: 10px;

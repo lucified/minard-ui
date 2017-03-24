@@ -5,7 +5,7 @@
   margin: 0;
 
   @include nitti-grotesk-medium;
-  font-size: 19px;
+  @include font-size-M;
   color: #fbfbfb;
 }
 
@@ -19,7 +19,7 @@
 
 .minard {
   @include nitti-grotesk-bold;
-  font-size: 46px;
+  @include font-size-XXL;
 
   display: inline-block;
   margin: 0;

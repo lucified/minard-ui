@@ -14,7 +14,7 @@
     padding: 2px 8px;
 
     @include nitti-grotesk-regular;
-    font-size: 15px;
+    @include font-size-M;
     line-height: 22px;
     color: #2C3E50;
   }
@@ -34,7 +34,7 @@
     position: absolute;
     right: 8px;
     top: 2px;
-    font-size: 15px;
+    @include font-size-M;
     color: #D0021B;
     letter-spacing: -0.21px;
     line-height: 22px;

@@ -11,7 +11,7 @@
 .commit-metadata {
   @include nitti-grotesk-regular;
   line-height: 20px;
-  font-size: 15px;
+  @include font-size-S;
   color: #919D9F;
 }
 
@@ -21,7 +21,7 @@
 
 .commit-body {
   @include nitti;
-  font-size: 17px;
+  @include font-size-M;
   line-height: 24px;
   letter-spacing: -0.5px;
   color: #2C3E50;
@@ -33,7 +33,7 @@
 
 .description {
   line-height: 23px;
-  font-size: 12px;
+  @include font-size-MS;
 }
 
 .error {

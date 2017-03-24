@@ -1,3 +1,5 @@
+@import '../mixins';
+
 .confirmable {
   position: relative;
 }
@@ -45,13 +47,13 @@
     border-bottom: 1px solid #D8D8D8;
 
     .title {
-      font-size: 16px;
+      @include font-size-M;
       color: #2C3E50;
       margin-bottom: 8px;
     }
 
     .message {
-      font-size: 14px;
+      @include font-size-S;
       color: #7F8C8D;
       letter-spacing: -0.21px;
       line-height: 21px;
@@ -73,7 +75,7 @@
       outline: none;
       background: #D0021B;
       border-radius: 3px;
-      font-size: 16px;
+      @include font-size-M;
       color: #FFFFFF;
 
       &:hover {
@@ -82,7 +84,7 @@
     }
 
     .cancel {
-      font-size: 12px;
+      @include font-size-S;
       color: #7F8C8D;
 
       &:hover {

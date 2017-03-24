@@ -17,7 +17,7 @@
 }
 
 .timestamp {
-  font-size: 14px;
+  @include font-size-MS;
   color: #95A5A6;
   letter-spacing: -0.5px;
   line-height: 25px;
@@ -59,7 +59,7 @@
 
 .metadata {
   display: flex;
-  font-size: 16px;
+  @include font-size-MS;
   color: #7F8C8D;
   margin-bottom: 12px;
   line-height: 25px;
@@ -97,5 +97,5 @@
 
 .share {
   margin-left: auto;
-  font-size: 11px;
+  @include font-size-S;
 }

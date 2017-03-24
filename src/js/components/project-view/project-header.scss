@@ -1,7 +1,7 @@
 @import '../mixins';
 
 .title {
-  font-size: 60px;
+  @include font-size-XXL;
   letter-spacing: -2px;
   color: #2C3E50;
   white-space: nowrap;
@@ -10,7 +10,7 @@
 }
 
 .description {
-  font-size: 26px;
+  @include font-size-L;
   color: #2C3E50;
   line-height: 34px;
   white-space: pre-wrap;
@@ -22,12 +22,12 @@
   top: 48px;
 
   @include nitti-grotesk-medium;
-  font-size: 18px;
+  @include font-size-M;
   color: #95a5a6;
 }
 
 .icon {
-  font-size: 15px;
+  @include font-size-MS;
   padding-right: 4px;
 }
 

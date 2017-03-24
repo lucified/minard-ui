@@ -8,13 +8,13 @@
   margin-right: 12px;
 
   @include nitti-grotesk-medium;
-  font-size: 17px;
+  @include font-size-M;
   letter-spacing: -0.21px;
   line-height: 24px;
 }
 
 .text, .smaller-text {
-  font-size: 14px;
+  @include font-size-MS;
   color: #7F8C8D;
   letter-spacing: -0.17px;
   line-height: 24px;
@@ -25,7 +25,7 @@
 .url {
   color: #2EBDB1;
   @include nitti-grotesk-medium;
-  font-size: 18px;
+  @include font-size-M;
 }
 
 .code {
@@ -34,7 +34,7 @@
   overflow-x: auto;
   background: #2C3E50;
   border-radius: 2px;
-  font-size: 13px;
+  @include font-size-S;
   color: #FFFFFF;
   letter-spacing: -0.38px;
   line-height: 21px;

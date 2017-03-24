@@ -1,3 +1,5 @@
+@import '../mixins';
+
 .simple-confirmable {
   position: relative;
 }
@@ -48,7 +50,7 @@ $width: 160px;
     padding: 11px 12px 3px;
     text-align: center;
 
-    font-size: 16px;
+    @include font-size-M;
     color: #2C3E50;
     margin-bottom: 8px;
   }
@@ -69,7 +71,7 @@ $width: 160px;
       outline: none;
       background: #D0021B;
       border-radius: 3px;
-      font-size: 14px;
+      @include font-size-S;
       color: #FFFFFF;
 
       &:hover {
@@ -78,7 +80,7 @@ $width: 160px;
     }
 
     .cancel {
-      font-size: 12px;
+      @include font-size-S;
       color: #7F8C8D;
 
       &:hover {

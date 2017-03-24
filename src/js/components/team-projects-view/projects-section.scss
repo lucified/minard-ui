@@ -2,7 +2,7 @@
 
 .add-project-link {
   @include nitti-grotesk-bold;
-  font-size: 18px;
+  @include font-size-M;
   color: #2EBDB1;
 
   text-align: right;
@@ -30,7 +30,7 @@
 
 .show-all-projects-link {
   @include nitti-grotesk-medium;
-  font-size: 17px;
+  @include font-size-M;
   color: #2EBDB1;
 
   text-align: right;

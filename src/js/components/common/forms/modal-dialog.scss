@@ -68,7 +68,7 @@
   color: #FBFBFB;
 
   @include nitti-grotesk-medium;
-  font-size: 20px;
+  @include font-size-M;
   letter-spacing: −0.11px;
 
   .close {
@@ -109,7 +109,7 @@
     width: 164px;
     cursor: pointer;
 
-    font-size: 18px;
+    @include font-size-M;
     color: #2EBDB1;
 
     &:hover {
@@ -127,7 +127,7 @@
 
   .cancel {
     margin-right: 28px;
-    font-size: 16px;
+    @include font-size-M;
     color: #7F8C8D;
 
     &:hover {
@@ -145,7 +145,7 @@
   }
 
   .delete {
-    font-size: 16px;
+    @include font-size-M;
     color: #D0021B;
 
     &:hover {
@@ -164,7 +164,7 @@
   background: #D0021B;
   border-radius: 3px;
 
-  font-size: 17px;
+  @include font-size-M;
   color: #FFFFFF;
   letter-spacing: -0.21px;
   line-height: 21px;

@@ -2,7 +2,7 @@
 
 .delete-branch-link {
   @include nitti-grotesk-medium;
-  font-size: 18px;
+  @include font-size-M;
   text-align: right;
   color: #95a5a6;
 }
@@ -17,14 +17,14 @@
 
 .title {
   @include nitti-grotesk-light;
-  font-size: 36px;
+  @include font-size-XL;
   color: #2C3E50;
   letter-spacing: -1px;
 }
 
 .description {
   margin: -30px 0 48px;
-  font-size: 26px;
+  @include font-size-M;
   color: #2C3E50;
   line-height: 34px;
 }
