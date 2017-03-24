@@ -133,6 +133,9 @@ class SignupView extends React.Component<Props, State> {
           {this.getHeader()}
           <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
+            <p>
+              Please try again and contact <a href="mailto:support@minard.io">support@minard.io</a> if that didn't help.
+            </p>
           </ErrorDialog>
         </div>
       );
@@ -154,8 +157,14 @@ class SignupView extends React.Component<Props, State> {
               </strong>
             </p>
             <p>
-              <strong>Username:</strong> <code>{email}</code><br />
-              <strong>Password:</strong> <code>{password}</code>
+              <strong>Username:</strong>
+              <br />
+              <code>{email}</code>
+            </p>
+            <p>
+              <strong>Password:</strong>
+              <br />
+              <code>{password}</code>
             </p>
             <p>
               Once you have stored this information, you can continue to Minard.

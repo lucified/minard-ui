@@ -9,7 +9,7 @@
 
   @media (max-width: 480px) {
     width: 90%;
-    margin: 0 auto;
+    margin: 1rem auto;
   }
 
   @media (max-width: 360px) {
@@ -36,12 +36,20 @@
   font-size: 15px;
   padding: 1.5rem;
 
+  :first-child {
+    margin-top: 0;
+  }
+
   strong, bold {
     @include nitti-grotesk-medium;
   }
 
   code {
     @include nitti;
+  }
+
+  a {
+    color: #2EBDB1;
   }
 }
 
