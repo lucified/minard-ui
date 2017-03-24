@@ -8,7 +8,7 @@
 
 .metadata {
   @include nitti-grotesk-medium;
-  font-size: 18px;
+  @include font-size-M;
 
   a {
     color: #2EBDB1;
@@ -16,8 +16,8 @@
 }
 
 .commit-message {
-  @include nitti-grotesk-regular;
-  font-size: 14px;
+  @include nitti;
+  @include font-size-MS;
   line-height: 18px;
   margin-top: 8px;
 }
@@ -28,6 +28,6 @@
 
 .open-link {
   @include nitti-grotesk-medium;
-  font-size: 14px;
+  @include font-size-MS;
   color: #95A5A6;
 }

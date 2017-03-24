@@ -11,7 +11,7 @@
 
 .title {
   @include nitti-grotesk-light;
-  font-size: 36px;
+  @include font-size-XL;
   color: #2C3E50;
   letter-spacing: -1px;
   text-align: center;

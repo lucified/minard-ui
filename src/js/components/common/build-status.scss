@@ -6,7 +6,7 @@
   padding: 7px 16px;
 
   @include nitti-grotesk-medium;
-  font-size: 14px;
+  @include font-size-S;
   color: #FFFFFF;
   letter-spacing: -0.23px;
   line-height: 16px;

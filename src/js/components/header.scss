@@ -4,7 +4,7 @@
   height: 72px;
 
   @include nitti-grotesk-medium;
-  font-size: 19px;
+  @include font-size-M;
   color: #fbfbfb;
 }
 
@@ -47,7 +47,7 @@
 
 .minard {
   @include nitti-grotesk-bold;
-  font-size: 46px;
+  @include font-size-XXL;
 
   display: inline-block;
   margin: 0;
@@ -68,7 +68,7 @@
 
 .team-dropdown {
   margin-right: 20px;
-  font-size: 17px;
+  @include font-size-M;
 }
 
 .caret {
@@ -91,7 +91,7 @@
   z-index: 2;
 
   @include nitti-grotesk-bold;
-  font-size: 16px;
+  @include font-size-MS;
   line-height: 20px;
   color: #ffffff;
 }

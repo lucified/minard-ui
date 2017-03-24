@@ -6,7 +6,7 @@
 
 .sub-header {
   @include nitti-grotesk-regular;
-  font-size: 17px;
+  @include font-size-M;
   letter-spacing: -0.3px;
 
   height: 60px;
@@ -25,7 +25,7 @@
 
 .sub-header-link {
   @include nitti-grotesk-medium;
-  font-size: 16px;
+  @include font-size-MS;
   line-height: 1.79;
 }
 
