@@ -1,5 +1,6 @@
 // TODO: import this with typings once the latest auth0-js typings work with auth0-lock typings
 const Auth0 = require('auth0-js');
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -9,6 +10,10 @@ import { login as intercomLogin } from '../../intercom';
 import Errors from '../../modules/errors';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
+import Spinner from '../common/spinner';
+import ErrorDialog from './error-dialog';
+
+const styles = require('./index.scss');
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
@@ -122,50 +127,76 @@ class SignupView extends React.Component<Props, State> {
     const { password, email, error } = this.props;
     const { loadingStatus, auth0Error } = this.state;
 
-    if (auth0Error || error) {
-      // TODO: better auth0Error styling
+    if (auth0Error || error) { // TODO: Add "back to signup" action
       return (
-        <div>
-          <h2>Error</h2>
-          <p>{auth0Error || error}</p>
+        <div className={styles['login-message']}>
+          {this.getHeader()}
+          <ErrorDialog title="Something went wrong">
+            <p>{auth0Error || error}</p>
+            <p>
+              Please try again and contact <a href="mailto:support@minard.io">support@minard.io</a> if that didn't help.
+            </p>
+          </ErrorDialog>
         </div>
       );
     }
 
     if (password) {
-      // TODO: style this
       return (
         <div>
-          <h2>Important</h2>
-          <p>
-            Success! Your Minard user account has been created. To access the Minard
-            Git repository, you will need to use the following username and password.
-            <strong>
-              Please store this password in some place safe. This is the only time you will
-              see this password.
-            </strong>
-          </p>
-          <p>
-            <strong>Username:</strong> <code>{email}</code><br />
-            <strong>Password:</strong> <code>{password}</code>
-          </p>
-          <p>
-            Once you have stored this information, you can continue to Minard.
-          </p>
-          <button onClick={this.redirectToApp}>Open minard</button>
+          {this.getHeader()}
+          <ErrorDialog title="Important" actionText="Open Minard" action={this.redirectToApp}>
+            <p>
+              Success! Your Minard user account has been created. To access the Minard
+              Git repository, you will need to use the following username and password.
+            </p>
+            <p>
+              <strong>
+                Please store this password in some place safe. This is the only time you will
+                see this password.
+              </strong>
+            </p>
+            <p>
+              <strong>Username:</strong>
+              <br />
+              <code>{email}</code>
+            </p>
+            <p>
+              <strong>Password:</strong>
+              <br />
+              <code>{password}</code>
+            </p>
+            <p>
+              Once you have stored this information, you can continue to Minard.
+            </p>
+          </ErrorDialog>
         </div>
       );
     }
 
     if (loadingStatus === LoadingStatus.BACKEND) {
-      // TODO: better loading indicator
       return (
-        <div>Creating user...</div>
+        <div>
+          {this.getHeader()}
+          <Spinner />
+        </div>
       );
     }
 
     // TODO: Say something
     return null;
+  }
+
+  private getHeader() {
+    return (
+      <section className={styles['header-background']}>
+        <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
+          <div className={classNames(styles.logo, 'col-xs')}>
+              <h1 title="Minard" className={styles.minard}>m</h1>
+            </div>
+        </div>
+      </section>
+    );
   }
 };
 
