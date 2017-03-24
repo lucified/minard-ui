@@ -214,11 +214,11 @@ const Preview = {
 };
 
 const Team = {
-  fetch: () => getApi<ApiTeam>('/team'),
+  fetch: () => connectToApi<ApiTeam>('/team', { credentials: 'include' }),
 };
 
 const User = {
-  signup: () => getApi<SignupResponse>('/signup'),
+  signup: () => connectToApi<SignupResponse>('/signup', { credentials: 'include' }),
 };
 
 const API: Api = {
