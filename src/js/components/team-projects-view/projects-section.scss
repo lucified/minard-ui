@@ -1,14 +1,15 @@
 @import '../mixins';
+@import '../definitions';
 
 .add-project-link {
   @include nitti-grotesk-bold;
   @include font-size-M;
-  color: #2EBDB1;
+  color: $minard-cyan;
 
   text-align: right;
 
   &:hover {
-    color: #0F807E;
+    color: $minard-dark-cyan;
   }
 }
 
@@ -31,19 +32,19 @@
 .show-all-projects-link {
   @include nitti-grotesk-medium;
   @include font-size-M;
-  color: #2EBDB1;
+  color: $minard-cyan;
 
   text-align: right;
 
   &:hover {
-    color: #0F807E;
+    color: $minard-dark-cyan;
   }
 }
 
 .empty {
   @include nitti-grotesk-light;
   text-align: center;
-  color: #7F8C8D;
+  color: $minard-mid-gray;
   margin-bottom: 70px;
 
   h2 {

@@ -1,11 +1,12 @@
 @import '../mixins';
+@import '../definitions';
 
 .dialog {
   width: 400px;
   min-height: 300px;
-  background-color: #fff;
+  background-color: white;
   margin: 2rem auto;
-  box-shadow: 0px 3px 5px #CCC;
+  box-shadow: 0px 3px 5px $minard-shadow;
 
   @media (max-width: 480px) {
     width: 90%;
@@ -25,7 +26,7 @@
   vertical-align: middle;
   padding: 0 1.5rem;
   margin: 0;
-  background-color: #4A4A4A;
+  background-color: $minard-dark-gray;
 
   @include nitti-grotesk-medium;
   color: white;
@@ -49,20 +50,20 @@
   }
 
   a {
-    color: #2EBDB1;
+    color: $minard-cyan;
   }
 }
 
 .button-container {
   width: 100%;
-  border-top: 1px solid #F2F2F2;
+  border-top: 1px solid $minard-light-gray;
   text-align: right;
 
   button {
     margin: 1rem 1.5rem;
     padding: 0.5rem 1rem;
-    color: #2EBDB1;
-    border: 1px solid #D8D8D8;
+    color: $minard-cyan;
+    border: 1px solid $minard-light-gray;
     border-radius: 5px;
     background-color: white;
     @include nitti-grotesk-medium;

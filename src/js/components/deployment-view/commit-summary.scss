@@ -1,8 +1,9 @@
 @import '../mixins';
+@import '../definitions';
 
 .commit-summary {
   padding: 15px 23px;
-  color: #2C3E50;
+  color: $minard-dark-blue;
   line-height: 24px;
 }
 
@@ -11,7 +12,7 @@
   @include font-size-M;
 
   a {
-    color: #2EBDB1;
+    color: $minard-cyan;
   }
 }
 
@@ -29,5 +30,5 @@
 .open-link {
   @include nitti-grotesk-medium;
   @include font-size-MS;
-  color: #95A5A6;
+  color: $minard-mid-gray;
 }

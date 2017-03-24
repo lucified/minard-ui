@@ -1,9 +1,10 @@
 @import '../../mixins';
+@import '../../definitions';
 
 .empty {
   @include nitti-grotesk-light;
   text-align: center;
-  color: #7F8C8D;
+  color: $minard-mid-gray;
   margin-bottom: 70px;
 
   h2 {

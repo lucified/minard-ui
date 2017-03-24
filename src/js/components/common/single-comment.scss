@@ -1,4 +1,5 @@
 @import '../mixins';
+@import '../definitions';
 
 .single-comment {
   @include nitti-grotesk-regular;
@@ -20,12 +21,12 @@
 
 .metadata {
   line-height: 20px;
-  color: #919D9F;
+  color: $minard-mid-gray;
   @include font-size-MS;
 }
 
 .author-name {
-  color: #4A4A4A;
+  color: $minard-dark-blue;
 }
 
 .actions {
@@ -34,11 +35,11 @@
 }
 
 .delete:hover {
-  color: #4A4A4A;
+  color: $minard-dark-blue;
 }
 
 .comment-message {
-  color: #2C3E50;
+  color: $minard-dark-blue;
   line-height: 24px;
   @include font-size-M;
   letter-spacing: -0.31px;

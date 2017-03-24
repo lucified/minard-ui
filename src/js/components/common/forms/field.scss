@@ -1,4 +1,5 @@
 @import '../../mixins';
+@import '../../definitions';
 
 .field {
   margin-bottom: 36px;
@@ -11,7 +12,7 @@
     @include font-size-M;
     letter-spacing: -0.21px;
     line-height: 24px;
-    color: #2C3E50;
+    color: $minard-dark-blue;
   }
 
   .input {
@@ -24,7 +25,7 @@
     top: 18px;
     left: 0px;
     @include font-size-S;
-    color: #95A5A6;
+    color: $minard-mid-gray;
     margin-right: 12px;
   }
 
@@ -41,7 +42,7 @@
     border: none;
     outline: none;
 
-    color: #2C3E50;
+    color: $minard-dark-blue;
     @include nitti-grotesk-light;
   }
 
@@ -68,7 +69,7 @@
 
   .error {
     @include font-size-M;
-    color: #D0021B;
+    color: $minard-red;
     letter-spacing: -0.21px;
     line-height: 21px;
   }
@@ -77,7 +78,7 @@
     margin-top: 4px;
 
     @include font-size-MS;
-    color: #7F8C8D;
+    color: $minard-mid-gray;
     letter-spacing: -0.17px;
     line-height: 21px;
   }

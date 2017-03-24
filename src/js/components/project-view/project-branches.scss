@@ -1,9 +1,10 @@
 @import '../mixins';
+@import '../definitions';
 
 .empty {
   @include nitti-grotesk-light;
   text-align: center;
-  color: #7F8C8D;
+  color: $minard-mid-gray;
 
   h2 {
     margin-top: 8px;
@@ -13,7 +14,7 @@
 .error {
   @include nitti-grotesk-light;
   text-align: center;
-  color: #4A4A4A;
+  color: $minard-dark-blue;
 
   small {
     @include nitti;
@@ -27,7 +28,7 @@
 .show-all-branches-link {
   @include nitti-grotesk-medium;
   @include font-size-M;
-  color: #2EBDB1;
+  color: $minard-cyan;
   text-align: right;
 }
 

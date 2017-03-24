@@ -1,11 +1,12 @@
 @import '../../mixins';
+@import '../../definitions';
 
 .field {
   margin-bottom: 4px;
   position: relative;
 
   input, textarea {
-    background: #FFFFFF;
+    background: white;
     border: 1px solid #E5E5E5;
     border-radius: 3px;
     outline: none;
@@ -16,7 +17,7 @@
     @include nitti-grotesk-regular;
     @include font-size-M;
     line-height: 22px;
-    color: #2C3E50;
+    color: $minard-dark-blue;
   }
 
   textarea {
@@ -24,10 +25,10 @@
   }
 
   ::placeholder {
-    color: #95A5A6;
+    color: $minard-mid-gray;
   }
   :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: #95A5A6;
+    color: $minard-mid-gray;
   }
 
   .error {
@@ -35,7 +36,7 @@
     right: 8px;
     top: 2px;
     @include font-size-M;
-    color: #D0021B;
+    color: $minard-red;
     letter-spacing: -0.21px;
     line-height: 22px;
     z-index: 1;

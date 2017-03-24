@@ -1,7 +1,9 @@
+@import '../definitions';
+
 .comment-list {
-  border-top: 1px solid #EFEFEF;
+  border-top: 1px solid $minard-light-gray;
   padding: 8px 0px;
-  background: #FDFDFD;
+  background: white;
 }
 
 .comment {
@@ -9,5 +11,5 @@
 }
 
 .highlighted {
-  background-color: #fff8ba;
+  background-color: $minard-light-yellow;
 }
