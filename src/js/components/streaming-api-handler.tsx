@@ -284,6 +284,11 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     const url = accessToken ?
       `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}` :
       `${streamingAPIUrl}/${teamId}`;
+
+    if (this._source) {
+      this._source.close();
+    }
+
     this._source = new EventSource(url, { withCredentials: false });
 
     this._source.addEventListener('error', (e: EventSourceError) => {
