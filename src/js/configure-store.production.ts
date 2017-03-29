@@ -7,7 +7,7 @@ const RavenMiddleware = require('redux-raven-middleware');
 
 import rootReducer from './reducers';
 
-function configureStore(initialState: Object, history: any) { // TODO: improve typings
+function configureStore(initialState: object, history: any) { // TODO: improve typings
   const sagaMiddleware = createSagaMiddleware();
   const routerMiddlewareObject = routerMiddleware(history);
 

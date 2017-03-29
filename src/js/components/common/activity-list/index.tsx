@@ -95,12 +95,12 @@ class ActivityList extends React.Component<Props, void> {
           })}
         </FlipMove>
         {isLoading && <LoadingActivityGroup />}
-        {!isLoading && !allLoaded &&
+        {!isLoading && !allLoaded && (
           <Waypoint
             bottomOffset="-300px" // Start loading new activities when the waypoint is 300px below the window
             onEnter={this.loadMoreActivities}
           />
-        }
+        )}
       </div>
     );
   }

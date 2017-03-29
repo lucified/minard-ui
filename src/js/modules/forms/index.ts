@@ -8,7 +8,7 @@ export interface FormSubmitAction extends Action {
     successAction: string;
     failureAction: string;
     values: any;
-    resolve: (idOrEntity: string | Object) => void;
+    resolve: (idOrEntity: string | object) => void;
     reject: (error: any) => void;
   };
 }
@@ -18,7 +18,7 @@ export function formSubmit(
   successAction: string,
   failureAction: string,
   values: any,
-  resolve: (idOrEntity: string | Object) => void,
+  resolve: (idOrEntity: string | object) => void,
   reject: (error: any) => void,
 ): FormSubmitAction {
   return {

@@ -50,14 +50,14 @@ type CreateEntityRequestActionCreator = (name: string) => CreateEntityRequestAct
 
 // When request succeeds
 export interface CreateEntitySuccessAction extends Action {
-  result: Object;
+  result: object;
   name: string;
 }
 
 type CreateEntitySuccessActionCreator = (entity: any, name: string) => CreateEntitySuccessAction;
 
 export interface EditEntitySuccessAction extends Action {
-  result: Object;
+  result: object;
 }
 
 type EditEntitySuccessActionCreator = (entity: any) => EditEntitySuccessAction;

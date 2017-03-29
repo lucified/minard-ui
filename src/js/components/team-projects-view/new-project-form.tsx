@@ -123,7 +123,7 @@ class NewProjectForm extends React.Component<Props, void> {
             <div>
               <Field
                 name="projectTemplate"
-                component={(field: WrappedFieldProps<void>) =>
+                component={(field: WrappedFieldProps<void>) => (
                   <Select
                     value={field.input.value}
                     onChange={field.input.onChange}
@@ -135,7 +135,7 @@ class NewProjectForm extends React.Component<Props, void> {
                     className={styles['template-dropdown']}
                     simpleValue
                   />
-                }
+                )}
               />
             </div>
           )}

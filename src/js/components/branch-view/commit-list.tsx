@@ -44,12 +44,12 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
         {commits.map((commit, i) => <CommitRow key={(commit && commit.id) || i} commit={commit} />)}
       </FlipMove>
       {isLoading && <LoadingIcon className={styles.loading} center />}
-      {!isLoading && !allLoaded && lastCommit && !isFetchError(lastCommit) &&
+      {!isLoading && !allLoaded && lastCommit && !isFetchError(lastCommit) && (
         <Waypoint
           bottomOffset="-200px" // Start loading new commits when the waypoint is 200px below the bottom edge
           onEnter={() => { loadCommits(10, lastCommit.committer.timestamp); }}
         />
-      }
+      )}
       {allLoaded && (
         <div className="row center-xs">
           <div className={classNames('col-xs-12', styles.end)}>
