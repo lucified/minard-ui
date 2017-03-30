@@ -1,6 +1,7 @@
 import { mapKeys } from 'lodash';
 import { Reducer } from 'redux';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { STORE_ACTIVITIES } from './actions';
 import * as t from './types';
 
@@ -20,6 +21,8 @@ const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState
       }
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }

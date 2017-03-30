@@ -30,6 +30,7 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   clearUserDetails: () => void;
+  clearData: () => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
@@ -50,6 +51,7 @@ class Header extends React.Component<Props, void> {
 
   private logout(_e: any) {
     intercomLogout();
+    this.props.clearData();
     this.props.clearUserDetails();
     clearStoredCredentials();
   }
@@ -141,6 +143,7 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   clearUserDetails: () => { dispatch(User.actions.clearUserDetails()); },
+  clearData: () => { dispatch(User.actions.clearStoredData()); },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

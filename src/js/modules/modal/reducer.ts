@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { CLOSE_MODAL, OPEN_MODAL } from './actions';
 import * as t from './types';
 
@@ -21,6 +22,8 @@ const reducer: Reducer<t.ModalState> = (state: t.ModalState = initialState, acti
       }
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }

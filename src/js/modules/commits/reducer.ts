@@ -5,6 +5,7 @@ import { logMessage } from '../../logger';
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { ADD_DEPLOYMENT_TO_COMMIT, STORE_COMMITS } from './actions';
 import * as t from './types';
 
@@ -62,6 +63,8 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
       }
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }

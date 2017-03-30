@@ -1,6 +1,7 @@
 import { Reducer } from 'redux';
 
 import { DeleteError, FetchError } from '../errors';
+import { CLEAR_STORED_DATA } from '../user';
 import * as actions from './actions';
 import * as t from './types';
 
@@ -86,6 +87,8 @@ const reducer: Reducer<t.RequestsState> = (state = initialState, action: any) =>
         requestInfo => (requestInfo.type !== actions.Projects.DeleteProject.REQUEST.type) ||
           (requestInfo.id !== deleteProjectAction.id),
       );
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }

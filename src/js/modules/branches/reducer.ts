@@ -4,6 +4,7 @@ import { Reducer } from 'redux';
 import { logMessage } from '../../logger';
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
+import { CLEAR_STORED_DATA } from '../user';
 
 import {
   ADD_COMMITS_TO_BRANCH,
@@ -161,6 +162,8 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       }
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }

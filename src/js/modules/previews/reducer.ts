@@ -3,6 +3,7 @@ import { Reducer } from 'redux';
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { STORE_PREVIEW } from './actions';
 import * as t from './types';
 
@@ -36,6 +37,8 @@ const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => 
       console.error('No preview found when storing preview.', action);
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }
