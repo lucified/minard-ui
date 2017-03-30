@@ -1,6 +1,6 @@
 import { uniq } from 'lodash';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 
 require('event-source-polyfill');
 
@@ -376,30 +376,73 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),
 });
 
-export default connect<{}, GeneratedDispatchProps, {}>(
-  mapStateToProps,
-  {
-    setConnectionState: Streaming.actions.setConnectionState,
-    storeActivities: Activities.actions.storeActivities,
-    removeBranch: Branches.actions.removeBranch,
-    updateBranchWithCommits: Branches.actions.updateBranchWithCommits,
-    updateLatestDeployedCommitForBranch: Branches.actions.updateLatestDeployedCommit,
-    storeBranches: Branches.actions.storeBranches,
-    addDeploymentToCommit: Commits.actions.addDeploymentToCommit,
-    storeComments: Comments.actions.storeComments,
-    removeComment: Comments.actions.removeComment,
-    addCommentsToDeployment: Deployments.actions.addCommentsToDeployment,
-    removeCommentFromDeployment: Deployments.actions.removeCommentFromDeployment,
-    storeCommits: Commits.actions.storeCommits,
-    storeDeployments: Deployments.actions.storeDeployments,
-    updateProject: Projects.actions.updateProject,
-    removeProject: Projects.actions.removeProject,
-    storeProjects: Projects.actions.storeProjects,
-    storeAuthorsToProject: Projects.actions.storeAuthorsToProject,
-    addBranchToProject: Projects.actions.addBranchesToProject,
-    updateLatestActivityTimestampForProject: Projects.actions.updateLatestActivityTimestampForProject,
-    updateLatestDeployedCommitForProject: Projects.actions.updateLatestDeployedCommitForProject,
-    updateLatestActivityTimestampForBranch: Branches.actions.updateLatestActivityTimestampForBranch,
-    removeBranchFromProject: Projects.actions.removeBranchFromProject,
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  // Activities
+  storeActivities: (activities: Activity[]) => { dispatch(Activities.actions.storeActivities(activities)); },
+
+  // Branches
+  storeBranches: (branches: Branch[]) => { dispatch(Branches.actions.storeBranches(branches)); },
+  removeBranch: (id: string) => { dispatch(Branches.actions.removeBranch(id)); },
+  updateBranchWithCommits: (id: string, latestCommitId: string, newCommits: Commit[], parentCommits: string[]) => {
+    dispatch(Branches.actions.updateBranchWithCommits(id, latestCommitId, newCommits, parentCommits));
   },
+  updateLatestActivityTimestampForBranch: (id: string, timestamp: number) => {
+    dispatch(Branches.actions.updateLatestActivityTimestampForBranch(id, timestamp));
+  },
+  updateLatestDeployedCommitForBranch: (id: string, commit: string) => {
+    dispatch(Branches.actions.updateLatestDeployedCommit(id, commit));
+  },
+
+  // Comments
+  storeComments: (comments: Comment[]) => { dispatch(Comments.actions.storeComments(comments)); },
+  removeComment: (comment: string) => { dispatch(Comments.actions.removeComment(comment)); },
+
+  // Commits
+  storeCommits: (commits: Commit[]) => { dispatch(Commits.actions.storeCommits(commits)); },
+  addDeploymentToCommit: (commitId: string, deploymentId: string) => {
+    dispatch(Commits.actions.addDeploymentToCommit(commitId, deploymentId));
+  },
+
+  // Deployments
+  storeDeployments: (deployments: Deployment[]) => {
+    dispatch(Deployments.actions.storeDeployments(deployments));
+  },
+  addCommentsToDeployment: (id: string, comments: string[]) => {
+    dispatch(Deployments.actions.addCommentsToDeployment(id, comments));
+  },
+  removeCommentFromDeployment: (id: string, comment: string) => {
+    dispatch(Deployments.actions.removeCommentFromDeployment(id, comment));
+  },
+
+  // Projects
+  storeProjects: (projects: Project[]) => { dispatch(Projects.actions.storeProjects(projects)); },
+  removeProject: (id: string) => { dispatch(Projects.actions.removeProject(id)); },
+  updateProject: (id: string, name: string, repoUrl: string, description?: string) => {
+    dispatch(Projects.actions.updateProject(id, name, repoUrl, description));
+  },
+  storeAuthorsToProject: (id: string, authors: ProjectUser[]) => {
+    dispatch(Projects.actions.storeAuthorsToProject(id, authors));
+  },
+  addBranchToProject: (id: string, branch: string) => {
+    dispatch(Projects.actions.addBranchesToProject(id, branch));
+  },
+  updateLatestActivityTimestampForProject: (id: string, timestamp: number) => {
+    dispatch(Projects.actions.updateLatestActivityTimestampForProject(id, timestamp));
+  },
+  updateLatestDeployedCommitForProject: (id: string, commit: string) => {
+    dispatch(Projects.actions.updateLatestDeployedCommitForProject(id, commit));
+  },
+  removeBranchFromProject: (id: string, branch: string) => {
+    dispatch(Projects.actions.removeBranchFromProject(id, branch));
+  },
+
+  // Streaming
+  setConnectionState: (state: ConnectionState, error?: string) => {
+    dispatch(Streaming.actions.setConnectionState(state, error));
+  },
+});
+
+export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
+  mapStateToProps,
+  mapDispatchToProps,
 )(StreamingAPIHandler);
