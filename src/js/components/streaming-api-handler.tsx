@@ -338,21 +338,32 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   public componentWillMount() {
     const { team } = this.props;
 
-    // TODO: handle situation when not an authenticated Minard user
+    // TODO: handle situation when user has Deployment View open and is not a logged in Minard user
     if (streamingAPIUrl && team) {
       this.restartConnection(team.id);
     }
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    if (!this.props.team && nextProps.team) {
+    const { team, setConnectionState } = this.props;
+
+    // User logged in
+    if (streamingAPIUrl && !team && nextProps.team) {
       this.restartConnection(nextProps.team.id);
+    }
+
+    // User logged out
+    if (team && !nextProps.team) {
+      setConnectionState(ConnectionState.INITIAL_CONNECT);
+      this._source.close();
+      this._source = null;
     }
   }
 
   public componentWillUnmount() {
     if (this._source) {
       this._source.close();
+      this._source = null;
     }
   }
 
