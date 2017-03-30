@@ -4,7 +4,7 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
 
-import { clearCredentials } from '../api/auth';
+import { clearStoredCredentials } from '../api/auth';
 import { logout as intercomLogout } from '../intercom';
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Selected from '../modules/selected';
@@ -51,7 +51,7 @@ class Header extends React.Component<Props, void> {
   private logout(_e: any) {
     intercomLogout();
     this.props.clearUserDetails();
-    clearCredentials();
+    clearStoredCredentials();
   }
 
   public render() {
