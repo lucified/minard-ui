@@ -474,7 +474,7 @@ export default function createSagas(api: Api) {
     const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
     let previewExists = !!existingPreview;
 
-    if (!existingPreview || isFetchError(existingPreview)) {
+    if (!previewExists || isFetchError(existingPreview)) {
       previewExists = yield call(fetchPreview, id, commitHash);
     }
 
