@@ -54,7 +54,7 @@ export const createEntityFetcher = <ApiParams>(
   return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
-    const { response, error, details }: {
+    const { response, error, details, unauthorized }: {
       response?: ApiEntityResponse,
       error?: string,
       details?: string,
@@ -79,7 +79,7 @@ export const createEntityFetcher = <ApiParams>(
 
       return true;
     } else {
-      yield put(requestActionCreators.FAILURE.actionCreator(id, error!, details));
+      yield put(requestActionCreators.FAILURE.actionCreator(id, error!, details, unauthorized));
 
       return false;
     }
@@ -96,8 +96,12 @@ export const createCollectionFetcher = <ApiParams>(
   return function*(...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
     yield put(requestActionCreators.REQUEST.actionCreator());
 
-    const { response, error, details }: { response?: ApiEntityResponse, error?: string, details?: string } =
-      yield call(apiFetchFunction, ...args);
+    const { response, error, details, unauthorized }: {
+      response?: ApiEntityResponse,
+      error?: string,
+      details?: string,
+      unauthorized?: boolean,
+    } = yield call(apiFetchFunction, ...args);
 
     if (response) {
       if (response.included) {
@@ -115,7 +119,7 @@ export const createCollectionFetcher = <ApiParams>(
 
       return true;
     } else {
-      yield put(requestActionCreators.FAILURE.actionCreator(error!, details));
+      yield put(requestActionCreators.FAILURE.actionCreator(error!, details, unauthorized));
 
       return false;
     }
