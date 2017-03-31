@@ -1,4 +1,5 @@
 import { compact } from 'lodash';
+import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import { takeEvery, takeLatest, throttle } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
@@ -45,7 +46,7 @@ import Projects, {
   StoreProjectsAction,
 } from '../modules/projects';
 import Requests, { CreateEntitySuccessAction, EditEntitySuccessAction } from '../modules/requests';
-import User, { LoadTeamInformationAction, SignupUserAction } from '../modules/user';
+import User, { LoadTeamInformationAction, RedirectToLoginAction, SignupUserAction } from '../modules/user';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -625,6 +626,16 @@ export default function createSagas(api: Api) {
     }
   }
 
+  function *redirectToLogin(action: RedirectToLoginAction): IterableIterator<Effect> {
+    const { returnPath } = action;
+
+    if (returnPath) {
+      yield put(push(`/login/${encodeURIComponent(returnPath)}`));
+    } else {
+      yield put(push('/login'));
+    }
+  }
+
   // FORMS
   function* formSubmitSaga({
     payload: {
@@ -705,6 +716,7 @@ export default function createSagas(api: Api) {
       takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments),
       takeEvery(FORM_SUBMIT, formSubmitSaga),
       throttle(200, Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
+      takeEvery(User.actions.REDIRECT_TO_LOGIN, redirectToLogin),
       fork(watchForLoadAllProjects),
       fork(watchForLoadActivities),
       fork(watchForLoadTeamInformation),

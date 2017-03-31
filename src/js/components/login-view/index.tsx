@@ -15,7 +15,13 @@ interface GeneratedDispatchProps {
   setUserEmail: (email: string) => void;
 }
 
-type Props = GeneratedDispatchProps;
+interface PassedProps {
+  params: {
+    returnPath?: string;
+  };
+}
+
+type Props = GeneratedDispatchProps & PassedProps;
 
 class LoginView extends React.Component<Props, void> {
   private lock: Auth0LockStatic;
@@ -64,7 +70,7 @@ class LoginView extends React.Component<Props, void> {
   }
 
   private onAuthentication(authResult: any) {
-    const { navigateTo, setUserEmail } = this.props;
+    const { navigateTo, setUserEmail, params: { returnPath } } = this.props;
     const { idToken, accessToken, expiresIn } = authResult;
 
     this.lock.getUserInfo(accessToken, (error: Auth0Error, profile: Auth0UserProfile) => {
@@ -81,8 +87,7 @@ class LoginView extends React.Component<Props, void> {
       storeCredentials(idToken, accessToken, email, expiresIn);
       setUserEmail(email);
 
-      navigateTo('/');
-      // TODO: redirect to page where user came from
+      navigateTo(returnPath || '/');
     });
   }
 

@@ -43,3 +43,8 @@ export interface SetGitPasswordAction {
   type: 'USER/SET_GIT_PASSWORD';
   password: string;
 };
+
+export interface RedirectToLoginAction {
+  type: 'USER/REDIRECT_TO_LOGIN';
+  returnPath?: string;
+};

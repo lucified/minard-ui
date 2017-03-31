@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
 
 import Projects from '../modules/projects';
 import Requests from '../modules/requests';
@@ -20,7 +19,7 @@ interface PassedProps {
 interface GeneratedDispatchProps {
   loadAllProjects: (teamId: string) => void;
   loadTeamInformation: () => void;
-  redirectTo: (url: string) => void;
+  redirectToLogin: () => void;
 }
 
 interface GeneratedStateProps {
@@ -33,10 +32,10 @@ type Props = GeneratedDispatchProps & PassedProps & GeneratedStateProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
-    const { loadAllProjects, isUserLoggedIn, redirectTo, team, loadTeamInformation } = this.props;
+    const { loadAllProjects, isUserLoggedIn, redirectToLogin, team, loadTeamInformation } = this.props;
 
     if (!isUserLoggedIn) {
-      redirectTo('/login');
+      redirectToLogin();
     } else if (team === undefined) {
       loadTeamInformation();
     } else {
@@ -78,7 +77,7 @@ class ProjectsFrame extends React.Component<Props, void> {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },
-  redirectTo: (url: string) => { dispatch(push(url)); },
+  redirectToLogin: () => { dispatch(User.actions.redirectToLogin()); },
   loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
 });
 

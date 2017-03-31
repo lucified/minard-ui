@@ -2,6 +2,7 @@ import {
   ClearStoredDataAction,
   ClearUserDetailsAction,
   LoadTeamInformationAction,
+  RedirectToLoginAction,
   SetGitPasswordAction,
   SetTeamAction,
   SetUserEmailAction,
@@ -45,4 +46,10 @@ export const SET_GIT_PASSWORD = 'USER/SET_GIT_PASSWORD';
 export const setGitPassword = (password: string): SetGitPasswordAction => ({
   type: SET_GIT_PASSWORD,
   password,
+});
+
+export const REDIRECT_TO_LOGIN = 'USER/REDIRECT_TO_LOGIN';
+export const redirectToLogin = (returnPath?: string): RedirectToLoginAction => ({
+  type: REDIRECT_TO_LOGIN,
+  returnPath,
 });
