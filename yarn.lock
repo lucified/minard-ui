@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@types/auth0-js@*", "@types/auth0-js@0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-0.0.7.tgz#bc5d251913d0f951318d337d30f0ad5cadea4cf1"
+"@types/auth0-js@*", "@types/auth0-js@^8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-8.3.0.tgz#387070e339400b7a7b3b2f4b78cb5ff229aa67e0"
 
-"@types/auth0-lock@10.9.0":
-  version "10.9.0"
-  resolved "https://registry.yarnpkg.com/@types/auth0-lock/-/auth0-lock-10.9.0.tgz#2b0c5ff65836d8a4abd03ebd66e7c16d29b7980f"
+"@types/auth0-lock@^10.10.1":
+  version "10.10.1"
+  resolved "https://registry.yarnpkg.com/@types/auth0-lock/-/auth0-lock-10.10.1.tgz#4e2a020f8392d6ca843926c16ad77cd2e7bc93d0"
   dependencies:
     "@types/auth0-js" "*"
 
@@ -24,9 +24,9 @@
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-3.2.1.tgz#0039ab0e0be2a0cc22bac171d27a44588103d123"
 
-"@types/lodash@^4.14.58":
-  version "4.14.58"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.58.tgz#18d45863b6119c1ffffe935c1f51fe044c8c4102"
+"@types/lodash@^4.14.61":
+  version "4.14.61"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.61.tgz#0518c10805b1f9d21f98f82b1311ac2a6ec75892"
 
 "@types/mocha@^2.2.40":
   version "2.2.40"
@@ -61,9 +61,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-gravatar@^2.6.1":
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/@types/react-gravatar/-/react-gravatar-2.6.1.tgz#33408961b1d3578e431083955a254abf87d09f85"
+"@types/react-gravatar@^2.6.2":
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/@types/react-gravatar/-/react-gravatar-2.6.2.tgz#5e1f0b7f1f9de8d640fc7017800a0092dfa10953"
   dependencies:
     "@types/react" "*"
 
@@ -88,9 +88,9 @@
     "@types/history" "^3"
     "@types/react" "*"
 
-"@types/react-select@1.0.42":
-  version "1.0.42"
-  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-1.0.42.tgz#edd6a708ca89e43916eeb7c10c5028fb23247bbe"
+"@types/react-select@^1.0.45":
+  version "1.0.45"
+  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-1.0.45.tgz#9985dafe96e43e3586b5cb9e86a6e1eac6684ddd"
   dependencies:
     "@types/react" "*"
 
@@ -1441,9 +1441,9 @@ css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
 
-css-loader@^0.27.3:
-  version "0.27.3"
-  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.27.3.tgz#69ab6f47b69bfb1b5acee61bac2aab14302ff0dc"
+css-loader@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.28.0.tgz#417cfa9789f8cde59a30ccbf3e4da7a806889bad"
   dependencies:
     babel-code-frame "^6.11.0"
     css-selector-tokenizer "^0.7.0"
@@ -4584,9 +4584,9 @@ react-truncate@2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/react-truncate/-/react-truncate-2.0.5.tgz#a8307f022db05e6971c82992e55c41955c3986f8"
 
-react-waypoint@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/react-waypoint/-/react-waypoint-5.2.0.tgz#924474f6f3b4b95c7b6527ddba0e8af9c8a8c47d"
+react-waypoint@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/react-waypoint/-/react-waypoint-5.2.1.tgz#0c5e13600df5e59c0e1abc29a527054ce3db6909"
   dependencies:
     consolidated-events "^1.0.1"
 
@@ -4698,9 +4698,9 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux-form@^6.6.0:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.6.0.tgz#a26f05d5a2b317596733718031dec94126a0f05c"
+redux-form@^6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.6.1.tgz#368dc4fc41301bfb1cd471b059a2215573649c8c"
   dependencies:
     deep-equal "^1.0.1"
     es6-error "^4.0.0"
@@ -4716,9 +4716,9 @@ redux-raven-middleware@^1.2.0:
   dependencies:
     raven-js "^3.1.1"
 
-redux-saga@^0.14.3:
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.3.tgz#28cd2c5b49cf780a1de25875765724150c630513"
+redux-saga@^0.14.4:
+  version "0.14.4"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.4.tgz#a09acf294ef8387a0f23043e5c6d2f9f3fd25b54"
 
 redux@^3.6.0:
   version "3.6.0"
@@ -5090,9 +5090,9 @@ source-list-map@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-1.1.1.tgz#1a33ac210ca144d1e561f906ebccab5669ff4cb4"
 
-source-map-loader@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/source-map-loader/-/source-map-loader-0.2.0.tgz#aba0cf717a1d7ee29fc30f31cc0c441d78ea42ba"
+source-map-loader@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/source-map-loader/-/source-map-loader-0.2.1.tgz#48126be9230bd47fad05e46a8c3c2e3d2dabe507"
   dependencies:
     async "^0.9.0"
     loader-utils "~0.2.2"

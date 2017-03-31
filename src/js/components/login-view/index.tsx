@@ -1,3 +1,4 @@
+import { Auth0Error, Auth0UserProfile } from 'auth0-js';
 import Auth0Lock from 'auth0-lock';
 import * as moment from 'moment';
 import * as React from 'react';
@@ -83,14 +84,19 @@ class LoginView extends React.Component<Props, void> {
       }
 
       const { email } = profile;
-      // expiresIn is seconds from now
-      const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
+      if (email) {
+        // expiresIn is seconds from now
+        const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
 
-      intercomLogin(email);
-      storeCredentials(idToken, accessToken, email, expiresAt);
-      setUserEmail(email, expiresAt);
+        intercomLogin(email);
+        storeCredentials(idToken, accessToken, email, expiresAt);
+        setUserEmail(email, expiresAt);
 
-      navigateTo(returnPath || '/');
+        navigateTo(returnPath || '/');
+      } else {
+        console.error('No email address returned from Auth0!', profile);
+        // TODO: handle this
+      }
     });
   }
 
