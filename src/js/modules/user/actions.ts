@@ -1,4 +1,5 @@
 import {
+  ClearStoredDataAction,
   ClearUserDetailsAction,
   LoadTeamInformationAction,
   SetGitPasswordAction,
@@ -23,6 +24,11 @@ export const setTeam = (id: string, name: string): SetTeamAction => ({
 export const CLEAR_USER_DETAILS = 'USER/CLEAR_USER_DETAILS';
 export const clearUserDetails = (): ClearUserDetailsAction => ({
   type: CLEAR_USER_DETAILS,
+});
+
+export const CLEAR_STORED_DATA = 'USER/CLEAR_STORED_DATA';
+export const clearStoredData = (): ClearStoredDataAction => ({
+  type: CLEAR_STORED_DATA,
 });
 
 export const LOAD_TEAM_INFORMATION = 'USER/LOAD_TEAM_INFORMATION';

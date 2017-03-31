@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { SET_SELECTED } from './actions';
 import * as t from './types';
 
@@ -23,6 +24,8 @@ const reducer: Reducer<t.SelectedState> = (state = initialState, action: any) =>
       }
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }

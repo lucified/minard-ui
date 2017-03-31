@@ -4,7 +4,7 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
 
-import { clearCredentials } from '../api/auth';
+import { clearStoredCredentials } from '../api/auth';
 import { logout as intercomLogout } from '../intercom';
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Selected from '../modules/selected';
@@ -30,6 +30,7 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   clearUserDetails: () => void;
+  clearData: () => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
@@ -50,8 +51,9 @@ class Header extends React.Component<Props, void> {
 
   private logout(_e: any) {
     intercomLogout();
+    this.props.clearData();
     this.props.clearUserDetails();
-    clearCredentials();
+    clearStoredCredentials();
   }
 
   public render() {
@@ -141,6 +143,7 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   clearUserDetails: () => { dispatch(User.actions.clearUserDetails()); },
+  clearData: () => { dispatch(User.actions.clearStoredData()); },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

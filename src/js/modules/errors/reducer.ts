@@ -2,6 +2,7 @@ import { Reducer } from 'redux';
 
 import Requests from '../requests';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { CLEAR_PROJECT_DELETION_ERRORS, CLEAR_SIGNUP_ERROR, SIGNUP_ERROR } from './actions';
 import * as t from './types';
 
@@ -45,6 +46,8 @@ const reducer: Reducer<t.ErrorState> = (state = initialState, action: any) => {
         state,
         error => error.type !== SIGNUP_ERROR,
       );
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }

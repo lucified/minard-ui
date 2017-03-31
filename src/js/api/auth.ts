@@ -33,7 +33,7 @@ export function getEmail(): string | null {
   return getAccessToken() && localStorage.getItem(EMAIL_KEY);
 };
 
-export function clearCredentials() {
+export function clearStoredCredentials() {
   localStorage.removeItem(ID_TOKEN_KEY);
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(EXPIRES_AT_KEY);

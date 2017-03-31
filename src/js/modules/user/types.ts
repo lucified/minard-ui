@@ -27,6 +27,10 @@ export interface ClearUserDetailsAction {
   type: 'USER/CLEAR_USER_DETAILS';
 }
 
+export interface ClearStoredDataAction {
+  type: 'USER/CLEAR_STORED_DATA';
+}
+
 export interface LoadTeamInformationAction {
   type: 'USER/LOAD_TEAM_INFORMATION';
 };

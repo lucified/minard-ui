@@ -1,6 +1,7 @@
 import { mapKeys, omit } from 'lodash';
 import { Reducer } from 'redux';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { REMOVE_COMMENT, STORE_COMMENTS } from './actions';
 import * as t from './types';
 
@@ -27,6 +28,8 @@ const reducer: Reducer<t.CommentState> = (state = initialState, action: any) => 
       }
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }
