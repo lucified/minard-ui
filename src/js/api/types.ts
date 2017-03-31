@@ -1,4 +1,4 @@
-export type ApiResult<T> = { response: T; } | { error: string; details?: string; };
+export type ApiResult<T> = { response: T; } | { error: string; details?: string; unauthorized?: boolean };
 
 export interface Api {
   Activity: {

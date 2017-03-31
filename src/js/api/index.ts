@@ -44,6 +44,7 @@ function generateErrorObject(errorResponse: any) {
   return {
     error,
     details,
+    unauthorized: errorResponse.unauthorized,
   };
 };
 
@@ -67,10 +68,18 @@ function connectToApi<ResponseType>(path: string, options?: RequestInit): Promis
       response => response.json().then(json => ({
         json,
         response,
-      })) as Promise<{ json: any, response: any }>,
-    ).then(
-      ({ json, response }) => response.ok ? json : Promise.reject(json),
-    ).then(
+      })) as Promise<{ json: any, response: Response }>,
+    ).then(({ json, response }) => {
+      if (response.ok) {
+        return json;
+      }
+
+      if (response.status === 401 || response.status === 403) {
+        json.unauthorized = true;
+      }
+
+      return Promise.reject(json);
+    }).then(
       json => ({ response: json }),
     ).catch(errorResponse => {
       logMessage('Error while calling API', { path, errorResponse }, 'info');
