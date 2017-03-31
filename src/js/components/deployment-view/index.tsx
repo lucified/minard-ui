@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { Link } from 'react-router';
 
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
@@ -69,6 +70,7 @@ class ProjectsFrame extends React.Component<Props, void> {
         <div>
           <strong>Error!</strong>
           <p>{preview.unauthorized ? 'Unauthorized.' : 'Unable to load preview.'}</p>
+          {isUserLoggedIn && <Link to="/">Open Minard</Link>}
         </div>
       );
     }
