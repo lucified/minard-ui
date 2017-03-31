@@ -1,12 +1,14 @@
+@import '../definitions';
+
 .image {
   width: 100%;
-  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+  box-shadow: 0px 2px 4px 0px $minard-shadow;
   border-radius: 3px;
-  border: 1px solid #D8D8D8;
+  border: 1px solid $minard-lightest-gray;
 
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 
   &:hover {
-    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: 0 6px 12px 0 $minard-shadow;
   }
 }

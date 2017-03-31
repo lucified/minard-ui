@@ -4,7 +4,7 @@
 .header {
   height: 53px;
   padding: 15px 24px;
-  border-bottom: 1px solid #EFEFEF;
+  border-bottom: 1px solid $minard-lightest-gray;
   line-height: 24px;
 }
 
@@ -17,7 +17,7 @@
 
   &.selected {
     color: $minard-dark-blue;
-    border-bottom: 3px solid #2C3E50;
+    border-bottom: 3px solid $minard-dark-blue;
   }
 
   &.disabled {

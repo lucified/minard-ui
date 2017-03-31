@@ -1,11 +1,12 @@
 @import 'mixins';
+@import 'definitions';
 
 .header {
   height: 72px;
 
   @include nitti-grotesk-medium;
   @include font-size-M;
-  color: #fbfbfb;
+  color: white;
 }
 
 .header-background {
@@ -34,11 +35,11 @@
 }
 
 .link.active, .link.active:hover {
-  border-bottom: #95ffe7 5px solid;
+  border-bottom: $minard-light-cyan 5px solid;
 }
 
 .link:hover {
-  border-bottom: #ffffff 5px solid;
+  border-bottom: white 5px solid;
 }
 
 .logo {
@@ -83,7 +84,7 @@
   right: 12px;
   height: 97px;
   border-radius: 6px;
-  background-color: #e74c3c;
+  background-color: $minard-light-red;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
   padding: 24px 30px;
   display: flex;
@@ -93,12 +94,12 @@
   @include nitti-grotesk-bold;
   @include font-size-MS;
   line-height: 20px;
-  color: #ffffff;
+  color: white;
 }
 
 .connection-box {
   @extend .error-box;
-  background-color: #4b7d7d;
+  background-color: $minard-dark-cyan;
 }
 
 .error-image {
