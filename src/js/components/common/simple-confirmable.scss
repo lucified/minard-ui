@@ -1,4 +1,5 @@
 @import '../mixins';
+@import '../definitions';
 
 .simple-confirmable {
   position: relative;
@@ -16,13 +17,13 @@
 }
 .arrow-box:after {
   border-color: rgba(255, 255, 255, 0);
-  border-left-color: #ffffff;
+  border-left-color: white;
   border-width: 8px;
   margin-top: -8px;
 }
 .arrow-box:before {
   border-color: rgba(216, 216, 216, 0);
-  border-left-color: #D8D8D8;
+  border-left-color: $minard-light-gray;
   border-width: 9px;
   margin-top: -9px;
 }
@@ -39,19 +40,19 @@ $width: 160px;
   width: $width;
   height: $height;
 
-  background: #FFFFFF;
-  border: 1px solid #D8D8D8;
-  box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.10);
+  background: white;
+  border: 1px solid $minard-light-gray;
+  box-shadow: 0px 3px 6px 0px $minard-shadow;
   border-radius: 4px;
 
-  color: #7F8C8D;
+  color: $minard-mid-gray;
 
   .content {
     padding: 11px 12px 3px;
     text-align: center;
 
     @include font-size-M;
-    color: #2C3E50;
+    color: $minard-dark-blue;
     margin-bottom: 8px;
   }
 
@@ -69,22 +70,22 @@ $width: 160px;
       padding: 6px 12px;
       border: none;
       outline: none;
-      background: #D0021B;
+      background: $minard-red;
       border-radius: 3px;
       @include font-size-S;
-      color: #FFFFFF;
+      color: white;
 
       &:hover {
-        background: #540006;
+        background: $minard-dark-red;
       }
     }
 
     .cancel {
       @include font-size-S;
-      color: #7F8C8D;
+      color: $minard-mid-gray;
 
       &:hover {
-        color: #2C3E50;
+        color: $minard-dark-blue;
       }
     }
   }

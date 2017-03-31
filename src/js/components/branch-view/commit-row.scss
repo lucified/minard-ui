@@ -1,9 +1,11 @@
+@import '../definitions';
+
 .screenshot {
   max-width: 120px;
   max-height: 100px;
   object-fit: cover;
   padding-top: 15px;
-  border: 1px solid #D8D8D8;
+  border: 1px solid $minard-lightest-gray;
 }
 
 .build-status {
@@ -19,7 +21,7 @@
 .commit {
   padding: 20px 0;
   margin-left: 30px;
-  border-top: 1px #f0f0f0 solid;
+  border-top: 1px $minard-lightest-gray solid;
   flex: 1;
 }
 

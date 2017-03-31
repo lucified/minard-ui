@@ -1,4 +1,5 @@
 @import '../../mixins';
+@import '../../definitions';
 
 :global {
   .ReactModal__Overlay {
@@ -38,7 +39,7 @@
   width: 580px;
   border: none;
   outline: none;
-  background: #fff;
+  background: white;
 
   box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.10);
   border-bottom-right-radius: 5px;
@@ -64,19 +65,19 @@
 
 .header {
   height: 72px;
-  background-color: #4A4A4A;
-  color: #FBFBFB;
+  background-color: $minard-dark-gray;
+  color: white;
 
   @include nitti-grotesk-medium;
   @include font-size-M;
   letter-spacing: −0.11px;
 
   .close {
-    color: #2EBDB1;
+    color: $minard-cyan;
     cursor: pointer;
 
     &:hover {
-      color: #ffffff;
+      color: white;
     }
   }
 }
@@ -84,11 +85,11 @@
 .form {
   padding: 48px 60px 60px 60px;
 
-  color: #2C3E50;
+  color: $minard-dark-blue;
 }
 
 .footer {
-  background: #F7F7F7;
+  background: $minard-lightest-gray;
   height: 95px;
   flex-direction: row-reverse;
   border-bottom-right-radius: 5px;
@@ -101,8 +102,8 @@
   }
 
   .submit {
-    background: #FFFFFF;
-    border: 1px solid #D8D8D8;
+    background: white;
+    border: 1px solid $minard-light-gray;
     outline: none;
     border-radius: 5px;
     padding: 14px 24px;
@@ -110,46 +111,46 @@
     cursor: pointer;
 
     @include font-size-M;
-    color: #2EBDB1;
+    color: $minard-cyan;
 
     &:hover {
-      background: #2EBDB1;
-      color: #FBFBFB;
+      background: $minard-cyan;
+      color: white;
     }
 
     &[disabled=disabled], &:disabled {
       cursor: default;
       pointer-events: none;
-      color: rgba(127, 140, 141, 0.6);
-      background: #FFFFFF;
+      color: $minard-disabled-mid-gray;
+      background: white;
     }
   }
 
   .cancel {
     margin-right: 28px;
     @include font-size-M;
-    color: #7F8C8D;
+    color: $minard-mid-gray;
 
     &:hover {
-      color: #2C3E50;
+      color: $minard-dark-blue;
     }
 
     &.disabled-link {
       cursor: default;
-      color: #D8D8D8;
+      color: $minard-light-gray;
     }
 
     &.disabled-link:hover {
-      color: #D8D8D8;
+      color: $minard-light-gray;
     }
   }
 
   .delete {
     @include font-size-M;
-    color: #D0021B;
+    color: $minard-red;
 
     &:hover {
-      color: #540006;
+      color: $minard-dark-red;
     }
   }
 }
@@ -161,11 +162,11 @@
   top: -24px;
   padding: 14px 28px 14px 18px;
   margin-bottom: 12px;
-  background: #D0021B;
+  background: $minard-red;
   border-radius: 3px;
 
   @include font-size-M;
-  color: #FFFFFF;
+  color: white;
   letter-spacing: -0.21px;
   line-height: 21px;
 }

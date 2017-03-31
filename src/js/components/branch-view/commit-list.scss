@@ -1,9 +1,10 @@
 @import '../mixins';
+@import '../definitions';
 
 .commit-list {
   padding: 32px 48px 35px 40px;
   border-radius: 3px;
-  background-color: #ffffff;
+  background-color: white;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -18,7 +19,7 @@
 .end {
   @include nitti-grotesk-light;
   text-align: center;
-  color: #7F8C8D;
+  color: $minard-mid-gray;
 
   padding-top: 18px;
 }

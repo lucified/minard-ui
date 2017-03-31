@@ -1,4 +1,5 @@
 @import 'mixins';
+@import 'definitions';
 
 .sub-header-background {
   background-color: white;
@@ -10,16 +11,16 @@
   letter-spacing: -0.3px;
 
   height: 60px;
-  color: #7f8c8d;
+  color: $minard-mid-gray;
   display: flex;
   align-items: center;
 
   a {
-    color: #2c3e50;
+    color: $minard-dark-blue;
   }
 
   a:hover {
-    color: #000000;
+    color: black;
   }
 }
 

@@ -1,4 +1,5 @@
 @import '../mixins';
+@import '../definitions';
 
 .loading {
   margin-top: 100px;
@@ -6,14 +7,14 @@
 
 .error {
   text-align: center;
-  color: #4A4A4A;
+  color: $minard-dark-blue;
 
   h2 {
     padding-top: 50px;
   }
 
   a:hover {
-    color: #000000;
+    color: black;
   }
 
   small {

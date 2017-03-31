@@ -1,4 +1,5 @@
 @import '../mixins';
+@import '../definitions';
 
 .card {
   width: 100%;
@@ -40,7 +41,7 @@
 .card-middle {
   padding: 36px;
   height: 178px;
-  background-color: #ffffff;
+  background-color: white;
   position: relative;
 
   h3 {
@@ -51,9 +52,10 @@
 .card-bottom {
   padding: 18px 36px;
   height: 76px;
-  background-color: #fbfbfb;
+  background-color: white;
+  border-top: 1px solid $minard-lightest-gray;
 
-  color: #7f8c8d;
+  color: $minard-mid-gray;
   @include font-size-S;
   letter-spacing: -0.11px;
   line-height: 20px;
@@ -63,7 +65,7 @@
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 
   &:hover {
-    background-color: #f3f3f3;
+    background-color: $minard-lightest-gray;
   }
 }
 
@@ -74,7 +76,7 @@
 
 .title {
   @include font-size-L;
-  color: #2C3E50;
+  color: $minard-dark-blue;
   letter-spacing: -1px;
   margin-bottom: 12px;
   white-space: nowrap;
@@ -86,7 +88,7 @@
   @include font-size-M;
   letter-spacing: -0.21px;
   line-height: 24px;
-  color: #4A4A4A;
+  color: $minard-dark-blue;
   margin-top: 0px;
   max-width: 90%;
 }
@@ -100,13 +102,13 @@
 }
 
 .timestamp {
-  color: #95A5A6;
+  color: $minard-mid-gray;
 }
 
 .open {
   @include nitti-grotesk-bold;
   @include font-size-MS;
-  color: #21BAB5;
+  color: $minard-cyan;
 }
 
 .open-icon {
@@ -118,8 +120,8 @@
   // disable hover
   pointer-events: none;
 
-  background-color: #ffffff;
-  color: #7F8C8D;
+  background-color: white;
+  color: $minard-mid-gray;
 
   display: flex;
   flex-direction: column;

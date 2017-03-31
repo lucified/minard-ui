@@ -1,8 +1,10 @@
+@import '../definitions';
+
 .root {
   text-align: center;
   height: 100vh;
   margin-bottom: -20px;
-  background-color: #333333;
+  background-color: $minard-darkest-gray;
 }
 
 .login-container {

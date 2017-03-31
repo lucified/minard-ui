@@ -1,33 +1,34 @@
 @import '../mixins';
+@import '../definitions';
 
 .header {
   height: 53px;
   padding: 15px 24px;
-  border-bottom: 1px solid #EFEFEF;
+  border-bottom: 1px solid $minard-lightest-gray;
   line-height: 24px;
 }
 
 .tab {
   @include nitti-grotesk-medium;
   @include font-size-M;
-  color: #95A5A6;
+  color: $minard-mid-gray;
   margin-right: 22px;
   padding-bottom: 13px;
 
   &.selected {
-    color: #2C3E50;
-    border-bottom: 3px solid #2C3E50;
+    color: $minard-dark-blue;
+    border-bottom: 3px solid $minard-dark-blue;
   }
 
   &.disabled {
-    color: #D8D8D8;
+    color: $minard-light-gray;
   }
 }
 
 .toggle-open {
   float: right;
   @include font-size-S;
-  color: #95A5A6;
+  color: $minard-mid-gray;
 }
 
 .comment-count {
@@ -35,7 +36,7 @@
   right: 64px;
   top: 15px;
 
-  color: #4a4a4a;
+  color: $minard-dark-blue;
   margin-right: 24px;
   @include font-size-M;
 
@@ -45,15 +46,15 @@
   }
 
   &:hover {
-    color: #000000;
+    color: black;
   }
 }
 
 .open {
-  color: #2EBDB1;
+  color: $minard-cyan;
 
   &:hover {
-    color: #000000;
+    color: black;
   }
 }
 

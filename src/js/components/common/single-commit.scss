@@ -1,4 +1,5 @@
 @import '../mixins';
+@import '../definitions';
 
 .commit-content {
   display: flex;
@@ -12,11 +13,11 @@
   @include nitti-grotesk-regular;
   line-height: 20px;
   @include font-size-S;
-  color: #919D9F;
+  color: $minard-mid-gray;
 }
 
 .author {
-  color: #4A4A4A;
+  color: $minard-dark-blue;
 }
 
 .commit-body {
@@ -24,7 +25,7 @@
   @include font-size-M;
   line-height: 24px;
   letter-spacing: -0.5px;
-  color: #2C3E50;
+  color: $minard-dark-blue;
 }
 
 .message {
@@ -37,7 +38,7 @@
 }
 
 .error {
-  color: #919D9F;
+  color: $minard-mid-gray;
 
   small {
     @include nitti;

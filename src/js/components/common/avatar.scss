@@ -1,4 +1,5 @@
 @import '../mixins';
+@import '../definitions';
 
 // From Spectre.css: https://picturepan2.github.io/spectre/#avatars
 // Add the class avatar to <img> element. There are 4 additional sizes available,
@@ -63,7 +64,7 @@
 }
 
 .avatar-icon {
-  background: #fff;
+  background: white;
   border-radius: 50%;
   bottom: -.2em;
   height: 40%;
@@ -74,11 +75,11 @@
 }
 
 .avatar[data-initial] {
-  background-color: #2ebdb1;
+  background-color: $minard-cyan;
 }
 
 .avatar[data-initial]::after {
-  color: #fff;
+  color: white;
   content: attr(data-initial);
   left: 50%;
   position: absolute;

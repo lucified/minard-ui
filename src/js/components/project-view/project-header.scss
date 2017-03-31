@@ -1,9 +1,10 @@
 @import '../mixins';
+@import '../definitions';
 
 .title {
   @include font-size-XXL;
   letter-spacing: -2px;
-  color: #2C3E50;
+  color: $minard-dark-blue;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11,7 +12,7 @@
 
 .description {
   @include font-size-L;
-  color: #2C3E50;
+  color: $minard-dark-blue;
   line-height: 34px;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -23,7 +24,7 @@
 
   @include nitti-grotesk-medium;
   @include font-size-M;
-  color: #95a5a6;
+  color: $minard-mid-gray;
 }
 
 .icon {
