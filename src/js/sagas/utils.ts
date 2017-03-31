@@ -54,8 +54,12 @@ export const createEntityFetcher = <ApiParams>(
   return function* (id: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
-    const { response, error, details }: { response?: ApiEntityResponse, error?: string, details?: string } =
-      yield call(apiFetchFunction, id, ...args);
+    const { response, error, details }: {
+      response?: ApiEntityResponse,
+      error?: string,
+      details?: string,
+      unauthorized?: boolean,
+    } = yield call(apiFetchFunction, id, ...args);
 
     if (response) {
       if (response.included) {
