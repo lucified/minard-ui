@@ -5,13 +5,11 @@ const ACCESS_TOKEN_KEY = 'access_token';
 const EXPIRES_AT_KEY = 'expires_at';
 const EMAIL_KEY = 'email';
 
-export function storeCredentials(idToken: string, accessToken: string, email: string, expiresIn: number) {
-  const expiresAt = moment().add(expiresIn, 'seconds');
-
+export function storeCredentials(idToken: string, accessToken: string, email: string, expiresAt: number) {
   localStorage.setItem(ID_TOKEN_KEY, idToken);
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   localStorage.setItem(EMAIL_KEY, email);
-  localStorage.setItem(EXPIRES_AT_KEY, expiresAt.toISOString());
+  localStorage.setItem(EXPIRES_AT_KEY, moment(expiresAt).toISOString());
 }
 
 /**

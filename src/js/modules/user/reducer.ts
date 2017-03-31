@@ -16,10 +16,11 @@ const initialState: UserState = {
 const reducer = (state: UserState = initialState, action: any): UserState => {
   switch (action.type) {
     case SET_USER_EMAIL:
-      const { email } = action as SetUserEmailAction;
+      const { email, expiresAt } = action as SetUserEmailAction;
       return {
         ...state,
         email,
+        expiresAt,
       };
     case SET_TEAM:
       const { id, name } = action as SetTeamAction;

@@ -10,9 +10,10 @@ import {
 } from './types';
 
 export const SET_USER_EMAIL = 'USER/SET_USER_EMAIL';
-export const setUserEmail = (email: string): SetUserEmailAction => ({
+export const setUserEmail = (email: string, expiresAt: number): SetUserEmailAction => ({
   type: SET_USER_EMAIL,
   email,
+  expiresAt,
 });
 
 export const SET_TEAM = 'USER/SET_TEAM';

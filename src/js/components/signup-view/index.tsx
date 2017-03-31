@@ -1,6 +1,7 @@
 // TODO: import this with typings once the latest auth0-js typings work with auth0-lock typings
 const Auth0 = require('auth0-js');
 import * as classNames from 'classnames';
+import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -17,7 +18,7 @@ const styles = require('./index.scss');
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
-  setUserEmail: (email: string) => void;
+  setUserEmail: (email: string, expiresAt: number) => void;
   signupUser: () => void;
 }
 
@@ -97,9 +98,11 @@ class SignupView extends React.Component<Props, State> {
             } else {
               const { email } = profile;
 
+              const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
+
               intercomLogin(email);
-              storeCredentials(idToken, accessToken, email, expiresIn);
-              setUserEmail(email);
+              storeCredentials(idToken, accessToken, email, expiresAt);
+              setUserEmail(email, expiresAt);
 
               // Will use the teamToken in the accessToken to add the user to the
               // appropriate team and return the user's git password which is then
@@ -213,7 +216,7 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   signupUser: () => { dispatch(User.actions.signupUser()); },
   navigateTo: (url: string) => { dispatch(push(url)); },
-  setUserEmail: (email: string) => { dispatch(User.actions.setUserEmail(email)); },
+  setUserEmail: (email: string, expiresAt) => { dispatch(User.actions.setUserEmail(email, expiresAt)); },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

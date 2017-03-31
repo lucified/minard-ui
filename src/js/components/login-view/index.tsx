@@ -1,4 +1,5 @@
 import Auth0Lock from 'auth0-lock';
+import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -12,7 +13,7 @@ const styles = require('./index.scss');
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
-  setUserEmail: (email: string) => void;
+  setUserEmail: (email: string, expiresIn: number) => void;
 }
 
 interface PassedProps {
@@ -82,10 +83,12 @@ class LoginView extends React.Component<Props, void> {
       }
 
       const { email } = profile;
+      // expiresIn is seconds from now
+      const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
 
       intercomLogin(email);
-      storeCredentials(idToken, accessToken, email, expiresIn);
-      setUserEmail(email);
+      storeCredentials(idToken, accessToken, email, expiresAt);
+      setUserEmail(email, expiresAt);
 
       navigateTo(returnPath || '/');
     });
@@ -102,7 +105,7 @@ class LoginView extends React.Component<Props, void> {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   navigateTo: (url: string) => { dispatch(push(url)); },
-  setUserEmail: (email: string) => { dispatch(User.actions.setUserEmail(email)); },
+  setUserEmail: (email: string, expiresAt: number) => { dispatch(User.actions.setUserEmail(email, expiresAt)); },
 });
 
 export default connect(() => ({}), mapDispatchToProps)(LoginView);
