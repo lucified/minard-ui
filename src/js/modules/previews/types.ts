@@ -27,6 +27,7 @@ export interface PreviewState {
 export interface LoadPreviewAndCommentsAction extends Action {
   id: string;
   commitHash: string;
+  isUserLoggedIn: boolean;
 }
 
 // STORE_PREVIEW

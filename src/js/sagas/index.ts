@@ -476,12 +476,12 @@ export default function createSagas(api: Api) {
 
   // PREVIEW
   function* loadPreviewAndComments(action: LoadPreviewAndCommentsAction): IterableIterator<Effect> {
-    const { id, commitHash } = action;
+    const { id, commitHash, isUserLoggedIn } = action;
     const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
     let previewExists = !!existingPreview;
 
     if (!previewExists || isFetchError(existingPreview)) {
-      previewExists = yield call(fetchPreview, id, commitHash);
+      previewExists = yield call(fetchPreview, id, commitHash, isUserLoggedIn);
     }
 
     if (previewExists) {
@@ -489,7 +489,7 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchPreview(id: string, commitHash: string): IterableIterator<Effect> {
+  function* fetchPreview(id: string, commitHash: string, isUserLoggedIn: boolean): IterableIterator<Effect> {
     yield put(Requests.actions.Previews.LoadPreview.REQUEST.actionCreator(id));
 
     const { response, error, details, unauthorized }: {
@@ -516,7 +516,7 @@ export default function createSagas(api: Api) {
     } else {
       yield put(Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(id, error!, details, unauthorized));
 
-      if (unauthorized) {
+      if (unauthorized && !isUserLoggedIn) {
         yield put(User.actions.redirectToLogin(`/preview/${commitHash}/${id}`));
       }
 

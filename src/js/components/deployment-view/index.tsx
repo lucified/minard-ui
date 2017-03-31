@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
@@ -35,25 +35,25 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadPreviewAndComments: (deploymentId: string, commitHash: string) => void;
+  loadPreviewAndComments: (deploymentId: string, commitHash: string, isUserLoggedIn: boolean) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
-    const { loadPreviewAndComments } = this.props;
+    const { loadPreviewAndComments, isUserLoggedIn } = this.props;
     const { deploymentId, commitHash } = this.props.params;
 
-    loadPreviewAndComments(deploymentId, commitHash);
+    loadPreviewAndComments(deploymentId, commitHash, isUserLoggedIn);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadPreviewAndComments } = nextProps;
+    const { loadPreviewAndComments, isUserLoggedIn } = nextProps;
     const { commitHash, deploymentId } = nextProps.params;
 
     if (deploymentId !== this.props.params.deploymentId) {
-      loadPreviewAndComments(deploymentId, commitHash);
+      loadPreviewAndComments(deploymentId, commitHash, isUserLoggedIn);
     }
   }
 
@@ -68,7 +68,7 @@ class ProjectsFrame extends React.Component<Props, void> {
       return (
         <div>
           <strong>Error!</strong>
-          <p>Unable to load preview.</p>
+          <p>{preview.unauthorized ? 'Unauthorized.' : 'Unable to load preview.'}</p>
         </div>
       );
     }
@@ -121,9 +121,13 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   };
 };
 
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  loadPreviewAndComments: (id, commitHash, isUserLoggedIn) => {
+    dispatch(Previews.actions.loadPreviewAndComments(id, commitHash, isUserLoggedIn));
+  },
+});
+
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  {
-    loadPreviewAndComments: Previews.actions.loadPreviewAndComments,
-  },
+  mapDispatchToProps,
 )(ProjectsFrame);
