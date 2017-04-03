@@ -7,14 +7,22 @@ import { push } from 'react-router-redux';
 
 import { clearStoredCredentials, storeCredentials } from '../../api/auth';
 import { login as intercomLogin } from '../../intercom';
-import User from '../../modules/user';
+import Requests from '../../modules/requests';
+import User, { Team } from '../../modules/user';
+import { StateTree } from '../../reducers';
 
 const minardLogo = require('../../../../static/minard-logo-auth0.png');
 const styles = require('./index.scss');
 
+interface GeneratedStateProps {
+  isLoadingTeamInformation: boolean;
+  team?: Team;
+}
+
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
   setUserEmail: (email: string, expiresIn: number) => void;
+  loadTeamInformation: () => void;
 }
 
 interface PassedProps {
@@ -23,10 +31,27 @@ interface PassedProps {
   };
 }
 
-type Props = GeneratedDispatchProps & PassedProps;
+type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
 
-class LoginView extends React.Component<Props, void> {
+interface State {
+  loadingStatus: LoadingStatus;
+}
+
+enum LoadingStatus {
+  AUTH0,
+  BACKEND,
+};
+
+class LoginView extends React.Component<Props, State> {
   private lock: Auth0LockStatic;
+
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      loadingStatus: LoadingStatus.AUTH0,
+    };
+  }
 
   public componentDidMount() {
     // Remove stored credentials. E.g. if there is an old access token stored that
@@ -71,8 +96,16 @@ class LoginView extends React.Component<Props, void> {
     // TODO: handle this
   }
 
+  public componentWillReceiveProps(nextProps: Props) {
+    const { navigateTo, params: { returnPath } } = this.props;
+
+    if (nextProps.team) {
+      navigateTo(returnPath || '/');
+    }
+  }
+
   private onAuthentication(authResult: any) {
-    const { navigateTo, setUserEmail, params: { returnPath } } = this.props;
+    const { loadTeamInformation, setUserEmail } = this.props;
     const { idToken, accessToken, expiresIn } = authResult;
 
     this.lock.getUserInfo(accessToken, (error: Auth0Error, profile: Auth0UserProfile) => {
@@ -92,7 +125,9 @@ class LoginView extends React.Component<Props, void> {
         storeCredentials(idToken, accessToken, email, expiresAt);
         setUserEmail(email, expiresAt);
 
-        navigateTo(returnPath || '/');
+        loadTeamInformation();
+        this.lock.hide();
+        this.setState({ loadingStatus: LoadingStatus.BACKEND });
       } else {
         console.error('No email address returned from Auth0!', profile);
         // TODO: handle this
@@ -101,6 +136,27 @@ class LoginView extends React.Component<Props, void> {
   }
 
   public render() {
+    const { loadingStatus } = this.state;
+    const { team, isLoadingTeamInformation } = this.props;
+
+    if (loadingStatus === LoadingStatus.BACKEND) {
+      if (!team && !isLoadingTeamInformation) {
+        // TODO: style this
+        return (
+          <div className={styles.root}>
+            Error! Unable to fetch team information.
+          </div>
+        );
+      }
+
+      // TODO: style this
+      return (
+        <div className={styles.root}>
+          Loading...
+        </div>
+      );
+    }
+
     return (
       <div className={styles.root}>
         <div className={styles['login-container']} id="login-container" />
@@ -109,9 +165,15 @@ class LoginView extends React.Component<Props, void> {
   }
 };
 
+const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
+  isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
+  team: User.selectors.getTeam(state),
+});
+
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   navigateTo: (url: string) => { dispatch(push(url)); },
   setUserEmail: (email: string, expiresAt: number) => { dispatch(User.actions.setUserEmail(email, expiresAt)); },
+  loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
 });
 
-export default connect(() => ({}), mapDispatchToProps)(LoginView);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
