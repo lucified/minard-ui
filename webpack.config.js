@@ -210,7 +210,7 @@ const config = {
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
       'process.env.AUTH0_CLIENT_ID': JSON.stringify(process.env.AUTH0_CLIENT_ID || 'ZaeiNyV7S7MpI69cKNHr8wXe5Bdr8tvW'),
       'process.env.AUTH0_DOMAIN': JSON.stringify(process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com'),
-      'process.env.AUTH0_AUDIENCE': JSON.stringify(process.env.AUTH0_AUDIENCE || 'http://localhost:8000'),
+      'process.env.AUTH0_AUDIENCE': JSON.stringify(process.env.AUTH0_AUDIENCE || getCharles() || 'http://localhost:8000'),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
     new CopyWebpackPlugin([{
