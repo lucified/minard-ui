@@ -33,6 +33,7 @@ interface GeneratedStateProps {
   commit?: Commit | FetchError;
   deployment?: Deployment | FetchError;
   isUserLoggedIn: boolean;
+  userEmail?: string;
 }
 
 interface GeneratedDispatchProps {
@@ -59,7 +60,7 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 
   public render() {
-    const { commit, deployment, preview, params, isUserLoggedIn } = this.props;
+    const { commit, deployment, preview, params, isUserLoggedIn, userEmail } = this.props;
 
     if (!preview) {
       return <div>Loading...</div>;
@@ -96,6 +97,7 @@ class ProjectsFrame extends React.Component<Props, void> {
           buildLogSelected={!showPreview}
           highlightComment={params.commentId}
           isAuthenticatedUser={isUserLoggedIn}
+          userEmail={userEmail}
         />
         <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
       </div>
@@ -119,6 +121,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     commit,
     deployment,
     isUserLoggedIn: User.selectors.isUserLoggedIn(state),
+    userEmail: User.selectors.getUserEmail(state),
   };
 };
 

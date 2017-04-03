@@ -20,6 +20,7 @@ interface Props {
   deployment: Deployment;
   preview: Preview;
   isAuthenticatedUser: boolean;
+  userEmail?: string;
   highlightComment?: string;
   className?: string;
 }
@@ -57,6 +58,7 @@ class PreviewDialog extends React.Component<Props, State> {
       highlightComment,
       preview,
       isAuthenticatedUser,
+      userEmail,
     } = this.props;
     const { dialogOpen } = this.state;
 
@@ -89,12 +91,12 @@ class PreviewDialog extends React.Component<Props, State> {
             isAuthenticatedUser={isAuthenticatedUser}
           />
         )}
-        {dialogOpen /* TODO: get email from user auth if available */ && (
+        {dialogOpen && (
           <NewCommentForm
             initialValues={{
               deployment: deployment.id,
               name: getValue('commentName'),
-              email: getValue('commentEmail'),
+              email: userEmail || getValue('commentEmail'),
             }}
           />
         )}
