@@ -100,6 +100,12 @@ class LoginView extends React.Component<Props, State> {
     const { navigateTo, params: { returnPath } } = this.props;
 
     if (nextProps.team) {
+      // For raw deployment URLs
+      if (returnPath && returnPath.match(/^https?:\/\//)) {
+        window.location.href = returnPath;
+        return;
+      }
+
       navigateTo(returnPath || '/');
     }
   }
