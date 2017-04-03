@@ -84,6 +84,7 @@ class SignupView extends React.Component<Props, State> {
         }
 
         if (!data) {
+          this.setState({ auth0Error: 'No data found!' });
           return;
         }
 
@@ -193,7 +194,6 @@ class SignupView extends React.Component<Props, State> {
       );
     }
 
-    // TODO: Say something
     return null;
   }
 
@@ -202,8 +202,8 @@ class SignupView extends React.Component<Props, State> {
       <section className={styles['header-background']}>
         <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
           <div className={classNames(styles.logo, 'col-xs')}>
-              <h1 title="Minard" className={styles.minard}>m</h1>
-            </div>
+            <h1 title="Minard" className={styles.minard}>m</h1>
+          </div>
         </div>
       </section>
     );
