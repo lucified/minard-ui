@@ -14,11 +14,11 @@ interface Props {
   commit: Commit;
   deployment: Deployment;
   preview: Preview;
-  authenticatedUser: boolean;
+  isAuthenticatedUser: boolean;
 }
 
-const CommitSummary = ({ authenticatedUser, className, commit, deployment, preview }: Props) => {
-  const metadata = authenticatedUser ? (
+const CommitSummary = ({ isAuthenticatedUser, className, commit, deployment, preview }: Props) => {
+  const metadata = isAuthenticatedUser ? (
     <div className={styles.metadata}>
       <MinardLink branch={preview.branch.id} project={preview.project.id}>
         {preview.branch.name}

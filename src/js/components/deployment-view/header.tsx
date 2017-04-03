@@ -16,11 +16,11 @@ interface Props {
   onToggleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   isOpen: boolean;
   className?: string;
-  authenticatedUser: boolean;
+  isAuthenticatedUser: boolean;
 }
 
 const Header = (
-  { authenticatedUser, buildLogSelected, className, commit, deployment, isOpen, onToggleOpen }: Props,
+  { isAuthenticatedUser, buildLogSelected, className, commit, deployment, isOpen, onToggleOpen }: Props,
 ) => (
   <div className={classNames(styles.header, className)}>
     {buildLogSelected ? (
@@ -55,7 +55,7 @@ const Header = (
             Preview
           </a>
         )}
-        {authenticatedUser && (
+        {isAuthenticatedUser && (
           <MinardLink preview={deployment} commit={commit} buildLog className={styles.tab}>
             Build log
           </MinardLink>

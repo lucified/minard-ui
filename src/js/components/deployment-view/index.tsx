@@ -86,7 +86,6 @@ class ProjectsFrame extends React.Component<Props, void> {
 
     const showPreview = deployment.url && params.view !== 'log';
 
-    // TODO: check that isUserLoggedIn is enough authentication
     return (
       <div className={styles['preview-container']}>
         <PreviewDialog
@@ -96,7 +95,7 @@ class ProjectsFrame extends React.Component<Props, void> {
           preview={preview}
           buildLogSelected={!showPreview}
           highlightComment={params.commentId}
-          authenticatedUser={isUserLoggedIn}
+          isAuthenticatedUser={isUserLoggedIn}
         />
         <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
       </div>
