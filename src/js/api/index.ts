@@ -48,7 +48,6 @@ function generateErrorObject(errorResponse: any) {
   };
 };
 
-// TODO: indicate whether the server returns unauthorized and react to it in sagas
 /**
  * This method will overwrite the Authorization header if an access token exists.
  */
