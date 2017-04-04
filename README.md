@@ -56,8 +56,13 @@ By default, when run locally, the minard-backend (charles) API runs
 on port 8000:
 
 ```shell
-yarn start -- http://localhost:8000
+yarn start -- http://localtest.me:8000
 ```
+
+Note that in local development mode, by default, the backend sets cookies
+for the `localtest.me` domain, which should resolve to `127.0.0.1`. Because
+of this, the API URL should be set to `http://localtest.me:8000` when using
+the default settings.
 
 ## Building for production
 
