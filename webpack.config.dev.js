@@ -56,7 +56,11 @@ const devOptions = {
   devServer: {
     publicPath: '/',
     // For react-router's browserHistory
-    historyApiFallback: true,
+    historyApiFallback: {
+      // Needed for handling react-router params that contain dots, i.e. raw deployment redirects:
+      // https://github.com/ReactTraining/react-router/issues/3409#issuecomment-272023984
+      disableDotRule: true,
+    },
   },
 };
 
