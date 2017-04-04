@@ -1,24 +1,57 @@
+import { Auth0Error, Auth0UserProfile } from 'auth0-js';
 import Auth0Lock from 'auth0-lock';
+import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import { clearStoredCredentials, storeCredentials } from '../../api/auth';
 import { login as intercomLogin } from '../../intercom';
-import User from '../../modules/user';
+import Requests from '../../modules/requests';
+import User, { Team } from '../../modules/user';
+import { StateTree } from '../../reducers';
 
 const minardLogo = require('../../../../static/minard-logo-auth0.png');
 const styles = require('./index.scss');
 
-interface GeneratedDispatchProps {
-  navigateTo: (url: string) => void;
-  setUserEmail: (email: string) => void;
+interface GeneratedStateProps {
+  isLoadingTeamInformation: boolean;
+  team?: Team;
 }
 
-type Props = GeneratedDispatchProps;
+interface GeneratedDispatchProps {
+  navigateTo: (url: string) => void;
+  setUserEmail: (email: string, expiresIn: number) => void;
+  loadTeamInformation: () => void;
+}
 
-class LoginView extends React.Component<Props, void> {
+interface PassedProps {
+  params: {
+    returnPath?: string;
+  };
+}
+
+type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
+
+interface State {
+  loadingStatus: LoadingStatus;
+}
+
+enum LoadingStatus {
+  AUTH0,
+  BACKEND,
+};
+
+class LoginView extends React.Component<Props, State> {
   private lock: Auth0LockStatic;
+
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      loadingStatus: LoadingStatus.AUTH0,
+    };
+  }
 
   public componentDidMount() {
     // Remove stored credentials. E.g. if there is an old access token stored that
@@ -63,8 +96,22 @@ class LoginView extends React.Component<Props, void> {
     // TODO: handle this
   }
 
+  public componentWillReceiveProps(nextProps: Props) {
+    const { navigateTo, params: { returnPath } } = this.props;
+
+    if (nextProps.team) {
+      // For raw deployment URLs
+      if (returnPath && returnPath.match(/^https?:\/\//)) {
+        window.location.href = returnPath;
+        return;
+      }
+
+      navigateTo(returnPath || '/');
+    }
+  }
+
   private onAuthentication(authResult: any) {
-    const { navigateTo, setUserEmail } = this.props;
+    const { loadTeamInformation, setUserEmail } = this.props;
     const { idToken, accessToken, expiresIn } = authResult;
 
     this.lock.getUserInfo(accessToken, (error: Auth0Error, profile: Auth0UserProfile) => {
@@ -76,17 +123,46 @@ class LoginView extends React.Component<Props, void> {
       }
 
       const { email } = profile;
+      if (email) {
+        // expiresIn is seconds from now
+        const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
 
-      intercomLogin(email);
-      storeCredentials(idToken, accessToken, email, expiresIn);
-      setUserEmail(email);
+        intercomLogin(email);
+        storeCredentials(idToken, accessToken, email, expiresAt);
+        setUserEmail(email, expiresAt);
 
-      navigateTo('/');
-      // TODO: redirect to page where user came from
+        loadTeamInformation();
+        this.lock.hide();
+        this.setState({ loadingStatus: LoadingStatus.BACKEND });
+      } else {
+        console.error('No email address returned from Auth0!', profile);
+        // TODO: handle this
+      }
     });
   }
 
   public render() {
+    const { loadingStatus } = this.state;
+    const { team, isLoadingTeamInformation } = this.props;
+
+    if (loadingStatus === LoadingStatus.BACKEND) {
+      if (!team && !isLoadingTeamInformation) {
+        // TODO: style this
+        return (
+          <div className={styles.root}>
+            Error! Unable to fetch team information.
+          </div>
+        );
+      }
+
+      // TODO: style this
+      return (
+        <div className={styles.root}>
+          Loading...
+        </div>
+      );
+    }
+
     return (
       <div className={styles.root}>
         <div className={styles['login-container']} id="login-container" />
@@ -95,9 +171,15 @@ class LoginView extends React.Component<Props, void> {
   }
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  navigateTo: (url: string) => { dispatch(push(url)); },
-  setUserEmail: (email: string) => { dispatch(User.actions.setUserEmail(email)); },
+const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
+  isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
+  team: User.selectors.getTeam(state),
 });
 
-export default connect(() => ({}), mapDispatchToProps)(LoginView);
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  navigateTo: (url: string) => { dispatch(push(url)); },
+  setUserEmail: (email: string, expiresAt: number) => { dispatch(User.actions.setUserEmail(email, expiresAt)); },
+  loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginView);

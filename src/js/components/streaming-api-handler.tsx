@@ -426,14 +426,14 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   addBranchToProject: (id: string, branch: string) => {
     dispatch(Projects.actions.addBranchesToProject(id, branch));
   },
+  removeBranchFromProject: (id: string, branch: string) => {
+    dispatch(Projects.actions.removeBranchFromProject(id, branch));
+  },
   updateLatestActivityTimestampForProject: (id: string, timestamp: number) => {
     dispatch(Projects.actions.updateLatestActivityTimestampForProject(id, timestamp));
   },
   updateLatestDeployedCommitForProject: (id: string, commit: string) => {
     dispatch(Projects.actions.updateLatestDeployedCommitForProject(id, commit));
-  },
-  removeBranchFromProject: (id: string, branch: string) => {
-    dispatch(Projects.actions.removeBranchFromProject(id, branch));
   },
 
   // Streaming

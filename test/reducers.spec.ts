@@ -30,7 +30,7 @@ type ModuleState = BranchState | CommitState | DeploymentState | ProjectState | 
 */
 const testInitialState = (reducer: Reducer<ModuleState>, expectedState: ModuleState) => {
   it('returns the correct default state', () => {
-    expect(reducer(<any> undefined, { type: 'foobar' })).to.deep.equal(expectedState);
+    expect(reducer(undefined as any, { type: 'foobar' })).to.deep.equal(expectedState);
   });
 };
 
@@ -455,7 +455,7 @@ describe('reducers', () => {
         showAll: false,
       };
 
-      const endState: SelectedState = reducer(<any> undefined, action);
+      const endState: SelectedState = reducer(undefined as any, action);
 
       expect(endState).to.deep.equal(expectedState);
     });
@@ -527,7 +527,7 @@ describe('reducers', () => {
 
       const expectedState = [action];
 
-      const endState = reducer(<any> undefined, action);
+      const endState = reducer(undefined as any, action);
 
       expect(endState).to.deep.equal(expectedState);
     });

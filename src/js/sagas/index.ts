@@ -1,4 +1,5 @@
 import { compact } from 'lodash';
+import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import { takeEvery, takeLatest, throttle } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
@@ -45,7 +46,7 @@ import Projects, {
   StoreProjectsAction,
 } from '../modules/projects';
 import Requests, { CreateEntitySuccessAction, EditEntitySuccessAction } from '../modules/requests';
-import User, { LoadTeamInformationAction, SignupUserAction } from '../modules/user';
+import User, { LoadTeamInformationAction, RedirectToLoginAction, SignupUserAction } from '../modules/user';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -356,14 +357,14 @@ export default function createSagas(api: Api) {
 
     yield put(Requests.actions.Comments.DeleteComment.REQUEST.actionCreator(id));
 
-    const { response, error, details } = yield call(api.Comment.delete, id);
+    const { response, error, details, unauthorized } = yield call(api.Comment.delete, id);
 
     if (response) {
       yield put(Requests.actions.Comments.DeleteComment.SUCCESS.actionCreator(id));
 
       return true;
     } else {
-      yield put(Requests.actions.Comments.DeleteComment.FAILURE.actionCreator(id, error, details));
+      yield put(Requests.actions.Comments.DeleteComment.FAILURE.actionCreator(id, error, details, unauthorized));
 
       return false;
     }
@@ -376,8 +377,12 @@ export default function createSagas(api: Api) {
 
     yield put(Requests.actions.Comments.CreateComment.REQUEST.actionCreator(requestName));
 
-    const { response, error, details }: { response?: any, error?: string, details?: string } =
-      yield call(api.Comment.create, deployment, message, email, name);
+    const { response, error, details, unauthorized }: {
+      response?: any,
+      error?: string,
+      details?: string,
+      unauthorized?: boolean,
+    } = yield call(api.Comment.create, deployment, message, email, name);
 
     if (response) {
       // Store new comment
@@ -391,7 +396,9 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Comments.CreateComment.FAILURE.actionCreator(requestName, error!, details));
+      yield put(
+        Requests.actions.Comments.CreateComment.FAILURE.actionCreator(requestName, error!, details, unauthorized),
+      );
 
       return false;
     }
@@ -469,12 +476,12 @@ export default function createSagas(api: Api) {
 
   // PREVIEW
   function* loadPreviewAndComments(action: LoadPreviewAndCommentsAction): IterableIterator<Effect> {
-    const { id, commitHash } = action;
+    const { id, commitHash, isUserLoggedIn } = action;
     const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
     let previewExists = !!existingPreview;
 
-    if (!existingPreview) {
-      previewExists = yield call(fetchPreview, id, commitHash);
+    if (!previewExists || isFetchError(existingPreview)) {
+      previewExists = yield call(fetchPreview, id, commitHash, isUserLoggedIn);
     }
 
     if (previewExists) {
@@ -482,11 +489,15 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchPreview(id: string, commitHash: string): IterableIterator<Effect> {
+  function* fetchPreview(id: string, commitHash: string, isUserLoggedIn: boolean): IterableIterator<Effect> {
     yield put(Requests.actions.Previews.LoadPreview.REQUEST.actionCreator(id));
 
-    const { response, error, details }: { response?: ApiPreviewResponse, error?: string, details?: string } =
-      yield call(api.Preview.fetch, id, commitHash);
+    const { response, error, details, unauthorized }: {
+      response?: ApiPreviewResponse,
+      error?: string,
+      details?: string,
+      unauthorized?: boolean,
+    } = yield call(api.Preview.fetch, id, commitHash);
 
     if (response) {
       const commit: Commit[] = yield call(Converter.toCommits, response.commit);
@@ -503,7 +514,11 @@ export default function createSagas(api: Api) {
 
       return true;
     } else {
-      yield put(Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(id, error!, details));
+      yield put(Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(id, error!, details, unauthorized));
+
+      if (unauthorized && !isUserLoggedIn) {
+        yield put(User.actions.redirectToLogin(`/preview/${commitHash}/${id}`));
+      }
 
       return false;
     }
@@ -515,8 +530,12 @@ export default function createSagas(api: Api) {
 
     yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
 
-    const { response, error, details }: { response?: any, error?: string, details?: string } =
-      yield call(api.Project.create, teamId, name, description, projectTemplate);
+    const { response, error, details, unauthorized }: {
+      response?: any,
+      error?: string,
+      details?: string,
+      unauthorized?: boolean,
+    } = yield call(api.Project.create, teamId, name, description, projectTemplate);
 
     if (response) {
       if (response.included) {
@@ -533,7 +552,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error!, details));
+      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error!, details, unauthorized));
 
       return false;
     }
@@ -545,7 +564,7 @@ export default function createSagas(api: Api) {
 
     yield put(Requests.actions.Projects.DeleteProject.REQUEST.actionCreator(id));
 
-    const { response, error, details } = yield call(api.Project.delete, id);
+    const { response, error, details, unauthorized } = yield call(api.Project.delete, id);
 
     if (response) {
       yield call(resolve);
@@ -554,7 +573,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       yield call(reject);
-      yield put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error, details));
+      yield put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error, details, unauthorized));
 
       return false;
     }
@@ -568,7 +587,7 @@ export default function createSagas(api: Api) {
 
     yield put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id));
 
-    const { response, error, details } = yield call(api.Project.edit, id, { name, description });
+    const { response, error, details, unauthorized } = yield call(api.Project.edit, id, { name, description });
 
     if (response) {
       // Store edited project
@@ -581,7 +600,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error, details));
+      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error, details, unauthorized));
 
       return false;
     }
@@ -591,7 +610,7 @@ export default function createSagas(api: Api) {
   function *loadTeamInformation(_action: LoadTeamInformationAction): IterableIterator<Effect> {
     yield put(Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator());
 
-    const { response, error, details } = yield call(api.Team.fetch);
+    const { response, error, details, unauthorized } = yield call(api.Team.fetch);
 
     if (response) {
       const { id, name } = response as ApiTeam;
@@ -601,7 +620,7 @@ export default function createSagas(api: Api) {
       return true;
     } else {
       // TODO: handle failure, e.g. not authorized or member of team
-      yield put(Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(error, details));
+      yield put(Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(error, details, unauthorized));
 
       return false;
     }
@@ -622,6 +641,16 @@ export default function createSagas(api: Api) {
       yield put(Errors.actions.signupError(error, details));
 
       return false;
+    }
+  }
+
+  function *redirectToLogin(action: RedirectToLoginAction): IterableIterator<Effect> {
+    const { returnPath } = action;
+
+    if (returnPath) {
+      yield put(push(`/login/${encodeURIComponent(returnPath)}`));
+    } else {
+      yield put(push('/login'));
     }
   }
 
@@ -705,6 +734,7 @@ export default function createSagas(api: Api) {
       takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments),
       takeEvery(FORM_SUBMIT, formSubmitSaga),
       throttle(200, Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
+      takeEvery(User.actions.REDIRECT_TO_LOGIN, redirectToLogin),
       fork(watchForLoadAllProjects),
       fork(watchForLoadActivities),
       fork(watchForLoadTeamInformation),

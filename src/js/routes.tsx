@@ -22,7 +22,7 @@ export default (
       <Route path="comment/:commentId" />
       <Route path=":view" />
     </Route>
-    <Route path="login" component={LoginView} />
+    <Route path="login(/:returnPath)" component={LoginView} />
     <Route path="signup(/:teamToken)" component={SignupView} />
   </Route>
 );

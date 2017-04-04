@@ -36,12 +36,13 @@ const fetchEntityActionCreators = (prefix: string): t.FetchEntityActionCreators 
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string): FetchError => ({
+      actionCreator: (id: string, error: string, details: string, unauthorized?: boolean): FetchError => ({
         type: failureAction,
         id,
         error,
         details,
         prettyError: prettyErrorMessage(error),
+        unauthorized,
       }),
     },
   };
@@ -61,12 +62,13 @@ const createEntityActionCreators = (prefix: string): t.CreateEntityActionCreator
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (name: string, error: string, details: string): CreateError => ({
+      actionCreator: (name: string, error: string, details: string, unauthorized?: boolean): CreateError => ({
         type: failureAction,
         name,
         error,
         details,
         prettyError: prettyErrorMessage(error),
+        unauthorized,
       }),
     },
   };
@@ -86,12 +88,13 @@ const editEntityActionCreators = (prefix: string): t.EditEntityActionCreators =>
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string): EditError => ({
+      actionCreator: (id: string, error: string, details: string, unauthorized?: boolean): EditError => ({
         type: failureAction,
         id,
         error,
         details,
         prettyError: prettyErrorMessage(error),
+        unauthorized,
       }),
     },
   };
@@ -111,12 +114,13 @@ const deleteEntityActionCreators = (prefix: string): t.DeleteEntityActionCreator
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string): DeleteError => ({
+      actionCreator: (id: string, error: string, details: string, unauthorized?: boolean): DeleteError => ({
         type: failureAction,
         id,
         error,
         details,
         prettyError: prettyErrorMessage(error),
+        unauthorized,
       }),
     },
   };
@@ -136,11 +140,12 @@ const fetchCollectionActionCreators = (prefix: string): t.CollectionActionCreato
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (error: string, details: string): FetchCollectionError => ({
+      actionCreator: (error: string, details: string, unauthorized?: boolean): FetchCollectionError => ({
         type: failureAction,
         error,
         details,
         prettyError: prettyErrorMessage(error),
+        unauthorized,
       }),
     },
   };

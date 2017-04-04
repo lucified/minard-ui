@@ -7,8 +7,13 @@ export const storePreviews = (preview: t.Preview): t.StorePreviewAction => ({
 });
 
 export const LOAD_PREVIEW_AND_COMMENTS = 'PREVIEW/LOAD_PREVIEW_AND_COMMENTS';
-export const loadPreviewAndComments = (id: string, commitHash: string): t.LoadPreviewAndCommentsAction => ({
+export const loadPreviewAndComments = (
+  id: string,
+  commitHash: string,
+  isUserLoggedIn: boolean,
+): t.LoadPreviewAndCommentsAction => ({
   type: LOAD_PREVIEW_AND_COMMENTS,
   id,
   commitHash,
+  isUserLoggedIn,
 });

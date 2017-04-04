@@ -5,13 +5,11 @@ const ACCESS_TOKEN_KEY = 'access_token';
 const EXPIRES_AT_KEY = 'expires_at';
 const EMAIL_KEY = 'email';
 
-export function storeCredentials(idToken: string, accessToken: string, email: string, expiresIn: number) {
-  const expiresAt = moment().add(expiresIn, 'seconds');
-
+export function storeCredentials(idToken: string, accessToken: string, email: string, expiresAt: number) {
   localStorage.setItem(ID_TOKEN_KEY, idToken);
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   localStorage.setItem(EMAIL_KEY, email);
-  localStorage.setItem(EXPIRES_AT_KEY, expiresAt.toISOString());
+  localStorage.setItem(EXPIRES_AT_KEY, moment(expiresAt).toISOString());
 }
 
 /**
@@ -32,6 +30,16 @@ export function getAccessToken(): string | null {
 export function getEmail(): string | null {
   return getAccessToken() && localStorage.getItem(EMAIL_KEY);
 };
+
+export function getExpirationTime(): number | null {
+  const expirationTimestamp = localStorage.getItem(EXPIRES_AT_KEY);
+
+  if (expirationTimestamp && expirationTimestamp.length > 0) {
+    return moment(expirationTimestamp).valueOf();
+  }
+
+  return null;
+}
 
 export function clearStoredCredentials() {
   localStorage.removeItem(ID_TOKEN_KEY);

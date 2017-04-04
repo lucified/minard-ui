@@ -23,6 +23,7 @@ interface GenericError {
   details?: string;
   // The error to display to the user
   prettyError: string;
+  unauthorized?: boolean;
 }
 
 export type Error = FetchError | FetchCollectionError | CreateError | DeleteError | EditError;

@@ -3,6 +3,7 @@ export interface UserState {
   email?: string;
   team?: Team;
   gitPassword?: string;
+  expiresAt?: number; // moment.valueOf()
   // TODO: add full name
 };
 
@@ -15,6 +16,7 @@ export interface Team {
 export interface SetUserEmailAction {
   type: 'USER/SET_USER_EMAIL';
   email: string;
+  expiresAt: number;
 };
 
 export interface SetTeamAction {
@@ -42,4 +44,9 @@ export interface SignupUserAction {
 export interface SetGitPasswordAction {
   type: 'USER/SET_GIT_PASSWORD';
   password: string;
+};
+
+export interface RedirectToLoginAction {
+  type: 'USER/REDIRECT_TO_LOGIN';
+  returnPath?: string;
 };

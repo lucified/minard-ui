@@ -53,14 +53,16 @@ yarn start -- <minard-backend API URL> # then open http://localhost:3000/ in a b
 ```
 
 By default, when run locally, the minard-backend (charles) API runs
-on `http://localhost:8000`:
+on port 8000:
 
 ```shell
-yarn start -- http://localhost:8000
+yarn start -- http://localtest.me:8000
 ```
 
-Note that the team ID needs to match the ID of a team that has been
-created in [minard-backend](https://github.com/lucified/minard-backend).
+Note that in local development mode, by default, the backend sets cookies
+for the `localtest.me` domain, which should resolve to `127.0.0.1`. Because
+of this, the API URL should be set to `http://localtest.me:8000` when using
+the default settings.
 
 ## Building for production
 
@@ -98,15 +100,15 @@ Run `yarn run` to see other available commands.
 
 - **NODE_ENV**: Used to set the environment. Set it to 'production' to enable optimizations. Defaults to 'development'.
 - **LUCIFY_ENV**: Overrides NODE_ENV if set. Meant to be used for automatic deployments.
-- **CHARLES_PRODUCTION**: URL for the backend server API when the environment is set to 'production'. Defaults to `https://charles.lucify.com`.
-- **CHARLES_STAGING**: URL for the backend server API when the environment is set to 'staging'. Defaults to `https://charles-staging.lucify.com`.
+- **CHARLES_PRODUCTION**: URL for the backend server API when the environment is set to 'production'.
+- **CHARLES_STAGING**: URL for the backend server API when the environment is set to 'staging'.
 - **CHARLES**: Fallback URL of the backend server API.
 - **CHARLES_STREAMING_PRODUCTION**: URL for the streaming API when the environment is set to 'production'.
 - **CHARLES_STREAMING_STAGING**: URL for the streaming API when the environment is set to 'staging'.
 - **STREAMING_API**: Fallback URL of the streaming API. If no URL is set for the streaming API, falls back the charles API URL.
 - **AUTH0_CLIENT_ID**: The client ID for Auth0. Defaults to the client in Lucify's dev account.
 - **AUTH0_DOMAIN**: The domain used for Auth0 authentication. Defaults to Lucify's dev account domain.
-- **AUTH0_AUDIENCE**: The Auth0 audience that we're requesting. Needs to match the correct API in Auth0. Defaults to `http://localhost:8000`.
+- **AUTH0_AUDIENCE**: The Auth0 audience that we're requesting. Needs to match the correct API in Auth0. Defaults to `http://localtest.me:8000`.
 
 ## Acknowledgements
 
