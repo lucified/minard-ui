@@ -16,7 +16,7 @@ export interface Commit {
 
 export interface CommitState {
   [id: string]: Commit | FetchError;
-};
+}
 
 // Actions
 // LOAD_COMMIT

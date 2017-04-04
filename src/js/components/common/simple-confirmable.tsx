@@ -92,6 +92,6 @@ class SimpleConfirmable extends React.Component<Props, State> {
       </div>
     );
   }
-};
+}
 
 export default SimpleConfirmable;

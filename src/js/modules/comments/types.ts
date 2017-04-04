@@ -12,7 +12,7 @@ export interface Comment {
 
 export interface CommentState {
   [id: string]: Comment;
-};
+}
 
 // Actions
 // DELETE_COMMENT

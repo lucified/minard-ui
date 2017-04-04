@@ -83,7 +83,7 @@ class NewProjectDialog extends React.Component<Props, void> {
       </ModalDialog>
     );
   }
-};
+}
 
 const mapStateToProps = (state: StateTree) => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.NewProject),

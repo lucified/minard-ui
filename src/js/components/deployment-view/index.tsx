@@ -103,7 +103,7 @@ class ProjectsFrame extends React.Component<Props, void> {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { deploymentId } = ownProps.params;

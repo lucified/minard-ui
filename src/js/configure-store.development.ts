@@ -4,8 +4,8 @@ import createSagaMiddleware, { END } from 'redux-saga';
 
 import rootReducer from './reducers';
 
-declare var module: { hot: any }; // An ugly hack
-declare var window: { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
+declare const module: { hot: any }; // An ugly hack
+declare const window: { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
 
 function configureStore(initialState: object, history: any) { // TODO: improve typings
   const sagaMiddleware = createSagaMiddleware();

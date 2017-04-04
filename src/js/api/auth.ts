@@ -22,14 +22,14 @@ export function getAccessToken(): string | null {
   const isValid = !!accessToken && !!expiresAt && now.isBefore(moment(expiresAt));
 
   return isValid ? accessToken : null;
-};
+}
 
 /**
  * Returns null if email does not exist or access token has expired
  */
 export function getEmail(): string | null {
   return getAccessToken() && localStorage.getItem(EMAIL_KEY);
-};
+}
 
 export function getExpirationTime(): number | null {
   const expirationTimestamp = localStorage.getItem(EXPIRES_AT_KEY);

@@ -262,4 +262,4 @@ export interface ApiTeam {
 export interface SignupResponse {
   password: string;
   team: ApiTeam;
-};
+}

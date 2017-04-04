@@ -8,5 +8,5 @@ export {
   BranchState,
   LoadBranchesForProjectAction,
   StoreBranchesAction,
-  UpdateBranchWithCommitsAction
+  UpdateBranchWithCommitsAction,
 } from './types';

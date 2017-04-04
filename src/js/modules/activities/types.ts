@@ -6,7 +6,7 @@ import { DeploymentStatus } from '../deployments';
 export enum ActivityType {
   Comment,
   Deployment,
-};
+}
 
 export interface Activity {
   id: string;
@@ -59,7 +59,7 @@ export interface Activity {
 
 export interface ActivityState {
   [id: string]: Activity;
-};
+}
 
 // Actions
 // ACTIVITIES

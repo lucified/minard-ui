@@ -25,7 +25,7 @@ import Streaming, { ConnectionState } from '../modules/streaming';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
-declare var EventSource: any;
+declare const EventSource: any;
 
 interface GeneratedDispatchProps {
   setConnectionState: (state: ConnectionState, error?: string) => void;
@@ -370,7 +370,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   public render() {
     return <span />;
   }
-};
+}
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),

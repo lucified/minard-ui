@@ -13,5 +13,5 @@ export {
   ProjectUser,
   LoadAllProjectsAction,
   DeleteProjectAction,
-  StoreProjectsAction
+  StoreProjectsAction,
 } from './types';

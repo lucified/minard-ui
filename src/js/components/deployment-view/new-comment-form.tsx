@@ -78,7 +78,7 @@ class NewCommentForm extends React.Component<Props, void> {
       </div>
     );
   }
-};
+}
 
 const formName = 'newComment';
 
