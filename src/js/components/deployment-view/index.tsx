@@ -33,6 +33,7 @@ interface GeneratedStateProps {
   commit?: Commit | FetchError;
   deployment?: Deployment | FetchError;
   isUserLoggedIn: boolean;
+  userEmail?: string;
 }
 
 interface GeneratedDispatchProps {
@@ -59,7 +60,7 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 
   public render() {
-    const { commit, deployment, preview, params, isUserLoggedIn } = this.props;
+    const { commit, deployment, preview, params, isUserLoggedIn, userEmail } = this.props;
 
     if (!preview) {
       return <div>Loading...</div>;
@@ -86,7 +87,6 @@ class ProjectsFrame extends React.Component<Props, void> {
 
     const showPreview = deployment.url && params.view !== 'log';
 
-    // TODO: check that isUserLoggedIn is enough authentication
     return (
       <div className={styles['preview-container']}>
         <PreviewDialog
@@ -96,7 +96,8 @@ class ProjectsFrame extends React.Component<Props, void> {
           preview={preview}
           buildLogSelected={!showPreview}
           highlightComment={params.commentId}
-          authenticatedUser={isUserLoggedIn}
+          isAuthenticatedUser={isUserLoggedIn}
+          userEmail={userEmail}
         />
         <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
       </div>
@@ -120,6 +121,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     commit,
     deployment,
     isUserLoggedIn: User.selectors.isUserLoggedIn(state),
+    userEmail: User.selectors.getUserEmail(state),
   };
 };
 

@@ -19,7 +19,8 @@ interface Props {
   commit: Commit;
   deployment: Deployment;
   preview: Preview;
-  authenticatedUser: boolean;
+  isAuthenticatedUser: boolean;
+  userEmail?: string;
   highlightComment?: string;
   className?: string;
 }
@@ -56,7 +57,8 @@ class PreviewDialog extends React.Component<Props, State> {
       deployment,
       highlightComment,
       preview,
-      authenticatedUser,
+      isAuthenticatedUser,
+      userEmail,
     } = this.props;
     const { dialogOpen } = this.state;
 
@@ -69,7 +71,7 @@ class PreviewDialog extends React.Component<Props, State> {
           isOpen={dialogOpen}
           onToggleOpen={this.handleToggleOpen}
           buildLogSelected={buildLogSelected}
-          authenticatedUser={authenticatedUser}
+          isAuthenticatedUser={isAuthenticatedUser}
         />
         {dialogOpen && (
           <CommitSummary
@@ -78,7 +80,7 @@ class PreviewDialog extends React.Component<Props, State> {
             commit={commit}
             deployment={deployment}
             preview={preview}
-            authenticatedUser={authenticatedUser}
+            isAuthenticatedUser={isAuthenticatedUser}
           />
         )}
         {dialogOpen && deployment.comments && !isFetchError(deployment.comments) && deployment.comments.length > 0 && (
@@ -86,15 +88,15 @@ class PreviewDialog extends React.Component<Props, State> {
             className={styles['commit-list']}
             commentIds={deployment.comments}
             highlightComment={highlightComment}
-            authenticatedUser={authenticatedUser}
+            isAuthenticatedUser={isAuthenticatedUser}
           />
         )}
-        {dialogOpen /* TODO: get email from user auth if available */ && (
+        {dialogOpen && (
           <NewCommentForm
             initialValues={{
               deployment: deployment.id,
               name: getValue('commentName'),
-              email: getValue('commentEmail'),
+              email: userEmail || getValue('commentEmail'),
             }}
           />
         )}
