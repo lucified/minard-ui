@@ -95,15 +95,15 @@ Run `yarn run` to see other available commands.
 
 - **NODE_ENV**: Used to set the environment. Set it to 'production' to enable optimizations. Defaults to 'development'.
 - **LUCIFY_ENV**: Overrides NODE_ENV if set. Meant to be used for automatic deployments.
-- **CHARLES_PRODUCTION**: URL for the backend server API when the environment is set to 'production'. Defaults to `https://charles.lucify.com`.
-- **CHARLES_STAGING**: URL for the backend server API when the environment is set to 'staging'. Defaults to `https://charles-staging.lucify.com`.
+- **CHARLES_PRODUCTION**: URL for the backend server API when the environment is set to 'production'.
+- **CHARLES_STAGING**: URL for the backend server API when the environment is set to 'staging'.
 - **CHARLES**: Fallback URL of the backend server API.
 - **CHARLES_STREAMING_PRODUCTION**: URL for the streaming API when the environment is set to 'production'.
 - **CHARLES_STREAMING_STAGING**: URL for the streaming API when the environment is set to 'staging'.
 - **STREAMING_API**: Fallback URL of the streaming API. If no URL is set for the streaming API, falls back the charles API URL.
 - **AUTH0_CLIENT_ID**: The client ID for Auth0. Defaults to the client in Lucify's dev account.
 - **AUTH0_DOMAIN**: The domain used for Auth0 authentication. Defaults to Lucify's dev account domain.
-- **AUTH0_AUDIENCE**: The Auth0 audience that we're requesting. Needs to match the correct API in Auth0. Defaults to `http://localhost:8000`.
+- **AUTH0_AUDIENCE**: The Auth0 audience that we're requesting. Needs to match the correct API in Auth0. Defaults to `http://localtest.me:8000`.
 
 ## Acknowledgements
 
