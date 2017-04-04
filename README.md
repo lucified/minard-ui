@@ -53,14 +53,11 @@ yarn start -- <minard-backend API URL> # then open http://localhost:3000/ in a b
 ```
 
 By default, when run locally, the minard-backend (charles) API runs
-on `http://localhost:8000`:
+on port 8000:
 
 ```shell
 yarn start -- http://localhost:8000
 ```
-
-Note that the team ID needs to match the ID of a team that has been
-created in [minard-backend](https://github.com/lucified/minard-backend).
 
 ## Building for production
 
