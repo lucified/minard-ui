@@ -167,11 +167,21 @@ const htmlWebpackPluginConfig = {
 
 function getCharles() {
   if (deployConfig.env === 'production') {
-    return process.env.CHARLES_PRODUCTION || 'https://charles.lucify.com';
+    if (!process.env.CHARLES_PRODUCTION) {
+      throw new Error('CHARLES_PRODUCTION environment variable missing!');
+    }
+
+    return process.env.CHARLES_PRODUCTION;
   }
+
   if (deployConfig.env === 'staging') {
-    return process.env.CHARLES_STAGING || 'https://charles-staging.lucify.com';
+    if (!process.env.CHARLES_PRODUCTION) {
+      throw new Error('CHARLES_STAGING environment variable missing!');
+    }
+
+    return process.env.CHARLES_STAGING;
   }
+
   return process.env.CHARLES || false;
 }
 
@@ -179,9 +189,11 @@ function getStreamingAPI() {
   if (deployConfig.env === 'production' && process.env.CHARLES_STREAMING_PRODUCTION) {
     return process.env.CHARLES_STREAMING_PRODUCTION;
   }
+
   if (deployConfig.env === 'staging' && process.env.CHARLES_STREAMING_STAGING) {
     return process.env.CHARLES_STREAMING_STAGING;
   }
+
   return process.env.CHARLES_STREAMING || getCharles();
 }
 
@@ -210,7 +222,7 @@ const config = {
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
       'process.env.AUTH0_CLIENT_ID': JSON.stringify(process.env.AUTH0_CLIENT_ID || 'ZaeiNyV7S7MpI69cKNHr8wXe5Bdr8tvW'),
       'process.env.AUTH0_DOMAIN': JSON.stringify(process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com'),
-      'process.env.AUTH0_AUDIENCE': JSON.stringify(process.env.AUTH0_AUDIENCE || getCharles() || 'http://localhost:8000'),
+      'process.env.AUTH0_AUDIENCE': JSON.stringify(process.env.AUTH0_AUDIENCE || 'http://localtest.me:8000'),
     }),
     new ExtractTextPlugin('bundled-[hash].css'),
     new CopyWebpackPlugin([{
@@ -227,7 +239,7 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    // LopaderOptionsPlugin with minimize:true will be removed in Webpack 3.
+    // LoaderOptionsPlugin with minimize:true will be removed in Webpack 3.
     // Will need to add minimize: true to loaders at that point.
     // See https://webpack.js.org/guides/migrating/#uglifyjsplugin-minimize-loaders
     new webpack.LoaderOptionsPlugin({
