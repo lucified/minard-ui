@@ -31,6 +31,16 @@ export function getEmail(): string | null {
   return getAccessToken() && localStorage.getItem(EMAIL_KEY);
 };
 
+export function getExpirationTime(): number | null {
+  const expirationTimestamp = localStorage.getItem(EXPIRES_AT_KEY);
+
+  if (expirationTimestamp && expirationTimestamp.length > 0) {
+    return moment(expirationTimestamp).valueOf();
+  }
+
+  return null;
+}
+
 export function clearStoredCredentials() {
   localStorage.removeItem(ID_TOKEN_KEY);
   localStorage.removeItem(ACCESS_TOKEN_KEY);
