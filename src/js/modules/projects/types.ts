@@ -21,7 +21,7 @@ export interface Project {
 
 export interface ProjectState {
   [id: string]: Project | FetchError;
-};
+}
 
 // Actions
 // LOAD_ALL_PROJECTS

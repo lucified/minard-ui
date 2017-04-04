@@ -143,7 +143,7 @@ class NewProjectForm extends React.Component<Props, void> {
       </form>
     );
   }
-};
+}
 
 export default reduxForm({
   form: 'newProject',

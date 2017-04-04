@@ -40,7 +40,7 @@ interface State {
 enum LoadingStatus {
   AUTH0,
   BACKEND,
-};
+}
 
 class LoginView extends React.Component<Props, State> {
   private lock: Auth0LockStatic;
@@ -169,7 +169,7 @@ class LoginView extends React.Component<Props, State> {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),

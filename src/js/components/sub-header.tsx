@@ -18,7 +18,7 @@ enum PageType {
   ProjectView,
   BranchesList,
   BranchView,
-};
+}
 
 interface GeneratedProps {
   openPageType: PageType;
@@ -73,7 +73,7 @@ class SubHeader extends React.Component<GeneratedProps, void> {
       </section>
     );
   }
-};
+}
 
 const mapStateToProps = (state: StateTree): GeneratedProps => {
   const selectedBranch = Selected.selectors.getSelectedBranch(state);

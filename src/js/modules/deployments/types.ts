@@ -9,9 +9,9 @@ export enum DeploymentStatus {
   Running,
   Pending,
   Canceled,
-};
+}
 
-export const toDeploymentStatus = (deploymentStatus: string): DeploymentStatus => {
+export function toDeploymentStatus(deploymentStatus: string): DeploymentStatus {
   switch (deploymentStatus) {
     case 'success':
       return DeploymentStatus.Success;
@@ -26,7 +26,7 @@ export const toDeploymentStatus = (deploymentStatus: string): DeploymentStatus =
     default:
       throw new Error(`Unknown deployment type ${deploymentStatus}!`);
   }
-};
+}
 
 export const isSuccessful = (deployment: Deployment) =>
   deployment.status === DeploymentStatus.Success;
@@ -48,7 +48,7 @@ export interface Deployment {
 
 export interface DeploymentState {
   [id: string]: Deployment | FetchError;
-};
+}
 
 // Actions
 // LOAD_DEPLOYMENT

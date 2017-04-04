@@ -95,6 +95,6 @@ class Confirmable extends React.Component<Props, State> {
       </div>
     );
   }
-};
+}
 
 export default Confirmable;

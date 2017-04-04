@@ -11,7 +11,7 @@ export enum ConnectionState {
 export interface StreamingState {
   state: ConnectionState;
   error?: string;
-};
+}
 
 export interface SetConnectionStateAction extends Action {
   state: ConnectionState;

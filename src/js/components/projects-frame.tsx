@@ -79,7 +79,7 @@ class ProjectsFrame extends React.Component<Props, void> {
       </div>
     );
   }
-};
+}
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },

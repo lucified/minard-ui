@@ -84,7 +84,7 @@ class TeamProjectsView extends React.Component<Props, void> {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   projects: Projects.selectors.getProjects(state),

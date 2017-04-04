@@ -46,7 +46,7 @@ function generateErrorObject(errorResponse: any) {
     details,
     unauthorized: errorResponse.unauthorized,
   };
-};
+}
 
 /**
  * This method will overwrite the Authorization header if an access token exists.
@@ -85,7 +85,7 @@ function connectToApi<ResponseType>(path: string, options?: RequestInit): Promis
 
       return generateErrorObject(errorResponse);
     });
-};
+}
 
 function getApi<ResponseType>(path: string, query?: any): Promise<ApiResult<ResponseType>> {
   let queryString = '';
@@ -96,7 +96,7 @@ function getApi<ResponseType>(path: string, query?: any): Promise<ApiResult<Resp
   }
 
   return connectToApi<ResponseType>(`${path}${queryString}`);
-};
+}
 
 function postApi<ResponseType>(path: string, payload: any): Promise<ApiResult<ResponseType>> {
   return connectToApi(path, {

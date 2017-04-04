@@ -20,7 +20,7 @@ export interface Preview {
 
 export interface PreviewState {
   [id: string]: Preview | FetchError;
-};
+}
 
 // Actions
 // LOAD_PREVIEW_AND_COMMENTS

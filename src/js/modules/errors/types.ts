@@ -32,13 +32,13 @@ export interface FetchError extends GenericError {
   id: string;
 }
 
-export const isFetchError = (obj: any): obj is FetchError => {
+export function isFetchError(obj: any): obj is FetchError {
   const possiblyError = obj as FetchError;
   return possiblyError &&
     possiblyError.type !== undefined &&
     possiblyError.error !== undefined &&
     possiblyError.id !== undefined;
-};
+}
 
 export interface FetchCollectionError extends GenericError {
 

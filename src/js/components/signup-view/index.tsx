@@ -43,7 +43,7 @@ interface State {
 enum LoadingStatus {
   AUTH0,
   BACKEND,
-};
+}
 
 class SignupView extends React.Component<Props, State> {
   private auth0?: Auth0.WebAuth;
@@ -208,7 +208,7 @@ class SignupView extends React.Component<Props, State> {
       </section>
     );
   }
-};
+}
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => {
   const error = Errors.selectors.getSignupError(state);

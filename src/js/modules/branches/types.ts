@@ -19,7 +19,7 @@ export interface Branch {
 
 export interface BranchState {
   [id: string]: Branch | FetchError;
-};
+}
 
 // Actions
 // LOAD_BRANCH
