@@ -166,19 +166,11 @@ const htmlWebpackPluginConfig = {
 };
 
 function getCharles() {
-  if (deployConfig.env === 'production') {
-    if (!process.env.CHARLES_PRODUCTION) {
-      throw new Error('CHARLES_PRODUCTION environment variable missing!');
-    }
-
+  if (deployConfig.env === 'production' && process.env.CHARLES_PRODUCTION) {
     return process.env.CHARLES_PRODUCTION;
   }
 
-  if (deployConfig.env === 'staging') {
-    if (!process.env.CHARLES_PRODUCTION) {
-      throw new Error('CHARLES_STAGING environment variable missing!');
-    }
-
+  if (deployConfig.env === 'staging' && process.env.CHARLES_STAGING) {
     return process.env.CHARLES_STAGING;
   }
 
