@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
@@ -170,11 +170,15 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   };
 };
 
+const dispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  loadProject: (id: string) => { dispatch(Projects.actions.loadProject(id)); },
+  loadActivities: (id: string, count: number, until?: number) => {
+    dispatch(Activities.actions.loadActivitiesForProject(id, count, until));
+  },
+  loadBranches: (id: string) => { dispatch(Branches.actions.loadBranchesForProject(id)); },
+});
+
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  {
-    loadProject: Projects.actions.loadProject,
-    loadActivities: Activities.actions.loadActivitiesForProject,
-    loadBranches: Branches.actions.loadBranchesForProject,
-  },
+  dispatchToProps,
 )(ProjectView);
