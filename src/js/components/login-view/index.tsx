@@ -145,7 +145,6 @@ class LoginView extends React.Component<Props, State> {
   }
 
   private restartLogin() {
-    clearStoredCredentials();
     window.location.href = '/login';
   }
 

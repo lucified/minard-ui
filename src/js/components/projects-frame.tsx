@@ -6,7 +6,6 @@ import Requests from '../modules/requests';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
-import { clearStoredCredentials } from '../api/auth';
 import ErrorDialog from './common/error-dialog';
 import Spinner from './common/spinner';
 import Footer from './footer';
@@ -61,7 +60,6 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 
   private redirectToLogin() {
-    clearStoredCredentials();
     window.location.href = '/login';
   }
 
