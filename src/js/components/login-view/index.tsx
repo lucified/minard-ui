@@ -1,5 +1,6 @@
 import { Auth0Error, Auth0UserProfile } from 'auth0-js';
 import Auth0Lock from 'auth0-lock';
+import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
@@ -10,9 +11,12 @@ import { login as intercomLogin } from '../../intercom';
 import Requests from '../../modules/requests';
 import User, { Team } from '../../modules/user';
 import { StateTree } from '../../reducers';
+import ErrorDialog from '../common/error-dialog';
+import Spinner from '../common/spinner';
 
 const minardLogo = require('../../../../static/minard-logo-auth0.png');
 const styles = require('./index.scss');
+const headerStyles = require('../header.scss');
 
 interface GeneratedStateProps {
   isLoadingTeamInformation: boolean;
@@ -141,24 +145,46 @@ class LoginView extends React.Component<Props, State> {
     });
   }
 
+  private restartLogin() {
+    clearStoredCredentials();
+    window.location.href = '/login';
+  }
+
+  // TODO: Make the Header component support this usage
+  private getHeader() {
+    return (
+      <section className={headerStyles['header-background']}>
+        <div className={classNames(headerStyles.header, 'row', 'between-xs', 'middle-xs')}>
+          <div className={classNames(headerStyles.logo, 'col-xs')}>
+            <h1 title="Minard" className={headerStyles.minard}>m</h1>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   public render() {
     const { loadingStatus } = this.state;
     const { team, isLoadingTeamInformation } = this.props;
 
     if (loadingStatus === LoadingStatus.BACKEND) {
       if (!team && !isLoadingTeamInformation) {
-        // TODO: style this
         return (
-          <div className={styles.root}>
-            Error! Unable to fetch team information.
+          <div>
+            {this.getHeader()}
+            <ErrorDialog title="Error" actionText="Try again" action={this.restartLogin}>
+              <p>
+                Unable to fetch team information.
+              </p>
+            </ErrorDialog>
           </div>
         );
       }
 
-      // TODO: style this
       return (
-        <div className={styles.root}>
-          Loading...
+        <div>
+          {this.getHeader()}
+          <Spinner />
         </div>
       );
     }
