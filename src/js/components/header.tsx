@@ -25,6 +25,7 @@ interface GeneratedStateProps {
   selectedSection: string;
   errors: FetchCollectionError[];
   connectionState: ConnectionState;
+  isUserLoggedIn: boolean;
   userEmail?: string;
 }
 
@@ -57,7 +58,20 @@ class Header extends React.Component<Props, void> {
   }
 
   public render() {
-    const { errors, selectedSection, connectionState, userEmail } = this.props;
+    const { errors, selectedSection, connectionState, isUserLoggedIn, userEmail } = this.props;
+
+    if (!isUserLoggedIn) {
+      return (
+        <section className={styles['header-background']}>
+          <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
+            <div className={classNames(styles.logo, 'col-xs')}>
+              <h1 title="Minard" className={styles.minard}>m</h1>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
     let error: JSX.Element | null = null;
     let errorContent: JSX.Element | null = null;
     let errorClass: string = '';
@@ -137,6 +151,7 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
     errors: Errors.selectors.getFetchCollectionErrors(state),
     selectedSection,
     connectionState: Streaming.selectors.getConnectionState(state),
+    isUserLoggedIn: User.selectors.isUserLoggedIn(state),
     userEmail: User.selectors.getUserEmail(state),
   };
 };

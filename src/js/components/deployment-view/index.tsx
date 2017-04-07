@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { Link } from 'react-router';
+import { push } from 'react-router-redux';
 
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
@@ -9,6 +9,9 @@ import Previews, { Preview } from '../../modules/previews';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
+import ErrorDialog from '../common/error-dialog';
+import Spinner from '../common/spinner';
+import Header from '../header';
 import PreviewDialog from './preview-dialog';
 
 const getBuildLogURL = process.env.CHARLES ?
@@ -38,11 +41,18 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   loadPreviewAndComments: (deploymentId: string, commitHash: string, isUserLoggedIn: boolean) => void;
+  redirectToApp: () => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
+  constructor(props: Props) {
+    super(props);
+
+    this.redirectToApp = this.redirectToApp.bind(this);
+  }
+
   public componentWillMount() {
     const { loadPreviewAndComments, isUserLoggedIn } = this.props;
     const { deploymentId, commitHash } = this.props.params;
@@ -59,19 +69,35 @@ class ProjectsFrame extends React.Component<Props, void> {
     }
   }
 
+  private redirectToApp() {
+    this.props.redirectToApp();
+  }
+
   public render() {
     const { commit, deployment, preview, params, isUserLoggedIn, userEmail } = this.props;
 
     if (!preview) {
-      return <div>Loading...</div>;
+      return (
+        <div>
+          <Header />
+          <Spinner />
+        </div>
+      );
     }
 
     if (isFetchError(preview)) {
       return (
         <div>
-          <strong>Error!</strong>
-          <p>{preview.unauthorized ? 'Unauthorized.' : 'Unable to load preview.'}</p>
-          {isUserLoggedIn && <Link to="/">Open Minard</Link>}
+          <Header />
+          <ErrorDialog
+            title="Error"
+            actionText={isUserLoggedIn ? 'Back to Minard' : undefined}
+            action={isUserLoggedIn ? this.redirectToApp : undefined}
+          >
+            <p>
+              {preview.unauthorized ? 'You do not have access to this preview.' : 'Unable to load preview.'}
+            </p>
+          </ErrorDialog>
         </div>
       );
     }
@@ -79,8 +105,16 @@ class ProjectsFrame extends React.Component<Props, void> {
     if (!commit || isFetchError(commit) || !deployment || isFetchError(deployment)) {
       return (
         <div>
-          <strong>Error!</strong>
-          <p>Unable to load commit and deployment information.</p>
+          <Header />
+          <ErrorDialog
+            title="Error"
+            actionText={isUserLoggedIn ? 'Back to Minard' : undefined}
+            action={isUserLoggedIn ? this.redirectToApp : undefined}
+          >
+            <p>
+              Unable to load preview details.
+            </p>
+          </ErrorDialog>
         </div>
       );
     }
@@ -129,6 +163,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   loadPreviewAndComments: (id, commitHash, isUserLoggedIn) => {
     dispatch(Previews.actions.loadPreviewAndComments(id, commitHash, isUserLoggedIn));
   },
+  redirectToApp: () => { dispatch(push('/')); },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

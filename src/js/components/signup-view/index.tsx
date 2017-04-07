@@ -1,5 +1,4 @@
 import * as Auth0 from 'auth0-js';
-import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
@@ -10,10 +9,9 @@ import { login as intercomLogin } from '../../intercom';
 import Errors from '../../modules/errors';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
+import ErrorDialog from '../common/error-dialog';
 import Spinner from '../common/spinner';
-import ErrorDialog from './error-dialog';
-
-const styles = require('./index.scss');
+import Header from '../header';
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
@@ -140,12 +138,13 @@ class SignupView extends React.Component<Props, State> {
 
     if (auth0Error || error) { // TODO: Add "back to signup" action
       return (
-        <div className={styles['login-message']}>
-          {this.getHeader()}
+        <div>
+          <Header />
           <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
             <p>
-              Please try again and contact <a href="mailto:support@minard.io">support@minard.io</a> if that didn't help.
+              Please try signing up again. If that doesn't work,
+              contact <a href="mailto:support@minard.io">support@minard.io</a>.
             </p>
           </ErrorDialog>
         </div>
@@ -155,16 +154,17 @@ class SignupView extends React.Component<Props, State> {
     if (password) {
       return (
         <div>
-          {this.getHeader()}
-          <ErrorDialog title="Important" actionText="Open Minard" action={this.redirectToApp}>
+          <Header />
+          <ErrorDialog title="Important" actionText="Continue to Minard" action={this.redirectToApp}>
             <p>
-              Success! Your Minard user account has been created. To access the Minard
-              Git repository, you will need to use the following username and password.
+              Success! Your Minard user account has been created. To push code to Minard,
+              you will need to use the following Git username and password.
             </p>
             <p>
               <strong>
-                Please store this password in some place safe. This is the only time you will
-                see this password.
+                Please store the password in some place safe. This is the only time you will
+                see this password. If you ever lose it, send a message
+                to <a href="mailto:support@minard.io">support@minard.io</a> to have it reset.
               </strong>
             </p>
             <p>
@@ -178,7 +178,7 @@ class SignupView extends React.Component<Props, State> {
               <code>{password}</code>
             </p>
             <p>
-              Once you have stored this information, you can continue to Minard.
+              Once you have stored this information, continue on to Minard.
             </p>
           </ErrorDialog>
         </div>
@@ -188,25 +188,13 @@ class SignupView extends React.Component<Props, State> {
     if (loadingStatus === LoadingStatus.BACKEND) {
       return (
         <div>
-          {this.getHeader()}
+          <Header />
           <Spinner />
         </div>
       );
     }
 
     return null;
-  }
-
-  private getHeader() {
-    return (
-      <section className={styles['header-background']}>
-        <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
-          <div className={classNames(styles.logo, 'col-xs')}>
-            <h1 title="Minard" className={styles.minard}>m</h1>
-          </div>
-        </div>
-      </section>
-    );
   }
 }
 

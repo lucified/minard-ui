@@ -6,6 +6,8 @@ import Requests from '../modules/requests';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
+import ErrorDialog from './common/error-dialog';
+import Spinner from './common/spinner';
 import Footer from './footer';
 import Header from './header';
 import SubHeader from './sub-header';
@@ -57,17 +59,34 @@ class ProjectsFrame extends React.Component<Props, void> {
     }
   }
 
+  private redirectToLogin() {
+    window.location.href = '/login';
+  }
+
   public render() {
     const { children, team, isLoadingTeamInformation } = this.props;
 
     if (!team) {
       if (isLoadingTeamInformation) {
-        // TODO: better loading indicator
-        return <div>Loading...</div>;
+        return (
+          <div>
+            <Header />
+            <Spinner />
+          </div>
+        );
       }
 
-      // TODO: better error indicator
-      return <div>Unable to load team information</div>;
+      return (
+        <div>
+          <Header />
+          <ErrorDialog title="Error" actionText="Log in" action={this.redirectToLogin}>
+            <p>
+              Unable to fetch team information. If this problem persists,
+              contact <a href="mailto:support@minard.io">support@minard.io</a>.
+            </p>
+          </ErrorDialog>
+        </div>
+      );
     }
 
     return (

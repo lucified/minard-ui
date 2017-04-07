@@ -10,6 +10,9 @@ import { login as intercomLogin } from '../../intercom';
 import Requests from '../../modules/requests';
 import User, { Team } from '../../modules/user';
 import { StateTree } from '../../reducers';
+import ErrorDialog from '../common/error-dialog';
+import Spinner from '../common/spinner';
+import Header from '../header';
 
 const minardLogo = require('../../../../static/minard-logo-auth0.png');
 const styles = require('./index.scss');
@@ -141,24 +144,33 @@ class LoginView extends React.Component<Props, State> {
     });
   }
 
+  private restartLogin() {
+    window.location.href = '/login';
+  }
+
   public render() {
     const { loadingStatus } = this.state;
     const { team, isLoadingTeamInformation } = this.props;
 
     if (loadingStatus === LoadingStatus.BACKEND) {
       if (!team && !isLoadingTeamInformation) {
-        // TODO: style this
         return (
-          <div className={styles.root}>
-            Error! Unable to fetch team information.
+          <div>
+            <Header />
+            <ErrorDialog title="Error" actionText="Try again" action={this.restartLogin}>
+              <p>
+                Unable to fetch team information. If this problem persists,
+                contact <a href="mailto:support@minard.io">support@minard.io</a>.
+              </p>
+            </ErrorDialog>
           </div>
         );
       }
 
-      // TODO: style this
       return (
-        <div className={styles.root}>
-          Loading...
+        <div>
+          <Header />
+          <Spinner />
         </div>
       );
     }
