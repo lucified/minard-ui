@@ -48,8 +48,10 @@ export default class ErrorDialog extends React.Component<Props, void> {
   }
 
   private handleButtonClick() {
-    if (this.props.action) {
-      this.props.action();
+    const { action } = this.props;
+
+    if (action) {
+      action();
     }
   }
 }

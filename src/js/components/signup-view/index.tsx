@@ -10,10 +10,10 @@ import { login as intercomLogin } from '../../intercom';
 import Errors from '../../modules/errors';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
+import ErrorDialog from '../common/error-dialog';
 import Spinner from '../common/spinner';
-import ErrorDialog from './error-dialog';
 
-const styles = require('./index.scss');
+const headerStyles = require('../header.scss');
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
@@ -140,12 +140,13 @@ class SignupView extends React.Component<Props, State> {
 
     if (auth0Error || error) { // TODO: Add "back to signup" action
       return (
-        <div className={styles['login-message']}>
+        <div>
           {this.getHeader()}
           <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
             <p>
-              Please try again and contact <a href="mailto:support@minard.io">support@minard.io</a> if that didn't help.
+              Please try signing up again. If that doesn't work,
+              contact <a href="mailto:support@minard.io">support@minard.io</a>.
             </p>
           </ErrorDialog>
         </div>
@@ -197,12 +198,13 @@ class SignupView extends React.Component<Props, State> {
     return null;
   }
 
+  // TODO: make Header component support this case
   private getHeader() {
     return (
-      <section className={styles['header-background']}>
-        <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
-          <div className={classNames(styles.logo, 'col-xs')}>
-            <h1 title="Minard" className={styles.minard}>m</h1>
+      <section className={headerStyles['header-background']}>
+        <div className={classNames(headerStyles.header, 'row', 'between-xs', 'middle-xs')}>
+          <div className={classNames(headerStyles.logo, 'col-xs')}>
+            <h1 title="Minard" className={headerStyles.minard}>m</h1>
           </div>
         </div>
       </section>
