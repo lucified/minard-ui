@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 
@@ -13,8 +12,6 @@ import Spinner from './common/spinner';
 import Footer from './footer';
 import Header from './header';
 import SubHeader from './sub-header';
-
-const headerStyles = require('./header.scss');
 
 interface PassedProps {
   location: any;
@@ -72,21 +69,10 @@ class ProjectsFrame extends React.Component<Props, void> {
     const { children, team, isLoadingTeamInformation } = this.props;
 
     if (!team) {
-      // TODO: Make the Header component support this usage
-      const header = (
-        <section className={headerStyles['header-background']}>
-          <div className={classNames(headerStyles.header, 'row', 'between-xs', 'middle-xs')}>
-            <div className={classNames(headerStyles.logo, 'col-xs')}>
-              <h1 title="Minard" className={headerStyles.minard}>m</h1>
-            </div>
-          </div>
-        </section>
-      );
-
       if (isLoadingTeamInformation) {
         return (
           <div>
-            {header}
+            <Header />
             <Spinner />
           </div>
         );
@@ -94,7 +80,7 @@ class ProjectsFrame extends React.Component<Props, void> {
 
       return (
         <div>
-          {header}
+          <Header />
           <ErrorDialog title="Error" actionText="Log in" action={this.redirectToLogin}>
             <p>
               Unable to fetch team information.

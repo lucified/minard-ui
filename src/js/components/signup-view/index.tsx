@@ -1,5 +1,4 @@
 import * as Auth0 from 'auth0-js';
-import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
@@ -12,8 +11,7 @@ import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 import ErrorDialog from '../common/error-dialog';
 import Spinner from '../common/spinner';
-
-const headerStyles = require('../header.scss');
+import Header from '../header';
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
@@ -141,7 +139,7 @@ class SignupView extends React.Component<Props, State> {
     if (auth0Error || error) { // TODO: Add "back to signup" action
       return (
         <div>
-          {this.getHeader()}
+          <Header />
           <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
             <p>
@@ -156,7 +154,7 @@ class SignupView extends React.Component<Props, State> {
     if (password) {
       return (
         <div>
-          {this.getHeader()}
+          <Header />
           <ErrorDialog title="Important" actionText="Open Minard" action={this.redirectToApp}>
             <p>
               Success! Your Minard user account has been created. To access the Minard
@@ -189,26 +187,13 @@ class SignupView extends React.Component<Props, State> {
     if (loadingStatus === LoadingStatus.BACKEND) {
       return (
         <div>
-          {this.getHeader()}
+          <Header />
           <Spinner />
         </div>
       );
     }
 
     return null;
-  }
-
-  // TODO: make Header component support this case
-  private getHeader() {
-    return (
-      <section className={headerStyles['header-background']}>
-        <div className={classNames(headerStyles.header, 'row', 'between-xs', 'middle-xs')}>
-          <div className={classNames(headerStyles.logo, 'col-xs')}>
-            <h1 title="Minard" className={headerStyles.minard}>m</h1>
-          </div>
-        </div>
-      </section>
-    );
   }
 }
 
