@@ -159,7 +159,8 @@ class LoginView extends React.Component<Props, State> {
             <Header />
             <ErrorDialog title="Error" actionText="Try again" action={this.restartLogin}>
               <p>
-                Unable to fetch team information.
+                Unable to fetch team information. If this problem persists,
+                contact <a href="mailto:support@minard.io">support@minard.io</a>.
               </p>
             </ErrorDialog>
           </div>

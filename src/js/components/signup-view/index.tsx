@@ -155,15 +155,16 @@ class SignupView extends React.Component<Props, State> {
       return (
         <div>
           <Header />
-          <ErrorDialog title="Important" actionText="Open Minard" action={this.redirectToApp}>
+          <ErrorDialog title="Important" actionText="Continue to Minard" action={this.redirectToApp}>
             <p>
-              Success! Your Minard user account has been created. To access the Minard
-              Git repository, you will need to use the following username and password.
+              Success! Your Minard user account has been created. To push code to Minard,
+              you will need to use the following Git username and password.
             </p>
             <p>
               <strong>
-                Please store this password in some place safe. This is the only time you will
-                see this password.
+                Please store the password in some place safe. This is the only time you will
+                see this password. If you ever lose it, send a message
+                to <a href="mailto:support@minard.io">support@minard.io</a> to have it reset.
               </strong>
             </p>
             <p>
@@ -177,7 +178,7 @@ class SignupView extends React.Component<Props, State> {
               <code>{password}</code>
             </p>
             <p>
-              Once you have stored this information, you can continue to Minard.
+              Once you have stored this information, continue on to Minard.
             </p>
           </ErrorDialog>
         </div>

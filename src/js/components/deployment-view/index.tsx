@@ -95,7 +95,7 @@ class ProjectsFrame extends React.Component<Props, void> {
             action={isUserLoggedIn ? this.redirectToApp : undefined}
           >
             <p>
-              {preview.unauthorized ? 'Unauthorized.' : 'Unable to load preview.'}
+              {preview.unauthorized ? 'You do not have access to this preview.' : 'Unable to load preview.'}
             </p>
           </ErrorDialog>
         </div>
@@ -106,9 +106,13 @@ class ProjectsFrame extends React.Component<Props, void> {
       return (
         <div>
           <Header />
-          <ErrorDialog title="Error">
+          <ErrorDialog
+            title="Error"
+            actionText={isUserLoggedIn ? 'Back to Minard' : undefined}
+            action={isUserLoggedIn ? this.redirectToApp : undefined}
+          >
             <p>
-              Unable to load commit and deployment information.
+              Unable to load preview details.
             </p>
           </ErrorDialog>
         </div>
