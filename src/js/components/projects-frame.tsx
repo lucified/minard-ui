@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 
@@ -6,9 +7,14 @@ import Requests from '../modules/requests';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
+import { clearStoredCredentials } from '../api/auth';
+import ErrorDialog from './common/error-dialog';
+import Spinner from './common/spinner';
 import Footer from './footer';
 import Header from './header';
 import SubHeader from './sub-header';
+
+const headerStyles = require('./header.scss');
 
 interface PassedProps {
   location: any;
@@ -57,17 +63,45 @@ class ProjectsFrame extends React.Component<Props, void> {
     }
   }
 
+  private redirectToLogin() {
+    clearStoredCredentials();
+    window.location.href = '/login';
+  }
+
   public render() {
     const { children, team, isLoadingTeamInformation } = this.props;
 
     if (!team) {
+      // TODO: Make the Header component support this usage
+      const header = (
+        <section className={headerStyles['header-background']}>
+          <div className={classNames(headerStyles.header, 'row', 'between-xs', 'middle-xs')}>
+            <div className={classNames(headerStyles.logo, 'col-xs')}>
+              <h1 title="Minard" className={headerStyles.minard}>m</h1>
+            </div>
+          </div>
+        </section>
+      );
+
       if (isLoadingTeamInformation) {
-        // TODO: better loading indicator
-        return <div>Loading...</div>;
+        return (
+          <div>
+            {header}
+            <Spinner />
+          </div>
+        );
       }
 
-      // TODO: better error indicator
-      return <div>Unable to load team information</div>;
+      return (
+        <div>
+          {header}
+          <ErrorDialog title="Error" actionText="Log in" action={this.redirectToLogin}>
+            <p>
+              Unable to fetch team information.
+            </p>
+          </ErrorDialog>
+        </div>
+      );
     }
 
     return (
