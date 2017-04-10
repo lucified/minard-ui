@@ -7,7 +7,6 @@ import { Store } from 'redux';
 
 import { Api } from './api/types';
 import { update as updateIntercom } from './intercom';
-import Selected from './modules/selected';
 import routes from './routes';
 import sagaCreator from './sagas';
 
@@ -22,16 +21,7 @@ export const createStoreAndRender = (
 
   const syncedHistory = syncHistoryWithStore(history, store);
 
-  // Store current open project + branch into state
-  syncedHistory.listen((location: any) => { // TODO: better type definition
-    // TODO: this is rather fragile and not in the best location. Refactor in some way?
-    const result = /^\/project\/([^/]+)(\/branch\/([^/]+))?/.exec(location.pathname);
-    const project = (result && result[1]) || null;
-    const branch = (result && result[3]) || null;
-    const showAll = /\/all$/.exec(location.pathname); // This will break if we have an id that is "all"
-
-    store.dispatch(Selected.actions.setSelected(project, branch, !!showAll));
-
+  syncedHistory.listen(() => {
     // Update Intercom with page changed information
     updateIntercom();
   });
