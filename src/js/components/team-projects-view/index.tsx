@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 
 import Activities, { Activity } from '../../modules/activities';
 import { FetchError } from '../../modules/errors';
@@ -14,10 +15,8 @@ import ProjectsSection from './projects-section';
 
 const styles = require('./index.scss');
 
-interface PassedProps {
-  params: {
-    show?: string;
-  };
+interface Params {
+  show?: string;
 }
 
 interface GeneratedStateProps {
@@ -34,7 +33,7 @@ interface GeneratedDispatchProps {
   loadActivities: (teamId: string, count: number, until?: number) => void;
 }
 
-type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
+type Props = GeneratedStateProps & GeneratedDispatchProps & RouteComponentProps<Params, {}>;
 
 class TeamProjectsView extends React.Component<Props, void> {
   constructor(props: Props) {
@@ -102,7 +101,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
   mapStateToProps,
   mapDispatchToProps,
 )(TeamProjectsView);

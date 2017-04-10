@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
@@ -17,11 +18,9 @@ import ProjectSettingsDialog from './project-settings-dialog';
 
 const styles = require('./index.scss');
 
-interface PassedProps {
-  params: {
-    projectId: string;
-    show?: string;
-  };
+interface Params {
+  projectId: string;
+  show?: string;
 }
 
 interface GeneratedStateProps {
@@ -38,7 +37,9 @@ interface GeneratedDispatchProps {
   loadBranches: (id: string) => void;
 }
 
-class ProjectView extends React.Component<PassedProps & GeneratedStateProps & GeneratedDispatchProps, void> {
+type Props = RouteComponentProps<Params, {}> & GeneratedStateProps & GeneratedDispatchProps;
+
+class ProjectView extends React.Component<Props, void> {
   public componentWillMount() {
     const { loadProject, loadActivities, loadBranches } = this.props;
     const { projectId } = this.props.params;
@@ -48,7 +49,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
     loadActivities(projectId, 10);
   }
 
-  public componentWillReceiveProps(nextProps: PassedProps & GeneratedStateProps & GeneratedDispatchProps) {
+  public componentWillReceiveProps(nextProps: Props) {
     const { loadProject, loadActivities, loadBranches } = this.props;
     const { projectId } = nextProps.params;
 
@@ -137,7 +138,7 @@ class ProjectView extends React.Component<PassedProps & GeneratedStateProps & Ge
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
   const { projectId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const isLoadingActivities = Requests.selectors.isLoadingActivitiesForProject(state, projectId);
@@ -178,7 +179,7 @@ const dispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   loadBranches: (id: string) => { dispatch(Branches.actions.loadBranchesForProject(id)); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
   mapStateToProps,
   dispatchToProps,
 )(ProjectView);

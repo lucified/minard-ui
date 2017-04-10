@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 import { push } from 'react-router-redux';
 
 import Commits, { Commit } from '../../modules/commits';
@@ -20,15 +21,11 @@ const getBuildLogURL = process.env.CHARLES ?
 
 const styles = require('./index.scss');
 
-interface PassedProps {
-  location: any;
-  route: any;
-  params: {
-    commitHash: string;
-    deploymentId: string;
-    commentId?: string;
-    view?: string;
-  };
+interface Params {
+  commitHash: string;
+  deploymentId: string;
+  commentId?: string;
+  view?: string;
 }
 
 interface GeneratedStateProps {
@@ -44,9 +41,9 @@ interface GeneratedDispatchProps {
   redirectToApp: () => void;
 }
 
-type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
+type Props = RouteComponentProps<Params, {}> & GeneratedStateProps & GeneratedDispatchProps;
 
-class ProjectsFrame extends React.Component<Props, void> {
+class DeploymentView extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
 
@@ -139,7 +136,7 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
   const { deploymentId } = ownProps.params;
   const preview = Previews.selectors.getPreview(state, deploymentId);
   let commit: Commit | FetchError | undefined;
@@ -166,7 +163,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   redirectToApp: () => { dispatch(push('/')); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
   mapStateToProps,
   mapDispatchToProps,
-)(ProjectsFrame);
+)(DeploymentView);

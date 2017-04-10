@@ -2,6 +2,7 @@ import * as Auth0 from 'auth0-js';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 import { push } from 'react-router-redux';
 
 import { storeCredentials } from '../../api/auth';
@@ -25,13 +26,11 @@ interface GeneratedStateProps {
   error?: string;
 }
 
-interface PassedProps {
-  params: {
-    teamToken?: string;
-  };
+interface Params {
+  teamToken?: string;
 }
 
-type Props = GeneratedDispatchProps & PassedProps & GeneratedStateProps;
+type Props = GeneratedDispatchProps & RouteComponentProps<Params, {}> & GeneratedStateProps;
 
 interface State {
   loadingStatus: LoadingStatus;
@@ -214,7 +213,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   setUserEmail: (email: string, expiresAt) => { dispatch(User.actions.setUserEmail(email, expiresAt)); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
   mapStateToProps,
   mapDispatchToProps,
 )(SignupView);

@@ -22,8 +22,7 @@ import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
 import Projects, { Project, ProjectUser } from '../modules/projects';
 import Streaming, { ConnectionState } from '../modules/streaming';
-import User, { Team } from '../modules/user';
-import { StateTree } from '../reducers';
+import { Team } from '../modules/user';
 
 declare const EventSource: any;
 
@@ -52,11 +51,13 @@ interface GeneratedDispatchProps {
   removeBranchFromProject: (id: string, branch: string) => void;
 }
 
-interface GeneratedStateProps {
+interface PassedProps {
   team?: Team;
+  commitHash?: string;
+  deploymentId?: string;
 }
 
-type Props = GeneratedDispatchProps & GeneratedStateProps;
+type Props = PassedProps & GeneratedDispatchProps;
 
 // Streaming API types
 interface EventSourceEvent {
@@ -138,7 +139,7 @@ const toConnectionState = (state: any): ConnectionState => {
 class StreamingAPIHandler extends React.Component<Props, void> {
   private _source: any;
 
-  constructor(props: GeneratedDispatchProps) {
+  constructor(props: Props) {
     super(props);
 
     this.restartConnection = this.restartConnection.bind(this);
@@ -279,11 +280,19 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     }
   }
 
-  private restartConnection(teamId: string) {
+  private restartConnection(options: { teamId?: string, deploymentId?: string, commitHash?: string }) {
+    const { teamId, deploymentId, commitHash } = options;
     const accessToken = getAccessToken();
-    const url = accessToken ?
-      `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}` :
-      `${streamingAPIUrl}/${teamId}`;
+    let url: string;
+
+    if (teamId && accessToken) {
+      url = `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}`;
+    } else if (deploymentId && commitHash) {
+      url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deploymentId)}?sha=${encodeURIComponent(commitHash)}`;
+    } else {
+      console.error('Unable to open stream. Missing credentials.');
+      return;
+    }
 
     if (this._source) {
       this._source.close();
@@ -303,7 +312,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
         this._source.close();
         this._source = null;
 
-        setTimeout(this.restartConnection, 5000, teamId); // TODO: smarter retry logic?
+        setTimeout(this.restartConnection, 5000, { teamId }); // TODO: smarter retry logic?
       }
     }, false);
     this._source.addEventListener('open', () => {
@@ -336,27 +345,32 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team } = this.props;
+    const { team, deploymentId, commitHash } = this.props;
 
-    // TODO: handle situation when user has Deployment View open and is not a logged in Minard user
-    if (streamingAPIUrl && team) {
-      this.restartConnection(team.id);
+    if (streamingAPIUrl) {
+      if (team) {
+        this.restartConnection({ teamId: team.id });
+      } else if (deploymentId && commitHash) {
+        this.restartConnection({ deploymentId, commitHash });
+      }
     }
   }
 
   public componentWillReceiveProps(nextProps: Props) {
     const { team, setConnectionState } = this.props;
 
-    // User logged in
-    if (streamingAPIUrl && !team && nextProps.team) {
-      this.restartConnection(nextProps.team.id);
-    }
+    if (streamingAPIUrl) {
+      // User logged in or changed teams
+      if (nextProps.team && (!team || nextProps.team.id !== team.id)) {
+        this.restartConnection({ teamId: nextProps.team.id });
+      }
 
-    // User logged out
-    if (team && !nextProps.team) {
-      setConnectionState(ConnectionState.INITIAL_CONNECT);
-      this._source.close();
-      this._source = null;
+      // User logged out
+      if (team && !nextProps.team) {
+        setConnectionState(ConnectionState.INITIAL_CONNECT);
+        this._source.close();
+        this._source = null;
+      }
     }
   }
 
@@ -371,10 +385,6 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     return <span />;
   }
 }
-
-const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  team: User.selectors.getTeam(state),
-});
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   // Activities
@@ -442,7 +452,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
-  mapStateToProps,
+export default connect<{}, GeneratedDispatchProps, PassedProps>(
+  () => ({}),
   mapDispatchToProps,
 )(StreamingAPIHandler);

@@ -1,26 +1,38 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 
 // require global styles
 require('font-awesome/css/font-awesome.css');
 import './styles.scss';
 
 import Selected from '../modules/selected';
+import User, { Team } from '../modules/user';
+import { StateTree } from '../reducers';
 import StreamingAPIHandler from './streaming-api-handler';
 
 const styles = require('./app.scss');
 
-interface PassedProps {
-  location: any;
-  route: any;
-  params: any;
+interface Params {
+  deploymentId?: string;
+  commitHash?: string;
+  branchId?: string;
+  projectId?: string;
+  commentId?: string;
+  view?: string;
+  teamToken?: string;
+  show?: string;
+}
+
+interface GeneratedStateProps {
+  team?: Team;
 }
 
 interface GeneratedDispatchProps {
   setSelected: (project: string | null, branch: string | null, showAll: boolean) => void;
 }
 
-type Props = PassedProps & GeneratedDispatchProps;
+type Props = RouteComponentProps<Params, {}> & GeneratedDispatchProps & GeneratedStateProps;
 
 class App extends React.Component<Props, void> {
   public componentDidMount() {
@@ -37,16 +49,20 @@ class App extends React.Component<Props, void> {
   }
 
   public render() {
-    const { children } = this.props;
+    const { children, team, params: { deploymentId, commitHash } } = this.props;
 
     return (
       <div id="minard-app" className={styles.app}>
-        <StreamingAPIHandler />
+        <StreamingAPIHandler team={team} deploymentId={deploymentId} commitHash={commitHash} />
         {children}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
+  team: User.selectors.getTeam(state),
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   setSelected: (project: string | null, branch: string | null, showAll: boolean) => {
@@ -54,4 +70,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<{}, GeneratedDispatchProps, PassedProps>(() => ({}), mapDispatchToProps)(App);
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);

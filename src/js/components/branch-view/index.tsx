@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 
 import Branches, { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
@@ -14,11 +15,9 @@ import CommitList from './commit-list';
 
 const styles = require('./index.scss');
 
-interface PassedProps {
-  params: {
-    branchId: string;
-    projectId: string;
-  };
+interface Params {
+  branchId: string;
+  projectId: string;
 }
 
 interface GeneratedStateProps {
@@ -33,7 +32,9 @@ interface GeneratedDispatchProps {
   loadCommits: (id: string, count?: number, until?: number) => void;
 }
 
-class BranchView extends React.Component<GeneratedStateProps & PassedProps & GeneratedDispatchProps, StateTree> {
+type Props = GeneratedStateProps & RouteComponentProps<Params, {}> & GeneratedDispatchProps;
+
+class BranchView extends React.Component<Props, StateTree> {
   public componentWillMount() {
     const { loadBranch, loadCommits } = this.props;
     const { branchId } = this.props.params;
@@ -42,7 +43,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
     loadCommits(branchId, 10);
   }
 
-  public componentWillReceiveProps(nextProps: GeneratedStateProps & PassedProps & GeneratedDispatchProps) {
+  public componentWillReceiveProps(nextProps: Props) {
     const { loadBranch, loadCommits } = this.props;
     const { branchId } = nextProps.params;
 
@@ -111,7 +112,7 @@ class BranchView extends React.Component<GeneratedStateProps & PassedProps & Gen
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
   const { projectId, branchId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, branchId);
@@ -130,7 +131,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   };
 };
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
   mapStateToProps,
   {
     loadBranch: Branches.actions.loadBranch,
