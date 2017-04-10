@@ -56,7 +56,16 @@ interface GeneratedStateProps {
   team?: Team;
 }
 
-type Props = GeneratedDispatchProps & GeneratedStateProps;
+interface PassedProps {
+  location: any;
+  route: any;
+  params: {
+    commitHash?: string;
+    deploymentId?: string;
+  };
+}
+
+type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 
 // Streaming API types
 interface EventSourceEvent {
@@ -138,7 +147,7 @@ const toConnectionState = (state: any): ConnectionState => {
 class StreamingAPIHandler extends React.Component<Props, void> {
   private _source: any;
 
-  constructor(props: GeneratedDispatchProps) {
+  constructor(props: Props) {
     super(props);
 
     this.restartConnection = this.restartConnection.bind(this);
@@ -279,11 +288,19 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     }
   }
 
-  private restartConnection(teamId: string) {
+  private restartConnection(options: { teamId?: string, deploymentId?: string, commitHash?: string }) {
+    const { teamId, deploymentId, commitHash } = options;
     const accessToken = getAccessToken();
-    const url = accessToken ?
-      `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}` :
-      `${streamingAPIUrl}/${teamId}`;
+    let url: string;
+
+    if (teamId && accessToken) {
+      url = `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}`;
+    } else if (deploymentId && commitHash) {
+      url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deploymentId)}?sha=${encodeURIComponent(commitHash)}`;
+    } else {
+      console.error('Unable to open stream. Missing credentials.');
+      return;
+    }
 
     if (this._source) {
       this._source.close();
@@ -336,11 +353,14 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team } = this.props;
+    const { team, params: { deploymentId, commitHash } } = this.props;
 
-    // TODO: handle situation when user has Deployment View open and is not a logged in Minard user
-    if (streamingAPIUrl && team) {
-      this.restartConnection(team.id);
+    if (streamingAPIUrl) {
+      if (team) {
+        this.restartConnection({ teamId: team.id });
+      } else if (deploymentId && commitHash) {
+        this.restartConnection({ deploymentId, commitHash });
+      }
     }
   }
 
@@ -442,7 +462,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
 )(StreamingAPIHandler);
