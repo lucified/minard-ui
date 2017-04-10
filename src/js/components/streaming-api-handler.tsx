@@ -320,7 +320,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
         this._source.close();
         this._source = null;
 
-        setTimeout(this.restartConnection, 5000, teamId); // TODO: smarter retry logic?
+        setTimeout(this.restartConnection, 5000, { teamId }); // TODO: smarter retry logic?
       }
     }, false);
     this._source.addEventListener('open', () => {
@@ -370,7 +370,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     if (streamingAPIUrl) {
       // User logged in or changed teams
       if (nextProps.team && (!team || nextProps.team.id !== team.id)) {
-        this.restartConnection(nextProps.team.id);
+        this.restartConnection({ teamId: nextProps.team.id });
       }
 
       // User logged out
