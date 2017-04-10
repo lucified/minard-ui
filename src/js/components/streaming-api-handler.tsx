@@ -464,7 +464,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
   mapStateToProps,
   mapDispatchToProps,
 )(StreamingAPIHandler);
