@@ -154,7 +154,7 @@ describe('sagas', () => {
         expect(iterator.next(false).done).to.equal(true);
       });
 
-      it('it still ensures data even if entity already exists', () => {
+      it('still ensures data even if entity already exists', () => {
         const iterator = loader(action);
 
         expect(iterator.next().value).to.deep.equal(

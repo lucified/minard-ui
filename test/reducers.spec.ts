@@ -461,7 +461,7 @@ describe('reducers', () => {
       expect(endState).to.deep.equal(expectedState);
     });
 
-    it('it replaces existing selections', () => {
+    it('replaces existing selections', () => {
       const action = {
         type: LOCATION_CHANGE,
         payload: {
