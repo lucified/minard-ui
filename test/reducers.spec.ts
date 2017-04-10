@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import { Reducer } from 'redux';
 
 import { ActivityState } from '../src/js/modules/activities';
@@ -10,7 +11,7 @@ import { FetchError } from '../src/js/modules/errors';
 import Modal, { ModalType } from '../src/js/modules/modal';
 import Projects, { ProjectState } from '../src/js/modules/projects';
 import Requests, { RequestsState } from '../src/js/modules/requests';
-import Selected, { SelectedState, SetSelectedAction } from '../src/js/modules/selected';
+import Selected, { SelectedState } from '../src/js/modules/selected';
 
 /*const testData = {
   allProjectsResponse: require('../json/projects.json') as ApiResponse,
@@ -442,16 +443,16 @@ describe('reducers', () => {
     const { reducer } = Selected;
 
     it('adds selected project and branch to empty state', () => {
-      const action: SetSelectedAction = {
-        type: Selected.actions.SET_SELECTED,
-        project: 'p',
-        branch: 'b',
-        showAll: false,
+      const action = {
+        type: LOCATION_CHANGE,
+        payload: {
+          pathname: '/project/11/branch/11-master',
+        },
       };
 
       const expectedState: SelectedState = {
-        project: 'p',
-        branch: 'b',
+        project: '11',
+        branch: '11-master',
         showAll: false,
       };
 
@@ -460,12 +461,12 @@ describe('reducers', () => {
       expect(endState).to.deep.equal(expectedState);
     });
 
-    it('it replaces existing selections', () => {
-      const action: SetSelectedAction = {
-        type: Selected.actions.SET_SELECTED,
-        project: 'p',
-        branch: 'b',
-        showAll: true,
+    it('replaces existing selections', () => {
+      const action = {
+        type: LOCATION_CHANGE,
+        payload: {
+          pathname: '/project/12/branch/12-master',
+        },
       };
 
       const initialState: SelectedState = {
@@ -475,8 +476,34 @@ describe('reducers', () => {
       };
 
       const expectedState: SelectedState = {
-        project: 'p',
-        branch: 'b',
+        project: '12',
+        branch: '12-master',
+        showAll: false,
+      };
+
+      const endState: SelectedState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it('parses Show all correctly in the Team Projects View', () => {
+      const action = {
+        type: LOCATION_CHANGE,
+        payload: {
+          pathname: '/projects/all',
+        },
+      };
+
+      const initialState: SelectedState = {
+        project: 'p2',
+        branch: 'b2',
+        showAll: false,
+      };
+
+      const expectedState: SelectedState = {
+        project: null,
+        branch: null,
         showAll: true,
       };
 
@@ -486,12 +513,64 @@ describe('reducers', () => {
       expect(endState).to.not.equal(initialState);
     });
 
-    it('it clears existing selections', () => {
-      const action: SetSelectedAction = {
-        type: Selected.actions.SET_SELECTED,
+    it('parses Show all correctly in the Project View', () => {
+      const action = {
+        type: LOCATION_CHANGE,
+        payload: {
+          pathname: '/project/66/all',
+        },
+      };
+
+      const initialState: SelectedState = {
+        project: '66',
+        branch: null,
+        showAll: false,
+      };
+
+      const expectedState: SelectedState = {
+        project: '66',
+        branch: null,
+        showAll: true,
+      };
+
+      const endState: SelectedState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it('clears existing selections', () => {
+      const action = {
+        type: LOCATION_CHANGE,
+        payload: {
+          pathname: '',
+        },
+      };
+
+      const initialState: SelectedState = {
+        project: 'p2',
+        branch: 'b',
+        showAll: true,
+      };
+
+      const expectedState: SelectedState = {
         project: null,
         branch: null,
         showAll: false,
+      };
+
+      const endState: SelectedState = reducer(initialState, action);
+
+      expect(endState).to.deep.equal(expectedState);
+      expect(endState).to.not.equal(initialState);
+    });
+
+    it('returns empty for unknown locations', () => {
+      const action = {
+        type: LOCATION_CHANGE,
+        payload: {
+          pathname: '/asfasd/fahgasfa/adasd',
+        },
       };
 
       const initialState: SelectedState = {
