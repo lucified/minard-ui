@@ -22,8 +22,7 @@ import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
 import Projects, { Project, ProjectUser } from '../modules/projects';
 import Streaming, { ConnectionState } from '../modules/streaming';
-import User, { Team } from '../modules/user';
-import { StateTree } from '../reducers';
+import { Team } from '../modules/user';
 
 declare const EventSource: any;
 
@@ -52,20 +51,13 @@ interface GeneratedDispatchProps {
   removeBranchFromProject: (id: string, branch: string) => void;
 }
 
-interface GeneratedStateProps {
-  team?: Team;
-}
-
 interface PassedProps {
-  location: any;
-  route: any;
-  params: {
-    commitHash?: string;
-    deploymentId?: string;
-  };
+  team?: Team;
+  commitHash?: string;
+  deploymentId?: string;
 }
 
-type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
+type Props = PassedProps & GeneratedDispatchProps;
 
 // Streaming API types
 interface EventSourceEvent {
@@ -353,7 +345,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team, params: { deploymentId, commitHash } } = this.props;
+    const { team, deploymentId, commitHash } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
@@ -393,10 +385,6 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     return <span />;
   }
 }
-
-const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  team: User.selectors.getTeam(state),
-});
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   // Activities
@@ -464,7 +452,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, {}>(
-  mapStateToProps,
+export default connect<{}, GeneratedDispatchProps, PassedProps>(
+  () => ({}),
   mapDispatchToProps,
 )(StreamingAPIHandler);
