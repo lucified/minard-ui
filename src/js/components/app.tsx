@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 
 // require global styles
 require('font-awesome/css/font-awesome.css');
@@ -12,19 +13,15 @@ import StreamingAPIHandler from './streaming-api-handler';
 
 const styles = require('./app.scss');
 
-interface PassedProps {
-  location: any;
-  route: any;
-  params: {
-    deploymentId?: string;
-    commitHash?: string;
-    branchId?: string;
-    projectId?: string;
-    commentId?: string;
-    view?: string;
-    teamToken?: string;
-    show?: string;
-  };
+interface Params {
+  deploymentId?: string;
+  commitHash?: string;
+  branchId?: string;
+  projectId?: string;
+  commentId?: string;
+  view?: string;
+  teamToken?: string;
+  show?: string;
 }
 
 interface GeneratedStateProps {
@@ -35,7 +32,7 @@ interface GeneratedDispatchProps {
   setSelected: (project: string | null, branch: string | null, showAll: boolean) => void;
 }
 
-type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
+type Props = RouteComponentProps<Params, {}> & GeneratedDispatchProps & GeneratedStateProps;
 
 class App extends React.Component<Props, void> {
   public componentDidMount() {
@@ -67,14 +64,13 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),
 });
 
-
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   setSelected: (project: string | null, branch: string | null, showAll: boolean) => {
     dispatch(Selected.actions.setSelected(project, branch, showAll));
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
   mapStateToProps,
   mapDispatchToProps,
 )(App);

@@ -3,6 +3,7 @@ import Auth0Lock from 'auth0-lock';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 import { push } from 'react-router-redux';
 
 import { clearStoredCredentials, storeCredentials } from '../../api/auth';
@@ -28,13 +29,11 @@ interface GeneratedDispatchProps {
   loadTeamInformation: () => void;
 }
 
-interface PassedProps {
-  params: {
-    returnPath?: string;
-  };
+interface Params {
+  returnPath?: string;
 }
 
-type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
+type Props = GeneratedStateProps & GeneratedDispatchProps & RouteComponentProps<Params, {}>;
 
 interface State {
   loadingStatus: LoadingStatus;
@@ -194,4 +193,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoginView);
