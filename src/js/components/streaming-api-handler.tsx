@@ -367,16 +367,18 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   public componentWillReceiveProps(nextProps: Props) {
     const { team, setConnectionState } = this.props;
 
-    // User logged in
-    if (streamingAPIUrl && !team && nextProps.team) {
-      this.restartConnection(nextProps.team.id);
-    }
+    if (streamingAPIUrl) {
+      // User logged in or changed teams
+      if (nextProps.team && (!team || nextProps.team.id !== team.id)) {
+        this.restartConnection(nextProps.team.id);
+      }
 
-    // User logged out
-    if (team && !nextProps.team) {
-      setConnectionState(ConnectionState.INITIAL_CONNECT);
-      this._source.close();
-      this._source = null;
+      // User logged out
+      if (team && !nextProps.team) {
+        setConnectionState(ConnectionState.INITIAL_CONNECT);
+        this._source.close();
+        this._source = null;
+      }
     }
   }
 
