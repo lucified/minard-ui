@@ -46,7 +46,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-class ProjectsFrame extends React.Component<Props, void> {
+class DeploymentView extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
 
@@ -169,4 +169,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
-)(ProjectsFrame);
+)(DeploymentView);
