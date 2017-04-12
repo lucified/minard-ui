@@ -3263,9 +3263,9 @@ lucify-deploy-config@^0.1.11:
     shortid "^2.2.6"
     url-join "^1.1.0"
 
-lucify-notifier@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/lucify-notifier/-/lucify-notifier-0.1.13.tgz#e7a5bc3143a2c6e602dd13e48c327514145fda90"
+lucify-notifier@^0.1.14:
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/lucify-notifier/-/lucify-notifier-0.1.14.tgz#24688cfcc82824e8f87752037f955263a0fc5a00"
   dependencies:
     aws-sdk "^2.32.0"
     bluebird "^3.5.0"
