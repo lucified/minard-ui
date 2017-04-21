@@ -139,13 +139,13 @@
   </script>
   {{/if}}
 
+  <script defer src="{{{htmlWebpackPlugin.files.chunks.manifest.entry}}}"></script>
+  <script defer src="{{{htmlWebpackPlugin.files.chunks.vendor.entry}}}"></script>
+  <script defer src="{{{htmlWebpackPlugin.files.chunks.main.entry}}}"></script>
 
-
-<script src="{{{htmlWebpackPlugin.files.chunks.main.entry}}}"></script>
-
-{{#if htmlWebpackPlugin.options.devServer}}
-<script src="http://localhost:3000/webpack-dev-server.js"></script>
-{{/if}}
+  {{#if htmlWebpackPlugin.options.devServer}}
+  <script src="http://localhost:3000/webpack-dev-server.js"></script>
+  {{/if}}
 
 
 </body>

@@ -15,6 +15,9 @@ const devOptions = {
     publicPath: '/',
     // path must be '/' or an absolute path for webpack-dev-server ver. 2
     path: '/',
+    // [chunkhash] can't be used when webpack is started with --hot:
+    // https://github.com/webpack/webpack-dev-server/issues/377
+    filename: '[name].[hash].js',
   },
 
   module: {
