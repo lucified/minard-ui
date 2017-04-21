@@ -2902,7 +2902,7 @@ json-stable-stringify@^1.0.0, json-stable-stringify@^1.0.1:
   dependencies:
     jsonify "~0.0.0"
 
-json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
+json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
 
@@ -4210,9 +4210,15 @@ promise@^7.0.3, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.0.0, prop-types@^15.5.2, prop-types@~15.5.0:
+prop-types@^15.0.0:
   version "15.5.6"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.6.tgz#797a915b1714b645ebb7c5d6cc690346205bd2aa"
+  dependencies:
+    fbjs "^0.8.9"
+
+prop-types@^15.5.6, prop-types@^15.5.7, prop-types@~15.5.7:
+  version "15.5.8"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
     fbjs "^0.8.9"
 
@@ -4314,11 +4320,9 @@ range-parser@^1.0.3, range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
 
-raven-js@^3.1.1, raven-js@^3.14.0:
-  version "3.14.0"
-  resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.14.0.tgz#94dda81d975fdc4a42f193db437cf70021d654e0"
-  dependencies:
-    json-stringify-safe "^5.0.1"
+raven-js@^3.1.1, raven-js@^3.14.2:
+  version "3.14.2"
+  resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.14.2.tgz#9db2ffdd282e999e9d75541d4fa018be8d5266f4"
 
 rc@~1.1.6:
   version "1.1.6"
@@ -4347,18 +4351,18 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-"react-dom@^15.0.0 || ^16.0.0", react-dom@^15.5.3:
-  version "15.5.3"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.3.tgz#2ee127ce942df55da53111ae303316e68072b5c5"
+"react-dom@^15.0.0 || ^16.0.0", react-dom@^15.5.4:
+  version "15.5.4"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
   dependencies:
     fbjs "^0.8.9"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
-    prop-types "~15.5.0"
+    prop-types "~15.5.7"
 
-react-flip-move@^2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-2.9.1.tgz#075bbf7957286c13b35029f23f42cf1db0b951ec"
+react-flip-move@^2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-2.9.2.tgz#cac7b40c3a764b43495175bd5ad2588fd10b199c"
 
 react-fontawesome@1.3.1:
   version "1.3.1"
@@ -4443,20 +4447,20 @@ react-truncate@2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/react-truncate/-/react-truncate-2.0.5.tgz#a8307f022db05e6971c82992e55c41955c3986f8"
 
-react-waypoint@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/react-waypoint/-/react-waypoint-5.2.1.tgz#0c5e13600df5e59c0e1abc29a527054ce3db6909"
+react-waypoint@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/react-waypoint/-/react-waypoint-6.0.0.tgz#a14c8cb1305bfdf7160ace4f8a087d6c7f745639"
   dependencies:
     consolidated-events "^1.0.1"
 
-react@>=0.13.0, "react@^15.0.0 || ^16.0.0", react@^15.5.3:
-  version "15.5.3"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.5.3.tgz#84055382c025dec4e3b902bb61a8697cc79c1258"
+react@>=0.13.0, "react@^15.0.0 || ^16.0.0", react@^15.5.4:
+  version "15.5.4"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:
     fbjs "^0.8.9"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
-    prop-types "^15.5.2"
+    prop-types "^15.5.7"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -4558,9 +4562,9 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux-form@^6.6.1:
-  version "6.6.1"
-  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.6.1.tgz#368dc4fc41301bfb1cd471b059a2215573649c8c"
+redux-form@^6.6.3:
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-6.6.3.tgz#62362654f2214c83a8f9fcb8313702bb46f92205"
   dependencies:
     deep-equal "^1.0.1"
     es6-error "^4.0.0"
@@ -4569,6 +4573,7 @@ redux-form@^6.6.1:
     is-promise "^2.1.0"
     lodash "^4.17.3"
     lodash-es "^4.17.3"
+    prop-types "^15.5.6"
 
 redux-raven-middleware@^1.2.0:
   version "1.2.0"
@@ -4576,9 +4581,9 @@ redux-raven-middleware@^1.2.0:
   dependencies:
     raven-js "^3.1.1"
 
-redux-saga@^0.14.6:
-  version "0.14.6"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.6.tgz#bc409aa0edaa4a7234759041cc70da62f37c6f13"
+redux-saga@^0.14.7:
+  version "0.14.7"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.7.tgz#a2a8b6ea55433ecbde5b0d31ce8d21af9264ac71"
 
 redux@^3.6.0:
   version "3.6.0"
