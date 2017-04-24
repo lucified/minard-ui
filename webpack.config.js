@@ -1,11 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
-const postcssReporter = require('postcss-reporter');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BabiliPlugin = require('babili-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const postcssReporter = require('postcss-reporter');
+const webpack = require('webpack');
 
 const deployConfig = require('./deploy-config');
 
@@ -197,8 +198,9 @@ const config = {
     rules,
   },
   output: {
-    // [chunkhash] needs to be used in order for the hash to stay the same if the contents of the chunk
-    // hasn't changed (e.g. no new libraries have been added => vendor.js stays the same).
+    // [chunkhash] needs to be used in order for the hash to stay the same if
+    // the contents of the chunk hasn't changed (e.g. no new libraries have
+    // been added => vendor.js stays the same).
     filename: '[name].[chunkhash].js',
     path: path.join(__dirname, deployConfig.base.dest),
     publicPath: deployConfig.base.publicPath,
