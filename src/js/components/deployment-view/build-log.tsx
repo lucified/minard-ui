@@ -1,4 +1,6 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
+const Convert = require('ansi-to-html');
 
 import API from '../../api';
 import { Deployment } from '../../modules/deployments';
@@ -6,6 +8,13 @@ import { Deployment } from '../../modules/deployments';
 import Spinner from '../common/spinner';
 
 const styles = require('./build-log.scss');
+
+const convert = new Convert({
+  fg: '#000',
+  bg: '#fff',
+  newline: true,
+  escapeXML: true,
+});
 
 interface PassedProps {
   deployment: Deployment;
@@ -85,10 +94,19 @@ class BuildLog extends React.Component<Props, State> {
       return <Spinner />;
     }
 
+    if (error) {
+      return (
+        <div className={classNames(styles.frame, styles.error)}>
+          Error: {error}
+        </div>
+      );
+    }
+
     return (
-      <div className={styles['build-log']}>
-        {error ? `Error: ${error}` : <pre>{log}</pre>}
-      </div>
+      <div
+        className={classNames(styles.frame, styles['build-log'])}
+        dangerouslySetInnerHTML={{ __html: convert.toHtml(log) }}
+      />
     );
   }
 }

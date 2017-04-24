@@ -103,6 +103,7 @@
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
+    "ansi-to-html": "^0.6.0",
     "auth0-js": "^8.5.0",
     "auth0-lock": "^10.14.0",
     "classnames": "^2.2.5",
