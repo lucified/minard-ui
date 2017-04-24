@@ -69,7 +69,7 @@ class BuildLog extends React.Component<Props, State> {
 
           this.setState({ error: result.error });
         } else {
-          this.setState({ log: result.response });
+          this.setState({ log: result.response, error: undefined });
         }
       });
   }
