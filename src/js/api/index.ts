@@ -13,9 +13,6 @@ let host: string = process.env.CHARLES;
 // Remove trailing /
 host = host.replace(/\/$/, '');
 
-export const getBuildLogURL = (deploymentId: string): string =>
-  `${host}/ci/deployments/${deploymentId}/trace`;
-
 const defaultOptions: RequestInit = {
   credentials: 'same-origin',
   headers: {
@@ -180,6 +177,38 @@ const Commit = {
 
 const Deployment = {
   fetch: (id: string) => getApi<ApiEntityResponse>(`/api/deployments/${id}`),
+  fetchBuildLog: (id: string): Promise<ApiResult<string>> => {
+    const path = `${host}/ci/deployments/${id}/trace`;
+    const accessToken = getAccessToken();
+    const requestOptions: RequestInit = {
+      credentials: 'same-origin',
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+      },
+    };
+
+    return fetch(path, requestOptions)
+      .then<{ text: string, response: Response }>(
+        response => response.text().then(text => ({
+          text,
+          response,
+        })),
+      ).then<{ response: string }>(({ text, response }) => {
+        if (response.ok) {
+          return { response: text };
+        }
+
+        if (response.status === 401 || response.status === 403) {
+          return Promise.reject({ message: 'Unauthorized', unauthorized: true });
+        }
+
+        return Promise.reject({ message: 'Error' });
+      }).catch((errorResponse: any) => {
+        logMessage('Error while fetching build log', { path, errorResponse }, 'info');
+
+        return generateErrorObject(errorResponse);
+      });
+  },
 };
 
 const Project = {

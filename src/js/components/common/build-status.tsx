@@ -6,10 +6,7 @@ import Icon = require('react-fontawesome');
 import { logMessage } from '../../logger';
 import { Deployment, DeploymentStatus } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
-
-const getBuildLogURL = process.env.CHARLES ?
-  require('../../api').getBuildLogURL :
-  require('../../api/static-json').getBuildLogURL;
+import MinardLink from './minard-link';
 
 const styles = require('./build-status.scss');
 
@@ -31,33 +28,33 @@ const BuildStatus = ({ className, deployment, latest }: PassedProps) => {
         break;
       case DeploymentStatus.Canceled:
         content = (
-          <a href={getBuildLogURL(deployment.id)} target="_blank">
+          <MinardLink preview={deployment} buildLog openInNewWindow>
             <div key="canceled" className={classNames(styles.box, styles.error)}>
               <Icon name="times" className={styles.icon} />
               {latest ? <span>Latest build canceled</span> : <span>Build canceled</span>}
             </div>
-          </a>
+          </MinardLink>
         );
         break;
       case DeploymentStatus.Failed:
         content = (
-          <a href={getBuildLogURL(deployment.id)} target="_blank">
+          <MinardLink preview={deployment} buildLog openInNewWindow>
             <div key="failed" className={classNames(styles.box, styles.error)}>
               <Icon name="times" className={styles.icon} />
               {latest ? <span>Latest build failed</span> : <span>Build failed</span>}
             </div>
-          </a>
+          </MinardLink>
         );
         break;
       case DeploymentStatus.Pending:
       case DeploymentStatus.Running:
         content = (
-          <a href={getBuildLogURL(deployment.id)} target="_blank">
+          <MinardLink preview={deployment} buildLog openInNewWindow>
             <div key="running" className={classNames(styles.box, styles.building)}>
               <Icon name="circle-o-notch" spin className={styles.icon} />
               Generating preview
             </div>
-          </a>
+          </MinardLink>
         );
         break;
       default:
