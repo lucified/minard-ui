@@ -3609,6 +3609,15 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
+mocha-junit-reporter@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/mocha-junit-reporter/-/mocha-junit-reporter-1.13.0.tgz#030db8c530b244667253b03861d4cd336f7e56c8"
+  dependencies:
+    debug "^2.2.0"
+    md5 "^2.1.0"
+    mkdirp "~0.5.1"
+    xml "^1.0.0"
+
 mocha@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/mocha/-/mocha-3.3.0.tgz#d29b7428d3f52c82e2e65df1ecb7064e1aabbfb5"
@@ -5954,6 +5963,10 @@ xml2js@0.4.15, xml2js@^0.4.15:
   dependencies:
     sax ">=0.6.0"
     xmlbuilder ">=2.4.6"
+
+xml@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/xml/-/xml-1.0.1.tgz#78ba72020029c5bc87b8a81a3cfcd74b4a2fc1e5"
 
 xmlbuilder@2.6.2, xmlbuilder@>=2.4.6:
   version "2.6.2"
