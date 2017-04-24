@@ -23,10 +23,19 @@ interface GeneratedProps {
   latestSuccessfulDeployment?: Deployment | FetchError;
   latestSuccessfullyDeployedCommit?: Commit | FetchError;
   deploymentForLatestCommit?: Deployment | FetchError;
+  latestCommit?: Commit | FetchError;
 }
 
-const BranchSummary = (props: PassedProps & GeneratedProps) => {
-  const { branch, latestSuccessfulDeployment, latestSuccessfullyDeployedCommit, deploymentForLatestCommit } = props;
+type Props = PassedProps & GeneratedProps;
+
+const BranchSummary = (props: Props) => {
+  const {
+    branch,
+    latestSuccessfulDeployment,
+    latestSuccessfullyDeployedCommit,
+    deploymentForLatestCommit,
+    latestCommit,
+  } = props;
   let commitContent: JSX.Element;
 
   if (!latestSuccessfullyDeployedCommit) {
@@ -74,7 +83,7 @@ const BranchSummary = (props: PassedProps & GeneratedProps) => {
           <BuildStatus
             className={styles['build-status']}
             deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
-            commit={isFetchError(latestSuccessfullyDeployedCommit) ? undefined : latestSuccessfullyDeployedCommit}
+            commit={isFetchError(latestCommit) ? undefined : latestCommit}
             latest={true}
           />
         </div>
@@ -107,8 +116,9 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   }
 
   let deploymentForLatestCommit: Deployment | FetchError | undefined;
+  let latestCommit: Commit | FetchError | undefined;
   if (branch.latestCommit) {
-    const latestCommit = Commits.selectors.getCommit(state, branch.latestCommit);
+    latestCommit = Commits.selectors.getCommit(state, branch.latestCommit);
     if (latestCommit && !isFetchError(latestCommit) && latestCommit.deployment) {
       deploymentForLatestCommit = Deployments.selectors.getDeployment(state, latestCommit.deployment);
     }
@@ -118,6 +128,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     latestSuccessfulDeployment,
     latestSuccessfullyDeployedCommit,
     deploymentForLatestCommit,
+    latestCommit,
   };
 };
 
