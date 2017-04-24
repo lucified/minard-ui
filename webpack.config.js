@@ -257,12 +257,7 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
       minimize: true,
       debug: false,
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-      output: {
-        comments: false,
-      },
-    }),
+    new BabiliPlugin(),
   ]);
 }
 
