@@ -20,8 +20,6 @@ interface PassedProps {
 const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => {
   let content: JSX.Element | null = null;
 
-  // TODO: Link to build tab of Deployment View instead
-
   if (deployment && commit) {
     switch (deployment.status) {
       case DeploymentStatus.Success:
