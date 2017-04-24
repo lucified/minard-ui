@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 
 import Branches, { Branch } from '../../modules/branches';
@@ -20,6 +20,8 @@ interface Params {
   projectId: string;
 }
 
+type PassedProps = RouteComponentProps<Params, {}>;
+
 interface GeneratedStateProps {
   project?: Project | FetchError;
   branch?: Branch | FetchError;
@@ -32,25 +34,24 @@ interface GeneratedDispatchProps {
   loadCommits: (id: string, count?: number, until?: number) => void;
 }
 
-type Props = GeneratedStateProps & RouteComponentProps<Params, {}> & GeneratedDispatchProps;
+type Props = GeneratedStateProps & PassedProps & GeneratedDispatchProps;
 
 class BranchView extends React.Component<Props, StateTree> {
   public componentWillMount() {
-    const { loadBranch, loadCommits } = this.props;
-    const { branchId } = this.props.params;
+    const { loadBranch, loadCommits, params: { branchId } } = this.props;
 
     loadBranch(branchId);
     loadCommits(branchId, 10);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadBranch, loadCommits } = this.props;
-    const { branchId } = nextProps.params;
+    const { loadBranch, loadCommits, params: { branchId } } = this.props;
+    const { branchId: nextBranchId } = nextProps.params;
 
     // This happens if the user manually opens a new branch when another branch is open
-    if (branchId !== this.props.params.branchId) {
-      loadBranch(branchId);
-      loadCommits(branchId, 10);
+    if (branchId !== nextBranchId) {
+      loadBranch(nextBranchId);
+      loadCommits(nextBranchId, 10);
     }
   }
 
@@ -112,7 +113,7 @@ class BranchView extends React.Component<Props, StateTree> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { projectId, branchId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, branchId);
@@ -131,10 +132,16 @@ const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params,
   };
 };
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => {
+  return {
+    loadBranch: (id: string) => { dispatch(Branches.actions.loadBranch(id)); },
+    loadCommits: (id: string, count: number, until?: number) => {
+      dispatch(Commits.actions.loadCommitsForBranch(id, count, until));
+    },
+  };
+};
+
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  {
-    loadBranch: Branches.actions.loadBranch,
-    loadCommits: Commits.actions.loadCommitsForBranch,
-  },
+  mapDispatchToProps,
 )(BranchView);
