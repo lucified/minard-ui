@@ -1,10 +1,7 @@
 {
   "publicRoot": "dist",
   "build": {
-    "commands": ["npm install", "npm run build"],
-    "cache": {
-      "key": "%CI_PROJECT_PATH%",
-      "paths": ["node_modules/"]
-    }
+    "image": "kkarczmarczyk/node-yarn:7.6",
+    "commands": ["yarn", "yarn run build"]
   }
 }

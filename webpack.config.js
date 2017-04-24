@@ -1,11 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
-const postcssReporter = require('postcss-reporter');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BabiliPlugin = require('babili-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const postcssReporter = require('postcss-reporter');
+const webpack = require('webpack');
 
 const deployConfig = require('./deploy-config');
 
@@ -28,7 +29,7 @@ const getEntrypoint = (env, charles) => {
   return entrypoint;
 };
 
-const name = '[name]-[hash:8].[ext]';
+const name = '[name].[hash:8].[ext]';
 
 /*
  * Get the webpack loaders object for the webpack configuration
@@ -197,7 +198,10 @@ const config = {
     rules,
   },
   output: {
-    filename: 'index-[hash].js',
+    // [chunkhash] needs to be used in order for the hash to stay the same if
+    // the contents of the chunk hasn't changed (e.g. no new libraries have
+    // been added => vendor.js stays the same).
+    filename: '[name].[chunkhash].js',
     path: path.join(__dirname, deployConfig.base.dest),
     publicPath: deployConfig.base.publicPath,
   },
@@ -216,11 +220,28 @@ const config = {
       'process.env.AUTH0_DOMAIN': JSON.stringify(process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com'),
       'process.env.AUTH0_AUDIENCE': JSON.stringify(process.env.AUTH0_AUDIENCE || 'http://localtest.me:8000'),
     }),
-    new ExtractTextPlugin('bundled-[hash].css'),
+    new ExtractTextPlugin({
+      filename: 'bundled.[hash].css',
+      // allChunks is needed for CommonsChunkPlugin:
+      // https://github.com/webpack/webpack/issues/959#issuecomment-276685210
+      allChunks: true,
+    }),
     new CopyWebpackPlugin([{
       from: 'static/*',
       flatten: true,
     }]),
+    // Put all included NPM packages into its own file.
+    // https://webpack.js.org/plugins/commons-chunk-plugin/#combining-implicit-common-vendor-chunks-and-manifest-file
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: ({ resource }) => /node_modules/.test(resource),
+    }),
+    // Put webpack runtime into its own file. This changes on each build and we
+    // don't want it to get included in the vendor file.
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
+    }),
   ],
 };
 
@@ -238,12 +259,7 @@ if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
       minimize: true,
       debug: false,
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-      output: {
-        comments: false,
-      },
-    }),
+    new BabiliPlugin(),
   ]);
 }
 
