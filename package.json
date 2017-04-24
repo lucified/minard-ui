@@ -8,7 +8,7 @@
     "start": "./start.sh",
     "clean": "rm -rf dist",
     "build": "npm run clean && webpack",
-    "compiled-test": "npm run clean-compile && npm run compile && cp -R json lib/ && mocha --require mock-local-storage lib/test",
+    "compiled-test": "npm run clean-compile && npm run compile && cp -R json lib/ && mocha --require mock-local-storage --reporter mocha-junit-reporter lib/test",
     "test": "mocha --opts mocha.opts",
     "test:watch": "mocha --opts mocha.auto.opts --watch",
     "deploy": "lucify-notifier npm run deploy-plain",
