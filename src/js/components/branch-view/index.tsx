@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
+import { push } from 'react-router-redux';
 
 import Branches, { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
@@ -18,6 +19,7 @@ const styles = require('./index.scss');
 interface Params {
   branchId: string;
   projectId: string;
+  redirect?: string;
 }
 
 type PassedProps = RouteComponentProps<Params, {}>;
@@ -25,6 +27,7 @@ type PassedProps = RouteComponentProps<Params, {}>;
 interface GeneratedStateProps {
   project?: Project | FetchError;
   branch?: Branch | FetchError;
+  latestSuccessfullyDeployedCommit?: FetchError | Commit;
   commits?: (Commit | FetchError | undefined)[];
   isLoadingCommits: boolean;
 }
@@ -32,6 +35,7 @@ interface GeneratedStateProps {
 interface GeneratedDispatchProps {
   loadBranch: (id: string) => void;
   loadCommits: (id: string, count?: number, until?: number) => void;
+  redirectToDeployment: (commit: Commit) => void;
 }
 
 type Props = GeneratedStateProps & PassedProps & GeneratedDispatchProps;
@@ -42,6 +46,8 @@ class BranchView extends React.Component<Props, StateTree> {
 
     loadBranch(branchId);
     loadCommits(branchId, 10);
+
+    this.redirectIfNeeded();
   }
 
   public componentWillReceiveProps(nextProps: Props) {
@@ -52,6 +58,22 @@ class BranchView extends React.Component<Props, StateTree> {
     if (branchId !== nextBranchId) {
       loadBranch(nextBranchId);
       loadCommits(nextBranchId, 10);
+    }
+  }
+
+  public componentDidUpdate() {
+    this.redirectIfNeeded();
+  }
+
+  private redirectIfNeeded() {
+    const { latestSuccessfullyDeployedCommit, redirectToDeployment, params: { redirect } } = this.props;
+
+    if (redirect !== 'latest') {
+      return;
+    }
+
+    if (latestSuccessfullyDeployedCommit && !isFetchError(latestSuccessfullyDeployedCommit)) {
+      redirectToDeployment(latestSuccessfullyDeployedCommit);
     }
   }
 
@@ -77,7 +99,7 @@ class BranchView extends React.Component<Props, StateTree> {
   }
 
   public render() {
-    const { branch, commits, project, loadCommits, isLoadingCommits } = this.props;
+    const { branch, commits, project, loadCommits, isLoadingCommits, params: { redirect } } = this.props;
 
     if (!branch) {
       return this.getLoadingContent();
@@ -85,6 +107,11 @@ class BranchView extends React.Component<Props, StateTree> {
 
     if (isFetchError(branch)) {
       return this.getErrorContent(branch);
+    }
+
+    // redirect to latest deployment
+    if (redirect === 'latest') {
+      return this.getLoadingContent();
     }
 
     if (!project) {
@@ -117,16 +144,21 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   const { projectId, branchId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, branchId);
+  let latestSuccessfullyDeployedCommit: FetchError | Commit | undefined;
   let commits: (Commit | FetchError | undefined)[] | undefined;
   const isLoadingCommits = Requests.selectors.isLoadingCommitsForBranch(state, branchId);
 
   if (branch && !isFetchError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));
+    if (branch.latestSuccessfullyDeployedCommit) {
+      latestSuccessfullyDeployedCommit = Commits.selectors.getCommit(state, branch.latestSuccessfullyDeployedCommit);
+    }
   }
 
   return {
     project,
     branch,
+    latestSuccessfullyDeployedCommit,
     commits,
     isLoadingCommits,
   };
@@ -137,6 +169,9 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
     loadBranch: (id: string) => { dispatch(Branches.actions.loadBranch(id)); },
     loadCommits: (id: string, count: number, until?: number) => {
       dispatch(Commits.actions.loadCommitsForBranch(id, count, until));
+    },
+    redirectToDeployment: (commit: Commit) => {
+      dispatch(push(`/preview/${commit.hash}/${commit.deployment!}`));
     },
   };
 };
