@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Commit } from '../../modules/commits';
 import Deployments, { Deployment, isSuccessful } from '../../modules/deployments';
-import { FetchError, isFetchError } from '../../modules/errors';
+import { isFetchError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
 
 import BuildStatus from '../common/build-status';
@@ -14,20 +14,27 @@ import SingleCommit from '../common/single-commit';
 const styles = require('./commit-row.scss');
 
 interface PassedProps {
-  commit?: Commit | FetchError;
+  commit?: Commit;
 }
 
 interface GeneratedProps {
   deployment?: Deployment;
 }
 
-const getScreenshotOrBuildBadge = (deployment?: Deployment, commit?: FetchError | Commit) => {
+const getScreenshotOrBuildBadge = (deployment?: Deployment, commit?: Commit) => {
   if (!deployment || !isSuccessful(deployment)) {
-    return <BuildStatus className={styles['build-status']} deployment={deployment} latest={false} />;
+    return (
+      <BuildStatus
+        className={styles['build-status']}
+        deployment={deployment}
+        commit={commit}
+        latest={false}
+      />
+    );
   }
 
   return (
-    <MinardLink preview={deployment} commit={isFetchError(commit) ? undefined : commit}>
+    <MinardLink preview={deployment} commit={commit}>
       <img className={styles.screenshot} src={deployment.screenshot} />
     </MinardLink>
   );
@@ -39,7 +46,7 @@ const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
       {getScreenshotOrBuildBadge(deployment, commit)}
     </div>
     <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-      <MinardLink className={styles.commit} preview={deployment} commit={isFetchError(commit) ? undefined : commit}>
+      <MinardLink className={styles.commit} preview={deployment} commit={commit}>
         <SingleCommit commit={commit} deployment={deployment} />
       </MinardLink>
     </div>
@@ -49,7 +56,7 @@ const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { commit } = ownProps;
 
-  if (commit && !isFetchError(commit) && commit.deployment) {
+  if (commit && commit.deployment) {
     const deploymentOrError = Deployments.selectors.getDeployment(state, commit.deployment);
 
     return {

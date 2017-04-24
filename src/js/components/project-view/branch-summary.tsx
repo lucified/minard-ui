@@ -71,7 +71,12 @@ const BranchSummary = (props: PassedProps & GeneratedProps) => {
           <MinardLink branch={branch}>
             <div className={styles.title}>{branch.name}</div>
           </MinardLink>
-          <BuildStatus className={styles['build-status']} deployment={deploymentForLatestCommit} latest={true} />
+          <BuildStatus
+            className={styles['build-status']}
+            deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
+            commit={isFetchError(latestSuccessfullyDeployedCommit) ? undefined : latestSuccessfullyDeployedCommit}
+            latest={true}
+          />
         </div>
         <MinardLink branch={branch}>
           <div className={styles.description}>{branch.description}</div>
