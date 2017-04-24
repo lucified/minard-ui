@@ -52,14 +52,14 @@ function generateErrorObject(errorResponse: any) {
  * This method will overwrite the Authorization header if an access token exists.
  */
 function connectToApi<ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> {
-  const combinedOptions = {
+  const combinedOptions: RequestInit = {
     ...defaultOptions,
     ...options,
   };
 
   const accessToken = getAccessToken();
   if (accessToken) {
-    (combinedOptions.headers as any).Authorization = `Bearer ${accessToken}`;
+    combinedOptions.headers.Authorization = `Bearer ${accessToken}`;
   }
 
   return fetch(`${host}${path}`, combinedOptions)
@@ -68,9 +68,9 @@ function connectToApi<ResponseType>(path: string, options?: RequestInit): Promis
         json,
         response,
       })) as Promise<{ json: any, response: Response }>,
-    ).then(({ json, response }) => {
+    ).then<{ response: any }>(({ json, response }) => {
       if (response.ok) {
-        return json;
+        return { response: json };
       }
 
       if (response.status === 401 || response.status === 403) {
@@ -78,9 +78,7 @@ function connectToApi<ResponseType>(path: string, options?: RequestInit): Promis
       }
 
       return Promise.reject(json);
-    }).then(
-      json => ({ response: json }),
-    ).catch(errorResponse => {
+    }).catch(errorResponse => {
       logMessage('Error while calling API', { path, errorResponse }, 'info');
 
       return generateErrorObject(errorResponse);
