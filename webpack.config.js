@@ -228,7 +228,8 @@ const config = {
       from: 'static/*',
       flatten: true,
     }]),
-    // Put all included NPM packages into its own file
+    // Put all included NPM packages into its own file.
+    // https://webpack.js.org/plugins/commons-chunk-plugin/#combining-implicit-common-vendor-chunks-and-manifest-file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: ({ resource }) => /node_modules/.test(resource),
