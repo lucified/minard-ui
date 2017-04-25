@@ -35,23 +35,22 @@ const newProjectJSON = require('file-loader!../../../json/new-project.json');
 const editedProjectJSON = require('file-loader!../../../json/edited-project.json');
 const previewJSON = require('file-loader!../../../json/preview.json');
 
-function fetchFile(url: string) {
-  return fetch(url, { credentials: 'same-origin' })
-    .then(
-      response => response.json().then(json => ({
-        json,
-        response,
-      })) as Promise<{ json: any, response: any}>,
-    ).then(
-      ({ json, response }) => response.ok ? json : Promise.reject(json),
-    ).then(
-      json => ({ response: json }),
-    ).catch(
-      error => ({
-        error: error.message || 'An error occurred',
-        details: '',
-      }),
-    );
+async function fetchFile(url: string) {
+  try {
+    const response = await fetch(url, { credentials: 'same-origin' });
+    const json = await response.json();
+
+    if (response.ok) {
+      return { response: json };
+    }
+
+    throw json;
+  } catch (error) {
+    return {
+      error: error.message || 'An error occurred',
+      details: '',
+    };
+  }
 }
 
 const Activity = {
