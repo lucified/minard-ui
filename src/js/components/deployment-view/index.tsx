@@ -73,24 +73,15 @@ class DeploymentView extends React.Component<Props, void> {
       return <div className={styles.blank} />;
     }
 
-    if (isFetchError(preview)) {
-      return (
-        <div>
-          <Header />
-          <ErrorDialog
-            title="Error"
-            actionText={isUserLoggedIn ? 'Back to Minard' : undefined}
-            action={isUserLoggedIn ? this.redirectToApp : undefined}
-          >
-            <p>
-              {preview.unauthorized ? 'You do not have access to this preview.' : 'Unable to load preview.'}
-            </p>
-          </ErrorDialog>
-        </div>
-      );
-    }
+    if (!commit || isFetchError(commit) || !deployment || isFetchError(deployment) || isFetchError(preview)) {
+      let errorMessage;
 
-    if (!commit || isFetchError(commit) || !deployment || isFetchError(deployment)) {
+      if (isFetchError(preview)) {
+        errorMessage = preview.unauthorized ? 'You do not have access to this preview.' : 'Unable to load preview.';
+      } else {
+        errorMessage = 'Unable to load preview details.';
+      }
+
       return (
         <div>
           <Header />
@@ -100,7 +91,7 @@ class DeploymentView extends React.Component<Props, void> {
             action={isUserLoggedIn ? this.redirectToApp : undefined}
           >
             <p>
-              Unable to load preview details.
+              {errorMessage}
             </p>
           </ErrorDialog>
         </div>
