@@ -11,7 +11,6 @@ import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
 import ErrorDialog from '../common/error-dialog';
-import Spinner from '../common/spinner';
 import Header from '../header';
 import BuildLog from './build-log';
 import PreviewDialog from './preview-dialog';
@@ -71,12 +70,7 @@ class DeploymentView extends React.Component<Props, void> {
     const { commit, deployment, preview, params, isUserLoggedIn, userEmail } = this.props;
 
     if (!preview) {
-      return (
-        <div>
-          <Header />
-          <Spinner />
-        </div>
-      );
+      return <div className={styles.blank} />;
     }
 
     if (isFetchError(preview)) {
