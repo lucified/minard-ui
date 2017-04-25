@@ -48,6 +48,7 @@ const createApi = (): Api => {
     },
     Deployment: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchBuildLog: (_id: string) => Promise.resolve({ response: '' }),
     },
     Preview: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),

@@ -4,8 +4,6 @@ import { Api, ApiEntityResponse, ApiPreviewResponse, ApiResult, ApiTeam } from '
 
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
-export const getBuildLogURL = (_deploymentId: string): string => '#';
-
 const activitiesJSON = require('file-loader!../../../json/activities.json');
 const allProjectsJSON = require('file-loader!../../../json/projects.json');
 const projectJSON: { [id: string]: string } = {
@@ -88,6 +86,7 @@ const Commit = {
 
 const Deployment = {
   fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(deploymentJSON[id]),
+  fetchBuildLog: (_id: string): Promise<ApiResult<string>> => Promise.resolve({ response: 'Build log...' }),
 };
 
 const Preview = {

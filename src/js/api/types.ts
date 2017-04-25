@@ -25,6 +25,7 @@ export interface Api {
   };
   Deployment: {
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
+    fetchBuildLog: (id: string) => Promise<ApiResult<string>>;
   };
   Preview: {
     fetch: (id: string, commitHash: string) => Promise<ApiResult<ApiPreviewResponse>>;

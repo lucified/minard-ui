@@ -13,11 +13,8 @@ import { StateTree } from '../../reducers';
 import ErrorDialog from '../common/error-dialog';
 import Spinner from '../common/spinner';
 import Header from '../header';
+import BuildLog from './build-log';
 import PreviewDialog from './preview-dialog';
-
-const getBuildLogURL = process.env.CHARLES ?
-  require('../../api').getBuildLogURL :
-  require('../../api/static-json').getBuildLogURL;
 
 const styles = require('./index.scss');
 
@@ -130,7 +127,10 @@ class DeploymentView extends React.Component<Props, void> {
           isAuthenticatedUser={isUserLoggedIn}
           userEmail={userEmail}
         />
-        <iframe className={styles.preview} src={showPreview ? deployment.url : getBuildLogURL(deployment.id)} />
+        {showPreview ?
+          <iframe className={styles.preview} src={deployment.url} /> :
+          <BuildLog deployment={deployment} />
+        }
       </div>
     );
   }

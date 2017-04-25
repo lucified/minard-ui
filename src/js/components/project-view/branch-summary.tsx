@@ -23,10 +23,19 @@ interface GeneratedProps {
   latestSuccessfulDeployment?: Deployment | FetchError;
   latestSuccessfullyDeployedCommit?: Commit | FetchError;
   deploymentForLatestCommit?: Deployment | FetchError;
+  latestCommit?: Commit | FetchError;
 }
 
-const BranchSummary = (props: PassedProps & GeneratedProps) => {
-  const { branch, latestSuccessfulDeployment, latestSuccessfullyDeployedCommit, deploymentForLatestCommit } = props;
+type Props = PassedProps & GeneratedProps;
+
+const BranchSummary = (props: Props) => {
+  const {
+    branch,
+    latestSuccessfulDeployment,
+    latestSuccessfullyDeployedCommit,
+    deploymentForLatestCommit,
+    latestCommit,
+  } = props;
   let commitContent: JSX.Element;
 
   if (!latestSuccessfullyDeployedCommit) {
@@ -71,7 +80,12 @@ const BranchSummary = (props: PassedProps & GeneratedProps) => {
           <MinardLink branch={branch}>
             <div className={styles.title}>{branch.name}</div>
           </MinardLink>
-          <BuildStatus className={styles['build-status']} deployment={deploymentForLatestCommit} latest={true} />
+          <BuildStatus
+            className={styles['build-status']}
+            deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
+            commit={isFetchError(latestCommit) ? undefined : latestCommit}
+            latest={true}
+          />
         </div>
         <MinardLink branch={branch}>
           <div className={styles.description}>{branch.description}</div>
@@ -102,8 +116,9 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   }
 
   let deploymentForLatestCommit: Deployment | FetchError | undefined;
+  let latestCommit: Commit | FetchError | undefined;
   if (branch.latestCommit) {
-    const latestCommit = Commits.selectors.getCommit(state, branch.latestCommit);
+    latestCommit = Commits.selectors.getCommit(state, branch.latestCommit);
     if (latestCommit && !isFetchError(latestCommit) && latestCommit.deployment) {
       deploymentForLatestCommit = Deployments.selectors.getDeployment(state, latestCommit.deployment);
     }
@@ -113,6 +128,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
     latestSuccessfulDeployment,
     latestSuccessfullyDeployedCommit,
     deploymentForLatestCommit,
+    latestCommit,
   };
 };
 

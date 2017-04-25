@@ -13,9 +13,6 @@ let host: string = process.env.CHARLES;
 // Remove trailing /
 host = host.replace(/\/$/, '');
 
-export const getBuildLogURL = (deploymentId: string): string =>
-  `${host}/ci/deployments/${deploymentId}/trace`;
-
 const defaultOptions: RequestInit = {
   credentials: 'same-origin',
   headers: {
@@ -31,7 +28,8 @@ interface Error {
 }
 
 function generateErrorObject(errorResponse: any) {
-  let error: string = errorResponse.message || 'An error occurred';
+  let error: string = errorResponse.message ||
+    (typeof errorResponse === 'string' ? errorResponse : 'An error occurred');
   let details: string = '';
 
   if (errorResponse && errorResponse.errors && errorResponse.errors.length > 0) {
@@ -51,40 +49,34 @@ function generateErrorObject(errorResponse: any) {
 /**
  * This method will overwrite the Authorization header if an access token exists.
  */
-function connectToApi<ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> {
-  const combinedOptions = {
+async function connectToApi<ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> {
+  const combinedOptions: RequestInit = {
     ...defaultOptions,
     ...options,
   };
 
   const accessToken = getAccessToken();
   if (accessToken) {
-    (combinedOptions.headers as any).Authorization = `Bearer ${accessToken}`;
+    combinedOptions.headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  return fetch(`${host}${path}`, combinedOptions)
-    .then(
-      response => response.json().then(json => ({
-        json,
-        response,
-      })) as Promise<{ json: any, response: Response }>,
-    ).then(({ json, response }) => {
-      if (response.ok) {
-        return json;
-      }
+  try {
+    const response = await fetch(`${host}${path}`, combinedOptions);
+    const json = await response.json();
+    if (response.ok) {
+      return { response: json };
+    }
 
-      if (response.status === 401 || response.status === 403) {
-        json.unauthorized = true;
-      }
+    if (response.status === 401 || response.status === 403) {
+      json.unauthorized = true;
+    }
 
-      return Promise.reject(json);
-    }).then(
-      json => ({ response: json }),
-    ).catch(errorResponse => {
-      logMessage('Error while calling API', { path, errorResponse }, 'info');
+    throw json;
+  } catch (error) {
+    logMessage('Error while calling API', { path, error }, 'info');
 
-      return generateErrorObject(errorResponse);
-    });
+    return generateErrorObject(error);
+  }
 }
 
 function getApi<ResponseType>(path: string, query?: any): Promise<ApiResult<ResponseType>> {
@@ -182,6 +174,35 @@ const Commit = {
 
 const Deployment = {
   fetch: (id: string) => getApi<ApiEntityResponse>(`/api/deployments/${id}`),
+  fetchBuildLog: async (id: string): Promise<ApiResult<string>> => {
+    const path = `${host}/ci/deployments/${id}/trace`;
+    const accessToken = getAccessToken();
+    const requestOptions: RequestInit = {
+      credentials: 'same-origin',
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+      },
+    };
+
+    try {
+      const response = await fetch(path, requestOptions);
+      const text = await response.text();
+
+      if (response.ok) {
+        return { response: text };
+      }
+
+      if (response.status === 401 || response.status === 403) {
+        throw { message: 'Unauthorized', unauthorized: true };
+      }
+
+      throw { message: 'Error' };
+    } catch (error) {
+      logMessage('Error while fetching build log', { path, error, stacktrace: new Error() }, 'info');
+
+      return generateErrorObject(error);
+    }
+  },
 };
 
 const Project = {
