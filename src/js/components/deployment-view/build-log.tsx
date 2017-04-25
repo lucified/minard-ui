@@ -4,7 +4,6 @@ const Convert = require('ansi-to-html');
 
 import API from '../../api';
 import { Deployment } from '../../modules/deployments';
-
 import Spinner from '../common/spinner';
 
 const styles = require('./build-log.scss');
@@ -59,6 +58,23 @@ class BuildLog extends React.Component<Props, State> {
     this.intervalID = setInterval(this.updateLog, this.refreshCadenceInMs, deployment.id);
   }
 
+  public componentWillReceiveProps(nextProps: Props) {
+    const { deployment } = this.props;
+
+    if (deployment.id !== nextProps.deployment.id) {
+      if (this.intervalID) {
+        clearInterval(this.intervalID);
+      }
+
+      this.updateLog(nextProps.deployment.id);
+      this.intervalID = setInterval(this.updateLog, this.refreshCadenceInMs, nextProps.deployment.id);
+    }
+  }
+
+  public componentWillUnmount() {
+    clearInterval(this.intervalID);
+  }
+
   private updateLog(deploymentId: string) {
     API.Deployment.fetchBuildLog(deploymentId)
       .then(result => {
@@ -72,19 +88,6 @@ class BuildLog extends React.Component<Props, State> {
           this.setState({ log: result.response, error: undefined });
         }
       });
-  }
-
-  public componentWillReceiveProps(nextProps: Props) {
-    const { deployment } = this.props;
-
-    if (deployment.id !== nextProps.deployment.id) {
-      if (this.intervalID) {
-        clearInterval(this.intervalID);
-      }
-
-      this.updateLog(nextProps.deployment.id);
-      this.intervalID = setInterval(this.updateLog, this.refreshCadenceInMs, nextProps.deployment.id);
-    }
   }
 
   public render() {
