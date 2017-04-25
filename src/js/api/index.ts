@@ -49,7 +49,7 @@ function generateErrorObject(errorResponse: any) {
 /**
  * This method will overwrite the Authorization header if an access token exists.
  */
-function connectToApi<ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> {
+async function connectToApi<ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> {
   const combinedOptions: RequestInit = {
     ...defaultOptions,
     ...options,
@@ -60,27 +60,23 @@ function connectToApi<ResponseType>(path: string, options?: RequestInit): Promis
     combinedOptions.headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  return fetch(`${host}${path}`, combinedOptions)
-    .then(
-      response => response.json().then(json => ({
-        json,
-        response,
-      })) as Promise<{ json: any, response: Response }>,
-    ).then<{ response: any }>(({ json, response }) => {
-      if (response.ok) {
-        return { response: json };
-      }
+  try {
+    const response = await fetch(`${host}${path}`, combinedOptions);
+    const json = await response.json();
+    if (response.ok) {
+      return { response: json };
+    }
 
-      if (response.status === 401 || response.status === 403) {
-        json.unauthorized = true;
-      }
+    if (response.status === 401 || response.status === 403) {
+      json.unauthorized = true;
+    }
 
-      return Promise.reject(json);
-    }).catch(errorResponse => {
-      logMessage('Error while calling API', { path, errorResponse }, 'info');
+    throw json;
+  } catch (error) {
+    logMessage('Error while calling API', { path, error }, 'info');
 
-      return generateErrorObject(errorResponse);
-    });
+    return generateErrorObject(error);
+  }
 }
 
 function getApi<ResponseType>(path: string, query?: any): Promise<ApiResult<ResponseType>> {
@@ -178,7 +174,7 @@ const Commit = {
 
 const Deployment = {
   fetch: (id: string) => getApi<ApiEntityResponse>(`/api/deployments/${id}`),
-  fetchBuildLog: (id: string): Promise<ApiResult<string>> => {
+  fetchBuildLog: async (id: string): Promise<ApiResult<string>> => {
     const path = `${host}/ci/deployments/${id}/trace`;
     const accessToken = getAccessToken();
     const requestOptions: RequestInit = {
@@ -188,27 +184,24 @@ const Deployment = {
       },
     };
 
-    return fetch(path, requestOptions)
-      .then<{ text: string, response: Response }>(
-        response => response.text().then(text => ({
-          text,
-          response,
-        })),
-      ).then<{ response: string }>(({ text, response }) => {
-        if (response.ok) {
-          return { response: text };
-        }
+    try {
+      const response = await fetch(path, requestOptions);
+      const text = await response.text();
 
-        if (response.status === 401 || response.status === 403) {
-          return Promise.reject({ message: 'Unauthorized', unauthorized: true });
-        }
+      if (response.ok) {
+        return { response: text };
+      }
 
-        return Promise.reject({ message: 'Error' });
-      }).catch((errorResponse: any) => {
-        logMessage('Error while fetching build log', { path, errorResponse }, 'info');
+      if (response.status === 401 || response.status === 403) {
+        throw { message: 'Unauthorized', unauthorized: true };
+      }
 
-        return generateErrorObject(errorResponse);
-      });
+      throw { message: 'Error' };
+    } catch (error) {
+      logMessage('Error while fetching build log', { path, error, stacktrace: new Error() }, 'info');
+
+      return generateErrorObject(error);
+    }
   },
 };
 
