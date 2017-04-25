@@ -109,8 +109,8 @@ class BranchView extends React.Component<Props, StateTree> {
       return this.getErrorContent(branch);
     }
 
-    // redirect to latest deployment
-    if (redirect === 'latest') {
+    // Will redirect to latest deployment once everything has been loaded. Show spinner until then.
+    if (redirect === 'latest' && branch.latestSuccessfullyDeployedCommit) {
       return this.getLoadingContent();
     }
 
