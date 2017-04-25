@@ -28,7 +28,8 @@ interface Error {
 }
 
 function generateErrorObject(errorResponse: any) {
-  let error: string = errorResponse.message || 'An error occurred';
+  let error: string = errorResponse.message ||
+    (typeof errorResponse === 'string' ? errorResponse : 'An error occurred');
   let details: string = '';
 
   if (errorResponse && errorResponse.errors && errorResponse.errors.length > 0) {
