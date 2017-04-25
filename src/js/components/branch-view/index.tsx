@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
+import { push } from 'react-router-redux';
 
 import Branches, { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
@@ -18,11 +19,15 @@ const styles = require('./index.scss');
 interface Params {
   branchId: string;
   projectId: string;
+  redirect?: string;
 }
+
+type PassedProps = RouteComponentProps<Params, {}>;
 
 interface GeneratedStateProps {
   project?: Project | FetchError;
   branch?: Branch | FetchError;
+  latestSuccessfullyDeployedCommit?: FetchError | Commit;
   commits?: (Commit | FetchError | undefined)[];
   isLoadingCommits: boolean;
 }
@@ -30,27 +35,45 @@ interface GeneratedStateProps {
 interface GeneratedDispatchProps {
   loadBranch: (id: string) => void;
   loadCommits: (id: string, count?: number, until?: number) => void;
+  redirectToDeployment: (commit: Commit) => void;
 }
 
-type Props = GeneratedStateProps & RouteComponentProps<Params, {}> & GeneratedDispatchProps;
+type Props = GeneratedStateProps & PassedProps & GeneratedDispatchProps;
 
 class BranchView extends React.Component<Props, StateTree> {
   public componentWillMount() {
-    const { loadBranch, loadCommits } = this.props;
-    const { branchId } = this.props.params;
+    const { loadBranch, loadCommits, params: { branchId } } = this.props;
 
     loadBranch(branchId);
     loadCommits(branchId, 10);
+
+    this.redirectIfNeeded();
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadBranch, loadCommits } = this.props;
-    const { branchId } = nextProps.params;
+    const { loadBranch, loadCommits, params: { branchId } } = this.props;
+    const { branchId: nextBranchId } = nextProps.params;
 
     // This happens if the user manually opens a new branch when another branch is open
-    if (branchId !== this.props.params.branchId) {
-      loadBranch(branchId);
-      loadCommits(branchId, 10);
+    if (branchId !== nextBranchId) {
+      loadBranch(nextBranchId);
+      loadCommits(nextBranchId, 10);
+    }
+  }
+
+  public componentDidUpdate() {
+    this.redirectIfNeeded();
+  }
+
+  private redirectIfNeeded() {
+    const { latestSuccessfullyDeployedCommit, redirectToDeployment, params: { redirect } } = this.props;
+
+    if (redirect !== 'latest') {
+      return;
+    }
+
+    if (latestSuccessfullyDeployedCommit && !isFetchError(latestSuccessfullyDeployedCommit)) {
+      redirectToDeployment(latestSuccessfullyDeployedCommit);
     }
   }
 
@@ -76,7 +99,7 @@ class BranchView extends React.Component<Props, StateTree> {
   }
 
   public render() {
-    const { branch, commits, project, loadCommits, isLoadingCommits } = this.props;
+    const { branch, commits, project, loadCommits, isLoadingCommits, params: { redirect } } = this.props;
 
     if (!branch) {
       return this.getLoadingContent();
@@ -84,6 +107,11 @@ class BranchView extends React.Component<Props, StateTree> {
 
     if (isFetchError(branch)) {
       return this.getErrorContent(branch);
+    }
+
+    // Will redirect to latest deployment once everything has been loaded. Show spinner until then.
+    if (redirect === 'latest' && branch.latestSuccessfullyDeployedCommit) {
+      return this.getLoadingContent();
     }
 
     if (!project) {
@@ -112,29 +140,43 @@ class BranchView extends React.Component<Props, StateTree> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { projectId, branchId } = ownProps.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, branchId);
+  let latestSuccessfullyDeployedCommit: FetchError | Commit | undefined;
   let commits: (Commit | FetchError | undefined)[] | undefined;
   const isLoadingCommits = Requests.selectors.isLoadingCommitsForBranch(state, branchId);
 
   if (branch && !isFetchError(branch)) {
     commits = branch.commits.map(commitId => Commits.selectors.getCommit(state, commitId));
+    if (branch.latestSuccessfullyDeployedCommit) {
+      latestSuccessfullyDeployedCommit = Commits.selectors.getCommit(state, branch.latestSuccessfullyDeployedCommit);
+    }
   }
 
   return {
     project,
     branch,
+    latestSuccessfullyDeployedCommit,
     commits,
     isLoadingCommits,
   };
 };
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => {
+  return {
+    loadBranch: (id: string) => { dispatch(Branches.actions.loadBranch(id)); },
+    loadCommits: (id: string, count: number, until?: number) => {
+      dispatch(Commits.actions.loadCommitsForBranch(id, count, until));
+    },
+    redirectToDeployment: (commit: Commit) => {
+      dispatch(push(`/preview/${commit.hash}/${commit.deployment!}`));
+    },
+  };
+};
+
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
-  {
-    loadBranch: Branches.actions.loadBranch,
-    loadCommits: Commits.actions.loadCommitsForBranch,
-  },
+  mapDispatchToProps,
 )(BranchView);

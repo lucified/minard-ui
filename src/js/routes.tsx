@@ -15,7 +15,7 @@ export default (
     <IndexRedirect to="/projects" />
     <Route component={ProjectsFrame}>
       <Route path="projects(/:show)" component={TeamProjectsView} />
-      <Route path="project/:projectId/branch/:branchId" component={BranchView} />
+      <Route path="project/:projectId/branch/:branchId(/:redirect)" component={BranchView} />
       <Route path="project/:projectId(/:show)" component={ProjectView} />
     </Route>
     <Route path="preview/:commitHash/:deploymentId" component={DeploymentView}>
