@@ -2,7 +2,8 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 const Convert = require('ansi-to-html');
 
-import API from '../../api';
+import { Api } from '../../api/types';
+const API: Api = process.env.CHARLES ? require('../../api').default : require('../../api/static-json').default;
 import { Deployment } from '../../modules/deployments';
 import Spinner from '../common/spinner';
 
