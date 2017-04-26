@@ -1,0 +1,39 @@
+.menu {
+  position: relative;
+  display: inline-block;
+  text-align: left;
+}
+
+.caret {
+  padding-left: 6px;
+  position: relative;
+  top: 2px;
+}
+
+.options {
+  position: absolute;
+  left: 0;
+  top: 2rem;
+  font-size: 1rem;
+}
+
+.option {
+  height: 2rem;
+  background-color: white;
+  color: black;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lightgray;
+  }
+}
+
+.option + .option {
+  border-top: 1px solid gray;
+}
+
+.link {
+  cursor: pointer;
+}

@@ -1,6 +1,5 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-// import Icon = require('react-fontawesome');
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -13,6 +12,7 @@ import User from '../modules/user';
 import { StateTree } from '../reducers';
 
 import Avatar from './common/avatar';
+import ToggleMenu from './common/toggle-menu';
 
 const styles = require('./header.scss');
 const errorImage = require('../../images/icon-no-network.svg');
@@ -127,10 +127,10 @@ class Header extends React.Component<Props, void> {
               <h1 title="Minard" className={styles.minard}>m</h1>
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
-              <span className={styles['team-dropdown']}>
+              <ToggleMenu label={userEmail!} className={styles['team-dropdown']}>
+                Invite your team
                 <Link to="/login" onClick={this.logout}>Logout</Link>
-                {/* TODO: replace with dropdown link and <Icon className={styles.caret} name="caret-down" /> */}
-              </span>
+              </ToggleMenu>
               <Avatar size="lg" email={userEmail} />
             </div>
           </div>
