@@ -1,6 +1,5 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import Icon = require('react-fontawesome');
 
 const styles = require('./toggle-menu.scss');
@@ -23,30 +22,36 @@ class ToggleMenu extends React.Component<Props, State> {
     };
 
     this.toggleMenu = this.toggleMenu.bind(this);
-    this.closeMenuIfNotClickingSelf = this.closeMenuIfNotClickingSelf.bind(this);
+    this.closeMenuIfClickedAnywhere = this.closeMenuIfClickedAnywhere.bind(this);
+    this.storeTitleRef = this.storeTitleRef.bind(this);
   }
+
+  private titleRef: HTMLElement;
 
   public componentWillUnmount() {
     if (this.state.isOpen) {
-      window.removeEventListener('click', this.closeMenuIfNotClickingSelf, false);
+      window.removeEventListener('click', this.closeMenuIfClickedAnywhere, false);
     }
   }
 
-  private closeMenuIfNotClickingSelf(e: MouseEvent) {
-    // Only close it if it's open and the click happens outside the menu
-    if (this.state.isOpen && !findDOMNode(this).contains(e.target as any)) {
+  private closeMenuIfClickedAnywhere(e: MouseEvent) {
+    if (this.state.isOpen && !this.titleRef.contains(e.target as any)) {
       this.toggleMenu();
     }
   }
 
   private toggleMenu() {
     if (this.state.isOpen) {
-      window.removeEventListener('click', this.closeMenuIfNotClickingSelf, false);
+      window.removeEventListener('click', this.closeMenuIfClickedAnywhere, false);
       this.setState({ isOpen: false });
     } else {
-      window.addEventListener('click', this.closeMenuIfNotClickingSelf, false);
+      window.addEventListener('click', this.closeMenuIfClickedAnywhere, false);
       this.setState({ isOpen: true });
     }
+  }
+
+  private storeTitleRef(ref: HTMLElement) {
+    this.titleRef = ref;
   }
 
   public render() {
@@ -55,7 +60,7 @@ class ToggleMenu extends React.Component<Props, State> {
 
     return (
       <div className={classNames(styles.menu, className)}>
-        <span className={styles.link} onClick={this.toggleMenu}>
+        <span className={styles.link} onClick={this.toggleMenu} ref={this.storeTitleRef}>
           {label}
           <Icon className={styles.caret} name={isOpen ? 'caret-up' : 'caret-down'} />
         </span>
