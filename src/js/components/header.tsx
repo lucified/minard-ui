@@ -6,13 +6,15 @@ import { Link } from 'react-router';
 import { clearStoredCredentials } from '../api/auth';
 import { logout as intercomLogout } from '../intercom';
 import Errors, { FetchCollectionError } from '../modules/errors';
+import Modal, { ModalType } from '../modules/modal';
 import Selected from '../modules/selected';
 import Streaming, { ConnectionState } from '../modules/streaming';
-import User from '../modules/user';
+import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
 import Avatar from './common/avatar';
 import ToggleMenu from './common/toggle-menu';
+import InviteTeamDialog from './invite-team-dialog';
 
 const styles = require('./header.scss');
 const errorImage = require('../../images/icon-no-network.svg');
@@ -27,11 +29,13 @@ interface GeneratedStateProps {
   connectionState: ConnectionState;
   isUserLoggedIn: boolean;
   userEmail?: string;
+  team?: Team;
 }
 
 interface GeneratedDispatchProps {
   clearUserDetails: () => void;
   clearData: () => void;
+  openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
@@ -58,7 +62,15 @@ class Header extends React.Component<Props, void> {
   }
 
   public render() {
-    const { errors, selectedSection, connectionState, isUserLoggedIn, userEmail } = this.props;
+    const {
+      errors,
+      selectedSection,
+      connectionState,
+      isUserLoggedIn,
+      userEmail,
+      team,
+      openInviteTeamDialog,
+    } = this.props;
 
     if (!isUserLoggedIn) {
       return (
@@ -112,6 +124,7 @@ class Header extends React.Component<Props, void> {
     return (
       <section className={styles['header-background']}>
         {error}
+        <InviteTeamDialog invitationToken={team && team.invitationToken} />
         <div className="container">
           <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
             <div className={classNames(styles['link-container'], 'col-xs')}>
@@ -128,7 +141,7 @@ class Header extends React.Component<Props, void> {
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
               <ToggleMenu label={userEmail!} className={styles['team-dropdown']}>
-                Invite your team
+                <a href="#" onClick={openInviteTeamDialog}>Invite your team</a>
                 <Link to="/login" onClick={this.logout}>Logout</Link>
               </ToggleMenu>
               <Avatar size="lg" email={userEmail} />
@@ -153,12 +166,17 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
     connectionState: Streaming.selectors.getConnectionState(state),
     isUserLoggedIn: User.selectors.isUserLoggedIn(state),
     userEmail: User.selectors.getUserEmail(state),
+    team: User.selectors.getTeam(state),
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   clearUserDetails: () => { dispatch(User.actions.clearUserDetails()); },
   clearData: () => { dispatch(User.actions.clearStoredData()); },
+  openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    dispatch(Modal.actions.openModal(ModalType.InviteTeam));
+  },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

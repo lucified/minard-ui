@@ -2,11 +2,11 @@ import { Reducer } from 'redux';
 
 import { CLEAR_STORED_DATA } from '../user';
 import { CLOSE_MODAL, OPEN_MODAL } from './actions';
-import * as t from './types';
+import { ModalState } from './types';
 
-const initialState: t.ModalState = null;
+const initialState: ModalState = null;
 
-const reducer: Reducer<t.ModalState> = (state: t.ModalState = initialState, action: any): t.ModalState => {
+const reducer: Reducer<ModalState> = (state: ModalState = initialState, action: any): ModalState => {
   switch (action.type) {
     case OPEN_MODAL:
       if (!state) { // Don't open modal if one is already open
