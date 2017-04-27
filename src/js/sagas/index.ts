@@ -613,8 +613,8 @@ export default function createSagas(api: Api) {
     const { response, error, details, unauthorized } = yield call(api.Team.fetch);
 
     if (response) {
-      const { id, name } = response as ApiTeam;
-      yield put(User.actions.setTeam(String(id), name));
+      const { id, name, 'invitation-token': invitationToken } = response as ApiTeam;
+      yield put(User.actions.setTeam(String(id), name, invitationToken));
       yield put(Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator());
 
       return true;

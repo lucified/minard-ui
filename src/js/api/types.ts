@@ -253,6 +253,7 @@ export interface ApiTeam {
   id: number;
   name: string;
   path: string;
+  'invitation-token'?: string;
   description?: string;
   visibility_level: number;
   avatar_url?: string;

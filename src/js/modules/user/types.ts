@@ -10,6 +10,7 @@ export interface UserState {
 export interface Team {
   id: string;
   name: string;
+  invitationToken?: string;
 }
 
 // Actions
@@ -23,6 +24,7 @@ export interface SetTeamAction {
   type: 'USER/SET_TEAM';
   id: string;
   name: string;
+  invitationToken?: string;
 }
 
 export interface ClearUserDetailsAction {
