@@ -8,6 +8,17 @@
   padding-left: 6px;
   position: relative;
   top: 2px;
+  transition: transform 150ms;
+  transform: rotate(0);
+  transform-origin: 70% 50%; // The icon isn't perfectly centered
+
+  &.rotate {
+    transform: rotate(180deg);
+  }
+}
+
+.link {
+  cursor: pointer;
 }
 
 .options {
@@ -15,6 +26,26 @@
   left: 0;
   top: 2rem;
   font-size: 1rem;
+}
+
+:global {
+  .options-enter {
+    opacity: 0.01;
+  }
+
+  .options-enter.options-enter-active {
+    opacity: 1;
+    transition: opacity 150ms;
+  }
+
+  .options-leave {
+    opacity: 1;
+  }
+
+  .options-leave.options-leave-active {
+    opacity: 0.01;
+    transition: opacity 150ms;
+  }
 }
 
 .option {
@@ -32,8 +63,4 @@
 
 .option + .option {
   border-top: 1px solid gray;
-}
-
-.link {
-  cursor: pointer;
 }

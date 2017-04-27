@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Icon = require('react-fontawesome');
 
 const styles = require('./toggle-menu.scss');
@@ -62,15 +63,21 @@ class ToggleMenu extends React.Component<Props, State> {
       <div className={classNames(styles.menu, className)}>
         <span className={styles.link} onClick={this.toggleMenu} ref={this.storeTitleRef}>
           {label}
-          <Icon className={styles.caret} name={isOpen ? 'caret-up' : 'caret-down'} />
+          <Icon className={classNames(styles.caret, { [styles.rotate]: isOpen })} name={'caret-down'} />
         </span>
-        {isOpen && (
-          <div className={styles.options}>
-            {React.Children.map(children, child => (
-              <div className={styles.option}>{child}</div>
-            ))}
-          </div>
-        )}
+        <ReactCSSTransitionGroup
+          transitionName="options"
+          transitionEnterTimeout={150}
+          transitionLeaveTimeout={150}
+        >
+          {isOpen && (
+            <div key="dropdown-options" className={styles.options}>
+              {React.Children.map(children, child => (
+                <div className={styles.option}>{child}</div>
+              ))}
+            </div>
+          )}
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
