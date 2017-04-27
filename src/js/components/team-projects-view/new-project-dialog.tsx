@@ -31,22 +31,20 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: (e?: React.MouseEvent<HTMLElement>) => void;
+  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
+
+function getParentElement() {
+  return document.querySelector('#minard-app') as HTMLElement;
+}
 
 class NewProjectDialog extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
 
     this.onSuccessfulCreation = this.onSuccessfulCreation.bind(this);
-  }
-
-  public componentWillMount() {
-    // We need to mount the modal onto our App component so that
-    // the overlay covers the whole app
-    (ModalDialog as any).setAppElement('#minard-app');
   }
 
   private onSuccessfulCreation(result: any) {
@@ -67,6 +65,8 @@ class NewProjectDialog extends React.Component<Props, void> {
         closeTimeoutMS={150}
         className={styles.dialog}
         overlayClassName={styles.overlay}
+        parentSelector={getParentElement}
+        contentLabel="Create new project"
       >
         <header className={styles.header}>
           <div>Create a new project</div>
@@ -93,7 +93,7 @@ const mapStateToProps = (state: StateTree) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: (e?: React.MouseEvent<HTMLElement>) => {
+  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => {
     if (e) {
       e.preventDefault();
     }
