@@ -1,0 +1,18 @@
+@import './mixins';
+@import './definitions';
+
+.instructions {
+  @include font-size-M;
+}
+
+.url {
+  padding: 0 12px;
+  max-width: 100%;
+  overflow-x: auto;
+  background: $minard-dark-blue;
+  border-radius: 2px;
+  @include font-size-S;
+  color: white;
+  letter-spacing: -0.38px;
+  line-height: 21px;
+}
