@@ -35,34 +35,34 @@
   text-align: right;
 
   background: #ffffff;
-	border: 1px solid $minard-light-gray;
+  border: 1px solid $minard-light-gray;
   border-radius: 4px;
 }
 
 // The following are for the arrow
 .options:after, .options:before {
-	bottom: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
 }
 
 .options:after {
-	border-color: rgba(255, 255, 255, 0);
-	border-bottom-color: #ffffff;
-	border-width: 5px;
-	margin-left: -5px;
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: #ffffff;
+  border-width: 5px;
+  margin-left: -5px;
 }
 
 .options:before {
-	border-color: rgba(255, 255, 255, 0);
-	border-bottom-color: $minard-mid-gray;
-	border-width: 6px;
-	margin-left: -6px;
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: $minard-mid-gray;
+  border-width: 6px;
+  margin-left: -6px;
 }
 
 :global {
