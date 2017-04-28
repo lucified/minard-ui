@@ -78,6 +78,16 @@
   top: 2px;
 }
 
+.cover {
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left: 0;
+
+  z-index: 1;
+}
+
 .error-box {
   position: absolute;
   top: 12px;

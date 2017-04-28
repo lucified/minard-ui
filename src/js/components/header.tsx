@@ -1,3 +1,5 @@
+// tslint:disable:jsx-self-close
+
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
@@ -141,8 +143,9 @@ class Header extends React.Component<Props, void> {
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
               <ToggleMenu label={userEmail!} className={styles['team-dropdown']}>
-                <a href="#" onClick={openInviteTeamDialog}>Invite your team</a>
-                <Link to="/login" onClick={this.logout}>Logout</Link>
+                {/* TODO: find a better way to make the whole div clickable than the empty span trick below */}
+                <a href="#" onClick={openInviteTeamDialog}><span className={styles.cover}></span>Invite your team</a>
+                <Link to="/login" onClick={this.logout}><span className={styles.cover}></span>Logout</Link>
               </ToggleMenu>
               <Avatar size="lg" email={userEmail} />
             </div>
