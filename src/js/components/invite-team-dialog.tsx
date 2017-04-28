@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import Icon = require('react-fontawesome');
 import * as ModalDialog from 'react-modal';
@@ -65,21 +64,31 @@ class NewProjectDialog extends React.Component<Props, void> {
             <Icon name="times" />
           </div>
         </header>
-        <div className={classNames(modalStyles.form, styles.instructions)}>
-          <p>Get your team onboard by sharing this signup URL with them:</p>
-          <div className={styles.url}>
-            <pre onClick={selectText}>
-              {
-                `${window.location.protocol}//${window.location.hostname}` +
-                  (window.location.port !== '80' ? `:${window.location.port}` : '') +
-                  `/signup/${invitationToken}`
-              }
-            </pre>
-          </div>
-          <p>
-            <strong>Be mindful of where you share this URL!</strong><br />
-            Anyone can join your team with it.
-          </p>
+        <div className={styles.instructions}>
+          {invitationToken ? (
+            <div>
+              <p>Get your team onboard by sharing this signup URL with them:</p>
+              <div className={styles.url}>
+                <pre onClick={selectText}>
+                  {
+                    `${window.location.protocol}//${window.location.hostname}` +
+                      (window.location.port !== '80' ? `:${window.location.port}` : '') +
+                      `/signup/${invitationToken}`
+                  }
+                </pre>
+              </div>
+              <p>
+                <strong>Be mindful of where you share this URL!</strong> Anyone can
+                join your team by using it.
+              </p>
+            </div>
+          ) : (
+            <p>
+              It looks like the invitation URL is disabled for your team.
+              Contact <a href="mailto:support@minard.io">support@minard.io</a> to
+              get it enabled.
+            </p>
+          )}
         </div>
       </ModalDialog>
     );
