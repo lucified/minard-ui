@@ -70,11 +70,9 @@ class NewProjectDialog extends React.Component<Props, void> {
               <p>Get your team onboard by sharing this signup URL with them:</p>
               <div className={styles.url}>
                 <pre onClick={selectText}>
-                  {
-                    `${window.location.protocol}//${window.location.hostname}` +
+                  {`${window.location.protocol}//${window.location.hostname}` +
                       (window.location.port !== '80' ? `:${window.location.port}` : '') +
-                      `/signup/${invitationToken}`
-                  }
+                      `/signup/${invitationToken}`}
                 </pre>
               </div>
               <p>
