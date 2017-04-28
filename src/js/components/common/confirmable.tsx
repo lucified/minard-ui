@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { findDOMNode } from 'react-dom';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 const styles = require('./confirmable.scss');
 
@@ -73,7 +73,7 @@ class Confirmable extends React.Component<Props, State> {
     const { title, message, action, children } = this.props;
     return (
       <div className={styles.confirmable}>
-        <ReactCSSTransitionGroup
+        <CSSTransitionGroup
           transitionName="confirm-popup"
           transitionEnterTimeout={150}
           transitionLeaveTimeout={150}
@@ -90,7 +90,7 @@ class Confirmable extends React.Component<Props, State> {
               </div>
             </div>
           )}
-        </ReactCSSTransitionGroup>
+        </CSSTransitionGroup>
         {React.cloneElement(React.Children.only(children!), { onClick: this.showPopup })}
       </div>
     );

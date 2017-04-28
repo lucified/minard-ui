@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { CSSTransitionGroup } from 'react-transition-group';
 import Icon = require('react-fontawesome');
 
 import { logMessage } from '../../logger';
@@ -62,14 +62,14 @@ const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => 
   }
 
   return (
-    <ReactCSSTransitionGroup
+    <CSSTransitionGroup
       transitionName="build-status"
       transitionEnterTimeout={150}
       transitionLeaveTimeout={150}
       className={className}
     >
       {content}
-    </ReactCSSTransitionGroup>
+    </CSSTransitionGroup>
   );
 };
 

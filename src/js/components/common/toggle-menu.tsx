@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { CSSTransitionGroup } from 'react-transition-group';
 import Icon = require('react-fontawesome');
 
 const styles = require('./toggle-menu.scss');
@@ -67,7 +67,7 @@ class ToggleMenu extends React.Component<Props, State> {
           <Icon className={classNames(styles.caret, { [styles.rotate]: isOpen })} name={'caret-down'} />
           {icon && <span className={styles.icon}>{icon}</span>}
         </span>
-        <ReactCSSTransitionGroup
+        <CSSTransitionGroup
           transitionName="options"
           transitionEnterTimeout={150}
           transitionLeaveTimeout={150}
@@ -79,7 +79,7 @@ class ToggleMenu extends React.Component<Props, State> {
               ))}
             </div>
           )}
-        </ReactCSSTransitionGroup>
+        </CSSTransitionGroup>
       </div>
     );
   }
