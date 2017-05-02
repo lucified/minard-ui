@@ -1,4 +1,4 @@
-import * as Auth0 from 'auth0-js';
+import { Auth0Error, Auth0UserProfile, WebAuth } from 'auth0-js';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
@@ -43,7 +43,7 @@ enum LoadingStatus {
 }
 
 class SignupView extends React.Component<Props, State> {
-  private auth0?: Auth0.WebAuth;
+  private auth0?: WebAuth;
 
   constructor(props: Props) {
     super(props);
@@ -58,7 +58,7 @@ class SignupView extends React.Component<Props, State> {
   public componentWillMount() {
     const { setUserEmail, signupUser, params: { teamToken } } = this.props;
 
-    this.auth0 = new Auth0.WebAuth({
+    this.auth0 = new WebAuth({
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENT_ID,
       audience: process.env.AUTH0_AUDIENCE,
@@ -74,7 +74,7 @@ class SignupView extends React.Component<Props, State> {
         team_token: teamToken,
       });
     } else {
-      this.auth0.parseHash({}, (auth0Error: Auth0.Auth0Error, data: any) => {
+      this.auth0.parseHash({}, (auth0Error: Auth0Error, data: any) => {
         if (auth0Error) {
           console.error('Unable to sign up', auth0Error);
           this.setState({ auth0Error: auth0Error.errorDescription });
@@ -90,7 +90,7 @@ class SignupView extends React.Component<Props, State> {
           // At this point accessToken includes the teamToken
           this.auth0!.client.userInfo(
             accessToken,
-            (userInfoError: Auth0.Auth0Error, profile: Auth0.Auth0UserProfile) => {
+            (userInfoError: Auth0Error, profile: Auth0UserProfile) => {
               if (userInfoError) {
                 console.error('Unable to get user information', userInfoError);
                 this.setState({ auth0Error: userInfoError.description });
