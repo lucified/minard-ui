@@ -142,15 +142,17 @@ class Header extends React.Component<Props, void> {
               <h1 title="Minard" className={styles.minard}>m</h1>
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
-              <ToggleMenu
-                label={team!.name}
-                icon={<Avatar size="lg" email={userEmail} />}
-                className={styles['team-dropdown']}
-              >
-                {/* TODO: find a better way to make the whole div clickable than the empty span trick below */}
-                <a href="#" onClick={openInviteTeamDialog}><span className={styles.cover}></span>Invite your team</a>
-                <Link to="/login" onClick={this.logout}><span className={styles.cover}></span>Logout</Link>
-              </ToggleMenu>
+              {team && (
+                <ToggleMenu
+                  label={team.name}
+                  icon={<Avatar size="lg" email={userEmail} />}
+                  className={styles['team-dropdown']}
+                >
+                  {/* TODO: find a better way to make the whole div clickable than the empty span trick below */}
+                  <a href="#" onClick={openInviteTeamDialog}><span className={styles.cover}></span>Invite your team</a>
+                  <Link to="/login" onClick={this.logout}><span className={styles.cover}></span>Logout</Link>
+                </ToggleMenu>
+              )}
             </div>
           </div>
         </div>
