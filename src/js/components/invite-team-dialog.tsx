@@ -44,7 +44,7 @@ function selectText(e: React.MouseEvent<HTMLElement>) {
   }
 }
 
-class NewProjectDialog extends React.Component<Props, void> {
+class InviteTeamDialog extends React.Component<Props, void> {
   public render() {
     const { isOpen, closeDialog, invitationToken } = this.props;
 
@@ -110,4 +110,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
-)(NewProjectDialog);
+)(InviteTeamDialog);
