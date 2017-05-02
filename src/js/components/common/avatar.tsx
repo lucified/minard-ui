@@ -39,7 +39,7 @@ const Avatar = ({ size, email, iconEmail, initials, title, shadow, className }: 
 
   if (email) {
     return (
-      <figure title={title} className={classes}>
+      <figure title={title || email} className={classes}>
         <Gravatar className={styles['avatar-img']} email={email} rating="pg" size={pixelSize} />
         {iconEmail &&
           <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" size={pixelSize * 0.4} />
