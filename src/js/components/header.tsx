@@ -143,7 +143,7 @@ class Header extends React.Component<Props, void> {
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
               <ToggleMenu
-                label={userEmail!}
+                label={team!.name}
                 icon={<Avatar size="lg" email={userEmail} />}
                 className={styles['team-dropdown']}
               >
