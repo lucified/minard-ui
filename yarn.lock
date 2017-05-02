@@ -67,9 +67,9 @@
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react-router-redux@^4.0.44":
-  version "4.0.44"
-  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.44.tgz#116d01abd14fafc89a28d539a979388e42cb7bd4"
+"@types/react-router-redux@^4.0.46":
+  version "4.0.46"
+  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-4.0.46.tgz#6f997d4a852196ab691f107b32023ebed3e47ab7"
   dependencies:
     "@types/history" "^3"
     redux "^3.6.0"
@@ -3216,7 +3216,7 @@ loader-runner@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.3.0.tgz#f482aea82d543e07921700d5a46ef26fdac6b8a2"
 
-loader-utils@1.0.x, loader-utils@^1.0.1, loader-utils@^1.0.2:
+loader-utils@1.0.x:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.0.2.tgz#a9f923c865a974623391a8602d031137fad74830"
   dependencies:
@@ -3233,7 +3233,7 @@ loader-utils@^0.2.15, loader-utils@^0.2.16, loader-utils@~0.2.2:
     json5 "^0.5.0"
     object-assign "^4.0.1"
 
-loader-utils@^1.1.0:
+loader-utils@^1.0.1, loader-utils@^1.0.2, loader-utils@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.1.0.tgz#c98aef488bcceda2ffb5e2de646d6a754429f5cd"
   dependencies:
@@ -4780,9 +4780,9 @@ redux-raven-middleware@^1.2.0:
   dependencies:
     raven-js "^3.1.1"
 
-redux-saga@^0.14.8:
-  version "0.14.8"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.8.tgz#ad01afabe02ec41a17df54e2e09aa236b30a7732"
+redux-saga@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.15.0.tgz#14c4aae5bfece7266d6b16e9050556a102fc6d38"
 
 redux@^3.6.0:
   version "3.6.0"
@@ -5144,13 +5144,7 @@ source-map-loader@^0.2.1:
     loader-utils "~0.2.2"
     source-map "~0.1.33"
 
-source-map-support@^0.4.0, source-map-support@^0.4.2:
-  version "0.4.11"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.11.tgz#647f939978b38535909530885303daf23279f322"
-  dependencies:
-    source-map "^0.5.3"
-
-source-map-support@^0.4.15:
+source-map-support@^0.4.0, source-map-support@^0.4.15, source-map-support@^0.4.2:
   version "0.4.15"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.15.tgz#03202df65c06d2bd8c7ec2362a193056fef8d3b1"
   dependencies:

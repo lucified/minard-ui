@@ -59,7 +59,7 @@ export const createEntityFetcher = <ApiParams>(
       error?: string,
       details?: string,
       unauthorized?: boolean,
-    } = yield call(apiFetchFunction, id, ...args);
+    } = yield (call as any)(apiFetchFunction, id, ...args); // TODO: fix typings
 
     if (response) {
       if (response.included) {
@@ -90,10 +90,10 @@ export const createCollectionFetcher = <ApiParams>(
   requestActionCreators: CollectionActionCreators,
   converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
   storeEntitiesActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  apiFetchFunction: (...args: ApiParams[]) => Promise<ApiResult<ApiEntityResponse>>,
+  apiFetchFunction: (teamId: string, ...args: ApiParams[]) => Promise<ApiResult<ApiEntityResponse>>,
   postStoreEffects?: (response: ApiEntityResponse, ...args: ApiParams[]) => IterableIterator<Effect>,
 ) => {
-  return function*(...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line:only-arrow-functions
+  return function*(teamId: string, ...args: ApiParams[]): IterableIterator<Effect> { // tslint:disable-line
     yield put(requestActionCreators.REQUEST.actionCreator());
 
     const { response, error, details, unauthorized }: {
@@ -101,7 +101,7 @@ export const createCollectionFetcher = <ApiParams>(
       error?: string,
       details?: string,
       unauthorized?: boolean,
-    } = yield call(apiFetchFunction, ...args);
+    } = yield (call as any)(apiFetchFunction, teamId, ...args); // TODO: fix typings
 
     if (response) {
       if (response.included) {
