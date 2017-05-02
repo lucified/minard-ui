@@ -25,11 +25,15 @@
   user-select: none;
 }
 
+.icon {
+  margin-left: 20px;
+}
+
 .options {
   position: absolute;
   right: 0;
-  top: 2rem;
-  width: 200px;
+  top: 40px;
+  width: 220px;
 
   color: $minard-dark-blue;
   @include font-size-M;
@@ -38,6 +42,10 @@
   background: white;
   border: 1px solid $minard-light-gray;
   border-radius: 2px;
+
+  &.with-icon {
+    top: 54px;
+  }
 }
 
 .option {

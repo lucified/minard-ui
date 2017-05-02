@@ -7,6 +7,7 @@ const styles = require('./toggle-menu.scss');
 
 interface Props {
   label: string;
+  icon?: JSX.Element;
   className?: string;
 }
 
@@ -57,13 +58,14 @@ class ToggleMenu extends React.Component<Props, State> {
 
   public render() {
     const { isOpen } = this.state;
-    const { label, className, children } = this.props;
+    const { label, icon, className, children } = this.props;
 
     return (
       <div className={classNames(styles.menu, className)}>
         <span className={styles.link} onClick={this.toggleMenu} ref={this.storeTitleRef}>
           {label}
           <Icon className={classNames(styles.caret, { [styles.rotate]: isOpen })} name={'caret-down'} />
+          {icon && <span className={styles.icon}>{icon}</span>}
         </span>
         <ReactCSSTransitionGroup
           transitionName="options"
@@ -71,7 +73,7 @@ class ToggleMenu extends React.Component<Props, State> {
           transitionLeaveTimeout={150}
         >
           {isOpen && (
-            <div key="dropdown-options" className={styles.options}>
+            <div key="dropdown-options" className={classNames(styles.options, { [styles['with-icon']]: !!icon })}>
               {React.Children.map(children, child => (
                 <div className={styles.option}>{child}</div>
               ))}
