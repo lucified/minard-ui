@@ -72,14 +72,13 @@ class UserSettingsDialog extends React.Component<Props, State> {
   }
 
   public componentWillReceiveProps(newProps: Props) {
+    // Reset the state once the dialog is closed.
     if (newProps.isOpen !== this.props.isOpen && !newProps.isOpen) {
       this.setState({ passwordChangeTriggered: false });
     }
   }
 
-  private requestResetPassword(e: React.MouseEvent<HTMLElement>) {
-    e.preventDefault();
-
+  private requestResetPassword(_e: React.MouseEvent<HTMLElement>) {
     const { email } = this.props;
 
     if (this.auth0) {
