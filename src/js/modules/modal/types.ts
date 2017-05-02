@@ -3,7 +3,7 @@ import { Action } from 'redux';
 export enum ModalType {
   NewProject,
   ProjectSettings,
-  UserProfile,
+  UserSettings,
   TeamSettings,
   InviteTeam,
 }
