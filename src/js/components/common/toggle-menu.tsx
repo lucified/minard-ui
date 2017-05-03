@@ -63,7 +63,7 @@ class ToggleMenu extends React.Component<Props, State> {
     return (
       <div className={classNames(styles.menu, className)}>
         <span className={styles.link} onClick={this.toggleMenu} ref={this.storeTitleRef}>
-          {label}
+          <span className={styles.label}>{label}</span>
           <Icon className={classNames(styles.caret, { [styles.rotate]: isOpen })} name={'caret-down'} />
           {icon && <span className={styles.icon}>{icon}</span>}
         </span>

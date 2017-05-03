@@ -10,12 +10,10 @@ $border-radius: 3px;
 }
 
 .caret {
-  padding-left: 6px;
   position: relative;
   top: 2px;
   transition: transform 150ms;
   transform: rotate(0);
-  transform-origin: 70% 50%; // The icon isn't perfectly centered
 
   &.rotate {
     transform: rotate(180deg);
@@ -25,6 +23,11 @@ $border-radius: 3px;
 .link {
   cursor: pointer;
   user-select: none;
+  padding: 16px 0px;
+}
+
+.label {
+  padding-right: 6px;
 }
 
 .icon {
