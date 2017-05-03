@@ -81,7 +81,7 @@ class ProjectsFrame extends React.Component<Props, void> {
           <Header />
           <ErrorDialog title="Error" actionText="Log in" action={this.redirectToLogin}>
             <p>
-              Unable to fetch team information. If this problem persists,
+              Unable to load Minard. If this problem persists,
               contact <a href="mailto:support@minard.io">support@minard.io</a>.
             </p>
           </ErrorDialog>
