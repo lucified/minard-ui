@@ -153,7 +153,7 @@ class Header extends React.Component<Props, void> {
                   className={styles['team-dropdown']}
                 >
                   {/* TODO: find a better way to make the whole div clickable than the empty span trick below */}
-                  <a href="#" onClick={openUserSettingsDialog}><span className={styles.cover}></span>User settings</a>
+                  <a href="#" onClick={openUserSettingsDialog}><span className={styles.cover}></span>Account</a>
                   <a href="#" onClick={openInviteTeamDialog}><span className={styles.cover}></span>Invite your team</a>
                   <Link to="/login" onClick={this.logout}><span className={styles.cover}></span>Logout</Link>
                 </ToggleMenu>
@@ -192,7 +192,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
   openUserSettingsDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    dispatch(Modal.actions.openModal(ModalType.UserSettings));
+    dispatch(Modal.actions.openModal(ModalType.Account));
   },
 });
 

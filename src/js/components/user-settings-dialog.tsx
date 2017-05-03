@@ -111,10 +111,10 @@ class UserSettingsDialog extends React.Component<Props, State> {
         className={modalStyles.dialog}
         overlayClassName={modalStyles.overlay}
         parentSelector={getParentElement}
-        contentLabel="User settings"
+        contentLabel="Account"
       >
         <header className={modalStyles.header}>
-          <div>User settings</div>
+          <div>Account</div>
           <div onClick={closeDialog} className={modalStyles.close}>
             <Icon name="times" />
           </div>
@@ -171,7 +171,7 @@ class UserSettingsDialog extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.UserSettings),
+  isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.Account),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
@@ -180,7 +180,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
       e.preventDefault();
     }
 
-    dispatch(Modal.actions.closeModal(ModalType.UserSettings));
+    dispatch(Modal.actions.closeModal(ModalType.Account));
   },
 });
 
