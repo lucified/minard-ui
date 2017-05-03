@@ -40,6 +40,10 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
 
+function getParentElement() {
+  return document.querySelector('#minard-app') as HTMLElement;
+}
+
 class ProjectSettingsDialog extends React.Component<Props, void> {
   constructor(props: Props) {
     super(props);
@@ -47,12 +51,6 @@ class ProjectSettingsDialog extends React.Component<Props, void> {
     this.handleDeleteProject = this.handleDeleteProject.bind(this);
     this.clearAndClose = this.clearAndClose.bind(this);
     this.editSuccess = this.editSuccess.bind(this);
-  }
-
-  public componentWillMount() {
-    // We need to mount the modal onto our App component so that
-    // the overlay covers the whole app
-    (ModalDialog as any).setAppElement('#minard-app');
   }
 
   private handleDeleteProject() {
@@ -93,6 +91,8 @@ class ProjectSettingsDialog extends React.Component<Props, void> {
         closeTimeoutMS={150}
         className={styles.dialog}
         overlayClassName={styles.overlay}
+        parentSelector={getParentElement}
+        contentLabel="Edit project settings"
       >
         <header className={styles.header}>
           <div>Project settings</div>

@@ -54,8 +54,6 @@ class ProjectsSection extends React.Component<Props, void> {
     // If we're only showing some of the projects, don't show the loading indicator if we have enough to show
     const showLoadingIcon = isLoading && (showAll || (filteredProjects.length < count));
 
-    // TODO: What if we don't have team?
-
     return (
       <section className="container">
         <NewProjectDialog />

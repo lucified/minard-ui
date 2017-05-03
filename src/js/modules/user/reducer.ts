@@ -26,12 +26,13 @@ const reducer = (state: UserState = initialState, action: any): UserState => {
         expiresAt,
       };
     case SET_TEAM:
-      const { id, name } = action as SetTeamAction;
+      const { id, name, invitationToken } = action as SetTeamAction;
       return {
         ...state,
         team: {
           id,
           name,
+          invitationToken,
         },
       };
     case SET_GIT_PASSWORD:

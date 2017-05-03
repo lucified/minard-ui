@@ -1,0 +1,124 @@
+@import '../definitions';
+@import '../mixins';
+
+$border-radius: 3px;
+
+.menu {
+  position: relative;
+  display: inline-block;
+  text-align: left;
+}
+
+.caret {
+  position: relative;
+  top: 2px;
+  transition: transform 150ms;
+  transform: rotate(0);
+
+  &.rotate {
+    transform: rotate(180deg);
+  }
+}
+
+.link {
+  cursor: pointer;
+  user-select: none;
+  padding: 16px 0px;
+}
+
+.label {
+  padding-right: 6px;
+}
+
+.icon {
+  margin-left: 20px;
+}
+
+.options {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 220px;
+
+  color: $minard-dark-blue;
+  @include font-size-M;
+  text-align: right;
+
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+
+  &.with-icon {
+    top: 54px;
+  }
+}
+
+.option {
+  height: 40px;
+  background-color: white;
+  padding: 10px 16px;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+
+  &:first-child {
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+
+  &:hover {
+    background-color: $minard-lightest-gray;
+  }
+}
+
+// The following are for the arrow
+.options:after, .options:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.options:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: white;
+  border-width: 5px;
+  margin-left: -5px;
+}
+
+.options:before {
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: $minard-light-gray;
+  border-width: 6px;
+  margin-left: -6px;
+}
+
+// Fade animations
+:global {
+  .options-enter {
+    opacity: 0.01;
+  }
+
+  .options-enter.options-enter-active {
+    opacity: 1;
+    transition: opacity 150ms;
+  }
+
+  .options-leave {
+    opacity: 1;
+  }
+
+  .options-leave.options-leave-active {
+    opacity: 0.01;
+    transition: opacity 150ms;
+  }
+}

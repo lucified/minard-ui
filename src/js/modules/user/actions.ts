@@ -17,10 +17,11 @@ export const setUserEmail = (email: string, expiresAt: number): SetUserEmailActi
 });
 
 export const SET_TEAM = 'USER/SET_TEAM';
-export const setTeam = (id: string, name: string): SetTeamAction => ({
+export const setTeam = (id: string, name: string, invitationToken?: string): SetTeamAction => ({
   type: SET_TEAM,
   id,
   name,
+  invitationToken,
 });
 
 export const CLEAR_USER_DETAILS = 'USER/CLEAR_USER_DETAILS';
