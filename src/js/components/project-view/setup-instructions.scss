@@ -7,6 +7,7 @@
 
 .label {
   margin-right: 12px;
+  margin-top: 25px;
 
   @include nitti-grotesk-medium;
   @include font-size-M;
@@ -14,8 +15,23 @@
   line-height: 24px;
 }
 
-.text, .smaller-text {
+.heading {
+  @include font-size-L;
+  color: $minard-dark-blue;
+  margin-top: 36px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.heading-icon {
   @include font-size-MS;
+  margin-right: 10px;
+  color: $minard-dark-blue;
+}
+
+.text {
+  @include font-size-M;
   color: $minard-mid-gray;
   letter-spacing: -0.17px;
   line-height: 24px;
