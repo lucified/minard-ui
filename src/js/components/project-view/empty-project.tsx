@@ -1,10 +1,9 @@
 import * as React from 'react';
-
 import Icon = require('react-fontawesome');
 
+import { selectText } from '../../helpers';
 import { Project } from '../../modules/projects';
 import SectionTitle from '../common/section-title';
-import { selectText } from './helpers';
 
 const styles = require('./empty-project.scss');
 
@@ -18,11 +17,13 @@ const EmptyProject = ({ project }: Props) => {
       <SectionTitle><span>Get started</span></SectionTitle>
       <div className="row start-xs">
         <div className="col-xs-12 col-md-8 col-lg-6">
-              <div className={styles.instructions}>
+          <div className={styles.instructions}>
             <div className={styles.section}>
               <div className={styles.text}>
                 The URL for this project's Git repository is
-                <div className={styles.url}>{project.repoUrl}</div>
+              </div>
+              <div className={styles.code}>
+                <pre onClick={selectText}>{project.repoUrl}</pre>
               </div>
               <div className={styles.heading}>
                 <Icon className={styles['heading-icon']} name="file-o" />
@@ -32,7 +33,7 @@ const EmptyProject = ({ project }: Props) => {
                 Connect your project folder with
               </div>
               <div className={styles.code}>
-                <pre onClick={selectText}>
+                <pre>
                   git init<br />
                   git add .<br />
                   git commit -m “First commit”<br />
@@ -49,7 +50,7 @@ const EmptyProject = ({ project }: Props) => {
                 Add Minard as a new remote with
               </div>
               <div className={styles.code}>
-                <pre onClick={selectText}>
+                <pre>
                   git remote set-url ––add origin {project.repoUrl}<br />
                   git push -u origin master
                 </pre>

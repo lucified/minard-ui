@@ -4,6 +4,7 @@ import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
+import { selectText } from '../helpers';
 import Modal, { ModalType } from '../modules/modal';
 import { StateTree } from '../reducers';
 
@@ -26,22 +27,6 @@ type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 function getParentElement() {
   return document.querySelector('#minard-app') as HTMLElement;
-}
-
-function selectText(e: React.MouseEvent<HTMLElement>) {
-  const node = e.target;
-  const doc = document as any;
-
-  if (doc.selection) {
-    const range = doc.body.createTextRange();
-    range.moveToElementText(node);
-    range.select();
-  } else if (window.getSelection) {
-    const range = document.createRange();
-    range.selectNodeContents(node as Node);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-  }
 }
 
 class InviteTeamDialog extends React.Component<Props, void> {

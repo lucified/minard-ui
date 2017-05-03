@@ -1,19 +1,9 @@
 import * as React from 'react';
 
+import { selectText } from '../../helpers';
 import { Project } from '../../modules/projects';
-import { selectText } from './helpers';
 
-const styles: Styles = require('./setup-instructions.scss');
-
-interface Styles {
-  instructions: string;
-  section: string;
-  label: string;
-  heading: string;
-  text: string;
-  code: string;
-  url: string;
-}
+const styles = require('./setup-instructions.scss');
 
 interface Props {
   project: Project;
@@ -28,7 +18,9 @@ const SetupInstructions = ({ project }: Props) => {
         </div>
         <div className={styles.text}>
           The URL for this project's Git repository is
-          <div className={styles.url}>{project.repoUrl}</div>
+        </div>
+        <div className={styles.code}>
+          <pre onClick={selectText}>{project.repoUrl}</pre>
         </div>
 
         <div>
@@ -44,7 +36,7 @@ const SetupInstructions = ({ project }: Props) => {
           …Or connect your existing project folder with
         </div>
         <div className={styles.code}>
-          <pre onClick={selectText}>
+          <pre>
             git init<br />
             git add .<br />
             git commit -m “First commit”<br />
