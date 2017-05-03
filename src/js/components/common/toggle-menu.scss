@@ -1,6 +1,8 @@
 @import '../definitions';
 @import '../mixins';
 
+$border-radius: 3px;
+
 .menu {
   position: relative;
   display: inline-block;
@@ -40,8 +42,8 @@
   text-align: right;
 
   background: white;
-  border: 1px solid $minard-light-gray;
-  border-radius: 2px;
+  border-radius: $border-radius;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
 
   &.with-icon {
     top: 54px;
@@ -57,13 +59,13 @@
   position: relative;
 
   &:first-child {
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
   }
 
   &:last-child {
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
   }
 
   &:hover {
