@@ -31,17 +31,30 @@ const SetupInstructions = ({ project }: Props) => {
           <div className={styles.url}>{project.repoUrl}</div>
         </div>
 
+        <div>
+          <div className={styles.text}>
+            Clone the repository with
+          </div>
+          <div className={styles.code}>
+            <pre onClick={selectText}>git clone -o minard {project.repoUrl}</pre>
+          </div>
+        </div>
+
         <div className={styles.text}>
-          Connect the repository on the command line in your project folder:
+          …Or connect your existing project folder with
         </div>
         <div className={styles.code}>
           <pre onClick={selectText}>
+            git init<br />
+            git add .<br />
+            git commit -m “First commit”<br />
             git remote add origin {project.repoUrl}<br />
+            git push -u origin master
           </pre>
         </div>
 
         <div className={styles.text}>
-          Or, if you already use Git in your project, add Minard as a new remote:
+          …Or, if you already use Git in your project, add Minard as a new remote with
         </div>
         <div className={styles.code}>
           <pre onClick={selectText}>

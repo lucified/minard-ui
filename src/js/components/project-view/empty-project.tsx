@@ -29,7 +29,7 @@ const EmptyProject = ({ project }: Props) => {
                 I'm starting a new project
               </div>
               <div className={styles.text}>
-                Connect the repository on the command line in your project folder:
+                Connect your project folder with
               </div>
               <div className={styles.code}>
                 <pre onClick={selectText}>
@@ -46,7 +46,7 @@ const EmptyProject = ({ project }: Props) => {
                 My project is already in a Git repository
               </div>
               <div className={styles.text}>
-                Add Minard as a new remote:
+                Add Minard as a new remote with
               </div>
               <div className={styles.code}>
                 <pre onClick={selectText}>
