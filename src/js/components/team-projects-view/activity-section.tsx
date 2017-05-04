@@ -14,7 +14,7 @@ interface Props {
 
 const ActivitySection = ({ activities, isLoading, allLoaded, loadActivities }: Props) => (
   <section>
-    <SectionTitle><span>Activity</span></SectionTitle>
+    <SectionTitle><span>Previews</span></SectionTitle>
     <ActivityList
       activities={activities}
       emptyContentHeader="Nothing has happened in your projects!"
