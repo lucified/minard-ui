@@ -27,18 +27,28 @@ const EmptyProject = ({ project }: Props) => {
               </div>
               <div className={styles.heading}>
                 <Icon className={styles['heading-icon']} name="file-o" />
-                I'm starting a new project
+                I'm starting a project from scratch
               </div>
               <div className={styles.text}>
-                Connect your project folder with
+                In your project folder, run the following commands:
               </div>
               <div className={styles.code}>
                 <pre>
-                  git init<br />
-                  git add .<br />
+                  git init   # Initialize the Git repository<br />
+                  git add .  # Stage your existing files to a new commit<br />
                   git commit -m “First commit”<br />
-                  git remote add origin {project.repoUrl}<br />
-                  git push -u origin master
+                  <br />
+                  git remote add minard {project.repoUrl}<br />
+                  git push -u minard master  # Push your code to Minard
+                </pre>
+              </div>
+              <div className={styles.text}>
+                Now, whenever you push code to <code>minard</code>, Minard will create
+                a new preview:
+              </div>
+              <div className={styles.code}>
+                <pre onClick={selectText}>
+                  git push minard master
                 </pre>
               </div>
 
@@ -47,13 +57,18 @@ const EmptyProject = ({ project }: Props) => {
                 My project is in GitHub or another remote Git repository
               </div>
               <div className={styles.text}>
-                Add Minard as a new remote with
+                Add Minard as a new remote and as a secondary <code>origin</code> URL with:
               </div>
               <div className={styles.code}>
                 <pre>
+                  git remote add minard {project.repoUrl}<br />
                   git remote set-url ––add origin {project.repoUrl}<br />
                   git push -u origin master
                 </pre>
+              </div>
+              <div className={styles.text}>
+                You will now get a new preview whenever you push code
+                to <code>origin</code> or <code>minard</code>.
               </div>
 
               <div className={styles.heading}>
@@ -62,10 +77,10 @@ const EmptyProject = ({ project }: Props) => {
               </div>
 
               <div className={styles.text}>
-                By default, Minard will not build your project and will deploy a
-                preview using the root of your git repository. You can enable
-                builds and change the deployment root folder by including a
-                minard.json file in your repository. It has the following format:
+                By default, Minard will not build your project. The preview will be
+                the root of your git repository. You can enable builds and change
+                the deployment root folder by including a <code>minard.json</code> file
+                in your repository. It has the following format:
               </div>
               <div className={styles.code}>
                 <pre onClick={selectText}>

@@ -59,10 +59,10 @@ const SetupInstructions = ({ project }: Props) => {
         </div>
 
         <div className={styles.text}>
-          By default, Minard will not build your project and will deploy a
-          preview using the root of your git repository. You can enable
-          builds and change the deployment root folder by including a
-          minard.json file in your repository. It has the following format:
+          By default, Minard will not build your project. The preview will be
+          the root of your git repository. You can enable builds and change
+          the deployment root folder by including a <code>minard.json</code> file
+          in your repository. It has the following format:
         </div>
         <div className={styles.code}>
           <pre onClick={selectText}>
