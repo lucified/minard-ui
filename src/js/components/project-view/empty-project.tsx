@@ -3,7 +3,7 @@ import Icon = require('react-fontawesome');
 
 import { selectText } from '../../helpers';
 import { Project } from '../../modules/projects';
-import SectionTitle from '../common/section-title';
+import SectionTitle from '../common/simple-section-title';
 
 const styles = require('./empty-project.scss');
 
