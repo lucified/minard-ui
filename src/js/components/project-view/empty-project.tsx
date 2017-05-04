@@ -26,12 +26,12 @@ const EmptyProject = ({ project }: Props) => {
                 <pre onClick={selectText}>{project.repoUrl}</pre>
               </div>
               <div className={styles.heading}>
-                <Icon className={styles['heading-icon']} name="file-o" />
-                My project only exists locally
+                <Icon className={styles['heading-icon']} name="laptop" />
+                My project only exists on my computer
               </div>
               <div className={styles.text}>
-                If your project is not already a Git repository, initialize it by runing the
-                following commands in your project folder:
+                If your project folder is not already a Git repository, initialize
+                it by running the following commands in the folder:
               </div>
               <div className={styles.code}>
                 <pre>
@@ -41,7 +41,7 @@ const EmptyProject = ({ project }: Props) => {
                 </pre>
               </div>
               <div className={styles.text}>
-                Add Minard as a remote:
+                Add <code>minard</code> as a remote repository:
               </div>
               <div className={styles.code}>
                 <pre>
@@ -64,13 +64,13 @@ const EmptyProject = ({ project }: Props) => {
                 My project is in GitHub or another remote Git repository
               </div>
               <div className={styles.text}>
-                Add Minard as a new remote and as a secondary <code>origin</code> URL with:
+                Add <code>minard</code> as a new remote and as a secondary <code>origin</code> URL with:
               </div>
               <div className={styles.code}>
                 <pre>
                   git remote add minard {project.repoUrl}<br />
                   git remote set-url ––add origin {project.repoUrl}<br />
-                  git push -u origin master
+                  git push -u minard master
                 </pre>
               </div>
               <div className={styles.text}>

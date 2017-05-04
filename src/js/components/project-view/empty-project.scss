@@ -29,6 +29,14 @@
   line-height: 1.62;
   color: $minard-dark-blue;
   margin-top: 12px;
+
+  code {
+    @include nitti;
+    @include font-size-MS;
+    background-color: white;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
 }
 
 .url {
