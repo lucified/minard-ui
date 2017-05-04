@@ -23,6 +23,10 @@ const Field = ({
     touched,
   },
 }: BaseFieldProps & ReduxFormProps) => {
+  // TODO: remove the below. There currently seems to be a bug in tsc that makes it think
+  // that the placeholder variable is not used: https://github.com/Microsoft/TypeScript/issues/15478
+  placeholder; // tslint:disable-line
+
   const inputComponent = type === 'textarea' ?
     <Textarea {...input} placeholder={placeholder} type={type} rows={3} /> :
     <input {...input} placeholder={placeholder} type={type} />;

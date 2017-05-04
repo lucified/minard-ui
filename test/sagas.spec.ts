@@ -4,13 +4,22 @@ import { SubmissionError } from 'redux-form';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
 import * as Converter from '../src/js/api/convert';
-import { Api, ApiEntityResponse, ApiEntityTypeString, ApiResult, ApiTeam } from '../src/js/api/types';
-import Activities from '../src/js/modules/activities';
+import {
+  Api,
+  ApiEntityResponse,
+  ApiEntityTypeString,
+  ApiResult,
+  ApiTeam,
+  ResponseActivityElement,
+  ResponseCommitElement,
+  ResponseDeploymentElement,
+} from '../src/js/api/types';
+import Activities, { LoadActivitiesAction } from '../src/js/modules/activities';
 import Branches, { Branch } from '../src/js/modules/branches';
 import Commits, { Commit } from '../src/js/modules/commits';
 import Deployments, { Deployment } from '../src/js/modules/deployments';
 import { FetchError } from '../src/js/modules/errors';
-import Projects, { Project } from '../src/js/modules/projects';
+import Projects, { LoadAllProjectsAction, Project } from '../src/js/modules/projects';
 import Requests, { FetchEntityActionCreators } from '../src/js/modules/requests';
 import { StateTree } from '../src/js/reducers';
 import sagaCreator from '../src/js/sagas';
@@ -82,7 +91,10 @@ describe('sagas', () => {
   describe('watchForLoadAllProjects', () => {
     it(`calls a new saga on ${Projects.actions.LOAD_ALL_PROJECTS}`, () => {
       const iterator = sagas.watchForLoadAllProjects();
-      const action = { type: Projects.actions.LOAD_ALL_PROJECTS };
+      const action: LoadAllProjectsAction = {
+        type: Projects.actions.LOAD_ALL_PROJECTS,
+        teamId: 'foo',
+      };
 
       expect(iterator.next().value).to.deep.equal(
         take(Projects.actions.LOAD_ALL_PROJECTS),
@@ -97,7 +109,11 @@ describe('sagas', () => {
   describe('watchForLoadActivities', () => {
     it(`calls a new saga on ${Activities.actions.LOAD_ACTIVITIES}`, () => {
       const iterator = sagas.watchForLoadActivities();
-      const action = { type: Activities.actions.LOAD_ACTIVITIES };
+      const action: LoadActivitiesAction = {
+        type: Activities.actions.LOAD_ACTIVITIES,
+        teamId: 'foo',
+        count: 10,
+      };
 
       expect(iterator.next().value).to.deep.equal(
         take(Activities.actions.LOAD_ACTIVITIES),
@@ -504,7 +520,7 @@ describe('sagas', () => {
         );
 
         expect(iterator.next({ response: responseNoInclude }).value).to.deep.equal(
-          call(converter, responseNoInclude.data),
+          call(converter as any, responseNoInclude.data),
         );
 
         expect(iterator.next(objectsToStore).value).to.deep.equal(
@@ -608,23 +624,25 @@ describe('sagas', () => {
   );
 
   describe('fetchActivities', () => {
+    const teamId = 'foo';
+
     it('fetches, converts and stores all activities', () => {
       const response = testData.activitiesResponse;
       const objects = [{ id: '1' }, { id: '2' }];
       const until = 12523523623;
       const count = objects.length;
-      const iterator = sagas.fetchActivities(count, until);
+      const iterator = sagas.fetchActivities(teamId, count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator()),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAll, count, until),
+        call(api.Activity.fetchAll, teamId, count, until),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toActivities, response.data),
+        call(Converter.toActivities, response.data as ResponseActivityElement[]),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
@@ -645,7 +663,7 @@ describe('sagas', () => {
       const count = 10;
       const until = 12523523623;
       const response = testData.activitiesResponse;
-      const iterator = sagas.fetchActivities(count, until);
+      const iterator = sagas.fetchActivities(teamId, count, until);
       const objects = [{ id: '1' }, { id: '2' }];
 
       iterator.next(); // request action
@@ -670,7 +688,7 @@ describe('sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }];
       const count = objects.length;
       const until = undefined;
-      const iterator = sagas.fetchActivities(count, until);
+      const iterator = sagas.fetchActivities(teamId, count, until);
 
       iterator.next(); // request action
       iterator.next(); // API call
@@ -688,14 +706,14 @@ describe('sagas', () => {
       const count = 10;
       const until = 12523523623;
       const errorMessage = 'an error message';
-      const iterator = sagas.fetchActivities(count, until);
+      const iterator = sagas.fetchActivities(teamId, count, until);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator()),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Activity.fetchAll, count, until),
+        call(api.Activity.fetchAll, teamId, count, until),
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
@@ -728,7 +746,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toActivities, response.data),
+        call(Converter.toActivities, response.data as ResponseActivityElement[]),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
@@ -814,9 +832,11 @@ describe('sagas', () => {
   });
 
   describe('fetchAllProjects', () => {
+    const teamId = 'foo';
+
     it('fetches, converts and stores all projects', () => {
       const response = { data: testData.allProjectsResponse };
-      const iterator = sagas.fetchAllProjects();
+      const iterator = sagas.fetchAllProjects(teamId);
       const objects = [{ id: '1' }, { id: '2' }];
 
       expect(iterator.next().value).to.deep.equal(
@@ -824,11 +844,11 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.fetchAll),
+        call(api.Project.fetchAll, teamId),
       );
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toProjects, response.data),
+        call(Converter.toProjects, response.data as any),
       );
 
       expect(iterator.next(objects).value).to.deep.equal(
@@ -847,14 +867,14 @@ describe('sagas', () => {
 
     it('throws an error on failure', () => {
       const errorMessage = 'an error message';
-      const iterator = sagas.fetchAllProjects();
+      const iterator = sagas.fetchAllProjects(teamId);
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Projects.LoadAllProjects.REQUEST.actionCreator()),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(api.Project.fetchAll),
+        call(api.Project.fetchAll, teamId),
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
@@ -1447,7 +1467,7 @@ describe('sagas', () => {
       const commitObjects = [{ id: '2' }];
 
       expect(iterator.next().value).to.deep.equal(
-        call(Converter.toDeployments, deploymentsEntities),
+        call(Converter.toDeployments, deploymentsEntities as ResponseDeploymentElement[]),
       );
 
       expect(iterator.next(deploymentObjects).value).to.deep.equal(
@@ -1455,7 +1475,7 @@ describe('sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(Converter.toCommits, commitsEntities),
+        call(Converter.toCommits, commitsEntities as ResponseCommitElement[]),
       );
 
       expect(iterator.next(commitObjects).value).to.deep.equal(
@@ -1517,7 +1537,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toProjects, response.data),
+        call(Converter.toProjects, response.data as any),
       );
 
       expect(iterator.next(object).value).to.deep.equal(
@@ -1664,7 +1684,7 @@ describe('sagas', () => {
       iterator.next();
 
       expect(iterator.next({ response }).value).to.deep.equal(
-        call(Converter.toProjects, response.data),
+        call(Converter.toProjects, response.data as any),
       );
 
       expect(iterator.next(object).value).to.deep.equal(
