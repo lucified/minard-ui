@@ -27,19 +27,26 @@ const EmptyProject = ({ project }: Props) => {
               </div>
               <div className={styles.heading}>
                 <Icon className={styles['heading-icon']} name="file-o" />
-                I'm starting a project from scratch
+                My project only exists locally
               </div>
               <div className={styles.text}>
-                In your project folder, run the following commands:
+                If your project is not already a Git repository, initialize it by runing the
+                following commands in your project folder:
               </div>
               <div className={styles.code}>
                 <pre>
                   git init   # Initialize the Git repository<br />
                   git add .  # Stage your existing files to a new commit<br />
-                  git commit -m “First commit”<br />
-                  <br />
+                  git commit -m “First commit”
+                </pre>
+              </div>
+              <div className={styles.text}>
+                Add Minard as a remote:
+              </div>
+              <div className={styles.code}>
+                <pre>
                   git remote add minard {project.repoUrl}<br />
-                  git push -u minard master  # Push your code to Minard
+                  git push -u minard master
                 </pre>
               </div>
               <div className={styles.text}>
