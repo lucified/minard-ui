@@ -4,12 +4,12 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 import { clearStoredCredentials } from '../api/auth';
 import { logout as intercomLogout } from '../intercom';
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Modal, { ModalType } from '../modules/modal';
-import Selected from '../modules/selected';
 import Streaming, { ConnectionState } from '../modules/streaming';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
@@ -21,13 +21,13 @@ import InviteTeamDialog from './invite-team-dialog';
 
 const styles = require('./header.scss');
 const errorImage = require('../../images/icon-no-network.svg');
+const minardLogo = require('../../images/minard-logo.svg');
 
 interface PassedProps {
 
 }
 
 interface GeneratedStateProps {
-  selectedSection: string;
   errors: FetchCollectionError[];
   connectionState: ConnectionState;
   isUserLoggedIn: boolean;
@@ -68,7 +68,6 @@ class Header extends React.Component<Props, void> {
   public render() {
     const {
       errors,
-      selectedSection,
       connectionState,
       isUserLoggedIn,
       userEmail,
@@ -119,7 +118,7 @@ class Header extends React.Component<Props, void> {
 
     if (errorContent && errorClass) {
       error = (
-        <div className={errorClass}>
+        <div className={errorClass} key="error-dialog">
           <img className={styles['error-image']} src={errorImage} />
           {errorContent}
         </div>
@@ -128,22 +127,19 @@ class Header extends React.Component<Props, void> {
 
     return (
       <section className={styles['header-background']}>
-        {error}
+        <CSSTransitionGroup
+          transitionName="error-box"
+          transitionEnterTimeout={0}
+          transitionLeaveTimeout={0}
+        >
+          {error}
+        </CSSTransitionGroup>
         <InviteTeamDialog invitationToken={team && team.invitationToken} />
         <AccountDialog email={userEmail!} />
         <div className="container">
-          <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
-            <div className={classNames(styles['link-container'], 'col-xs')}>
-              <ul className={styles.links}>
-                <Link to="/">
-                  <li className={classNames(styles.link, { [styles.active]: selectedSection === 'homepage' })}>
-                    Home
-                  </li>
-                </Link>
-              </ul>
-            </div>
+          <div className={classNames(styles.header, 'row', 'between-l', 'middle-xs')}>
             <div className={classNames(styles.logo, 'col-xs')}>
-              <h1 title="Minard" className={styles.minard}>m</h1>
+              <img src={minardLogo} />
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
               {team && (
@@ -167,15 +163,8 @@ class Header extends React.Component<Props, void> {
 }
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => {
-  const selectedSection =
-    Selected.selectors.getSelectedBranch(state) === null &&
-    Selected.selectors.getSelectedProject(state) === null &&
-    !Selected.selectors.isShowingAll(state) ?
-      'homepage' : 'other';
-
   return {
     errors: Errors.selectors.getFetchCollectionErrors(state),
-    selectedSection,
     connectionState: Streaming.selectors.getConnectionState(state),
     isUserLoggedIn: User.selectors.isUserLoggedIn(state),
     userEmail: User.selectors.getUserEmail(state),

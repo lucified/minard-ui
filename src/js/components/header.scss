@@ -13,23 +13,6 @@
   background-image: linear-gradient(to left, #17b7b7, #54c6a8);
 }
 
-.link-container {
-  align-self: flex-end;
-}
-
-.links {
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
-
-.link {
-  list-style: none;
-  margin: 0 36px 0 0;
-  padding: 0;
-  height: 47px;
-}
-
 .link:last-child {
   margin: 0;
 }
@@ -43,24 +26,8 @@
 }
 
 .logo {
-  text-align: center;
-}
-
-.minard {
-  @include nitti-grotesk-bold;
-  @include font-size-XXL;
-
-  display: inline-block;
-  margin: 0;
-  transition: transform 0.6s ease-in-out;
-  transform-origin: 50% 55%;
-  transform: rotate(0deg);
-  user-select: none;
-  cursor: default;
-
-  &:hover {
-    transform: rotate(360deg);
-  }
+  width: 130px;
+  height: 35px;
 }
 
 .profile-container {
@@ -83,13 +50,13 @@
 
 .error-box {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  height: 97px;
-  border-radius: 6px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  height: 90px;
+  border-radius: 0 0 6px 6px;
   background-color: $minard-light-red;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  padding: 24px 30px;
+  padding: 20px 30px;
   display: flex;
   align-items: center;
   z-index: 2;
@@ -107,4 +74,26 @@
 
 .error-image {
   margin-right: 20px;
+}
+
+// Error transitions
+
+:global {
+  .error-box-enter {
+    top: -100px;
+  }
+
+  .error-box-enter.error-box-enter-active {
+    top: 0px;
+    transition: top 0.3s ease-out;
+  }
+
+  .error-box-leave {
+    top: 0px;
+  }
+
+  .error-box-leave.error-box-leave-active {
+    top: -100px;
+    transition: top 0.3s ease-in;
+  }
 }
