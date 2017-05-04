@@ -43,8 +43,8 @@ const EmptyProject = ({ project }: Props) => {
               </div>
 
               <div className={styles.heading}>
-                <Icon className={styles['heading-icon']} name="git-square" />
-                My project is already in a Git repository
+                <Icon className={styles['heading-icon']} name="github" />
+                My project is in GitHub or another remote Git repository
               </div>
               <div className={styles.text}>
                 Add Minard as a new remote with
