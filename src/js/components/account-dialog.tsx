@@ -150,7 +150,9 @@ class AccountDialog extends React.Component<Props, State> {
               <p>
                 A password reset email will be sent to {email}.
               </p>
-              {error && <p>Sorry, we had a problem problem requesting a password reset: {error}</p>}
+              {error && (
+                <p className={styles.error}>Sorry, we had a problem problem requesting a password reset: {error}</p>
+              )}
             </div>
           </div>
           <div className={styles.section}>
@@ -160,7 +162,7 @@ class AccountDialog extends React.Component<Props, State> {
             <div className={styles.text}>
               <p>
                 Your Git username is your email address:
-                {' '}<span onClick={selectText} className={styles.url}>{email}</span>
+                {' '}<strong onClick={selectText}>{email}</strong>
               </p>
               <p>
                 For security reasons, your Git password was only shown when you signed up for Minard. If

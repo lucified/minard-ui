@@ -29,6 +29,10 @@
   margin-top: 12px;
 }
 
+.error {
+  color: $minard-red;
+}
+
 .url, .clickable {
   color: $minard-cyan;
   @include nitti-grotesk-medium;
