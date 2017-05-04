@@ -122,11 +122,11 @@ class AccountDialog extends React.Component<Props, State> {
         <div className={styles.instructions}>
           <div className={styles.section}>
             <div className={styles.label}>
-              Username
+              Email address
             </div>
             <div className={styles.text}>
               <p>
-                Your Minard username is <span onClick={selectText} className={styles.url}>{email}</span>
+                Your account's email address is <strong onClick={selectText}>{email}</strong>
               </p>
               <p>
                 To change your Minard email address, please
