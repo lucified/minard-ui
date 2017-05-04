@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as FlipMove from 'react-flip-move';
 import * as Waypoint from 'react-waypoint';
+import { groupBy, values } from 'lodash';
 
 import { Activity } from '../../../modules/activities';
 
@@ -27,19 +28,23 @@ const getEmptyContent = (header: string, body: string) => (
 
 // Group activities by subsequent actions to the same deployment.
 const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
-  let lastGroup = [activities[0]];
-  const groupedActivities = [lastGroup];
+  // let lastGroup = [activities[0]];
 
-  activities.slice(1).forEach(activity => {
-    if (activity.deployment.id !== lastGroup[0].deployment.id) {
-      lastGroup = [activity];
-      groupedActivities.push(lastGroup);
-    } else {
-      lastGroup.push(activity);
-    }
-  });
+  return values(groupBy(activities, activity => activity.deployment.id));
+  // return grouped;
 
-  return groupedActivities;
+  // const groupedActivities = [lastGroup];
+
+  // activities.slice(1).forEach(activity => {
+  //   if (activity.deployment.id !== lastGroup[0].deployment.id) {
+  //     lastGroup = [activity];
+  //     groupedActivities.push(lastGroup);
+  //   } else {
+  //     lastGroup.push(activity);
+  //   }
+  // });
+
+  // return groupedActivities;
 };
 
 class ActivityList extends React.Component<Props, void> {

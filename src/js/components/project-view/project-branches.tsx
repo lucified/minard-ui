@@ -8,7 +8,7 @@ import { Project } from '../../modules/projects';
 
 import LoadingIcon from '../common/loading-icon';
 import MinardLink from '../common/minard-link';
-import SectionTitle from '../common/section-title';
+import SectionTitle from '../common/simple-section-title';
 import BranchSummary from './branch-summary';
 
 const styles = require('./project-branches.scss');
@@ -67,7 +67,7 @@ class ProjectBranches extends React.Component<Props, void> {
     const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
 
     return (
-      <section className="container">
+      <section>
         <SectionTitle><span>{title}</span></SectionTitle>
         {content}
         {(!showAll && filteredBranches.length > count) && (

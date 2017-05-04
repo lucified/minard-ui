@@ -7,10 +7,12 @@ import TimeAgo from 'react-timeago';
 import { Activity, ActivityType } from '../../../modules/activities';
 import { isSuccessful } from '../../../modules/deployments';
 
+import Avatar from '../../common/avatar';
+import BuildStatus from '../../common/build-status';
 import DeploymentScreenshot from '../deployment-screenshot';
 import LoadingIcon from '../loading-icon';
 import MinardLink from '../minard-link';
-import SingleActivity from './single-activity';
+import SingleComment from '../single-comment';
 
 const styles = require('./activity-group.scss');
 
@@ -30,48 +32,9 @@ const getProjectLabel = ({ project }: Activity) => {
   );
 };
 
-const getMetadata = (activity: Activity) => {
-  const { branch, commit, deployment, project, type } = activity;
-
-  if (type === ActivityType.Comment) {
-    return (
-      <span>
-        <Icon className={styles.icon} name="comment-o" />
-        {'New comments for '}
-        <MinardLink className={styles['metadata-deployment']} preview={deployment} commit={commit}>
-          {commit.hash.substr(0, 8)}
-        </MinardLink>
-        {' in '}
-        <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
-          {branch.name}
-        </MinardLink>
-      </span>
-    );
-  }
-
-  if (isSuccessful(deployment)) {
-    return (
-      <span>
-        <Icon className={styles.icon} name="eye" />
-        <span className={styles['metadata-author']}>
-          {deployment.creator.name || deployment.creator.email}
-        </span>
-        {' generated a preview for '}
-        <MinardLink className={styles['metadata-deployment']} preview={deployment} commit={commit}>
-          {commit.hash.substr(0, 8)}
-        </MinardLink>
-        {' in '}
-        <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
-          {branch.name}
-        </MinardLink>
-      </span>
-    );
-  }
-
+const getBranchLabel = ({ branch, project }: Activity) => {
   return (
     <span>
-      <Icon className={styles.icon} name="times" />
-      {`Preview generation for ${commit.hash.substring(0, 8)} failed in `}
       <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
         {branch.name}
       </MinardLink>
@@ -82,45 +45,88 @@ const getMetadata = (activity: Activity) => {
 class ActivityGroup extends React.Component<PassedProps, void> {
   public render() {
     const { activities, showProjectName } = this.props;
+    const deploymentTime = activities[0].deployment.creator.timestamp;
     const firstActivity = activities[activities.length - 1];
-    const latestActivity = activities[0];
+    const commentActivities = activities.filter(activity => activity.type === ActivityType.Comment);
+    const deployment = firstActivity.deployment;
+    const commit = firstActivity.commit;
 
     return (
-      <div className={classNames('row', styles['activity-group'])}>
-        <div className={classNames('col-xs-1', styles.timestamp)}>
-          <TimeAgo minPeriod={10} date={latestActivity.timestamp} />
-        </div>
-        <div className={classNames('col-xs-2', styles.screenshot)}>
-          {isSuccessful(firstActivity.deployment) && (
-            <MinardLink preview={firstActivity.deployment} commit={firstActivity.commit}>
-              <DeploymentScreenshot deployment={firstActivity.deployment} />
-            </MinardLink>
-          )}
-        </div>
-        <div className={classNames('col-xs-9', styles['activity-content'])}>
-          <div className={styles.activity}>
-            <div className={styles.metadata}>
-              <div className={styles.action}>
-                {getMetadata(firstActivity)}
-                {showProjectName && getProjectLabel(firstActivity)}
+      <div className={classNames(styles.root)}>
+        <div className={styles.top}>
+          <div className={styles.main}>
+            <div className={styles['time-and-branch']}>
+              <TimeAgo minPeriod={10} date={deploymentTime} />
+              {' '}&middot;{' '}
+              {getBranchLabel(firstActivity)}
+              { showProjectName && (
+                <span>
+                  {' '}in {getProjectLabel(firstActivity)}
+                </span>
+              )}
+            </div>
+            <div className={styles['deployment-details']}>
+              <div className={styles.avatar}>
+                <Avatar email={deployment.creator.email} size="40" title={name} />
               </div>
-              <div className={styles.share}>
-                {/* TODO: add share link */}
+              <div className={styles['deployment-details-name-and-message']}>
+                <div className={styles['deployment-details-name']}>
+                  {commit.author.name}
+                </div>
+                <div className={styles['deployment-details-message']}>
+                  {commit.message}
+                </div>
               </div>
             </div>
-            <FlipMove enterAnimation="fade" leaveAnimation="fade">
-              {activities.slice(0, -1).map(activity => (
-                <div key={activity.id}>
-                  <SingleActivity activity={activity} />
-                  <hr className={styles.line} />
-                </div>
-              ))}
-            </FlipMove>
-            <div>
-              <SingleActivity activity={firstActivity} />
+          </div>
+            {isSuccessful(firstActivity.deployment) ? (
+              <div className={styles.screenshot}>
+                <MinardLink preview={deployment} commit={firstActivity.commit}>
+                  <DeploymentScreenshot deployment={deployment} />
+                </MinardLink>
+              </div>
+            ) : (
+              <div className={styles['build-error']}>
+                <BuildStatus
+                  deployment={deployment}
+                  commit={commit}
+                  latest={false}
+                />
+              </div>
+            )}
+        </div>
+        <div className={styles['links-wrap']}>
+          <div className={styles.links}>
+            <div className={styles.link}>
+              <MinardLink preview={deployment} commit={commit}>
+                <Icon className={styles.icon} name="eye" />
+                Open preview
+              </MinardLink>
+            </div>
+            <div className={styles.link}>
+              <MinardLink deployment={deployment} openInNewWindow>
+                <Icon className={styles.icon} name="arrows-alt" />
+                Open raw deployment
+              </MinardLink>
             </div>
           </div>
         </div>
+        {commentActivities.length > 0 && (
+          <div className={styles.comments}>
+            <FlipMove enterAnimation="fade" leaveAnimation="fade">
+              {commentActivities.map(activity => {
+                const comment = {
+                  ...activity.comment,
+                  deployment: activity.deployment.id,
+                  timestamp: activity.timestamp,
+                };
+                return (
+                  <SingleComment key={activity.id} comment={comment} />
+                );
+              })}
+            </FlipMove>
+          </div>
+        )}
       </div>
     );
   }

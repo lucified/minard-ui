@@ -1,15 +1,26 @@
 @import '../../mixins';
 @import '../../definitions';
 
-.activity-group {
-  padding: 30px 36px 28px 42px;
-  background: white;
-  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
-  border-radius: 3px;
-  margin-bottom: 18px;
+@mixin basicPadding {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-.activity-group:last-child {
+.root {
+  padding-top: 20px;
+  background: white;
+  margin-bottom: 18px;
+  border-radius: 3px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  @include basicPadding;
+}
+
+.root:last-child {
   margin-bottom: 0;
 }
 
@@ -26,20 +37,37 @@
 
 .screenshot {
   padding-left: 20px;
+  max-width: 80px;
+  border: 1px solid $minard-lightest-gray;
 }
 
-.activity-content, .screenshot, .timestamp {
-  padding-top: 0;
-  padding-bottom: 0;
+.links-wrap {
+  @include basicPadding;
+
 }
 
-.line {
-  color: $minard-lightest-gray;
-  background-color: $minard-lightest-gray;
-  height: 1px;
-  font-size: 0;
-  border: 0;
-  margin: 12px 0px;
+.links {
+  border-top: 1px solid $minard-lightest-gray;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: flex;
+  margin-top: 20px;
+  @include nitti-grotesk-medium;
+}
+
+.link {
+  color: $minard-mid-gray;
+}
+
+.link + .link {
+  margin-left: 20px;
+}
+
+.comments {
+  @include basicPadding();
+  border-top: 1px solid $minard-lightest-gray;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .loading {
@@ -48,38 +76,21 @@
 
 .error {
   color: $minard-dark-blue;
-
   small {
     @include nitti;
   }
-
   a:hover {
     color: black;
   }
 }
 
-.metadata {
-  display: flex;
-  @include font-size-MS;
-  color: $minard-mid-gray;
-  margin-bottom: 12px;
-  line-height: 25px;
-
-  a:hover {
-    color: $minard-dark-blue;
-    text-decoration: underline;
-  }
-}
-
-.metadata-author, .metadata-branch, .metadata-project, .metdata-deployment {
+.metadata-branch, .metadata-project {
   @include nitti-grotesk-bold;
 }
 
-.metadata-project {
-  color: $minard-cyan;
-
+.metadata-branch, .metadata-project {
   &:hover {
-    color: $minard-dark-cyan !important;
+    color: $minard-dark-blue !important;
   }
 }
 
@@ -87,16 +98,34 @@
   margin-right: 6px;
 }
 
-.activity {
-  margin-left: 2rem;
-}
-
 .action {
   margin-left: -18px;
   align-self: flex-start;
 }
 
-.share {
-  margin-left: auto;
-  @include font-size-S;
+.time-and-branch {
+  color: #999999;
+  @include nitti-grotesk-semilight;
+  @include font-size-MS;
+}
+
+.deployment-details {
+  display: flex;
+  margin-top: 10px;
+  @include font-size-MS;
+}
+
+.avatar {
+  margin-right: 14px;
+}
+
+.deployment-details-message {
+  color: #2C3E50;
+  @include nitti-grotesk-semilight;
+  @include font-size-M;
+}
+
+.deployment-details-name {
+  color: #4A4A4A;
+  @include nitti-grotesk-medium;
 }

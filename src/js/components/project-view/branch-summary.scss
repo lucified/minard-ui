@@ -2,11 +2,12 @@
 @import '../definitions';
 
 .branch {
-  padding: 30px 36px 28px 32px;
+  padding: 20px;
   background: white;
-  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
   border-radius: 3px;
   margin-bottom: 18px;
+  border-radius: 3px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
 }
 
 .branch:last-child {
@@ -44,11 +45,9 @@
 
 .empty, .error {
   color: $minard-mid-gray;
-
   small {
     @include nitti;
   }
-
   a:hover {
     color: $minard-dark-gray;
   }
@@ -62,12 +61,13 @@
 
 .header {
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  justify-content: space-between;
 }
 
 .title {
   @include font-size-L;
-  letter-spacing: -0.5px;
+  @include nitti-grotesk-semilight;
   color: $minard-dark-blue;
 }
 
@@ -77,17 +77,38 @@
   top: 1px;
 }
 
-.description {
-  @include font-size-M;
-  line-height: 24px;
-  color: $minard-dark-blue;
+.links {
+  border-top: 1px solid $minard-lightest-gray;
+  margin-top: 20px;
+  padding-top: 20px;
 }
 
-.line {
-  color: $minard-light-gray;
-  background-color: $minard-light-gray;
-  height: 1px;
-  font-size: 0;
-  border: 0;
-  margin: 20px 0 23px 0;
+.link-disabled {
+  opacity: 0.3;
+}
+
+.commit-content {
+  display: flex;
+  align-items: center;
+  color: #7F8C8D;
+  @include font-size-MS;
+}
+
+.avatar {
+  margin-right: 14px;
+}
+
+.author {
+  color: #4A4A4A;
+  @include nitti-grotesk-regular;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  color: $minard-mid-gray;
+}
+
+.link-text {
+  margin-left: 10px;
 }

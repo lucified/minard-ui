@@ -1,17 +1,18 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import TimeAgo from 'react-timeago';
+import Icon = require('react-fontawesome');
 
 import { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import { StateTree } from '../../reducers';
+import Avatar from '../common/avatar';
 
 import BuildStatus from '../common/build-status';
-import DeploymentScreenshot from '../common/deployment-screenshot';
 import MinardLink from '../common/minard-link';
-import SingleCommit from '../common/single-commit';
 
 const styles = require('./branch-summary.scss');
 
@@ -52,46 +53,76 @@ const BranchSummary = (props: Props) => {
           <small>{latestSuccessfulDeployment.prettyError}</small>
         </div>
       );
-    } else {
+    } else if (isFetchError(latestSuccessfullyDeployedCommit)) {
       commitContent = (
-        <MinardLink
-          preview={latestSuccessfulDeployment}
-          commit={isFetchError(latestSuccessfullyDeployedCommit) ? undefined : latestSuccessfullyDeployedCommit}
-        >
-          <SingleCommit
-            className={styles.hover}
-            deployment={latestSuccessfulDeployment}
-            commit={latestSuccessfullyDeployedCommit}
-          />
-        </MinardLink>
+        <div className={styles.error}>
+          <p>Error loading deployment</p>
+          <small>{latestSuccessfullyDeployedCommit.prettyError}</small>
+        </div>
+      );
+    } else {
+      const { author, committer } = latestSuccessfullyDeployedCommit;
+      const otherAuthorEmail = author.email !== committer.email ? committer.email : undefined;
+      commitContent = (
+        <div className={styles['commit-content']}>
+          <div className={styles.avatar}>
+            <Avatar title={author.name || author.email} size="40" email={author.email} iconEmail={otherAuthorEmail} />
+          </div>
+          <div>
+            <div className={styles['commit-metadata']}>
+              <span>
+                <span className={styles.author}>{author.name || author.email}</span>
+                {' · '}
+                <span className={styles.timestamp}>
+                  <TimeAgo minPeriod={10} date={author.timestamp} />
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
       );
     }
   }
 
   return (
-    <div className={classNames('row', styles.branch)}>
-      <div className={classNames('col-xs-2', styles.screenshot)}>
-        <MinardLink branch={branch}>
-          <DeploymentScreenshot deployment={latestSuccessfulDeployment} />
-        </MinardLink>
-      </div>
-      <div className={classNames('col-xs-10', styles['activity-content'])}>
+    <div className={classNames(styles.branch)}>
+      <div className={styles['activity-content']}>
         <div className={styles.header}>
-          <MinardLink branch={branch}>
-            <div className={styles.title}>{branch.name}</div>
-          </MinardLink>
-          <BuildStatus
-            className={styles['build-status']}
-            deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
-            commit={isFetchError(latestCommit) ? undefined : latestCommit}
-            latest={true}
-          />
+          <div>
+            <MinardLink branch={branch}>
+              <div className={styles.title}>{branch.name}</div>
+            </MinardLink>
+          </div>
+          <div>
+            <BuildStatus
+              className={styles['build-status']}
+              deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
+              commit={isFetchError(latestCommit) ? undefined : latestCommit}
+              latest={true}
+            />
+          </div>
         </div>
-        <MinardLink branch={branch}>
-          <div className={styles.description}>{branch.description}</div>
-        </MinardLink>
-        <hr className={styles.line} />
         {commitContent}
+        <div className={styles.links}>
+          {!isFetchError(deploymentForLatestCommit)
+            && latestSuccessfullyDeployedCommit
+            && !isFetchError(latestCommit)
+            && latestCommit ? (
+              <MinardLink preview={deploymentForLatestCommit} commit={latestCommit}>
+                <div className={styles.link}>
+                  <Icon name="eye" />
+                  <div className={styles['link-text']}>
+                    Latest preview
+                  </div>
+                </div>
+              </MinardLink>
+            ) : (
+              <div className={classNames(styles.link, styles['link-disabled'])}>
+                No preview available
+              </div>
+            )
+          }
+        </div>
       </div>
     </div>
   );
