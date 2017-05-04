@@ -1,0 +1,52 @@
+@import './mixins';
+@import './definitions';
+
+.instructions {
+  padding: 32px 60px 48px;
+
+  @include font-size-M;
+  color: $minard-dark-blue;
+}
+
+.section {
+  margin-bottom: 36px;
+}
+
+.label {
+  margin-right: 12px;
+
+  @include nitti-grotesk-medium;
+  @include font-size-M;
+  letter-spacing: -0.21px;
+  line-height: 24px;
+}
+
+.text {
+  @include font-size-MS;
+  letter-spacing: -0.17px;
+  line-height: 24px;
+  margin-bottom: 4px;
+  margin-top: 12px;
+}
+
+.error {
+  color: $minard-red;
+}
+
+.url, .clickable {
+  color: $minard-cyan;
+  @include nitti-grotesk-medium;
+  @include font-size-M;
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover {
+    color: $minard-dark-blue;
+  }
+
+  &:active {
+    color: $minard-cyan;
+  }
+}

@@ -14,6 +14,7 @@ import Streaming, { ConnectionState } from '../modules/streaming';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
+import AccountDialog from './account-dialog';
 import Avatar from './common/avatar';
 import ToggleMenu from './common/toggle-menu';
 import InviteTeamDialog from './invite-team-dialog';
@@ -38,6 +39,7 @@ interface GeneratedDispatchProps {
   clearUserDetails: () => void;
   clearData: () => void;
   openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => void;
+  openAccountDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
@@ -72,6 +74,7 @@ class Header extends React.Component<Props, void> {
       userEmail,
       team,
       openInviteTeamDialog,
+      openAccountDialog,
     } = this.props;
 
     if (!isUserLoggedIn) {
@@ -127,6 +130,7 @@ class Header extends React.Component<Props, void> {
       <section className={styles['header-background']}>
         {error}
         <InviteTeamDialog invitationToken={team && team.invitationToken} />
+        <AccountDialog email={userEmail!} />
         <div className="container">
           <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
             <div className={classNames(styles['link-container'], 'col-xs')}>
@@ -149,6 +153,7 @@ class Header extends React.Component<Props, void> {
                   className={styles['team-dropdown']}
                 >
                   {/* TODO: find a better way to make the whole div clickable than the empty span trick below */}
+                  <a href="#" onClick={openAccountDialog}><span className={styles.cover}></span>Account</a>
                   <a href="#" onClick={openInviteTeamDialog}><span className={styles.cover}></span>Invite your team</a>
                   <Link to="/login" onClick={this.logout}><span className={styles.cover}></span>Logout</Link>
                 </ToggleMenu>
@@ -184,6 +189,10 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(Modal.actions.openModal(ModalType.InviteTeam));
+  },
+  openAccountDialog: (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    dispatch(Modal.actions.openModal(ModalType.Account));
   },
 });
 
