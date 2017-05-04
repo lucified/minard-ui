@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { selectText } from '../../helpers';
+import { isFetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 
 const styles = require('./setup-instructions.scss');
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const SetupInstructions = ({ project }: Props) => {
+  const projectIsEmpty = !!project.branches && !isFetchError(project.branches) && project.branches.length === 0;
+
   return (
     <div className={styles.instructions}>
       <div className={styles.section}>
@@ -23,36 +26,26 @@ const SetupInstructions = ({ project }: Props) => {
           <pre onClick={selectText}>{project.repoUrl}</pre>
         </div>
 
-        <div>
-          <div className={styles.text}>
-            Clone the repository with
+        {!projectIsEmpty && (
+          <div>
+            <div className={styles.text}>
+              Clone the repository with:
+            </div>
+            <div className={styles.code}>
+              <pre onClick={selectText}>git clone -o minard {project.repoUrl}</pre>
+            </div>
+            <div className={styles.text}>
+              …Or, if you already use GitHub or another remote repository in your project, add Minard
+              as a new remote and secodary URL to origin with:
+            </div>
+            <div className={styles.code}>
+              <pre>
+                git remote add minard {project.repoUrl}<br />
+                git remote set-url ––add origin {project.repoUrl}
+              </pre>
+            </div>
           </div>
-          <div className={styles.code}>
-            <pre onClick={selectText}>git clone -o minard {project.repoUrl}</pre>
-          </div>
-        </div>
-
-        <div className={styles.text}>
-          …Or connect your existing project folder with
-        </div>
-        <div className={styles.code}>
-          <pre>
-            git init<br />
-            git add .<br />
-            git commit -m “First commit”<br />
-            git remote add origin {project.repoUrl}<br />
-            git push -u origin master
-          </pre>
-        </div>
-
-        <div className={styles.text}>
-          …Or, if you already use GitHub or another remote repository in your project, add Minard as a new remote with
-        </div>
-        <div className={styles.code}>
-          <pre onClick={selectText}>
-            git remote set-url ––add origin {project.repoUrl}
-          </pre>
-        </div>
+        )}
 
         <div className={styles.label}>
           Building the project
