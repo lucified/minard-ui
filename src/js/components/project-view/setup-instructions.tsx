@@ -46,7 +46,7 @@ const SetupInstructions = ({ project }: Props) => {
         </div>
 
         <div className={styles.text}>
-          …Or, if you already use Git in your project, add Minard as a new remote with
+          …Or, if you already use GitHub or another remote repository in your project, add Minard as a new remote with
         </div>
         <div className={styles.code}>
           <pre onClick={selectText}>
