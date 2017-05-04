@@ -1,98 +1,64 @@
 import * as React from 'react';
 
+import { selectText } from '../../helpers';
+import { isFetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
 
-const defaultStyles: Styles = require('./setup-instructions.scss');
-
-interface Styles {
-  instructions: string;
-  section: string;
-  label: string;
-  text: string;
-  'smaller-text': string;
-  code: string;
-  url: string;
-}
+const styles = require('./setup-instructions.scss');
 
 interface Props {
   project: Project;
-  styles?: Styles;
-  hideLabels?: boolean;
-  showClone?: boolean;
 }
 
-const selectText = (e: React.MouseEvent<HTMLElement>) => {
-  const node = e.target;
-  const doc = document as any;
+const SetupInstructions = ({ project }: Props) => {
+  const projectIsEmpty = !!project.branches && !isFetchError(project.branches) && project.branches.length === 0;
 
-  if (doc.selection) {
-    const range = doc.body.createTextRange();
-    range.moveToElementText(node);
-    range.select();
-  } else if (window.getSelection) {
-    const range = document.createRange();
-    range.selectNodeContents(node as Node);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-  }
-};
-
-const SetupInstructions = ({ project, hideLabels, showClone, styles: passedInStyles }: Props) => {
-  const styles = passedInStyles || defaultStyles;
   return (
     <div className={styles.instructions}>
       <div className={styles.section}>
-        {!hideLabels && (
-          <div className={styles.label}>
-            Git repository
-          </div>
-        )}
+        <div className={styles.label}>
+          Code repository
+        </div>
         <div className={styles.text}>
           The URL for this project's Git repository is
-          <div className={styles.url}>{project.repoUrl}</div>
         </div>
-        {showClone && (
+        <div className={styles.code}>
+          <pre onClick={selectText}>{project.repoUrl}</pre>
+        </div>
+
+        {!projectIsEmpty && (
           <div>
             <div className={styles.text}>
-              Clone the repo with
+              Clone the repository with:
             </div>
             <div className={styles.code}>
               <pre onClick={selectText}>git clone -o minard {project.repoUrl}</pre>
             </div>
+            <div className={styles.text}>
+              …Or, if you already use GitHub or another remote repository in your project, add Minard
+              as a new remote and secodary URL to origin with:
+            </div>
+            <div className={styles.code}>
+              <pre>
+                git remote add minard {project.repoUrl}<br />
+                git remote set-url ––add origin {project.repoUrl}
+              </pre>
+            </div>
           </div>
         )}
+
+        <div className={styles.label}>
+          Building the project
+        </div>
+
         <div className={styles.text}>
-          {showClone ?
-            'Or you can add it as a remote to your existing repository with the following command.' :
-            'Add it as a remote to your existing repository with the following command and start pushing some code.'
-          }
+          By default, Minard will not build your project. The preview will be
+          the root of your git repository. You can enable builds and change
+          the deployment root folder by including a <code>minard.json</code> file
+          in your repository. It has the following format:
         </div>
         <div className={styles.code}>
-          <pre onClick={selectText}>git remote add minard {project.repoUrl}</pre>
-        </div>
-        <div className={styles.text}>
-          If you use another repository (such as GitHub) as your origin, set up Git to automatically
-          also push to Minard with the following command.
-        </div>
-        <div className={styles.code}>
-          <pre onClick={selectText}>git remote set-url --add origin {project.repoUrl}</pre>
-        </div>
-      </div>
-      <div className={styles.section}>
-        {!hideLabels && (
-          <div className={styles.label}>
-            Building &amp; deployments
-          </div>
-        )}
-        <div className={styles['smaller-text']}>
-          By default, Minard will not build your project and will deploy
-          a preview using the root of your Git repository. You can enable
-          builds and change the root folder of what should be deployed by
-          including a <strong>minard.json</strong> file in your
-          repository. It has the following format:
-        </div>
-        <div className={styles.code}>
-          <pre>
+          <pre onClick={selectText}>
 {`{
   "publicRoot": "dist",
   "build": {

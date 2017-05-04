@@ -2,25 +2,41 @@
 @import '../definitions';
 
 .instructions {
-
+  text-align: left;
 }
 
 .section {
   margin-bottom: 24px;
 }
 
-.text {
+.heading {
   @include font-size-L;
-  line-height: 1.62;
   color: $minard-dark-blue;
-  margin-top: 12px;
+  margin-top: 36px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.smaller-text {
-  @include nitti-grotesk-light;
+.heading-icon {
+  @include font-size-MS;
+  margin-right: 10px;
+  color: $minard-dark-blue;
+}
+
+.text {
   @include font-size-M;
   line-height: 1.62;
   color: $minard-dark-blue;
+  margin-top: 12px;
+
+  code {
+    @include nitti;
+    @include font-size-MS;
+    background-color: white;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
 }
 
 .url {
@@ -38,11 +54,11 @@
 
   display: inline-block;
   padding: 0 12px;
-  margin: 12px 0;
-  max-width: 100%;
+  margin: 12px 0 0 0;
+  width: 100%;
   overflow-x: auto;
-  background: $minard-dark-blue;
+  background: white;
   border-radius: 2px;
-  color: white;
+  color: $minard-dark-blue;
   text-align: left;
 }

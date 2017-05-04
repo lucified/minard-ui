@@ -7,6 +7,7 @@
 
 .label {
   margin-right: 12px;
+  margin-top: 25px;
 
   @include nitti-grotesk-medium;
   @include font-size-M;
@@ -14,13 +15,37 @@
   line-height: 24px;
 }
 
-.text, .smaller-text {
+.heading {
+  @include font-size-L;
+  color: $minard-dark-blue;
+  margin-top: 36px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.heading-icon {
   @include font-size-MS;
-  color: $minard-mid-gray;
+  margin-right: 10px;
+  color: $minard-dark-blue;
+}
+
+.text {
+  @include font-size-M;
+  color: $minard-dark-blue;
   letter-spacing: -0.17px;
   line-height: 24px;
   margin-bottom: 4px;
   margin-top: 12px;
+
+  code {
+    @include nitti;
+    @include font-size-MS;
+    background-color: $minard-dark-blue;
+    color: white;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 }
 
 .url {
@@ -31,7 +56,7 @@
 
 .code {
   padding: 0 12px;
-  max-width: 100%;
+  width: 100%;
   overflow-x: auto;
   background: $minard-dark-blue;
   border-radius: 2px;
