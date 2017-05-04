@@ -13,7 +13,6 @@ import LoadingIcon from '../common/loading-icon';
 import EmptyProject from './empty-project';
 import ProjectActivity from './project-activity';
 import ProjectBranches from './project-branches';
-import ProjectHeader from './project-header';
 import ProjectSettingsDialog from './project-settings-dialog';
 
 const styles = require('./index.scss');
@@ -137,9 +136,8 @@ class ProjectView extends React.Component<Props, void> {
     }
 
     return (
-      <div>
+      <div className={styles.root}>
         <ProjectSettingsDialog project={project} />
-        <ProjectHeader project={project} />
         {mainContent}
       </div>
     );
