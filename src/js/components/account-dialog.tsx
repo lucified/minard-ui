@@ -145,7 +145,7 @@ class AccountDialog extends React.Component<Props, State> {
                 className={modalStyles.reset}
                 onClick={this.requestResetPassword}
               >
-                {passwordChangeTriggered ? 'Email sent!' : 'Reset password'}
+                {passwordChangeTriggered ? 'Email sent!' : 'Request password reset'}
               </button>
               <p>
                 A password reset email will be sent to {email}.

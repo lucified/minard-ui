@@ -130,8 +130,9 @@
 .reset {
   @extend .submit;
 
-  width: 186px;
-  padding: 10px 20px;
+  @include font-size-MS;
+  width: 220px;
+  padding: 10px 0px;
 }
 
 .cancel {
