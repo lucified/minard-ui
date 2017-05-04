@@ -9,7 +9,7 @@ import Modal, { ModalType } from '../modules/modal';
 import { StateTree } from '../reducers';
 
 const modalStyles = require('./common/forms/modal-dialog.scss');
-const styles = require('./user-settings-dialog.scss');
+const styles = require('./account-dialog.scss');
 
 interface PassedProps {
   email: string;
@@ -50,7 +50,7 @@ const selectText = (e: React.MouseEvent<HTMLElement>) => {
   }
 };
 
-class UserSettingsDialog extends React.Component<Props, State> {
+class AccountDialog extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -187,4 +187,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
-)(UserSettingsDialog);
+)(AccountDialog);
