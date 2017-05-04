@@ -6,15 +6,20 @@ const styles = require('./simple-section-title.scss');
 // CSS classes will be added to this element.
 interface Props {
   children?: any;
+  rightContent?: string | JSX.Element;
 }
 
-const SimpleSectionTitle = ({ children }: Props) => {
+const SimpleSectionTitle = ({ children, rightContent }: Props) => {
   return (
     <div className={styles.root}>
       <div className={styles.primary}>
         {children}
       </div>
-      <hr className={styles.line} />
+      {rightContent && (
+        <div>
+          {rightContent}
+        </div>
+      )}
     </div>
   );
 };

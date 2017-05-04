@@ -5,7 +5,7 @@
   @include nitti-grotesk-bold;
   @include font-size-M;
   color: $minard-cyan;
-
+  letter-spacing: normal;
   text-align: right;
 
   &:hover {
@@ -26,7 +26,7 @@
 }
 
 .show-all-projects-section {
-  margin: 48px 36px 72px 0;
+  margin-top: 20px;
 }
 
 .show-all-projects-link {

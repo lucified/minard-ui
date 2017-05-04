@@ -55,6 +55,9 @@
   margin-left: 20px;
   display: flex;
   align-items: center;
+  a {
+    color: $minard-mid-gray;
+  }
 }
 
 .project-settings-text {

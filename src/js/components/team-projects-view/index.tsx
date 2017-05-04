@@ -67,19 +67,31 @@ class TeamProjectsView extends React.Component<Props, void> {
 
     if (show === 'all') {
       return (
-        <ProjectsSection projects={projects} isLoading={isLoadingProjects} showAll />
+        <div className={styles['all-projects']}>
+          <div className="container">
+            <ProjectsSection projects={projects} isLoading={isLoadingProjects} showAll />
+          </div>
+        </div>
       );
     }
 
     return (
-      <div>
-        <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={6} />
-        <ActivitySection
-          activities={activities}
-          loadActivities={this.loadMoreActivities}
-          isLoading={isLoadingAllActivities}
-          allLoaded={isAllActivitiesRequested}
-        />
+      <div className={styles.root}>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8">
+              <ActivitySection
+                activities={activities}
+                loadActivities={this.loadMoreActivities}
+                isLoading={isLoadingAllActivities}
+                allLoaded={isAllActivitiesRequested}
+              />
+            </div>
+            <div className="col-md-4">
+              <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={2} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

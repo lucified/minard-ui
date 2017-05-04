@@ -12,7 +12,7 @@ import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
 import MinardLink from '../common/minard-link';
-import SectionTitle from '../common/section-title';
+import SectionTitle from '../common/simple-section-title';
 import NewProjectDialog from './new-project-dialog';
 import ProjectCard from './project-card';
 
@@ -37,7 +37,7 @@ type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 
 class ProjectsSection extends React.Component<Props, void> {
   public render() {
-    const { projects, isLoading, openCreateNewProjectDialog, team, showAll, count = 6 } = this.props;
+    const { projects, isLoading, openCreateNewProjectDialog, showAll, count = 6 } = this.props;
     const filteredProjects = (projects.filter(project => !isFetchError(project)) as Project[])
       .sort((a, b) => {
         if (a.latestActivityTimestamp === undefined) {
@@ -55,7 +55,7 @@ class ProjectsSection extends React.Component<Props, void> {
     const showLoadingIcon = isLoading && (showAll || (filteredProjects.length < count));
 
     return (
-      <section className="container">
+      <section>
         <NewProjectDialog />
         <SectionTitle
           rightContent={(
@@ -65,12 +65,29 @@ class ProjectsSection extends React.Component<Props, void> {
           )}
         >
           <span>
-            {showAll ? 'All' : 'Latest'} projects for <span className={styles.team}>{team!.name}</span>
+            Projects
           </span>
         </SectionTitle>
-        <FlipMove className="row center-xs start-sm" enterAnimation="elevator" leaveAnimation="elevator">
+        <FlipMove
+          className={classNames(
+            showAll && 'row center-xs start-sm',
+            showAll && 'center-xs',
+            showAll && 'start-sm',
+          )}
+          enterAnimation="elevator"
+          leaveAnimation="elevator"
+        >
           {projectsToShow.map(project => (
-            <div key={project.id} className={classNames('col-xs-12', 'col-sm-6', 'col-md-4', styles['project-card'])}>
+            <div
+              key={project.id}
+              className={
+                classNames(
+                  showAll && 'col-xs-12',
+                  showAll && 'col-sm-6',
+                  showAll && 'col-md-4',
+                  styles['project-card'],
+                )}
+            >
               <ProjectCard project={project} />
             </div>
           ))}

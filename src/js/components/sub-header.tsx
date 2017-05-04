@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import Icon = require('react-fontawesome');
 
 import { FetchError, isFetchError } from '../modules/errors';
+import Modal, { ModalType } from '../modules/modal';
 import Projects, { Project } from '../modules/projects';
 import Selected from '../modules/selected';
 import User, { Team } from '../modules/user';
@@ -28,7 +29,13 @@ interface GeneratedProps {
   branch: string | null;
 }
 
-class SubHeader extends React.Component<GeneratedProps, void> {
+interface GeneratedDispatchProps {
+  openProjectSettingsDialog: (e: React.MouseEvent<HTMLElement>) => void;
+}
+
+type Props = GeneratedProps & GeneratedDispatchProps;
+
+class SubHeader extends React.Component<Props, void> {
 
   private getLeftContent() {
     const { openPageType, project, branch, team } = this.props;
@@ -38,12 +45,19 @@ class SubHeader extends React.Component<GeneratedProps, void> {
       <MinardLink key="team" className={styles['sub-header-link']} homepage>{team!.name}</MinardLink>,
     );
 
+    if (openPageType === PageType.ProjectsList) {
+      items.push(
+        <span key="all-projects">
+          {' '}/ all projects
+        </span>,
+      );
+    }
+
     if (project && !isFetchError(project)) {
       items.push(
-        <span>
+        <span key="project-name">
           {' '}/{' '}
           <MinardLink
-            key="project-name"
             className={styles['sub-header-link']}
             project={project}
           >
@@ -54,10 +68,9 @@ class SubHeader extends React.Component<GeneratedProps, void> {
 
       if (openPageType === PageType.BranchView && branch) {
         items.push(
-          <span>
+          <span key="branch">
             {' '}/{' '}
             <MinardLink
-              key="branch"
               className={styles['sub-header-link']}
               project={project}
               branch={branch}
@@ -72,19 +85,21 @@ class SubHeader extends React.Component<GeneratedProps, void> {
   }
 
   private getRightContent() {
-    const { project } = this.props;
+    const { project, openProjectSettingsDialog } = this.props;
     if (project && !isFetchError(project)) {
       return (
         <div className={styles['project-right']}>
           {project.activeUsers.map(user => (
-            <div className={styles.avatar}>
+            <div className={styles.avatar} key={user.email}>
               <Avatar email={user.email} size="m" title={user.name} shadow />
             </div>
           ))}
           <div className={styles['project-settings']}>
             <Icon className={styles.icon} name="gear" />
             <div className={styles['project-settings-text']}>
-              Project settings
+              <a onClick={openProjectSettingsDialog}>
+                Project settings
+              </a>
             </div>
           </div>
         </div>
@@ -94,7 +109,12 @@ class SubHeader extends React.Component<GeneratedProps, void> {
   }
 
   public render() {
+    const { openPageType } = this.props;
     const centerContent: JSX.Element | null = null;
+
+    if (openPageType === PageType.TeamProjectsView) {
+      return <span />;
+    }
 
     // TODO: what if we don't have team?
     const leftContent = this.getLeftContent();
@@ -154,4 +174,10 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   };
 };
 
-export default connect<GeneratedProps, {}, {}>(mapStateToProps)(SubHeader);
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  openProjectSettingsDialog: (_e: React.MouseEvent<HTMLElement>) => {
+    dispatch(Modal.actions.openModal(ModalType.ProjectSettings));
+  },
+});
+
+export default connect<GeneratedProps, {}, {}>(mapStateToProps, mapDispatchToProps)(SubHeader);

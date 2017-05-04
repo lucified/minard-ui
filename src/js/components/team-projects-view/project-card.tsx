@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import Icon = require('react-fontawesome');
 import { connect } from 'react-redux';
@@ -15,7 +14,6 @@ import Avatar from '../common/avatar';
 import MinardLink from '../common/minard-link';
 
 const styles = require('./project-card.scss');
-const noScreenshot = require('../../../images/no-screenshot.png');
 
 interface PassedProps {
   project: Project;
@@ -26,52 +24,47 @@ interface GeneratedProps {
   latestDeployedCommit?: Commit;
 }
 
-const getDeploymentSummary = (deployment?: Deployment) => {
-  if (!deployment) {
-    return null;
-  }
-
-  const { creator } = deployment;
-
+const getBottom = (project: Project, deployment?: Deployment) => {
   return (
-    <div className={styles.spread}>
-      <div className="flex">
-        <div className={styles['preview-icon']}>
-          <Icon name="eye" />
+    <div className={styles.links}>
+      {deployment && (
+        <div className={styles.link}>
+          <Icon className={styles.icon} name="eye" />
+          <span className={styles['link-text']}>
+            Latest preview
+          </span>
         </div>
-        <div>
-          <div className={styles.action}>
-            <span className={styles.author}>
-              {creator.name || creator.email}
-            </span>
-            {' '}generated a{' '}
-            <span className={styles.target}>
-              new preview
-            </span>
-          </div>
-          <div className={styles.timestamp}>
-            <TimeAgo minPeriod={10} date={creator.timestamp} />
-          </div>
-        </div>
-      </div>
-      <div className={styles.open}>
-        Open <Icon className={styles['open-icon']} name="external-link" />
+      )}
+      <div className={styles.link}>
+        <MinardLink project={project}>
+          <Icon className={styles.icon} name="chevron-right" />
+          <span className={styles['link-text']}>
+            Open project
+          </span>
+        </MinardLink>
       </div>
     </div>
   );
 };
 
-const ProjectCard = ({ project, latestDeployedCommit, latestDeployment }: PassedProps & GeneratedProps) => {
-  const screenshot = (latestDeployment && latestDeployment.screenshot) || noScreenshot;
-  const deploymentSummary = getDeploymentSummary(latestDeployment);
-
+const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
+  const screenshot = (latestDeployment && latestDeployment.screenshot);
+  const bottom = getBottom(project, latestDeployment);
   const maxAvatarCount = 8;
 
   return (
     <div className={styles.card}>
-      <MinardLink project={project}>
         <div className={styles['card-top']}>
-          <img src={screenshot} className={styles.screenshot} />
+          {screenshot ? (
+            <img src={screenshot} className={styles.screenshot} />
+          ) : (
+            <div className={styles['no-screenshot']}>
+              <div className={styles['no-screenshot-inner']}>
+                No screenshot is available
+                for this project
+              </div>
+            </div>
+          )}
         </div>
         <div className={styles['card-middle']}>
           <div className={styles.avatars}>
@@ -85,32 +78,37 @@ const ProjectCard = ({ project, latestDeployedCommit, latestDeployment }: Passed
               />
             ))}
           </div>
-          <h3 className={styles.title}>{project.name}</h3>
-          <p className={styles.description}>
-            <Truncate lines={3}>
-              {project.description}
-            </Truncate>
-          </p>
+          <MinardLink project={project}>
+            <h3 className={styles.title}>{project.name}</h3>
+          </MinardLink>
+          { latestDeployment ? (
+            <div className={styles['time-ago']}>
+              <TimeAgo minPeriod={10} date={latestDeployment.creator.timestamp} />
+            </div>
+          ) : (
+            <div className={styles['no-previews-yet']}>
+              No previews yet
+            </div>
+          )}
+          { project.description && (
+            <div className={styles.description}>
+              <Truncate lines={1}>
+                {project.description}
+              </Truncate>
+            </div>
+          )}
         </div>
-      </MinardLink>
-      {deploymentSummary ? (
-        <MinardLink preview={latestDeployment} commit={latestDeployedCommit}>
-          <div className={classNames(styles['card-bottom'], styles['hover-effect'])}>
-            {deploymentSummary}
+        <div className={styles['card-bottom']}>
+          <div className={styles['card-bottom-inner']}>
+            {bottom}
           </div>
-        </MinardLink>
-      ) : (
-        <MinardLink project={project}>
-          <div className={styles['card-bottom']} />
-        </MinardLink>
-      )}
+        </div>
     </div>
   );
 };
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
   const { project } = ownProps;
-
   const latestSuccessfullyDeployedCommitId = project.latestSuccessfullyDeployedCommit;
   const latestDeployedCommit = latestSuccessfullyDeployedCommitId ?
     Commits.selectors.getCommit(state, latestSuccessfullyDeployedCommitId) : undefined;

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Activity } from '../../modules/activities';
 
 import ActivityList from '../common/activity-list';
-import SectionTitle from '../common/section-title';
+import SectionTitle from '../common/simple-section-title';
 
 interface Props {
   activities: Activity[];
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const ActivitySection = ({ activities, isLoading, allLoaded, loadActivities }: Props) => (
-  <section className="container">
+  <section>
     <SectionTitle><span>Activity</span></SectionTitle>
     <ActivityList
       activities={activities}
