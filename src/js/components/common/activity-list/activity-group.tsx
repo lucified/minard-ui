@@ -79,7 +79,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
               </div>
             </div>
           </div>
-            {isSuccessful(firstActivity.deployment) ? (
+            {isSuccessful(deployment) ? (
               <div className={styles.screenshot}>
                 <MinardLink preview={deployment} commit={firstActivity.commit}>
                   <DeploymentScreenshot deployment={deployment} />
@@ -99,16 +99,29 @@ class ActivityGroup extends React.Component<PassedProps, void> {
           <div className={styles.links}>
             <div className={styles.link}>
               <MinardLink preview={deployment} commit={commit}>
-                <Icon className={styles.icon} name="eye" />
-                Open preview
+                {isSuccessful(deployment) ? (
+                  <div className={styles['link-inner']}>
+                    <Icon className={styles.icon} name="eye" />
+                    Open preview
+                  </div>
+                ) : (
+                  <div className={styles['link-inner']}>
+                    <Icon className={styles.icon} name="align-left" />
+                    Open build log
+                  </div>
+                )}
               </MinardLink>
             </div>
-            <div className={styles.link}>
-              <MinardLink deployment={deployment} openInNewWindow>
-                <Icon className={styles.icon} name="arrows-alt" />
-                Open raw deployment
-              </MinardLink>
-            </div>
+            {isSuccessful(deployment) && (
+              <div className={styles.link}>
+                <MinardLink deployment={deployment} openInNewWindow>
+                  <div className={styles['link-inner']}>
+                    <Icon className={styles.icon} name="arrows-alt" />
+                    Open naked preview
+                  </div>
+                </MinardLink>
+              </div>
+            )}
           </div>
         </div>
         {commentActivities.length > 0 && (

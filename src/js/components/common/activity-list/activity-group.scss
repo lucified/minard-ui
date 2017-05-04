@@ -59,6 +59,11 @@
   color: $minard-mid-gray;
 }
 
+.link-inner {
+  display: flex;
+  align-items: center;
+}
+
 .link + .link {
   margin-left: 20px;
 }
@@ -95,7 +100,7 @@
 }
 
 .icon {
-  margin-right: 6px;
+  margin-right: 10px;
 }
 
 .action {

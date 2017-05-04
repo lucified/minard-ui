@@ -62,7 +62,6 @@ class ProjectView extends React.Component<Props, void> {
   private reloadPage(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
     e.stopPropagation();
-
     location.reload(true);
   }
 
