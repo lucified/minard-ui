@@ -139,12 +139,17 @@ class AccountDialog extends React.Component<Props, State> {
               Password
             </div>
             <div className={styles.text}>
+              <button
+                type="submit"
+                disabled={passwordChangeTriggered}
+                className={modalStyles.reset}
+                onClick={this.requestResetPassword}
+              >
+                {passwordChangeTriggered ? 'Email sent!' : 'Reset password'}
+              </button>
               <p>
-                To change your Minard
-                password, <span className={styles.clickable} onClick={this.requestResetPassword}>click here</span>.
                 A password reset email will be sent to {email}.
               </p>
-              {passwordChangeTriggered && <p>Password reset email sent!</p>}
               {error && <p>Sorry, we had a problem problem requesting a password reset: {error}</p>}
             </div>
           </div>

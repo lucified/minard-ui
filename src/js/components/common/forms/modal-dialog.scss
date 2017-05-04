@@ -95,63 +95,70 @@
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
   @include nitti-grotesk-medium;
+}
 
-  .primary-actions {
+.primary-actions {
     display: flex;
     align-items: center;
   }
 
-  .submit {
+.submit {
+  background: white;
+  border: 1px solid $minard-light-gray;
+  outline: none;
+  border-radius: 5px;
+  padding: 14px 24px;
+  width: 164px;
+  cursor: pointer;
+
+  @include font-size-M;
+  color: $minard-cyan;
+
+  &:hover {
+    background: $minard-cyan;
+    color: white;
+  }
+
+  &[disabled=disabled], &:disabled {
+    cursor: default;
+    pointer-events: none;
+    color: $minard-disabled-mid-gray;
     background: white;
-    border: 1px solid $minard-light-gray;
-    outline: none;
-    border-radius: 5px;
-    padding: 14px 24px;
-    width: 164px;
-    cursor: pointer;
+  }
+}
 
-    @include font-size-M;
-    color: $minard-cyan;
+.reset {
+  @extend .submit;
 
-    &:hover {
-      background: $minard-cyan;
-      color: white;
-    }
+  width: 186px;
+  padding: 10px 20px;
+}
 
-    &[disabled=disabled], &:disabled {
-      cursor: default;
-      pointer-events: none;
-      color: $minard-disabled-mid-gray;
-      background: white;
-    }
+.cancel {
+  margin-right: 28px;
+  @include font-size-M;
+  color: $minard-mid-gray;
+
+  &:hover {
+    color: $minard-dark-blue;
   }
 
-  .cancel {
-    margin-right: 28px;
-    @include font-size-M;
-    color: $minard-mid-gray;
-
-    &:hover {
-      color: $minard-dark-blue;
-    }
-
-    &.disabled-link {
-      cursor: default;
-      color: $minard-light-gray;
-    }
-
-    &.disabled-link:hover {
-      color: $minard-light-gray;
-    }
+  &.disabled-link {
+    cursor: default;
+    color: $minard-light-gray;
   }
 
-  .delete {
-    @include font-size-M;
-    color: $minard-red;
+  &.disabled-link:hover {
+    color: $minard-light-gray;
+  }
+}
 
-    &:hover {
-      color: $minard-dark-red;
-    }
+.delete {
+  @include font-size-M;
+  color: $minard-red;
+
+  &:hover {
+    color: $minard-dark-red;
   }
 }
 
