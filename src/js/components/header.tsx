@@ -2,9 +2,9 @@
 
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 import { clearStoredCredentials } from '../api/auth';
 import { logout as intercomLogout } from '../intercom';
