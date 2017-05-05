@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Activity } from '../../modules/activities';
+
 import ActivityList from '../common/activity-list';
 import MinardLink from '../common/minard-link';
 import SimpleSectionTitle from '../common/simple-section-title';
