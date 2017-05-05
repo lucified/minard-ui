@@ -104,11 +104,11 @@ const BranchSummary = (props: Props) => {
         </div>
         {commitContent}
         <div className={styles.links}>
-          {!isFetchError(deploymentForLatestCommit)
+          {!isFetchError(latestSuccessfulDeployment)
             && latestSuccessfullyDeployedCommit
-            && !isFetchError(latestCommit)
-            && latestCommit ? (
-              <MinardLink preview={deploymentForLatestCommit} commit={latestCommit}>
+            && !isFetchError(latestSuccessfullyDeployedCommit)
+            && latestSuccessfullyDeployedCommit ? (
+              <MinardLink preview={latestSuccessfulDeployment} commit={latestSuccessfullyDeployedCommit}>
                 <div className={styles.link}>
                   <Icon name="eye" />
                   <div className={styles['link-text']}>
