@@ -92,7 +92,10 @@ const ProjectCard = ({
   const maxAvatarCount = 8;
   return (
     <div className={styles.card}>
-        <div className={styles['card-top']}>
+        <div
+          className={styles['card-top']}
+          style={{ backgroundImage: `url(${screenshot})` }}
+        >
           {screenshot ? (
             <img src={screenshot} className={styles.screenshot} />
           ) : (

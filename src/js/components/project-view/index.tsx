@@ -114,18 +114,21 @@ class ProjectView extends React.Component<Props, void> {
       } else {
         mainContent = (
           <div>
-            <div className="container">
+            <div className="container-fluid">
               <div className="row">
-                <div className="col-md-8">
+                <div className="col-xs-12 col-sm-8">
                   <ProjectActivity
+                    project={project}
                     activities={activities!}
                     loadActivities={loadActivities.bind(this, project.id)}
                     isLoading={isLoadingActivities}
                     allLoaded={isAllActivitiesRequestedForProject}
                   />
                 </div>
-                <div className="col-md-4">
-                  <ProjectBranches project={project} branches={branches} count={3} />
+                <div className="col-xs-12 col-sm-4">
+                  <div className={styles.branches}>
+                    <ProjectBranches project={project} branches={branches} count={3} />
+                  </div>
                 </div>
               </div>
             </div>

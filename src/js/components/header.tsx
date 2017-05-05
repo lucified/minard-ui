@@ -137,7 +137,7 @@ class Header extends React.Component<Props, void> {
         </CSSTransitionGroup>
         <InviteTeamDialog invitationToken={team && team.invitationToken} />
         <AccountDialog email={userEmail!} />
-        <div className="container">
+        <div className="container-fluid">
           <div className={classNames(styles.header, 'row', 'between-l', 'middle-xs')}>
             <div className={classNames(styles.logo, 'col-xs')}>
               <MinardLink homepage>

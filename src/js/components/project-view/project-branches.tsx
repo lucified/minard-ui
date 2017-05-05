@@ -44,7 +44,7 @@ class ProjectBranches extends React.Component<Props, void> {
 
     if (!branches) {
       return (
-        <section className="container">
+        <section className="container-fluid">
           <SimpleSectionTitle><span>{title}</span></SimpleSectionTitle>
           <LoadingIcon className={styles.loading} center />
         </section>
@@ -67,18 +67,18 @@ class ProjectBranches extends React.Component<Props, void> {
     const content = (branchesToShow.length === 0) ? getEmptyContent() : getBranches(branchesToShow);
 
     return (
-      <section>
-        <SimpleSectionTitle><span>{title}</span></SimpleSectionTitle>
-        {content}
-        {(!showAll && filteredBranches.length > count) && (
-          <div className="row end-xs">
-            <div className={classNames('col-xs-12', styles['show-all-branches-section'])}>
+      <section className={classNames(styles.root, showAll && styles['root-all'])}>
+        <div className={classNames(showAll && 'container-fluid')}>
+          <div className={styles.inner}>
+            <SimpleSectionTitle><span>{title}</span></SimpleSectionTitle>
+            {content}
+            {(!showAll && filteredBranches.length > count) && (
               <MinardLink className={styles['show-all-branches-link']} showAll project={project}>
                 Show all branches ({filteredBranches.length})
               </MinardLink>
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </section>
     );
   }

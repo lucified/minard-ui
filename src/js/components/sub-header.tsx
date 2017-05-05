@@ -119,7 +119,7 @@ class SubHeader extends React.Component<Props, void> {
 
     return (
       <section className={classNames(styles['sub-header-background'])}>
-        <div className="container">
+        <div className="container-fluid">
           <div className={styles.main}>
             <div className={classNames(styles['sub-header-left'], styles['sub-header'])}>
               {leftContent}

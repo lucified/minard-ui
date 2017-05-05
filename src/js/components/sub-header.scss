@@ -24,6 +24,11 @@
   }
 }
 
+.sub-header-left {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .sub-header-link {
   line-height: 1.79;
 }
@@ -45,6 +50,12 @@
 
 .avatar + .avatar {
   margin-left: 10px;
+}
+
+@media(max-width: 600px) {
+  .avatar {
+    display: none;
+  }
 }
 
 .project-settings {

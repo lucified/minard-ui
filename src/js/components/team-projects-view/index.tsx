@@ -68,7 +68,7 @@ class TeamProjectsView extends React.Component<Props, void> {
     if (show === 'all') {
       return (
         <div className={styles['all-projects']}>
-          <div className="container">
+          <div className="container-fluid">
             <ProjectsSection projects={projects} isLoading={isLoadingProjects} showAll />
           </div>
         </div>
@@ -77,9 +77,9 @@ class TeamProjectsView extends React.Component<Props, void> {
 
     return (
       <div className={styles.root}>
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
-            <div className="col-md-8">
+            <div className="col-xs-12 col-md-8">
               <ActivitySection
                 activities={activities}
                 loadActivities={this.loadMoreActivities}
@@ -87,8 +87,10 @@ class TeamProjectsView extends React.Component<Props, void> {
                 allLoaded={isAllActivitiesRequested}
               />
             </div>
-            <div className="col-md-4">
-              <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={2} />
+            <div className="col-xs-12 col-md-4">
+              <div className={styles.projects}>
+                <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={2} />
+              </div>
             </div>
           </div>
         </div>

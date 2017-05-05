@@ -1,3 +1,6 @@
+@import '../mixins';
+@import '../definitions';
+
 .root {
   margin-top: 20px;
 }
@@ -8,4 +11,11 @@
 
 .all-projects {
   margin-top: 20px;
+}
+
+.projects {
+  display: none;
+  @media(min-width: $breakpoint-md) {
+    display: block;
+  }
 }
