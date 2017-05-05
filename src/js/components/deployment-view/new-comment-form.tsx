@@ -37,10 +37,28 @@ const validate = (values: CreateCommentFormData) => {
 };
 
 class NewCommentForm extends React.Component<Props, void> {
+  private commentFieldRef: HTMLElement;
+  private focusTimeoutId: any;
+
   constructor(props: Props) {
     super(props);
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.storeCommentFieldRef = this.storeCommentFieldRef.bind(this);
+  }
+
+  private storeCommentFieldRef(element: HTMLElement) {
+    this.commentFieldRef = element;
+  }
+
+  public componentWillReceiveProps(nextProps: Props) {
+    if (this.props.submitting && !nextProps.submitting) {
+      this.focusTimeoutId = setTimeout(() => { this.commentFieldRef.focus(); }, 100);
+    }
+  }
+
+  public componentWillUnmount() {
+    clearTimeout(this.focusTimeoutId);
   }
 
   private handleKeyDown(e: React.KeyboardEvent<any>) {
@@ -88,6 +106,7 @@ class NewCommentForm extends React.Component<Props, void> {
             type="textarea"
             placeholder="Comment"
             disabled={submitting}
+            fieldRef={this.storeCommentFieldRef}
             onKeyDown={this.handleKeyDown}
           />
           <footer className={styles.footer}>
