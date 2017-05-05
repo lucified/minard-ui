@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as Textarea from 'react-autosize-textarea';
+import Textarea from 'react-autosize-textarea';
 import Icon = require('react-fontawesome');
 import { BaseFieldProps, WrappedFieldMetaProps } from 'redux-form';
 

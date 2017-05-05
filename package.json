@@ -117,7 +117,7 @@
     "normalize.css": "5.0.0",
     "raven-js": "^3.14.2",
     "react": "^15.5.4",
-    "react-autosize-textarea": "0.3.4",
+    "react-autosize-textarea": "^0.4.3",
     "react-dom": "^15.5.4",
     "react-flip-move": "^2.9.3",
     "react-fontawesome": "^1.6.1",
