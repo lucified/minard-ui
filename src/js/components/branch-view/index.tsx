@@ -127,12 +127,14 @@ class BranchView extends React.Component<Props, StateTree> {
 
     return (
       <div className={styles.root}>
-        <CommitList
-          commits={commits!}
-          isLoading={isLoadingCommits}
-          allLoaded={branch.allCommitsLoaded}
-          loadCommits={loadCommits.bind(this, branch.id)}
-        />
+        <div className="container-fluid">
+          <CommitList
+            commits={commits!}
+            isLoading={isLoadingCommits}
+            allLoaded={branch.allCommitsLoaded}
+            loadCommits={loadCommits.bind(this, branch.id)}
+          />
+        </div>
       </div>
     );
   }
