@@ -59,11 +59,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
               <TimeAgo minPeriod={10} date={deploymentTime} />
               {' '}&middot;{' '}
               {getBranchLabel(firstActivity)}
-              { showProjectName && (
-                <span>
-                  {' '}in {getProjectLabel(firstActivity)}
-                </span>
-              )}
+              {showProjectName && getProjectLabel(firstActivity)}
             </div>
             <div className={styles['deployment-details']}>
               <div className={styles.avatar}>
