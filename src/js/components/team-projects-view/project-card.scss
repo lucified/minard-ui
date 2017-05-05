@@ -14,12 +14,12 @@
 
 .screenshot {
   width: 100%;
-  object-fit: cover;
 }
 
 .card-top {
   height: 244px;
   overflow: hidden;
+  background-size: cover;
 }
 
 .avatars {

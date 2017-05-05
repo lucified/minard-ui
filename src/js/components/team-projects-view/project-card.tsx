@@ -96,9 +96,7 @@ const ProjectCard = ({
           className={styles['card-top']}
           style={{ backgroundImage: `url(${screenshot})` }}
         >
-          {screenshot ? (
-            <img src={screenshot} className={styles.screenshot} />
-          ) : (
+          {!screenshot && (
             <div className={styles['no-screenshot']}>
               <div className={styles['no-screenshot-inner']}>
                 No screenshot is available
