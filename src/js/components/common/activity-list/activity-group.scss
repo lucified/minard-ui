@@ -59,6 +59,12 @@
   color: $minard-mid-gray;
 }
 
+.link {
+  :hover {
+    color: $minard-dark-gray !important;
+  }
+}
+
 .link-inner {
   display: flex;
   align-items: center;
