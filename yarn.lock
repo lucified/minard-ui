@@ -1805,13 +1805,6 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-doctrine@0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-0.7.2.tgz#7cb860359ba3be90e040b26b729ce4bfa654c523"
-  dependencies:
-    esutils "^1.1.6"
-    isarray "0.0.1"
-
 dom-converter@~0.1:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/dom-converter/-/dom-converter-0.1.4.tgz#a45ef5727b890c9bffe6d7c876e7b19cb0e17f3b"
@@ -1985,10 +1978,6 @@ escape-string-regexp@1.0.5, escape-string-regexp@^1.0.2:
 esprima@^2.6.0:
   version "2.7.3"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-2.7.3.tgz#96e3b70d5779f6ad49cd032673d1c312767ba581"
-
-esutils@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/esutils/-/esutils-1.1.6.tgz#c01ccaa9ae4b897c6d0c3e210ae52f3c7a844375"
 
 esutils@^2.0.2:
   version "2.0.2"
@@ -2332,10 +2321,6 @@ gaze@^1.0.0:
 get-caller-file@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.2.tgz#f702e63127e7e231c160a80c1554acb70d5047e5"
-
-get-comments@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/get-comments/-/get-comments-1.0.1.tgz#196759101bbbc4facf13060caaedd4870dee55be"
 
 get-stdin@^4.0.1:
   version "4.0.1"
@@ -4524,12 +4509,12 @@ rc@~1.1.6:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-autosize-textarea@0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/react-autosize-textarea/-/react-autosize-textarea-0.3.4.tgz#3b62fb01f48510cb18c894daefe49ffb2bd85039"
+react-autosize-textarea@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/react-autosize-textarea/-/react-autosize-textarea-0.4.3.tgz#71aa029a1278352dc805841fea880223cb99737a"
   dependencies:
     autosize "^3.0.15"
-    tcomb-react "^0.9.3"
+    prop-types "^15.5.6"
 
 react-deep-force-update@^1.0.0:
   version "1.0.1"
@@ -4652,7 +4637,7 @@ react-waypoint@^6.0.0:
   dependencies:
     consolidated-events "^1.0.1"
 
-react@>=0.13.0, "react@^15.3.0 || ^16.0.0", react@^15.5.4:
+"react@^15.3.0 || ^16.0.0", react@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:
@@ -5400,32 +5385,6 @@ tar@^2.0.0, tar@~2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
-
-tcomb-doc@^0.5.0:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/tcomb-doc/-/tcomb-doc-0.5.2.tgz#d58a653a3007e3649127864010c558a7bf666d1e"
-  dependencies:
-    tcomb "^3.0.0"
-
-tcomb-react@^0.9.3:
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/tcomb-react/-/tcomb-react-0.9.3.tgz#44713e1d2e8c2ff744b8ed6579bf77aed23b0efc"
-  dependencies:
-    doctrine "0.7.2"
-    get-comments "1.0.1"
-    react ">=0.13.0"
-    tcomb-doc "^0.5.0"
-    tcomb-validation "^3.0.0"
-
-tcomb-validation@^3.0.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/tcomb-validation/-/tcomb-validation-3.3.0.tgz#29ada8534203500e90b245eedd0e1a80f1909ba2"
-  dependencies:
-    tcomb "^3.0.0"
-
-tcomb@^3.0.0:
-  version "3.2.16"
-  resolved "https://registry.yarnpkg.com/tcomb/-/tcomb-3.2.16.tgz#345782f2f060839a2df30480209b1afc8b16e1fa"
 
 through2-filter@^2.0.0:
   version "2.0.0"

@@ -13,6 +13,7 @@ const styles = require('./new-comment-form.scss');
 
 interface PassedProps {
   initialValues: Partial<CreateCommentFormData>;
+  isAuthenticatedUser: boolean;
 }
 
 type Props = PassedProps & FormProps<CreateCommentFormData, PassedProps, void>;
@@ -36,10 +37,32 @@ const validate = (values: CreateCommentFormData) => {
 };
 
 class NewCommentForm extends React.Component<Props, void> {
+  private commentFieldRef: HTMLElement;
+  private focusTimeoutId: any;
+
   constructor(props: Props) {
     super(props);
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.storeCommentFieldRef = this.storeCommentFieldRef.bind(this);
+  }
+
+  public componentDidMount() {
+    this.commentFieldRef.focus();
+  }
+
+  public componentWillReceiveProps(nextProps: Props) {
+    if (this.props.submitting && !nextProps.submitting) {
+      this.focusTimeoutId = setTimeout(() => { this.commentFieldRef.focus(); }, 100);
+    }
+  }
+
+  public componentWillUnmount() {
+    clearTimeout(this.focusTimeoutId);
+  }
+
+  private storeCommentFieldRef(element: HTMLElement) {
+    this.commentFieldRef = element;
   }
 
   private handleKeyDown(e: React.KeyboardEvent<any>) {
@@ -52,7 +75,7 @@ class NewCommentForm extends React.Component<Props, void> {
   }
 
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid, isAuthenticatedUser } = this.props;
 
     return (
       <div className={styles['new-comment-form']}>
@@ -63,26 +86,31 @@ class NewCommentForm extends React.Component<Props, void> {
               {error}
             </div>
           )}
-          <Field
-            name="name"
-            component={FormField}
-            type="text"
-            placeholder="Name (optional)"
-            disabled={submitting}
-          />
-          <Field
-            name="email"
-            component={FormField}
-            type="text"
-            placeholder="Email"
-            disabled={submitting}
-          />
+          {!isAuthenticatedUser && (
+            <Field
+              name="email"
+              component={FormField}
+              type="text"
+              placeholder="Email"
+              disabled={submitting}
+            />
+          )}
+          {!isAuthenticatedUser && (
+            <Field
+              name="name"
+              component={FormField}
+              type="text"
+              placeholder="Name (optional)"
+              disabled={submitting}
+            />
+          )}
           <Field
             name="message"
             component={FormField}
             type="textarea"
             placeholder="Comment"
             disabled={submitting}
+            fieldRef={this.storeCommentFieldRef}
             onKeyDown={this.handleKeyDown}
           />
           <footer className={styles.footer}>
