@@ -6,8 +6,8 @@
 }
 
 .sub-header {
-  @include nitti-grotesk-regular;
-  @include font-size-M;
+  @include nitti-grotesk-semilight;
+  @include font-size-L;
   letter-spacing: -0.3px;
 
   height: 60px;
@@ -25,8 +25,6 @@
 }
 
 .sub-header-link {
-  @include nitti-grotesk-medium;
-  @include font-size-MS;
   line-height: 1.79;
 }
 
@@ -38,4 +36,33 @@
   padding-left: 6px;
   position: relative;
   top: 2px;
+}
+
+.project-right {
+  display: flex;
+  align-items: center;
+}
+
+.avatar + .avatar {
+  margin-left: 10px;
+}
+
+.project-settings {
+  @include font-size-M;
+  @include nitti-grotesk-medium;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  a {
+    color: $minard-mid-gray;
+  }
+}
+
+.project-settings-text {
+  margin-left: 10px;
+}
+
+.main {
+  display: flex;
+  justify-content: space-between;
 }

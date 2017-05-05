@@ -3,7 +3,7 @@ import Icon = require('react-fontawesome');
 
 import { selectText } from '../../helpers';
 import { Project } from '../../modules/projects';
-import SectionTitle from '../common/section-title';
+import SimpleSectionTitle from '../common/simple-section-title';
 
 const styles = require('./empty-project.scss');
 
@@ -14,7 +14,7 @@ interface Props {
 const EmptyProject = ({ project }: Props) => {
   return (
     <section className="container">
-      <SectionTitle><span>Get started</span></SectionTitle>
+      <SimpleSectionTitle><span>Get started</span></SimpleSectionTitle>
       <div className="row start-xs">
         <div className="col-xs-12 col-md-8 col-lg-6">
           <div className={styles.instructions}>

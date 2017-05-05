@@ -1,13 +1,16 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-// import Icon = require('react-fontawesome');
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
+import Icon = require('react-fontawesome');
 
 import { FetchError, isFetchError } from '../modules/errors';
+import Modal, { ModalType } from '../modules/modal';
 import Projects, { Project } from '../modules/projects';
 import Selected from '../modules/selected';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
+
+import Avatar from './common/avatar';
 import MinardLink from './common/minard-link';
 
 const styles = require('./sub-header.scss');
@@ -24,48 +27,104 @@ interface GeneratedProps {
   openPageType: PageType;
   team?: Team;
   project?: Project | FetchError;
+  branch: string | null;
 }
 
-class SubHeader extends React.Component<GeneratedProps, void> {
-  public render() {
-    const { openPageType, project, team } = this.props;
-    let leftContent: JSX.Element | null = null;
-    const centerContent: JSX.Element | null = null;
-    const rightContent: JSX.Element | null = null;
+interface GeneratedDispatchProps {
+  openProjectSettingsDialog: (e: React.MouseEvent<HTMLElement>) => void;
+}
 
-    // TODO: what if we don't have team?
+type Props = GeneratedProps & GeneratedDispatchProps;
 
-    if (project && !isFetchError(project) &&
-      (openPageType === PageType.BranchView || openPageType === PageType.BranchesList)) {
-      leftContent = <MinardLink className={styles['sub-header-link']} project={project}>‹ {project.name}</MinardLink>;
-    } else if (team!.name && (openPageType === PageType.ProjectView || openPageType === PageType.ProjectsList)) {
-      leftContent = <MinardLink className={styles['sub-header-link']} homepage>‹ {team!.name}</MinardLink>;
-    }
+class SubHeader extends React.Component<Props, void> {
 
-    /* TODO: uncomment this once we add sorting
-    if (openPageType === PageType.TeamProjectsView || openPageType === PageType.ProjectsList) {
-      centerContent = (
-        <span>
-          Sort projects by
-          <a className={styles['sorting-dropdown']} href="#">
-            Recent <Icon className={styles.caret} name="caret-down" />
-          </a>
-        </span>
+  private getLeftContent() {
+    const { openPageType, project, branch, team } = this.props;
+    const items: JSX.Element[] = [
+      <MinardLink key="team" className={styles['sub-header-link']} homepage>{team!.name}</MinardLink>,
+    ];
+
+    if (openPageType === PageType.ProjectsList) {
+      items.push(
+        <span key="all-projects">
+          {' '}/ all projects
+        </span>,
       );
     }
-    */
+
+    if (project && !isFetchError(project)) {
+      items.push(
+        <span key="project-name">
+          {' '}/{' '}
+          <MinardLink
+            className={styles['sub-header-link']}
+            project={project}
+          >
+            {project.name}
+          </MinardLink>
+        </span>,
+      );
+
+      if (openPageType === PageType.BranchView && branch) {
+        items.push(
+          <span key="branch">
+            {' '}/{' '}
+            <MinardLink
+              className={styles['sub-header-link']}
+              project={project}
+              branch={branch}
+            >
+              {branch}
+            </MinardLink>
+          </span>,
+        );
+      }
+    }
+    return <span>{items}</span>;
+  }
+
+  private getRightContent() {
+    const { project, openProjectSettingsDialog } = this.props;
+    if (project && !isFetchError(project)) {
+      return (
+        <div className={styles['project-right']}>
+          {project.activeUsers.map(user => (
+            <div className={styles.avatar} key={user.email}>
+              <Avatar email={user.email} size="m" title={user.name} shadow />
+            </div>
+          ))}
+          <div className={styles['project-settings']}>
+            <Icon className={styles.icon} name="gear" />
+            <div className={styles['project-settings-text']}>
+              <a onClick={openProjectSettingsDialog}>
+                Project settings
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  public render() {
+    const { openPageType } = this.props;
+    if (openPageType === PageType.TeamProjectsView) {
+      return <span />;
+    }
+
+    // TODO: what if we don't have team?
+    const leftContent = this.getLeftContent();
+    const rightContent = this.getRightContent();
 
     return (
       <section className={classNames(styles['sub-header-background'])}>
         <div className="container">
-          <div className="row">
-            <div className={classNames(styles['sub-header'], 'start-xs', 'col-xs-4')}>
+          <div className={styles.main}>
+            <div className={classNames(styles['sub-header-left'], styles['sub-header'])}>
               {leftContent}
             </div>
-            <div className={classNames(styles['sub-header'], 'center-xs', 'col-xs-4')}>
-              {centerContent}
-            </div>
-            <div className={classNames(styles['sub-header'], 'end-xs', 'col-xs-4')}>
+            <div className={styles['sub-header']}>
               {rightContent}
             </div>
           </div>
@@ -104,8 +163,15 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   return {
     openPageType,
     project,
+    branch: selectedBranch,
     team: User.selectors.getTeam(state),
   };
 };
 
-export default connect<GeneratedProps, {}, {}>(mapStateToProps)(SubHeader);
+const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+  openProjectSettingsDialog: (_e: React.MouseEvent<HTMLElement>) => {
+    dispatch(Modal.actions.openModal(ModalType.ProjectSettings));
+  },
+});
+
+export default connect<GeneratedProps, {}, {}>(mapStateToProps, mapDispatchToProps)(SubHeader);

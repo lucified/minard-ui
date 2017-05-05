@@ -42,5 +42,5 @@
   color: $minard-dark-blue;
   line-height: 24px;
   @include font-size-M;
-  letter-spacing: -0.31px;
+  @include nitti-grotesk-semilight;
 }

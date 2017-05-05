@@ -5,7 +5,7 @@
   @include nitti-grotesk-bold;
   @include font-size-M;
   color: $minard-cyan;
-
+  letter-spacing: normal;
   text-align: right;
 
   &:hover {
@@ -17,16 +17,12 @@
   @include nitti-grotesk-regular;
 }
 
-.project-card {
-  max-width: 450px;
-}
-
 .loading {
   margin-top: 100px;
 }
 
 .show-all-projects-section {
-  margin: 48px 36px 72px 0;
+  margin-top: 20px;
 }
 
 .show-all-projects-link {

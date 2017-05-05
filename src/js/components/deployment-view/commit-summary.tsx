@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import Icon = require('react-fontawesome');
 
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
@@ -45,7 +46,8 @@ const CommitSummary = ({ isAuthenticatedUser, className, commit, deployment, pre
       </div>
       <div className={styles.bottom}>
         <MinardLink className={styles['open-link']} openInNewWindow deployment={deployment}>
-          Open in new window
+          <Icon className={styles.icon} name="arrows-alt" />
+          Open naked preview
         </MinardLink>
       </div>
     </div>

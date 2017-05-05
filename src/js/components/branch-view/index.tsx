@@ -11,7 +11,6 @@ import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
-import BranchHeader from './branch-header';
 import CommitList from './commit-list';
 
 const styles = require('./index.scss');
@@ -127,8 +126,7 @@ class BranchView extends React.Component<Props, StateTree> {
     }
 
     return (
-      <div>
-        <BranchHeader project={project} branch={branch} />
+      <div className={styles.root}>
         <CommitList
           commits={commits!}
           isLoading={isLoadingCommits}

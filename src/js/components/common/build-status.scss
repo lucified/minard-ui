@@ -4,12 +4,12 @@
 .box {
   display: inline-block;
   border-radius: 3px;
+  margin-top: -3px;
   padding: 7px 16px;
 
   @include nitti-grotesk-medium;
   @include font-size-S;
   color: white;
-  letter-spacing: -0.23px;
   line-height: 16px;
 }
 

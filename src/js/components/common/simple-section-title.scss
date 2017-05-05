@@ -1,0 +1,28 @@
+@import '../mixins';
+@import '../definitions';
+
+.root {
+  @include nitti-grotesk-light;
+  @include font-size-XL;
+  color: $minard-dark-blue;
+  letter-spacing: -1px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.line {
+  color: $minard-light-gray;
+  background-color: $minard-light-gray;
+  opacity: 0.0;
+  height: 1px;
+  font-size: 0;
+  border: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.root {
+  margin-bottom: 20px;
+}

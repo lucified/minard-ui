@@ -3,18 +3,13 @@
   font-weight: normal;
 }
 
-@mixin nitti-grotesk-bold {
-  font-family: "Nitti Grotesk", "Open Sans", sans-serif;
-  font-weight: bold;
-}
-
 @mixin nitti-grotesk-light {
   font-family: "Nitti Grotesk Light", "Open Sans", sans-serif;
   font-weight: lighter;
 }
 
-@mixin nitti-grotesk-medium {
-  font-family: "Nitti Grotesk Medium", "Open Sans", sans-serif;
+@mixin nitti-grotesk-semilight {
+  font-family: "Nitti Grotesk Semilight", "Open Sans", sans-serif;
   font-weight: normal;
 }
 
@@ -23,16 +18,22 @@
   font-weight: normal;
 }
 
-@mixin font-size-XS {
-  font-size: 0.563rem;
+@mixin nitti-grotesk-medium {
+  font-family: "Nitti Grotesk Medium", "Open Sans", sans-serif;
+  font-weight: normal;
+}
+
+@mixin nitti-grotesk-bold {
+  font-family: "Nitti Grotesk", "Open Sans", sans-serif;
+  font-weight: bold;
 }
 
 @mixin font-size-S {
-  font-size: 0.796rem;
+  font-size: 0.875rem;
 }
 
 @mixin font-size-MS {
-  font-size: 0.938rem;
+  font-size: 1rem;
 }
 
 @mixin font-size-M {
@@ -50,3 +51,4 @@
 @mixin font-size-XXL {
   font-size: 3.181rem;
 }
+
