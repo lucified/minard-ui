@@ -11,7 +11,7 @@ const opts = {
     if (env === 'production') {
       return 'https://minard.io/';
     }
-    return 'https://staging.minard.io/';
+    return 'https://minard.team/';
   },
   publicPath: (env) => {
     if (['production', 'staging'].indexOf(env) > -1) {
