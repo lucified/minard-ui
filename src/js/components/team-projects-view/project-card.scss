@@ -36,10 +36,7 @@
 }
 
 .card-middle {
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 20px;
   background-color: white;
   position: relative;
   h3 {
@@ -54,7 +51,6 @@
   background-color: white;
   color: $minard-mid-gray;
   @include font-size-MS;
-  // letter-spacing: -0.11px;
   line-height: 20px;
 }
 

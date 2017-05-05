@@ -7,8 +7,8 @@ import TimeAgo from 'react-timeago';
 import { Activity, ActivityType } from '../../../modules/activities';
 import { isSuccessful } from '../../../modules/deployments';
 
-import Avatar from '../../common/avatar';
-import BuildStatus from '../../common/build-status';
+import Avatar from '../avatar';
+import BuildStatus from '../build-status';
 import DeploymentScreenshot from '../deployment-screenshot';
 import LoadingIcon from '../loading-icon';
 import MinardLink from '../minard-link';

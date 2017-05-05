@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Activity } from '../../modules/activities';
 
 import ActivityList from '../common/activity-list';
-import SectionTitle from '../common/simple-section-title';
+import SimpleSectionTitle from '../common/simple-section-title';
 
 interface Props {
   activities: Activity[];
@@ -14,7 +14,7 @@ interface Props {
 
 const ActivitySection = ({ activities, isLoading, allLoaded, loadActivities }: Props) => (
   <section>
-    <SectionTitle><span>Previews</span></SectionTitle>
+    <SimpleSectionTitle><span>Previews</span></SimpleSectionTitle>
     <ActivityList
       activities={activities}
       emptyContentHeader="Nothing has happened in your projects!"

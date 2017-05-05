@@ -121,7 +121,7 @@ const ProjectCard = ({
               {project.name}
             </h3>
           </MinardLink>
-          { latestDeployment ? (
+          {latestDeployment ? (
             <div className={styles['time-ago']}>
               <TimeAgo minPeriod={10} date={latestDeployment.creator.timestamp} />
             </div>

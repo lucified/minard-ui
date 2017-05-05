@@ -9,6 +9,7 @@ import Projects, { Project } from '../modules/projects';
 import Selected from '../modules/selected';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
+
 import Avatar from './common/avatar';
 import MinardLink from './common/minard-link';
 
@@ -39,11 +40,9 @@ class SubHeader extends React.Component<Props, void> {
 
   private getLeftContent() {
     const { openPageType, project, branch, team } = this.props;
-    const items: JSX.Element[] = [];
-
-    items.push(
+    const items: JSX.Element[] = [
       <MinardLink key="team" className={styles['sub-header-link']} homepage>{team!.name}</MinardLink>,
-    );
+    ];
 
     if (openPageType === PageType.ProjectsList) {
       items.push(

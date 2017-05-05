@@ -12,7 +12,7 @@ import { StateTree } from '../../reducers';
 
 import LoadingIcon from '../common/loading-icon';
 import MinardLink from '../common/minard-link';
-import SectionTitle from '../common/simple-section-title';
+import SimpleSectionTitle from '../common/simple-section-title';
 import NewProjectDialog from './new-project-dialog';
 import ProjectCard from './project-card';
 
@@ -67,7 +67,7 @@ class ProjectsSection extends React.Component<Props, void> {
     return (
       <section>
         <NewProjectDialog />
-        <SectionTitle
+        <SimpleSectionTitle
           rightContent={(
             <a onClick={openCreateNewProjectDialog} className={classNames(styles['add-project-link'])}>
               + Add new project
@@ -77,7 +77,7 @@ class ProjectsSection extends React.Component<Props, void> {
           <span>
             Projects
           </span>
-        </SectionTitle>
+        </SimpleSectionTitle>
         <FlipMove
           className={classNames(
             showAll && 'row center-xs start-sm',
