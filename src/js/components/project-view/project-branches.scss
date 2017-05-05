@@ -1,6 +1,14 @@
 @import '../mixins';
 @import '../definitions';
 
+.root-all {
+  margin-top: 20px;
+}
+
+.inner {
+  max-width: 600px;
+}
+
 .empty {
   @include nitti-grotesk-light;
   text-align: center;
@@ -21,13 +29,11 @@
   }
 }
 
-.show-all-branches-section {
-  margin: 48px 36px 72px 0;
-}
-
 .show-all-branches-link {
   @include nitti-grotesk-medium;
   @include font-size-M;
+  display: block;
+  margin-top: 20px;
   color: $minard-cyan;
   text-align: right;
 }

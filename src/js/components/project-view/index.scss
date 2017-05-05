@@ -25,3 +25,10 @@
     @include nitti;
   }
 }
+
+.branches {
+  display: none;
+  @media(min-width: $breakpoint-sm) {
+    display: block;
+  }
+}

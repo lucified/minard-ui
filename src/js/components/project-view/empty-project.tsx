@@ -13,7 +13,7 @@ interface Props {
 
 const EmptyProject = ({ project }: Props) => {
   return (
-    <section className="container">
+    <section className="container-fluid">
       <SimpleSectionTitle><span>Get started</span></SimpleSectionTitle>
       <div className="row start-xs">
         <div className="col-xs-12 col-md-8 col-lg-6">

@@ -44,3 +44,7 @@
   @include font-size-M;
   @include nitti-grotesk-semilight;
 }
+
+.timestamp {
+  white-space: nowrap;
+}

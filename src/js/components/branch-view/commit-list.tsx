@@ -30,7 +30,7 @@ interface Props {
 const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
   if (commits.length === 0) {
     return (
-      <section className={classNames(styles['commit-list'], 'container')}>
+      <section className={classNames(styles['commit-list'], 'container-fluid')}>
         {getEmptyContent()}
       </section>
     );
@@ -39,7 +39,7 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
   const lastCommit = commits[commits.length - 1];
 
   return (
-    <section className={classNames(styles['commit-list'], 'container')}>
+    <section className={classNames(styles['commit-list'], 'container-fluid')}>
       <FlipMove enterAnimation="fade" leaveAnimation="fade">
         {commits.map((commit, i) => (
           <CommitRow key={(commit && commit.id) || i} commit={isFetchError(commit) ? undefined : commit} />

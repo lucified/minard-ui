@@ -92,10 +92,11 @@ const ProjectCard = ({
   const maxAvatarCount = 8;
   return (
     <div className={styles.card}>
-        <div className={styles['card-top']}>
-          {screenshot ? (
-            <img src={screenshot} className={styles.screenshot} />
-          ) : (
+        <div
+          className={styles['card-top']}
+          style={{ backgroundImage: `url(${screenshot})` }}
+        >
+          {!screenshot && (
             <div className={styles['no-screenshot']}>
               <div className={styles['no-screenshot-inner']}>
                 No screenshot is available

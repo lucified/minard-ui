@@ -84,11 +84,11 @@ class SubHeader extends React.Component<Props, void> {
   }
 
   private getRightContent() {
-    const { project, openProjectSettingsDialog } = this.props;
+    const { project, openProjectSettingsDialog, openPageType } = this.props;
     if (project && !isFetchError(project)) {
       return (
         <div className={styles['project-right']}>
-          {project.activeUsers.map(user => (
+          {openPageType === PageType.ProjectView && project.activeUsers.map(user => (
             <div className={styles.avatar} key={user.email}>
               <Avatar email={user.email} size="m" title={user.name} shadow />
             </div>
@@ -119,7 +119,7 @@ class SubHeader extends React.Component<Props, void> {
 
     return (
       <section className={classNames(styles['sub-header-background'])}>
-        <div className="container">
+        <div className="container-fluid">
           <div className={styles.main}>
             <div className={classNames(styles['sub-header-left'], styles['sub-header'])}>
               {leftContent}

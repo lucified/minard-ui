@@ -1,0 +1,19 @@
+@import '../mixins';
+@import '../definitions';
+
+.show-branches {
+  @include nitti-grotesk-bold;
+  @include font-size-M;
+  color: $minard-cyan;
+  letter-spacing: normal;
+  text-align: right;
+  &:hover {
+    color: $minard-dark-cyan;
+  }
+  margin-left: 20px;
+  display: inline-block;
+
+  @media only screen and (min-width: $breakpoint-sm) {
+    display: none;
+  }
+}
