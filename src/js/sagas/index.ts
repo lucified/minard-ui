@@ -4,6 +4,7 @@ import { SubmissionError } from 'redux-form';
 import { takeEvery, takeLatest, throttle } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
+import { clearStoredCredentials } from '../api/auth';
 import * as Converter from '../api/convert';
 import {
   Api,
@@ -14,6 +15,7 @@ import {
   ApiTeam,
   SignupResponse,
 } from '../api/types';
+import { logout as intercomLogout } from '../intercom';
 import { logException, logMessage } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
@@ -628,7 +630,7 @@ export default function createSagas(api: Api) {
 
   function *signupUser(_action: SignupUserAction): IterableIterator<Effect> {
     yield put(Errors.actions.clearSignupError());
-    const { response , error, details } = yield call(api.User.signup);
+    const { response, error, details } = yield call(api.User.signup);
 
     if (response) {
       const { password, team: { id, name } } = response as SignupResponse;
@@ -652,6 +654,23 @@ export default function createSagas(api: Api) {
     } else {
       yield put(push('/login'));
     }
+  }
+
+  function *logout(): IterableIterator<Effect> {
+    const { error, unauthorized } = yield call(api.User.logout);
+
+    if (error) {
+      if (unauthorized) {
+        console.error('Unable to clear cookie: Unauthorized');
+      } else {
+        console.error(`Unable to clear cookie: ${error}`);
+      }
+    }
+
+    intercomLogout();
+    yield put(User.actions.clearStoredData());
+    yield put(User.actions.clearUserDetails());
+    clearStoredCredentials();
   }
 
   // FORMS
@@ -734,6 +753,7 @@ export default function createSagas(api: Api) {
       takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments),
       takeEvery(FORM_SUBMIT, formSubmitSaga),
       throttle(200, Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
+      takeEvery(User.actions.LOGOUT, logout),
       takeEvery(User.actions.REDIRECT_TO_LOGIN, redirectToLogin),
       fork(watchForLoadAllProjects),
       fork(watchForLoadActivities),

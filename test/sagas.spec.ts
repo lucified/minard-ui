@@ -78,6 +78,7 @@ const createApi = (): Api => {
         password: 'secretPass',
         team: { id: 1, name: 'name' } as ApiTeam },
       }),
+      logout: () => Promise.resolve({}),
     },
   };
 };
