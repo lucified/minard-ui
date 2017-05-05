@@ -81,7 +81,6 @@ class ProjectsSection extends React.Component<Props, void> {
         <FlipMove
           className={classNames(
             showAll && 'row',
-            // showAll && 'center-xs',
             showAll && 'start-sm',
           )}
           enterAnimation="elevator"
