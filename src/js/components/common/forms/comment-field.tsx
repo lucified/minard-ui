@@ -12,12 +12,14 @@ interface ReduxFormProps {
   type: string;
   label: string;
   placeholder: string;
+  disabled?: boolean;
   onKeyDown?: (e: React.KeyboardEvent<any>) => void;
 }
 
 const Field = ({
   input,
   placeholder,
+  disabled,
   type,
   onKeyDown,
   meta: {
@@ -26,13 +28,14 @@ const Field = ({
   },
 }: BaseFieldProps & ReduxFormProps) => {
   // TODO: remove the below. There currently seems to be a bug in tsc that makes it think
-  // that the placeholder variable is not used: https://github.com/Microsoft/TypeScript/issues/15478
+  // that the variables are not used if you spread an any: https://github.com/Microsoft/TypeScript/issues/15478
   placeholder; // tslint:disable-line
   onKeyDown; // tslint:disable-line
+  disabled; // tslint:disable-line
 
   const inputComponent = type === 'textarea' ?
-    <Textarea {...input} placeholder={placeholder} type={type} rows={3} onKeyDown={onKeyDown} /> :
-    <input {...input} placeholder={placeholder} type={type} onKeyDown={onKeyDown} />;
+    <Textarea {...input} disabled={disabled} placeholder={placeholder} type={type} rows={3} onKeyDown={onKeyDown} /> :
+    <input {...input} disabled={disabled} placeholder={placeholder} type={type} onKeyDown={onKeyDown} />;
 
   return (
     <div className={styles.field}>

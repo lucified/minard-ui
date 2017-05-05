@@ -18,6 +18,11 @@
     @include font-size-M;
     line-height: 22px;
     color: $minard-dark-blue;
+
+    &[disabled=disabled], &:disabled {
+      color: $minard-mid-gray;
+      background: $minard-lightest-gray;
+    }
   }
 
   textarea {
