@@ -13,6 +13,7 @@ const styles = require('./new-comment-form.scss');
 
 interface PassedProps {
   initialValues: Partial<CreateCommentFormData>;
+  isAuthenticatedUser: boolean;
 }
 
 type Props = PassedProps & FormProps<CreateCommentFormData, PassedProps, void>;
@@ -52,7 +53,7 @@ class NewCommentForm extends React.Component<Props, void> {
   }
 
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid } = this.props;
+    const { handleSubmit, pristine, submitting, error, invalid, isAuthenticatedUser } = this.props;
 
     return (
       <div className={styles['new-comment-form']}>
@@ -63,20 +64,24 @@ class NewCommentForm extends React.Component<Props, void> {
               {error}
             </div>
           )}
-          <Field
-            name="name"
-            component={FormField}
-            type="text"
-            placeholder="Name (optional)"
-            disabled={submitting}
-          />
-          <Field
-            name="email"
-            component={FormField}
-            type="text"
-            placeholder="Email"
-            disabled={submitting}
-          />
+          {!isAuthenticatedUser && (
+            <Field
+              name="email"
+              component={FormField}
+              type="text"
+              placeholder="Email"
+              disabled={submitting}
+            />
+          )}
+          {!isAuthenticatedUser && (
+            <Field
+              name="name"
+              component={FormField}
+              type="text"
+              placeholder="Name (optional)"
+              disabled={submitting}
+            />
+          )}
           <Field
             name="message"
             component={FormField}

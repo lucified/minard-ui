@@ -93,6 +93,7 @@ class PreviewDialog extends React.Component<Props, State> {
         )}
         {dialogOpen && (
           <NewCommentForm
+            isAuthenticatedUser={isAuthenticatedUser}
             initialValues={{
               deployment: deployment.id,
               name: getValue('commentName'),
