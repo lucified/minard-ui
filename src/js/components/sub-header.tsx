@@ -110,8 +110,6 @@ class SubHeader extends React.Component<Props, void> {
 
   public render() {
     const { openPageType } = this.props;
-    const centerContent: JSX.Element | null = null;
-
     if (openPageType === PageType.TeamProjectsView) {
       return <span />;
     }
@@ -123,14 +121,11 @@ class SubHeader extends React.Component<Props, void> {
     return (
       <section className={classNames(styles['sub-header-background'])}>
         <div className="container">
-          <div className="row">
-            <div className={classNames(styles['sub-header'], 'start-xs', 'col-xs-4')}>
+          <div className={styles.main}>
+            <div className={classNames(styles['sub-header-left'], styles['sub-header'])}>
               {leftContent}
             </div>
-            <div className={classNames(styles['sub-header'], 'center-xs', 'col-xs-4')}>
-              {centerContent}
-            </div>
-            <div className={classNames(styles['sub-header'], 'end-xs', 'col-xs-4')}>
+            <div className={styles['sub-header']}>
               {rightContent}
             </div>
           </div>
