@@ -25,6 +25,10 @@ interface PassedProps {
   showAll?: boolean;
 }
 
+interface DefaultProps {
+  showAll: boolean;
+}
+
 interface GeneratedStateProps {
   team?: Team;
 }
@@ -34,10 +38,16 @@ interface GeneratedDispatchProps {
 }
 
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
+type PropsWithDefaults = Props & DefaultProps;
 
 class ProjectsSection extends React.Component<Props, void> {
+
+  public defaultProps = {
+    showAll: false,
+  };
+
   public render() {
-    const { projects, isLoading, openCreateNewProjectDialog, showAll, count = 6 } = this.props;
+    const { projects, isLoading, openCreateNewProjectDialog, showAll, count = 6 } = this.props as PropsWithDefaults;
     const filteredProjects = (projects.filter(project => !isFetchError(project)) as Project[])
       .sort((a, b) => {
         if (a.latestActivityTimestamp === undefined) {
@@ -88,7 +98,7 @@ class ProjectsSection extends React.Component<Props, void> {
                   styles['project-card'],
                 )}
             >
-              <ProjectCard project={project} />
+              <ProjectCard project={project} constantHeight={showAll} />
             </div>
           ))}
           {showLoadingIcon && (

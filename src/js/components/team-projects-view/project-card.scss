@@ -85,17 +85,17 @@
   margin-bottom: 0px;
 }
 
-.description-wrap {
-  max-width: 90%;
-}
-
 .description {
   @include font-size-M;
   @include nitti-grotesk-semilight;
   line-height: 24px;
   color: $minard-dark-blue;
   margin-top: 20px;
-  max-width: 90%
+}
+
+.description-placeholder {
+  @extend .description;
+  color: $minard-light-gray;
 }
 
 .preview-icon {
@@ -134,7 +134,7 @@
 
 .no-previews-yet {
   margin-top: 5px;
-  color: $minard-mid-gray;
+  color: $minard-light-gray;
 }
 
 .links {
@@ -147,7 +147,7 @@
   margin-left: 20px;
 }
 
-.link {
+.link-inner {
   display: flex;
   align-items: center;
 }

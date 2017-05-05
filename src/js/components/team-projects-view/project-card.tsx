@@ -17,6 +17,7 @@ const styles = require('./project-card.scss');
 
 interface PassedProps {
   project: Project;
+  constantHeight: boolean;
 }
 
 interface GeneratedProps {
@@ -24,15 +25,19 @@ interface GeneratedProps {
   latestDeployedCommit?: Commit;
 }
 
-const getBottom = (project: Project, deployment?: Deployment) => {
+const getBottom = (project: Project, deployment?: Deployment, commit?: Commit) => {
   return (
     <div className={styles.links}>
       {deployment && (
         <div className={styles.link}>
-          <Icon className={styles.icon} name="eye" />
-          <span className={styles['link-text']}>
-            Latest preview
-          </span>
+          <MinardLink preview={deployment} project={project} commit={commit}>
+            <div className={styles['link-inner']}>
+              <Icon className={styles.icon} name="eye" />
+              <span className={styles['link-text']}>
+                Latest preview
+              </span>
+            </div>
+          </MinardLink>
         </div>
       )}
       <div className={styles.link}>
@@ -47,11 +52,44 @@ const getBottom = (project: Project, deployment?: Deployment) => {
   );
 };
 
-const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps) => {
-  const screenshot = (latestDeployment && latestDeployment.screenshot);
-  const bottom = getBottom(project, latestDeployment);
-  const maxAvatarCount = 8;
+function getDescription(description: string | undefined, constantHeight: boolean) {
+  if (constantHeight) {
+    if (description) {
+      return (
+        <div className={styles.description}>
+          <Truncate lines={1}>
+            {description}
+          </Truncate>
+        </div>
+      );
+    } else {
+      return (
+        <div className={styles['description-placeholder']}>
+          No project description
+        </div>
+      );
+    }
+  } else if (description) {
+    return (
+      <div className={styles.description}>
+        <Truncate lines={4}>
+          {description}
+        </Truncate>
+      </div>
+    );
+  }
+  return undefined;
+}
 
+const ProjectCard = ({
+  project,
+  latestDeployment,
+  latestDeployedCommit,
+  constantHeight,
+}: PassedProps & GeneratedProps) => {
+  const screenshot = (latestDeployment && latestDeployment.screenshot);
+  const bottom = getBottom(project, latestDeployment, latestDeployedCommit);
+  const maxAvatarCount = 8;
   return (
     <div className={styles.card}>
         <div className={styles['card-top']}>
@@ -79,7 +117,9 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
             ))}
           </div>
           <MinardLink project={project}>
-            <h3 className={styles.title}>{project.name}</h3>
+            <h3 className={styles.title}>
+              {project.name}
+            </h3>
           </MinardLink>
           { latestDeployment ? (
             <div className={styles['time-ago']}>
@@ -90,13 +130,7 @@ const ProjectCard = ({ project, latestDeployment }: PassedProps & GeneratedProps
               No previews yet
             </div>
           )}
-          { project.description && (
-            <div className={styles.description}>
-              <Truncate lines={1}>
-                {project.description}
-              </Truncate>
-            </div>
-          )}
+          {getDescription(project.description, constantHeight)}
         </div>
         <div className={styles['card-bottom']}>
           <div className={styles['card-bottom-inner']}>
