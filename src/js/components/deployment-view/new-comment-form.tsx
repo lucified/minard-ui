@@ -47,8 +47,8 @@ class NewCommentForm extends React.Component<Props, void> {
     this.storeCommentFieldRef = this.storeCommentFieldRef.bind(this);
   }
 
-  private storeCommentFieldRef(element: HTMLElement) {
-    this.commentFieldRef = element;
+  public componentDidMount() {
+    this.commentFieldRef.focus();
   }
 
   public componentWillReceiveProps(nextProps: Props) {
@@ -59,6 +59,10 @@ class NewCommentForm extends React.Component<Props, void> {
 
   public componentWillUnmount() {
     clearTimeout(this.focusTimeoutId);
+  }
+
+  private storeCommentFieldRef(element: HTMLElement) {
+    this.commentFieldRef = element;
   }
 
   private handleKeyDown(e: React.KeyboardEvent<any>) {
