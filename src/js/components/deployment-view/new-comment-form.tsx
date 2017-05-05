@@ -36,6 +36,21 @@ const validate = (values: CreateCommentFormData) => {
 };
 
 class NewCommentForm extends React.Component<Props, void> {
+  constructor(props: Props) {
+    super(props);
+
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
+  private handleKeyDown(e: React.KeyboardEvent<any>) {
+    const { handleSubmit } = this.props;
+
+    if (handleSubmit && e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
+      // Submit on ctrl/cmd/meta + enter
+      handleSubmit(e);
+    }
+  }
+
   public render() {
     const { handleSubmit, pristine, submitting, error, invalid } = this.props;
 
@@ -68,6 +83,7 @@ class NewCommentForm extends React.Component<Props, void> {
             type="textarea"
             placeholder="Comment"
             disabled={submitting}
+            onKeyDown={this.handleKeyDown}
           />
           <footer className={styles.footer}>
             <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
