@@ -13,6 +13,7 @@ import Modal, { ModalType } from '../modules/modal';
 import Streaming, { ConnectionState } from '../modules/streaming';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
+import MinardLink from './common/minard-link';
 
 import AccountDialog from './account-dialog';
 import Avatar from './common/avatar';
@@ -129,8 +130,8 @@ class Header extends React.Component<Props, void> {
       <section className={styles['header-background']}>
         <CSSTransitionGroup
           transitionName="error-box"
-          transitionEnterTimeout={0}
-          transitionLeaveTimeout={0}
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
         >
           {error}
         </CSSTransitionGroup>
@@ -139,7 +140,9 @@ class Header extends React.Component<Props, void> {
         <div className="container">
           <div className={classNames(styles.header, 'row', 'between-l', 'middle-xs')}>
             <div className={classNames(styles.logo, 'col-xs')}>
-              <img src={minardLogo} />
+              <MinardLink homepage>
+                <img src={minardLogo} />
+              </MinardLink>
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
               {team && (
