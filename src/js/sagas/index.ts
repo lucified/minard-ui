@@ -15,6 +15,7 @@ import {
   ApiTeam,
   SignupResponse,
 } from '../api/types';
+import { logout as intercomLogout } from '../intercom';
 import { logException, logMessage } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
@@ -666,6 +667,7 @@ export default function createSagas(api: Api) {
       }
     }
 
+    intercomLogout();
     yield put(User.actions.clearStoredData());
     yield put(User.actions.clearUserDetails());
     clearStoredCredentials();

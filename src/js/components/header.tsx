@@ -6,7 +6,6 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
 import { CSSTransitionGroup } from 'react-transition-group';
 
-import { logout as intercomLogout } from '../intercom';
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Modal, { ModalType } from '../modules/modal';
 import Streaming, { ConnectionState } from '../modules/streaming';
@@ -57,7 +56,6 @@ class Header extends React.Component<Props, void> {
   }
 
   private logout(_e: any) {
-    intercomLogout();
     this.props.logout();
   }
 
