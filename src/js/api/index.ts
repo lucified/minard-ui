@@ -248,6 +248,7 @@ const Team = {
 
 const User = {
   signup: () => connectToApi<SignupResponse>('/signup', { credentials: 'include' }),
+  logout: () => getApi('/logout'),
 };
 
 const API: Api = {

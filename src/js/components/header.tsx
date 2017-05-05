@@ -6,7 +6,6 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
 import { CSSTransitionGroup } from 'react-transition-group';
 
-import { clearStoredCredentials } from '../api/auth';
 import { logout as intercomLogout } from '../intercom';
 import Errors, { FetchCollectionError } from '../modules/errors';
 import Modal, { ModalType } from '../modules/modal';
@@ -36,8 +35,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  clearUserDetails: () => void;
-  clearData: () => void;
+  logout: () => void;
   openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => void;
   openAccountDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
@@ -60,9 +58,7 @@ class Header extends React.Component<Props, void> {
 
   private logout(_e: any) {
     intercomLogout();
-    this.props.clearData();
-    this.props.clearUserDetails();
-    clearStoredCredentials();
+    this.props.logout();
   }
 
   public render() {
@@ -173,8 +169,7 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  clearUserDetails: () => { dispatch(User.actions.clearUserDetails()); },
-  clearData: () => { dispatch(User.actions.clearStoredData()); },
+  logout: () => { dispatch(User.actions.logout()); },
   openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(Modal.actions.openModal(ModalType.InviteTeam));

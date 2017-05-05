@@ -47,6 +47,7 @@ export interface Api {
   };
   User: {
     signup: () => Promise<ApiResult<SignupResponse>>;
+    logout: () => Promise<ApiResult<{}>>;
   };
 }
 

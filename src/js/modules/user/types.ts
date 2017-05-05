@@ -27,6 +27,10 @@ export interface SetTeamAction {
   invitationToken?: string;
 }
 
+export interface LogoutAction {
+  type: 'USER/LOGOUT';
+}
+
 export interface ClearUserDetailsAction {
   type: 'USER/CLEAR_USER_DETAILS';
 }

@@ -116,6 +116,7 @@ const User = {
       team: { id: 3, name: 'teamName' } as ApiTeam,
     },
   }),
+  logout: () => Promise.resolve({}),
 };
 
 const API: Api = {

@@ -2,6 +2,7 @@ import {
   ClearStoredDataAction,
   ClearUserDetailsAction,
   LoadTeamInformationAction,
+  LogoutAction,
   RedirectToLoginAction,
   SetGitPasswordAction,
   SetTeamAction,
@@ -24,11 +25,18 @@ export const setTeam = (id: string, name: string, invitationToken?: string): Set
   invitationToken,
 });
 
+export const LOGOUT = 'USER/LOGOUT';
+export const logout = (): LogoutAction => ({
+  type: LOGOUT,
+});
+
+// Clears user data stored in the state
 export const CLEAR_USER_DETAILS = 'USER/CLEAR_USER_DETAILS';
 export const clearUserDetails = (): ClearUserDetailsAction => ({
   type: CLEAR_USER_DETAILS,
 });
 
+// Clears all stored entity data
 export const CLEAR_STORED_DATA = 'USER/CLEAR_STORED_DATA';
 export const clearStoredData = (): ClearStoredDataAction => ({
   type: CLEAR_STORED_DATA,
