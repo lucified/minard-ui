@@ -487,7 +487,8 @@ export default function createSagas(api: Api) {
     }
 
     if (previewExists) {
-      yield call(loadCommentsForDeployment, id);
+      const preview: Preview = yield select(Previews.selectors.getPreview, id, entityType);
+      yield call(loadCommentsForDeployment, preview.deployment);
     }
   }
 
