@@ -83,8 +83,8 @@ class ProjectsSection extends React.Component<Props, void> {
             showAll && 'row',
             showAll && 'start-sm',
           )}
-          enterAnimation="elevator"
-          leaveAnimation="elevator"
+          enterAnimation="fade"
+          leaveAnimation="fade"
         >
           {projectsToShow.map(project => (
             <div

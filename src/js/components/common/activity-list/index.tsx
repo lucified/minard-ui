@@ -60,7 +60,7 @@ class ActivityList extends React.Component<Props, void> {
 
     return (
       <div>
-        <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+        <FlipMove enterAnimation="fade" leaveAnimation="fade">
           {groupedActivities.map(activityGroup => {
            /* We need to generate a unique key for the activity group. We can't use
             * just the deployment ID since we can have multiple activity groups per

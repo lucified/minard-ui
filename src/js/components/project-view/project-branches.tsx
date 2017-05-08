@@ -28,7 +28,7 @@ const getEmptyContent = () => (
 );
 
 const getBranches = (branches: (Branch | undefined)[]) => (
-  <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
+  <FlipMove enterAnimation="fade" leaveAnimation="fade">
     {branches.map(
       (branch, i) => branch ?
         <BranchSummary key={branch.id} branch={branch} /> :
