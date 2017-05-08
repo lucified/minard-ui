@@ -56,10 +56,7 @@ class SubHeader extends React.Component<Props, void> {
       items.push(
         <span key="project-name">
           {' '}/{' '}
-          <MinardLink
-            className={styles['sub-header-link']}
-            project={{ project }}
-          >
+          <MinardLink className={styles['sub-header-link']} project={{ project }}>
             {project.name}
           </MinardLink>
         </span>,
@@ -69,10 +66,7 @@ class SubHeader extends React.Component<Props, void> {
         items.push(
           <span key="branch">
             {' '}/{' '}
-            <MinardLink
-              className={styles['sub-header-link']}
-              branch={{ branch, project: project.id }}
-            >
+            <MinardLink className={styles['sub-header-link']} branch={{ branch, project: project.id }}>
               {branch}
             </MinardLink>
           </span>,

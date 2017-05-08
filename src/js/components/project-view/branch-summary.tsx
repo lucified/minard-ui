@@ -56,7 +56,7 @@ const BranchSummary = (props: Props) => {
     } else if (isFetchError(latestSuccessfullyDeployedCommit)) {
       commitContent = (
         <div className={styles.error}>
-          <p>Error loading deployment</p>
+          <p>Error loading commit</p>
           <small>{latestSuccessfullyDeployedCommit.prettyError}</small>
         </div>
       );
@@ -104,26 +104,20 @@ const BranchSummary = (props: Props) => {
         </div>
         {commitContent}
         <div className={styles.links}>
-          {!isFetchError(latestSuccessfulDeployment)
-            && latestSuccessfulDeployment
-            && !isFetchError(latestSuccessfullyDeployedCommit)
-            && latestSuccessfullyDeployedCommit ? (
-              <MinardLink
-                deployment={{ deployment: latestSuccessfulDeployment, commit: latestSuccessfullyDeployedCommit }}
-              >
-                <div className={styles.link}>
-                  <Icon name="eye" />
-                  <div className={styles['link-text']}>
-                    Latest preview
-                  </div>
+          {latestSuccessfulDeployment && !isFetchError(latestSuccessfulDeployment) ? (
+            <MinardLink preview={{ deployment: latestSuccessfulDeployment }}>
+              <div className={styles.link}>
+                <Icon name="eye" />
+                <div className={styles['link-text']}>
+                  Latest preview
                 </div>
-              </MinardLink>
-            ) : (
-              <div className={classNames(styles.link, styles['link-disabled'])}>
-                No preview available
               </div>
-            )
-          }
+            </MinardLink>
+          ) : (
+            <div className={classNames(styles.link, styles['link-disabled'])}>
+              No preview available
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => 
         break;
       case DeploymentStatus.Canceled:
         content = (
-          <MinardLink deployment={{ deployment, commit, buildLog: true }} openInNewWindow>
+          <MinardLink preview={{ deployment, buildLog: true }} openInNewWindow>
             <div key="canceled" className={classNames(styles.box, styles.error)}>
               <Icon name="times" className={styles.icon} />
               {latest ? <span>Latest build canceled</span> : <span>Build canceled</span>}
@@ -37,7 +37,7 @@ const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => 
         break;
       case DeploymentStatus.Failed:
         content = (
-          <MinardLink deployment={{ deployment, commit, buildLog: true }} openInNewWindow>
+          <MinardLink preview={{ deployment, buildLog: true }} openInNewWindow>
             <div key="failed" className={classNames(styles.box, styles.error)}>
               <Icon name="times" className={styles.icon} />
               {latest ? <span>Latest build failed</span> : <span>Build failed</span>}
@@ -48,7 +48,7 @@ const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => 
       case DeploymentStatus.Pending:
       case DeploymentStatus.Running:
         content = (
-          <MinardLink deployment={{ deployment, commit, buildLog: true }} openInNewWindow>
+          <MinardLink preview={{ deployment, buildLog: true }} openInNewWindow>
             <div key="running" className={classNames(styles.box, styles.building)}>
               <Icon name="circle-o-notch" spin className={styles.icon} />
               Generating preview

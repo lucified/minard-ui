@@ -67,7 +67,6 @@ class PreviewDialog extends React.Component<Props, State> {
         <Header
           className={styles.header}
           deployment={deployment}
-          commit={commit}
           isOpen={dialogOpen}
           onToggleOpen={this.handleToggleOpen}
           buildLogSelected={buildLogSelected}

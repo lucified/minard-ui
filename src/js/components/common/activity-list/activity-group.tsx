@@ -77,7 +77,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
           </div>
             {isSuccessful(deployment) ? (
               <div className={styles.screenshot}>
-                <MinardLink deployment={{ deployment, commit: firstActivity.commit }}>
+                <MinardLink preview={{ deployment }}>
                   <DeploymentScreenshot deployment={deployment} />
                 </MinardLink>
               </div>
@@ -94,7 +94,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
         <div className={styles['links-wrap']}>
           <div className={styles.links}>
             <div className={styles.link}>
-              <MinardLink deployment={{ deployment, commit }}>
+              <MinardLink preview={{ deployment }}>
                 {isSuccessful(deployment) ? (
                   <div className={styles['link-inner']}>
                     <Icon className={styles.icon} name="eye" />
@@ -110,7 +110,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
             </div>
             {isSuccessful(deployment) && (
               <div className={styles.link}>
-                <MinardLink deployment={{ deployment }} openInNewWindow>
+                <MinardLink rawDeployment={{ deployment }} openInNewWindow>
                   <div className={styles['link-inner']}>
                     <Icon className={styles.icon} name="arrows-alt" />
                     Open naked preview

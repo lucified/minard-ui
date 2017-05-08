@@ -17,7 +17,7 @@ const CommentActivity = ({ activity }: Props) => {
   };
 
   return (
-    <MinardLink comment={{ comment, commit: activity.commit }}>
+    <MinardLink comment={{ comment, deployment: activity.deployment }}>
       <SingleComment comment={comment} hideDelete />
     </MinardLink>
   );

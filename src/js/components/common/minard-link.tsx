@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 
 import { Branch } from '../../modules/branches';
 import { Comment } from '../../modules/comments';
-import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
 
@@ -11,14 +10,15 @@ interface Props {
   rawDeployment?: {
     deployment: Deployment;
   };
-  deployment?: {
-    deployment: Deployment;
-    commit?: Commit;
+  preview?: {
+    deployment?: Deployment;
+    project?: Project;
+    branch?: Branch;
     buildLog?: boolean;
   };
   comment?: {
     comment: Comment;
-    commit: Commit;
+    deployment: Deployment;
   };
   branch?: {
     branch: Branch | string;
@@ -41,9 +41,9 @@ class MinardLink extends React.Component<Props, void> {
       children,
       className,
       comment,
-      deployment,
       homepage,
       openInNewWindow,
+      preview,
       project,
       rawDeployment,
       showAll,
@@ -65,25 +65,34 @@ class MinardLink extends React.Component<Props, void> {
       return (
         <span className={className}>{children}</span>
       );
-    } else if (deployment) {
-      const { commit, buildLog } = deployment;
-      if (!commit || !deployment.deployment) {
-        console.error('Missing commit information for preview link!', deployment);
+    } else if (preview) {
+      const { deployment, project: previewProject, branch: previewBranch, buildLog } = preview;
+
+      if (previewProject) {
+        path = buildLog ?
+          `/preview/project/${previewProject.id}/${previewProject.token}/log` :
+          `/preview/project/${previewProject.id}/${previewProject.token}`;
+      } else if (previewBranch) {
+        path = buildLog ?
+          `/preview/branch/${previewBranch.id}/${previewBranch.token}/log` :
+          `/preview/branch/${previewBranch.id}/${previewBranch.token}`;
+      } else if (deployment) {
+        // Link to build log if deployment is not ready
+        path = (deployment.url && !buildLog) ?
+          `/preview/deployment/${deployment.id}/${deployment.token}` :
+          `/preview/deployment/${deployment.id}/${deployment.token}/log`;
+      } else {
+        console.error('Insufficient data for preview!', preview);
         return <span className={className}>{children}</span>;
       }
-
-      // Link to build log if preview is not ready
-      path = (deployment.deployment.url && !buildLog) ?
-        `/preview/${commit.hash}/${deployment.deployment.id}` :
-        `/preview/${commit.hash}/${deployment.deployment.id}/log`;
     } else if (comment) {
-      const { commit } = comment;
-      if (!commit) {
-        console.error('Missing commit information for comment link!', comment);
+      const { deployment } = comment;
+      if (!deployment) {
+        console.error('Missing deployment information for comment link!', comment);
         return <span className={className}>{children}</span>;
       }
 
-      path = `/preview/${commit.hash}/${comment.comment.deployment}/comment/${comment.comment.id}`;
+      path = `/preview/deployment/${deployment.id}/${deployment.token}/comment/${comment.comment.id}`;
     } else if (branch) {
       let projectId: string;
       let branchId: string;
