@@ -86,7 +86,7 @@ class DeploymentView extends React.Component<Props, void> {
       let errorMessage;
 
       if (isFetchError(preview)) {
-        errorMessage = preview.unauthorized ? 'You do not have access to this preview.' : 'Unable to load preview.';
+        errorMessage = preview.unauthorized ? 'Unauthorized' : 'Unable to load preview.';
       } else {
         errorMessage = 'Unable to load preview details.';
       }
