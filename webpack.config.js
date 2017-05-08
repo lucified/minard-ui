@@ -170,11 +170,9 @@ function getCharles() {
   if (deployConfig.env === 'production' && process.env.CHARLES_PRODUCTION) {
     return process.env.CHARLES_PRODUCTION;
   }
-
   if (deployConfig.env === 'staging' && process.env.CHARLES_STAGING) {
     return process.env.CHARLES_STAGING;
   }
-
   return process.env.CHARLES || false;
 }
 
@@ -182,12 +180,31 @@ function getStreamingAPI() {
   if (deployConfig.env === 'production' && process.env.CHARLES_STREAMING_PRODUCTION) {
     return process.env.CHARLES_STREAMING_PRODUCTION;
   }
-
   if (deployConfig.env === 'staging' && process.env.CHARLES_STREAMING_STAGING) {
     return process.env.CHARLES_STREAMING_STAGING;
   }
-
   return process.env.CHARLES_STREAMING || getCharles();
+}
+
+function getAuth0ClientId() {
+  if (deployConfig.env === 'production' && process.env.AUTH0_CLIENT_ID_PRODUCTION) {
+    return process.env.AUTH0_CLIENT_ID_PRODUCTION;
+  }
+  return process.env.AUTH0_CLIENT_ID || 'ZaeiNyV7S7MpI69cKNHr8wXe5Bdr8tvW';
+}
+
+function getAuth0Domain() {
+  if (deployConfig.env === 'production' && process.env.AUTH0_DOMAIN_PRODUCTION) {
+    return process.env.AUTH0_DOMAIN_PRODUCTION;
+  }
+  return process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com';
+}
+
+function getAuth0Audience() {
+  if (deployConfig.env === 'production' && process.env.AUTH0_AUDIENCE_PRODUCTION) {
+    return process.env.AUTH0_AUDIENCE_PRODUCTION;
+  }
+  return process.env.AUTH0_AUDIENCE || 'http://localtest.me:8000';
 }
 
 const config = {
@@ -216,9 +233,9 @@ const config = {
       'process.env.STREAMING_API': JSON.stringify(getStreamingAPI()),
       'process.env.ENV': JSON.stringify(deployConfig.env),
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
-      'process.env.AUTH0_CLIENT_ID': JSON.stringify(process.env.AUTH0_CLIENT_ID || 'ZaeiNyV7S7MpI69cKNHr8wXe5Bdr8tvW'),
-      'process.env.AUTH0_DOMAIN': JSON.stringify(process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com'),
-      'process.env.AUTH0_AUDIENCE': JSON.stringify(process.env.AUTH0_AUDIENCE || 'http://localtest.me:8000'),
+      'process.env.AUTH0_CLIENT_ID': JSON.stringify(getAuth0ClientId()),
+      'process.env.AUTH0_DOMAIN': JSON.stringify(getAuth0Domain()),
+      'process.env.AUTH0_AUDIENCE': JSON.stringify(getAuth0Audience()),
     }),
     new ExtractTextPlugin({
       filename: 'bundled.[hash].css',
