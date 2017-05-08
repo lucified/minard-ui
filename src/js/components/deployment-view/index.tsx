@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
-import Previews, { Preview } from '../../modules/previews';
+import Previews, { EntityType, Preview } from '../../modules/previews';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
@@ -18,8 +18,10 @@ import PreviewDialog from './preview-dialog';
 const styles = require('./index.scss');
 
 interface Params {
-  commitHash: string;
-  deploymentId: string;
+  token: string;
+  deploymentId?: string;
+  projectId?: string;
+  branchId?: string;
   commentId?: string;
   view?: string;
 }
@@ -33,7 +35,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadPreviewAndComments: (deploymentId: string, commitHash: string, isUserLoggedIn: boolean) => void;
+  loadPreviewAndComments: (id: string, entityType: EntityType, token: string, isUserLoggedIn: boolean) => void;
   redirectToApp: () => void;
 }
 
@@ -48,17 +50,37 @@ class DeploymentView extends React.Component<Props, void> {
 
   public componentWillMount() {
     const { loadPreviewAndComments, isUserLoggedIn } = this.props;
-    const { deploymentId, commitHash } = this.props.params;
+    const { deploymentId, projectId, branchId, token } = this.props.params;
 
-    loadPreviewAndComments(deploymentId, commitHash, isUserLoggedIn);
+    if (deploymentId) {
+      loadPreviewAndComments(deploymentId, 'deployment', token, isUserLoggedIn);
+    } else if (projectId) {
+      loadPreviewAndComments(projectId, 'project', token, isUserLoggedIn);
+    } else if (branchId) {
+      loadPreviewAndComments(branchId, 'branch', token, isUserLoggedIn);
+    } else {
+      console.error('Unknown preview type!');
+    }
   }
 
   public componentWillReceiveProps(nextProps: Props) {
     const { loadPreviewAndComments, isUserLoggedIn } = nextProps;
-    const { commitHash, deploymentId } = nextProps.params;
+    const { token, deploymentId, projectId, branchId } = nextProps.params;
 
-    if (deploymentId !== this.props.params.deploymentId) {
-      loadPreviewAndComments(deploymentId, commitHash, isUserLoggedIn);
+    if (
+      deploymentId !== this.props.params.deploymentId ||
+      projectId !== this.props.params.projectId ||
+      branchId !== this.props.params.branchId
+    ) {
+      if (deploymentId) {
+        loadPreviewAndComments(deploymentId, 'deployment', token, isUserLoggedIn);
+      } else if (projectId) {
+        loadPreviewAndComments(projectId, 'project', token, isUserLoggedIn);
+      } else if (branchId) {
+        loadPreviewAndComments(branchId, 'branch', token, isUserLoggedIn);
+      } else {
+        console.error('Unknown preview type!');
+      }
     }
   }
 
@@ -122,14 +144,20 @@ class DeploymentView extends React.Component<Props, void> {
 }
 
 const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
-  const { deploymentId } = ownProps.params;
-  const preview = Previews.selectors.getPreview(state, deploymentId);
+  const { deploymentId, projectId, branchId } = ownProps.params;
+  let preview: Preview | FetchError | undefined;
   let commit: Commit | FetchError | undefined;
   let deployment: Deployment | FetchError | undefined;
 
-  if (preview && !isFetchError(preview)) {
-    commit = Commits.selectors.getCommit(state, preview.commit);
-    deployment = Deployments.selectors.getDeployment(state, preview.deployment);
+  const id = deploymentId || projectId || branchId;
+
+  if (id) {
+    preview = Previews.selectors.getPreview(state, id);
+
+    if (preview && !isFetchError(preview)) {
+      commit = Commits.selectors.getCommit(state, preview.commit);
+      deployment = Deployments.selectors.getDeployment(state, preview.deployment);
+    }
   }
 
   return {
@@ -142,8 +170,8 @@ const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params,
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  loadPreviewAndComments: (id, commitHash, isUserLoggedIn) => {
-    dispatch(Previews.actions.loadPreviewAndComments(id, commitHash, isUserLoggedIn));
+  loadPreviewAndComments: (id, entityType, token, isUserLoggedIn) => {
+    dispatch(Previews.actions.loadPreviewAndComments(id, entityType, token, isUserLoggedIn));
   },
   redirectToApp: () => { dispatch(push('/')); },
 });

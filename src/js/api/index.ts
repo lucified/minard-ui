@@ -2,6 +2,7 @@ import 'isomorphic-fetch';
 import * as moment from 'moment';
 
 import { logMessage } from '../logger';
+import { EntityType } from '../modules/previews';
 import { getAccessToken } from './auth';
 import { Api, ApiEntityResponse, ApiPreviewResponse, ApiResult, ApiTeam, SignupResponse } from './types';
 
@@ -239,7 +240,8 @@ const Project = {
 };
 
 const Preview = {
-  fetch: (id: string, commitHash: string) => getApi<ApiPreviewResponse>(`/api/preview/${id}`, { sha: commitHash }),
+  fetch: (id: string, entityType: EntityType, token: string) =>
+    getApi<ApiPreviewResponse>(`/api/preview/${entityType}/${id}/${token}`),
 };
 
 const Team = {

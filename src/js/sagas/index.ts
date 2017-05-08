@@ -38,7 +38,7 @@ import Errors, {
   isFetchError,
 } from '../modules/errors';
 import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
-import Previews, { LoadPreviewAndCommentsAction, Preview } from '../modules/previews';
+import Previews, { EntityType, LoadPreviewAndCommentsAction, Preview } from '../modules/previews';
 import Projects, {
   CreateProjectAction,
   DeleteProjectAction,
@@ -478,12 +478,12 @@ export default function createSagas(api: Api) {
 
   // PREVIEW
   function* loadPreviewAndComments(action: LoadPreviewAndCommentsAction): IterableIterator<Effect> {
-    const { id, commitHash, isUserLoggedIn } = action;
+    const { id, token, isUserLoggedIn, entityType } = action;
     const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
     let previewExists = !!existingPreview;
 
     if (!previewExists || isFetchError(existingPreview)) {
-      previewExists = yield call(fetchPreview, id, commitHash, isUserLoggedIn);
+      previewExists = yield call(fetchPreview, id, entityType, token, isUserLoggedIn);
     }
 
     if (previewExists) {
@@ -491,7 +491,12 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* fetchPreview(id: string, commitHash: string, isUserLoggedIn: boolean): IterableIterator<Effect> {
+  function* fetchPreview(
+    id: string,
+    entityType: EntityType,
+    token: string,
+    isUserLoggedIn: boolean,
+  ): IterableIterator<Effect> {
     yield put(Requests.actions.Previews.LoadPreview.REQUEST.actionCreator(id));
 
     const { response, error, details, unauthorized }: {
@@ -499,7 +504,7 @@ export default function createSagas(api: Api) {
       error?: string,
       details?: string,
       unauthorized?: boolean,
-    } = yield call(api.Preview.fetch, id, commitHash);
+    } = yield call(api.Preview.fetch, id, entityType, token);
 
     if (response) {
       const commit: Commit[] = yield call(Converter.toCommits, response.commit);
@@ -519,7 +524,7 @@ export default function createSagas(api: Api) {
       yield put(Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(id, error!, details, unauthorized));
 
       if (unauthorized && !isUserLoggedIn) {
-        yield put(User.actions.redirectToLogin(`/preview/${commitHash}/${id}`));
+        yield put(User.actions.redirectToLogin(`/preview/${entityType}/${id}/${token}`));
       }
 
       return false;

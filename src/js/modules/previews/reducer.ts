@@ -5,11 +5,11 @@ import Requests from '../requests';
 
 import { CLEAR_STORED_DATA } from '../user';
 import { STORE_PREVIEW } from './actions';
-import * as t from './types';
+import { Preview, PreviewState, StorePreviewAction } from './types';
 
-const initialState: t.PreviewState = {};
+const initialState: PreviewState = {};
 
-const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => {
+const reducer: Reducer<PreviewState> = (state = initialState, action: any) => {
   switch (action.type) {
     case Requests.actions.Previews.LoadPreview.FAILURE.type:
       const responseAction = action as FetchError;
@@ -26,7 +26,7 @@ const reducer: Reducer<t.PreviewState> = (state = initialState, action: any) => 
 
       return state;
     case STORE_PREVIEW:
-      const preview: t.Preview = (action as t.StorePreviewAction).preview;
+      const preview: Preview = (action as StorePreviewAction).preview;
       if (preview) {
         return {
           ...state,

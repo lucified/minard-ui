@@ -14,6 +14,8 @@ export interface Preview {
     id: string;
     name: string;
   };
+
+  // Currently not available from the API and not used
   next?: string;
   previous?: string;
 }
@@ -24,9 +26,11 @@ export interface PreviewState {
 
 // Actions
 // LOAD_PREVIEW_AND_COMMENTS
+export type EntityType = 'project' | 'branch' | 'deployment';
 export interface LoadPreviewAndCommentsAction extends Action {
   id: string;
-  commitHash: string;
+  entityType: EntityType;
+  token: string;
   isUserLoggedIn: boolean;
 }
 
