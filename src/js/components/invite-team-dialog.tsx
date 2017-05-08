@@ -56,7 +56,7 @@ class InviteTeamDialog extends React.Component<Props, void> {
               <div className={styles.url}>
                 <pre onClick={selectText}>
                   {`${window.location.protocol}//${window.location.hostname}` +
-                      (window.location.port !== '80' ? `:${window.location.port}` : '') +
+                      (window.location.port && window.location.port !== '80' ? `:${window.location.port}` : '') +
                       `/signup/${invitationToken}`}
                 </pre>
               </div>
