@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 import { FetchError } from '../errors';
 
 // State
@@ -27,7 +25,8 @@ export interface PreviewState {
 // Actions
 // LOAD_PREVIEW_AND_COMMENTS
 export type EntityType = 'project' | 'branch' | 'deployment';
-export interface LoadPreviewAndCommentsAction extends Action {
+export interface LoadPreviewAndCommentsAction {
+  type: 'PREVIEW/LOAD_PREVIEW_AND_COMMENTS';
   id: string;
   entityType: EntityType;
   token: string;
@@ -35,6 +34,9 @@ export interface LoadPreviewAndCommentsAction extends Action {
 }
 
 // STORE_PREVIEW
-export interface StorePreviewAction extends Action {
+export interface StorePreviewAction {
+  type: 'PREVIEW/STORE_PREVIEW';
   preview: Preview;
+  requestedEntityType: EntityType;
+  requestedId: string;
 }

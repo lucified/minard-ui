@@ -19,9 +19,8 @@ const styles = require('./index.scss');
 
 interface Params {
   token: string;
-  deploymentId?: string;
-  projectId?: string;
-  branchId?: string;
+  entityType: EntityType;
+  id: string;
   commentId?: string;
   view?: string;
 }
@@ -49,38 +48,26 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { loadPreviewAndComments, isUserLoggedIn } = this.props;
-    const { deploymentId, projectId, branchId, token } = this.props.params;
+    const { loadPreviewAndComments, isUserLoggedIn, params: { entityType, token, id } } = this.props;
 
-    if (deploymentId) {
-      loadPreviewAndComments(deploymentId, 'deployment', token, isUserLoggedIn);
-    } else if (projectId) {
-      loadPreviewAndComments(projectId, 'project', token, isUserLoggedIn);
-    } else if (branchId) {
-      loadPreviewAndComments(branchId, 'branch', token, isUserLoggedIn);
-    } else {
+    if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
       console.error('Unknown preview type!');
+      return;
     }
+
+    loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadPreviewAndComments, isUserLoggedIn } = nextProps;
-    const { token, deploymentId, projectId, branchId } = nextProps.params;
+    const { loadPreviewAndComments, isUserLoggedIn, params: { entityType, token, id } } = nextProps;
 
-    if (
-      deploymentId !== this.props.params.deploymentId ||
-      projectId !== this.props.params.projectId ||
-      branchId !== this.props.params.branchId
-    ) {
-      if (deploymentId) {
-        loadPreviewAndComments(deploymentId, 'deployment', token, isUserLoggedIn);
-      } else if (projectId) {
-        loadPreviewAndComments(projectId, 'project', token, isUserLoggedIn);
-      } else if (branchId) {
-        loadPreviewAndComments(branchId, 'branch', token, isUserLoggedIn);
-      } else {
+    if (id !== this.props.params.id || entityType !== this.props.params.entityType) {
+      if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
         console.error('Unknown preview type!');
+        return;
       }
+
+      loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
     }
   }
 
@@ -144,20 +131,15 @@ class DeploymentView extends React.Component<Props, void> {
 }
 
 const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
-  const { deploymentId, projectId, branchId } = ownProps.params;
-  let preview: Preview | FetchError | undefined;
+  const { id, entityType } = ownProps.params;
   let commit: Commit | FetchError | undefined;
   let deployment: Deployment | FetchError | undefined;
 
-  const id = deploymentId || projectId || branchId;
+  const preview = Previews.selectors.getPreview(state, id, entityType);
 
-  if (id) {
-    preview = Previews.selectors.getPreview(state, id);
-
-    if (preview && !isFetchError(preview)) {
-      commit = Commits.selectors.getCommit(state, preview.commit);
-      deployment = Deployments.selectors.getDeployment(state, preview.deployment);
-    }
+  if (preview && !isFetchError(preview)) {
+    commit = Commits.selectors.getCommit(state, preview.commit);
+    deployment = Deployments.selectors.getDeployment(state, preview.deployment);
   }
 
   return {

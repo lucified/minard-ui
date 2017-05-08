@@ -479,7 +479,7 @@ export default function createSagas(api: Api) {
   // PREVIEW
   function* loadPreviewAndComments(action: LoadPreviewAndCommentsAction): IterableIterator<Effect> {
     const { id, token, isUserLoggedIn, entityType } = action;
-    const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
+    const existingPreview: Preview = yield select(Previews.selectors.getPreview, id, entityType);
     let previewExists = !!existingPreview;
 
     if (!previewExists || isFetchError(existingPreview)) {
@@ -515,7 +515,7 @@ export default function createSagas(api: Api) {
 
       // only store IDs into Preview, not the actual Commit and Deployment objects
       const preview: Preview = { ...response, commit: commit[0].id, deployment: deployment[0].id };
-      yield put(Previews.actions.storePreviews(preview));
+      yield put(Previews.actions.storePreviews(preview, id, entityType));
 
       yield put(Requests.actions.Previews.LoadPreview.SUCCESS.actionCreator(id));
 
