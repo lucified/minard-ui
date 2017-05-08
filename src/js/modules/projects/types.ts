@@ -17,6 +17,7 @@ export interface Project {
   latestSuccessfullyDeployedCommit?: string;
   activeUsers: ProjectUser[];
   repoUrl: string;
+  token: string;
 }
 
 export interface ProjectState {

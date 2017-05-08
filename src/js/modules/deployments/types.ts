@@ -44,6 +44,7 @@ export interface Deployment {
   status: DeploymentStatus;
   comments?: string[] | FetchError;
   commentCount?: number;
+  token: string;
 }
 
 export interface DeploymentState {

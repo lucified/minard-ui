@@ -8,8 +8,14 @@ import { Comment } from '../modules/comments';
 import { Commit } from '../modules/commits';
 import { Deployment, toDeploymentStatus } from '../modules/deployments';
 import { Project } from '../modules/projects';
-
-import * as t from './types';
+import {
+  ResponseActivityElement,
+  ResponseBranchElement,
+  ResponseCommentElement,
+  ResponseCommitElement,
+  ResponseDeploymentElement,
+  ResponseProjectElement,
+} from './types';
 
 const toConvertedArray = <InputType, OutputType>(converter: (response: InputType) => OutputType) =>
   (response: InputType[] | InputType): OutputType[] => {
@@ -42,7 +48,7 @@ const splitCommitMessage = (rawMessage: string): { message: string, description?
 };
 
 // Projects
-const createProjectObject = (project: t.ResponseProjectElement): Project => {
+const createProjectObject = (project: ResponseProjectElement): Project => {
   const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = project.relationships &&
     project.relationships['latest-successfully-deployed-commit'];
   const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
@@ -64,6 +70,7 @@ const createProjectObject = (project: t.ResponseProjectElement): Project => {
     latestActivityTimestamp,
     latestSuccessfullyDeployedCommit,
     repoUrl: project.attributes['repo-url'],
+    token: project.attributes.token,
   };
 };
 
@@ -81,7 +88,7 @@ const toActivityType = (activityString: string): ActivityType => {
   }
 };
 
-const createActivityObject = (activity: t.ResponseActivityElement): Activity => {
+const createActivityObject = (activity: ResponseActivityElement): Activity => {
   const type = toActivityType(activity.attributes['activity-type']);
   const { commit, deployment, project, branch, timestamp } = activity.attributes;
   const { message, description } = splitCommitMessage(commit.message);
@@ -118,6 +125,7 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
         email: deployment.creator.email,
         timestamp: moment(deployment.creator.timestamp).valueOf(),
       },
+      token: deployment.token,
     },
     timestamp: moment(timestamp).valueOf(),
   };
@@ -132,7 +140,7 @@ const createActivityObject = (activity: t.ResponseActivityElement): Activity => 
 export const toActivities = toConvertedArray(createActivityObject);
 
 // Branches
-const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
+const createBranchObject = (branch: ResponseBranchElement): Branch => {
   const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = branch.relationships &&
     branch.relationships['latest-successfully-deployed-commit'];
   const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
@@ -169,13 +177,14 @@ const createBranchObject = (branch: t.ResponseBranchElement): Branch => {
     allCommitsLoaded: !latestCommit,
     latestCommit,
     latestSuccessfullyDeployedCommit,
+    token: branch.attributes.token,
   };
 };
 
 export const toBranches = toConvertedArray(createBranchObject);
 
 // Comments
-const createCommentObject = (comment: t.ResponseCommentElement): Comment => {
+const createCommentObject = (comment: ResponseCommentElement): Comment => {
   const { id } = comment;
   const { name, email, message, 'created-at': timestamp, deployment } = comment.attributes;
 
@@ -192,7 +201,7 @@ const createCommentObject = (comment: t.ResponseCommentElement): Comment => {
 export const toComments = toConvertedArray(createCommentObject);
 
 // Commits
-const createCommitObject = (commit: t.ResponseCommitElement): Commit => {
+const createCommitObject = (commit: ResponseCommitElement): Commit => {
   const { message, description } = splitCommitMessage(commit.attributes.message);
   const deployments = commit.relationships && commit.relationships.deployments;
   const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
@@ -220,7 +229,7 @@ const createCommitObject = (commit: t.ResponseCommitElement): Commit => {
 export const toCommits = toConvertedArray(createCommitObject);
 
 // Deployments
-const createDeploymentObject = (deployment: t.ResponseDeploymentElement): Deployment => ({
+const createDeploymentObject = (deployment: ResponseDeploymentElement): Deployment => ({
   id: deployment.id,
   status: toDeploymentStatus(deployment.attributes.status),
   url: deployment.attributes.url,
@@ -231,6 +240,7 @@ const createDeploymentObject = (deployment: t.ResponseDeploymentElement): Deploy
     email: deployment.attributes.creator.email,
     timestamp: moment(deployment.attributes.creator.timestamp).valueOf(),
   },
+  token: deployment.attributes.token,
 });
 
 export const toDeployments = toConvertedArray(createDeploymentObject);

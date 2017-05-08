@@ -5,7 +5,8 @@
     "attributes": {
       "name": "second-branch",
       "latest-activity-timestamp": "2016-07-27T15:51:21.802Z",
-      "minard-json": {}
+      "minard-json": {},
+      "token": "tokenfoobar"
     },
     "relationships": {
       "latest-successfully-deployed-commit": {

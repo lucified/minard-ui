@@ -15,6 +15,7 @@ export interface Branch {
   latestCommit?: string;
   latestActivityTimestamp?: number;
   buildErrors: string[];
+  token: string;
 }
 
 export interface BranchState {

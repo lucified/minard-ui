@@ -8,7 +8,8 @@
       "latest-activity-timestamp": "2016-08-01T15:51:21.802Z",
       "minard-json": {
         "errors": []
-      }
+      },
+      "token": "tokenfoobar"
     },
     "relationships": {
       "latest-successfully-deployed-commit": {

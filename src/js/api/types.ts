@@ -118,6 +118,7 @@ export interface ResponseProjectElement {
     'active-committers': ProjectUser[];
     'latest-activity-timestamp'?: string;
     'repo-url': string;
+    token: string;
   };
   relationships?: {
     'latest-successfully-deployed-commit'?: {
@@ -169,6 +170,7 @@ export interface ResponseActivityElement {
         email: string;
         timestamp: string;
       };
+      token: string;
     };
     comment?: { // Only for comments
       id: string;
@@ -190,6 +192,7 @@ export interface ResponseBranchElement {
     'minard-json'?: {
       errors?: string[];
     };
+    token: string;
   };
   relationships: {
     'latest-successfully-deployed-commit'?: {
@@ -246,6 +249,7 @@ export interface ResponseDeploymentElement {
     screenshot?: string;
     'comment-count': number;
     status: DeploymentStatusString;
+    token: string;
   };
 }
 

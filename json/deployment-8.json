@@ -10,7 +10,8 @@
         "name": "Ville Saarinen",
         "email": "ville.saarinen@lucify.com",
         "timestamp": "2016-08-01T09:51:21.802Z"
-      }
+      },
+      "token": "tokenfoobar"
     }
   }
 }
