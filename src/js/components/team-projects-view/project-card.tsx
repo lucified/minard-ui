@@ -27,9 +27,17 @@ interface GeneratedProps {
 const getBottom = (project: Project, deployment?: Deployment) => {
   return (
     <div className={styles.links}>
+      <div className={styles.link}>
+        <MinardLink project={{ project }}>
+          <Icon className={styles.icon} name="chevron-right" />
+          <span className={styles['link-text']}>
+            Open project
+          </span>
+        </MinardLink>
+      </div>
       {deployment && (
         <div className={styles.link}>
-          <MinardLink preview={{ deployment }}>
+          <MinardLink preview={{ project }}>
             <div className={styles['link-inner']}>
               <Icon className={styles.icon} name="eye" />
               <span className={styles['link-text']}>
@@ -39,14 +47,6 @@ const getBottom = (project: Project, deployment?: Deployment) => {
           </MinardLink>
         </div>
       )}
-      <div className={styles.link}>
-        <MinardLink project={{ project }}>
-          <Icon className={styles.icon} name="chevron-right" />
-          <span className={styles['link-text']}>
-            Open project
-          </span>
-        </MinardLink>
-      </div>
     </div>
   );
 };

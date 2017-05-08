@@ -105,7 +105,7 @@ const BranchSummary = (props: Props) => {
         {commitContent}
         <div className={styles.links}>
           {latestSuccessfulDeployment && !isFetchError(latestSuccessfulDeployment) ? (
-            <MinardLink preview={{ deployment: latestSuccessfulDeployment }}>
+            <MinardLink preview={{ branch }}>
               <div className={styles.link}>
                 <Icon name="eye" />
                 <div className={styles['link-text']}>
