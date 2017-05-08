@@ -524,7 +524,14 @@ export default function createSagas(api: Api) {
 
       return true;
     } else {
-      yield put(Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(id, error!, details, unauthorized));
+      yield put(
+        Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(
+          `${entityType}-${id}`, // TODO: Manually specifying this here is ugly. Fix it up at some point.
+          error!,
+          details,
+          unauthorized,
+        ),
+      );
 
       if (unauthorized && !isUserLoggedIn) {
         yield put(User.actions.redirectToLogin(`/preview/${entityType}/${id}/${token}`));
