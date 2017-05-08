@@ -69,13 +69,9 @@ class MinardLink extends React.Component<Props, void> {
       const { deployment, project: previewProject, branch: previewBranch, buildLog } = preview;
 
       if (previewProject) {
-        path = buildLog ?
-          `/preview/project/${previewProject.id}/${previewProject.token}/log` :
-          `/preview/project/${previewProject.id}/${previewProject.token}`;
+        path = `/preview/project/${previewProject.id}/${previewProject.token}${buildLog ? '/log' : ''}`;
       } else if (previewBranch) {
-        path = buildLog ?
-          `/preview/branch/${previewBranch.id}/${previewBranch.token}/log` :
-          `/preview/branch/${previewBranch.id}/${previewBranch.token}`;
+        path = `/preview/branch/${previewBranch.id}/${previewBranch.token}${buildLog ? '/log' : ''}`;
       } else if (deployment) {
         // Link to build log if deployment is not ready
         path = (deployment.url && !buildLog) ?
