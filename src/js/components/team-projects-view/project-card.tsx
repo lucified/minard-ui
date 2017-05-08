@@ -30,7 +30,7 @@ const getBottom = (project: Project, deployment?: Deployment, commit?: Commit) =
     <div className={styles.links}>
       {deployment && (
         <div className={styles.link}>
-          <MinardLink preview={deployment} project={project} commit={commit}>
+          <MinardLink deployment={{ deployment, commit }}>
             <div className={styles['link-inner']}>
               <Icon className={styles.icon} name="eye" />
               <span className={styles['link-text']}>
@@ -41,7 +41,7 @@ const getBottom = (project: Project, deployment?: Deployment, commit?: Commit) =
         </div>
       )}
       <div className={styles.link}>
-        <MinardLink project={project}>
+        <MinardLink project={{ project }}>
           <Icon className={styles.icon} name="chevron-right" />
           <span className={styles['link-text']}>
             Open project
@@ -117,7 +117,7 @@ const ProjectCard = ({
               />
             ))}
           </div>
-          <MinardLink project={project}>
+          <MinardLink project={{ project }}>
             <h3 className={styles.title}>
               {project.name}
             </h3>

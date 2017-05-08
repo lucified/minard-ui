@@ -26,7 +26,7 @@ const Header = (
     {buildLogSelected ? (
       <span>
         {deployment.url ? (
-          <MinardLink preview={deployment} commit={commit} className={styles.tab}>
+          <MinardLink deployment={{ deployment, commit}} className={styles.tab}>
             Preview
           </MinardLink>
         ) : (
@@ -56,7 +56,7 @@ const Header = (
           </a>
         )}
         {isAuthenticatedUser && (
-          <MinardLink preview={deployment} commit={commit} buildLog className={styles.tab}>
+          <MinardLink deployment={{ deployment, commit, buildLog: true }} className={styles.tab}>
             Build log
           </MinardLink>
         )}

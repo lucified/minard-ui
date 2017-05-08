@@ -89,7 +89,7 @@ const BranchSummary = (props: Props) => {
       <div className={styles['activity-content']}>
         <div className={styles.header}>
           <div>
-            <MinardLink branch={branch}>
+            <MinardLink branch={{ branch }}>
               <div className={styles.title}>{branch.name}</div>
             </MinardLink>
           </div>
@@ -105,10 +105,12 @@ const BranchSummary = (props: Props) => {
         {commitContent}
         <div className={styles.links}>
           {!isFetchError(latestSuccessfulDeployment)
-            && latestSuccessfullyDeployedCommit
+            && latestSuccessfulDeployment
             && !isFetchError(latestSuccessfullyDeployedCommit)
             && latestSuccessfullyDeployedCommit ? (
-              <MinardLink preview={latestSuccessfulDeployment} commit={latestSuccessfullyDeployedCommit}>
+              <MinardLink
+                deployment={{ deployment: latestSuccessfulDeployment, commit: latestSuccessfullyDeployedCommit }}
+              >
                 <div className={styles.link}>
                   <Icon name="eye" />
                   <div className={styles['link-text']}>

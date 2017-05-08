@@ -8,41 +8,51 @@ import { Deployment } from '../../modules/deployments';
 import { Project } from '../../modules/projects';
 
 interface Props {
-  deployment?: Deployment;
-  preview?: Deployment;
-  commit?: Commit;
-  branch?: Branch | string;
-  project?: Project | string;
-  comment?: Comment;
-  openInNewWindow?: boolean;
+  rawDeployment?: {
+    deployment: Deployment;
+  };
+  deployment?: {
+    deployment: Deployment;
+    commit?: Commit;
+    buildLog?: boolean;
+  };
+  comment?: {
+    comment: Comment;
+    commit: Commit;
+  };
+  branch?: {
+    branch: Branch | string;
+    project?: string;
+  };
+  project?: {
+    project: Project | string;
+  };
   homepage?: boolean;
-  className?: string;
+  /* showAll can be used for project or homepage. */
   showAll?: boolean;
-  buildLog?: boolean;
+  openInNewWindow?: boolean;
+  className?: string;
 }
 
 class MinardLink extends React.Component<Props, void> {
   public render() {
     const {
-      buildLog,
+      branch,
+      children,
       className,
       comment,
-      commit,
-      children,
       deployment,
-      branch,
       homepage,
-      preview,
-      project,
-      showAll,
       openInNewWindow,
+      project,
+      rawDeployment,
+      showAll,
     } = this.props;
     const target = openInNewWindow ? '_blank' : undefined;
     let path: string;
 
-    // Raw deployment
-    if (deployment) {
-      path = deployment.url || '';
+    if (rawDeployment) {
+      path = rawDeployment.deployment.url || '';
 
       if (path) {
         return (
@@ -55,42 +65,45 @@ class MinardLink extends React.Component<Props, void> {
       return (
         <span className={className}>{children}</span>
       );
-    } else if (preview) {
-      if (!commit) {
-        console.error('Missing commit information for preview link!', preview);
+    } else if (deployment) {
+      const { commit, buildLog } = deployment;
+      if (!commit || !deployment.deployment) {
+        console.error('Missing commit information for preview link!', deployment);
         return <span className={className}>{children}</span>;
       }
 
       // Link to build log if preview is not ready
-      path = (preview.url && !buildLog) ?
-        `/preview/${commit.hash}/${preview.id}` : `/preview/${commit.hash}/${preview.id}/log`;
+      path = (deployment.deployment.url && !buildLog) ?
+        `/preview/${commit.hash}/${deployment.deployment.id}` :
+        `/preview/${commit.hash}/${deployment.deployment.id}/log`;
     } else if (comment) {
+      const { commit } = comment;
       if (!commit) {
         console.error('Missing commit information for comment link!', comment);
         return <span className={className}>{children}</span>;
       }
 
-      path = `/preview/${commit.hash}/${comment.deployment}/comment/${comment.id}`;
+      path = `/preview/${commit.hash}/${comment.comment.deployment}/comment/${comment.comment.id}`;
     } else if (branch) {
       let projectId: string;
       let branchId: string;
 
-      if (typeof branch === 'string') {
-        branchId = branch;
-        projectId = project as string;
+      if (typeof branch.branch === 'string') {
+        branchId = branch.branch;
+        projectId = branch.project as string;
       } else {
-        branchId = branch.id;
-        projectId = branch.project;
+        branchId = branch.branch.id;
+        projectId = branch.branch.project;
       }
 
       path = `/project/${projectId}/branch/${branchId}`;
     } else if (project) {
       let projectId: string;
 
-      if (typeof project === 'string') {
-        projectId = project as string;
+      if (typeof project.project === 'string') {
+        projectId = project.project as string;
       } else {
-        projectId = project.id;
+        projectId = project.project.id;
       }
 
       if (showAll) {

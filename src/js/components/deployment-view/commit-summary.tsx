@@ -21,11 +21,11 @@ interface Props {
 const CommitSummary = ({ isAuthenticatedUser, className, commit, deployment, preview }: Props) => {
   const metadata = isAuthenticatedUser ? (
     <div className={styles.metadata}>
-      <MinardLink branch={preview.branch.id} project={preview.project.id}>
+      <MinardLink branch={{ branch: preview.branch.id, project: preview.project.id }}>
         {preview.branch.name}
       </MinardLink>
       {' in '}
-      <MinardLink project={preview.project.id}>
+      <MinardLink project={{ project: preview.project.id }}>
         {preview.project.name}
       </MinardLink>
     </div>
@@ -45,7 +45,7 @@ const CommitSummary = ({ isAuthenticatedUser, className, commit, deployment, pre
         )}
       </div>
       <div className={styles.bottom}>
-        <MinardLink className={styles['open-link']} openInNewWindow deployment={deployment}>
+        <MinardLink className={styles['open-link']} openInNewWindow rawDeployment={{ deployment }}>
           <Icon className={styles.icon} name="arrows-alt" />
           Open naked preview
         </MinardLink>

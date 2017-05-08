@@ -14,13 +14,13 @@ interface Props {
 }
 
 const DeploymentActivity = (props: Props) => {
-  const { activity } = props;
+  const { activity: { deployment, commit } } = props;
 
   return (
-    <MinardLink preview={activity.deployment} commit={activity.commit}>
+    <MinardLink deployment={{ deployment, commit }}>
       <SingleCommit
-        className={classNames({ [styles.hover]: isSuccessful(activity.deployment) })}
-        commit={activity.commit}
+        className={classNames({ [styles.hover]: isSuccessful(deployment) })}
+        commit={commit}
       />
     </MinardLink>
   );
