@@ -176,16 +176,6 @@ function getCharles() {
   return process.env.CHARLES || false;
 }
 
-function getStreamingAPI() {
-  if (deployConfig.env === 'production' && process.env.CHARLES_STREAMING_PRODUCTION) {
-    return process.env.CHARLES_STREAMING_PRODUCTION;
-  }
-  if (deployConfig.env === 'staging' && process.env.CHARLES_STREAMING_STAGING) {
-    return process.env.CHARLES_STREAMING_STAGING;
-  }
-  return process.env.CHARLES_STREAMING || getCharles();
-}
-
 function getAuth0ClientId() {
   if (deployConfig.env === 'production' && process.env.AUTH0_CLIENT_ID_PRODUCTION) {
     return process.env.AUTH0_CLIENT_ID_PRODUCTION;
@@ -230,7 +220,7 @@ const config = {
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(getCharles()),
-      'process.env.STREAMING_API': JSON.stringify(getStreamingAPI()),
+      'process.env.STREAMING_API': JSON.stringify(getCharles()),
       'process.env.ENV': JSON.stringify(deployConfig.env),
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
       'process.env.AUTH0_CLIENT_ID': JSON.stringify(getAuth0ClientId()),
