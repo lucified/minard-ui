@@ -1085,6 +1085,7 @@ describe('sagas', () => {
           branches: ['1', '2'],
           activeUsers: [],
           repoUrl: 'http://mock.repo.url/project.git',
+          token: 'foobartoken',
         },
         {
           id: '2',
@@ -1092,6 +1093,7 @@ describe('sagas', () => {
           branches: ['3'],
           activeUsers: [],
           repoUrl: 'http://mock.repo.url/project.git',
+          token: 'foobartoken',
         },
       ];
 
@@ -1122,6 +1124,7 @@ describe('sagas', () => {
         latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
         repoUrl: 'http://mock.repo.url/project.git',
+        token: 'foobartoken',
       };
       const commit: Commit = {
         id: 'abc',
@@ -1155,6 +1158,7 @@ describe('sagas', () => {
         latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
         repoUrl: 'http://mock.repo.url/project.git',
+        token: 'foobartoken',
       };
 
       const iterator = sagas.ensureProjectRelatedDataLoaded(project);
@@ -1193,6 +1197,7 @@ describe('sagas', () => {
         project: '1',
         commits: ['lc', 'lsdc'],
         allCommitsLoaded: false,
+        token: 'foobartoken',
       };
       const latestSuccessfullyDeployedCommit: Commit = {
         id: 'abc',
@@ -1240,6 +1245,7 @@ describe('sagas', () => {
           latestCommit: 'b1lc',
           commits: ['b1lc', 'b1sc'],
           allCommitsLoaded: false,
+          token: 'foobartoken',
         },
         {
           id: 'b2',
@@ -1250,6 +1256,7 @@ describe('sagas', () => {
           latestCommit: 'b2sc',
           commits: ['b2sc'],
           allCommitsLoaded: false,
+          token: 'foobartoken',
         },
         {
           id: 'b3',
@@ -1258,6 +1265,7 @@ describe('sagas', () => {
           name: 'branch-3',
           commits: [],
           allCommitsLoaded: true,
+          token: 'foobartoken',
         },
       ];
       const deployedCommits: Commit[] = [
@@ -1381,6 +1389,7 @@ describe('sagas', () => {
         name: 'branchname',
         commits: ['c1', 'c2', 'c3'],
         allCommitsLoaded: false,
+        token: 'foobartoken',
       };
 
       const iterator = sagas.ensureCommitsForBranchRelatedDataLoaded(branchId);
@@ -1655,6 +1664,7 @@ describe('sagas', () => {
         description,
         activeUsers: [],
         repoUrl: '',
+        token: 'foobartoken',
       },
     };
 
