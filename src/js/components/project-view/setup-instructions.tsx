@@ -41,7 +41,7 @@ const SetupInstructions = ({ project }: Props) => {
             <div className={styles.code}>
               <pre>
                 git remote add minard {project.repoUrl}<br />
-                git remote set-url ––add origin {project.repoUrl}
+                git remote set-url --add origin {project.repoUrl}
               </pre>
             </div>
           </div>

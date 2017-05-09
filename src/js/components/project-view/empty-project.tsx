@@ -69,7 +69,7 @@ const EmptyProject = ({ project }: Props) => {
               <div className={styles.code}>
                 <pre>
                   git remote add minard {project.repoUrl}<br />
-                  git remote set-url ––add origin {project.repoUrl}<br />
+                  git remote set-url --add origin {project.repoUrl}<br />
                   git push -u minard master
                 </pre>
               </div>
