@@ -2,6 +2,7 @@ import {
   ClearStoredDataAction,
   ClearUserDetailsAction,
   LoadTeamInformationAction,
+  LoginAction,
   LogoutAction,
   RedirectToLoginAction,
   SetGitPasswordAction,
@@ -25,6 +26,29 @@ export const setTeam = (id: string, name: string, invitationToken?: string): Set
   invitationToken,
 });
 
+export const SIGNUP_USER = 'USER/SIGNUP_USER';
+export const signupUser = (
+  email: string,
+  idToken: string,
+  accessToken: string,
+  expiresAt: number,
+): SignupUserAction => ({
+  type: SIGNUP_USER,
+  email,
+  idToken,
+  accessToken,
+  expiresAt,
+});
+
+export const LOGIN = 'USER/LOGIN';
+export const login = (email: string, idToken: string, accessToken: string, expiresAt: number): LoginAction => ({
+  type: LOGIN,
+  email,
+  idToken,
+  accessToken,
+  expiresAt,
+});
+
 export const LOGOUT = 'USER/LOGOUT';
 export const logout = (): LogoutAction => ({
   type: LOGOUT,
@@ -45,11 +69,6 @@ export const clearStoredData = (): ClearStoredDataAction => ({
 export const LOAD_TEAM_INFORMATION = 'USER/LOAD_TEAM_INFORMATION';
 export const loadTeamInformation = (): LoadTeamInformationAction => ({
   type: LOAD_TEAM_INFORMATION,
-});
-
-export const SIGNUP_USER = 'USER/SIGNUP_USER';
-export const signupUser = (): SignupUserAction => ({
-  type: SIGNUP_USER,
 });
 
 export const SET_GIT_PASSWORD = 'USER/SET_GIT_PASSWORD';
