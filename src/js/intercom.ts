@@ -40,7 +40,7 @@ export function trackEvent(event: string) {
  */
 export function update(options?: any) {
   const intercom = (window as any).Intercom;
-  if (intercom) {
+  if (loggedInUserEmail && intercom) {
     intercom('update', { email: loggedInUserEmail, ...options });
   }
 }
