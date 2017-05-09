@@ -5,7 +5,7 @@ import { getValue } from '../../cookie';
 import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
 import { isFetchError } from '../../modules/errors';
-import { Preview } from '../../modules/previews';
+import { EntityType, Preview } from '../../modules/previews';
 
 import CommentList from './comment-list';
 import CommitSummary from './commit-summary';
@@ -23,6 +23,7 @@ interface Props {
   userEmail?: string;
   highlightComment?: string;
   className?: string;
+  linkDetails: { entityType: EntityType, id: string, token: string };
 }
 
 interface State {
@@ -59,6 +60,7 @@ class PreviewDialog extends React.Component<Props, State> {
       preview,
       isAuthenticatedUser,
       userEmail,
+      linkDetails,
     } = this.props;
     const { dialogOpen } = this.state;
 
@@ -70,6 +72,7 @@ class PreviewDialog extends React.Component<Props, State> {
           isOpen={dialogOpen}
           onToggleOpen={this.handleToggleOpen}
           buildLogSelected={buildLogSelected}
+          linkDetails={linkDetails}
           isAuthenticatedUser={isAuthenticatedUser}
         />
         {dialogOpen && (

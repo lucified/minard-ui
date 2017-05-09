@@ -3,6 +3,7 @@ import * as React from 'react';
 import Icon = require('react-fontawesome');
 
 import { Deployment } from '../../modules/deployments';
+import { EntityType } from '../../modules/previews';
 
 import MinardLink from '../common/minard-link';
 
@@ -15,16 +16,34 @@ interface Props {
   isOpen: boolean;
   className?: string;
   isAuthenticatedUser: boolean;
+  linkDetails: { entityType: EntityType, id: string, token: string };
 }
 
 const Header = (
-  { isAuthenticatedUser, buildLogSelected, className, deployment, isOpen, onToggleOpen }: Props,
+  {
+    isAuthenticatedUser,
+    buildLogSelected,
+    className,
+    deployment,
+    isOpen,
+    onToggleOpen,
+    linkDetails,
+  }: Props,
 ) => (
   <div className={classNames(styles.header, className)}>
     {buildLogSelected ? (
       <span>
         {deployment.url ? (
-          <MinardLink preview={{ deployment }} className={styles.tab}>
+          <MinardLink
+            preview={{
+              [linkDetails.entityType]: {
+                id: linkDetails.id,
+                token: linkDetails.token,
+                url: deployment.url,
+              },
+            }}
+            className={styles.tab}
+          >
             Preview
           </MinardLink>
         ) : (
@@ -54,7 +73,17 @@ const Header = (
           </a>
         )}
         {isAuthenticatedUser && (
-          <MinardLink preview={{ deployment, buildLog: true }} className={styles.tab}>
+          <MinardLink
+            preview={{
+              [linkDetails.entityType]: {
+                id: linkDetails.id,
+                token: linkDetails.token,
+                url: deployment.url,
+              },
+              buildLog: true,
+            }}
+            className={styles.tab}
+          >
             Build log
           </MinardLink>
         )}

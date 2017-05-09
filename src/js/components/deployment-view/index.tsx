@@ -76,7 +76,19 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public render() {
-    const { commit, deployment, preview, params, isUserLoggedIn, userEmail } = this.props;
+    const {
+      commit,
+      deployment,
+      preview,
+      params,
+      isUserLoggedIn,
+      userEmail,
+      params: {
+        entityType,
+        id,
+        token,
+      },
+  } = this.props;
 
     if (!preview) {
       return <div className={styles.blank} />;
@@ -120,6 +132,7 @@ class DeploymentView extends React.Component<Props, void> {
           highlightComment={params.commentId}
           isAuthenticatedUser={isUserLoggedIn}
           userEmail={userEmail}
+          linkDetails={{ entityType, id, token }}
         />
         {showPreview ?
           <iframe className={styles.preview} src={deployment.url} /> :
