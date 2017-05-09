@@ -1,4 +1,4 @@
-let loggedInUserEmail: string| undefined;
+let loggedInUserEmail: string | undefined;
 
 export function login(email: string) {
   const intercom = (window as any).Intercom;
