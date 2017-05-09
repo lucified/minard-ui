@@ -63,7 +63,7 @@ class SubHeader extends React.Component<Props, void> {
         </span>,
       );
 
-      if (openPageType === PageType.BranchView && branch && !isFetchError(branch)) {
+      if (branch && !isFetchError(branch)) {
         items.push(
           <span key="branch">
             {' '}/{' '}
