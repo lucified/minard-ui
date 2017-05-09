@@ -3,7 +3,6 @@ export function login(email: string) {
   if (process.env.INTERCOM_ID && intercom) {
     intercom('boot', {
       app_id: process.env.INTERCOM_ID,
-      user_id: email,
       email,
     });
 
