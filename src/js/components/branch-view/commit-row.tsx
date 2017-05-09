@@ -46,11 +46,13 @@ const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
       {getScreenshotOrBuildBadge(deployment, commit)}
     </div>
     <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-      {deployment ? (
-        <MinardLink className={styles.commit} preview={{ deployment }}>
-          <SingleCommit commit={commit} deployment={deployment} />
-        </MinardLink>
-      ) : <SingleCommit commit={commit} deployment={deployment} />}
+      <div className={styles['commit-wrap']}>
+        {deployment ? (
+          <MinardLink className={styles.commit} preview={{ deployment }}>
+            <SingleCommit commit={commit} deployment={deployment} />
+          </MinardLink>
+        ) : <SingleCommit commit={commit} deployment={deployment} />}
+      </div>
     </div>
   </div>
 );
