@@ -5,8 +5,6 @@ import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { push } from 'react-router-redux';
 
-import { storeCredentials } from '../../api/auth';
-import { login as intercomLogin } from '../../intercom';
 import Errors from '../../modules/errors';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
@@ -16,8 +14,7 @@ import Header from '../header';
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
-  setUserEmail: (email: string, expiresAt: number) => void;
-  signupUser: () => void;
+  signupUser: (email: string, idToken: string, accessToken: string, expiresAt: number) => void;
 }
 
 interface GeneratedStateProps {
@@ -56,7 +53,7 @@ class SignupView extends React.Component<Props, State> {
   }
 
   public componentWillMount() {
-    const { setUserEmail, signupUser, params: { teamToken } } = this.props;
+    const { signupUser, params: { teamToken } } = this.props;
 
     this.auth0 = new WebAuth({
       domain: process.env.AUTH0_DOMAIN,
@@ -100,14 +97,10 @@ class SignupView extends React.Component<Props, State> {
                 if (email) {
                   const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
 
-                  intercomLogin(email);
-                  storeCredentials(idToken, accessToken, email, expiresAt);
-                  setUserEmail(email, expiresAt);
-
                   // Will use the teamToken in the accessToken to add the user to the
                   // appropriate team and return the user's git password which is then
                   // stored to the Redux state
-                  signupUser();
+                  signupUser(email, idToken, accessToken, expiresAt);
 
                   this.setState({ loadingStatus: LoadingStatus.BACKEND });
                 } else {
@@ -208,9 +201,10 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  signupUser: () => { dispatch(User.actions.signupUser()); },
+  signupUser: (email: string, idToken: string, accessToken: string, expiresAt: number) => {
+    dispatch(User.actions.signupUser(email, idToken, accessToken, expiresAt));
+  },
   navigateTo: (url: string) => { dispatch(push(url)); },
-  setUserEmail: (email: string, expiresAt) => { dispatch(User.actions.setUserEmail(email, expiresAt)); },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(

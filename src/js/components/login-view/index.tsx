@@ -6,8 +6,7 @@ import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { push } from 'react-router-redux';
 
-import { clearStoredCredentials, storeCredentials } from '../../api/auth';
-import { login as intercomLogin } from '../../intercom';
+import { clearStoredCredentials } from '../../api/auth';
 import Requests from '../../modules/requests';
 import User, { Team } from '../../modules/user';
 import { StateTree } from '../../reducers';
@@ -25,7 +24,7 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
-  setUserEmail: (email: string, expiresIn: number) => void;
+  login: (email: string, idToken: string, accessToken: string, expiresAt: number) => void;
   loadTeamInformation: () => void;
 }
 
@@ -113,7 +112,7 @@ class LoginView extends React.Component<Props, State> {
   }
 
   private onAuthentication(authResult: any) {
-    const { loadTeamInformation, setUserEmail } = this.props;
+    const { loadTeamInformation, login } = this.props;
     const { idToken, accessToken, expiresIn } = authResult;
 
     this.lock.getUserInfo(accessToken, (error: Auth0Error, profile: Auth0UserProfile) => {
@@ -129,10 +128,7 @@ class LoginView extends React.Component<Props, State> {
         // expiresIn is seconds from now
         const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
 
-        intercomLogin(email);
-        storeCredentials(idToken, accessToken, email, expiresAt);
-        setUserEmail(email, expiresAt);
-
+        login(email, idToken, accessToken, expiresAt);
         loadTeamInformation();
         this.lock.hide();
         this.setState({ loadingStatus: LoadingStatus.BACKEND });
@@ -189,7 +185,9 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   navigateTo: (url: string) => { dispatch(push(url)); },
-  setUserEmail: (email: string, expiresAt: number) => { dispatch(User.actions.setUserEmail(email, expiresAt)); },
+  login: (email: string, idToken: string, accessToken: string, expiresAt: number) => {
+    dispatch(User.actions.login(email, idToken, accessToken, expiresAt));
+  },
   loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
 });
 

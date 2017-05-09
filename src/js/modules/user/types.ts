@@ -27,6 +27,22 @@ export interface SetTeamAction {
   invitationToken?: string;
 }
 
+export interface SignupUserAction {
+  type: 'USER/SIGNUP_USER';
+  email: string;
+  idToken: string;
+  accessToken: string;
+  expiresAt: number;
+}
+
+export interface LoginAction {
+  type: 'USER/LOGIN';
+  email: string;
+  idToken: string;
+  accessToken: string;
+  expiresAt: number;
+}
+
 export interface LogoutAction {
   type: 'USER/LOGOUT';
 }
@@ -41,10 +57,6 @@ export interface ClearStoredDataAction {
 
 export interface LoadTeamInformationAction {
   type: 'USER/LOAD_TEAM_INFORMATION';
-}
-
-export interface SignupUserAction {
-  type: 'USER/SIGNUP_USER';
 }
 
 export interface SetGitPasswordAction {

@@ -4,7 +4,7 @@ import { SubmissionError } from 'redux-form';
 import { takeEvery, takeLatest, throttle } from 'redux-saga';
 import { call, Effect, fork, put, race, select, take } from 'redux-saga/effects';
 
-import { clearStoredCredentials } from '../api/auth';
+import { clearStoredCredentials, storeCredentials } from '../api/auth';
 import * as Converter from '../api/convert';
 import {
   Api,
@@ -15,7 +15,7 @@ import {
   ApiTeam,
   SignupResponse,
 } from '../api/types';
-import { logout as intercomLogout } from '../intercom';
+import { login as intercomLogin, logout as intercomLogout } from '../intercom';
 import { logException, logMessage } from '../logger';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from '../modules/activities';
 import Branches, {
@@ -48,7 +48,7 @@ import Projects, {
   StoreProjectsAction,
 } from '../modules/projects';
 import Requests, { CreateEntitySuccessAction, EditEntitySuccessAction } from '../modules/requests';
-import User, { LoadTeamInformationAction, RedirectToLoginAction, SignupUserAction } from '../modules/user';
+import User, { LoadTeamInformationAction, LoginAction, RedirectToLoginAction, SignupUserAction } from '../modules/user';
 
 // Loaders check whether an entity exists. If not, fetch it with a fetcher.
 // Afterwards, the loader also ensures that other needed data exists.
@@ -641,7 +641,9 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function *signupUser(_action: SignupUserAction): IterableIterator<Effect> {
+  function *signupUser(action: SignupUserAction): IterableIterator<Effect> {
+    yield call(login, action);
+
     yield put(Errors.actions.clearSignupError());
     const { response, error, details } = yield call(api.User.signup);
 
@@ -667,6 +669,14 @@ export default function createSagas(api: Api) {
     } else {
       yield put(push('/login'));
     }
+  }
+
+  function *login(action: LoginAction | SignupUserAction): IterableIterator<Effect> {
+    const { email, accessToken, idToken, expiresAt } = action;
+
+    intercomLogin(email);
+    storeCredentials(idToken, accessToken, email, expiresAt);
+    yield put(User.actions.setUserEmail(email, expiresAt));
   }
 
   function *logout(): IterableIterator<Effect> {
@@ -766,6 +776,7 @@ export default function createSagas(api: Api) {
       takeEvery(Previews.actions.LOAD_PREVIEW_AND_COMMENTS, loadPreviewAndComments),
       takeEvery(FORM_SUBMIT, formSubmitSaga),
       throttle(200, Activities.actions.LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
+      takeEvery(User.actions.LOGIN, login),
       takeEvery(User.actions.LOGOUT, logout),
       takeEvery(User.actions.REDIRECT_TO_LOGIN, redirectToLogin),
       fork(watchForLoadAllProjects),
