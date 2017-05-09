@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import Icon = require('react-fontawesome');
 
+import Branches, { Branch } from '../modules/branches';
 import { FetchError, isFetchError } from '../modules/errors';
 import Modal, { ModalType } from '../modules/modal';
 import Projects, { Project } from '../modules/projects';
@@ -27,7 +28,7 @@ interface GeneratedProps {
   openPageType: PageType;
   team?: Team;
   project?: Project | FetchError;
-  branch: string | null;
+  branch?: Branch | FetchError;
 }
 
 interface GeneratedDispatchProps {
@@ -62,12 +63,12 @@ class SubHeader extends React.Component<Props, void> {
         </span>,
       );
 
-      if (openPageType === PageType.BranchView && branch) {
+      if (openPageType === PageType.BranchView && branch && !isFetchError(branch)) {
         items.push(
           <span key="branch">
             {' '}/{' '}
             <MinardLink className={styles['sub-header-link']} branch={{ branch, project: project.id }}>
-              {branch}
+              {branch.name}
             </MinardLink>
           </span>,
         );
@@ -133,10 +134,12 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   const isShowingAll = Selected.selectors.isShowingAll(state);
   let openPageType: PageType;
   let project: Project | FetchError | undefined;
+  let branch: Branch | FetchError | undefined;
 
   if (selectedProject !== null) {
     project = Projects.selectors.getProject(state, selectedProject);
     if (selectedBranch !== null) {
+      branch = Branches.selectors.getBranch(state, selectedBranch);
       openPageType = PageType.BranchView;
     } else {
       if (isShowingAll) {
@@ -156,7 +159,7 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   return {
     openPageType,
     project,
-    branch: selectedBranch,
+    branch,
     team: User.selectors.getTeam(state),
   };
 };
