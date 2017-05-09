@@ -2,8 +2,8 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import Icon = require('react-fontawesome');
 
-import { Commit } from '../../modules/commits';
 import { Deployment } from '../../modules/deployments';
+import { EntityType } from '../../modules/previews';
 
 import MinardLink from '../common/minard-link';
 
@@ -12,21 +12,38 @@ const styles = require('./header.scss');
 interface Props {
   buildLogSelected: boolean;
   deployment: Deployment;
-  commit: Commit;
   onToggleOpen: (e: React.MouseEvent<HTMLElement>) => void;
   isOpen: boolean;
   className?: string;
   isAuthenticatedUser: boolean;
+  linkDetails: { entityType: EntityType, id: string, token: string };
 }
 
 const Header = (
-  { isAuthenticatedUser, buildLogSelected, className, commit, deployment, isOpen, onToggleOpen }: Props,
+  {
+    isAuthenticatedUser,
+    buildLogSelected,
+    className,
+    deployment,
+    isOpen,
+    onToggleOpen,
+    linkDetails,
+  }: Props,
 ) => (
   <div className={classNames(styles.header, className)}>
     {buildLogSelected ? (
       <span>
         {deployment.url ? (
-          <MinardLink preview={deployment} commit={commit} className={styles.tab}>
+          <MinardLink
+            preview={{
+              [linkDetails.entityType]: {
+                id: linkDetails.id,
+                token: linkDetails.token,
+                url: deployment.url,
+              },
+            }}
+            className={styles.tab}
+          >
             Preview
           </MinardLink>
         ) : (
@@ -34,29 +51,27 @@ const Header = (
             Preview
           </span>
         )}
-        {isOpen ? (
-          <span className={classNames(styles.tab, styles.selected)}>
-            Build log
-          </span>
-        ) : (
-          <a className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
-            Build log
-          </a>
-        )}
+        <a className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
+          Build log
+        </a>
       </span>
     ) : (
       <span>
-        {isOpen ? (
-          <span className={classNames(styles.tab, styles.selected)}>
-            Preview
-          </span>
-        ) : (
-          <a className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
-            Preview
-          </a>
-        )}
+        <span className={classNames(styles.tab, styles.selected)} onClick={onToggleOpen}>
+          Preview
+        </span>
         {isAuthenticatedUser && (
-          <MinardLink preview={deployment} commit={commit} buildLog className={styles.tab}>
+          <MinardLink
+            preview={{
+              [linkDetails.entityType]: {
+                id: linkDetails.id,
+                token: linkDetails.token,
+                url: deployment.url,
+              },
+              buildLog: true,
+            }}
+            className={styles.tab}
+          >
             Build log
           </MinardLink>
         )}

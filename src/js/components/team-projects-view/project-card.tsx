@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import * as Truncate from 'react-truncate';
 
-import Commits, { Commit } from '../../modules/commits';
+import Commits from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import { Project } from '../../modules/projects';
@@ -22,15 +22,22 @@ interface PassedProps {
 
 interface GeneratedProps {
   latestDeployment?: Deployment;
-  latestDeployedCommit?: Commit;
 }
 
-const getBottom = (project: Project, deployment?: Deployment, commit?: Commit) => {
+const getBottom = (project: Project, deployment?: Deployment) => {
   return (
     <div className={styles.links}>
+      <div className={styles.link}>
+        <MinardLink project={{ project }}>
+          <Icon className={styles.icon} name="chevron-right" />
+          <span className={styles['link-text']}>
+            Open project
+          </span>
+        </MinardLink>
+      </div>
       {deployment && (
         <div className={styles.link}>
-          <MinardLink preview={deployment} project={project} commit={commit}>
+          <MinardLink preview={{ project }}>
             <div className={styles['link-inner']}>
               <Icon className={styles.icon} name="eye" />
               <span className={styles['link-text']}>
@@ -40,14 +47,6 @@ const getBottom = (project: Project, deployment?: Deployment, commit?: Commit) =
           </MinardLink>
         </div>
       )}
-      <div className={styles.link}>
-        <MinardLink project={project}>
-          <Icon className={styles.icon} name="chevron-right" />
-          <span className={styles['link-text']}>
-            Open project
-          </span>
-        </MinardLink>
-      </div>
     </div>
   );
 };
@@ -84,11 +83,10 @@ function getDescription(description: string | undefined, constantHeight: boolean
 const ProjectCard = ({
   project,
   latestDeployment,
-  latestDeployedCommit,
   constantHeight,
 }: PassedProps & GeneratedProps) => {
   const screenshot = (latestDeployment && latestDeployment.screenshot);
-  const bottom = getBottom(project, latestDeployment, latestDeployedCommit);
+  const bottom = getBottom(project, latestDeployment);
   const maxAvatarCount = 8;
   return (
     <div className={styles.card}>
@@ -117,7 +115,7 @@ const ProjectCard = ({
               />
             ))}
           </div>
-          <MinardLink project={project}>
+          <MinardLink project={{ project }}>
             <h3 className={styles.title}>
               {project.name}
             </h3>
@@ -156,7 +154,6 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   // TODO: Don't convert error state to loading state?
   return {
     latestDeployment: isFetchError(latestDeployment) ? undefined : latestDeployment,
-    latestDeployedCommit: isFetchError(latestDeployedCommit) ? undefined : latestDeployedCommit,
   };
 };
 

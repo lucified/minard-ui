@@ -3,7 +3,8 @@
     "type": "branches",
     "id": "3",
     "attributes": {
-      "name": "third-long-name-branch"
+      "name": "third-long-name-branch",
+      "token": "tokenfoobar"
     },
     "relationships": {
       "latest-successfully-deployed-commit": {

@@ -1445,6 +1445,7 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
+        token: 'foobartoken',
       },
     };
 
@@ -1464,6 +1465,7 @@ describe('reducers', () => {
           email: 'juho@lucify.com',
           timestamp: 1470131581802,
         },
+        token: 'foobartoken',
       },
     };
 
@@ -1478,6 +1480,7 @@ describe('reducers', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
+        token: 'foobartoken',
       },
     };
 
@@ -1521,6 +1524,7 @@ describe('reducers', () => {
           },
         ],
         repoUrl: 'http://mock.repo.url/project.git',
+        token: 'foobartoken',
       },
       2: {
         id: '2',
@@ -1531,6 +1535,7 @@ describe('reducers', () => {
         latestSuccessfullyDeployedCommit: undefined,
         activeUsers: [],
         repoUrl: 'http://mock.repo.url/project.git',
+        token: 'foobartoken',
       },
     };
 
@@ -1549,6 +1554,7 @@ describe('reducers', () => {
         latestSuccessfullyDeployedCommit: undefined,
         branches: undefined,
         repoUrl: 'http://mock.repo.url/project.git',
+        token: 'foobartoken',
       },
     };
 
@@ -1566,6 +1572,7 @@ describe('reducers', () => {
           },
         ],
         repoUrl: 'http://mock.repo.url/project.git',
+        token: 'foobartoken',
       },
       1: {
         id: '1',
@@ -1580,6 +1587,7 @@ describe('reducers', () => {
           },
         ],
         repoUrl: 'http://mock.repo.url/project.git',
+        token: 'foobartoken',
       },
     };
 

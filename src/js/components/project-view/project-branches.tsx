@@ -73,7 +73,7 @@ class ProjectBranches extends React.Component<Props, void> {
             <SimpleSectionTitle><span>{title}</span></SimpleSectionTitle>
             {content}
             {(!showAll && filteredBranches.length > count) && (
-              <MinardLink className={styles['show-all-branches-link']} showAll project={project}>
+              <MinardLink className={styles['show-all-branches-link']} showAll project={{ project }}>
                 Show all branches ({filteredBranches.length})
               </MinardLink>
             )}

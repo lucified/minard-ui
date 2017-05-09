@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
-import Previews, { Preview } from '../../modules/previews';
+import Previews, { EntityType, Preview } from '../../modules/previews';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
@@ -18,8 +18,9 @@ import PreviewDialog from './preview-dialog';
 const styles = require('./index.scss');
 
 interface Params {
-  commitHash: string;
-  deploymentId: string;
+  token: string;
+  entityType: EntityType;
+  id: string;
   commentId?: string;
   view?: string;
 }
@@ -33,7 +34,7 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadPreviewAndComments: (deploymentId: string, commitHash: string, isUserLoggedIn: boolean) => void;
+  loadPreviewAndComments: (id: string, entityType: EntityType, token: string, isUserLoggedIn: boolean) => void;
   redirectToApp: () => void;
 }
 
@@ -47,18 +48,26 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { loadPreviewAndComments, isUserLoggedIn } = this.props;
-    const { deploymentId, commitHash } = this.props.params;
+    const { loadPreviewAndComments, isUserLoggedIn, params: { entityType, token, id } } = this.props;
 
-    loadPreviewAndComments(deploymentId, commitHash, isUserLoggedIn);
+    if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
+      console.error('Unknown preview type!');
+      return;
+    }
+
+    loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadPreviewAndComments, isUserLoggedIn } = nextProps;
-    const { commitHash, deploymentId } = nextProps.params;
+    const { loadPreviewAndComments, isUserLoggedIn, params: { entityType, token, id } } = nextProps;
 
-    if (deploymentId !== this.props.params.deploymentId) {
-      loadPreviewAndComments(deploymentId, commitHash, isUserLoggedIn);
+    if (id !== this.props.params.id || entityType !== this.props.params.entityType) {
+      if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
+        console.error('Unknown preview type!');
+        return;
+      }
+
+      loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
     }
   }
 
@@ -67,7 +76,19 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public render() {
-    const { commit, deployment, preview, params, isUserLoggedIn, userEmail } = this.props;
+    const {
+      commit,
+      deployment,
+      preview,
+      params,
+      isUserLoggedIn,
+      userEmail,
+      params: {
+        entityType,
+        id,
+        token,
+      },
+  } = this.props;
 
     if (!preview) {
       return <div className={styles.blank} />;
@@ -77,7 +98,7 @@ class DeploymentView extends React.Component<Props, void> {
       let errorMessage;
 
       if (isFetchError(preview)) {
-        errorMessage = preview.unauthorized ? 'You do not have access to this preview.' : 'Unable to load preview.';
+        errorMessage = preview.unauthorized ? 'Unauthorized' : 'Unable to load preview.';
       } else {
         errorMessage = 'Unable to load preview details.';
       }
@@ -111,6 +132,7 @@ class DeploymentView extends React.Component<Props, void> {
           highlightComment={params.commentId}
           isAuthenticatedUser={isUserLoggedIn}
           userEmail={userEmail}
+          linkDetails={{ entityType, id, token }}
         />
         {showPreview ?
           <iframe className={styles.preview} src={deployment.url} /> :
@@ -122,10 +144,11 @@ class DeploymentView extends React.Component<Props, void> {
 }
 
 const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
-  const { deploymentId } = ownProps.params;
-  const preview = Previews.selectors.getPreview(state, deploymentId);
+  const { id, entityType } = ownProps.params;
   let commit: Commit | FetchError | undefined;
   let deployment: Deployment | FetchError | undefined;
+
+  const preview = Previews.selectors.getPreview(state, id, entityType);
 
   if (preview && !isFetchError(preview)) {
     commit = Commits.selectors.getCommit(state, preview.commit);
@@ -142,8 +165,8 @@ const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params,
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  loadPreviewAndComments: (id, commitHash, isUserLoggedIn) => {
-    dispatch(Previews.actions.loadPreviewAndComments(id, commitHash, isUserLoggedIn));
+  loadPreviewAndComments: (id, entityType, token, isUserLoggedIn) => {
+    dispatch(Previews.actions.loadPreviewAndComments(id, entityType, token, isUserLoggedIn));
   },
   redirectToApp: () => { dispatch(push('/')); },
 });

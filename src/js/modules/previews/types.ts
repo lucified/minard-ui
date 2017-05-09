@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 import { FetchError } from '../errors';
 
 // State
@@ -14,23 +12,32 @@ export interface Preview {
     id: string;
     name: string;
   };
+
+  // Currently not available from the API and not used
   next?: string;
   previous?: string;
 }
 
 export interface PreviewState {
+  // The Preview is stored into the state with the key: `${entityType}-${id}`
   [id: string]: Preview | FetchError;
 }
 
 // Actions
 // LOAD_PREVIEW_AND_COMMENTS
-export interface LoadPreviewAndCommentsAction extends Action {
+export type EntityType = 'project' | 'branch' | 'deployment';
+export interface LoadPreviewAndCommentsAction {
+  type: 'PREVIEW/LOAD_PREVIEW_AND_COMMENTS';
   id: string;
-  commitHash: string;
+  entityType: EntityType;
+  token: string;
   isUserLoggedIn: boolean;
 }
 
 // STORE_PREVIEW
-export interface StorePreviewAction extends Action {
+export interface StorePreviewAction {
+  type: 'PREVIEW/STORE_PREVIEW';
   preview: Preview;
+  requestedEntityType: EntityType;
+  requestedId: string;
 }

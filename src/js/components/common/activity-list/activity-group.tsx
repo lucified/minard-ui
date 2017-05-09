@@ -25,7 +25,7 @@ const getProjectLabel = ({ project }: Activity) => {
   return (
     <span>
       {' in '}
-      <MinardLink className={styles['metadata-project']} project={project.id}>
+      <MinardLink className={styles['metadata-project']} project={{ project: project.id }}>
         {project.name}
       </MinardLink>
     </span>
@@ -35,7 +35,7 @@ const getProjectLabel = ({ project }: Activity) => {
 const getBranchLabel = ({ branch, project }: Activity) => {
   return (
     <span>
-      <MinardLink className={styles['metadata-branch']} branch={branch.id} project={project.id} >
+      <MinardLink className={styles['metadata-branch']} branch={{ branch: branch.id, project: project.id }} >
         {branch.name}
       </MinardLink>
     </span>
@@ -77,7 +77,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
           </div>
             {isSuccessful(deployment) ? (
               <div className={styles.screenshot}>
-                <MinardLink preview={deployment} commit={firstActivity.commit}>
+                <MinardLink preview={{ deployment }}>
                   <DeploymentScreenshot deployment={deployment} />
                 </MinardLink>
               </div>
@@ -94,7 +94,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
         <div className={styles['links-wrap']}>
           <div className={styles.links}>
             <div className={styles.link}>
-              <MinardLink preview={deployment} commit={commit}>
+              <MinardLink preview={{ deployment }}>
                 {isSuccessful(deployment) ? (
                   <div className={styles['link-inner']}>
                     <Icon className={styles.icon} name="eye" />
@@ -110,7 +110,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
             </div>
             {isSuccessful(deployment) && (
               <div className={styles.link}>
-                <MinardLink deployment={deployment} openInNewWindow>
+                <MinardLink rawDeployment={{ deployment }} openInNewWindow>
                   <div className={styles['link-inner']}>
                     <Icon className={styles.icon} name="arrows-alt" />
                     Open naked preview

@@ -56,7 +56,7 @@ const BranchSummary = (props: Props) => {
     } else if (isFetchError(latestSuccessfullyDeployedCommit)) {
       commitContent = (
         <div className={styles.error}>
-          <p>Error loading deployment</p>
+          <p>Error loading commit</p>
           <small>{latestSuccessfullyDeployedCommit.prettyError}</small>
         </div>
       );
@@ -89,7 +89,7 @@ const BranchSummary = (props: Props) => {
       <div className={styles['activity-content']}>
         <div className={styles.header}>
           <div>
-            <MinardLink branch={branch}>
+            <MinardLink branch={{ branch }}>
               <div className={styles.title}>{branch.name}</div>
             </MinardLink>
           </div>
@@ -104,24 +104,20 @@ const BranchSummary = (props: Props) => {
         </div>
         {commitContent}
         <div className={styles.links}>
-          {!isFetchError(latestSuccessfulDeployment)
-            && latestSuccessfullyDeployedCommit
-            && !isFetchError(latestSuccessfullyDeployedCommit)
-            && latestSuccessfullyDeployedCommit ? (
-              <MinardLink preview={latestSuccessfulDeployment} commit={latestSuccessfullyDeployedCommit}>
-                <div className={styles.link}>
-                  <Icon name="eye" />
-                  <div className={styles['link-text']}>
-                    Latest preview
-                  </div>
+          {latestSuccessfulDeployment && !isFetchError(latestSuccessfulDeployment) ? (
+            <MinardLink preview={{ branch }}>
+              <div className={styles.link}>
+                <Icon name="eye" />
+                <div className={styles['link-text']}>
+                  Latest preview
                 </div>
-              </MinardLink>
-            ) : (
-              <div className={classNames(styles.link, styles['link-disabled'])}>
-                No preview available
               </div>
-            )
-          }
+            </MinardLink>
+          ) : (
+            <div className={classNames(styles.link, styles['link-disabled'])}>
+              No preview available
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -89,7 +89,8 @@ const Deployment = {
 };
 
 const Preview = {
-  fetch: (_id: string, _commitHash: string): Promise<ApiResult<ApiPreviewResponse>> => fetchFile(previewJSON),
+  fetch: (_id: string, _entityType: string, _token: string): Promise<ApiResult<ApiPreviewResponse>> =>
+    fetchFile(previewJSON),
 };
 
 const Project = {

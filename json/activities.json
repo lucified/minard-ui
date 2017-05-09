@@ -30,6 +30,7 @@
           "deployments": ["7"]
         },
         "deployment": {
+          "token": "foobar",
           "id": "7",
           "url": "#",
           "screenshot": "https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png",
@@ -71,6 +72,7 @@
           "deployments": ["8"]
         },
         "deployment": {
+          "token": "foobar",
           "id": "8",
           "url": "#",
           "screenshot": "https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png",

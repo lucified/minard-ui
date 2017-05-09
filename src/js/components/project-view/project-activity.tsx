@@ -23,7 +23,7 @@ const ProjectActivity = ({ activities, loadActivities, isLoading, allLoaded, pro
         Previews
       </span>
       <span className={styles['show-branches']}>
-        <MinardLink showAll project={project}>
+        <MinardLink showAll project={{ project }}>
           Show branches
         </MinardLink>
       </span>

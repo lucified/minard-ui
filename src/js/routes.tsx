@@ -18,7 +18,7 @@ export default (
       <Route path="project/:projectId/branch/:branchId(/:redirect)" component={BranchView} />
       <Route path="project/:projectId(/:show)" component={ProjectView} />
     </Route>
-    <Route path="preview/:commitHash/:deploymentId" component={DeploymentView}>
+    <Route path="preview/:entityType/:id/:token" component={DeploymentView}>
       <Route path="comment/:commentId" />
       <Route path=":view" />
     </Route>

@@ -16,7 +16,8 @@
           }
         ],
         "latest-activity-timestamp": "2016-08-01T15:51:21.802Z",
-        "repo-url": "http://mock.repo.url/project.git"
+        "repo-url": "http://mock.repo.url/project.git",
+        "token": "tokenfoobar"
       },
       "relationships": {
         "latest-successfully-deployed-commit": {
@@ -33,7 +34,8 @@
       "attributes": {
         "name": "second-project",
         "active-committers": [],
-        "repo-url": "http://mock.repo.url/project.git"
+        "repo-url": "http://mock.repo.url/project.git",
+        "token": "tokenfoobar"
       },
       "relationships": {
         "latest-successfully-deployed-commit": {

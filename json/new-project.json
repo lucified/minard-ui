@@ -5,7 +5,8 @@
     "attributes": {
       "name": "new-project",
       "active-committers": [],
-      "repo-url": "http://mock.repo.url/project.git"
+      "repo-url": "http://mock.repo.url/project.git",
+      "token": "tokenfoobar"
     },
     "relationships": {
       "latest-successfully-deployed-commit": {

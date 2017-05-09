@@ -34,7 +34,7 @@ const getScreenshotOrBuildBadge = (deployment?: Deployment, commit?: Commit) => 
   }
 
   return (
-    <MinardLink preview={deployment} commit={commit}>
+    <MinardLink preview={{ deployment }}>
       <img className={styles.screenshot} src={deployment.screenshot} />
     </MinardLink>
   );
@@ -46,9 +46,11 @@ const CommitRow = ({ commit, deployment }: PassedProps & GeneratedProps) => (
       {getScreenshotOrBuildBadge(deployment, commit)}
     </div>
     <div className={classNames(styles['commit-container'], 'col-xs-10')}>
-      <MinardLink className={styles.commit} preview={deployment} commit={commit}>
-        <SingleCommit commit={commit} deployment={deployment} />
-      </MinardLink>
+      {deployment ? (
+        <MinardLink className={styles.commit} preview={{ deployment }}>
+          <SingleCommit commit={commit} deployment={deployment} />
+        </MinardLink>
+      ) : <SingleCommit commit={commit} deployment={deployment} />}
     </div>
   </div>
 );

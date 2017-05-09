@@ -31,6 +31,7 @@ export interface Activity {
       email: string;
       timestamp: number;
     };
+    token: string;
   };
   commit: {
     id: string;

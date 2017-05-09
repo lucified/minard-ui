@@ -1,3 +1,5 @@
+import { EntityType } from '../modules/previews';
+
 export type ApiResult<T> = { response: T; } | { error: string; details?: string; unauthorized?: boolean };
 
 export interface Api {
@@ -28,7 +30,7 @@ export interface Api {
     fetchBuildLog: (id: string) => Promise<ApiResult<string>>;
   };
   Preview: {
-    fetch: (id: string, commitHash: string) => Promise<ApiResult<ApiPreviewResponse>>;
+    fetch: (id: string, entityType: EntityType, token: string) => Promise<ApiResult<ApiPreviewResponse>>;
   };
   Project: {
     fetchAll: (teamId: string) => Promise<ApiResult<ApiEntityResponse>>;
@@ -118,6 +120,7 @@ export interface ResponseProjectElement {
     'active-committers': ProjectUser[];
     'latest-activity-timestamp'?: string;
     'repo-url': string;
+    token: string;
   };
   relationships?: {
     'latest-successfully-deployed-commit'?: {
@@ -169,6 +172,7 @@ export interface ResponseActivityElement {
         email: string;
         timestamp: string;
       };
+      token: string;
     };
     comment?: { // Only for comments
       id: string;
@@ -190,6 +194,7 @@ export interface ResponseBranchElement {
     'minard-json'?: {
       errors?: string[];
     };
+    token: string;
   };
   relationships: {
     'latest-successfully-deployed-commit'?: {
@@ -246,6 +251,7 @@ export interface ResponseDeploymentElement {
     screenshot?: string;
     'comment-count': number;
     status: DeploymentStatusString;
+    token: string;
   };
 }
 

@@ -38,7 +38,7 @@ import Errors, {
   isFetchError,
 } from '../modules/errors';
 import { FORM_SUBMIT, FormSubmitAction } from '../modules/forms';
-import Previews, { LoadPreviewAndCommentsAction, Preview } from '../modules/previews';
+import Previews, { EntityType, LoadPreviewAndCommentsAction, Preview } from '../modules/previews';
 import Projects, {
   CreateProjectAction,
   DeleteProjectAction,
@@ -478,20 +478,26 @@ export default function createSagas(api: Api) {
 
   // PREVIEW
   function* loadPreviewAndComments(action: LoadPreviewAndCommentsAction): IterableIterator<Effect> {
-    const { id, commitHash, isUserLoggedIn } = action;
-    const existingPreview: Preview = yield select(Previews.selectors.getPreview, id);
+    const { id, token, isUserLoggedIn, entityType } = action;
+    const existingPreview: Preview = yield select(Previews.selectors.getPreview, id, entityType);
     let previewExists = !!existingPreview;
 
     if (!previewExists || isFetchError(existingPreview)) {
-      previewExists = yield call(fetchPreview, id, commitHash, isUserLoggedIn);
+      previewExists = yield call(fetchPreview, id, entityType, token, isUserLoggedIn);
     }
 
     if (previewExists) {
-      yield call(loadCommentsForDeployment, id);
+      const preview: Preview = yield select(Previews.selectors.getPreview, id, entityType);
+      yield call(loadCommentsForDeployment, preview.deployment);
     }
   }
 
-  function* fetchPreview(id: string, commitHash: string, isUserLoggedIn: boolean): IterableIterator<Effect> {
+  function* fetchPreview(
+    id: string,
+    entityType: EntityType,
+    token: string,
+    isUserLoggedIn: boolean,
+  ): IterableIterator<Effect> {
     yield put(Requests.actions.Previews.LoadPreview.REQUEST.actionCreator(id));
 
     const { response, error, details, unauthorized }: {
@@ -499,7 +505,7 @@ export default function createSagas(api: Api) {
       error?: string,
       details?: string,
       unauthorized?: boolean,
-    } = yield call(api.Preview.fetch, id, commitHash);
+    } = yield call(api.Preview.fetch, id, entityType, token);
 
     if (response) {
       const commit: Commit[] = yield call(Converter.toCommits, response.commit);
@@ -510,16 +516,23 @@ export default function createSagas(api: Api) {
 
       // only store IDs into Preview, not the actual Commit and Deployment objects
       const preview: Preview = { ...response, commit: commit[0].id, deployment: deployment[0].id };
-      yield put(Previews.actions.storePreviews(preview));
+      yield put(Previews.actions.storePreviews(preview, id, entityType));
 
       yield put(Requests.actions.Previews.LoadPreview.SUCCESS.actionCreator(id));
 
       return true;
     } else {
-      yield put(Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(id, error!, details, unauthorized));
+      yield put(
+        Requests.actions.Previews.LoadPreview.FAILURE.actionCreator(
+          `${entityType}-${id}`, // TODO: Manually specifying this here is ugly. Fix it up at some point.
+          error!,
+          details,
+          unauthorized,
+        ),
+      );
 
       if (unauthorized && !isUserLoggedIn) {
-        yield put(User.actions.redirectToLogin(`/preview/${commitHash}/${id}`));
+        yield put(User.actions.redirectToLogin(`/preview/${entityType}/${id}/${token}`));
       }
 
       return false;
