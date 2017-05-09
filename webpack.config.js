@@ -159,7 +159,7 @@ const htmlWebpackPluginConfig = {
   filename: 'index.html',
   googleAnalytics: (deployConfig.env === 'production'),
   googleAnalyticsSendPageView: (deployConfig.env === 'production'),
-  enableIntercom: (deployConfig.env === 'production'),
+  enableIntercom: ['production', 'staging'].indexOf(deployConfig.env) > -1,
   icons: true,
   files: {
     css: ['bundled.css'],
@@ -197,6 +197,14 @@ function getAuth0Audience() {
   return process.env.AUTH0_AUDIENCE || 'http://localtest.me:8000';
 }
 
+function getIntercomId() {
+  if (deployConfig.env === 'production' && process.env.INTERCOM_ID_PRODUCTION) {
+    return process.env.INTERCOM_ID_PRODUCTION;
+  }
+
+  return process.env.INTERCOM_ID;
+}
+
 const config = {
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
@@ -226,6 +234,7 @@ const config = {
       'process.env.AUTH0_CLIENT_ID': JSON.stringify(getAuth0ClientId()),
       'process.env.AUTH0_DOMAIN': JSON.stringify(getAuth0Domain()),
       'process.env.AUTH0_AUDIENCE': JSON.stringify(getAuth0Audience()),
+      'process.env.INTERCOM_ID': JSON.stringify(getIntercomId()),
     }),
     new ExtractTextPlugin({
       filename: 'bundled.[hash].css',
