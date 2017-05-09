@@ -19,6 +19,7 @@ export interface Preview {
 }
 
 export interface PreviewState {
+  // The Preview is stored into the state with the key: `${entityType}-${id}`
   [id: string]: Preview | FetchError;
 }
 
