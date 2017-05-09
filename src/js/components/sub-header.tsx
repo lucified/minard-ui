@@ -48,7 +48,7 @@ class SubHeader extends React.Component<Props, void> {
     if (openPageType === PageType.ProjectsList) {
       items.push(
         <span key="all-projects">
-          {' '}/ all projects
+          {' '}/ Projects
         </span>,
       );
     }
