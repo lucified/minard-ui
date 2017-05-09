@@ -157,8 +157,8 @@ const htmlWebpackPluginConfig = {
   template: require.resolve('./src/templates/index.hbs'),
   inject: false,
   filename: 'index.html',
-  googleAnalytics: (deployConfig.env === 'production'),
-  googleAnalyticsSendPageView: (deployConfig.env === 'production'),
+  googleAnalytics: false,
+  googleAnalyticsSendPageView: false,
   enableIntercom: ['production', 'staging'].indexOf(deployConfig.env) > -1,
   icons: true,
   files: {
