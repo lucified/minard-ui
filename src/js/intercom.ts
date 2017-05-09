@@ -30,6 +30,14 @@ export function trackEvent(event: string) {
   }
 }
 
+/*
+ * The goal of this update is to update the information about the current
+ * page. This needs to be done manually since we're not refreshing the page
+ * whenever the user navigates around. However, it doesn't seem to work at
+ * the moment. We'll keep it here to see if it provides some value.
+ *
+ * TOOD: Make sure this works or remove it along with the stored email info.
+ */
 export function update(options?: any) {
   const intercom = (window as any).Intercom;
   if (intercom) {
