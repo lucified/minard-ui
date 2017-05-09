@@ -36,7 +36,7 @@ export function trackEvent(event: string) {
  * whenever the user navigates around. However, it doesn't seem to work at
  * the moment. We'll keep it here to see if it provides some value.
  *
- * TOOD: Make sure this works or remove it along with the stored email info.
+ * TOOD: Make sure this works or remove it along with loggedInUserEmail.
  */
 export function update(options?: any) {
   const intercom = (window as any).Intercom;
