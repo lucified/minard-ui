@@ -2,7 +2,7 @@ import * as React from 'react';
 import Icon = require('react-fontawesome');
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
-import * as Truncate from 'react-truncate';
+import Truncate from 'react-truncate';
 
 import Commits from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';

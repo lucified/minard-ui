@@ -106,7 +106,7 @@ const Project = {
 
 const Team = {
   fetch: () => Promise.resolve({
-    response: { id: 3, name: 'Dev team' } as ApiTeam,
+    response: { id: 3, name: 'Dev team' } as ApiTeam,  // tslint:disable-line:no-object-literal-type-assertion
   }),
 };
 
@@ -114,7 +114,7 @@ const User = {
   signup: () => Promise.resolve({
     response: {
       password: 'secretPassword',
-      team: { id: 3, name: 'teamName' } as ApiTeam,
+      team: { id: 3, name: 'teamName' } as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
     },
   }),
   logout: () => Promise.resolve({}),

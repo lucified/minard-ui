@@ -84,7 +84,7 @@ class LoginView extends React.Component<Props, State> {
       languageDictionary: {
         title: 'Minard by Lucify',
       },
-    } as any);
+    } as any); // tslint:disable-line:no-object-literal-type-assertion
 
     this.lock.on('authenticated', this.onAuthentication.bind(this));
     this.lock.on('authorization_error', this.onError.bind(this));
