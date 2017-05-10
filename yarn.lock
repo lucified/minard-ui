@@ -103,9 +103,9 @@
   version "15.0.24"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.24.tgz#8a75299dc37906df327c18ca918bf97a55e7123b"
 
-"@types/redux-form@^6.3.6":
-  version "6.3.6"
-  resolved "https://registry.yarnpkg.com/@types/redux-form/-/redux-form-6.3.6.tgz#73fdb76a02555e79c7a8e4337daf847d8978a98a"
+"@types/redux-form@^6.6.2":
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/@types/redux-form/-/redux-form-6.6.2.tgz#f3384046ab3609578cc28daf6c50231c25860a06"
   dependencies:
     "@types/react" "*"
     redux "^3.6.0"

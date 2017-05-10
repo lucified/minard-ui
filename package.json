@@ -66,7 +66,7 @@
     "@types/react-router-redux": "^4.0.46",
     "@types/react-select": "^1.0.46",
     "@types/react-transition-group": "^1.1.0",
-    "@types/redux-form": "^6.3.6",
+    "@types/redux-form": "^6.6.2",
     "atomic-s3": "^0.2.0",
     "autoprefixer": "^7.0.1",
     "awesome-typescript-loader": "^3.1.3",

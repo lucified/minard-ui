@@ -125,9 +125,9 @@ class NewProjectForm extends React.Component<Props, void> {
                 name="projectTemplate"
                 component={(field: WrappedFieldProps<void>) => (
                   <Select
-                    value={field.input.value}
-                    onChange={field.input.onChange}
-                    onBlur={() => field.input.onBlur(field.input.value)}
+                    value={field.input && field.input.value}
+                    onChange={field.input && field.input.onChange}
+                    onBlur={() => field.input && field.input.onBlur(field.input.value)}
                     options={dropdownValues}
                     placeholder="Clone existing project…"
                     autosize={false}
