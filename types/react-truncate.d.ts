@@ -8,5 +8,4 @@ interface ReactTruncateProps {
   onTruncate?: (truncated: boolean) => void;
 }
 
-declare var ReactTruncateType: typeof ReactTruncate;
-export = ReactTruncateType;
+export default ReactTruncate;
