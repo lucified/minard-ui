@@ -38,6 +38,7 @@ const validate = (values: CreateCommentFormData) => {
 
 class NewCommentForm extends React.Component<Props, void> {
   private commentFieldRef: HTMLElement;
+  private emailFieldRef: HTMLElement;
   private focusTimeoutId: any;
 
   constructor(props: Props) {
@@ -45,14 +46,22 @@ class NewCommentForm extends React.Component<Props, void> {
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.storeCommentFieldRef = this.storeCommentFieldRef.bind(this);
+    this.storeEmailFieldRef = this.storeEmailFieldRef.bind(this);
   }
 
   public componentDidMount() {
-    this.commentFieldRef.focus();
+    const { isAuthenticatedUser, initialValues: { email } } = this.props;
+
+    if (!isAuthenticatedUser && !email) {
+      this.emailFieldRef.focus();
+    } else {
+      this.commentFieldRef.focus();
+    }
   }
 
   public componentWillReceiveProps(nextProps: Props) {
     if (this.props.submitting && !nextProps.submitting) {
+      // Focus the comment field after a submission.
       this.focusTimeoutId = setTimeout(() => { this.commentFieldRef.focus(); }, 100);
     }
   }
@@ -63,6 +72,10 @@ class NewCommentForm extends React.Component<Props, void> {
 
   private storeCommentFieldRef(element: HTMLElement) {
     this.commentFieldRef = element;
+  }
+
+  private storeEmailFieldRef(element: HTMLElement) {
+    this.emailFieldRef = element;
   }
 
   private handleKeyDown(e: React.KeyboardEvent<any>) {
@@ -93,6 +106,7 @@ class NewCommentForm extends React.Component<Props, void> {
               type="text"
               placeholder="Email"
               disabled={submitting}
+              fieldRef={this.storeEmailFieldRef}
             />
           )}
           {!isAuthenticatedUser && (
