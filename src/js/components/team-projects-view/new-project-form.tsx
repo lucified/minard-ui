@@ -135,7 +135,7 @@ class NewProjectForm extends React.Component<Props, void> {
                     className={styles['template-dropdown']}
                     simpleValue
                   />
-                )}
+                ) /* tslint:disable-line:jsx-no-lambda */}
               />
             </div>
           )}

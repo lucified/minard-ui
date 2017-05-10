@@ -49,7 +49,7 @@ const CommitList = ({ commits, isLoading, allLoaded, loadCommits }: Props) => {
       {!isLoading && !allLoaded && lastCommit && !isFetchError(lastCommit) && (
         <Waypoint
           bottomOffset="-200px" // Start loading new commits when the waypoint is 200px below the bottom edge
-          onEnter={() => { loadCommits(10, lastCommit.committer.timestamp); }}
+          onEnter={() => { loadCommits(10, lastCommit.committer.timestamp); /* tslint:disable-line:jsx-no-lambda */ }}
         />
       )}
       {allLoaded && (
