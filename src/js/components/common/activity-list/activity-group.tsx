@@ -130,7 +130,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
                   timestamp: activity.timestamp,
                 };
                 return (
-                  <SingleComment key={activity.id} comment={comment} />
+                  <SingleComment key={activity.id} comment={comment} hideDelete />
                 );
               })}
             </FlipMove>
