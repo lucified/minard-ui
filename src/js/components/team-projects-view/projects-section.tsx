@@ -79,10 +79,12 @@ class ProjectsSection extends React.Component<Props, void> {
           </span>
         </SimpleSectionTitle>
         <FlipMove
-          className={classNames(
-            showAll && 'row',
-            showAll && 'start-sm',
-          )}
+          className={
+            classNames({
+              row: showAll,
+              'start-sm': showAll,
+            })
+          }
           enterAnimation="fade"
           leaveAnimation="fade"
         >
@@ -90,18 +92,18 @@ class ProjectsSection extends React.Component<Props, void> {
             <div
               key={project.id}
               className={
-                classNames(
-                  showAll && 'col-xs-12',
-                  showAll && 'col-sm-6',
-                  showAll && 'col-md-4',
-                  styles['project-card'],
-                )}
+                classNames({
+                  'col-xs-12': showAll,
+                  'col-sm-6': showAll,
+                  'col-md-4': showAll,
+                })
+              }
             >
               <ProjectCard project={project} constantHeight={showAll} />
             </div>
           ))}
           {showLoadingIcon && (
-            <div key="loading" className={classNames('col-xs-12', 'col-sm-6', 'col-md-4', styles['project-card'])}>
+            <div key="loading" className={classNames('col-xs-12', 'col-sm-6', 'col-md-4')}>
               <LoadingIcon className={styles.loading} center />
             </div>
           )}
