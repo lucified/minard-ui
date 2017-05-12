@@ -28,7 +28,8 @@ const getEmptyContent = (header: string, body: string) => (
 
 // Group activities by actions related to the same deployment.
 const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
-  return values(groupBy(activities, activity => activity.deployment.id));
+  return values(groupBy(activities, activity => activity.deployment.id))
+    .sort((a, b) => b[0].deployment.creator.timestamp - a[0].deployment.creator.timestamp);
 };
 
 class ActivityList extends React.Component<Props, void> {
@@ -61,27 +62,13 @@ class ActivityList extends React.Component<Props, void> {
     return (
       <div>
         <FlipMove enterAnimation="fade" leaveAnimation="fade">
-          {groupedActivities.map(activityGroup => {
-           /* We need to generate a unique key for the activity group. We can't use
-            * just the deployment ID since we can have multiple activity groups per
-            * deployment, se we use a combination of the deployment ID and the
-            * timestamp of one of the activities in the group. Here lies the challenge:
-            * which activity do we pick? If we choose the latest activity, it will
-            * change when we get a new activity for the deployment. On the other hand,
-            * if we choose the oldest one, it will change if the group is "cut off" at
-            * the bottom and we load more activities when we scroll down.
-            *
-            * Since the latter option is less likely to occur, we'll go with that.
-            */
-            const oldestActivity = activityGroup[activityGroup.length - 1];
-            return (
-              <ActivityGroup
-                key={`${oldestActivity.deployment.id}-${oldestActivity.timestamp}`}
-                activities={activityGroup}
-                showProjectName={showProjectName}
-              />
-            );
-          })}
+          {groupedActivities.map(activityGroup => (
+            <ActivityGroup
+              key={activityGroup[0].deployment.id}
+              activities={activityGroup}
+              showProjectName={showProjectName}
+            />
+          ))}
         </FlipMove>
         {isLoading && <LoadingActivityGroup />}
         {!isLoading && !allLoaded && (
