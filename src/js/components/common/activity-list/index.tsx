@@ -28,7 +28,8 @@ const getEmptyContent = (header: string, body: string) => (
 
 // Group activities by actions related to the same deployment.
 const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
-  return values(groupBy(activities, activity => activity.deployment.id));
+  return values(groupBy(activities, activity => activity.deployment.id))
+    .sort((a, b) => b[0].deployment.creator.timestamp - a[0].deployment.creator.timestamp);
 };
 
 class ActivityList extends React.Component<Props, void> {
