@@ -56,7 +56,9 @@ class ActivityGroup extends React.Component<PassedProps, void> {
         <div className={styles.top}>
           <div className={styles.main}>
             <div className={styles['time-and-branch']}>
-              <TimeAgo minPeriod={10} date={deploymentTime} />
+              <MinardLink preview={{ deployment }}>
+                <TimeAgo minPeriod={10} date={deploymentTime} />
+              </MinardLink>
               {' '}&middot;{' '}
               {getBranchLabel(firstActivity)}
               {showProjectName && getProjectLabel(firstActivity)}
