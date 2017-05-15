@@ -2,7 +2,7 @@ import * as React from 'react';
 import Icon = require('react-fontawesome');
 import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
-import { InjectedRouter, withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 import { Dispatch } from 'redux';
 
 import { trackEvent } from '../../intercom';
@@ -20,10 +20,6 @@ interface PassedProps {
 
 }
 
-interface InjectedProps {
-  router: InjectedRouter;
-}
-
 interface GeneratedStateProps {
   isOpen: boolean;
   team?: Team;
@@ -32,9 +28,10 @@ interface GeneratedStateProps {
 
 interface GeneratedDispatchProps {
   closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => void;
+  redirectToProject: (project: Project) => void;
 }
 
-type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
+type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 function getParentElement() {
   return document.querySelector('#minard-app') as HTMLElement;
@@ -52,7 +49,7 @@ class NewProjectDialog extends React.Component<Props, void> {
     trackEvent('project-created');
 
     this.props.closeDialog();
-    this.props.router.push(`/project/${project.id}`);
+    this.props.redirectToProject(project);
   }
 
   public render() {
@@ -100,9 +97,12 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 
     dispatch(Modal.actions.closeModal(ModalType.NewProject));
   },
+  redirectToProject: (project: Project) => {
+    dispatch(push(`/project/${project.id}`));
+  },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
-)(withRouter(NewProjectDialog));
+)(NewProjectDialog);

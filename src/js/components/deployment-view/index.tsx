@@ -38,7 +38,7 @@ interface GeneratedDispatchProps {
   redirectToApp: () => void;
 }
 
-type Props = RouteComponentProps<Params, {}> & GeneratedStateProps & GeneratedDispatchProps;
+type Props = RouteComponentProps<Params> & GeneratedStateProps & GeneratedDispatchProps;
 
 class DeploymentView extends React.Component<Props, void> {
   constructor(props: Props) {
@@ -48,7 +48,7 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { loadPreviewAndComments, isUserLoggedIn, params: { entityType, token, id } } = this.props;
+    const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = this.props;
 
     if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
       console.error('Unknown preview type!');
@@ -59,9 +59,9 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadPreviewAndComments, isUserLoggedIn, params: { entityType, token, id } } = nextProps;
+    const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = nextProps;
 
-    if (id !== this.props.params.id || entityType !== this.props.params.entityType) {
+    if (id !== this.props.match.params.id || entityType !== this.props.match.params.entityType) {
       if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
         console.error('Unknown preview type!');
         return;
@@ -80,13 +80,16 @@ class DeploymentView extends React.Component<Props, void> {
       commit,
       deployment,
       preview,
-      params,
       isUserLoggedIn,
       userEmail,
-      params: {
-        entityType,
-        id,
-        token,
+      match: {
+        params: {
+          entityType,
+          id,
+          token,
+          view,
+          commentId,
+        },
       },
   } = this.props;
 
@@ -119,7 +122,7 @@ class DeploymentView extends React.Component<Props, void> {
       );
     }
 
-    const showPreview = deployment.url && params.view !== 'log';
+    const showPreview = deployment.url && view !== 'log';
 
     return (
       <div className={styles['preview-container']}>
@@ -129,7 +132,7 @@ class DeploymentView extends React.Component<Props, void> {
           deployment={deployment}
           preview={preview}
           buildLogSelected={!showPreview}
-          highlightComment={params.commentId}
+          highlightComment={commentId}
           isAuthenticatedUser={isUserLoggedIn}
           userEmail={userEmail}
           linkDetails={{ entityType, id, token }}
@@ -143,8 +146,8 @@ class DeploymentView extends React.Component<Props, void> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
-  const { id, entityType } = ownProps.params;
+const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params>): GeneratedStateProps => {
+  const { id, entityType } = ownProps.match.params;
   let commit: Commit | FetchError | undefined;
   let deployment: Deployment | FetchError | undefined;
 
@@ -171,7 +174,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   redirectToApp: () => { dispatch(push('/')); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params>>(
   mapStateToProps,
   mapDispatchToProps,
 )(DeploymentView);

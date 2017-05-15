@@ -5,6 +5,7 @@ import * as selectors from './selectors';
 export default { actions, reducer, selectors };
 export {
   EntityType,
+  isEntityType,
   LoadPreviewAndCommentsAction,
   Preview,
   PreviewState,

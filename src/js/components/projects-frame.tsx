@@ -1,22 +1,24 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { Route, RouteComponentProps, Switch } from 'react-router';
 
 import Projects from '../modules/projects';
 import Requests from '../modules/requests';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
+import BranchView from './branch-view';
 import ErrorDialog from './common/error-dialog';
 import Spinner from './common/spinner';
 import Footer from './footer';
 import Header from './header';
+import ProjectView from './project-view';
 import SubHeader from './sub-header';
+import TeamProjectsView from './team-projects-view';
 
-interface PassedProps {
-  location: any;
-  route: any;
-  params: any;
-}
+interface Params {}
+
+type PassedProps = RouteComponentProps<Params>;
 
 interface GeneratedDispatchProps {
   loadAllProjects: (teamId: string) => void;
@@ -30,7 +32,7 @@ interface GeneratedStateProps {
   team?: Team;
 }
 
-type Props = GeneratedDispatchProps & PassedProps & GeneratedStateProps;
+type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
@@ -64,7 +66,7 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 
   public render() {
-    const { children, team, isLoadingTeamInformation } = this.props;
+    const { team, isLoadingTeamInformation } = this.props;
 
     if (!team) {
       if (isLoadingTeamInformation) {
@@ -93,7 +95,11 @@ class ProjectsFrame extends React.Component<Props, void> {
       <div>
         <Header />
         <SubHeader />
-        {children}
+        <Switch>
+          <Route path=":projectId/branch/:branchId" component={BranchView} />
+          <Route path=":projectId(/:show)" component={ProjectView} />
+          <Route path="(:show)" component={TeamProjectsView} />
+        </Switch>
         <Footer />
       </div>
     );

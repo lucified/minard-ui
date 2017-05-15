@@ -1,51 +1,53 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 // require global styles
 require('font-awesome/css/font-awesome.css');
 import './styles.scss';
 
-import User, { Team } from '../modules/user';
-import { StateTree } from '../reducers';
+import { update as updateIntercom } from '../intercom';
+
+import DeploymentView from './deployment-view';
+import LoginView from './login-view';
+import ProjectsFrame from './projects-frame';
+import SignupView from './signup-view';
 import StreamingAPIHandler from './streaming-api-handler';
 
 const styles = require('./app.scss');
 
-interface Params {
-  deploymentId?: string;
-  commitHash?: string;
-  branchId?: string;
-  projectId?: string;
-  commentId?: string;
-  view?: string;
-  teamToken?: string;
-  show?: string;
-}
+type PassedProps = RouteComponentProps<{}>;
 
-interface GeneratedStateProps {
-  team?: Team;
-}
+type Props = PassedProps;
 
-type Props = RouteComponentProps<Params, {}> & GeneratedStateProps;
+const RedirectToTeamProjectsView = () => <Redirect to="/projects" />;
 
 class App extends React.Component<Props, void> {
-  public render() {
-    const { children, team, params: { deploymentId, commitHash } } = this.props;
+  public componentDidUpdate(prevProps: Props) {
+    if (prevProps.location !== this.props.location) {
+      // Update Intercom with page changed information
+      updateIntercom();
+    }
+  }
 
+  public render() {
     return (
       <div id="minard-app" className={styles.app}>
-        <StreamingAPIHandler team={team} deploymentId={deploymentId} commitHash={commitHash} />
-        {children}
+        <Switch>
+          <Route path="preview/:entityType/:id/:token" component={StreamingAPIHandler} />
+          <Route component={StreamingAPIHandler} />
+        </Switch>
+        <Switch>
+          <Route path="projects" component={ProjectsFrame} />
+          <Route path="project" component={ProjectsFrame} />
+          <Route path="preview/:entityType/:id/:token/comment/:commentId" component={DeploymentView} />
+          <Route path="preview/:entityType/:id/:token(/:view)" component={DeploymentView} />
+          <Route path="login(/:returnPath)" component={LoginView} />
+          <Route path="signup(/:teamToken)" component={SignupView} />
+          <Route render={RedirectToTeamProjectsView} />
+        </Switch>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  team: User.selectors.getTeam(state),
-});
-
-export default connect<GeneratedStateProps, {}, RouteComponentProps<Params, {}>>(
-  mapStateToProps,
-)(App);
+export default App;

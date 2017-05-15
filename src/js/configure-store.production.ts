@@ -1,3 +1,4 @@
+import { History } from 'history';
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, createStore } from 'redux';
 import createSagaMiddleware, { END } from 'redux-saga';
@@ -7,7 +8,7 @@ const RavenMiddleware = require('redux-raven-middleware');
 
 import rootReducer from './reducers';
 
-function configureStore(initialState: object, history: any) { // TODO: improve typings
+function configureStore(initialState: object, history: History) {
   const sagaMiddleware = createSagaMiddleware();
   const routerMiddlewareObject = routerMiddleware(history);
 

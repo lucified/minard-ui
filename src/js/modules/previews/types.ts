@@ -34,6 +34,10 @@ export interface LoadPreviewAndCommentsAction {
   isUserLoggedIn: boolean;
 }
 
+export function isEntityType(s: string): s is EntityType {
+  return ['project', 'branch', 'deployment'].indexOf(s) > -1;
+}
+
 // STORE_PREVIEW
 export interface StorePreviewAction {
   type: 'PREVIEW/STORE_PREVIEW';

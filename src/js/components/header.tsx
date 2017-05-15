@@ -3,7 +3,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { CSSTransitionGroup } from 'react-transition-group';
 
 import Errors, { FetchCollectionError } from '../modules/errors';
