@@ -1,7 +1,5 @@
 import { Dispatch } from 'redux';
 
-export { default as createSagas } from './sagas';
-
 // Based on https://github.com/yelouafi/redux-saga/issues/161#issuecomment-229350795
 export const FORM_SUBMIT = 'FORMS/FORM_SUBMIT';
 export interface FormSubmitAction {
