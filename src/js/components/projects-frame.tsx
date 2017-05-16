@@ -22,7 +22,6 @@ type PassedProps = RouteComponentProps<Params>;
 
 interface GeneratedDispatchProps {
   loadAllProjects: (teamId: string) => void;
-  loadTeamInformation: () => void;
   redirectToLogin: () => void;
 }
 
@@ -36,28 +35,20 @@ type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
-    const { loadAllProjects, isUserLoggedIn, redirectToLogin, team, loadTeamInformation } = this.props;
+    const { loadAllProjects, isUserLoggedIn, redirectToLogin, team } = this.props;
 
     if (!isUserLoggedIn) {
       redirectToLogin();
-    } else if (team === undefined) {
-      // TODO: team information is now being fetched in three places:
-      // - Login View after getting user login information from Auth0
-      // - Signup View after getting user information (using the backend's signup endpoint)
-      // - Here
-      //
-      // We should probably try to reduce the number of places.
-      loadTeamInformation();
-    } else {
+    } else if (team) {
       loadAllProjects(team.id);
     }
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadAllProjects, team } = this.props;
+    const { loadAllProjects, team } = nextProps;
 
-    if (nextProps.team && team === undefined) {
-      loadAllProjects(nextProps.team.id);
+    if (team && this.props.team === undefined) {
+      loadAllProjects(team.id);
     }
   }
 
@@ -109,7 +100,6 @@ class ProjectsFrame extends React.Component<Props, void> {
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },
   redirectToLogin: () => { dispatch(User.actions.redirectToLogin()); },
-  loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
 });
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
