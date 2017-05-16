@@ -66,6 +66,10 @@ export default function createSagas(api: Api) {
   }
 
   return {
+    functions: {
+      createComment,
+      deleteComment,
+    },
     sagas: [
       takeLatest(CREATE_COMMENT, createComment),
       takeEvery(DELETE_COMMENT, deleteComment),

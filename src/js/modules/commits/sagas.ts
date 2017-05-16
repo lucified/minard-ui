@@ -85,6 +85,15 @@ export default function createSagas(api: Api) {
   }
 
   return {
+    functions: {
+      ensureCommitRelatedDataLoaded,
+      ensureCommitsForBranchRelatedDataLoaded,
+      loadCommit,
+      fetchCommit,
+      fetchCommitsForBranch,
+      addCommitsToBranch,
+      loadCommitsForBranch,
+    },
     sagas: [
       takeEvery(LOAD_COMMIT, loadCommit),
       takeEvery(FETCH_COMMIT, startFetchCommit),

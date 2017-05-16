@@ -108,6 +108,15 @@ export default function createSagas(api: Api) {
   }
 
   return {
+    functions: {
+      fetchBranch,
+      loadBranch,
+      ensureBranchesForProjectRelatedDataLoaded,
+      ensureBranchRelatedDataLoaded,
+      addBranchesToProject,
+      loadBranchesForProject,
+      fetchBranchesForProject,
+    },
     sagas: [
       takeEvery(LOAD_BRANCH, loadBranch),
       takeEvery(LOAD_BRANCHES_FOR_PROJECT, loadBranchesForProject),

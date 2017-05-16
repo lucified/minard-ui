@@ -41,5 +41,9 @@ export default function createSagas() {
     sagas: [
       takeEvery(FORM_SUBMIT, formSubmitSaga),
     ],
+    // For unit testing
+    functions: {
+      formSubmitSaga,
+    },
   };
 }

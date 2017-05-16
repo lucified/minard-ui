@@ -82,6 +82,15 @@ export default function createSagas(api: Api) {
   }
 
   return {
+    functions: {
+      loadActivities,
+      loadActivitiesForProject,
+      checkIfAllActivitiesLoaded,
+      checkIfAllActivitiesLoadedForProject,
+      fetchActivities,
+      fetchActivitiesForProject,
+      ensureActivitiesRelatedDataLoaded,
+    },
     sagas: [
       throttle(200, LOAD_ACTIVITIES_FOR_PROJECT, loadActivitiesForProject),
       fork(watchForLoadActivities, loadActivities),

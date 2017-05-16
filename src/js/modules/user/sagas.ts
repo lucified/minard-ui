@@ -90,13 +90,12 @@ export default function createSagas(api: Api) {
       }
     }
 
-    intercomLogout();
+    yield call(intercomLogout);
     yield put(clearStoredData());
     yield put(clearUserDetails());
-    clearStoredCredentials();
+    yield call(clearStoredCredentials);
   }
 
-  // WATCHERS: Watch for specific actions to begin async operations.
   function* watchForLoadTeamInformation(): IterableIterator<Effect> {
     while (true) {
       const action = yield take(LOAD_TEAM_INFORMATION);
@@ -114,6 +113,13 @@ export default function createSagas(api: Api) {
   }
 
   return {
+    functions: {
+      loadTeamInformation,
+      login,
+      logout,
+      redirectToLogin,
+      signupUser,
+    },
     sagas: [
       takeEvery(LOGIN, login),
       takeEvery(LOGOUT, logout),

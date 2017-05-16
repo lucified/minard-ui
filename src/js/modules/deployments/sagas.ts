@@ -27,6 +27,11 @@ export default function createSagas(api: Api) {
   }
 
   return {
+    functions: {
+      fetchDeployment,
+      loadDeployment,
+      ensureDeploymentRelatedDataLoaded,
+    },
     sagas: [
       takeEvery(LOAD_DEPLOYMENT, loadDeployment),
       takeEvery(FETCH_DEPLOYMENT, startFetchDeployment),

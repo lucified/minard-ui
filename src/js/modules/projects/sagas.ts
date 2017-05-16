@@ -207,6 +207,9 @@ export default function createSagas(api: Api) {
       createProject,
       editProject,
       deleteProject,
+      loadProject,
+      loadAllProjects,
+      ensureAllProjectsRelatedDataLoaded,
     },
     sagas: [
       takeEvery(LOAD_PROJECT, loadProject),
