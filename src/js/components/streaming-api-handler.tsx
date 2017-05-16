@@ -22,7 +22,7 @@ import Comments, { Comment } from '../modules/comments';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
-import Previews, { isEntityType, Preview } from '../modules/previews';
+import Previews, { isEntityType } from '../modules/previews';
 import Projects, { Project, ProjectUser } from '../modules/projects';
 import Streaming, { ConnectionState } from '../modules/streaming';
 import User, { Team } from '../modules/user';
@@ -32,7 +32,7 @@ declare const EventSource: any;
 
 interface GeneratedStateProps {
   team?: Team;
-  preview?: Preview | FetchError;
+  deployment?: Deployment | FetchError;
 }
 
 interface GeneratedDispatchProps {
@@ -292,22 +292,23 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     }
   }
 
-  private restartConnection(options: { teamId?: string, preview?: Preview, token?: string }) {
-    const { teamId, preview, token } = options;
+  private restartConnection(options: { teamId?: string, deployment?: Deployment }) {
+    const { teamId, deployment } = options;
     const accessToken = getAccessToken();
     let url: string;
 
     if (accessToken && teamId) {
       // Logged in, inside the app. Deployment View was not the landing page
       url = `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}`;
-    } else if (token && preview) {
+    } else if (deployment) {
       if (accessToken) {
         // Logged in, Deployment View as landing page
-        url = `${streamingAPIUrl}/deployment/${encodeURIComponent(preview.deployment)}` +
-          `/${encodeURIComponent(token)}?token=${encodeURIComponent(accessToken)}`;
+        url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
+          `/${encodeURIComponent(deployment.token)}?token=${encodeURIComponent(accessToken)}`;
       } else {
         // Not logged in, in Deployment View
-        url = `${streamingAPIUrl}/deployment/${encodeURIComponent(preview.deployment)}/${encodeURIComponent(token)}`;
+        url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
+          `/${encodeURIComponent(deployment.token)}`;
       }
     } else {
       console.error('Unable to open stream. Missing credentials.');
@@ -365,24 +366,24 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team, preview, match: { params: { token } } } = this.props;
+    const { team, deployment } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
         this.restartConnection({ teamId: team.id });
-      } else if (preview && !isFetchError(preview) && token) {
-        this.restartConnection({ token, preview });
+      } else if (deployment && !isFetchError(deployment)) {
+        this.restartConnection({ deployment });
       }
     }
   }
 
-  public componentWillReceiveProps({ team, setConnectionState, preview, match: { params: { token } } }: Props) {
+  public componentWillReceiveProps({ team, setConnectionState, deployment }: Props) {
     if (streamingAPIUrl) {
       if (team && (!this.props.team || team.id !== this.props.team.id)) {
         // User logged in or changed teams
         this.restartConnection({ teamId: team.id });
-      } else if (token && preview !== this.props.preview && !isFetchError(preview)) {
-        this.restartConnection({ token, preview });
+      } else if (deployment !== this.props.deployment && !isFetchError(deployment)) {
+        this.restartConnection({ deployment });
       } else if (this.props.team && !team) {
         // User logged out
         setConnectionState(ConnectionState.INITIAL_CONNECT);
@@ -472,15 +473,18 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 
 const mapStateToProps = (state: StateTree, ownProps: Props): GeneratedStateProps => {
   const { id, entityType, token } = ownProps.match.params;
-  let preview: Preview | FetchError | undefined;
+  let deployment: Deployment | FetchError | undefined;
 
   if (id && entityType && token && isEntityType(entityType)) {
-    preview = Previews.selectors.getPreview(state, id, entityType);
+    const preview = Previews.selectors.getPreview(state, id, entityType);
+    if (preview && !isFetchError(preview)) {
+      deployment = Deployments.selectors.getDeployment(state, preview.deployment);
+    }
   }
 
   return {
     team: User.selectors.getTeam(state),
-    preview,
+    deployment,
   };
 };
 
