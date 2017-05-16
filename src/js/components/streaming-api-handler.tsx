@@ -333,7 +333,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
         this._source.close();
         this._source = null;
 
-        setTimeout(this.restartConnection, 5000, { teamId }); // TODO: smarter retry logic?
+        setTimeout(this.restartConnection, 5000, options); // TODO: smarter retry logic?
       }
     }, false);
     this._source.addEventListener('open', () => {
