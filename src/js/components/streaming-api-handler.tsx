@@ -24,6 +24,7 @@ import Deployments, { Deployment, DeploymentStatus } from '../modules/deployment
 import { FetchError, isFetchError } from '../modules/errors';
 import Previews, { isEntityType } from '../modules/previews';
 import Projects, { Project, ProjectUser } from '../modules/projects';
+import Requests from '../modules/requests';
 import Streaming, { ConnectionState } from '../modules/streaming';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
@@ -33,6 +34,7 @@ declare const EventSource: any;
 interface GeneratedStateProps {
   team?: Team;
   deployment?: Deployment | FetchError;
+  isLoadingTeamInformation: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -360,25 +362,34 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team, deployment } = this.props;
+    const { team, deployment, isLoadingTeamInformation } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
         this.restartConnection({ teamId: team.id });
-      } else if (deployment && !isFetchError(deployment)) {
+      } else if (!isLoadingTeamInformation && deployment && !isFetchError(deployment)) {
         this.restartConnection({ deployment });
       }
     }
   }
 
-  public componentWillReceiveProps({ team, setConnectionState, deployment }: Props) {
+  public componentWillReceiveProps({ team, setConnectionState, deployment, isLoadingTeamInformation }: Props) {
+    const { team: previousTeam, deployment: previousDeployment } = this.props;
+
     if (streamingAPIUrl) {
-      if (team && (!this.props.team || team.id !== this.props.team.id)) {
-        // User logged in or changed teams
-        this.restartConnection({ teamId: team.id });
-      } else if (deployment !== this.props.deployment && !isFetchError(deployment)) {
+      if (team) {
+        if (!previousTeam || team.id !== previousTeam.id) {
+          // User logged in or changed teams
+          this.restartConnection({ teamId: team.id });
+        }
+      } else if (
+        !isLoadingTeamInformation && // Only fall back to deployment-only stream if we're not logged in.
+        deployment &&
+        !isFetchError(deployment) &&
+        (!previousDeployment || deployment.id !== previousDeployment.id)
+      ) {
         this.restartConnection({ deployment });
-      } else if (this.props.team && !team) {
+      } else if (previousTeam && !team) {
         // User logged out
         setConnectionState(ConnectionState.INITIAL_CONNECT);
         this._source.close();
@@ -479,6 +490,7 @@ const mapStateToProps = (state: StateTree, ownProps: Props): GeneratedStateProps
   return {
     team: User.selectors.getTeam(state),
     deployment,
+    isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
   };
 };
 
