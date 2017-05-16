@@ -1,29 +1,50 @@
-import * as t from './types';
+import {
+  AddBranchesToProjectAction,
+  FetchProjectAction,
+  LoadAllProjectsAction,
+  LoadProjectAction,
+  Project,
+  ProjectUser,
+  RemoveBranchAction,
+  RemoveProjectAction,
+  StoreAuthorsToProjectAction,
+  StoreProjectsAction,
+  UpdateLatestActivityTimestampAction,
+  UpdateLatestDeployedCommitAction,
+  UpdateProjectAction,
+} from './types';
 
 // Load multiple projects
 export const LOAD_ALL_PROJECTS = 'PROJECTS/LOAD_ALL_PROJECTS';
-export const loadAllProjects = (teamId: string): t.LoadAllProjectsAction => ({
+export const loadAllProjects = (teamId: string): LoadAllProjectsAction => ({
   type: LOAD_ALL_PROJECTS,
   teamId,
 });
 
 // Load a single project
 export const LOAD_PROJECT = 'PROJECTS/LOAD_PROJECT';
-export const loadProject = (id: string): t.LoadProjectAction => ({
+export const loadProject = (id: string): LoadProjectAction => ({
   type: LOAD_PROJECT,
+  id,
+});
+
+// Only fetch (don't ensure related data) a single project
+export const FETCH_PROJECT = 'PROJECTS/FETCH_PROJECT';
+export const fetchProject = (id: string): FetchProjectAction => ({
+  type: FETCH_PROJECT,
   id,
 });
 
 // Store included projects
 export const STORE_PROJECTS = 'PROJECTS/STORE_PROJECTS';
-export const storeProjects = (projects: t.Project[]): t.StoreProjectsAction => ({
+export const storeProjects = (projects: Project[]): StoreProjectsAction => ({
   type: STORE_PROJECTS,
   entities: projects,
 });
 
 // Add branches to existing project
 export const ADD_BRANCHES_TO_PROJECT = 'PROJECTS/ADD_BRANCHES_TO_PROJECT';
-export const addBranchesToProject = (id: string, branchIds: string[] | string): t.AddBranchesToProjectAction => {
+export const addBranchesToProject = (id: string, branchIds: string[] | string): AddBranchesToProjectAction => {
   let branches: string[];
   if (typeof branchIds === 'string') {
     branches = [branchIds];
@@ -66,7 +87,7 @@ export const updateProject = (
   name: string,
   repoUrl: string,
   description?: string,
-): t.UpdateProjectAction => ({
+): UpdateProjectAction => ({
   type: UPDATE_PROJECT,
   id,
   name,
@@ -76,14 +97,14 @@ export const updateProject = (
 
 // Remove project based on event from Streaming API
 export const REMOVE_PROJECT = 'PROJECTS/REMOVE_PROJECT';
-export const removeProject = (id: string): t.RemoveProjectAction => ({
+export const removeProject = (id: string): RemoveProjectAction => ({
   type: REMOVE_PROJECT,
   id,
 });
 
 // Add users to project based on code pushes from Streaming API
 export const STORE_AUTHORS_TO_PROJECT = 'PROJECTS/STORE_AUTHORS_TO_PROJECT';
-export const storeAuthorsToProject = (id: string, authors: t.ProjectUser[]): t.StoreAuthorsToProjectAction => ({
+export const storeAuthorsToProject = (id: string, authors: ProjectUser[]): StoreAuthorsToProjectAction => ({
   type: STORE_AUTHORS_TO_PROJECT,
   id,
   authors,
@@ -93,14 +114,14 @@ export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT = 'PROJECTS/UPDATE_LAT
 export const updateLatestActivityTimestampForProject = (
   id: string,
   timestamp: number,
-): t.UpdateLatestActivityTimestampAction => ({
+): UpdateLatestActivityTimestampAction => ({
   type: UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT,
   id,
   timestamp,
 });
 
 export const REMOVE_BRANCH_FROM_PROJECT = 'PROJECTS/REMOVE_BRANCH_FROM_PROJECT';
-export const removeBranchFromProject = (id: string, branch: string): t.RemoveBranchAction => ({
+export const removeBranchFromProject = (id: string, branch: string): RemoveBranchAction => ({
   type: REMOVE_BRANCH_FROM_PROJECT,
   id,
   branch,
@@ -111,7 +132,7 @@ export const UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT =
 export const updateLatestDeployedCommitForProject = (
   id: string,
   commit: string,
-): t.UpdateLatestDeployedCommitAction => ({
+): UpdateLatestDeployedCommitAction => ({
   type: UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT,
   id,
   commit,

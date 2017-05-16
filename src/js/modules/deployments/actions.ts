@@ -1,13 +1,19 @@
-import * as t from './types';
+import { Deployment, FetchDeploymentAction, LoadDeploymentAction, StoreDeploymentsAction } from './types';
 
 export const LOAD_DEPLOYMENT = 'DEPLOYMENTS/LOAD_DEPLOYMENT';
-export const loadDeployment = (id: string): t.LoadDeploymentAction => ({
+export const loadDeployment = (id: string): LoadDeploymentAction => ({
   type: LOAD_DEPLOYMENT,
   id,
 });
 
+export const FETCH_DEPLOYMENT = 'DEPLOYMENTS/FETCH_DEPLOYMENT';
+export const fetchDeployment = (id: string): FetchDeploymentAction => ({
+  type: FETCH_DEPLOYMENT,
+  id,
+});
+
 export const STORE_DEPLOYMENTS = 'DEPLOYMENTS/STORE_DEPLOYMENTS';
-export const storeDeployments = (deployments: t.Deployment[]): t.StoreDeploymentsAction => ({
+export const storeDeployments = (deployments: Deployment[]): StoreDeploymentsAction => ({
   type: STORE_DEPLOYMENTS,
   entities: deployments,
 });
