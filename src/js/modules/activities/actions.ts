@@ -1,7 +1,7 @@
-import * as t from './types';
+import { Activity, LoadActivitiesAction, LoadActivitiesForProjectAction, StoreActivitiesAction } from './types';
 
 export const LOAD_ACTIVITIES = 'ACTIVITIES/LOAD_ACTIVITIES';
-export const loadActivities = (teamId: string, count: number, until?: number): t.LoadActivitiesAction => ({
+export const loadActivities = (teamId: string, count: number, until?: number): LoadActivitiesAction => ({
   type: LOAD_ACTIVITIES,
   teamId,
   count,
@@ -13,7 +13,7 @@ export const loadActivitiesForProject = (
   id: string,
   count: number,
   until?: number,
-): t.LoadActivitiesForProjectAction => ({
+): LoadActivitiesForProjectAction => ({
   type: LOAD_ACTIVITIES_FOR_PROJECT,
   id,
   count,
@@ -21,7 +21,7 @@ export const loadActivitiesForProject = (
 });
 
 export const STORE_ACTIVITIES = 'ACTIVITIES/STORE_ACTIVITIES';
-export const storeActivities = (activities: t.Activity[]): t.StoreActivitiesAction => ({
+export const storeActivities = (activities: Activity[]): StoreActivitiesAction => ({
   type: STORE_ACTIVITIES,
   entities: activities,
 });

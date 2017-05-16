@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 import { DeploymentStatus } from '../deployments';
 
 // State
@@ -63,21 +61,21 @@ export interface ActivityState {
 }
 
 // Actions
-// ACTIVITIES
-export interface LoadActivitiesAction extends Action {
+export interface LoadActivitiesAction {
+  type: 'ACTIVITIES/LOAD_ACTIVITIES';
   teamId: string;
   count: number;
   until?: number;
 }
 
-// ACTIVITIES_FOR_PROJECT
-export interface LoadActivitiesForProjectAction extends Action {
+export interface LoadActivitiesForProjectAction {
+  type: 'ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT';
   id: string;
   count: number;
   until?: number;
 }
 
-// STORE_PROJECTS
-export interface StoreActivitiesAction extends Action {
+export interface StoreActivitiesAction {
+  type: 'ACTIVITIES/STORE_ACTIVITIES';
   entities: Activity[];
 }

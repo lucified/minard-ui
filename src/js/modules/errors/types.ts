@@ -1,14 +1,17 @@
-import { Action } from 'redux';
-
 // State
 export type ErrorState = Error[];
 
-export interface ClearProjectDeletionErrorAction extends Action {
+export interface ClearProjectDeletionErrorAction {
+  type: 'ERRORS/CLEAR_PROJECT_DELETION_ERROR';
   id?: string;
 }
 
-export interface ClearSignupErrorAction extends Action {}
-export interface SignupErrorAction extends Action {
+export interface ClearSignupErrorAction {
+  type: 'ERRORS/CLEAR_SIGNUP_ERROR';
+}
+
+export interface SignupErrorAction {
+  type: 'ERRORS/SIGNUP_ERROR';
   error: string;
   details?: string;
 }

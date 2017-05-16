@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 // State
 export interface Comment {
   id: string;
@@ -15,21 +13,21 @@ export interface CommentState {
 }
 
 // Actions
-// DELETE_COMMENT
-export interface DeleteCommentAction extends Action {
+export interface DeleteCommentAction {
+  type: 'COMMENTS/DELETE_COMMENT';
   id: string;
 }
 
-// STORE_COMMENTS
-export interface StoreCommentsAction extends Action {
+export interface StoreCommentsAction {
+  type: 'COMMENTS/STORE_COMMENTS';
   entities: Comment[];
 }
 
-export interface RemoveCommentAction extends Action {
+export interface RemoveCommentAction {
+  type: 'COMMENTS/REMOVE_COMMENT';
   id: string;
 }
 
-// CREATE_COMMENT
 export interface CreateCommentFormData {
   name?: string;
   email: string;
@@ -37,6 +35,7 @@ export interface CreateCommentFormData {
   deployment: string;
 }
 
-export interface CreateCommentAction extends Action {
+export interface CreateCommentAction {
+  type: 'COMMENTS/CREATE_COMMENT';
   payload: CreateCommentFormData;
 }

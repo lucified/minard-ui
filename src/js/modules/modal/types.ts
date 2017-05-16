@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 export enum ModalType {
   NewProject,
   ProjectSettings,
@@ -16,10 +14,12 @@ export interface ModalDialog {
 export type ModalState = ModalDialog | null;
 
 // Actions
-export interface OpenModalAction extends Action {
+export interface OpenModalAction {
+  type: 'MODALS/OPEN_MODAL';
   modalType: ModalType;
 }
 
-export interface CloseModalAction extends Action {
+export interface CloseModalAction {
+  type: 'MODALS/CLOSE_MODAL';
   modalType: ModalType;
 }
