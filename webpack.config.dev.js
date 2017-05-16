@@ -46,7 +46,7 @@ const devOptions = {
       },
     ],
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'source-map',
 
   plugins: [
     // For awesome-typescript-loader's async error reporting, i.e. watch mode
