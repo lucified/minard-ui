@@ -5,22 +5,22 @@ describe('User sagas', () => {
   // const sagaFunctions = createSagas(api).functions;
 
   describe('login', () => {
-    // TODO
+    it('TODO');
   });
 
   describe('logout', () => {
-    // TODO
+    it('TODO');
   });
 
   describe('redirectToLogin', () => {
-    // TODO
+    it('TODO');
   });
 
   describe('signupUser', () => {
-    // TODO
+    it('TODO');
   });
 
   describe('loadTeamInformation', () => {
-    // TODO
+    it('TODO');
   });
 });
