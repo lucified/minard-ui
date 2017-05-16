@@ -18,7 +18,7 @@ export const createStoreAndRender = (
   const initialState = {};
   const history = createHistory();
   const store = configureStore(initialState, history);
-  (store as any).runSaga(sagaCreator(api).root);
+  (store as any).runSaga(sagaCreator(api));
 
   ReactDOM.render(
     <Provider store={store}>
