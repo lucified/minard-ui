@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
-import Previews, { EntityType, Preview } from '../../modules/previews';
+import Previews, { EntityType, isEntityType, Preview } from '../../modules/previews';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
@@ -52,7 +52,7 @@ class DeploymentView extends React.Component<Props, void> {
   public componentWillMount() {
     const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = this.props;
 
-    if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
+    if (!isEntityType(entityType)) {
       console.error('Unknown preview type!');
       return;
     }
@@ -64,7 +64,7 @@ class DeploymentView extends React.Component<Props, void> {
     const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = nextProps;
 
     if (id !== this.props.match.params.id || entityType !== this.props.match.params.entityType) {
-      if (['project', 'branch', 'deployment'].indexOf(entityType) === -1) {
+      if (!isEntityType(entityType)) {
         console.error('Unknown preview type!');
         return;
       }
