@@ -374,7 +374,11 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillReceiveProps({ team, setConnectionState, deployment, isLoadingTeamInformation }: Props) {
-    const { team: previousTeam, deployment: previousDeployment } = this.props;
+    const {
+      team: previousTeam,
+      deployment: previousDeployment,
+      isLoadingTeamInformation: wasLoadingTeamInformation,
+    } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
@@ -386,7 +390,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
         !isLoadingTeamInformation && // Only fall back to deployment-only stream if we're not logged in.
         deployment &&
         !isFetchError(deployment) &&
-        (!previousDeployment || deployment.id !== previousDeployment.id)
+        (wasLoadingTeamInformation || (!previousDeployment || deployment.id !== previousDeployment.id))
       ) {
         this.restartConnection({ deployment });
       } else if (previousTeam && !team) {
