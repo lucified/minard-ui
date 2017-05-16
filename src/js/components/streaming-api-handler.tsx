@@ -301,15 +301,9 @@ class StreamingAPIHandler extends React.Component<Props, void> {
       // Logged in, inside the app. Deployment View was not the landing page
       url = `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}`;
     } else if (deployment) {
-      if (accessToken) {
-        // Logged in, Deployment View as landing page
-        url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
-          `/${encodeURIComponent(deployment.token)}?token=${encodeURIComponent(accessToken)}`;
-      } else {
-        // Not logged in, in Deployment View
-        url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
-          `/${encodeURIComponent(deployment.token)}`;
-      }
+      // Not logged in or team info not yet fetched, in Deployment View
+      url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
+        `/${encodeURIComponent(deployment.token)}`;
     } else {
       console.error('Unable to open stream. Missing credentials.');
       return;
