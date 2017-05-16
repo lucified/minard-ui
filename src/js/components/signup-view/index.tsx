@@ -2,7 +2,7 @@ import { Auth0Error, Auth0UserProfile, WebAuth } from 'auth0-js';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 import { push } from 'react-router-redux';
 
 import Errors from '../../modules/errors';

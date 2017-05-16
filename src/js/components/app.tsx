@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 // require global styles
 require('font-awesome/css/font-awesome.css');
