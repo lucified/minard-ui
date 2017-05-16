@@ -96,9 +96,9 @@ class ProjectsFrame extends React.Component<Props, void> {
         <Header />
         <SubHeader />
         <Switch>
-          <Route path=":projectId/branch/:branchId" component={BranchView} />
-          <Route path=":projectId(/:show)" component={ProjectView} />
-          <Route path="(:show)" component={TeamProjectsView} />
+          <Route path="/project/:projectId/branch/:branchId" component={BranchView} />
+          <Route path="/project/:projectId/:show?" component={ProjectView} />
+          <Route path="/projects/:show?" component={TeamProjectsView} />
         </Switch>
         <Footer />
       </div>

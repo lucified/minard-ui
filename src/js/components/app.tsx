@@ -33,17 +33,17 @@ class App extends React.Component<Props, void> {
     return (
       <div id="minard-app" className={styles.app}>
         <Switch>
-          <Route path="preview/:entityType/:id/:token" component={StreamingAPIHandler} />
+          <Route path="/preview/:entityType/:id/:token" component={StreamingAPIHandler} />
           <Route component={StreamingAPIHandler} />
         </Switch>
         <Switch>
-          <Route path="projects" component={ProjectsFrame} />
-          <Route path="project" component={ProjectsFrame} />
-          <Route path="preview/:entityType/:id/:token/comment/:commentId" component={DeploymentView} />
-          <Route path="preview/:entityType/:id/:token(/:view)" component={DeploymentView} />
-          <Route path="login(/:returnPath)" component={LoginView} />
-          <Route path="signup(/:teamToken)" component={SignupView} />
-          <Route render={RedirectToTeamProjectsView} />
+          <Route path="/project" component={ProjectsFrame} />
+          <Route path="/projects" component={ProjectsFrame} />
+          <Route path="/preview/:entityType/:id/:token/comment/:commentId" component={DeploymentView} />
+          <Route path="/preview/:entityType/:id/:token/:view?" component={DeploymentView} />
+          <Route path="/login/:returnPath?" component={LoginView} />
+          <Route path="/signup/:teamToken?" component={SignupView} />
+          <Route component={RedirectToTeamProjectsView} />
         </Switch>
       </div>
     );
