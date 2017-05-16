@@ -387,11 +387,13 @@ class StreamingAPIHandler extends React.Component<Props, void> {
           this.restartConnection({ teamId: team.id });
         }
       } else if (
-        !isLoadingTeamInformation && // Only fall back to deployment-only stream if we're not logged in.
+        !isLoadingTeamInformation && // Only fall back to deployment-only stream if we're not logged/logging in.
         deployment &&
         !isFetchError(deployment) &&
-        (wasLoadingTeamInformation || (!previousDeployment || deployment.id !== previousDeployment.id))
+        (wasLoadingTeamInformation || !previousDeployment || deployment.id !== previousDeployment.id)
       ) {
+        // Either fetching the team information failed, the fetching of the deployment succeeded,
+        // or the user switched deployments.
         this.restartConnection({ deployment });
       } else if (previousTeam && !team) {
         // User logged out
