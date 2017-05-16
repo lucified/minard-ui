@@ -126,8 +126,6 @@ export const createCollectionFetcher = <ApiParams>(
   };
 };
 
-debugger;
-
 const storingMetadata: {
   type: ApiEntityTypeString,
   storeActionCreator: (entities: EntityType[]) => StoreEntityAction,
