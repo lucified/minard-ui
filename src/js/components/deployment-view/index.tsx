@@ -25,6 +25,8 @@ interface Params {
   view?: string;
 }
 
+type PassedProps = RouteComponentProps<Params>;
+
 interface GeneratedStateProps {
   preview?: Preview | FetchError;
   commit?: Commit | FetchError;
@@ -38,7 +40,7 @@ interface GeneratedDispatchProps {
   redirectToApp: () => void;
 }
 
-type Props = RouteComponentProps<Params> & GeneratedStateProps & GeneratedDispatchProps;
+type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 class DeploymentView extends React.Component<Props, void> {
   constructor(props: Props) {
@@ -146,7 +148,7 @@ class DeploymentView extends React.Component<Props, void> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params>): GeneratedStateProps => {
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
   const { id, entityType } = ownProps.match.params;
   let commit: Commit | FetchError | undefined;
   let deployment: Deployment | FetchError | undefined;
@@ -174,7 +176,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   redirectToApp: () => { dispatch(push('/')); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params>>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
 )(DeploymentView);
