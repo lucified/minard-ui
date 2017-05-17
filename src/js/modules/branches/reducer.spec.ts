@@ -17,48 +17,6 @@ import reducer from './reducer';
 import { Branch, BranchState } from './types';
 
 describe('Branches reducer', () => {
-  const newBranches: BranchState = {
-    1: {
-      id: '1',
-      name: 'first-branch',
-      description: 'This is a branch description',
-      latestSuccessfullyDeployedCommit: 'aacceeff02',
-      latestCommit: 'aacceeff02',
-      latestActivityTimestamp: 1470066681802,
-      buildErrors: [],
-      commits: ['aacceeff02'],
-      allCommitsLoaded: false,
-      project: '1',
-      token: 'testtoken',
-    },
-    2: {
-      id: '2',
-      name: 'second-branch',
-      description: undefined,
-      latestSuccessfullyDeployedCommit: 'a998823423',
-      latestCommit: '01234567',
-      latestActivityTimestamp: 1469634681802,
-      buildErrors: [],
-      commits: ['01234567', 'a998823423'],
-      allCommitsLoaded: false,
-      project: '1',
-      token: 'testtoken',
-    },
-    3: {
-      id: '3',
-      description: undefined,
-      latestSuccessfullyDeployedCommit: undefined,
-      latestCommit: undefined,
-      latestActivityTimestamp: undefined,
-      buildErrors: [],
-      name: 'third-long-name-branch',
-      commits: [],
-      allCommitsLoaded: true,
-      project: '1',
-      token: 'testtoken',
-    },
-  };
-
   const stateWithoutExistingEntity: BranchState = {
     4: {
       id: '4',
@@ -102,6 +60,48 @@ describe('Branches reducer', () => {
   });
 
   describe('storeBranches', () => {
+    const newBranches: BranchState = {
+      1: {
+        id: '1',
+        name: 'first-branch',
+        description: 'This is a branch description',
+        latestSuccessfullyDeployedCommit: 'aacceeff02',
+        latestCommit: 'aacceeff02',
+        latestActivityTimestamp: 1470066681802,
+        buildErrors: [],
+        commits: ['aacceeff02'],
+        allCommitsLoaded: false,
+        project: '1',
+        token: 'testtoken',
+      },
+      2: {
+        id: '2',
+        name: 'second-branch',
+        description: undefined,
+        latestSuccessfullyDeployedCommit: 'a998823423',
+        latestCommit: '01234567',
+        latestActivityTimestamp: 1469634681802,
+        buildErrors: [],
+        commits: ['01234567', 'a998823423'],
+        allCommitsLoaded: false,
+        project: '1',
+        token: 'testtoken',
+      },
+      3: {
+        id: '3',
+        description: undefined,
+        latestSuccessfullyDeployedCommit: undefined,
+        latestCommit: undefined,
+        latestActivityTimestamp: undefined,
+        buildErrors: [],
+        name: 'third-long-name-branch',
+        commits: [],
+        allCommitsLoaded: true,
+        project: '1',
+        token: 'testtoken',
+      },
+    };
+
     const storeAction = storeBranches(values<Branch>(newBranches));
 
     it('with an empty initial state', () => {
@@ -109,7 +109,7 @@ describe('Branches reducer', () => {
     });
 
     it('makes no changes with an empty list', () => {
-      const emptyAction = { type: storeAction.type, entities: [] as any[] };
+      const emptyAction = storeBranches([]);
       const newState = reducer(stateWithoutExistingEntity, emptyAction);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
