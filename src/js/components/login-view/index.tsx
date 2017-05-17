@@ -3,7 +3,7 @@ import Auth0Lock from 'auth0-lock';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 import { push } from 'react-router-redux';
 
 import { clearStoredCredentials } from '../../api/auth';
@@ -32,7 +32,9 @@ interface Params {
   returnPath?: string;
 }
 
-type Props = GeneratedStateProps & GeneratedDispatchProps & RouteComponentProps<Params, {}>;
+type PassedProps = RouteComponentProps<Params>;
+
+type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
 
 interface State {
   loadingStatus: LoadingStatus;
@@ -98,7 +100,7 @@ class LoginView extends React.Component<Props, State> {
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { navigateTo, params: { returnPath } } = this.props;
+    const { navigateTo, match: { params: { returnPath } } } = this.props;
 
     if (nextProps.team) {
       // For raw deployment URLs
@@ -191,7 +193,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
 )(LoginView);

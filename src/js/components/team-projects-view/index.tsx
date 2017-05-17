@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 
 import Activities, { Activity } from '../../modules/activities';
 import { FetchError } from '../../modules/errors';
@@ -19,6 +19,8 @@ interface Params {
   show?: string;
 }
 
+type PassedProps = RouteComponentProps<Params>;
+
 interface GeneratedStateProps {
   activities: Activity[];
   projects: (Project | FetchError)[];
@@ -33,7 +35,7 @@ interface GeneratedDispatchProps {
   loadActivities: (teamId: string, count: number, until?: number) => void;
 }
 
-type Props = GeneratedStateProps & GeneratedDispatchProps & RouteComponentProps<Params, {}>;
+type Props = GeneratedStateProps & GeneratedDispatchProps & PassedProps;
 
 class TeamProjectsView extends React.Component<Props, void> {
   constructor(props: Props) {
@@ -58,7 +60,7 @@ class TeamProjectsView extends React.Component<Props, void> {
   }
 
   public render() {
-    const { activities, projects, params: { show } } = this.props;
+    const { activities, projects, match: { params: { show } } } = this.props;
     const { isLoadingAllActivities, isLoadingProjects, isAllActivitiesRequested } = this.props;
 
     if (isLoadingProjects && projects.length === 0) {
@@ -115,7 +117,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
 )(TeamProjectsView);

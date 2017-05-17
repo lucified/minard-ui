@@ -1,4 +1,4 @@
-import { routerReducer } from 'react-router-redux';
+import { routerReducer, RouterState } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
@@ -53,5 +53,5 @@ export interface StateTree {
   streaming: StreamingState;
   user: UserState;
   form: any;
-  routing: any;
+  routing: RouterState;
 }

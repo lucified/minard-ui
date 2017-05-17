@@ -2,7 +2,7 @@ import { Auth0Error, Auth0UserProfile, WebAuth } from 'auth0-js';
 import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 import { push } from 'react-router-redux';
 
 import Errors from '../../modules/errors';
@@ -27,7 +27,9 @@ interface Params {
   teamToken?: string;
 }
 
-type Props = GeneratedDispatchProps & RouteComponentProps<Params, {}> & GeneratedStateProps;
+type PassedProps = RouteComponentProps<Params>;
+
+type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
 interface State {
   loadingStatus: LoadingStatus;
@@ -53,7 +55,7 @@ class SignupView extends React.Component<Props, State> {
   }
 
   public componentWillMount() {
-    const { signupUser, params: { teamToken } } = this.props;
+    const { signupUser, match: { params: { teamToken } } } = this.props;
 
     this.auth0 = new WebAuth({
       domain: process.env.AUTH0_DOMAIN,
@@ -207,7 +209,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   navigateTo: (url: string) => { dispatch(push(url)); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
 )(SignupView);

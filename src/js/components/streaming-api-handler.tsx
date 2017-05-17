@@ -1,6 +1,7 @@
 import { uniq } from 'lodash';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
 
 require('event-source-polyfill');
 
@@ -20,11 +21,21 @@ import Branches, { Branch } from '../modules/branches';
 import Comments, { Comment } from '../modules/comments';
 import Commits, { Commit } from '../modules/commits';
 import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
+import { FetchError, isFetchError } from '../modules/errors';
+import Previews, { isEntityType } from '../modules/previews';
 import Projects, { Project, ProjectUser } from '../modules/projects';
+import Requests from '../modules/requests';
 import Streaming, { ConnectionState } from '../modules/streaming';
-import { Team } from '../modules/user';
+import User, { Team } from '../modules/user';
+import { StateTree } from '../reducers';
 
 declare const EventSource: any;
+
+interface GeneratedStateProps {
+  team?: Team;
+  deployment?: Deployment | FetchError;
+  isLoadingTeamInformation: boolean;
+}
 
 interface GeneratedDispatchProps {
   setConnectionState: (state: ConnectionState, error?: string) => void;
@@ -51,13 +62,16 @@ interface GeneratedDispatchProps {
   removeBranchFromProject: (id: string, branch: string) => void;
 }
 
-interface PassedProps {
-  team?: Team;
-  commitHash?: string;
-  deploymentId?: string;
+interface Params {
+  entityType?: string;
+  id?: string;
+  token?: string;
+  view?: string;
 }
 
-type Props = PassedProps & GeneratedDispatchProps;
+type PassedProps = RouteComponentProps<Params>;
+
+type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 // Streaming API types
 interface EventSourceEvent {
@@ -280,22 +294,18 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     }
   }
 
-  private restartConnection(options: { teamId?: string, deploymentId?: string, commitHash?: string }) {
-    const { teamId, deploymentId, commitHash } = options;
+  private restartConnection(options: { teamId?: string, deployment?: Deployment }) {
+    const { teamId, deployment } = options;
     const accessToken = getAccessToken();
     let url: string;
 
     if (accessToken && teamId) {
       // Logged in, inside the app. Deployment View was not the landing page
       url = `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}`;
-    } else if (accessToken && deploymentId) {
-      // Logged in, Deployment View as landing page
-      url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deploymentId)}` +
-        `?token=${encodeURIComponent(accessToken)}`;
-    } else if (deploymentId && commitHash) {
-      // Not logged in, in Deployment View
-      url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deploymentId)}` +
-       `?sha=${encodeURIComponent(commitHash)}`;
+    } else if (deployment) {
+      // Not logged in or team info not yet fetched, in Deployment View
+      url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
+        `/${encodeURIComponent(deployment.token)}`;
     } else {
       console.error('Unable to open stream. Missing credentials.');
       return;
@@ -319,7 +329,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
         this._source.close();
         this._source = null;
 
-        setTimeout(this.restartConnection, 5000, { teamId }); // TODO: smarter retry logic?
+        setTimeout(this.restartConnection, 5000, options); // TODO: smarter retry logic?
       }
     }, false);
     this._source.addEventListener('open', () => {
@@ -352,28 +362,41 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team, deploymentId, commitHash } = this.props;
+    const { team, deployment, isLoadingTeamInformation } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
         this.restartConnection({ teamId: team.id });
-      } else if (deploymentId && commitHash) {
-        this.restartConnection({ deploymentId, commitHash });
+      } else if (!isLoadingTeamInformation && deployment && !isFetchError(deployment)) {
+        this.restartConnection({ deployment });
       }
     }
   }
 
-  public componentWillReceiveProps(nextProps: Props) {
-    const { team, setConnectionState } = this.props;
+  public componentWillReceiveProps({ team, setConnectionState, deployment, isLoadingTeamInformation }: Props) {
+    const {
+      team: previousTeam,
+      deployment: previousDeployment,
+      isLoadingTeamInformation: wasLoadingTeamInformation,
+    } = this.props;
 
     if (streamingAPIUrl) {
-      // User logged in or changed teams
-      if (nextProps.team && (!team || nextProps.team.id !== team.id)) {
-        this.restartConnection({ teamId: nextProps.team.id });
-      }
-
-      // User logged out
-      if (team && !nextProps.team) {
+      if (team) {
+        if (!previousTeam || team.id !== previousTeam.id) {
+          // User logged in or changed teams
+          this.restartConnection({ teamId: team.id });
+        }
+      } else if (
+        !isLoadingTeamInformation && // Only fall back to deployment-only stream if we're not logged/logging in.
+        deployment &&
+        !isFetchError(deployment) &&
+        (wasLoadingTeamInformation || !previousDeployment || deployment.id !== previousDeployment.id)
+      ) {
+        // Either fetching the team information failed, the fetching of the deployment succeeded,
+        // or the user switched deployments.
+        this.restartConnection({ deployment });
+      } else if (previousTeam && !team) {
+        // User logged out
         setConnectionState(ConnectionState.INITIAL_CONNECT);
         this._source.close();
         this._source = null;
@@ -459,7 +482,25 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<{}, GeneratedDispatchProps, PassedProps>(
-  () => ({}),
+const mapStateToProps = (state: StateTree, ownProps: Props): GeneratedStateProps => {
+  const { id, entityType, token } = ownProps.match.params;
+  let deployment: Deployment | FetchError | undefined;
+
+  if (id && entityType && token && isEntityType(entityType)) {
+    const preview = Previews.selectors.getPreview(state, id, entityType);
+    if (preview && !isFetchError(preview)) {
+      deployment = Deployments.selectors.getDeployment(state, preview.deployment);
+    }
+  }
+
+  return {
+    team: User.selectors.getTeam(state),
+    deployment,
+    isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
+  };
+};
+
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
+  mapStateToProps,
   mapDispatchToProps,
 )(StreamingAPIHandler);

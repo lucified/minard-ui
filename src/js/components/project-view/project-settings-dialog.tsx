@@ -2,7 +2,7 @@ import * as React from 'react';
 import Icon = require('react-fontawesome');
 import * as ModalDialog from 'react-modal';
 import { connect } from 'react-redux';
-import { InjectedRouter, withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 import { Dispatch } from 'redux';
 
 import { trackEvent } from '../../intercom';
@@ -21,10 +21,6 @@ interface PassedProps {
   project: Project;
 }
 
-interface InjectedProps {
-  router: InjectedRouter;
-}
-
 interface GeneratedStateProps {
   isOpen: boolean;
   existingProjectNames: string[];
@@ -36,9 +32,10 @@ interface GeneratedDispatchProps {
   closeDialog: (e?: React.MouseEvent<HTMLElement>) => void;
   deleteProject: (id: string, resolve: () => void, reject: () => void) => void;
   clearDeletionErrors: () => void;
+  redirectToTeamProjectsView: () => void;
 }
 
-type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps & InjectedProps;
+type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 function getParentElement() {
   return document.querySelector('#minard-app') as HTMLElement;
@@ -54,7 +51,7 @@ class ProjectSettingsDialog extends React.Component<Props, void> {
   }
 
   private handleDeleteProject() {
-    const { project, deleteProject, router } = this.props;
+    const { project, deleteProject, redirectToTeamProjectsView } = this.props;
 
     new Promise((resolve, reject) => {
       deleteProject(project.id, resolve, reject);
@@ -63,7 +60,7 @@ class ProjectSettingsDialog extends React.Component<Props, void> {
       trackEvent('project-deleted');
 
       this.clearAndClose();
-      router.push('/projects');
+      redirectToTeamProjectsView();
     })
     .catch((e) => {
       logException('Error deleting project:', e, { project });
@@ -138,9 +135,12 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   clearDeletionErrors: () => {
     dispatch(Errors.actions.clearProjectDeletionErrors());
   },
+  redirectToTeamProjectsView: () => {
+    dispatch(push('/projects'));
+  },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   mapDispatchToProps,
-)(withRouter(ProjectSettingsDialog));
+)(ProjectSettingsDialog);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
@@ -22,6 +22,8 @@ interface Params {
   show?: string;
 }
 
+type PassedProps = RouteComponentProps<Params>;
+
 interface GeneratedStateProps {
   project?: Project | FetchError;
   branches?: (Branch | FetchError | undefined)[] | FetchError;
@@ -36,12 +38,12 @@ interface GeneratedDispatchProps {
   loadBranches: (id: string) => void;
 }
 
-type Props = RouteComponentProps<Params, {}> & GeneratedStateProps & GeneratedDispatchProps;
+type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 class ProjectView extends React.Component<Props, void> {
   public componentWillMount() {
     const { loadProject, loadActivities, loadBranches } = this.props;
-    const { projectId } = this.props.params;
+    const { projectId } = this.props.match.params;
 
     loadProject(projectId);
     loadBranches(projectId);
@@ -50,9 +52,9 @@ class ProjectView extends React.Component<Props, void> {
 
   public componentWillReceiveProps(nextProps: Props) {
     const { loadProject, loadActivities, loadBranches } = this.props;
-    const { projectId } = nextProps.params;
+    const { projectId } = nextProps.match.params;
 
-    if (projectId !== this.props.params.projectId) {
+    if (projectId !== this.props.match.params.projectId) {
       loadProject(projectId);
       loadBranches(projectId);
       loadActivities(projectId, 10);
@@ -73,7 +75,7 @@ class ProjectView extends React.Component<Props, void> {
       loadActivities,
       isLoadingActivities,
       isAllActivitiesRequestedForProject,
-      params: { show },
+      match: { params: { show } },
     } = this.props;
 
     if (isFetchError(project)) {
@@ -146,8 +148,8 @@ class ProjectView extends React.Component<Props, void> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: RouteComponentProps<Params, {}>): GeneratedStateProps => {
-  const { projectId } = ownProps.params;
+const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+  const { projectId } = ownProps.match.params;
   const project = Projects.selectors.getProject(state, projectId);
   const isLoadingActivities = Requests.selectors.isLoadingActivitiesForProject(state, projectId);
   const isAllActivitiesRequestedForProject = Requests.selectors.isAllActivitiesRequestedForProject(state, projectId);
@@ -187,7 +189,7 @@ const dispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   loadBranches: (id: string) => { dispatch(Branches.actions.loadBranchesForProject(id)); },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, RouteComponentProps<Params, {}>>(
+export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
   mapStateToProps,
   dispatchToProps,
 )(ProjectView);

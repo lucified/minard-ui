@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router-dom';
 
 import Branches, { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
@@ -19,7 +19,7 @@ interface Params {
   projectId: string;
 }
 
-type PassedProps = RouteComponentProps<Params, {}>;
+type PassedProps = RouteComponentProps<Params>;
 
 interface GeneratedStateProps {
   project?: Project | FetchError;
@@ -37,15 +37,15 @@ type Props = GeneratedStateProps & PassedProps & GeneratedDispatchProps;
 
 class BranchView extends React.Component<Props, StateTree> {
   public componentWillMount() {
-    const { loadBranch, loadCommits, params: { branchId } } = this.props;
+    const { loadBranch, loadCommits, match: { params: { branchId } } } = this.props;
 
     loadBranch(branchId);
     loadCommits(branchId, 10);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadBranch, loadCommits, params: { branchId } } = this.props;
-    const { branchId: nextBranchId } = nextProps.params;
+    const { loadBranch, loadCommits, match: { params: { branchId } } } = this.props;
+    const { branchId: nextBranchId } = nextProps.match.params;
 
     // This happens if the user manually opens a new branch when another branch is open
     if (branchId !== nextBranchId) {
@@ -114,7 +114,7 @@ class BranchView extends React.Component<Props, StateTree> {
 }
 
 const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
-  const { projectId, branchId } = ownProps.params;
+  const { projectId, branchId } = ownProps.match.params;
   const project = Projects.selectors.getProject(state, projectId);
   const branch = Branches.selectors.getBranch(state, branchId);
   let commits: (Commit | FetchError | undefined)[] | undefined;

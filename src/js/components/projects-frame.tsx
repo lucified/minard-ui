@@ -1,26 +1,27 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
+import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import Projects from '../modules/projects';
 import Requests from '../modules/requests';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
+import BranchView from './branch-view';
 import ErrorDialog from './common/error-dialog';
 import Spinner from './common/spinner';
 import Footer from './footer';
 import Header from './header';
+import ProjectView from './project-view';
 import SubHeader from './sub-header';
+import TeamProjectsView from './team-projects-view';
 
-interface PassedProps {
-  location: any;
-  route: any;
-  params: any;
-}
+interface Params {}
+
+type PassedProps = RouteComponentProps<Params>;
 
 interface GeneratedDispatchProps {
   loadAllProjects: (teamId: string) => void;
-  loadTeamInformation: () => void;
   redirectToLogin: () => void;
 }
 
@@ -30,32 +31,24 @@ interface GeneratedStateProps {
   team?: Team;
 }
 
-type Props = GeneratedDispatchProps & PassedProps & GeneratedStateProps;
+type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
-    const { loadAllProjects, isUserLoggedIn, redirectToLogin, team, loadTeamInformation } = this.props;
+    const { loadAllProjects, isUserLoggedIn, redirectToLogin, team } = this.props;
 
     if (!isUserLoggedIn) {
       redirectToLogin();
-    } else if (team === undefined) {
-      // TODO: team information is now being fetched in three places:
-      // - Login View after getting user login information from Auth0
-      // - Signup View after getting user information (using the backend's signup endpoint)
-      // - Here
-      //
-      // We should probably try to reduce the number of places.
-      loadTeamInformation();
-    } else {
+    } else if (team) {
       loadAllProjects(team.id);
     }
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadAllProjects, team } = this.props;
+    const { loadAllProjects, team } = nextProps;
 
-    if (nextProps.team && team === undefined) {
-      loadAllProjects(nextProps.team.id);
+    if (team && this.props.team === undefined) {
+      loadAllProjects(team.id);
     }
   }
 
@@ -64,7 +57,7 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 
   public render() {
-    const { children, team, isLoadingTeamInformation } = this.props;
+    const { team, isLoadingTeamInformation } = this.props;
 
     if (!team) {
       if (isLoadingTeamInformation) {
@@ -93,7 +86,11 @@ class ProjectsFrame extends React.Component<Props, void> {
       <div>
         <Header />
         <SubHeader />
-        {children}
+        <Switch>
+          <Route path="/project/:projectId/branch/:branchId" component={BranchView} />
+          <Route path="/project/:projectId/:show?" component={ProjectView} />
+          <Route path="/projects/:show?" component={TeamProjectsView} />
+        </Switch>
         <Footer />
       </div>
     );
@@ -103,7 +100,6 @@ class ProjectsFrame extends React.Component<Props, void> {
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },
   redirectToLogin: () => { dispatch(User.actions.redirectToLogin()); },
-  loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
 });
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
