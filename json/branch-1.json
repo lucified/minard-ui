@@ -9,7 +9,7 @@
       "minard-json": {
         "errors": []
       },
-      "token": "tokenfoobar"
+      "token": "testtoken"
     },
     "relationships": {
       "latest-successfully-deployed-commit": {
