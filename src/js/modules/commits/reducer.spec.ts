@@ -11,7 +11,7 @@ import {
 import reducer from './reducer';
 import { Commit, CommitState } from './types';
 
-describe.only('Commits reducer', () => {
+describe('Commits reducer', () => {
   const stateWithoutExistingEntity: CommitState = {
     098325343: {
       id: '098325343',
@@ -132,8 +132,7 @@ describe.only('Commits reducer', () => {
 
     it('by replacing existing commits', () => {
       const newState = reducer(stateWithExistingEntity, storeAction);
-      const expectedNewState = { ...stateWithExistingEntity, ...newCommits };
-      expect(newState).to.deep.equal(expectedNewState);
+      expect(newState).to.deep.equal({ ...stateWithExistingEntity, ...newCommits });
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
