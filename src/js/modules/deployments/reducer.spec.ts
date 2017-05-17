@@ -18,7 +18,7 @@ describe('Deployments reducer', () => {
         email: 'ville.saarinen@lucify.com',
         timestamp: 1470131481802,
       },
-      token: 'foobartoken',
+      token: 'testtoken',
     },
   };
 
@@ -38,7 +38,7 @@ describe('Deployments reducer', () => {
         email: 'juho@lucify.com',
         timestamp: 1470131581802,
       },
-      token: 'foobartoken',
+      token: 'testtoken',
     },
   };
 
@@ -53,7 +53,7 @@ describe('Deployments reducer', () => {
         email: 'ville.saarinen@lucify.com',
         timestamp: 1470131481802,
       },
-      token: 'foobartoken',
+      token: 'testtoken',
     },
   };
 

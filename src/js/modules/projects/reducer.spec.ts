@@ -25,7 +25,7 @@ describe('Projects reducer', () => {
         },
       ],
       repoUrl: 'http://mock.repo.url/project.git',
-      token: 'foobartoken',
+      token: 'testtoken',
     },
     2: {
       id: '2',
@@ -36,7 +36,7 @@ describe('Projects reducer', () => {
       latestSuccessfullyDeployedCommit: undefined,
       activeUsers: [],
       repoUrl: 'http://mock.repo.url/project.git',
-      token: 'foobartoken',
+      token: 'testtoken',
     },
   };
   /*
@@ -55,7 +55,7 @@ describe('Projects reducer', () => {
       latestSuccessfullyDeployedCommit: undefined,
       branches: undefined,
       repoUrl: 'http://mock.repo.url/project.git',
-      token: 'foobartoken',
+      token: 'testtoken',
     },
   };*/
 
@@ -73,7 +73,7 @@ describe('Projects reducer', () => {
         },
       ],
       repoUrl: 'http://mock.repo.url/project.git',
-      token: 'foobartoken',
+      token: 'testtoken',
     },
     1: {
       id: '1',
@@ -88,7 +88,7 @@ describe('Projects reducer', () => {
         },
       ],
       repoUrl: 'http://mock.repo.url/project.git',
-      token: 'foobartoken',
+      token: 'testtoken',
     },
   };
   /*
