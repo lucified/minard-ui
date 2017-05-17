@@ -7,6 +7,7 @@ export interface Branch {
   name: string;
   project: string;
   description?: string;
+  // In chronological order. The first commit is the newest one.
   commits: string[];
   allCommitsLoaded: boolean;
   latestSuccessfullyDeployedCommit?: string;
