@@ -3,16 +3,16 @@ import { Reducer } from 'redux';
 
 import { CLEAR_STORED_DATA } from '../user';
 import { STORE_ACTIVITIES } from './actions';
-import * as t from './types';
+import { ActivityState, StoreActivitiesAction } from './types';
 
-const initialState: t.ActivityState = {};
+const initialState: ActivityState = {};
 
-const reducer: Reducer<t.ActivityState> = (state: t.ActivityState = initialState, action: any) => {
+const reducer: Reducer<ActivityState> = (state: ActivityState = initialState, action: any) => {
   switch (action.type) {
     case STORE_ACTIVITIES:
-      const activities = (action as t.StoreActivitiesAction).entities;
+      const activities = (action as StoreActivitiesAction).entities;
       if (activities && activities.length > 0) {
-        const newActivitiesObject: t.ActivityState = mapKeys(activities, activity => activity.id);
+        const newActivitiesObject: ActivityState = mapKeys(activities, activity => activity.id);
 
         return {
           ...state,

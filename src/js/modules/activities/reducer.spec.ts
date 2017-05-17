@@ -1,23 +1,14 @@
-// import { expect } from 'chai';
+import { expect } from 'chai';
+import { values } from 'lodash';
 
-import { } from './actions';
-// import reducer from './reducer';
-import {  } from './types';
+import { DeploymentStatus } from '../deployments';
+import { CLEAR_STORED_DATA } from '../user/index';
+import { STORE_ACTIVITIES } from './actions';
+import reducer from './reducer';
+import { ActivityState, ActivityType, StoreActivitiesAction } from './types';
 
 describe('Activities reducer', () => {
-  /*const { reducer } = Activities;
-
-  const successfulActivitiesRequestAction = {
-    type: Requests.actions.Activities.LoadAllActivities.SUCCESS.type,
-    response: testData.activitiesResponse.data,
-  };
-
-  const successfulActivitiesForProjectRequestAction = {
-    type: Requests.actions.Activities.LoadActivitiesForProject.SUCCESS.type,
-    response: testData.activitiesResponse.data,
-  };
-
-  const expectedObjectsToStore: ActivityState = {
+  const newActivities: ActivityState = {
     1: {
       id: '1',
       timestamp: 1470131481802,
@@ -56,6 +47,7 @@ describe('Activities reducer', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470131481802,
         },
+        token: 'testtoken',
       },
     },
     2: {
@@ -97,13 +89,9 @@ describe('Activities reducer', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470045081802,
         },
+        token: 'testtoken',
       },
     },
-  };
-
-  const storeAction = {
-    type: Activities.actions.STORE_ACTIVITIES,
-    entities: expectedObjectsToStore,
   };
 
   const stateWithoutExistingEntity: ActivityState = {
@@ -145,6 +133,7 @@ describe('Activities reducer', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470145081802,
         },
+        token: 'testtoken',
       },
     },
   };
@@ -187,6 +176,7 @@ describe('Activities reducer', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1471131481802,
         },
+        token: 'testtoken',
       },
     },
     3: {
@@ -225,73 +215,48 @@ describe('Activities reducer', () => {
           email: 'ville.saarinen@lucify.com',
           timestamp: 1470145081802,
         },
+        token: 'testtoken',
       },
     },
   };
 
-  const expectedStateWithoutExistingEntity = Object.assign({}, stateWithoutExistingEntity, expectedObjectsToStore);
-  const expectedStateWithExistingEntity = Object.assign({}, stateWithExistingEntity, expectedObjectsToStore);
+  it('returns the correct default empty state', () => {
+    expect(reducer(undefined as any, { type: 'foobar' })).to.deep.equal({});
+  });
 
-  testStoreEntities(
-    reducer,
-    storeAction,
-    expectedObjectsToStore,
-    stateWithoutExistingEntity,
-    expectedStateWithoutExistingEntity,
-    stateWithExistingEntity,
-    expectedStateWithExistingEntity
-  );
+  describe('stores activities', () => {
+    const storeAction: StoreActivitiesAction = {
+      type: STORE_ACTIVITIES,
+      entities: values(newActivities),
+    };
 
-  describe(`successful request all activities (${successfulActivitiesRequestAction.type})`, () => {
     it('with an empty initial state', () => {
-      expect(reducer(<any> undefined, successfulActivitiesRequestAction)).to.deep.equal(expectedObjectsToStore);
+      expect(reducer(undefined as any, storeAction)).to.deep.equal(newActivities);
     });
 
     it('makes no changes with an empty list', () => {
-      const emptyAction = { type: successfulActivitiesRequestAction.type, entities: <any[]> [] };
+      const emptyAction: StoreActivitiesAction = { type: storeAction.type, entities: [] };
       const newState = reducer(stateWithoutExistingEntity, emptyAction);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
     });
 
     it('with other entities in state', () => {
-      const newState = reducer(stateWithoutExistingEntity, successfulActivitiesRequestAction);
-      expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
+      const newState = reducer(stateWithoutExistingEntity, storeAction);
+      expect(newState).to.deep.equal({ ...stateWithoutExistingEntity, ...newActivities });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
-    it('by overwriting existing entities', () => {
-      const newState = reducer(stateWithExistingEntity, successfulActivitiesRequestAction);
-      expect(newState).to.deep.equal(expectedStateWithExistingEntity);
+    it('with existing entities in state', () => {
+      const newState = reducer(stateWithExistingEntity, storeAction);
+      expect(newState).to.deep.equal({ ...stateWithExistingEntity, ...newActivities });
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
 
-  describe(`successful request activities for project (${successfulActivitiesForProjectRequestAction.type})`, () => {
-    it('with an empty initial state', () => {
-      expect(reducer(<any> undefined, successfulActivitiesForProjectRequestAction)).to.deep.equal(
-        expectedObjectsToStore
-      );
-    });
-
-    it('makes no changes with an empty list', () => {
-      const emptyAction = { type: successfulActivitiesForProjectRequestAction.type, entities: <any[]> [] };
-      const newState = reducer(stateWithoutExistingEntity, emptyAction);
-      expect(newState).to.deep.equal(stateWithoutExistingEntity);
-      expect(newState).to.equal(stateWithoutExistingEntity);
-    });
-
-    it('with other entities in state', () => {
-      const newState = reducer(stateWithoutExistingEntity, successfulActivitiesForProjectRequestAction);
-      expect(newState).to.deep.equal(expectedStateWithoutExistingEntity);
-      expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
-    });
-
-    it('by overwriting existing entities', () => {
-      const newState = reducer(stateWithExistingEntity, successfulActivitiesForProjectRequestAction);
-      expect(newState).to.deep.equal(expectedStateWithExistingEntity);
-      expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
-    });
+  it(`clears data on ${CLEAR_STORED_DATA}`, () => {
+    expect(reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
   });
-  */
 });
