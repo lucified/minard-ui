@@ -9,7 +9,7 @@ import Commits, { Commit } from '../commits';
 import Requests from '../requests';
 import { LoadCommitsForBranchAction } from './index';
 
-import { createApi, testData, testEntityFetcher, testLoader } from '../../sagas/test-utils';
+import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
 import { fetchIfMissing, storeIncludedEntities } from '../../sagas/utils';
 import createSagas from './sagas';
 
@@ -17,7 +17,7 @@ describe('Commits sagas', () => {
   const api = createApi();
   const sagaFunctions = createSagas(api).functions;
 
-  testLoader(
+  testLoaderSaga(
     'loadCommit',
     sagaFunctions.loadCommit,
     Commits.selectors.getCommit,
@@ -123,7 +123,7 @@ describe('Commits sagas', () => {
     it('does not fetch latest commit if it already exists');
   });
 
-  testEntityFetcher(
+  testEntityFetcherSaga(
     'fetchCommit',
     testData.commitResponse,
     { data: testData.commitResponse.data },

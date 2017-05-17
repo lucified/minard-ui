@@ -3,9 +3,9 @@
 import { expect } from 'chai';
 import { call, fork, put, select } from 'redux-saga/effects';
 
+import { createApi, testData } from '../../../../test/test-utils';
 import { toActivities } from '../../api/convert';
 import { ResponseActivityElement } from '../../api/types';
-import { createApi, testData } from '../../sagas/test-utils';
 import Requests from '../requests';
 import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from './index';
 import createSagas from './sagas';

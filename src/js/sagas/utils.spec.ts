@@ -8,7 +8,7 @@ import { ResponseCommitElement, ResponseDeploymentElement } from '../api/types';
 import Commits from '../modules/commits';
 import Deployments from '../modules/deployments';
 
-import { testData } from './test-utils';
+import { testData } from '../../../test/test-utils';
 import { fetchIfMissing, storeIncludedEntities } from './utils';
 
 describe('saga utils', () => {

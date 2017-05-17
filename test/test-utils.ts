@@ -1,28 +1,31 @@
 // tslint:disable:no-object-literal-type-assertion
 
+// NOTE: This file needs to be at the same level in this level of the project
+// becase of the JSON requires below and compiled-test.
+
 import { expect } from 'chai';
 import { Action } from 'redux';
 import { call, Effect, fork, put, select } from 'redux-saga/effects';
 
-import { Api, ApiEntityResponse, ApiResult, ApiTeam } from '../api/types';
-import { Branch } from '../modules/branches';
-import { Commit } from '../modules/commits';
-import { Deployment } from '../modules/deployments';
-import { FetchError } from '../modules/errors';
-import { Project } from '../modules/projects';
-import { FetchEntityActionCreators } from '../modules/requests';
-import { StateTree } from '../reducers';
-import { storeIncludedEntities } from './utils';
+import { Api, ApiEntityResponse, ApiResult, ApiTeam } from '../src/js/api/types';
+import { Branch } from '../src/js/modules/branches';
+import { Commit } from '../src/js/modules/commits';
+import { Deployment } from '../src/js/modules/deployments';
+import { FetchError } from '../src/js/modules/errors';
+import { Project } from '../src/js/modules/projects';
+import { FetchEntityActionCreators } from '../src/js/modules/requests';
+import { StateTree } from '../src/js/reducers';
+import { storeIncludedEntities } from '../src/js/sagas/utils';
 
 export const testData = {
-  allProjectsResponse: require('../../../json/projects.json') as ApiEntityResponse,
-  deploymentResponse: require('../../../json/deployment-7.json') as ApiEntityResponse,
-  branchResponse: require('../../../json/branch-1.json') as ApiEntityResponse,
-  commitResponse: require('../../../json/commit.json') as ApiEntityResponse,
-  projectResponse: require('../../../json/project-1.json') as ApiEntityResponse,
-  activitiesResponse: require('../../../json/activities.json') as ApiEntityResponse,
-  projectBranchesResponse: require('../../../json/project-1-branches.json') as ApiEntityResponse,
-  branchCommitsResponse: require('../../../json/branch-1-commits.json') as ApiEntityResponse,
+  allProjectsResponse: require('../json/projects.json') as ApiEntityResponse,
+  deploymentResponse: require('../json/deployment-7.json') as ApiEntityResponse,
+  branchResponse: require('../json/branch-1.json') as ApiEntityResponse,
+  commitResponse: require('../json/commit.json') as ApiEntityResponse,
+  projectResponse: require('../json/project-1.json') as ApiEntityResponse,
+  activitiesResponse: require('../json/activities.json') as ApiEntityResponse,
+  projectBranchesResponse: require('../json/project-1-branches.json') as ApiEntityResponse,
+  branchCommitsResponse: require('../json/branch-1-commits.json') as ApiEntityResponse,
 };
 
 export function createApi(): Api {
@@ -73,7 +76,7 @@ export function createApi(): Api {
   };
 }
 
-export function testLoader(
+export function testLoaderSaga(
   name: string,
   loader: (action: any) => IterableIterator<Effect>,
   selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError | undefined,
@@ -139,7 +142,7 @@ interface StoreAction extends Action {
   entities: any[];
 }
 
-export function testEntityFetcher<ApiParams>(
+export function testEntityFetcherSaga<ApiParams>(
   name: string,
   response: ApiEntityResponse,
   responseNoInclude: ApiEntityResponse,

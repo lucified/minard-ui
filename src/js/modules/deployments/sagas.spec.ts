@@ -7,14 +7,14 @@ import Requests from '../requests';
 import Deployments, {
 } from './index';
 
-import { createApi, testData, testEntityFetcher, testLoader } from '../../sagas/test-utils';
+import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
 import createSagas from './sagas';
 
 describe('Deployments sagas', () => {
   const api = createApi();
   const sagaFunctions = createSagas(api).functions;
 
-  testLoader(
+  testLoaderSaga(
     'loadDeployment',
     sagaFunctions.loadDeployment,
     Deployments.selectors.getDeployment,
@@ -22,7 +22,7 @@ describe('Deployments sagas', () => {
     sagaFunctions.ensureDeploymentRelatedDataLoaded,
   );
 
-  testEntityFetcher(
+  testEntityFetcherSaga(
     'fetchDeployment',
     testData.deploymentResponse,
     { data: testData.deploymentResponse.data },

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.01" tests="49" failures="0" skipped="8">
+  <testsuite name="Root Suite" timestamp="2017-05-17T17:01:06" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="reducers" timestamp="2017-05-17T17:01:06" tests="0" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="modal" timestamp="2017-05-17T17:01:06" tests="6" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0.003">
+    <testcase name="reducers modal opens a modal dialog when one is not open" time="0.002" classname="opens a modal dialog when one is not open">
+    </testcase>
+    <testcase name="reducers modal does nothing when opening a modal that is already open" time="0" classname="does nothing when opening a modal that is already open">
+    </testcase>
+    <testcase name="reducers modal does nothing when opening a modal when another modal is already open" time="0.001" classname="does nothing when opening a modal when another modal is already open">
+    </testcase>
+    <testcase name="reducers modal closes a modal dialog" time="0" classname="closes a modal dialog">
+    </testcase>
+    <testcase name="reducers modal does not close a modal dialog of a different type" time="0" classname="does not close a modal dialog of a different type">
+    </testcase>
+    <testcase name="reducers modal does nothing when closing a modal when none are open" time="0" classname="does nothing when closing a modal when none are open">
+    </testcase>
+  </testsuite>
+  <testsuite name="requests" timestamp="2017-05-17T17:01:06" tests="0" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="requests module refactoring" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="fetch all projects" timestamp="2017-05-17T17:01:06" tests="3" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+    <testcase name="reducers requests fetch all projects stores request information" time="0" classname="stores request information">
+    </testcase>
+    <testcase name="reducers requests fetch all projects removes request information once request succeeds" time="0" classname="removes request information once request succeeds">
+    </testcase>
+    <testcase name="reducers requests fetch all projects removes request information once request fails" time="0" classname="removes request information once request fails">
+    </testcase>
+  </testsuite>
+  <testsuite name="fetch all activities" timestamp="2017-05-17T17:01:06" tests="3" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+    <testcase name="reducers requests fetch all activities stores request information" time="0" classname="stores request information">
+    </testcase>
+    <testcase name="reducers requests fetch all activities removes request information once request succeeds" time="0" classname="removes request information once request succeeds">
+    </testcase>
+    <testcase name="reducers requests fetch all activities removes request information once request fails" time="0" classname="removes request information once request fails">
+    </testcase>
+  </testsuite>
+  <testsuite name="fetch all activities for project" timestamp="2017-05-17T17:01:06" tests="3" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+    <testcase name="reducers requests fetch all activities for project stores request information" time="0" classname="stores request information">
+    </testcase>
+    <testcase name="reducers requests fetch all activities for project removes request information once request succeeds" time="0" classname="removes request information once request succeeds">
+    </testcase>
+    <testcase name="reducers requests fetch all activities for project removes request information once request fails" time="0" classname="removes request information once request fails">
+    </testcase>
+  </testsuite>
+  <testsuite name="fetch all commits for branch" timestamp="2017-05-17T17:01:06" tests="3" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0.001">
+    <testcase name="reducers requests fetch all commits for branch stores request information" time="0.001" classname="stores request information">
+    </testcase>
+    <testcase name="reducers requests fetch all commits for branch removes request information once request succeeds" time="0" classname="removes request information once request succeeds">
+    </testcase>
+    <testcase name="reducers requests fetch all commits for branch removes request information once request fails" time="0" classname="removes request information once request fails">
+    </testcase>
+  </testsuite>
+  <testsuite name="delete project" timestamp="2017-05-17T17:01:06" tests="3" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+    <testcase name="reducers requests delete project stores request information" time="0" classname="stores request information">
+    </testcase>
+    <testcase name="reducers requests delete project removes request information once request succeeds" time="0" classname="removes request information once request succeeds">
+    </testcase>
+    <testcase name="reducers requests delete project removes request information once request fails" time="0" classname="removes request information once request fails">
+    </testcase>
+  </testsuite>
+  <testsuite name="selected" timestamp="2017-05-17T17:01:06" tests="6" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0.001">
+    <testcase name="reducers selected adds selected project and branch to empty state" time="0.001" classname="adds selected project and branch to empty state">
+    </testcase>
+    <testcase name="reducers selected replaces existing selections" time="0" classname="replaces existing selections">
+    </testcase>
+    <testcase name="reducers selected parses Show all correctly in the Team Projects View" time="0" classname="parses Show all correctly in the Team Projects View">
+    </testcase>
+    <testcase name="reducers selected parses Show all correctly in the Project View" time="0" classname="parses Show all correctly in the Project View">
+    </testcase>
+    <testcase name="reducers selected clears existing selections" time="0" classname="clears existing selections">
+    </testcase>
+    <testcase name="reducers selected returns empty for unknown locations" time="0" classname="returns empty for unknown locations">
+    </testcase>
+  </testsuite>
+  <testsuite name="errors" timestamp="2017-05-17T17:01:06" tests="9" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0.002">
+    <testcase name="reducers errors adds error to an empty initial state" time="0" classname="adds error to an empty initial state">
+    </testcase>
+    <testcase name="reducers errors adds error when requesting all projects fails" time="0.001" classname="adds error when requesting all projects fails">
+    </testcase>
+    <testcase name="reducers errors adds error when requesting activities fails" time="0" classname="adds error when requesting activities fails">
+    </testcase>
+    <testcase name="reducers errors clears all projects fetching error when starting new request" time="0" classname="clears all projects fetching error when starting new request">
+    </testcase>
+    <testcase name="reducers errors clears activity fetching error when starting new request" time="0" classname="clears activity fetching error when starting new request">
+    </testcase>
+    <testcase name="reducers errors adds an error when deleting a project fails" time="0" classname="adds an error when deleting a project fails">
+    </testcase>
+    <testcase name="reducers errors clears the error when trying to delete a project again" time="0" classname="clears the error when trying to delete a project again">
+    </testcase>
+    <testcase name="reducers errors clears all project deletion errors on ERRORS/CLEAR_PROJECT_DELETION_ERROR" time="0.001" classname="clears all project deletion errors on ERRORS/CLEAR_PROJECT_DELETION_ERROR">
+    </testcase>
+    <testcase name="reducers errors does nothing on ERRORS/CLEAR_PROJECT_DELETION_ERROR when no deletion errors exist" time="0" classname="does nothing on ERRORS/CLEAR_PROJECT_DELETION_ERROR when no deletion errors exist">
+    </testcase>
+  </testsuite>
+  <testsuite name="branches" timestamp="2017-05-17T17:01:06" tests="0" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="store commits to branch" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="remove branch" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="commits" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+    <testcase name="reducers commits returns the correct default state" time="0" classname="returns the correct default state">
+    </testcase>
+  </testsuite>
+  <testsuite name="adding a deployment to a commit" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="deployments" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0.001">
+    <testcase name="reducers deployments returns the correct default state" time="0.001" classname="returns the correct default state">
+    </testcase>
+  </testsuite>
+  <testsuite name="projects" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+    <testcase name="reducers projects returns the correct default state" time="0" classname="returns the correct default state">
+    </testcase>
+  </testsuite>
+  <testsuite name="project deletion" timestamp="2017-05-17T17:01:06" tests="2" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0.002">
+    <testcase name="reducers projects project deletion removes a project from the state upon receiving REQUESTS/PROJECTS/DELETE_PROJECT/SUCCESS" time="0.002" classname="removes a project from the state upon receiving REQUESTS/PROJECTS/DELETE_PROJECT/SUCCESS">
+    </testcase>
+    <testcase name="reducers projects project deletion does nothing if the project does not exist" time="0" classname="does nothing if the project does not exist">
+    </testcase>
+  </testsuite>
+  <testsuite name="removing a project" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="updating a project" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="add authors to project" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="streaming" timestamp="2017-05-17T17:01:06" tests="1" file="/Users/ville/Repos/minard-ui/lib/test/reducers.spec.js" failures="0" time="0">
+  </testsuite>
+</testsuites>

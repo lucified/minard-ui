@@ -14,7 +14,7 @@ import Projects, {
   Project,
 } from './index';
 
-import { createApi, testData, testEntityFetcher, testLoader } from '../../sagas/test-utils';
+import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
 import { fetchIfMissing } from '../../sagas/utils';
 import createSagas from './sagas';
 
@@ -22,7 +22,7 @@ describe('Projects sagas', () => {
   const api = createApi();
   const sagaFunctions = createSagas(api).functions;
 
-  testLoader(
+  testLoaderSaga(
     'loadProject',
     sagaFunctions.loadProject,
     Projects.selectors.getProject,
@@ -62,7 +62,7 @@ describe('Projects sagas', () => {
     });
   });
 
-  testEntityFetcher(
+  testEntityFetcherSaga(
     'fetchProject',
     testData.projectResponse,
     { data: testData.projectResponse.data },

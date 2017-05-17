@@ -10,7 +10,7 @@ import Projects from '../projects';
 import Requests from '../requests';
 import { LoadBranchesForProjectAction } from './index';
 
-import { createApi, testData, testEntityFetcher, testLoader } from '../../sagas/test-utils';
+import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
 import { fetchIfMissing, storeIncludedEntities } from '../../sagas/utils';
 import createSagas from './sagas';
 
@@ -18,7 +18,7 @@ describe('Branches sagas', () => {
   const api = createApi();
   const sagaFunctions = createSagas(api).functions;
 
-  testLoader(
+  testLoaderSaga(
     'loadBranch',
     sagaFunctions.loadBranch,
     Branches.selectors.getBranch,
@@ -84,7 +84,7 @@ describe('Branches sagas', () => {
     });
   });
 
-  testEntityFetcher(
+  testEntityFetcherSaga(
     'fetchBranch',
     testData.branchResponse,
     { data: testData.branchResponse.data },
