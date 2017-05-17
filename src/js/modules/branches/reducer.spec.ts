@@ -16,7 +16,7 @@ import {
 import reducer from './reducer';
 import { Branch, BranchState } from './types';
 
-describe.only('Branches reducer', () => {
+describe('Branches reducer', () => {
   const newBranches: BranchState = {
     1: {
       id: '1',
@@ -101,7 +101,7 @@ describe.only('Branches reducer', () => {
     expect(reducer(undefined as any, { type: 'foobar' })).to.deep.equal({});
   });
 
-  describe('stores branches', () => {
+  describe('storeBranches', () => {
     const storeAction = storeBranches(values<Branch>(newBranches));
 
     it('with an empty initial state', () => {
@@ -129,7 +129,7 @@ describe.only('Branches reducer', () => {
     });
   });
 
-  describe('stores failed fetch branch requests', () => {
+  describe('failed fetch branch requests', () => {
     const failedRequestAction: FetchError = {
       id: '1',
       type: Requests.actions.Branches.LoadBranch.FAILURE.type,
@@ -159,7 +159,7 @@ describe.only('Branches reducer', () => {
     });
   });
 
-  describe('adds commits to branch', () => {
+  describe('addCommitsToBranch', () => {
     it('to end of existing commits', () => {
       const addCommitsAction = addCommitsToBranch('1', ['12345678', '87654321'], 3);
       const newState = reducer(stateWithExistingEntity, addCommitsAction);
@@ -205,7 +205,7 @@ describe.only('Branches reducer', () => {
     });
   });
 
-  describe('removes branch', () => {
+  describe('removeBranch', () => {
     it('if it exists', () => {
       const removeBranchAction = removeBranch('1');
       const newState = reducer(stateWithExistingEntity, removeBranchAction);
@@ -221,7 +221,7 @@ describe.only('Branches reducer', () => {
     });
   });
 
-  describe('updates branch with supplied commits', () => {
+  describe('updateBranchWithCommits', () => {
     const commits: Commit[] = [
       {
         id: '01234567',
@@ -336,7 +336,7 @@ describe.only('Branches reducer', () => {
     });
   });
 
-  describe('updates latest activity timestamp', () => {
+  describe('updateLatestActivityTimestampForBranch', () => {
     it('updates an existing branch', () => {
       const action = updateLatestActivityTimestampForBranch('1', 13579);
       const newState = reducer(stateWithExistingEntity, action);
@@ -360,7 +360,7 @@ describe.only('Branches reducer', () => {
     });
   });
 
-  describe('updates latest successfully deployed commit', () => {
+  describe('updateLatestDeployedCommit', () => {
     it('updates an existing branch', () => {
       const action = updateLatestDeployedCommit('1', 'abcedfsddd');
       const newState = reducer(stateWithExistingEntity, action);
