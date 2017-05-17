@@ -3,7 +3,7 @@ import { values } from 'lodash';
 
 import { DeploymentStatus } from '../deployments';
 import { CLEAR_STORED_DATA } from '../user/index';
-import { STORE_ACTIVITIES } from './actions';
+import { storeActivities } from './actions';
 import reducer from './reducer';
 import { ActivityState, ActivityType, StoreActivitiesAction } from './types';
 
@@ -225,10 +225,7 @@ describe('Activities reducer', () => {
   });
 
   describe('stores activities', () => {
-    const storeAction: StoreActivitiesAction = {
-      type: STORE_ACTIVITIES,
-      entities: values(newActivities),
-    };
+    const storeAction = storeActivities(values(newActivities));
 
     it('with an empty initial state', () => {
       expect(reducer(undefined as any, storeAction)).to.deep.equal(newActivities);
