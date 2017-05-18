@@ -8,7 +8,6 @@ import Errors from '../errors';
 import Requests from '../requests';
 import {
   clearStoredData,
-  clearUserDetails,
   LOAD_TEAM_INFORMATION,
   LOGIN,
   LOGOUT,
@@ -92,7 +91,6 @@ export default function createSagas(api: Api) {
 
     yield call(intercomLogout);
     yield put(clearStoredData());
-    yield put(clearUserDetails());
     yield call(clearStoredCredentials);
   }
 

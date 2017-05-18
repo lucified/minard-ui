@@ -1,6 +1,5 @@
 import {
   ClearStoredDataAction,
-  ClearUserDetailsAction,
   LoadTeamInformationAction,
   LoginAction,
   LogoutAction,
@@ -54,13 +53,7 @@ export const logout = (): LogoutAction => ({
   type: LOGOUT,
 });
 
-// Clears user data stored in the state
-export const CLEAR_USER_DETAILS = 'USER/CLEAR_USER_DETAILS';
-export const clearUserDetails = (): ClearUserDetailsAction => ({
-  type: CLEAR_USER_DETAILS,
-});
-
-// Clears all stored entity data
+// Clears all stored entity and user data from the Redux state
 export const CLEAR_STORED_DATA = 'USER/CLEAR_STORED_DATA';
 export const clearStoredData = (): ClearStoredDataAction => ({
   type: CLEAR_STORED_DATA,

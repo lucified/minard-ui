@@ -1,6 +1,6 @@
 import { getEmail, getExpirationTime } from '../../api/auth';
 import { login as intercomLogin } from '../../intercom';
-import { CLEAR_USER_DETAILS, SET_GIT_PASSWORD, SET_TEAM, SET_USER_EMAIL } from './actions';
+import { CLEAR_STORED_DATA, SET_GIT_PASSWORD, SET_TEAM, SET_USER_EMAIL } from './actions';
 import { SetGitPasswordAction, SetTeamAction, SetUserEmailAction, UserState } from './types';
 
 // TODO: Move Intercom stuff elsewhere?
@@ -41,7 +41,7 @@ const reducer = (state: UserState = initialState, action: any): UserState => {
         ...state,
         gitPassword: password,
       };
-    case CLEAR_USER_DETAILS:
+    case CLEAR_STORED_DATA:
       return {};
     default:
       return state;
