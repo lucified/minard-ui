@@ -1,7 +1,7 @@
 import { EntityType, LoadPreviewAndCommentsAction, Preview, StorePreviewAction } from './types';
 
 export const STORE_PREVIEW = 'PREVIEW/STORE_PREVIEW';
-export const storePreviews = (
+export const storePreview = (
   preview: Preview,
   requestedId: string,
   requestedEntityType: EntityType,
