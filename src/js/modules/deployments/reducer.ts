@@ -12,14 +12,21 @@ import {
   SET_COMMENTS_FOR_DEPLOYMENT,
   STORE_DEPLOYMENTS,
 } from './actions';
-import * as t from './types';
+import {
+  AddCommentsToDeploymentAction,
+  Deployment,
+  DeploymentState,
+  RemoveCommentFromDeploymentAction,
+  SetCommentsForDeploymentAction,
+  StoreDeploymentsAction,
+} from './types';
 
-const initialState: t.DeploymentState = {};
+const initialState: DeploymentState = {};
 
-const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) => {
+const reducer: Reducer<DeploymentState> = (state = initialState, action: any) => {
   let fetchErrorAction: FetchError;
   let id: string;
-  let existingDeployment: t.Deployment | FetchError;
+  let existingDeployment: Deployment | FetchError;
 
   switch (action.type) {
     case Requests.actions.Deployments.LoadDeployment.FAILURE.type:
@@ -61,9 +68,9 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       return state;
     // Add/replace deployments into state
     case STORE_DEPLOYMENTS:
-      const deploymentsArray = (action as t.StoreDeploymentsAction).entities;
+      const deploymentsArray = (action as StoreDeploymentsAction).entities;
       if (deploymentsArray && deploymentsArray.length > 0) {
-        const newDeploymentsObject: t.DeploymentState = mapKeys(deploymentsArray, d => d.id);
+        const newDeploymentsObject: DeploymentState = mapKeys(deploymentsArray, d => d.id);
 
         return {
           ...state,
@@ -74,7 +81,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       return state;
     // Replaces comments in the deployment
     case SET_COMMENTS_FOR_DEPLOYMENT:
-      const commentsAction = action as t.SetCommentsForDeploymentAction;
+      const commentsAction = action as SetCommentsForDeploymentAction;
       existingDeployment = state[commentsAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         return {
@@ -82,6 +89,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
           [commentsAction.id]: {
             ...existingDeployment,
             comments: commentsAction.comments,
+            commentCount: commentsAction.comments.length,
           },
         };
       }
@@ -91,7 +99,7 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
       return state;
     // Appends comment to deployment
     case ADD_COMMENTS_TO_DEPLOYMENT:
-      const addCommentsAction = action as t.AddCommentsToDeploymentAction;
+      const addCommentsAction = action as AddCommentsToDeploymentAction;
       existingDeployment = state[addCommentsAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         let newComments: string[];
@@ -103,8 +111,12 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
         } else {
           const existingComments = existingDeployment.comments;
           const commentsToAdd = addCommentsAction.comments.filter(comment => existingComments.indexOf(comment) === -1);
-          newComments = existingDeployment.comments.concat(commentsToAdd);
-          newCommentCount += commentsToAdd.length;
+          if (commentsToAdd.length > 0) {
+            newComments = existingComments.concat(commentsToAdd);
+            newCommentCount += commentsToAdd.length;
+          } else {
+            return state;
+          }
         }
 
         return {
@@ -119,18 +131,18 @@ const reducer: Reducer<t.DeploymentState> = (state = initialState, action: any) 
 
       return state;
     case REMOVE_COMMENT_FROM_DEPLOYMENT:
-      const removeCommentAction = action as t.RemoveCommentFromDeploymentAction;
+      const removeCommentAction = action as RemoveCommentFromDeploymentAction;
       existingDeployment = state[removeCommentAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
         if (existingDeployment.comments && !isFetchError(existingDeployment.comments)) {
-          if (existingDeployment.comments.indexOf(removeCommentAction.comment) > -1) {
-            const newComments = existingDeployment.comments.filter(comment => comment !== removeCommentAction.comment);
+          const newComments = existingDeployment.comments.filter(comment => comment !== removeCommentAction.comment);
+          if (newComments.length < existingDeployment.comments.length) {
             return {
               ...state,
               [removeCommentAction.id]: {
                 ...existingDeployment,
                 comments: newComments,
-                commentCount: existingDeployment.commentCount ? existingDeployment.commentCount - 1 : 0,
+                commentCount: newComments.length,
               },
             };
           }

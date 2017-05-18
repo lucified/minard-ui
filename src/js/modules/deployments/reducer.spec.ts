@@ -210,6 +210,7 @@ describe('Deployments reducer', () => {
       expect(newDeployment.comments).to.deep.equal([]);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
+
     it('should decrease the commentCount', () => {
       const oldDeployment: Deployment = { ...stateWithExistingEntity['7'] as Deployment };
       const action = removeCommentFromDeployment('7', 'existingComment');
@@ -219,12 +220,14 @@ describe('Deployments reducer', () => {
       expect(newDeployment.commentCount).to.equal(0);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
+
     it('should do nothing if the comment does not exist', () => {
       const action = removeCommentFromDeployment('8', 'notExist');
       const newState = reducer(stateWithoutExistingEntity, action);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
     });
+
     it('should do nothing if the deployment does not exist', () => {
       const action = removeCommentFromDeployment('notExist', 'comment');
       const newState = reducer(stateWithoutExistingEntity, action);
@@ -241,6 +244,7 @@ describe('Deployments reducer', () => {
       expect(newDeployment.comments).to.deep.equal(action.comments);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
+
     it('should set the correct commentCount', () => {
       const oldDeployment: Deployment = { ...stateWithExistingEntity['7'] as Deployment };
       const action = setCommentsForDeployment('7', ['comment1', 'comment2']);
@@ -250,6 +254,7 @@ describe('Deployments reducer', () => {
       expect(newDeployment.commentCount).to.equal(2);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
+
     it('should set the comments if they do not already exist', () => {
       const action = setCommentsForDeployment('8', ['comment1', 'comment2']);
       const newState = reducer(stateWithoutExistingEntity, action);
@@ -257,6 +262,7 @@ describe('Deployments reducer', () => {
       expect(newDeployment.comments).to.deep.equal(action.comments);
       expect(newState).to.not.equal(stateWithoutExistingEntity);
     });
+
     it('should do nothing if the deployment does not exist', () => {
       const action = setCommentsForDeployment('notExist', ['comment1', 'comment2']);
       const newState = reducer(stateWithoutExistingEntity, action);
