@@ -51,33 +51,6 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
       logMessage('Fetching failed! Not replacing existing entity.', { action });
 
       return state;
-    case ADD_BRANCHES_TO_PROJECT:
-      const { id: projectId, branches } = action as AddBranchesToProjectAction;
-      project = state[projectId];
-
-      if (project && !isFetchError(project)) {
-        let newBranches: string[];
-        if (project.branches && !isFetchError(project.branches) && project.branches.length > 0) {
-          newBranches = uniq(branches.concat(project.branches));
-
-          if (xor(project.branches, newBranches).length === 0) {
-            // Branches already exist
-            return state;
-          }
-        } else {
-          newBranches = branches;
-        }
-
-        return {
-          ...state,
-          [projectId]: {
-            ...project,
-            branches: newBranches,
-          },
-        };
-      }
-
-      return state;
     case Requests.actions.Branches.LoadBranchesForProject.FAILURE.type:
       const fetchError = action as FetchError;
       project = state[fetchError.id];
@@ -103,6 +76,33 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
       }
 
       return state;
+    case ADD_BRANCHES_TO_PROJECT:
+      const { id: projectId, branches } = action as AddBranchesToProjectAction;
+      project = state[projectId];
+
+      if (project && !isFetchError(project)) {
+        let newBranches: string[];
+        if (project.branches && !isFetchError(project.branches) && project.branches.length > 0) {
+          newBranches = uniq(project.branches.concat(branches));
+
+          if (xor(project.branches, newBranches).length === 0) {
+            // Branches already exist
+            return state;
+          }
+        } else {
+          newBranches = branches;
+        }
+
+        return {
+          ...state,
+          [projectId]: {
+            ...project,
+            branches: newBranches,
+          },
+        };
+      }
+
+      return state;
     case UPDATE_PROJECT:
       const updateProjectAction = action as UpdateProjectAction;
       id = updateProjectAction.id;
@@ -110,15 +110,17 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
 
       if (project && !isFetchError(project)) {
         const { name, description, repoUrl } = updateProjectAction;
-        return {
-          ...state,
-          [id]: {
-            ...project,
-            name,
-            description,
-            repoUrl,
-          },
-        };
+        if (project.name !== name || project.description !== description || project.repoUrl !== repoUrl) {
+          return {
+            ...state,
+            [id]: {
+              ...project,
+              name,
+              description,
+              repoUrl,
+            },
+          };
+        }
       }
 
       return state;
@@ -148,10 +150,8 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
       project = state[id];
 
       if (project && !isFetchError(project)) {
-        if (xor(
-          storeAuthorsAction.authors.map(user => user.email),
-          project.activeUsers.map(user => user.email),
-        ).length === 0) {
+        const combinedAuthors = unionBy(project.activeUsers, action.authors, (user: ProjectUser) => user.email);
+        if (combinedAuthors.length === project.activeUsers.length) {
           // All users already included
           return state;
         } else {
@@ -159,7 +159,7 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
             ...state,
             [id]: {
               ...project,
-              activeUsers: unionBy(action.authors, project.activeUsers, (user: ProjectUser) => user.email),
+              activeUsers: combinedAuthors,
             },
           };
         }
