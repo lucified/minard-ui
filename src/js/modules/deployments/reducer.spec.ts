@@ -50,7 +50,7 @@ describe('Deployments reducer', () => {
     expect(reducer(undefined as any, { type: 'foobar' })).to.deep.equal({});
   });
 
-  describe('storeCommits', () => {
+  describe('storeDeployments', () => {
     const newDeployments: DeploymentState = {
       7: {
         id: '7',
@@ -92,7 +92,7 @@ describe('Deployments reducer', () => {
     });
   });
 
-  describe('failed fetch commit request', () => {
+  describe('failed fetch deployment request', () => {
     const failedRequestAction: FetchError = {
       id: '7',
       type: Requests.actions.Deployments.LoadDeployment.FAILURE.type,
@@ -122,7 +122,7 @@ describe('Deployments reducer', () => {
     });
   });
 
-  describe('failed fetch comments for commit request', () => {
+  describe('failed fetch comments for deployment request', () => {
     const failedRequestAction: FetchError = {
       id: '7',
       type: Requests.actions.Comments.LoadCommentsForDeployment.FAILURE.type,
