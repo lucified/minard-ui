@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
+import { CLEAR_STORED_DATA } from '../user';
 import reducer from './reducer';
 import { SelectedState } from './types';
 
@@ -152,5 +153,15 @@ describe('Selected reducer', () => {
 
     expect(endState).to.deep.equal(expectedState);
     expect(endState).to.not.equal(initialState);
+  });
+
+  it(`clears data on ${CLEAR_STORED_DATA}`, () => {
+    const initialState: SelectedState = {
+      project: 'p2',
+      branch: 'b',
+      showAll: true,
+    };
+    expect(reducer(initialState, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
   });
 });
