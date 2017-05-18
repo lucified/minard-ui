@@ -6,7 +6,7 @@ import { clearProjectDeletionErrors, clearSignupError, SIGNUP_ERROR, signupError
 import reducer from './reducer';
 import { ErrorState } from './types';
 
-describe.only('Errors reducer', () => {
+describe('Errors reducer', () => {
   it('adds error to an empty initial state', () => {
     const action = Requests.actions.Projects.LoadAllProjects.FAILURE.actionCreator(
       'projects fetch error',
