@@ -33,7 +33,7 @@ const reducer: Reducer<RequestsState> = (state = initialState, action: any) => {
     case Comments.LoadCommentsForDeployment.REQUEST.type:
     case Comments.DeleteComment.REQUEST.type:
     case User.LoadTeamInformation.REQUEST.type:
-    case ALL_ACTIVITIES_REQUESTED:
+    case ALL_ACTIVITIES_REQUESTED: // Note: How are these two cleared?
     case ALL_ACTIVITIES_REQUESTED_FOR_PROJECT:
       return state.concat(action);
 
