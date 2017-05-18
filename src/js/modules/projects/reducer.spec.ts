@@ -18,7 +18,7 @@ import {
 import reducer from './reducer';
 import { Project, ProjectState, ProjectUser } from './types';
 
-describe.only('Projects reducer', () => {
+describe('Projects reducer', () => {
   const newProjects: ProjectState = {
     1: {
       id: '1',
