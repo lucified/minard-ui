@@ -16,12 +16,24 @@ import {
   UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT,
   UPDATE_PROJECT,
 } from './actions';
-import * as t from './types';
+import {
+  AddBranchesToProjectAction,
+  Project,
+  ProjectState,
+  ProjectUser,
+  RemoveBranchAction,
+  RemoveProjectAction,
+  StoreAuthorsToProjectAction,
+  StoreProjectsAction,
+  UpdateLatestActivityTimestampAction,
+  UpdateLatestDeployedCommitAction,
+  UpdateProjectAction,
+} from './types';
 
-const initialState: t.ProjectState = {};
+const initialState: ProjectState = {};
 
-const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => {
-  let project: t.Project | FetchError;
+const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
+  let project: Project | FetchError;
   let id: string;
 
   switch (action.type) {
@@ -40,7 +52,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case ADD_BRANCHES_TO_PROJECT:
-      const { id: projectId, branches } = action as t.AddBranchesToProjectAction;
+      const { id: projectId, branches } = action as AddBranchesToProjectAction;
       project = state[projectId];
 
       if (project && !isFetchError(project)) {
@@ -84,15 +96,15 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
       return state;
     case Requests.actions.Projects.DeleteProject.SUCCESS.type:
     case REMOVE_PROJECT:
-      const deleteAction = action as DeleteError | t.RemoveProjectAction;
+      const deleteAction = action as DeleteError | RemoveProjectAction;
       id = deleteAction.id;
       if (state[id]) {
-        return omit<t.ProjectState, t.ProjectState>(state, id);
+        return omit<ProjectState, ProjectState>(state, id);
       }
 
       return state;
     case UPDATE_PROJECT:
-      const updateProjectAction = action as t.UpdateProjectAction;
+      const updateProjectAction = action as UpdateProjectAction;
       id = updateProjectAction.id;
       project = state[id];
 
@@ -111,9 +123,9 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case STORE_PROJECTS:
-      const projects = (action as t.StoreProjectsAction).entities;
+      const projects = (action as StoreProjectsAction).entities;
       if (projects && projects.length > 0) {
-        const newProjects = projects.reduce<t.ProjectState>((obj, newProject) => {
+        const newProjects = projects.reduce<ProjectState>((obj, newProject) => {
           // If existing project has branches, store those
           const existingProject = state[newProject.id];
           if (existingProject && !isFetchError(existingProject) && existingProject.branches) {
@@ -131,7 +143,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case STORE_AUTHORS_TO_PROJECT:
-      const storeAuthorsAction = action as t.StoreAuthorsToProjectAction;
+      const storeAuthorsAction = action as StoreAuthorsToProjectAction;
       id = storeAuthorsAction.id;
       project = state[id];
 
@@ -147,7 +159,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
             ...state,
             [id]: {
               ...project,
-              activeUsers: unionBy(action.authors, project.activeUsers, (user: t.ProjectUser) => user.email),
+              activeUsers: unionBy(action.authors, project.activeUsers, (user: ProjectUser) => user.email),
             },
           };
         }
@@ -155,7 +167,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT:
-      const updateActivityTimestampAction = action as t.UpdateLatestActivityTimestampAction;
+      const updateActivityTimestampAction = action as UpdateLatestActivityTimestampAction;
       id = updateActivityTimestampAction.id;
       project = state[id];
 
@@ -176,7 +188,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_PROJECT:
-      const updateLatestCommitAction = action as t.UpdateLatestDeployedCommitAction;
+      const updateLatestCommitAction = action as UpdateLatestDeployedCommitAction;
       id = updateLatestCommitAction.id;
       project = state[id];
 
@@ -197,7 +209,7 @@ const reducer: Reducer<t.ProjectState> = (state = initialState, action: any) => 
 
       return state;
     case REMOVE_BRANCH_FROM_PROJECT:
-      const removeBranchAction = action as t.RemoveBranchAction;
+      const removeBranchAction = action as RemoveBranchAction;
       id = removeBranchAction.id;
       project = state[id];
 

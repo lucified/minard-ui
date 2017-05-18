@@ -4,16 +4,16 @@ import Requests from '../requests';
 
 import { CLEAR_STORED_DATA } from '../user';
 import { CLEAR_PROJECT_DELETION_ERRORS, CLEAR_SIGNUP_ERROR, SIGNUP_ERROR } from './actions';
-import * as t from './types';
+import { ErrorState, MinardError } from './types';
 
-const initialState: t.ErrorState = [];
+const initialState: ErrorState = [];
 
-const returnFilteredStateIfChanged = (state: t.ErrorState, predicate: (error: t.Error) => boolean): t.ErrorState => {
+const returnFilteredStateIfChanged = (state: ErrorState, predicate: (error: MinardError) => boolean): ErrorState => {
   const filteredState = state.filter(predicate);
   return filteredState.length !== state.length ? filteredState : state;
 };
 
-const reducer: Reducer<t.ErrorState> = (state = initialState, action: any) => {
+const reducer: Reducer<ErrorState> = (state = initialState, action: any) => {
   switch (action.type) {
     case Requests.actions.Projects.LoadAllProjects.FAILURE.type:
     case Requests.actions.Activities.LoadAllActivities.FAILURE.type:

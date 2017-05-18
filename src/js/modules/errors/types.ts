@@ -1,5 +1,5 @@
 // State
-export type ErrorState = Error[];
+export type ErrorState = MinardError[];
 
 export interface ClearProjectDeletionErrorAction {
   type: 'ERRORS/CLEAR_PROJECT_DELETION_ERROR';
@@ -23,7 +23,7 @@ interface GenericError {
   unauthorized?: boolean;
 }
 
-export type Error = FetchError | FetchCollectionError | CreateError | DeleteError | EditError | SignupError;
+export type MinardError = FetchError | FetchCollectionError | CreateError | DeleteError | EditError | SignupError;
 
 export interface FetchError extends GenericError {
   id: string;
