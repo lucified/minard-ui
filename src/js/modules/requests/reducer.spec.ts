@@ -1,251 +1,93 @@
 import { expect } from 'chai';
 
-import { Activities, Commits, Projects } from './actions';
+import { CLEAR_STORED_DATA } from '../user/index';
+
+import {
+  Activities,
+  ALL_ACTIVITIES_REQUESTED,
+  ALL_ACTIVITIES_REQUESTED_FOR_PROJECT,
+  Comments,
+  Commits,
+  Projects,
+  User,
+} from './actions';
 import reducer from './reducer';
 import { RequestsState } from './types';
 
 describe('Requests reducer', () => {
-  describe('requests module refactoring', () => {
-    it('TODO: review these tests');
-  });
+  describe('request started', () => {
+    const requestStartedTypes = [
+      Projects.LoadAllProjects.REQUEST.type, Projects.DeleteProject.REQUEST.type,
+      Activities.LoadAllActivities.REQUEST.type, Activities.LoadActivitiesForProject.REQUEST.type,
+      Commits.LoadCommitsForBranch.REQUEST.type, Comments.LoadCommentsForDeployment.REQUEST.type,
+      Comments.DeleteComment.REQUEST.type, User.LoadTeamInformation.REQUEST.type,
+      ALL_ACTIVITIES_REQUESTED, ALL_ACTIVITIES_REQUESTED_FOR_PROJECT,
+    ];
 
-  describe('fetch all projects', () => {
-    it('stores request information', () => {
-      const initialState: RequestsState = [];
-      const action = {
-        type: Projects.LoadAllProjects.REQUEST.type,
-      };
-      const expectedState = [action];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request succeeds', () => {
-      const initialState: RequestsState = [{
-        type: Projects.LoadAllProjects.REQUEST.type,
-      }];
-      const action = {
-        type: Projects.LoadAllProjects.SUCCESS.type,
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request fails', () => {
-      const initialState: RequestsState = [{
-        type: Projects.LoadAllProjects.REQUEST.type,
-      }];
-      const action = {
-        type: Projects.LoadAllProjects.FAILURE.type,
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
+    requestStartedTypes.forEach(type => {
+      it(`stores information about started request for ${type}`, () => {
+        const initialState: RequestsState = [];
+        const action = { type }; // NOTE: this is not the full action
+        const newState = reducer(initialState, action);
+        expect(newState).to.contain(action);
+        expect(newState).to.not.equal(initialState);
+      });
     });
   });
 
-  describe('fetch all activities', () => {
-    it('stores request information', () => {
-      const initialState: RequestsState = [];
-      const action = {
-        type: Activities.LoadAllActivities.REQUEST.type,
-      };
-      const expectedState = [action];
+  describe('request completed', () => {
+    const entityTypesWithoutId = [Projects.LoadAllProjects, Activities.LoadAllActivities, User.LoadTeamInformation];
 
-      const endState = reducer(initialState, action);
+    entityTypesWithoutId.forEach(entityType => {
+      const initialState: RequestsState = [{ type: entityType.REQUEST.type }];
 
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
+      it(`clears request information on successful completion (${entityType.SUCCESS.type})`, () => {
+        const action = entityType.SUCCESS.actionCreator();
+        const newState = reducer(initialState, action);
+        expect(newState).to.deep.equal([]);
+        expect(newState).to.not.equal(initialState);
+      });
+
+      it(`clears request information on failed completion (${entityType.FAILURE.type})`, () => {
+        const action = entityType.FAILURE.actionCreator('error');
+        const newState = reducer(initialState, action);
+        expect(newState).to.deep.equal([]);
+        expect(newState).to.not.equal(initialState);
+      });
     });
 
-    it('removes request information once request succeeds', () => {
-      const initialState: RequestsState = [{
-        type: Activities.LoadAllActivities.REQUEST.type,
-      }];
-      const action = {
-        type: Activities.LoadAllActivities.SUCCESS.type,
-      };
-      const expectedState: any[] = [];
+    const entityTypesWithIds = [
+      Projects.DeleteProject, Activities.LoadActivitiesForProject, Commits.LoadCommitsForBranch,
+      Comments.LoadCommentsForDeployment, Comments.DeleteComment,
+    ];
 
-      const endState = reducer(initialState, action);
+    entityTypesWithIds.forEach(entityType => {
+      const id = 'id';
+      const initialState: RequestsState = [{ type: entityType.REQUEST.type, id }];
 
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
+      it(`clears request information on successful completion (${entityType.SUCCESS.type})`, () => {
+        const action = entityType.SUCCESS.actionCreator(id);
+        const newState = reducer(initialState, action);
+        expect(newState).to.deep.equal([]);
+        expect(newState).to.not.equal(initialState);
+      });
 
-    it('removes request information once request fails', () => {
-      const initialState: RequestsState = [{
-        type: Activities.LoadAllActivities.REQUEST.type,
-      }];
-      const action = {
-        type: Activities.LoadAllActivities.FAILURE.type,
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-  });
-
-  describe('fetch all activities for project', () => {
-    it('stores request information', () => {
-      const initialState: RequestsState = [];
-      const action = {
-        type: Activities.LoadActivitiesForProject.REQUEST.type,
-        id: 'foo',
-      };
-      const expectedState = [action];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request succeeds', () => {
-      const initialState: RequestsState = [{
-        type: Activities.LoadActivitiesForProject.REQUEST.type,
-        id: 'foo',
-      }];
-      const action = {
-        type: Activities.LoadActivitiesForProject.SUCCESS.type,
-        id: 'foo',
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request fails', () => {
-      const initialState: RequestsState = [{
-        type: Activities.LoadActivitiesForProject.REQUEST.type,
-        id: 'foo',
-      }];
-      const action = {
-        type: Activities.LoadActivitiesForProject.FAILURE.type,
-        id: 'foo',
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
+      it(`clears request information on failed completion (${entityType.FAILURE.type})`, () => {
+        const action = entityType.FAILURE.actionCreator(id, 'error');
+        const newState = reducer(initialState, action);
+        expect(newState).to.deep.equal([]);
+        expect(newState).to.not.equal(initialState);
+      });
     });
   });
 
-  describe('fetch all commits for branch', () => {
-    it('stores request information', () => {
-      const initialState: RequestsState = [];
-      const action = {
-        type: Commits.LoadCommitsForBranch.REQUEST.type,
-        id: 'foo',
-      };
-      const expectedState = [action];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request succeeds', () => {
-      const initialState: RequestsState = [{
-        type: Commits.LoadCommitsForBranch.REQUEST.type,
-        id: 'foo',
-      }];
-      const action = {
-        type: Commits.LoadCommitsForBranch.SUCCESS.type,
-        id: 'foo',
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request fails', () => {
-      const initialState: RequestsState = [{
-        type: Commits.LoadCommitsForBranch.REQUEST.type,
-        id: 'foo',
-      }];
-      const action = {
-        type: Commits.LoadCommitsForBranch.FAILURE.type,
-        id: 'foo',
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-  });
-
-  describe('delete project', () => {
-    it('stores request information', () => {
-      const initialState: RequestsState = [];
-      const action = {
-        type: Projects.DeleteProject.REQUEST.type,
-        id: 'foo',
-      };
-      const expectedState = [action];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request succeeds', () => {
-      const initialState: RequestsState = [{
-        type: Projects.DeleteProject.REQUEST.type,
-        id: 'foo',
-      }];
-      const action = {
-        type: Projects.DeleteProject.SUCCESS.type,
-        id: 'foo',
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
-
-    it('removes request information once request fails', () => {
-      const initialState: RequestsState = [{
-        type: Projects.DeleteProject.REQUEST.type,
-        id: 'foo',
-      }];
-      const action = {
-        type: Projects.DeleteProject.FAILURE.type,
-        id: 'foo',
-      };
-      const expectedState: any[] = [];
-
-      const endState = reducer(initialState, action);
-
-      expect(endState).to.deep.equal(expectedState);
-      expect(endState).to.not.equal(initialState);
-    });
+  it(`clears data on ${CLEAR_STORED_DATA}`, () => {
+    const initialState: RequestsState = [{
+      type: Projects.DeleteProject.REQUEST.type,
+      id: 'foo',
+    }];
+    const action = { type: CLEAR_STORED_DATA };
+    expect(reducer(initialState, action)).to.deep.equal([]);
+    expect(reducer(undefined as any, action)).to.deep.equal([]);
   });
 });
