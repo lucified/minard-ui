@@ -6,7 +6,7 @@ import { setConnectionState } from './actions';
 import reducer from './reducer';
 import { ConnectionState, StreamingState } from './types';
 
-describe.only('Streaming reducer', () => {
+describe('Streaming reducer', () => {
   const initialState: StreamingState = {
     state: ConnectionState.INITIAL_CONNECT,
   };

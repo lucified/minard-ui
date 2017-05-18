@@ -161,7 +161,13 @@ describe('Selected reducer', () => {
       branch: 'b',
       showAll: true,
     };
-    expect(reducer(initialState, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    const action = { type: CLEAR_STORED_DATA };
+    const expectedState: SelectedState = {
+      project: null,
+      branch: null,
+      showAll: false,
+    };
+    expect(reducer(initialState, action)).to.deep.equal(expectedState);
+    expect(reducer(undefined as any, action)).to.deep.equal(expectedState);
   });
 });
