@@ -10,12 +10,6 @@ export interface ClearSignupErrorAction {
   type: 'ERRORS/CLEAR_SIGNUP_ERROR';
 }
 
-export interface SignupErrorAction {
-  type: 'ERRORS/SIGNUP_ERROR';
-  error: string;
-  details?: string;
-}
-
 // Error types
 interface GenericError {
   // The type of action that produced the error
@@ -29,7 +23,7 @@ interface GenericError {
   unauthorized?: boolean;
 }
 
-export type Error = FetchError | FetchCollectionError | CreateError | DeleteError | EditError;
+export type Error = FetchError | FetchCollectionError | CreateError | DeleteError | EditError | SignupError;
 
 export interface FetchError extends GenericError {
   id: string;
@@ -67,4 +61,6 @@ export interface EditError extends GenericError {
   id: string;
 }
 
-export interface SignupError extends GenericError {}
+export interface SignupError extends GenericError {
+  type: 'ERRORS/SIGNUP_ERROR';
+}
