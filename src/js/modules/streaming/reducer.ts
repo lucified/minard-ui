@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 
+import { CLEAR_STORED_DATA } from '../user';
 import { SET_CONNECTION_STATE } from './actions';
 import { ConnectionState, SetConnectionStateAction, StreamingState } from './types';
 
@@ -14,6 +15,8 @@ const reducer: Reducer<StreamingState> = (state = initialState, action: any) => 
       }
 
       return state;
+    case CLEAR_STORED_DATA:
+      return initialState;
     default:
       return state;
   }
