@@ -5,7 +5,6 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { clearStoredCredentials } from '../../api/auth';
 import Requests from '../../modules/requests';
 import User, { Team } from '../../modules/user';
 import { StateTree } from '../../reducers';
@@ -55,10 +54,6 @@ class LoginView extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
-    // Remove stored credentials. E.g. if there is an old access token stored that
-    // has expired.
-    clearStoredCredentials();
-
     this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN, {
       // oidcConformant is still in preview stage, which is why it is not documented
       // or found in the typings. Remove the `as any` below once it's included.
