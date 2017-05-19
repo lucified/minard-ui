@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 import { Commit } from '../commits';
 import { FetchError } from '../errors';
 
@@ -23,49 +21,54 @@ export interface BranchState {
 }
 
 // Actions
-// LOAD_BRANCH
-export interface LoadBranchAction extends Action {
+export interface LoadBranchAction {
+  type: 'BRANCHES/LOAD_BRANCH';
   id: string;
 }
 
-// LOAD_BRANCHES_FOR_PROJECT
-export interface LoadBranchesForProjectAction extends Action {
+export interface FetchBranchAction {
+  type: 'BRANCHES/FETCH_BRANCH';
   id: string;
 }
 
-// ADD_COMMITS_TO_BRANCH
-export interface AddCommitsToBranchAction extends Action {
+export interface LoadBranchesForProjectAction {
+  type: 'BRANCHES/LOAD_BRANCHES_FOR_PROJECT';
+  id: string;
+}
+
+export interface AddCommitsToBranchAction {
+  type: 'BRANCHES/ADD_COMMITS_TO_BRANCH';
   id: string;
   commits: string[];
   requestedCount: number;
 }
 
-// STORE_BRANCHES
-export interface StoreBranchesAction extends Action {
+export interface StoreBranchesAction {
+  type: 'BRANCHES/STORE_BRANCHES';
   entities: Branch[];
 }
 
-// REMOVE_BRANCH
-export interface RemoveBranchAction extends Action {
+export interface RemoveBranchAction {
+  type: 'BRANCHES/REMOVE_BRANCH';
   id: string;
 }
 
-// UPDATE_BRANCH_WITH_COMMITS
-export interface UpdateBranchWithCommitsAction extends Action {
+export interface UpdateBranchWithCommitsAction {
+  type: 'BRANCHES/UPDATE_BRANCH_WITH_COMMITS';
   id: string;
   latestCommitId: string;
   newCommits: Commit[];
   parentCommitIds: string[];
 }
 
-// UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH
-export interface UpdateLatestDeployedCommitAction extends Action {
+export interface UpdateLatestDeployedCommitAction {
+  type: 'BRANCHES/UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH';
   id: string;
   commit: string;
 }
 
-// UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH
-export interface UpdateLatestActivityTimestampAction extends Action {
+export interface UpdateLatestActivityTimestampAction {
+  type: 'BRANCHES/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH';
   id: string;
   timestamp: number;
 }

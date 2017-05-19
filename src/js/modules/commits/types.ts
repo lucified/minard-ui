@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 import { FetchError } from '../errors';
 import { User } from '../types';
 
@@ -19,24 +17,30 @@ export interface CommitState {
 }
 
 // Actions
-// LOAD_COMMIT
-export interface LoadCommitAction extends Action {
+export interface LoadCommitAction {
+  type: 'COMMITS/LOAD_COMMIT';
   id: string;
 }
 
-// LOAD_COMMITS_FOR_BRANCH
-export interface LoadCommitsForBranchAction extends Action {
+export interface FetchCommitAction {
+  type: 'COMMITS/FETCH_COMMIT';
+  id: string;
+}
+
+export interface LoadCommitsForBranchAction {
+  type: 'COMMITS/LOAD_COMMITS_FOR_BRANCH';
   id: string;
   count: number;
   until?: number;
 }
 
-// STORE_COMMITS
-export interface StoreCommitsAction extends Action {
+export interface StoreCommitsAction {
+  type: 'COMMITS/STORE_COMMITS';
   entities: Commit[];
 }
 
-export interface AddDeploymentToCommitAction extends Action {
+export interface AddDeploymentToCommitAction {
+  type: 'COMMITS/ADD_DEPLOYMENT_TO_COMMIT';
   id: string;
   deployment: string;
 }

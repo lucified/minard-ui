@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 export enum ConnectionState {
   OPEN,
   INITIAL_CONNECT,
@@ -13,7 +11,8 @@ export interface StreamingState {
   error?: string;
 }
 
-export interface SetConnectionStateAction extends Action {
+export interface SetConnectionStateAction {
+  type: 'STREAMING/SET_CONNECTION_STATE';
   state: ConnectionState;
   error?: string;
 }

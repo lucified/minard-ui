@@ -1,4 +1,4 @@
 --require ts-node/register
 --require mock-local-storage
 --watch-extensions ts
-test/**/*.spec.ts
+./**/*.spec.ts

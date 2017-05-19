@@ -1,5 +1,3 @@
-import { Action } from 'redux';
-
 import { FetchError } from '../errors';
 import { User } from '../types';
 
@@ -52,29 +50,35 @@ export interface DeploymentState {
 }
 
 // Actions
-// LOAD_DEPLOYMENT
-export interface LoadDeploymentAction extends Action {
+export interface LoadDeploymentAction {
+  type: 'DEPLOYMENTS/LOAD_DEPLOYMENT';
   id: string;
 }
 
-// STORE_DEPLOYMENTS
-export interface StoreDeploymentsAction extends Action {
+export interface FetchDeploymentAction {
+  type: 'DEPLOYMENTS/FETCH_DEPLOYMENT';
+  id: string;
+}
+
+export interface StoreDeploymentsAction {
+  type: 'DEPLOYMENTS/STORE_DEPLOYMENTS';
   entities: Deployment[];
 }
 
-// ADD_COMMENTS_TO_DEPLOYMENT
-export interface AddCommentsToDeploymentAction extends Action {
+export interface AddCommentsToDeploymentAction {
+  type: 'DEPLOYMENTS/ADD_COMMENTS_TO_DEPLOYMENT';
   id: string;
   comments: string[];
 }
 
-// SET_COMMENTS_FOR_DEPLOYMENT
-export interface SetCommentsForDeploymentAction extends Action {
+export interface SetCommentsForDeploymentAction {
+  type: 'DEPLOYMENTS/SET_COMMENTS_FOR_DEPLOYMENT';
   id: string;
   comments: string[];
 }
 
-export interface RemoveCommentFromDeploymentAction extends Action {
+export interface RemoveCommentFromDeploymentAction {
+  type: 'DEPLOYMENTS/REMOVE_COMMENT_FROM_DEPLOYMENT';
   id: string;
   comment: string;
 }
