@@ -157,7 +157,7 @@ class DeploymentView extends React.Component<Props, void> {
           preview={preview}
           buildLogSelected={!showPreview}
           highlightComment={commentId}
-          isAuthenticatedUser={isUserLoggedIn}
+          isAuthenticatedUser={isUserLoggedIn} // TODO: This should check whether the preview belongs to the user's team
           userEmail={userEmail}
           linkDetails={{ entityType, id, token }}
         />
