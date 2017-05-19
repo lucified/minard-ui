@@ -6,7 +6,7 @@ import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 
 import Requests from '../../modules/requests';
-import User, { Team } from '../../modules/user';
+import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 import ErrorDialog from '../common/error-dialog';
 import Spinner from '../common/spinner';
@@ -16,8 +16,8 @@ const minardLogo = require('../../../../static/minard-logo-auth0.png');
 const styles = require('./index.scss');
 
 interface GeneratedStateProps {
-  isLoadingTeamInformation: boolean;
-  team?: Team;
+  isLoggingIn: boolean;
+  isUserLoggedIn: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -127,10 +127,10 @@ class LoginView extends React.Component<Props, State> {
 
   public render() {
     const { loadingStatus } = this.state;
-    const { team, isLoadingTeamInformation } = this.props;
+    const { isUserLoggedIn, isLoggingIn } = this.props;
 
     if (loadingStatus === LoadingStatus.BACKEND) {
-      if (!team && !isLoadingTeamInformation) {
+      if (!isUserLoggedIn && !isLoggingIn) {
         return (
           <div>
             <Header />
@@ -161,8 +161,8 @@ class LoginView extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
-  team: User.selectors.getTeam(state),
+  isLoggingIn: Requests.selectors.isLoggingIn(state),
+  isUserLoggedIn: User.selectors.isUserLoggedIn(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({

@@ -27,7 +27,7 @@ interface GeneratedDispatchProps {
 
 interface GeneratedStateProps {
   isUserLoggedIn: boolean;
-  isLoadingTeamInformation: boolean;
+  isLoggingIn: boolean;
   team?: Team;
 }
 
@@ -35,9 +35,9 @@ type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
-    const { loadAllProjects, isUserLoggedIn, redirectToLogin, team } = this.props;
+    const { loadAllProjects, isUserLoggedIn, isLoggingIn, redirectToLogin, team } = this.props;
 
-    if (!isUserLoggedIn) {
+    if (!isUserLoggedIn && !isLoggingIn) {
       redirectToLogin();
     } else if (team) {
       loadAllProjects(team.id);
@@ -57,10 +57,10 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 
   public render() {
-    const { team, isLoadingTeamInformation } = this.props;
+    const { team, isLoggingIn } = this.props;
 
     if (!team) {
-      if (isLoadingTeamInformation) {
+      if (isLoggingIn) {
         return (
           <div>
             <Header />
@@ -104,7 +104,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   isUserLoggedIn: User.selectors.isUserLoggedIn(state),
-  isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
+  isLoggingIn: Requests.selectors.isLoggingIn(state),
   team: User.selectors.getTeam(state),
 });
 

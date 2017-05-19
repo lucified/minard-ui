@@ -34,7 +34,7 @@ declare const EventSource: any;
 interface GeneratedStateProps {
   team?: Team;
   deployment?: Deployment | FetchError;
-  isLoadingTeamInformation: boolean;
+  isLoggingIn: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -362,22 +362,22 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team, deployment, isLoadingTeamInformation } = this.props;
+    const { team, deployment, isLoggingIn } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
         this.restartConnection({ teamId: team.id });
-      } else if (!isLoadingTeamInformation && deployment && !isFetchError(deployment)) {
+      } else if (!isLoggingIn && deployment && !isFetchError(deployment)) {
         this.restartConnection({ deployment });
       }
     }
   }
 
-  public componentWillReceiveProps({ team, setConnectionState, deployment, isLoadingTeamInformation }: Props) {
+  public componentWillReceiveProps({ team, setConnectionState, deployment, isLoggingIn }: Props) {
     const {
       team: previousTeam,
       deployment: previousDeployment,
-      isLoadingTeamInformation: wasLoadingTeamInformation,
+      isLoggingIn: wasLoadingTeamInformation,
     } = this.props;
 
     if (streamingAPIUrl) {
@@ -387,7 +387,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
           this.restartConnection({ teamId: team.id });
         }
       } else if (
-        !isLoadingTeamInformation && // Only fall back to deployment-only stream if we're not logged/logging in.
+        !isLoggingIn && // Only fall back to deployment-only stream if we're not logged/logging in.
         deployment &&
         !isFetchError(deployment) &&
         (wasLoadingTeamInformation || !previousDeployment || deployment.id !== previousDeployment.id)
@@ -496,7 +496,7 @@ const mapStateToProps = (state: StateTree, ownProps: Props): GeneratedStateProps
   return {
     team: User.selectors.getTeam(state),
     deployment,
-    isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
+    isLoggingIn: Requests.selectors.isLoggingIn(state),
   };
 };
 
