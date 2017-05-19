@@ -7,6 +7,7 @@ import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import Previews, { EntityType, isEntityType, Preview } from '../../modules/previews';
+import Requests from '../../modules/requests';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
@@ -32,6 +33,7 @@ interface GeneratedStateProps {
   commit?: Commit | FetchError;
   deployment?: Deployment | FetchError;
   isUserLoggedIn: boolean;
+  isLoggingIn: boolean;
   userEmail?: string;
 }
 
@@ -50,20 +52,40 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = this.props;
+    const {
+      loadPreviewAndComments,
+      isUserLoggedIn,
+      isLoggingIn,
+      match: {
+        params: {
+          entityType,
+          token,
+          id,
+        },
+      },
+    } = this.props;
 
     if (!isEntityType(entityType)) {
       console.error('Unknown preview type!');
       return;
     }
 
-    loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
+    if (
+      isUserLoggedIn ||
+      (!isUserLoggedIn && !isLoggingIn) // A non-Minard user viewing an open deployment
+    ) {
+      loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
+    }
   }
 
   public componentWillReceiveProps(nextProps: Props) {
     const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = nextProps;
 
-    if (id !== this.props.match.params.id || entityType !== this.props.match.params.entityType) {
+    if (
+      (isUserLoggedIn && !this.props.isUserLoggedIn) || // User logged in (i.e. fetched team information) successfully
+      id !== this.props.match.params.id || // Switched to another deployment
+      entityType !== this.props.match.params.entityType
+    ) {
       if (!isEntityType(entityType)) {
         console.error('Unknown preview type!');
         return;
@@ -93,7 +115,7 @@ class DeploymentView extends React.Component<Props, void> {
           commentId,
         },
       },
-  } = this.props;
+    } = this.props;
 
     if (!preview) {
       return <div className={styles.blank} />;
@@ -165,6 +187,7 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     commit,
     deployment,
     isUserLoggedIn: User.selectors.isUserLoggedIn(state),
+    isLoggingIn: Requests.selectors.isLoggingIn(state),
     userEmail: User.selectors.getUserEmail(state),
   };
 };
