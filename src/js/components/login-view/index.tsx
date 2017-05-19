@@ -4,7 +4,6 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { push } from 'react-router-redux';
 
 import { clearStoredCredentials } from '../../api/auth';
 import Requests from '../../modules/requests';
@@ -23,9 +22,8 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  navigateTo: (url: string) => void;
   login: (email: string, idToken: string, accessToken: string, expiresAt: number) => void;
-  loadTeamInformation: () => void;
+  loadTeamInformation: (redirect?: string) => void;
 }
 
 interface Params {
@@ -99,22 +97,8 @@ class LoginView extends React.Component<Props, State> {
     // TODO: handle this
   }
 
-  public componentWillReceiveProps(nextProps: Props) {
-    const { navigateTo, match: { params: { returnPath } } } = this.props;
-
-    if (nextProps.team) {
-      // For raw deployment URLs
-      if (returnPath && returnPath.match(/^https?:\/\//)) {
-        window.location.href = returnPath;
-        return;
-      }
-
-      navigateTo(returnPath || '/');
-    }
-  }
-
   private onAuthentication(authResult: any) {
-    const { loadTeamInformation, login } = this.props;
+    const { loadTeamInformation, login, match: { params: { returnPath } } } = this.props;
     const { idToken, accessToken, expiresIn } = authResult;
 
     this.lock.getUserInfo(accessToken, (error: Auth0Error, profile: Auth0UserProfile) => {
@@ -129,9 +113,10 @@ class LoginView extends React.Component<Props, State> {
       if (email) {
         // expiresIn is seconds from now
         const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
+        const redirectTarget = (returnPath && decodeURIComponent(returnPath)) || '/';
 
         login(email, idToken, accessToken, expiresAt);
-        loadTeamInformation();
+        loadTeamInformation(redirectTarget);
         this.lock.hide();
         this.setState({ loadingStatus: LoadingStatus.BACKEND });
       } else {
@@ -186,11 +171,10 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  navigateTo: (url: string) => { dispatch(push(url)); },
   login: (email: string, idToken: string, accessToken: string, expiresAt: number) => {
     dispatch(User.actions.login(email, idToken, accessToken, expiresAt));
   },
-  loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
+  loadTeamInformation: (redirect?: string) => { dispatch(User.actions.loadTeamInformation(redirect)); },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

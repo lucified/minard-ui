@@ -20,15 +20,24 @@ import {
 import { LoadTeamInformationAction, LoginAction, RedirectToLoginAction, SignupUserAction } from './types';
 
 export default function createSagas(api: Api) {
-  // User
-  function *loadTeamInformation(_action: LoadTeamInformationAction): IterableIterator<Effect> {
-    yield put(Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator());
+  function *loadTeamInformation(action: LoadTeamInformationAction): IterableIterator<Effect> {
+    const { redirect } = action;
 
     const { response, error, details, unauthorized } = yield call(api.Team.fetch);
 
     if (response) {
       const { id, name, 'invitation-token': invitationToken } = response as ApiTeam;
       yield put(setTeam(String(id), name, invitationToken));
+
+      if (redirect) {
+        // For raw deployment URLs. Cookie has been set by api.Team.fetch.
+        if (redirect.match(/^https?:\/\//)) {
+          window.location.href = redirect;
+        } else {
+          yield put(push(redirect));
+        }
+      }
+
       yield put(Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator());
 
       return true;
