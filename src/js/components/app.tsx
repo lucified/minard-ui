@@ -21,7 +21,7 @@ const styles = require('./app.scss');
 type PassedProps = RouteComponentProps<{}>;
 
 interface GeneratedStateProps {
-  isUserLoggedIn: boolean;
+  hasStoredUserCredentials: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -34,9 +34,9 @@ const RedirectToTeamProjectsView = () => <Redirect to="/projects" />;
 
 class App extends React.Component<Props, void> {
   public componentWillMount() {
-    const { isUserLoggedIn, loadTeamInformation } = this.props;
+    const { hasStoredUserCredentials, loadTeamInformation } = this.props;
 
-    if (isUserLoggedIn) {
+    if (hasStoredUserCredentials) {
       // TODO: team information is now being fetched in three places:
       // - Login View after getting user login information from Auth0
       // - Signup View after getting user information (using the backend's signup endpoint)
@@ -80,7 +80,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
 });
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  isUserLoggedIn: User.selectors.isUserLoggedIn(state),
+  hasStoredUserCredentials: User.selectors.hasStoredUserCredentials(state),
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
