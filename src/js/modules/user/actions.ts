@@ -60,8 +60,9 @@ export const clearStoredData = (): ClearStoredDataAction => ({
 });
 
 export const LOAD_TEAM_INFORMATION = 'USER/LOAD_TEAM_INFORMATION';
-export const loadTeamInformation = (): LoadTeamInformationAction => ({
+export const loadTeamInformation = (redirect?: string): LoadTeamInformationAction => ({
   type: LOAD_TEAM_INFORMATION,
+  redirect,
 });
 
 export const SET_GIT_PASSWORD = 'USER/SET_GIT_PASSWORD';

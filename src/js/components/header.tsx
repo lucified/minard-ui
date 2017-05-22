@@ -74,9 +74,13 @@ class Header extends React.Component<Props, void> {
     if (!isUserLoggedIn) {
       return (
         <section className={styles['header-background']}>
-          <div className={classNames(styles.header, 'row', 'between-xs', 'middle-xs')}>
-            <div className={classNames(styles.logo, 'col-xs')}>
-              <h1 title="Minard" className={styles.minard}>m</h1>
+          <div className="container-fluid">
+            <div className={classNames(styles.header, 'row', 'between-l', 'middle-xs')}>
+              <div className={classNames(styles.logo, 'col-xs')}>
+                <MinardLink homepage>
+                  <img src={minardLogo} />
+                </MinardLink>
+              </div>
             </div>
           </div>
         </section>

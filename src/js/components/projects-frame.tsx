@@ -3,13 +3,12 @@ import { connect, Dispatch } from 'react-redux';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import Projects from '../modules/projects';
-import Requests from '../modules/requests';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
 
+import { logMessage } from '../logger';
 import BranchView from './branch-view';
 import ErrorDialog from './common/error-dialog';
-import Spinner from './common/spinner';
 import Footer from './footer';
 import Header from './header';
 import ProjectView from './project-view';
@@ -22,12 +21,9 @@ type PassedProps = RouteComponentProps<Params>;
 
 interface GeneratedDispatchProps {
   loadAllProjects: (teamId: string) => void;
-  redirectToLogin: () => void;
 }
 
 interface GeneratedStateProps {
-  isUserLoggedIn: boolean;
-  isLoadingTeamInformation: boolean;
   team?: Team;
 }
 
@@ -35,12 +31,15 @@ type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
 class ProjectsFrame extends React.Component<Props, void> {
   public componentWillMount() {
-    const { loadAllProjects, isUserLoggedIn, redirectToLogin, team } = this.props;
+    const { loadAllProjects, team } = this.props;
 
-    if (!isUserLoggedIn) {
-      redirectToLogin();
-    } else if (team) {
+    if (team) {
       loadAllProjects(team.id);
+    } else {
+      // This shouldn't happen.
+      logMessage('Inside ProjectsFrame without a team!');
+
+      console.error('No team information found!');
     }
   }
 
@@ -57,18 +56,9 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 
   public render() {
-    const { team, isLoadingTeamInformation } = this.props;
+    const { team } = this.props;
 
     if (!team) {
-      if (isLoadingTeamInformation) {
-        return (
-          <div>
-            <Header />
-            <Spinner />
-          </div>
-        );
-      }
-
       return (
         <div>
           <Header />
@@ -99,12 +89,9 @@ class ProjectsFrame extends React.Component<Props, void> {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },
-  redirectToLogin: () => { dispatch(User.actions.redirectToLogin()); },
 });
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  isUserLoggedIn: User.selectors.isUserLoggedIn(state),
-  isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
   team: User.selectors.getTeam(state),
 });
 

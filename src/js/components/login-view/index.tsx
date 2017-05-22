@@ -4,11 +4,9 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { push } from 'react-router-redux';
 
-import { clearStoredCredentials } from '../../api/auth';
 import Requests from '../../modules/requests';
-import User, { Team } from '../../modules/user';
+import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 import ErrorDialog from '../common/error-dialog';
 import Spinner from '../common/spinner';
@@ -18,14 +16,13 @@ const minardLogo = require('../../../../static/minard-logo-auth0.png');
 const styles = require('./index.scss');
 
 interface GeneratedStateProps {
-  isLoadingTeamInformation: boolean;
-  team?: Team;
+  isLoggingIn: boolean;
+  isUserLoggedIn: boolean;
 }
 
 interface GeneratedDispatchProps {
-  navigateTo: (url: string) => void;
   login: (email: string, idToken: string, accessToken: string, expiresAt: number) => void;
-  loadTeamInformation: () => void;
+  loadTeamInformation: (redirect?: string) => void;
 }
 
 interface Params {
@@ -57,10 +54,6 @@ class LoginView extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
-    // Remove stored credentials. E.g. if there is an old access token stored that
-    // has expired.
-    clearStoredCredentials();
-
     this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN, {
       // oidcConformant is still in preview stage, which is why it is not documented
       // or found in the typings. Remove the `as any` below once it's included.
@@ -99,22 +92,8 @@ class LoginView extends React.Component<Props, State> {
     // TODO: handle this
   }
 
-  public componentWillReceiveProps(nextProps: Props) {
-    const { navigateTo, match: { params: { returnPath } } } = this.props;
-
-    if (nextProps.team) {
-      // For raw deployment URLs
-      if (returnPath && returnPath.match(/^https?:\/\//)) {
-        window.location.href = returnPath;
-        return;
-      }
-
-      navigateTo(returnPath || '/');
-    }
-  }
-
   private onAuthentication(authResult: any) {
-    const { loadTeamInformation, login } = this.props;
+    const { loadTeamInformation, login, match: { params: { returnPath } } } = this.props;
     const { idToken, accessToken, expiresIn } = authResult;
 
     this.lock.getUserInfo(accessToken, (error: Auth0Error, profile: Auth0UserProfile) => {
@@ -129,9 +108,10 @@ class LoginView extends React.Component<Props, State> {
       if (email) {
         // expiresIn is seconds from now
         const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
+        const redirectTarget = (returnPath && decodeURIComponent(returnPath)) || '/';
 
         login(email, idToken, accessToken, expiresAt);
-        loadTeamInformation();
+        loadTeamInformation(redirectTarget);
         this.lock.hide();
         this.setState({ loadingStatus: LoadingStatus.BACKEND });
       } else {
@@ -147,10 +127,10 @@ class LoginView extends React.Component<Props, State> {
 
   public render() {
     const { loadingStatus } = this.state;
-    const { team, isLoadingTeamInformation } = this.props;
+    const { isUserLoggedIn, isLoggingIn } = this.props;
 
     if (loadingStatus === LoadingStatus.BACKEND) {
-      if (!team && !isLoadingTeamInformation) {
+      if (!isUserLoggedIn && !isLoggingIn) {
         return (
           <div>
             <Header />
@@ -181,16 +161,15 @@ class LoginView extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
-  isLoadingTeamInformation: Requests.selectors.isLoadingTeamInformation(state),
-  team: User.selectors.getTeam(state),
+  isLoggingIn: Requests.selectors.isLoggingIn(state),
+  isUserLoggedIn: User.selectors.isUserLoggedIn(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  navigateTo: (url: string) => { dispatch(push(url)); },
   login: (email: string, idToken: string, accessToken: string, expiresAt: number) => {
     dispatch(User.actions.login(email, idToken, accessToken, expiresAt));
   },
-  loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
+  loadTeamInformation: (redirect?: string) => { dispatch(User.actions.loadTeamInformation(redirect)); },
 });
 
 export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(

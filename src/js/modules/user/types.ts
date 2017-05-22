@@ -53,6 +53,7 @@ export interface ClearStoredDataAction {
 
 export interface LoadTeamInformationAction {
   type: 'USER/LOAD_TEAM_INFORMATION';
+  redirect?: string;
 }
 
 export interface SetGitPasswordAction {

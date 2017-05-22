@@ -49,8 +49,18 @@ class DeploymentView extends React.Component<Props, void> {
     this.redirectToApp = this.redirectToApp.bind(this);
   }
 
-  public componentWillMount() {
-    const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = this.props;
+  public componentDidMount() {
+    const {
+      loadPreviewAndComments,
+      isUserLoggedIn,
+      match: {
+        params: {
+          entityType,
+          token,
+          id,
+        },
+      },
+    } = this.props;
 
     if (!isEntityType(entityType)) {
       console.error('Unknown preview type!');
@@ -63,7 +73,11 @@ class DeploymentView extends React.Component<Props, void> {
   public componentWillReceiveProps(nextProps: Props) {
     const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = nextProps;
 
-    if (id !== this.props.match.params.id || entityType !== this.props.match.params.entityType) {
+    if (
+      isUserLoggedIn !== !this.props.isUserLoggedIn || // User logged in/out
+      id !== this.props.match.params.id || // Switched to another deployment
+      entityType !== this.props.match.params.entityType
+    ) {
       if (!isEntityType(entityType)) {
         console.error('Unknown preview type!');
         return;
@@ -93,7 +107,7 @@ class DeploymentView extends React.Component<Props, void> {
           commentId,
         },
       },
-  } = this.props;
+    } = this.props;
 
     if (!preview) {
       return <div className={styles.blank} />;
@@ -135,7 +149,7 @@ class DeploymentView extends React.Component<Props, void> {
           preview={preview}
           buildLogSelected={!showPreview}
           highlightComment={commentId}
-          isAuthenticatedUser={isUserLoggedIn}
+          isAuthenticatedUser={isUserLoggedIn} // TODO: This should check whether the preview belongs to the user's team
           userEmail={userEmail}
           linkDetails={{ entityType, id, token }}
         />

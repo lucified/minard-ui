@@ -15,6 +15,8 @@ export const isLoadingTeamInformation = createSelector<StateTree, RequestsState,
     ),
 );
 
+export const isLoggingIn = isLoadingTeamInformation;
+
 export const isLoadingAllProjects = createSelector<StateTree, RequestsState, boolean>(
   selectRequestsTree,
   (requestInformations) =>
