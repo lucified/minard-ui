@@ -23,6 +23,8 @@ export default function createSagas(api: Api) {
   function *loadTeamInformation(action: LoadTeamInformationAction): IterableIterator<Effect> {
     const { redirect } = action;
 
+    yield put(Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator());
+
     const { response, error, details, unauthorized } = yield call(api.Team.fetch);
 
     if (response) {
