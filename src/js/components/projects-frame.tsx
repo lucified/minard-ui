@@ -36,6 +36,9 @@ class ProjectsFrame extends React.Component<Props, void> {
     if (team) {
       loadAllProjects(team.id);
     } else {
+      // This shouldn't happen.
+      logMessage('Inside ProjectsFrame without a team!');
+
       console.error('No team information found!');
     }
   }
@@ -56,9 +59,6 @@ class ProjectsFrame extends React.Component<Props, void> {
     const { team } = this.props;
 
     if (!team) {
-      // This shouldn't happen.
-      logMessage('Inside ProjectsFrame without a team!');
-
       return (
         <div>
           <Header />
