@@ -24,7 +24,6 @@ import Deployments, { Deployment, DeploymentStatus } from '../modules/deployment
 import { FetchError, isFetchError } from '../modules/errors';
 import Previews, { isEntityType } from '../modules/previews';
 import Projects, { Project, ProjectUser } from '../modules/projects';
-import Requests from '../modules/requests';
 import Streaming, { ConnectionState } from '../modules/streaming';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
@@ -34,7 +33,6 @@ declare const EventSource: any;
 interface GeneratedStateProps {
   team?: Team;
   deployment?: Deployment | FetchError;
-  isLoggingIn: boolean;
 }
 
 interface GeneratedDispatchProps {
@@ -362,22 +360,21 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   public componentWillMount() {
-    const { team, deployment, isLoggingIn } = this.props;
+    const { team, deployment } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
         this.restartConnection({ teamId: team.id });
-      } else if (!isLoggingIn && deployment && !isFetchError(deployment)) {
+      } else if (deployment && !isFetchError(deployment)) {
         this.restartConnection({ deployment });
       }
     }
   }
 
-  public componentWillReceiveProps({ team, setConnectionState, deployment, isLoggingIn }: Props) {
+  public componentWillReceiveProps({ team, setConnectionState, deployment }: Props) {
     const {
       team: previousTeam,
       deployment: previousDeployment,
-      isLoggingIn: wasLoadingTeamInformation,
     } = this.props;
 
     if (streamingAPIUrl) {
@@ -387,13 +384,11 @@ class StreamingAPIHandler extends React.Component<Props, void> {
           this.restartConnection({ teamId: team.id });
         }
       } else if (
-        !isLoggingIn && // Only fall back to deployment-only stream if we're not logged/logging in.
         deployment &&
         !isFetchError(deployment) &&
-        (wasLoadingTeamInformation || !previousDeployment || deployment.id !== previousDeployment.id)
+        (!previousDeployment || deployment.id !== previousDeployment.id)
       ) {
-        // Either fetching the team information failed, the fetching of the deployment succeeded,
-        // or the user switched deployments.
+        // The fetching of the deployment succeeded or the user switched deployments.
         this.restartConnection({ deployment });
       } else if (previousTeam && !team) {
         // User logged out
@@ -496,7 +491,6 @@ const mapStateToProps = (state: StateTree, ownProps: Props): GeneratedStateProps
   return {
     team: User.selectors.getTeam(state),
     deployment,
-    isLoggingIn: Requests.selectors.isLoggingIn(state),
   };
 };
 

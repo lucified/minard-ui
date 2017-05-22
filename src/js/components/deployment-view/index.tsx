@@ -7,7 +7,6 @@ import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
 import Previews, { EntityType, isEntityType, Preview } from '../../modules/previews';
-import Requests from '../../modules/requests';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
@@ -33,7 +32,6 @@ interface GeneratedStateProps {
   commit?: Commit | FetchError;
   deployment?: Deployment | FetchError;
   isUserLoggedIn: boolean;
-  isLoggingIn: boolean;
   userEmail?: string;
 }
 
@@ -51,11 +49,10 @@ class DeploymentView extends React.Component<Props, void> {
     this.redirectToApp = this.redirectToApp.bind(this);
   }
 
-  public componentWillMount() {
+  public componentDidMount() {
     const {
       loadPreviewAndComments,
       isUserLoggedIn,
-      isLoggingIn,
       match: {
         params: {
           entityType,
@@ -70,19 +67,14 @@ class DeploymentView extends React.Component<Props, void> {
       return;
     }
 
-    if (
-      isUserLoggedIn ||
-      (!isUserLoggedIn && !isLoggingIn) // A non-Minard user viewing an open deployment
-    ) {
-      loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
-    }
+    loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
     const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = nextProps;
 
     if (
-      (isUserLoggedIn && !this.props.isUserLoggedIn) || // User logged in (i.e. fetched team information) successfully
+      isUserLoggedIn !== !this.props.isUserLoggedIn || // User logged in/out
       id !== this.props.match.params.id || // Switched to another deployment
       entityType !== this.props.match.params.entityType
     ) {
@@ -187,7 +179,6 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
     commit,
     deployment,
     isUserLoggedIn: User.selectors.isUserLoggedIn(state),
-    isLoggingIn: Requests.selectors.isLoggingIn(state),
     userEmail: User.selectors.getUserEmail(state),
   };
 };
