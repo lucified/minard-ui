@@ -291,7 +291,7 @@ describe('Commits sagas', () => {
         name: 'branchname',
         commits: ['c1', 'c2', 'c3'],
         allCommitsLoaded: false,
-        token: 'foobartoken',
+        token: 'testtoken',
       };
 
       const iterator = sagaFunctions.ensureCommitsForBranchRelatedDataLoaded(branchId);

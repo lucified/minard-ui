@@ -14,13 +14,22 @@ import {
   UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH,
   UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH,
 } from './actions';
-import * as t from './types';
+import {
+  AddCommitsToBranchAction,
+  Branch,
+  BranchState,
+  RemoveBranchAction,
+  StoreBranchesAction,
+  UpdateBranchWithCommitsAction,
+  UpdateLatestActivityTimestampAction,
+  UpdateLatestDeployedCommitAction,
+} from './types';
 
-const initialState: t.BranchState = {};
+const initialState: BranchState = {};
 
-const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
-  let branches: t.Branch[];
-  let branch: t.Branch | FetchError;
+const reducer: Reducer<BranchState> = (state = initialState, action: any) => {
+  let branches: Branch[];
+  let branch: Branch | FetchError;
   let id: string;
 
   switch (action.type) {
@@ -38,8 +47,9 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
       logMessage('Fetching failed! Not replacing existing branch entity', { action });
 
       return state;
+    // Only stores any new commits to the branch
     case ADD_COMMITS_TO_BRANCH:
-      const commitsAction = action as t.AddCommitsToBranchAction;
+      const commitsAction = action as AddCommitsToBranchAction;
       branch = state[commitsAction.id];
       if (branch && !isFetchError(branch)) {
         // Note: we assume we always get older commits, sorted by time in reverse
@@ -51,6 +61,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
             [commitsAction.id]: {
               ...branch,
               commits: newCommitsList,
+              // When the two are equal, all commits might be loaded but we can't know
               allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
             },
           };
@@ -61,7 +72,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH:
-      const updateLatestDeployedAction = action as t.UpdateLatestDeployedCommitAction;
+      const updateLatestDeployedAction = action as UpdateLatestDeployedCommitAction;
       id = updateLatestDeployedAction.id;
       branch = state[id];
 
@@ -82,16 +93,16 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case REMOVE_BRANCH:
-      const removeAction = action as t.RemoveBranchAction;
+      const removeAction = action as RemoveBranchAction;
       id = removeAction.id;
       if (state[id]) {
-        return omit<t.BranchState, t.BranchState>(state, id);
+        return omit<BranchState, BranchState>(state, id);
       }
 
       return state;
     // Saves any new commits and sets the latestCommit of the branch
     case UPDATE_BRANCH_WITH_COMMITS:
-      const storeCommitsAction = action as t.UpdateBranchWithCommitsAction;
+      const storeCommitsAction = action as UpdateBranchWithCommitsAction;
       id = storeCommitsAction.id;
       branch = state[id];
       if (branch && !isFetchError(branch)) {
@@ -131,7 +142,7 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH:
-      const updateActivityTimestampAction = action as t.UpdateLatestActivityTimestampAction;
+      const updateActivityTimestampAction = action as UpdateLatestActivityTimestampAction;
       id = updateActivityTimestampAction.id;
       branch = state[id];
 
@@ -150,10 +161,10 @@ const reducer: Reducer<t.BranchState> = (state = initialState, action: any) => {
 
       return state;
     case STORE_BRANCHES:
-      const storeAction = action as t.StoreBranchesAction;
+      const storeAction = action as StoreBranchesAction;
       branches = storeAction.entities;
       if (branches && branches.length > 0) {
-        const newBranchesObject: t.BranchState = mapKeys(branches, b => b.id);
+        const newBranchesObject: BranchState = mapKeys(branches, b => b.id);
 
         return {
           ...state,

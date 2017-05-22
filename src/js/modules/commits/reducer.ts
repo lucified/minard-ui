@@ -7,13 +7,13 @@ import Requests from '../requests';
 
 import { CLEAR_STORED_DATA } from '../user';
 import { ADD_DEPLOYMENT_TO_COMMIT, STORE_COMMITS } from './actions';
-import * as t from './types';
+import { AddDeploymentToCommitAction, Commit, CommitState, StoreCommitsAction } from './types';
 
-const initialState: t.CommitState = {};
+const initialState: CommitState = {};
 
-const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
-  let commits: t.Commit[];
-  let commit: t.Commit | FetchError | undefined;
+const reducer: Reducer<CommitState> = (state = initialState, action: any) => {
+  let commits: Commit[];
+  let commit: Commit | FetchError | undefined;
   let id: string;
 
   switch (action.type) {
@@ -32,15 +32,17 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
 
       return state;
     case ADD_DEPLOYMENT_TO_COMMIT:
-      id = action.id;
+      const addDeploymentAction = action as AddDeploymentToCommitAction;
+      id = addDeploymentAction.id;
+      const deployment = addDeploymentAction.deployment;
       commit = state[id];
       if (commit && !isFetchError(commit)) {
-        if (commit.deployment !== action.deployment) {
+        if (commit.deployment !== deployment) {
           return {
             ...state,
             [id]: {
               ...commit,
-              deployment: action.deployment,
+              deployment,
             },
           };
         }
@@ -48,13 +50,13 @@ const reducer: Reducer<t.CommitState> = (state = initialState, action: any) => {
         return state;
       }
 
-      console.log('Trying to add deployment to commit that does not exist.', action); // tslint:disable-line
+      console.warn('Trying to add deployment to commit that does not exis', action);
 
       return state;
     case STORE_COMMITS:
-      commits = (action as t.StoreCommitsAction).entities;
+      commits = (action as StoreCommitsAction).entities;
       if (commits && commits.length > 0) {
-        const newCommitsObject: t.CommitState = mapKeys(commits, c => c.id);
+        const newCommitsObject: CommitState = mapKeys(commits, c => c.id);
 
         return {
           ...state,

@@ -47,10 +47,6 @@ export interface LogoutAction {
   type: 'USER/LOGOUT';
 }
 
-export interface ClearUserDetailsAction {
-  type: 'USER/CLEAR_USER_DETAILS';
-}
-
 export interface ClearStoredDataAction {
   type: 'USER/CLEAR_STORED_DATA';
 }

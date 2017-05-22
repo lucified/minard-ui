@@ -3,11 +3,11 @@ import { createSelector } from 'reselect';
 import { StateTree } from '../../reducers';
 
 import * as actions from './actions';
-import * as t from './types';
+import { RequestsState } from './types';
 
 const selectRequestsTree = (state: StateTree) => state.requests;
 
-export const isLoadingTeamInformation = createSelector<StateTree, t.RequestsState, boolean>(
+export const isLoadingTeamInformation = createSelector<StateTree, RequestsState, boolean>(
   selectRequestsTree,
   (requestInformations) =>
     !!requestInformations.find(
@@ -15,7 +15,7 @@ export const isLoadingTeamInformation = createSelector<StateTree, t.RequestsStat
     ),
 );
 
-export const isLoadingAllProjects = createSelector<StateTree, t.RequestsState, boolean>(
+export const isLoadingAllProjects = createSelector<StateTree, RequestsState, boolean>(
   selectRequestsTree,
   (requestInformations) =>
     !!requestInformations.find(
@@ -23,7 +23,7 @@ export const isLoadingAllProjects = createSelector<StateTree, t.RequestsState, b
     ),
 );
 
-export const isLoadingAllActivities = createSelector<StateTree, t.RequestsState, boolean>(
+export const isLoadingAllActivities = createSelector<StateTree, RequestsState, boolean>(
   selectRequestsTree,
   (requestInformations) =>
     !!requestInformations.find(
@@ -66,7 +66,7 @@ export const isLoadingCommitsForBranch = (state: StateTree, id: string): boolean
       (requestInfo.id === id),
   );
 
-export const isAllActivitiesRequested = createSelector<StateTree, t.RequestsState, boolean>(
+export const isAllActivitiesRequested = createSelector<StateTree, RequestsState, boolean>(
   selectRequestsTree,
   requestInformations => !!requestInformations.find(
     requestInfo => requestInfo.type === actions.ALL_ACTIVITIES_REQUESTED,

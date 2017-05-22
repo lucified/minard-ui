@@ -10,7 +10,7 @@ import Deployments, { Deployment } from '../deployments';
 import { FetchError, isFetchError } from '../errors';
 import Requests from '../requests';
 import User from '../user';
-import { LOAD_PREVIEW_AND_COMMENTS, storePreviews } from './actions';
+import { LOAD_PREVIEW_AND_COMMENTS, storePreview } from './actions';
 import { getPreview } from './selectors';
 import { EntityType, LoadPreviewAndCommentsAction, Preview } from './types';
 
@@ -39,7 +39,7 @@ export default function createSagas(api: Api) {
 
       // only store IDs into Preview, not the actual Commit and Deployment objects
       const preview: Preview = { ...response, commit: commit[0].id, deployment: deployment[0].id };
-      yield put(storePreviews(preview, id, entityType));
+      yield put(storePreview(preview, id, entityType));
 
       yield put(Requests.actions.Previews.LoadPreview.SUCCESS.actionCreator(id));
 

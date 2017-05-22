@@ -2,15 +2,15 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { Reducer } from 'redux';
 
 import { CLEAR_STORED_DATA } from '../user';
-import * as t from './types';
+import { SelectedState } from './types';
 
-const initialState: t.SelectedState = {
+const initialState: SelectedState = {
   project: null,
   branch: null,
   showAll: false,
 };
 
-const reducer: Reducer<t.SelectedState> = (state = initialState, action: any) => {
+const reducer: Reducer<SelectedState> = (state = initialState, action: any) => {
   switch (action.type) {
     case CLEAR_STORED_DATA:
       return initialState;

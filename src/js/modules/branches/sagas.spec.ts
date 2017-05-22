@@ -186,7 +186,7 @@ describe('Branches sagas', () => {
         project: '1',
         commits: ['lc', 'lsdc'],
         allCommitsLoaded: false,
-        token: 'foobartoken',
+        token: 'testtoken',
       };
       const latestSuccessfullyDeployedCommit: Commit = {
         id: 'abc',
@@ -234,7 +234,7 @@ describe('Branches sagas', () => {
           latestCommit: 'b1lc',
           commits: ['b1lc', 'b1sc'],
           allCommitsLoaded: false,
-          token: 'foobartoken',
+          token: 'testtoken',
         },
         {
           id: 'b2',
@@ -245,7 +245,7 @@ describe('Branches sagas', () => {
           latestCommit: 'b2sc',
           commits: ['b2sc'],
           allCommitsLoaded: false,
-          token: 'foobartoken',
+          token: 'testtoken',
         },
         {
           id: 'b3',
@@ -254,7 +254,7 @@ describe('Branches sagas', () => {
           name: 'branch-3',
           commits: [],
           allCommitsLoaded: true,
-          token: 'foobartoken',
+          token: 'testtoken',
         },
       ];
       const deployedCommits: Commit[] = [

@@ -140,7 +140,7 @@ describe('Projects sagas', () => {
           branches: ['1', '2'],
           activeUsers: [],
           repoUrl: 'http://mock.repo.url/project.git',
-          token: 'foobartoken',
+          token: 'testtoken',
         },
         {
           id: '2',
@@ -148,7 +148,7 @@ describe('Projects sagas', () => {
           branches: ['3'],
           activeUsers: [],
           repoUrl: 'http://mock.repo.url/project.git',
-          token: 'foobartoken',
+          token: 'testtoken',
         },
       ];
 
@@ -179,7 +179,7 @@ describe('Projects sagas', () => {
         latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
         repoUrl: 'http://mock.repo.url/project.git',
-        token: 'foobartoken',
+        token: 'testtoken',
       };
       const commit: Commit = {
         id: 'abc',
@@ -213,7 +213,7 @@ describe('Projects sagas', () => {
         latestSuccessfullyDeployedCommit: 'abc',
         activeUsers: [],
         repoUrl: 'http://mock.repo.url/project.git',
-        token: 'foobartoken',
+        token: 'testtoken',
       };
 
       const iterator = sagaFunctions.ensureProjectRelatedDataLoaded(project);
@@ -399,7 +399,7 @@ describe('Projects sagas', () => {
         description,
         activeUsers: [],
         repoUrl: '',
-        token: 'foobartoken',
+        token: 'testtoken',
       },
     };
 

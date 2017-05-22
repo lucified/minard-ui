@@ -1,6 +1,14 @@
 import { CreateError, DeleteError, EditError, FetchCollectionError, FetchError } from '../errors';
 
-import * as t from './types';
+import {
+  AllActivitiesRequestedAction,
+  AllActivitiesRequestedForProjectAction,
+  CollectionActionCreators,
+  CreateEntityActionCreators,
+  DeleteEntityActionCreators,
+  EditEntityActionCreators,
+  FetchEntityActionCreators,
+} from './types';
 
 const createActionNames = (prefix: string) => ({
   requestAction: `REQUESTS/${prefix}/REQUEST`,
@@ -22,7 +30,7 @@ const prettyErrorMessage = (error: string): string => {
   return error;
 };
 
-const fetchEntityActionCreators = (prefix: string): t.FetchEntityActionCreators => {
+const fetchEntityActionCreators = (prefix: string): FetchEntityActionCreators => {
   const { requestAction, successAction, failureAction } = createActionNames(prefix);
 
   return {
@@ -48,7 +56,7 @@ const fetchEntityActionCreators = (prefix: string): t.FetchEntityActionCreators 
   };
 };
 
-const createEntityActionCreators = (prefix: string): t.CreateEntityActionCreators => {
+const createEntityActionCreators = (prefix: string): CreateEntityActionCreators => {
   const { requestAction, successAction, failureAction } = createActionNames(prefix);
 
   return {
@@ -74,7 +82,7 @@ const createEntityActionCreators = (prefix: string): t.CreateEntityActionCreator
   };
 };
 
-const editEntityActionCreators = (prefix: string): t.EditEntityActionCreators => {
+const editEntityActionCreators = (prefix: string): EditEntityActionCreators => {
   const { requestAction, successAction, failureAction } = createActionNames(prefix);
 
   return {
@@ -100,7 +108,7 @@ const editEntityActionCreators = (prefix: string): t.EditEntityActionCreators =>
   };
 };
 
-const deleteEntityActionCreators = (prefix: string): t.DeleteEntityActionCreators => {
+const deleteEntityActionCreators = (prefix: string): DeleteEntityActionCreators => {
   const { requestAction, successAction, failureAction } = createActionNames(prefix);
 
   return {
@@ -126,7 +134,7 @@ const deleteEntityActionCreators = (prefix: string): t.DeleteEntityActionCreator
   };
 };
 
-const fetchCollectionActionCreators = (prefix: string): t.CollectionActionCreators => {
+const fetchCollectionActionCreators = (prefix: string): CollectionActionCreators => {
   const { requestAction, successAction, failureAction } = createActionNames(prefix);
 
   return {
@@ -194,13 +202,13 @@ export const User = {
 
 // This action is created once all activities have been requested from the server
 export const ALL_ACTIVITIES_REQUESTED = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED';
-export const allActivitiesRequested = (): t.AllActivitiesRequestedAction => ({
+export const allActivitiesRequested = (): AllActivitiesRequestedAction => ({
   type: ALL_ACTIVITIES_REQUESTED,
 });
 
 // This action is created once all activities for a project have been requested from the server
 export const ALL_ACTIVITIES_REQUESTED_FOR_PROJECT = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED_FOR_PROJECT';
-export const allActivitiesRequestedForProject = (id: string): t.AllActivitiesRequestedForProjectAction => ({
+export const allActivitiesRequestedForProject = (id: string): AllActivitiesRequestedForProjectAction => ({
   type: ALL_ACTIVITIES_REQUESTED_FOR_PROJECT,
   id,
 });
