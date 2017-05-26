@@ -37,13 +37,6 @@ class Field extends React.Component<Props, void> {
       },
     } = this.props;
 
-    // TODO: remove the below. There currently seems to be a bug in tsc that makes it think
-    // that the variables are not used if you spread an any: https://github.com/Microsoft/TypeScript/issues/15478
-    placeholder; // tslint:disable-line
-    onKeyDown; // tslint:disable-line
-    disabled; // tslint:disable-line
-    fieldRef; // tslint:disable-line
-
     const inputComponent = type === 'textarea' ? (
       <Textarea
         {...input}
