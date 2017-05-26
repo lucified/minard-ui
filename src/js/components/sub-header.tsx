@@ -110,7 +110,6 @@ class SubHeader extends React.Component<Props, void> {
       return <span />;
     }
 
-    // TODO: what if we don't have team?
     const leftContent = this.getLeftContent();
     const rightContent = this.getRightContent();
 
