@@ -1,9 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
+const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 // This can be removed once this issue is resolved:
 // https://github.com/webpack/webpack/issues/3460
 const { CheckerPlugin } = require('awesome-typescript-loader');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const productionConfig = require('./webpack.config.js'); // eslint-disable-line
 
@@ -53,6 +54,11 @@ const devOptions = {
     new CheckerPlugin(),
     // Named modules for hot module reloading
     new webpack.NamedModulesPlugin(),
+    // If you require a missing module and then `npm install` it, you still have
+    // to restart the development server for Webpack to discover it. This plugin
+    // makes the discovery automatic so you don't have to restart.
+    // See https://github.com/facebookincubator/create-react-app/issues/186
+    new WatchMissingNodeModulesPlugin(path.resolve('node_modules')),
   ],
 
   // For dev server
