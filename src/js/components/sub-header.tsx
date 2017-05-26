@@ -110,7 +110,6 @@ class SubHeader extends React.Component<Props, void> {
       return <span />;
     }
 
-    // TODO: what if we don't have team?
     const leftContent = this.getLeftContent();
     const rightContent = this.getRightContent();
 
@@ -145,18 +144,10 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
       branch = Branches.selectors.getBranch(state, selectedBranch);
       openPageType = PageType.BranchView;
     } else {
-      if (isShowingAll) {
-        openPageType = PageType.BranchesList;
-      } else {
-        openPageType = PageType.ProjectView;
-      }
+      openPageType = isShowingAll ? PageType.BranchesList : PageType.ProjectView;
     }
   } else {
-    if (isShowingAll) {
-      openPageType = PageType.ProjectsList;
-    } else {
-      openPageType = PageType.TeamProjectsView;
-    }
+    openPageType = isShowingAll ? PageType.ProjectsList : PageType.TeamProjectsView;
   }
 
   return {

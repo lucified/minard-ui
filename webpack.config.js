@@ -1,11 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const autoprefixer = require('autoprefixer');
 const BabiliPlugin = require('babili-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const postCssFlexbugsFixer = require('postcss-flexbugs-fixes');
 const path = require('path');
-const postcssReporter = require('postcss-reporter');
 const webpack = require('webpack');
 
 const deployConfig = require('./deploy-config');
@@ -91,8 +90,16 @@ const rules = [
         loader: 'postcss-loader',
         options: {
           plugins: () => [
-            autoprefixer,
-            postcssReporter,
+            postCssFlexbugsFixer,
+            autoprefixer({
+              browsers: [
+                '>1%',
+                'last 4 versions',
+                'Firefox ESR',
+                'not ie < 9', // React doesn't support IE8 anyway
+              ],
+              flexbox: 'no-2009',
+            }),
           ],
         },
       },
@@ -207,9 +214,10 @@ function getIntercomId() {
 
 const config = {
   resolve: {
-    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   module: {
+    strictExportPresence: true,
     rules,
   },
   output: {
@@ -258,10 +266,18 @@ const config = {
       name: 'manifest',
       minChunks: Infinity,
     }),
+    // This skips adding all locales to moment. NOTE: If more locales then 'en'
+    // are needed, another approach will need to be used.
+    // https://github.com/moment/moment/issues/2373#issuecomment-279785426
+    // See also:
+    // https://github.com/webpack/webpack/issues/3128
+    // https://github.com/moment/moment/issues/2517
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
 };
 
 if (['production', 'staging'].indexOf(deployConfig.env) > -1) {
+  config.bail = true;
   config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {

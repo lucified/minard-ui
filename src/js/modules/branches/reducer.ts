@@ -126,7 +126,7 @@ const reducer: Reducer<BranchState> = (state = initialState, action: any) => {
 
         const newCommitIds = storeCommitsAction.newCommits.map(commit => commit.id);
 
-        if (foundIndex === -1) {
+        if (foundIndex === -1) { // tslint:disable-line:prefer-conditional-expression
           // Not found, replace
           newBranch.commits = newCommitIds.length > 0 ? newCommitIds : [storeCommitsAction.latestCommitId];
         } else {

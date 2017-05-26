@@ -47,8 +47,6 @@ class TeamProjectsView extends React.Component<Props, void> {
   public componentWillMount() {
     const { loadAllProjects, loadActivities, team } = this.props;
 
-    // TODO: What if team is missing?
-
     loadAllProjects(team!.id);
     loadActivities(team!.id, 15);
   }

@@ -116,7 +116,7 @@ class DeploymentView extends React.Component<Props, void> {
     if (!commit || isFetchError(commit) || !deployment || isFetchError(deployment) || isFetchError(preview)) {
       let errorMessage;
 
-      if (isFetchError(preview)) {
+      if (isFetchError(preview)) { // tslint:disable-line:prefer-conditional-expression
         errorMessage = preview.unauthorized ? 'Unauthorized' : 'Unable to load preview.';
       } else {
         errorMessage = 'Unable to load preview details.';
