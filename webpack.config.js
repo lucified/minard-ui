@@ -258,6 +258,13 @@ const config = {
       name: 'manifest',
       minChunks: Infinity,
     }),
+    // This skips adding all locales to moment. NOTE: If more locales then 'en'
+    // are needed, another approach will need to be used.
+    // https://github.com/moment/moment/issues/2373#issuecomment-279785426
+    // See also:
+    // https://github.com/webpack/webpack/issues/3128
+    // https://github.com/moment/moment/issues/2517
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
 };
 
