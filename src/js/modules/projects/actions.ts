@@ -45,12 +45,7 @@ export const storeProjects = (projects: Project[]): StoreProjectsAction => ({
 // Add branches to existing project
 export const ADD_BRANCHES_TO_PROJECT = 'PROJECTS/ADD_BRANCHES_TO_PROJECT';
 export const addBranchesToProject = (id: string, branchIds: string[] | string): AddBranchesToProjectAction => {
-  let branches: string[];
-  if (typeof branchIds === 'string') {
-    branches = [branchIds];
-  } else {
-    branches = branchIds;
-  }
+  const branches: string[] = (typeof branchIds === 'string') ? [branchIds] : branchIds;
 
   return {
     type: ADD_BRANCHES_TO_PROJECT,

@@ -103,25 +103,10 @@ class MinardLink extends React.Component<Props, void> {
 
       path = `/project/${projectId}/branch/${branchId}`;
     } else if (project) {
-      let projectId: string;
-
-      if (typeof project.project === 'string') {
-        projectId = project.project as string;
-      } else {
-        projectId = project.project.id;
-      }
-
-      if (showAll) {
-        path = `/project/${projectId}/all`;
-      } else {
-        path = `/project/${projectId}`;
-      }
+      const projectId = (typeof project.project === 'string') ? project.project as string : project.project.id;
+      path = `/project/${projectId}${showAll ? '/all' : ''}`;
     } else if (homepage) {
-      if (showAll) {
-        path = '/projects/all';
-      } else {
-        path = '/projects';
-      }
+      path = `/projects${showAll ? '/all' : ''}`;
     } else {
       return <span className={className}>{children}</span>;
     }

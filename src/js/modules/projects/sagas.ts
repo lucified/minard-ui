@@ -76,7 +76,7 @@ export default function createSagas(api: Api) {
   function* ensureProjectRelatedDataLoaded(projectOrId: Project | string): IterableIterator<Effect | Effect[]> {
     let project: Project | FetchError | undefined;
 
-    if (typeof projectOrId === 'string') {
+    if (typeof projectOrId === 'string') { // tslint:disable-line:prefer-conditional-expression
       project = (yield select(getProject, projectOrId)) as Project | FetchError | undefined;
     } else {
       project = projectOrId;
