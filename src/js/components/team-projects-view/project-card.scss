@@ -3,13 +3,8 @@
 
 .card {
   width: 100%;
-  margin-bottom: 16px;
-  border-radius: 3px;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  &:hover {
-    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.05);
-  }
+  margin-bottom: $default-margin;
+  @include minard-card;
 }
 
 .screenshot {
@@ -25,7 +20,7 @@
 .avatars {
   position: absolute;
   top: -18px;
-  right: 20px;
+  right: $default-margin;
 }
 
 .avatar {
@@ -37,7 +32,7 @@
 }
 
 .card-middle {
-  padding: 20px;
+  padding: $default-margin;
   background-color: white;
   position: relative;
   h3 {
@@ -46,9 +41,8 @@
 }
 
 .card-bottom {
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
+  padding-left: $default-margin;
+  padding-right: $default-margin;
   background-color: white;
   color: $minard-mid-gray;
   @include font-size-MS;
@@ -87,7 +81,7 @@
   @include nitti-grotesk-semilight;
   line-height: 24px;
   color: $minard-dark-blue;
-  margin-top: 20px;
+  margin-top: $default-margin;
 }
 
 .description-placeholder {
@@ -125,32 +119,44 @@
 }
 
 .time-ago {
-  margin-top: 5px;
+  margin-top: $quarter-margin;
   color: $minard-mid-gray;
 }
 
 .no-previews-yet {
-  margin-top: 5px;
+  margin-top: $quarter-margin;
   color: $minard-light-gray;
 }
 
 .links {
-  margin-top: 20px;
   display: flex;
   align-items: center;
+  @include nitti-grotesk-medium;
 }
 
 .link + .link {
-  margin-left: 20px;
+  margin-left: $default-margin;
+}
+
+.link {
+  color: $minard-mid-gray;
+}
+
+.link {
+  :hover {
+    color: $minard-dark-blue !important;
+  }
 }
 
 .link-inner {
   display: flex;
   align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .link-text {
-  margin-left: 10px;
+  margin-left: $half-margin;
 }
 
 .no-screenshot {

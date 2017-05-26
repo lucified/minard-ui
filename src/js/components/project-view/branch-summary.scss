@@ -2,12 +2,9 @@
 @import '../definitions';
 
 .branch {
-  padding: 20px;
   background: white;
-  border-radius: 3px;
-  margin-bottom: 18px;
-  border-radius: 3px;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  margin-bottom: $default-margin;
+  @include minard-card;
 }
 
 .branch:last-child {
@@ -28,7 +25,7 @@
       @include font-size-S;
       content: "\f08e";
       opacity: 0;
-      padding-left: 10px;
+      padding-left: $half-margin;
       font-weight: normal;
     }
   }
@@ -53,13 +50,17 @@
 }
 
 .screenshot {
-  padding-left: 20px;
+  padding-left: $default-margin;
   padding-top: 0;
   padding-bottom: 0;
 }
 
+.main {
+  padding: $default-margin;
+}
+
 .header {
-  margin-bottom: 10px;
+  margin-bottom: $half-margin;
 }
 
 .title {
@@ -70,13 +71,12 @@
 
 .build-status {
   display: block;
-  margin-top: 10px;
+  margin-top: $half-margin;
 }
 
 .links {
   border-top: 1px solid $minard-lightest-gray;
-  margin-top: 20px;
-  padding-top: 20px;
+  margin: 0 $default-margin;
 }
 
 .link-disabled {
@@ -86,25 +86,31 @@
 .commit-content {
   display: flex;
   align-items: center;
-  color: #7F8C8D;
+  color: $minard-mid-gray;
   @include font-size-MS;
 }
 
 .avatar {
-  margin-right: 14px;
+  margin-right: $half-margin;
 }
 
 .author {
-  color: #4A4A4A;
+  color: $minard-dark-blue;
   @include nitti-grotesk-regular;
 }
 
 .link {
   display: flex;
   align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
   color: $minard-mid-gray;
+
+  &:hover {
+    color: $minard-dark-blue;
+  }
 }
 
 .link-text {
-  margin-left: 10px;
+  margin-left: $half-margin;
 }
