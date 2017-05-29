@@ -94,8 +94,6 @@
 .comments {
   @include basicPadding();
   border-top: 1px solid $minard-lightest-gray;
-  padding-top: $default-margin;
-  padding-bottom: $default-margin;
 }
 
 .loading {

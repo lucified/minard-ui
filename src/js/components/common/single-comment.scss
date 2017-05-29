@@ -3,16 +3,21 @@
 
 .single-comment {
   @include nitti-grotesk-regular;
-  margin-bottom: 24px;
+  padding-top: $half-margin;
+  padding-bottom: $half-margin;
   display: flex;
 
+  &:first-child {
+    padding-top: $default-margin;
+  }
+
   &:last-child {
-    margin-bottom: 0px;
+    padding-bottom: $default-margin;
   }
 }
 
 .avatar {
-  margin-right: 14px;
+  margin-right: $half-margin;
 }
 
 .comment-content {
