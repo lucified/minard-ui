@@ -56,7 +56,15 @@
 }
 
 .main {
-  padding: $default-margin;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: top;
+}
+
+.content {
+  flex-grow: 1;
+  padding: $default-margin $default-margin $half-margin $default-margin;
 }
 
 .header {
@@ -71,7 +79,7 @@
 
 .build-status {
   display: block;
-  margin-top: $half-margin;
+  margin: $default-margin $default-margin 0 0;
 }
 
 .links {
@@ -84,6 +92,7 @@
 }
 
 .commit-content {
+  padding: 0px $default-margin $default-margin $default-margin ;
   display: flex;
   align-items: center;
   color: $minard-mid-gray;

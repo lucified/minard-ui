@@ -37,27 +37,27 @@ const BranchSummary = (props: Props) => {
     deploymentForLatestCommit,
     latestCommit,
   } = props;
-  let commitContent: JSX.Element;
+  let commitContent: JSX.Element | undefined;
 
   if (!latestSuccessfullyDeployedCommit) {
-    commitContent = (
-      <div className={styles.empty}>
-        No previews available
-      </div>
-    );
+    commitContent = undefined;
   } else {
     if (isFetchError(latestSuccessfulDeployment)) {
       commitContent = (
-        <div className={styles.error}>
-          <p>Error loading deployment</p>
-          <small>{latestSuccessfulDeployment.prettyError}</small>
+        <div className={styles['commit-content']}>
+          <div className={styles.error}>
+            <p>Error loading deployment</p>
+            <small>{latestSuccessfulDeployment.prettyError}</small>
+          </div>
         </div>
       );
     } else if (isFetchError(latestSuccessfullyDeployedCommit)) {
       commitContent = (
-        <div className={styles.error}>
-          <p>Error loading commit</p>
-          <small>{latestSuccessfullyDeployedCommit.prettyError}</small>
+        <div className={styles['commit-content']}>
+          <div className={styles.error}>
+            <p>Error loading commit</p>
+            <small>{latestSuccessfullyDeployedCommit.prettyError}</small>
+          </div>
         </div>
       );
     } else {
@@ -86,22 +86,24 @@ const BranchSummary = (props: Props) => {
 
   return (
     <div className={classNames(styles.branch)}>
-      <MinardLink branch={{ branch }}>
-        <div className={classNames(styles.main)}>
+      <div className={classNames(styles.main)}>
+        <MinardLink branch={{ branch }} className={classNames(styles.content)}>
           <div className={styles.header}>
             <div className={styles.title}>{branch.name}</div>
           </div>
-          <div>
-            <BuildStatus
-              className={styles['build-status']}
-              deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
-              commit={isFetchError(latestCommit) ? undefined : latestCommit}
-              latest={true}
-            />
-          </div>
-          {commitContent}
-        </div>
-      </MinardLink>
+        </MinardLink>
+        <BuildStatus
+          className={styles['build-status']}
+          deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
+          commit={isFetchError(latestCommit) ? undefined : latestCommit}
+          latest={true}
+        />
+      </div>
+      {commitContent}
+
+
+
+
       <div className={styles.links}>
         {latestSuccessfulDeployment && !isFetchError(latestSuccessfulDeployment) ? (
           <MinardLink preview={{ branch }}>
