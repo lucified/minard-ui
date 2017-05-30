@@ -39,9 +39,7 @@ const BranchSummary = (props: Props) => {
   } = props;
   let commitContent: JSX.Element | undefined;
 
-  if (!latestSuccessfullyDeployedCommit) {
-    commitContent = undefined;
-  } else {
+  if (latestSuccessfullyDeployedCommit) {
     if (isFetchError(latestSuccessfulDeployment)) {
       commitContent = (
         <div className={styles['commit-content']}>
