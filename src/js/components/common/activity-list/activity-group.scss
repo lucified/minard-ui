@@ -2,22 +2,25 @@
 @import '../../definitions';
 
 @mixin basicPadding {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: $default-margin;
+  padding-right: $default-margin;
 }
 
 .root {
-  padding-top: 20px;
   background: white;
   margin-bottom: 18px;
-  border-radius: 3px;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  @include minard-card;
 }
 
 .top {
   display: flex;
   justify-content: space-between;
+  padding-top: $default-margin;
   @include basicPadding;
+}
+
+.main {
+  flex-grow: 1;
 }
 
 .root:last-child {
@@ -36,7 +39,6 @@
 }
 
 .screenshot {
-  margin-left: 20px;
   margin-bottom: auto;
   max-width: 100px;
   max-height: 133px;
@@ -64,10 +66,7 @@
 
 .links {
   border-top: 1px solid $minard-lightest-gray;
-  padding-top: 15px;
-  padding-bottom: 15px;
   display: flex;
-  margin-top: 20px;
   @include nitti-grotesk-medium;
 }
 
@@ -77,24 +76,24 @@
 
 .link {
   :hover {
-    color: $minard-dark-gray !important;
+    color: $minard-dark-blue !important;
   }
 }
 
 .link-inner {
   display: flex;
   align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .link + .link {
-  margin-left: 20px;
+  margin-left: $default-margin;
 }
 
 .comments {
   @include basicPadding();
   border-top: 1px solid $minard-lightest-gray;
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
 .loading {
@@ -121,7 +120,7 @@
 }
 
 .icon {
-  margin-right: 10px;
+  margin-right: $half-margin;
 }
 
 .action {
@@ -137,21 +136,23 @@
 
 .deployment-details {
   display: flex;
-  margin-top: 10px;
+  padding-top: $half-margin;
+  padding-bottom: $default-margin;
+  padding-right: $default-margin;
   @include font-size-MS;
 }
 
 .avatar {
-  margin-right: 14px;
+  margin-right: $half-margin;
 }
 
 .deployment-details-message {
-  color: #2C3E50;
+  color: $minard-dark-blue;
   @include nitti-grotesk-semilight;
   @include font-size-M;
 }
 
 .deployment-details-name {
-  color: #4A4A4A;
+  color: $minard-dark-gray;
   @include nitti-grotesk-medium;
 }

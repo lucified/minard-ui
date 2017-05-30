@@ -63,19 +63,21 @@ class ActivityGroup extends React.Component<PassedProps, void> {
               {getBranchLabel(firstActivity)}
               {showProjectName && getProjectLabel(firstActivity)}
             </div>
-            <div className={styles['deployment-details']}>
-              <div className={styles.avatar}>
-                <Avatar email={deployment.creator.email} size="40" title={name} />
-              </div>
-              <div className={styles['deployment-details-name-and-message']}>
-                <div className={styles['deployment-details-name']}>
-                  {commit.author.name}
+            <MinardLink preview={{ deployment }}>
+              <div className={styles['deployment-details']}>
+                <div className={styles.avatar}>
+                  <Avatar email={deployment.creator.email} size="40" title={name} />
                 </div>
-                <div className={styles['deployment-details-message']}>
-                  {commit.message}
+                <div className={styles['deployment-details-name-and-message']}>
+                  <div className={styles['deployment-details-name']}>
+                    {commit.author.name}
+                  </div>
+                  <div className={styles['deployment-details-message']}>
+                    {commit.message}
+                  </div>
                 </div>
               </div>
-            </div>
+            </MinardLink>
           </div>
             {isSuccessful(deployment) ? (
               <div className={styles.screenshot}>

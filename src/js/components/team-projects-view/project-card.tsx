@@ -29,10 +29,12 @@ const getBottom = (project: Project, deployment?: Deployment) => {
     <div className={styles.links}>
       <div className={styles.link}>
         <MinardLink project={{ project }}>
-          <Icon className={styles.icon} name="chevron-right" />
-          <span className={styles['link-text']}>
-            Open project
-          </span>
+          <div className={styles['link-inner']}>
+            <Icon className={styles.icon} name="chevron-right" />
+            <span className={styles['link-text']}>
+              Open project
+            </span>
+          </div>
         </MinardLink>
       </div>
       {deployment && (
@@ -90,6 +92,7 @@ const ProjectCard = ({
   const maxAvatarCount = 8;
   return (
     <div className={styles.card}>
+      <MinardLink project={{ project }}>
         <div
           className={styles['card-top']}
           style={{ backgroundImage: `url(${screenshot})` }}
@@ -103,6 +106,8 @@ const ProjectCard = ({
             </div>
           )}
         </div>
+      </MinardLink>
+      <MinardLink project={{ project }}>
         <div className={styles['card-middle']}>
           <div className={styles.avatars}>
             {project.activeUsers.slice(0, maxAvatarCount).map(user => (
@@ -115,11 +120,9 @@ const ProjectCard = ({
               />
             ))}
           </div>
-          <MinardLink project={{ project }}>
-            <h3 className={styles.title}>
-              {project.name}
-            </h3>
-          </MinardLink>
+          <h3 className={styles.title}>
+            {project.name}
+          </h3>
           {latestDeployment ? (
             <div className={styles['time-ago']}>
               <TimeAgo minPeriod={10} date={latestDeployment.creator.timestamp} />
@@ -131,11 +134,12 @@ const ProjectCard = ({
           )}
           {getDescription(project.description, constantHeight)}
         </div>
-        <div className={styles['card-bottom']}>
-          <div className={styles['card-bottom-inner']}>
-            {bottom}
-          </div>
+      </MinardLink>
+      <div className={styles['card-bottom']}>
+        <div className={styles['card-bottom-inner']}>
+          {bottom}
         </div>
+      </div>
     </div>
   );
 };
