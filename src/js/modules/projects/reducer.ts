@@ -134,7 +134,7 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
             newProject.branches = existingProject.branches;
           }
 
-          return Object.assign(obj, { [newProject.id]: newProject });
+          return Object.assign(obj, { [newProject.id]: newProject }); // tslint:disable-line:prefer-object-spread
         }, {});
 
         return {

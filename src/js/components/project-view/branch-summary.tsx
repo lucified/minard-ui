@@ -98,10 +98,6 @@ const BranchSummary = (props: Props) => {
         />
       </div>
       {commitContent}
-
-
-
-
       <div className={styles.links}>
         {latestSuccessfulDeployment && !isFetchError(latestSuccessfulDeployment) ? (
           <MinardLink preview={{ branch }}>

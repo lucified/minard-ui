@@ -12,7 +12,7 @@
     "jsx-boolean-value": false,
     "max-classes-per-file": [false],
     "member-ordering": [false],
-    "no-console": ["log", "assert", "debug", "info", "profile", "time", "trace"],
+    "no-console": [true, "log", "assert", "debug", "info", "profile", "time", "trace"],
     "no-var-requires": false,
     "no-empty-interface": false,
     "object-literal-key-quotes": [true, "as-needed"],
