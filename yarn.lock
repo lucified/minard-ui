@@ -49,6 +49,12 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-flip-move@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@types/react-flip-move/-/react-flip-move-2.9.0.tgz#3825a58a069485dd38762b042c05ff234dfb9b6f"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-fontawesome@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@types/react-fontawesome/-/react-fontawesome-1.5.0.tgz#8d10931e2eb593565b1db7b106e6f6bc1d2a2346"
@@ -4733,9 +4739,9 @@ react-dev-utils@^2.0.1:
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
-react-flip-move@^2.9.13:
-  version "2.9.13"
-  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-2.9.13.tgz#bf3909f707e2c3fc511c762346fa3ae89b282c50"
+react-flip-move@2.9.12:
+  version "2.9.12"
+  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-2.9.12.tgz#b26ed29d30e8378a951e8b4aa8b5bf84d1825b1a"
 
 react-fontawesome@^1.6.1:
   version "1.6.1"
