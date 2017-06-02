@@ -4,10 +4,14 @@ import { expect } from 'chai';
 
 import { toDeployments } from '../../api/convert';
 import Requests from '../requests';
-import Deployments, {
-} from './index';
+import Deployments from './index';
 
-import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
+import {
+  createApi,
+  testData,
+  testEntityFetcherSaga,
+  testLoaderSaga,
+} from '../../../../test/test-utils';
 import createSagas from './sagas';
 
 describe('Deployments sagas', () => {

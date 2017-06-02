@@ -13,11 +13,10 @@ const SimpleSectionTitle = ({ children, rightContent }: Props) => {
       <div className={styles.primary}>
         {children}
       </div>
-      {rightContent && (
+      {rightContent &&
         <div>
           {rightContent}
-        </div>
-      )}
+        </div>}
     </div>
   );
 };

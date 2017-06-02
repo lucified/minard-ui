@@ -39,15 +39,19 @@ interface State {
 }
 
 const RedirectToTeamProjectsView = () => <Redirect to="/projects" />;
-const ProjectsFrameOrLogin = connect<{ isLoggedIn: boolean; }, {}, RouteComponentProps<{}>>(
-  (state) => ({ isLoggedIn: User.selectors.isUserLoggedIn(state) }),
-)(({ isLoggedIn, ...props }) => isLoggedIn ? <ProjectsFrame {...props} /> : <Redirect to="/login" />);
-const Loading = () => (
+const ProjectsFrameOrLogin = connect<
+  { isLoggedIn: boolean },
+  {},
+  RouteComponentProps<{}>
+>(state => ({ isLoggedIn: User.selectors.isUserLoggedIn(state) }))(
+  ({ isLoggedIn, ...props }) =>
+    isLoggedIn ? <ProjectsFrame {...props} /> : <Redirect to="/login" />,
+);
+const Loading = () =>
   <div>
     <Header />
     <Spinner />
-  </div>
-);
+  </div>;
 
 class App extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -100,26 +104,40 @@ class App extends React.Component<Props, State> {
         <Switch>
           <Route
             path="/preview/:entityType/:id/:token"
-            component={loginTriggeredAndNotComplete ? undefined : StreamingAPIHandler}
+            component={
+              loginTriggeredAndNotComplete ? undefined : StreamingAPIHandler
+            }
           />
-          <Route component={loginTriggeredAndNotComplete ? undefined : StreamingAPIHandler} />
+          <Route
+            component={
+              loginTriggeredAndNotComplete ? undefined : StreamingAPIHandler
+            }
+          />
         </Switch>
         <Switch>
           <Route
             path="/project"
-            component={loginTriggeredAndNotComplete ? Loading : ProjectsFrameOrLogin}
+            component={
+              loginTriggeredAndNotComplete ? Loading : ProjectsFrameOrLogin
+            }
           />
           <Route
             path="/projects"
-            component={loginTriggeredAndNotComplete ? Loading : ProjectsFrameOrLogin}
+            component={
+              loginTriggeredAndNotComplete ? Loading : ProjectsFrameOrLogin
+            }
           />
           <Route
             path="/preview/:entityType/:id/:token/comment/:commentId"
-            component={loginTriggeredAndNotComplete ? undefined : DeploymentView}
+            component={
+              loginTriggeredAndNotComplete ? undefined : DeploymentView
+            }
           />
           <Route
             path="/preview/:entityType/:id/:token/:view?"
-            component={loginTriggeredAndNotComplete ? undefined : DeploymentView}
+            component={
+              loginTriggeredAndNotComplete ? undefined : DeploymentView
+            }
           />
           <Route path="/login/:returnPath?" component={LoginView} />
           <Route path="/signup/:teamToken?" component={SignupView} />
@@ -130,8 +148,12 @@ class App extends React.Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  loadTeamInformation: () => { dispatch(User.actions.loadTeamInformation()); },
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  loadTeamInformation: () => {
+    dispatch(User.actions.loadTeamInformation());
+  },
 });
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
@@ -139,7 +161,8 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   isLoggingIn: Requests.selectors.isLoggingIn(state),
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(App);

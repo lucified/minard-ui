@@ -58,7 +58,11 @@ describe('Previews reducer', () => {
       },
     };
 
-    const storeAction = storePreview(newPreview['branch-7-1'] as Preview, '7-1', 'branch');
+    const storeAction = storePreview(
+      newPreview['branch-7-1'] as Preview,
+      '7-1',
+      'branch',
+    );
 
     it('with an empty initial state', () => {
       expect(reducer(undefined as any, storeAction)).to.deep.equal(newPreview);
@@ -66,13 +70,19 @@ describe('Previews reducer', () => {
 
     it('with other previews in state', () => {
       const newState = reducer(stateWithoutExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithoutExistingEntity, ...newPreview});
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        ...newPreview,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
     it('by replacing existing previews', () => {
       const newState = reducer(stateWithExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithExistingEntity, ...newPreview });
+      expect(newState).to.deep.equal({
+        ...stateWithExistingEntity,
+        ...newPreview,
+      });
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
@@ -87,16 +97,17 @@ describe('Previews reducer', () => {
     };
 
     it('with an empty initial state', () => {
-      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal(
-        { [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal({
+        [failedRequestAction.id]: failedRequestAction,
+      });
     });
 
     it('with other entities in state', () => {
       const newState = reducer(stateWithoutExistingEntity, failedRequestAction);
-      expect(newState).to.deep.equal(
-        { ...stateWithoutExistingEntity, [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        [failedRequestAction.id]: failedRequestAction,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
@@ -108,8 +119,14 @@ describe('Previews reducer', () => {
   });
 
   it(`clears data on ${CLEAR_STORED_DATA}`, () => {
-    expect(reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(
+      reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
   });
 });

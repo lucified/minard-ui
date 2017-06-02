@@ -38,13 +38,13 @@ export default combineReducers({
 
 export interface StateTree {
   entities: {
-    activities: ActivityState;
-    branches: BranchState;
-    comments: CommentState;
-    commits: CommitState;
-    deployments: DeploymentState;
-    previews: PreviewState;
-    projects: ProjectState;
+    activities: ActivityState,
+    branches: BranchState,
+    comments: CommentState,
+    commits: CommitState,
+    deployments: DeploymentState,
+    previews: PreviewState,
+    projects: ProjectState,
   };
   errors: ErrorState;
   requests: RequestsState;

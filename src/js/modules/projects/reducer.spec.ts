@@ -23,7 +23,8 @@ describe('Projects reducer', () => {
     1: {
       id: '1',
       name: 'first-project',
-      description: 'This is the first-project description. It might not be set.',
+      description:
+        'This is the first-project description. It might not be set.',
       branches: undefined,
       latestActivityTimestamp: 1470066681802,
       latestSuccessfullyDeployedCommit: 'aacceeff02',
@@ -120,13 +121,19 @@ describe('Projects reducer', () => {
 
     it('with other projects in state', () => {
       const newState = reducer(stateWithoutExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithoutExistingEntity, ...newProjects});
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        ...newProjects,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
     it('by replacing existing projects', () => {
       const newState = reducer(stateWithExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithExistingEntity, ...newProjects });
+      expect(newState).to.deep.equal({
+        ...stateWithExistingEntity,
+        ...newProjects,
+      });
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
@@ -141,16 +148,17 @@ describe('Projects reducer', () => {
     };
 
     it('with an empty initial state', () => {
-      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal(
-        { [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal({
+        [failedRequestAction.id]: failedRequestAction,
+      });
     });
 
     it('with other entities in state', () => {
       const newState = reducer(stateWithoutExistingEntity, failedRequestAction);
-      expect(newState).to.deep.equal(
-        { ...stateWithoutExistingEntity, [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        [failedRequestAction.id]: failedRequestAction,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
@@ -192,30 +200,39 @@ describe('Projects reducer', () => {
     });
 
     it('does nothing if the deployment does not exist in the state', () => {
-      const newState = reducer(stateWithoutExistingEntity, { ...failedRequestAction, id: 'notexist' });
+      const newState = reducer(stateWithoutExistingEntity, {
+        ...failedRequestAction,
+        id: 'notexist',
+      });
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity); // make sure not mutated
     });
   });
 
   describe('project deletion request success', () => {
-    const expectedStateWithExistingEntity = { ...stateWithExistingEntity, ...newProjects };
+    const expectedStateWithExistingEntity = {
+      ...stateWithExistingEntity,
+      ...newProjects,
+    };
 
-    it(`removes a project from the state upon receiving ${Requests.actions.Projects.DeleteProject.SUCCESS.type}`,
-      () => {
-        const action = Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator('3');
-        const initialState = expectedStateWithExistingEntity;
-        const expectedNewState = { ...initialState };
-        delete expectedNewState['3'];
+    it(`removes a project from the state upon receiving ${Requests.actions
+      .Projects.DeleteProject.SUCCESS.type}`, () => {
+      const action = Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(
+        '3',
+      );
+      const initialState = expectedStateWithExistingEntity;
+      const expectedNewState = { ...initialState };
+      delete expectedNewState['3'];
 
-        const newState = reducer(initialState, action);
-        expect(newState).to.deep.equal(expectedNewState);
-        expect(newState).to.not.equal(initialState);
-      },
-    );
+      const newState = reducer(initialState, action);
+      expect(newState).to.deep.equal(expectedNewState);
+      expect(newState).to.not.equal(initialState);
+    });
 
     it('does nothing if the project does not exist', () => {
-      const action = Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator('7');
+      const action = Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(
+        '7',
+      );
       const initialState = expectedStateWithExistingEntity;
       const newState = reducer(initialState, action);
 
@@ -225,7 +242,10 @@ describe('Projects reducer', () => {
   });
 
   describe('removeProject', () => {
-    const expectedStateWithExistingEntity = { ...stateWithExistingEntity, ...newProjects };
+    const expectedStateWithExistingEntity = {
+      ...stateWithExistingEntity,
+      ...newProjects,
+    };
 
     it(`removes an existing project`, () => {
       const action = removeProject('3');
@@ -254,7 +274,10 @@ describe('Projects reducer', () => {
       const oldProject = { ...stateWithExistingEntity['3'] as Project };
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['3'] as Project;
-      expect(newProject.branches).to.deep.equal([...oldProject.branches as string[], ...action.branches]);
+      expect(newProject.branches).to.deep.equal([
+        ...(oldProject.branches as string[]),
+        ...action.branches,
+      ]);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
@@ -263,7 +286,10 @@ describe('Projects reducer', () => {
       const oldProject = { ...stateWithExistingEntity['3'] as Project };
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['3'] as Project;
-      expect(newProject.branches).to.deep.equal([...oldProject.branches as string[], action.branches[1]]);
+      expect(newProject.branches).to.deep.equal([
+        ...(oldProject.branches as string[]),
+        action.branches[1],
+      ]);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
@@ -275,7 +301,10 @@ describe('Projects reducer', () => {
     });
 
     it('should do nothing if the project does not exist', () => {
-      const action = addBranchesToProject('notExist', ['newbranch1', 'newbranch2']);
+      const action = addBranchesToProject('notExist', [
+        'newbranch1',
+        'newbranch2',
+      ]);
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
@@ -289,7 +318,9 @@ describe('Projects reducer', () => {
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['3'] as Project;
       expect((oldProject.branches as string[]).length).to.equal(2);
-      expect(newProject.branches).to.deep.equal((oldProject.branches as string[]).filter(b => b !== 'branch1'));
+      expect(newProject.branches).to.deep.equal(
+        (oldProject.branches as string[]).filter(b => b !== 'branch1'),
+      );
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
@@ -319,22 +350,34 @@ describe('Projects reducer', () => {
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['1'] as Project;
       expect(existingProject.activeUsers.length).to.equal(1);
-      expect(newProject.activeUsers).to.deep.equal([...existingProject.activeUsers, ...action.authors]);
+      expect(newProject.activeUsers).to.deep.equal([
+        ...existingProject.activeUsers,
+        ...action.authors,
+      ]);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
     it('should add only authors that do not exist in project', () => {
       const existingProject = stateWithExistingEntity['1'] as Project;
-      const action = storeAuthorsToProject('1', [...newUsers, ...existingProject.activeUsers]);
+      const action = storeAuthorsToProject('1', [
+        ...newUsers,
+        ...existingProject.activeUsers,
+      ]);
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['1'] as Project;
       expect(existingProject.activeUsers.length).to.equal(1);
-      expect(newProject.activeUsers).to.deep.equal([...existingProject.activeUsers, ...newUsers]);
+      expect(newProject.activeUsers).to.deep.equal([
+        ...existingProject.activeUsers,
+        ...newUsers,
+      ]);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
     it('should not do anything if all authors already exist', () => {
-      const action = storeAuthorsToProject('1', (stateWithExistingEntity['1'] as Project).activeUsers);
+      const action = storeAuthorsToProject(
+        '1',
+        (stateWithExistingEntity['1'] as Project).activeUsers,
+      );
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
@@ -354,21 +397,29 @@ describe('Projects reducer', () => {
       const oldProject = stateWithExistingEntity['1'] as Project;
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['1'] as Project;
-      expect(oldProject.latestActivityTimestamp).to.not.equal(newProject.latestActivityTimestamp);
+      expect(oldProject.latestActivityTimestamp).to.not.equal(
+        newProject.latestActivityTimestamp,
+      );
       expect(newProject.latestActivityTimestamp).to.equal(action.timestamp);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
     it('should do nothing if the same timestamp is already on the project', () => {
       const oldProject = stateWithExistingEntity['1'] as Project;
-      const action = updateLatestActivityTimestampForProject('1', oldProject.latestActivityTimestamp!);
+      const action = updateLatestActivityTimestampForProject(
+        '1',
+        oldProject.latestActivityTimestamp!,
+      );
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
     });
 
     it('should do nothing if a project does not exist', () => {
-      const action = updateLatestActivityTimestampForProject('notexist', 55555555);
+      const action = updateLatestActivityTimestampForProject(
+        'notexist',
+        55555555,
+      );
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
@@ -381,21 +432,31 @@ describe('Projects reducer', () => {
       const oldProject = stateWithExistingEntity['1'] as Project;
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['1'] as Project;
-      expect(oldProject.latestSuccessfullyDeployedCommit).to.not.equal(newProject.latestSuccessfullyDeployedCommit);
-      expect(newProject.latestSuccessfullyDeployedCommit).to.equal(action.commit);
+      expect(oldProject.latestSuccessfullyDeployedCommit).to.not.equal(
+        newProject.latestSuccessfullyDeployedCommit,
+      );
+      expect(newProject.latestSuccessfullyDeployedCommit).to.equal(
+        action.commit,
+      );
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
     it('should do nothing if the same timestamp is already on the project', () => {
       const oldProject = stateWithExistingEntity['1'] as Project;
-      const action = updateLatestDeployedCommitForProject('1', oldProject.latestSuccessfullyDeployedCommit!);
+      const action = updateLatestDeployedCommitForProject(
+        '1',
+        oldProject.latestSuccessfullyDeployedCommit!,
+      );
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
     });
 
     it('should do nothing if a project does not exist', () => {
-      const action = updateLatestDeployedCommitForProject('notexist', 'newcommit');
+      const action = updateLatestDeployedCommitForProject(
+        'notexist',
+        'newcommit',
+      );
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
@@ -403,8 +464,13 @@ describe('Projects reducer', () => {
   });
 
   describe('updateProject', () => {
-    it('should update an existing project\'s properties', () => {
-      const action = updateProject('1', 'newname', 'newrepourl', 'newdescription');
+    it("should update an existing project's properties", () => {
+      const action = updateProject(
+        '1',
+        'newname',
+        'newrepourl',
+        'newdescription',
+      );
       const oldProject = stateWithExistingEntity['1'] as Project;
       const newState = reducer(stateWithExistingEntity, action);
       const newProject = newState['1'] as Project;
@@ -417,14 +483,24 @@ describe('Projects reducer', () => {
 
     it('should do nothing if no properties were changed', () => {
       const oldProject = stateWithExistingEntity['1'] as Project;
-      const action = updateProject('1', oldProject.name, oldProject.repoUrl, oldProject.description);
+      const action = updateProject(
+        '1',
+        oldProject.name,
+        oldProject.repoUrl,
+        oldProject.description,
+      );
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
     });
 
     it('should do nothing if a project does not exist', () => {
-      const action = updateProject('notexist', 'newname', 'newrepourl', 'newdescription');
+      const action = updateProject(
+        'notexist',
+        'newname',
+        'newrepourl',
+        'newdescription',
+      );
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);

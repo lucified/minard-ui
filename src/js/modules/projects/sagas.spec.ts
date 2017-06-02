@@ -14,7 +14,12 @@ import Projects, {
   Project,
 } from './index';
 
-import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
+import {
+  createApi,
+  testData,
+  testEntityFetcherSaga,
+  testLoaderSaga,
+} from '../../../../test/test-utils';
 import { fetchIfMissing } from '../../sagas/utils';
 import createSagas from './sagas';
 
@@ -120,7 +125,11 @@ describe('Projects sagas', () => {
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Projects.LoadAllProjects.FAILURE.actionCreator(errorMessage)),
+        put(
+          Requests.actions.Projects.LoadAllProjects.FAILURE.actionCreator(
+            errorMessage,
+          ),
+        ),
       );
 
       const result = iterator.next();
@@ -195,7 +204,11 @@ describe('Projects sagas', () => {
       );
 
       expect(iterator.next(project).value).to.deep.equal(
-        call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit),
+        call(
+          fetchIfMissing,
+          'commits',
+          project.latestSuccessfullyDeployedCommit,
+        ),
       );
 
       expect(iterator.next(commit).value).to.deep.equal(
@@ -228,7 +241,11 @@ describe('Projects sagas', () => {
       };
 
       expect(iterator.next(project).value).to.deep.equal(
-        call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit),
+        call(
+          fetchIfMissing,
+          'commits',
+          project.latestSuccessfullyDeployedCommit,
+        ),
       );
 
       expect(iterator.next(commit).value).to.deep.equal(
@@ -258,7 +275,9 @@ describe('Projects sagas', () => {
       const iterator = sagaFunctions.createProject(action);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name)),
+        put(
+          Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name),
+        ),
       );
     });
 
@@ -290,7 +309,12 @@ describe('Projects sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(object[0], name)),
+        put(
+          Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(
+            object[0],
+            name,
+          ),
+        ),
       );
 
       const val = iterator.next();
@@ -306,7 +330,12 @@ describe('Projects sagas', () => {
       iterator.next();
 
       expect(iterator.next({ error }).value).to.deep.equal(
-        put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error)),
+        put(
+          Requests.actions.Projects.CreateProject.FAILURE.actionCreator(
+            name,
+            error,
+          ),
+        ),
       );
 
       const val = iterator.next();
@@ -341,9 +370,7 @@ describe('Projects sagas', () => {
 
       iterator.next();
 
-      expect(iterator.next().value).to.deep.equal(
-        call(api.Project.delete, id),
-      );
+      expect(iterator.next().value).to.deep.equal(call(api.Project.delete, id));
     });
 
     it('resolves the promise and generates a .success action if the deletion succeeds', () => {
@@ -353,9 +380,7 @@ describe('Projects sagas', () => {
       iterator.next();
       iterator.next();
 
-      expect(iterator.next({ response }).value).to.deep.equal(
-        call(resolve),
-      );
+      expect(iterator.next({ response }).value).to.deep.equal(call(resolve));
 
       expect(iterator.next().value).to.deep.equal(
         put(Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id)),
@@ -373,12 +398,15 @@ describe('Projects sagas', () => {
       iterator.next();
       iterator.next();
 
-      expect(iterator.next({ error }).value).to.deep.equal(
-        call(reject),
-      );
+      expect(iterator.next({ error }).value).to.deep.equal(call(reject));
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error)),
+        put(
+          Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(
+            id,
+            error,
+          ),
+        ),
       );
 
       const val = iterator.next();
@@ -423,7 +451,7 @@ describe('Projects sagas', () => {
 
     it('saves and converts the returned project and generates a .success action if the submission succeeds', () => {
       const iterator = sagaFunctions.editProject(action);
-      const response = { data: { id, attributes: { name, description }}};
+      const response = { data: { id, attributes: { name, description } } };
       const object = [{ id: '1' }];
 
       iterator.next();
@@ -438,7 +466,11 @@ describe('Projects sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(object[0])),
+        put(
+          Requests.actions.Projects.EditProject.SUCCESS.actionCreator(
+            object[0],
+          ),
+        ),
       );
 
       const val = iterator.next();
@@ -454,7 +486,12 @@ describe('Projects sagas', () => {
       iterator.next();
 
       expect(iterator.next({ error }).value).to.deep.equal(
-        put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error)),
+        put(
+          Requests.actions.Projects.EditProject.FAILURE.actionCreator(
+            id,
+            error,
+          ),
+        ),
       );
 
       const val = iterator.next();

@@ -23,7 +23,9 @@ class SimpleConfirmable extends React.Component<Props, State> {
     this.showPopup = this.showPopup.bind(this);
     this.hidePopup = this.hidePopup.bind(this);
     this.confirm = this.confirm.bind(this);
-    this.closePopupIfNotClickingSelf = this.closePopupIfNotClickingSelf.bind(this);
+    this.closePopupIfNotClickingSelf = this.closePopupIfNotClickingSelf.bind(
+      this,
+    );
 
     this.state = {
       open: false,
@@ -38,7 +40,11 @@ class SimpleConfirmable extends React.Component<Props, State> {
 
   public componentWillUnmount() {
     if (this.state.open) {
-      window.removeEventListener('click', this.closePopupIfNotClickingSelf, false);
+      window.removeEventListener(
+        'click',
+        this.closePopupIfNotClickingSelf,
+        false,
+      );
     }
   }
 
@@ -54,7 +60,11 @@ class SimpleConfirmable extends React.Component<Props, State> {
   }
 
   private hidePopup() {
-    window.removeEventListener('click', this.closePopupIfNotClickingSelf, false);
+    window.removeEventListener(
+      'click',
+      this.closePopupIfNotClickingSelf,
+      false,
+    );
 
     this.setState({ open: false });
   }
@@ -76,19 +86,25 @@ class SimpleConfirmable extends React.Component<Props, State> {
           transitionEnterTimeout={150}
           transitionLeaveTimeout={150}
         >
-          {this.state.open && (
-            <div key="confirm-popup" className={classNames(styles.popup, styles['arrow-box'])}>
+          {this.state.open &&
+            <div
+              key="confirm-popup"
+              className={classNames(styles.popup, styles['arrow-box'])}
+            >
               <div className={styles.content}>
                 Are you sure?
               </div>
               <div className={styles.actions}>
-                <button className={styles.confirm} onClick={this.confirm}>{action}</button>
+                <button className={styles.confirm} onClick={this.confirm}>
+                  {action}
+                </button>
                 <a className={styles.cancel} onClick={this.hidePopup}>Cancel</a>
               </div>
-            </div>
-          )}
+            </div>}
         </CSSTransitionGroup>
-        {React.cloneElement(React.Children.only(children!), { onClick: this.showPopup })}
+        {React.cloneElement(React.Children.only(children!), {
+          onClick: this.showPopup,
+        })}
       </div>
     );
   }

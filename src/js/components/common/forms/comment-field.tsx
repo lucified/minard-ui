@@ -31,32 +31,27 @@ class Field extends React.Component<Props, void> {
       type,
       onKeyDown,
       fieldRef,
-      meta: {
-        error,
-        touched,
-      },
+      meta: { error, touched },
     } = this.props;
 
-    const inputComponent = type === 'textarea' ? (
-      <Textarea
-        {...input}
-        disabled={disabled}
-        placeholder={placeholder}
-        type={type}
-        rows={3}
-        innerRef={fieldRef}
-        onKeyDown={onKeyDown}
-      />
-    ) : (
-      <input
-        {...input}
-        disabled={disabled}
-        placeholder={placeholder}
-        type={type}
-        ref={fieldRef}
-        onKeyDown={onKeyDown}
-      />
-    );
+    const inputComponent = type === 'textarea'
+      ? <Textarea
+          {...input}
+          disabled={disabled}
+          placeholder={placeholder}
+          type={type}
+          rows={3}
+          innerRef={fieldRef}
+          onKeyDown={onKeyDown}
+        />
+      : <input
+          {...input}
+          disabled={disabled}
+          placeholder={placeholder}
+          type={type}
+          ref={fieldRef}
+          onKeyDown={onKeyDown}
+        />;
 
     return (
       <div className={styles.field}>

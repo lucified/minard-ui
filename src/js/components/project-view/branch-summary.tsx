@@ -60,16 +60,25 @@ const BranchSummary = (props: Props) => {
       );
     } else {
       const { author, committer } = latestSuccessfullyDeployedCommit;
-      const otherAuthorEmail = author.email !== committer.email ? committer.email : undefined;
+      const otherAuthorEmail = author.email !== committer.email
+        ? committer.email
+        : undefined;
       commitContent = (
         <div className={styles['commit-content']}>
           <div className={styles.avatar}>
-            <Avatar title={author.name || author.email} size="sm" email={author.email} iconEmail={otherAuthorEmail} />
+            <Avatar
+              title={author.name || author.email}
+              size="sm"
+              email={author.email}
+              iconEmail={otherAuthorEmail}
+            />
           </div>
           <div>
             <div className={styles['commit-metadata']}>
               <span>
-                <span className={styles.author}>{author.name || author.email}</span>
+                <span className={styles.author}>
+                  {author.name || author.email}
+                </span>
                 {' · '}
                 <span className={styles.timestamp}>
                   <TimeAgo minPeriod={10} date={author.timestamp} />
@@ -92,56 +101,74 @@ const BranchSummary = (props: Props) => {
         </MinardLink>
         <BuildStatus
           className={styles['build-status']}
-          deployment={isFetchError(deploymentForLatestCommit) ? undefined : deploymentForLatestCommit}
+          deployment={
+            isFetchError(deploymentForLatestCommit)
+              ? undefined
+              : deploymentForLatestCommit
+          }
           commit={isFetchError(latestCommit) ? undefined : latestCommit}
           latest={true}
         />
       </div>
       {commitContent}
       <div className={styles.links}>
-        {latestSuccessfulDeployment && !isFetchError(latestSuccessfulDeployment) ? (
-          <MinardLink preview={{ branch }}>
-            <div className={styles.link}>
-              <Icon name="eye" />
-              <div className={styles['link-text']}>
-                Latest preview
+        {latestSuccessfulDeployment && !isFetchError(latestSuccessfulDeployment)
+          ? <MinardLink preview={{ branch }}>
+              <div className={styles.link}>
+                <Icon name="eye" />
+                <div className={styles['link-text']}>
+                  Latest preview
+                </div>
               </div>
-            </div>
-          </MinardLink>
-        ) : (
-          <div className={classNames(styles.link, styles['link-disabled'])}>
-            No preview available
-          </div>
-        )}
+            </MinardLink>
+          : <div className={classNames(styles.link, styles['link-disabled'])}>
+              No preview available
+            </div>}
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: PassedProps,
+): GeneratedProps => {
   const { branch } = ownProps;
 
   let latestSuccessfullyDeployedCommit: FetchError | Commit | undefined;
 
   if (branch.latestSuccessfullyDeployedCommit) {
-    latestSuccessfullyDeployedCommit = Commits.selectors.getCommit(state, branch.latestSuccessfullyDeployedCommit);
+    latestSuccessfullyDeployedCommit = Commits.selectors.getCommit(
+      state,
+      branch.latestSuccessfullyDeployedCommit,
+    );
   }
 
   let latestSuccessfulDeployment: FetchError | Deployment | undefined;
-  if (latestSuccessfullyDeployedCommit &&
+  if (
+    latestSuccessfullyDeployedCommit &&
     !isFetchError(latestSuccessfullyDeployedCommit) &&
     latestSuccessfullyDeployedCommit.deployment
   ) {
-    latestSuccessfulDeployment =
-      Deployments.selectors.getDeployment(state, latestSuccessfullyDeployedCommit.deployment);
+    latestSuccessfulDeployment = Deployments.selectors.getDeployment(
+      state,
+      latestSuccessfullyDeployedCommit.deployment,
+    );
   }
 
   let deploymentForLatestCommit: Deployment | FetchError | undefined;
   let latestCommit: Commit | FetchError | undefined;
   if (branch.latestCommit) {
     latestCommit = Commits.selectors.getCommit(state, branch.latestCommit);
-    if (latestCommit && !isFetchError(latestCommit) && latestCommit.deployment) {
-      deploymentForLatestCommit = Deployments.selectors.getDeployment(state, latestCommit.deployment);
+    if (
+      latestCommit &&
+      !isFetchError(latestCommit) &&
+      latestCommit.deployment
+    ) {
+      deploymentForLatestCommit = Deployments.selectors.getDeployment(
+        state,
+        latestCommit.deployment,
+      );
     }
   }
 
@@ -153,4 +180,6 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProp
   };
 };
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(BranchSummary);
+export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(
+  BranchSummary,
+);

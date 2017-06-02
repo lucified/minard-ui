@@ -6,10 +6,14 @@ import { ModalState } from './types';
 
 const initialState: ModalState = null;
 
-const reducer: Reducer<ModalState> = (state: ModalState = initialState, action: any): ModalState => {
+const reducer: Reducer<ModalState> = (
+  state: ModalState = initialState,
+  action: any,
+): ModalState => {
   switch (action.type) {
     case OPEN_MODAL:
-      if (!state) { // Don't open modal if one is already open
+      if (!state) {
+        // Don't open modal if one is already open
         return {
           type: action.modalType,
         };

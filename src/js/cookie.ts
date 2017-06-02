@@ -1,13 +1,19 @@
 export const getValue = (field: string): string | undefined => {
   const fieldEquals = `${field}=`;
-  const found = document.cookie.split(';')
+  const found = document.cookie
+    .split(';')
     .map(part => part.trim())
     .find(part => part.indexOf(fieldEquals) === 0);
 
   return found && decodeURIComponent(found.substring(fieldEquals.length));
 };
 
-export const setValue = (field: string, value: string, expiresInDays = 30, path = '/'): void => {
+export const setValue = (
+  field: string,
+  value: string,
+  expiresInDays = 30,
+  path = '/',
+): void => {
   let expires: string;
 
   if (expiresInDays) {
@@ -18,7 +24,9 @@ export const setValue = (field: string, value: string, expiresInDays = 30, path 
     expires = '';
   }
 
-  document.cookie = `${field}=${encodeURIComponent(value)}${expires}; path=${path}`;
+  document.cookie = `${field}=${encodeURIComponent(
+    value,
+  )}${expires}; path=${path}`;
 };
 
 export const removeValue = (field: string, path = '/'): void => {

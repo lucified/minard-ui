@@ -11,14 +11,21 @@ import {
 } from './types';
 
 export const SET_USER_EMAIL = 'USER/SET_USER_EMAIL';
-export const setUserEmail = (email: string, expiresAt: number): SetUserEmailAction => ({
+export const setUserEmail = (
+  email: string,
+  expiresAt: number,
+): SetUserEmailAction => ({
   type: SET_USER_EMAIL,
   email,
   expiresAt,
 });
 
 export const SET_TEAM = 'USER/SET_TEAM';
-export const setTeam = (id: string, name: string, invitationToken?: string): SetTeamAction => ({
+export const setTeam = (
+  id: string,
+  name: string,
+  invitationToken?: string,
+): SetTeamAction => ({
   type: SET_TEAM,
   id,
   name,
@@ -40,7 +47,12 @@ export const signupUser = (
 });
 
 export const LOGIN = 'USER/LOGIN';
-export const login = (email: string, idToken: string, accessToken: string, expiresAt: number): LoginAction => ({
+export const login = (
+  email: string,
+  idToken: string,
+  accessToken: string,
+  expiresAt: number,
+): LoginAction => ({
   type: LOGIN,
   email,
   idToken,
@@ -60,7 +72,9 @@ export const clearStoredData = (): ClearStoredDataAction => ({
 });
 
 export const LOAD_TEAM_INFORMATION = 'USER/LOAD_TEAM_INFORMATION';
-export const loadTeamInformation = (redirect?: string): LoadTeamInformationAction => ({
+export const loadTeamInformation = (
+  redirect?: string,
+): LoadTeamInformationAction => ({
   type: LOAD_TEAM_INFORMATION,
   redirect,
 });
@@ -72,7 +86,9 @@ export const setGitPassword = (password: string): SetGitPasswordAction => ({
 });
 
 export const REDIRECT_TO_LOGIN = 'USER/REDIRECT_TO_LOGIN';
-export const redirectToLogin = (returnPath?: string): RedirectToLoginAction => ({
+export const redirectToLogin = (
+  returnPath?: string,
+): RedirectToLoginAction => ({
   type: REDIRECT_TO_LOGIN,
   returnPath,
 });

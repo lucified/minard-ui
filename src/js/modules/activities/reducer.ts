@@ -7,12 +7,18 @@ import { ActivityState, StoreActivitiesAction } from './types';
 
 const initialState: ActivityState = {};
 
-const reducer: Reducer<ActivityState> = (state: ActivityState = initialState, action: any) => {
+const reducer: Reducer<ActivityState> = (
+  state: ActivityState = initialState,
+  action: any,
+) => {
   switch (action.type) {
     case STORE_ACTIVITIES:
       const activities = (action as StoreActivitiesAction).entities;
       if (activities && activities.length > 0) {
-        const newActivitiesObject: ActivityState = mapKeys(activities, activity => activity.id);
+        const newActivitiesObject: ActivityState = mapKeys(
+          activities,
+          activity => activity.id,
+        );
 
         return {
           ...state,

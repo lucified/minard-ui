@@ -1,6 +1,11 @@
-import { ClearProjectDeletionErrorAction, ClearSignupErrorAction, SignupError } from './types';
+import {
+  ClearProjectDeletionErrorAction,
+  ClearSignupErrorAction,
+  SignupError,
+} from './types';
 
-export const CLEAR_PROJECT_DELETION_ERRORS = 'ERRORS/CLEAR_PROJECT_DELETION_ERROR';
+export const CLEAR_PROJECT_DELETION_ERRORS =
+  'ERRORS/CLEAR_PROJECT_DELETION_ERROR';
 export const clearProjectDeletionErrors = (): ClearProjectDeletionErrorAction => ({
   type: CLEAR_PROJECT_DELETION_ERRORS,
 });

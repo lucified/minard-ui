@@ -16,9 +16,7 @@ import NewProjectForm from './new-project-form';
 
 const styles = require('../common/forms/modal-dialog.scss');
 
-interface PassedProps {
-
-}
+interface PassedProps {}
 
 interface GeneratedStateProps {
   isOpen: boolean;
@@ -27,7 +25,9 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => void;
+  closeDialog: (
+    e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>,
+  ) => void;
   redirectToProject: (project: Project) => void;
 }
 
@@ -85,12 +85,17 @@ class NewProjectDialog extends React.Component<Props, void> {
 const mapStateToProps = (state: StateTree) => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.NewProject),
   team: User.selectors.getTeam(state),
-  existingProjects: Projects.selectors.getProjects(state)
+  existingProjects: Projects.selectors
+    .getProjects(state)
     .filter(projectOrError => !isFetchError(projectOrError)) as Project[],
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => {
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  closeDialog: (
+    e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>,
+  ) => {
     if (e) {
       e.preventDefault();
     }
@@ -102,7 +107,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(NewProjectDialog);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(NewProjectDialog);

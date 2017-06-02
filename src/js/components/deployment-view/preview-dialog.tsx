@@ -75,7 +75,7 @@ class PreviewDialog extends React.Component<Props, State> {
           linkDetails={linkDetails}
           isAuthenticatedUser={isAuthenticatedUser}
         />
-        {dialogOpen && (
+        {dialogOpen &&
           <CommitSummary
             key="dialog"
             className={styles['commit-summary']}
@@ -83,17 +83,18 @@ class PreviewDialog extends React.Component<Props, State> {
             deployment={deployment}
             preview={preview}
             isAuthenticatedUser={isAuthenticatedUser}
-          />
-        )}
-        {dialogOpen && deployment.comments && !isFetchError(deployment.comments) && deployment.comments.length > 0 && (
+          />}
+        {dialogOpen &&
+          deployment.comments &&
+          !isFetchError(deployment.comments) &&
+          deployment.comments.length > 0 &&
           <CommentList
             className={styles['commit-list']}
             commentIds={deployment.comments}
             highlightComment={highlightComment}
             isAuthenticatedUser={isAuthenticatedUser}
-          />
-        )}
-        {dialogOpen && (
+          />}
+        {dialogOpen &&
           <NewCommentForm
             isAuthenticatedUser={isAuthenticatedUser}
             initialValues={{
@@ -101,8 +102,7 @@ class PreviewDialog extends React.Component<Props, State> {
               name: getValue('commentName'),
               email: userEmail || getValue('commentEmail'),
             }}
-          />
-        )}
+          />}
       </div>
     );
   }

@@ -9,7 +9,7 @@ interface Props {
   className: string;
 }
 
-const PlaceholderCommit = ({ className }: Props) => (
+const PlaceholderCommit = ({ className }: Props) =>
   <div className={classNames(styles['commit-container'], className)}>
     <div className={styles['animated-background']}>
       <div className={classNames(styles.mask, styles.avatar)} />
@@ -17,7 +17,6 @@ const PlaceholderCommit = ({ className }: Props) => (
       <div className={classNames(styles.mask, styles['bottom-right'])} />
       <div className={classNames(styles.mask, styles.between)} />
     </div>
-  </div>
-);
+  </div>;
 
 export default PlaceholderCommit;

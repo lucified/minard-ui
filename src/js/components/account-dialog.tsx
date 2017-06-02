@@ -20,7 +20,9 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => void;
+  closeDialog: (
+    e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>,
+  ) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
@@ -82,17 +84,23 @@ class AccountDialog extends React.Component<Props, State> {
     const { email } = this.props;
 
     if (this.auth0) {
-      this.auth0.changePassword({
-        connection: 'Username-Password-Authentication',
-        email,
-      }, (error: Auth0Error, _response: any) => {
-        if (error) {
-          console.error('Authorization error:', error);
-          this.setState({ error: error.description, passwordChangeTriggered: false });
-        } else {
-          this.setState({ passwordChangeTriggered: true, error: undefined });
-        }
-      });
+      this.auth0.changePassword(
+        {
+          connection: 'Username-Password-Authentication',
+          email,
+        },
+        (error: Auth0Error, _response: any) => {
+          if (error) {
+            console.error('Authorization error:', error);
+            this.setState({
+              error: error.description,
+              passwordChangeTriggered: false,
+            });
+          } else {
+            this.setState({ passwordChangeTriggered: true, error: undefined });
+          }
+        },
+      );
     } else {
       console.error('Auth0 not initialized!');
       this.setState({ error: 'Unable to initialize Auth0' });
@@ -126,11 +134,16 @@ class AccountDialog extends React.Component<Props, State> {
             </div>
             <div className={styles.text}>
               <p>
-                Your account's email address is <strong onClick={selectText}>{email}</strong>
+                Your account's email address is
+                {' '}<strong onClick={selectText}>{email}</strong>
               </p>
               <p>
                 To change your Minard email address, please
-                contact <a className={styles.url} href="mailto:support@minard.io">support@minard.io</a>.
+                contact
+                {' '}
+                <a className={styles.url} href="mailto:support@minard.io">
+                  support@minard.io
+                </a>.
               </p>
             </div>
           </div>
@@ -145,14 +158,18 @@ class AccountDialog extends React.Component<Props, State> {
                 className={modalStyles.reset}
                 onClick={this.requestResetPassword}
               >
-                {passwordChangeTriggered ? 'Email sent!' : 'Request password reset'}
+                {passwordChangeTriggered
+                  ? 'Email sent!'
+                  : 'Request password reset'}
               </button>
               <p>
                 A password reset email will be sent to {email}.
               </p>
-              {error && (
-                <p className={styles.error}>Sorry, we had a problem problem requesting a password reset: {error}</p>
-              )}
+              {error &&
+                <p className={styles.error}>
+                  Sorry, we had a problem problem requesting a password reset:
+                  {' '}{error}
+                </p>}
             </div>
           </div>
           <div className={styles.section}>
@@ -165,9 +182,14 @@ class AccountDialog extends React.Component<Props, State> {
                 {' '}<strong onClick={selectText}>{email}</strong>
               </p>
               <p>
-                For security reasons, your Git password was only shown when you signed up for Minard. If
+                For security reasons, your Git password was only shown when you
+                signed up for Minard. If
                 you wish to change your password, please
-                contact <a className={styles.url} href="mailto:support@minard.io">support@minard.io</a>.
+                contact
+                {' '}
+                <a className={styles.url} href="mailto:support@minard.io">
+                  support@minard.io
+                </a>.
               </p>
             </div>
           </div>
@@ -181,8 +203,12 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.Account),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => {
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  closeDialog: (
+    e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>,
+  ) => {
     if (e) {
       e.preventDefault();
     }
@@ -191,7 +217,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AccountDialog);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(AccountDialog);

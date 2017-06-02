@@ -5,7 +5,10 @@ import 'react-select/dist/react-select.css';
 import { Field, FormProps, reduxForm, WrappedFieldProps } from 'redux-form';
 
 import { onSubmitPromiseCreator } from '../../modules/forms';
-import Projects, { CreateProjectFormData, Project } from '../../modules/projects';
+import Projects, {
+  CreateProjectFormData,
+  Project,
+} from '../../modules/projects';
 import Requests from '../../modules/requests';
 
 import FormField from '../common/forms/field';
@@ -33,7 +36,7 @@ const validate = (values: CreateProjectFormData, props: Props) => {
   } else if (!projectNameRegex.test(name)) {
     errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (name[0] === '-') {
-    errors.name = 'Project name can\'t start with a hyphen';
+    errors.name = "Project name can't start with a hyphen";
   } else if (name.length > 220) {
     errors.name = 'Maximum length of 220 characters';
   } else if (props.existingProjects.find(project => project.name === name)) {
@@ -47,9 +50,12 @@ const validate = (values: CreateProjectFormData, props: Props) => {
   return errors;
 };
 
-const toLowerCase = (value?: string): string | undefined => value && value.toLowerCase();
-const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
-const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
+const toLowerCase = (value?: string): string | undefined =>
+  value && value.toLowerCase();
+const spaceToHyphen = (value?: string): string | undefined =>
+  value && value.replace(/ /, '-');
+const normalizeProjectName = (value?: string): string | undefined =>
+  spaceToHyphen(toLowerCase(value));
 
 class NewProjectForm extends React.Component<Props, void> {
   constructor(props: Props) {
@@ -66,28 +72,35 @@ class NewProjectForm extends React.Component<Props, void> {
   }
 
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid, existingProjects } = this.props;
-    const dropdownValues = existingProjects.sort((a, b) => {
-      if (a.latestActivityTimestamp === undefined) {
-        return -1;
-      }
+    const {
+      handleSubmit,
+      pristine,
+      submitting,
+      error,
+      invalid,
+      existingProjects,
+    } = this.props;
+    const dropdownValues = existingProjects
+      .sort((a, b) => {
+        if (a.latestActivityTimestamp === undefined) {
+          return -1;
+        }
 
-      if (b.latestActivityTimestamp === undefined) {
-        return 1;
-      }
+        if (b.latestActivityTimestamp === undefined) {
+          return 1;
+        }
 
-      return b.latestActivityTimestamp - a.latestActivityTimestamp;
-    })
+        return b.latestActivityTimestamp - a.latestActivityTimestamp;
+      })
       .map(project => ({ value: project.id, label: project.name }));
 
     return (
       <form onSubmit={handleSubmit}>
         <div className={styles.form}>
-          {error && (
+          {error &&
             <div className={styles['general-error']}>
               {error}
-            </div>
-          )}
+            </div>}
           <Field
             name="name"
             component={FormField}
@@ -108,37 +121,42 @@ class NewProjectForm extends React.Component<Props, void> {
         <footer className={styles.footer}>
           <div>
             <a
-              className={classNames(styles.cancel, { [styles['disabled-link']]: submitting })}
+              className={classNames(styles.cancel, {
+                [styles['disabled-link']]: submitting,
+              })}
               onClick={this.handleCancel}
             >
               Cancel
             </a>
 
-            <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
+            <button
+              type="submit"
+              className={styles.submit}
+              disabled={pristine || submitting || invalid}
+            >
               {submitting ? 'Creating...' : 'Create project'}
             </button>
           </div>
           {/* TODO: don't inline function below */}
-          {dropdownValues.length > 0 && (
+          {dropdownValues.length > 0 &&
             <div>
               <Field
                 name="projectTemplate"
-                component={(field: WrappedFieldProps<void>) => (
+                component={(field: WrappedFieldProps<void>) =>
                   <Select
                     value={field.input && field.input.value}
                     onChange={field.input && field.input.onChange}
-                    onBlur={() => field.input && field.input.onBlur(field.input.value)}
+                    onBlur={() =>
+                      field.input && field.input.onBlur(field.input.value)}
                     options={dropdownValues}
                     placeholder="Clone existing project…"
                     autosize={false}
                     disabled={(field.meta as any).submitting}
                     className={styles['template-dropdown']}
                     simpleValue
-                  />
-                ) /* tslint:disable-line:jsx-no-lambda */}
+                  /> /* tslint:disable-line:jsx-no-lambda */}
               />
-            </div>
-          )}
+            </div>}
         </footer>
       </form>
     );

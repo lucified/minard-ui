@@ -5,5 +5,7 @@ import { Commit } from './types';
 
 const selectCommitTree = (state: StateTree) => state.entities.commits;
 
-export const getCommit = (state: StateTree, id: string): Commit | FetchError | undefined =>
-  selectCommitTree(state)[id];
+export const getCommit = (
+  state: StateTree,
+  id: string,
+): Commit | FetchError | undefined => selectCommitTree(state)[id];

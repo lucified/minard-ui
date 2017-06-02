@@ -33,25 +33,51 @@ const getRetinaSize = (sizeLabel?: string): number => {
   }
 };
 
-const Avatar = ({ size, email, iconEmail, initials, title, shadow, className }: Props) => {
+const Avatar = ({
+  size,
+  email,
+  iconEmail,
+  initials,
+  title,
+  shadow,
+  className,
+}: Props) => {
   const pixelSize = getRetinaSize(size);
-  const classes = classNames(styles.avatar, styles[`avatar-${size}`], className, { [styles.shadow]: !!shadow });
+  const classes = classNames(
+    styles.avatar,
+    styles[`avatar-${size}`],
+    className,
+    { [styles.shadow]: !!shadow },
+  );
 
   if (email) {
     return (
       <figure title={title || email} className={classes}>
-        <Gravatar className={styles['avatar-img']} email={email} rating="pg" size={pixelSize} />
+        <Gravatar
+          className={styles['avatar-img']}
+          email={email}
+          rating="pg"
+          size={pixelSize}
+        />
         {iconEmail &&
-          <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" size={pixelSize * 0.4} />
-        }
+          <Gravatar
+            className={styles['avatar-icon']}
+            email={iconEmail}
+            rating="pg"
+            size={pixelSize * 0.4}
+          />}
       </figure>
     );
   } else {
     return (
       <figure title={title} className={classes} data-initial={initials}>
         {iconEmail &&
-          <Gravatar className={styles['avatar-icon']} email={iconEmail} rating="pg" size={pixelSize * 0.4} />
-        }
+          <Gravatar
+            className={styles['avatar-icon']}
+            email={iconEmail}
+            rating="pg"
+            size={pixelSize * 0.4}
+          />}
       </figure>
     );
   }

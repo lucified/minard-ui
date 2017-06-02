@@ -5,8 +5,10 @@ import { Team, UserState } from './types';
 
 const selectUserTree = (state: StateTree): UserState => state.user;
 
-export const getUserEmail = (state: StateTree): string | undefined => selectUserTree(state).email;
-export const isUserLoggedIn = (state: StateTree): boolean => !!selectUserTree(state).team;
+export const getUserEmail = (state: StateTree): string | undefined =>
+  selectUserTree(state).email;
+export const isUserLoggedIn = (state: StateTree): boolean =>
+  !!selectUserTree(state).team;
 export const hasStoredUserCredentials = (state: StateTree): boolean => {
   const { email, expiresAt } = selectUserTree(state);
 
@@ -18,5 +20,7 @@ export const hasStoredUserCredentials = (state: StateTree): boolean => {
 
   return now.isBefore(moment(expiresAt));
 };
-export const getTeam = (state: StateTree): Team | undefined => selectUserTree(state).team;
-export const getUserGitPassword = (state: StateTree): string | undefined => selectUserTree(state).gitPassword;
+export const getTeam = (state: StateTree): Team | undefined =>
+  selectUserTree(state).team;
+export const getUserGitPassword = (state: StateTree): string | undefined =>
+  selectUserTree(state).gitPassword;

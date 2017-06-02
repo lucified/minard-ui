@@ -15,7 +15,12 @@ interface Props {
   allLoaded: boolean;
 }
 
-const ActivitySection = ({ activities, isLoading, allLoaded, loadActivities }: Props) => (
+const ActivitySection = ({
+  activities,
+  isLoading,
+  allLoaded,
+  loadActivities,
+}: Props) =>
   <section>
     <SimpleSectionTitle>
       <span>Previews</span>
@@ -34,7 +39,6 @@ const ActivitySection = ({ activities, isLoading, allLoaded, loadActivities }: P
       loadActivities={loadActivities}
       isLoading={isLoading}
     />
-  </section>
-);
+  </section>;
 
 export default ActivitySection;

@@ -50,9 +50,9 @@ describe('Forms sagas', () => {
         }),
       );
 
-      expect(iterator.next({ success: { result: { id: 3 }}}).value).to.deep.equal(
-        call(resolve, { id: 3 }),
-      );
+      expect(
+        iterator.next({ success: { result: { id: 3 } } }).value,
+      ).to.deep.equal(call(resolve, { id: 3 }));
 
       expect(iterator.next().done).to.equal(true);
     });
@@ -69,9 +69,9 @@ describe('Forms sagas', () => {
         }),
       );
 
-      expect(iterator.next({ failure: { prettyError: 'foobar' } }).value).to.deep.equal(
-        call(reject, new SubmissionError({ _error: 'foobar' })),
-      );
+      expect(
+        iterator.next({ failure: { prettyError: 'foobar' } }).value,
+      ).to.deep.equal(call(reject, new SubmissionError({ _error: 'foobar' })));
 
       expect(iterator.next().done).to.equal(true);
     });

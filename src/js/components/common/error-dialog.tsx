@@ -16,7 +16,7 @@ export default class ErrorDialog extends React.Component<Props, void> {
   }
 
   public render() {
-    const {title, actionText, action} = this.props;
+    const { title, actionText, action } = this.props;
 
     const getTitle = () => {
       if (title) {

@@ -11,17 +11,13 @@ declare const window: { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
 function configureStore(initialState: object, history: History) {
   const sagaMiddleware = createSagaMiddleware();
   const routerMiddlewareObject = routerMiddleware(history);
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const store = createStore(
     rootReducer,
     initialState,
-    composeEnhancers(
-      applyMiddleware(
-        sagaMiddleware,
-        routerMiddlewareObject,
-      ),
-    ),
+    composeEnhancers(applyMiddleware(sagaMiddleware, routerMiddlewareObject)),
   );
 
   if (module.hot) {

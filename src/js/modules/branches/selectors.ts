@@ -7,7 +7,11 @@ import { Branch } from './types';
 
 const selectBranchTree = (state: StateTree) => state.entities.branches;
 
-export const getBranch = (state: StateTree, id: string): Branch | FetchError | undefined =>
-  selectBranchTree(state)[id];
+export const getBranch = (
+  state: StateTree,
+  id: string,
+): Branch | FetchError | undefined => selectBranchTree(state)[id];
 export const getBranchesForProject = (state: StateTree, id: string) =>
-  values(selectBranchTree(state)).filter(branch => !isFetchError(branch) && branch.project === id);
+  values(selectBranchTree(state)).filter(
+    branch => !isFetchError(branch) && branch.project === id,
+  );

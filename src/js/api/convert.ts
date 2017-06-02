@@ -17,14 +17,16 @@ import {
   ResponseProjectElement,
 } from './types';
 
-const toConvertedArray = <InputType, OutputType>(converter: (response: InputType) => OutputType) =>
-  (response: InputType[] | InputType): OutputType[] => {
-    let responseEntities = response;
-    if (!(responseEntities instanceof Array)) {
-      responseEntities = [responseEntities];
-    }
+const toConvertedArray = <InputType, OutputType>(
+  converter: (response: InputType) => OutputType,
+) => (response: InputType[] | InputType): OutputType[] => {
+  let responseEntities = response;
+  if (!(responseEntities instanceof Array)) {
+    responseEntities = [responseEntities];
+  }
 
-    return compact(responseEntities.map(responseEntity => {
+  return compact(
+    responseEntities.map(responseEntity => {
       try {
         return converter(responseEntity);
       } catch (e) {
@@ -32,14 +34,18 @@ const toConvertedArray = <InputType, OutputType>(converter: (response: InputType
 
         return undefined;
       }
-    })) as OutputType[];
-  };
+    }),
+  ) as OutputType[];
+};
 
-const splitCommitMessage = (rawMessage: string): { message: string, description?: string } => {
+const splitCommitMessage = (
+  rawMessage: string,
+): { message: string, description?: string } => {
   const commitMessageLines = rawMessage.match(/[^\r\n]+/g);
   const message = commitMessageLines ? commitMessageLines[0] : '';
-  const description = commitMessageLines && commitMessageLines.length > 1 ?
-    commitMessageLines.slice(1).join('\n') : undefined;
+  const description = commitMessageLines && commitMessageLines.length > 1
+    ? commitMessageLines.slice(1).join('\n')
+    : undefined;
 
   return {
     message,
@@ -49,13 +55,18 @@ const splitCommitMessage = (rawMessage: string): { message: string, description?
 
 // Projects
 const createProjectObject = (project: ResponseProjectElement): Project => {
-  const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = project.relationships &&
+  const latestSuccessfullyDeployedCommitObject:
+    | { data?: { id: string } }
+    | undefined =
+    project.relationships &&
     project.relationships['latest-successfully-deployed-commit'];
-  const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
+  const latestSuccessfullyDeployedCommit: string | undefined =
+    latestSuccessfullyDeployedCommitObject &&
     latestSuccessfullyDeployedCommitObject.data &&
     latestSuccessfullyDeployedCommitObject.data.id;
 
-  const latestActivityTimestampString = project.attributes['latest-activity-timestamp'];
+  const latestActivityTimestampString =
+    project.attributes['latest-activity-timestamp'];
   let latestActivityTimestamp: number | undefined;
 
   if (latestActivityTimestampString) {
@@ -90,7 +101,13 @@ const toActivityType = (activityString: string): ActivityType => {
 
 const createActivityObject = (activity: ResponseActivityElement): Activity => {
   const type = toActivityType(activity.attributes['activity-type']);
-  const { commit, deployment, project, branch, timestamp } = activity.attributes;
+  const {
+    commit,
+    deployment,
+    project,
+    branch,
+    timestamp,
+  } = activity.attributes;
   const { message, description } = splitCommitMessage(commit.message);
 
   const activityObject: Activity = {
@@ -113,7 +130,9 @@ const createActivityObject = (activity: ResponseActivityElement): Activity => {
         email: commit.committer.email,
         timestamp: moment(commit.committer.timestamp).valueOf(),
       },
-      deployment: commit.deployments && commit.deployments.length > 0 ? commit.deployments[0] : undefined,
+      deployment: commit.deployments && commit.deployments.length > 0
+        ? commit.deployments[0]
+        : undefined,
     },
     deployment: {
       status: toDeploymentStatus(deployment.status),
@@ -141,19 +160,23 @@ export const toActivities = toConvertedArray(createActivityObject);
 
 // Branches
 const createBranchObject = (branch: ResponseBranchElement): Branch => {
-  const latestSuccessfullyDeployedCommitObject: { data?: { id: string }} | undefined = branch.relationships &&
+  const latestSuccessfullyDeployedCommitObject:
+    | { data?: { id: string } }
+    | undefined =
+    branch.relationships &&
     branch.relationships['latest-successfully-deployed-commit'];
-  const latestSuccessfullyDeployedCommit: string | undefined = latestSuccessfullyDeployedCommitObject &&
+  const latestSuccessfullyDeployedCommit: string | undefined =
+    latestSuccessfullyDeployedCommitObject &&
     latestSuccessfullyDeployedCommitObject.data &&
     latestSuccessfullyDeployedCommitObject.data.id;
 
-  const latestCommitObject: { data?: { id: string }} | undefined = branch.relationships &&
-    branch.relationships['latest-commit'];
-  const latestCommit: string | undefined = latestCommitObject &&
-    latestCommitObject.data &&
-    latestCommitObject.data.id;
+  const latestCommitObject: { data?: { id: string } } | undefined =
+    branch.relationships && branch.relationships['latest-commit'];
+  const latestCommit: string | undefined =
+    latestCommitObject && latestCommitObject.data && latestCommitObject.data.id;
 
-  const latestActivityTimestampString = branch.attributes['latest-activity-timestamp'];
+  const latestActivityTimestampString =
+    branch.attributes['latest-activity-timestamp'];
   let latestActivityTimestamp: number | undefined;
 
   if (latestActivityTimestampString) {
@@ -161,8 +184,11 @@ const createBranchObject = (branch: ResponseBranchElement): Branch => {
   }
 
   let errors: string[] = [];
-  if (branch.attributes['minard-json'] && branch.attributes['minard-json']!.errors &&
-    branch.attributes['minard-json']!.errors!.length > 0) {
+  if (
+    branch.attributes['minard-json'] &&
+    branch.attributes['minard-json']!.errors &&
+    branch.attributes['minard-json']!.errors!.length > 0
+  ) {
     errors = errors.concat(branch.attributes['minard-json']!.errors!);
   }
 
@@ -186,7 +212,13 @@ export const toBranches = toConvertedArray(createBranchObject);
 // Comments
 const createCommentObject = (comment: ResponseCommentElement): Comment => {
   const { id } = comment;
-  const { name, email, message, 'created-at': timestamp, deployment } = comment.attributes;
+  const {
+    name,
+    email,
+    message,
+    'created-at': timestamp,
+    deployment,
+  } = comment.attributes;
 
   return {
     id,
@@ -202,9 +234,15 @@ export const toComments = toConvertedArray(createCommentObject);
 
 // Commits
 const createCommitObject = (commit: ResponseCommitElement): Commit => {
-  const { message, description } = splitCommitMessage(commit.attributes.message);
+  const { message, description } = splitCommitMessage(
+    commit.attributes.message,
+  );
   const deployments = commit.relationships && commit.relationships.deployments;
-  const latestDeployment = deployments && deployments.data && deployments.data[0] && deployments.data[0].id;
+  const latestDeployment =
+    deployments &&
+    deployments.data &&
+    deployments.data[0] &&
+    deployments.data[0].id;
   const committer = commit.attributes.committer;
 
   return {
@@ -229,7 +267,9 @@ const createCommitObject = (commit: ResponseCommitElement): Commit => {
 export const toCommits = toConvertedArray(createCommitObject);
 
 // Deployments
-const createDeploymentObject = (deployment: ResponseDeploymentElement): Deployment => ({
+const createDeploymentObject = (
+  deployment: ResponseDeploymentElement,
+): Deployment => ({
   id: deployment.id,
   status: toDeploymentStatus(deployment.attributes.status),
   url: deployment.attributes.url,

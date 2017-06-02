@@ -34,13 +34,15 @@ describe('Activities reducer', () => {
           email: 'juho@lucify.com',
           timestamp: 1469800281802,
         },
-        message: "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier.",
+        message:
+          "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier.",
         deployment: '7',
       },
       deployment: {
         id: '7',
         url: '#',
-        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot:
+          'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         status: DeploymentStatus.Success,
         creator: {
           name: 'Ville Saarinen',
@@ -75,14 +77,16 @@ describe('Activities reducer', () => {
           email: 'juho@lucify.com',
           timestamp: 1469634681802,
         },
-        message: 'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. ' +
-          'It should be truncated in some cases',
+        message:
+          'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. ' +
+            'It should be truncated in some cases',
         deployment: '8',
       },
       deployment: {
         id: '8',
         url: '#',
-        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot:
+          'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         status: DeploymentStatus.Success,
         creator: {
           name: 'Ville Saarinen',
@@ -126,7 +130,8 @@ describe('Activities reducer', () => {
       deployment: {
         id: '9',
         url: '#',
-        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot:
+          'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         status: DeploymentStatus.Success,
         creator: {
           name: 'Ville Saarinen',
@@ -169,7 +174,8 @@ describe('Activities reducer', () => {
       deployment: {
         id: '6',
         url: '#',
-        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot:
+          'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         status: DeploymentStatus.Success,
         creator: {
           name: 'Ville Saarinen',
@@ -208,7 +214,8 @@ describe('Activities reducer', () => {
       deployment: {
         id: '9',
         url: '#',
-        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot:
+          'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         status: DeploymentStatus.Success,
         creator: {
           name: 'Ville Saarinen',
@@ -228,11 +235,16 @@ describe('Activities reducer', () => {
     const storeAction = storeActivities(values(newActivities));
 
     it('with an empty initial state', () => {
-      expect(reducer(undefined as any, storeAction)).to.deep.equal(newActivities);
+      expect(reducer(undefined as any, storeAction)).to.deep.equal(
+        newActivities,
+      );
     });
 
     it('makes no changes with an empty list', () => {
-      const emptyAction: StoreActivitiesAction = { type: storeAction.type, entities: [] };
+      const emptyAction: StoreActivitiesAction = {
+        type: storeAction.type,
+        entities: [],
+      };
       const newState = reducer(stateWithoutExistingEntity, emptyAction);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
@@ -240,20 +252,32 @@ describe('Activities reducer', () => {
 
     it('with other entities in state', () => {
       const newState = reducer(stateWithoutExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithoutExistingEntity, ...newActivities });
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        ...newActivities,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
     it('with existing entities in state', () => {
       const newState = reducer(stateWithExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithExistingEntity, ...newActivities });
+      expect(newState).to.deep.equal({
+        ...stateWithExistingEntity,
+        ...newActivities,
+      });
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
 
   it(`clears data on ${CLEAR_STORED_DATA}`, () => {
-    expect(reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(
+      reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
   });
 });

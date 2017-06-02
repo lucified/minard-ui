@@ -70,13 +70,20 @@ describe('saga utils', () => {
     it('stores passed entities', () => {
       const includedData = testData.branchResponse.included!;
       const iterator = storeIncludedEntities(includedData);
-      const deploymentsEntities = includedData.filter(entity => entity.type === 'deployments');
+      const deploymentsEntities = includedData.filter(
+        entity => entity.type === 'deployments',
+      );
       const deploymentObjects = [{ id: '1' }];
-      const commitsEntities = includedData.filter(entity => entity.type === 'commits');
+      const commitsEntities = includedData.filter(
+        entity => entity.type === 'commits',
+      );
       const commitObjects = [{ id: '2' }];
 
       expect(iterator.next().value).to.deep.equal(
-        call(Converter.toDeployments, deploymentsEntities as ResponseDeploymentElement[]),
+        call(
+          Converter.toDeployments,
+          deploymentsEntities as ResponseDeploymentElement[],
+        ),
       );
 
       expect(iterator.next(deploymentObjects).value).to.deep.equal(

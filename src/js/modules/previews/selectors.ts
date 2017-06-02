@@ -3,7 +3,8 @@ import { FetchError } from '../errors';
 
 import { EntityType, Preview, PreviewState } from './types';
 
-const selectPreviewTree = (state: StateTree): PreviewState => state.entities.previews;
+const selectPreviewTree = (state: StateTree): PreviewState =>
+  state.entities.previews;
 
 export const getPreview = (
   state: StateTree,

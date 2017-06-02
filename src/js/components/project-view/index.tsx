@@ -129,7 +129,11 @@ class ProjectView extends React.Component<Props, void> {
                 </div>
                 <div className="col-xs-12 col-sm-4">
                   <div className={styles.branches}>
-                    <ProjectBranches project={project} branches={branches} count={3} />
+                    <ProjectBranches
+                      project={project}
+                      branches={branches}
+                      count={3}
+                    />
                   </div>
                 </div>
               </div>
@@ -148,11 +152,20 @@ class ProjectView extends React.Component<Props, void> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: PassedProps,
+): GeneratedStateProps => {
   const { projectId } = ownProps.match.params;
   const project = Projects.selectors.getProject(state, projectId);
-  const isLoadingActivities = Requests.selectors.isLoadingActivitiesForProject(state, projectId);
-  const isAllActivitiesRequestedForProject = Requests.selectors.isAllActivitiesRequestedForProject(state, projectId);
+  const isLoadingActivities = Requests.selectors.isLoadingActivitiesForProject(
+    state,
+    projectId,
+  );
+  const isAllActivitiesRequestedForProject = Requests.selectors.isAllActivitiesRequestedForProject(
+    state,
+    projectId,
+  );
 
   if (!project || isFetchError(project)) {
     return {
@@ -165,9 +178,11 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   let branches: (Branch | FetchError | undefined)[] | undefined | FetchError;
   const branchIDs = project.branches;
   if (branchIDs) {
-    branches = isFetchError(branchIDs) ?
-      branchIDs :
-      branchIDs.map(branchId => Branches.selectors.getBranch(state, branchId));
+    branches = isFetchError(branchIDs)
+      ? branchIDs
+      : branchIDs.map(branchId =>
+          Branches.selectors.getBranch(state, branchId),
+        );
   }
 
   return {
@@ -180,14 +195,19 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
 };
 
 const dispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  loadProject: (id: string) => { dispatch(Projects.actions.loadProject(id)); },
+  loadProject: (id: string) => {
+    dispatch(Projects.actions.loadProject(id));
+  },
   loadActivities: (id: string, count: number, until?: number) => {
     dispatch(Activities.actions.loadActivitiesForProject(id, count, until));
   },
-  loadBranches: (id: string) => { dispatch(Branches.actions.loadBranchesForProject(id)); },
+  loadBranches: (id: string) => {
+    dispatch(Branches.actions.loadBranchesForProject(id));
+  },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  dispatchToProps,
-)(ProjectView);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, dispatchToProps)(ProjectView);

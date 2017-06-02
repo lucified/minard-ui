@@ -1,6 +1,12 @@
 import 'isomorphic-fetch';
 
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiResult, ApiTeam } from './types';
+import {
+  Api,
+  ApiEntityResponse,
+  ApiPreviewResponse,
+  ApiResult,
+  ApiTeam,
+} from './types';
 
 console.log('Using bundled JSON files'); // tslint:disable-line:no-console
 
@@ -54,69 +60,97 @@ async function fetchFile(url: string) {
 }
 
 const Activity = {
-  fetchAll: (_teamId: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
-    fetchFile(activitiesJSON),
-  fetchAllForProject: (_id: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
-    fetchFile(activitiesJSON),
+  fetchAll: (
+    _teamId: string,
+    _count: number,
+    _until?: number,
+  ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(activitiesJSON),
+  fetchAllForProject: (
+    _id: string,
+    _count: number,
+    _until?: number,
+  ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(activitiesJSON),
 };
 
 const Branch = {
-  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(branchJSON[id]),
-  fetchForProject: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(projectBranchesJSON[id]),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
+    fetchFile(branchJSON[id]),
+  fetchForProject: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
+    fetchFile(projectBranchesJSON[id]),
 };
 
 const Comment = {
-  fetchForDeployment: (_id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(commentsJSON),
+  fetchForDeployment: (_id: string): Promise<ApiResult<ApiEntityResponse>> =>
+    fetchFile(commentsJSON),
   create: (
     _deployment: string,
     _message: string,
     _email: string,
     _name?: string,
-  ): Promise<ApiResult<ApiEntityResponse>> =>
-    fetchFile(newCommentJSON),
-  delete: (_id: string): Promise<ApiResult<{}>> => Promise.resolve({ response: {} }),
+  ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(newCommentJSON),
+  delete: (_id: string): Promise<ApiResult<{}>> =>
+    Promise.resolve({ response: {} }),
 };
 
 const Commit = {
-  fetch: (_id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(commitJSON),
-  fetchForBranch: (id: string, _count: number, _until?: number): Promise<ApiResult<ApiEntityResponse>> =>
-    fetchFile(branchCommitsJSON[id]),
+  fetch: (_id: string): Promise<ApiResult<ApiEntityResponse>> =>
+    fetchFile(commitJSON),
+  fetchForBranch: (
+    id: string,
+    _count: number,
+    _until?: number,
+  ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(branchCommitsJSON[id]),
 };
 
 const Deployment = {
-  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(deploymentJSON[id]),
-  fetchBuildLog: (_id: string): Promise<ApiResult<string>> => Promise.resolve({ response: 'Build log...' }),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
+    fetchFile(deploymentJSON[id]),
+  fetchBuildLog: (_id: string): Promise<ApiResult<string>> =>
+    Promise.resolve({ response: 'Build log...' }),
 };
 
 const Preview = {
-  fetch: (_id: string, _entityType: string, _token: string): Promise<ApiResult<ApiPreviewResponse>> =>
-    fetchFile(previewJSON),
+  fetch: (
+    _id: string,
+    _entityType: string,
+    _token: string,
+  ): Promise<ApiResult<ApiPreviewResponse>> => fetchFile(previewJSON),
 };
 
 const Project = {
-  fetchAll: (_teamId: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(allProjectsJSON),
-  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> => fetchFile(projectJSON[id]),
-  create: (_teamId: string, _name: string, _description?: string): Promise<ApiResult<ApiEntityResponse>> =>
-    fetchFile(newProjectJSON),
-  edit: (_id: string, _newAttributes: { name?: string, description?: string }): Promise<ApiResult<ApiEntityResponse>> =>
-    fetchFile(editedProjectJSON),
-  delete: (_id: string): Promise<ApiResult<{}>> => Promise.resolve({ response: {} }),
-    // Promise.resolve({ error: 'sad face :(' });
+  fetchAll: (_teamId: string): Promise<ApiResult<ApiEntityResponse>> =>
+    fetchFile(allProjectsJSON),
+  fetch: (id: string): Promise<ApiResult<ApiEntityResponse>> =>
+    fetchFile(projectJSON[id]),
+  create: (
+    _teamId: string,
+    _name: string,
+    _description?: string,
+  ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(newProjectJSON),
+  edit: (
+    _id: string,
+    _newAttributes: { name?: string, description?: string },
+  ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(editedProjectJSON),
+  delete: (_id: string): Promise<ApiResult<{}>> =>
+    Promise.resolve({ response: {} }),
+  // Promise.resolve({ error: 'sad face :(' });
 };
 
 const Team = {
-  fetch: () => Promise.resolve({
-    response: { id: 3, name: 'Dev team' } as ApiTeam,  // tslint:disable-line:no-object-literal-type-assertion
-  }),
+  fetch: () =>
+    Promise.resolve({
+      response: ({ id: 3, name: 'Dev team' }) as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
+    }),
 };
 
 const User = {
-  signup: () => Promise.resolve({
-    response: {
-      password: 'secretPassword',
-      team: { id: 3, name: 'teamName' } as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
-    },
-  }),
+  signup: () =>
+    Promise.resolve({
+      response: {
+        password: 'secretPassword',
+        team: ({ id: 3, name: 'teamName' }) as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
+      },
+    }),
   logout: () => Promise.resolve({}),
 };
 

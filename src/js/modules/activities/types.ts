@@ -1,58 +1,55 @@
 import { DeploymentStatus } from '../deployments';
 
 // State
-export enum ActivityType {
-  Comment,
-  Deployment,
-}
+export enum ActivityType { Comment, Deployment }
 
 export interface Activity {
   id: string;
   type: ActivityType;
   timestamp: number;
   branch: {
-    id: string;
-    name: string;
+    id: string,
+    name: string,
   };
   project: {
-    id: string;
-    name: string;
+    id: string,
+    name: string,
   };
   deployment: {
-    status: DeploymentStatus;
-    id: string;
-    url?: string;
-    screenshot?: string;
-    comments?: string[];
+    status: DeploymentStatus,
+    id: string,
+    url?: string,
+    screenshot?: string,
+    comments?: string[],
     creator: {
-      name?: string;
-      email: string;
-      timestamp: number;
-    };
-    token: string;
+      name?: string,
+      email: string,
+      timestamp: number,
+    },
+    token: string,
   };
   commit: {
-    id: string;
-    hash: string;
-    message: string;
-    description?: string;
+    id: string,
+    hash: string,
+    message: string,
+    description?: string,
     author: {
-      name?: string;
-      email: string;
-      timestamp: number;
-    };
+      name?: string,
+      email: string,
+      timestamp: number,
+    },
     committer: {
-      name?: string;
-      email: string;
-      timestamp: number;
-    };
-    deployment?: string;
+      name?: string,
+      email: string,
+      timestamp: number,
+    },
+    deployment?: string,
   };
   comment?: {
-    id: string;
-    message: string;
-    name?: string;
-    email: string;
+    id: string,
+    message: string,
+    name?: string,
+    email: string,
   };
 }
 

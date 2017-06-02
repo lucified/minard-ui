@@ -29,7 +29,8 @@ interface GeneratedStateProps {
   isProjectNameEdited: boolean;
 }
 
-type Props = PassedProps & FormProps<EditProjectFormData, PassedProps & GeneratedStateProps, void>;
+type Props = PassedProps &
+  FormProps<EditProjectFormData, PassedProps & GeneratedStateProps, void>;
 
 const validate = (values: EditProjectFormData, props: Props) => {
   const errors: Partial<EditProjectFormData> = {};
@@ -42,7 +43,7 @@ const validate = (values: EditProjectFormData, props: Props) => {
   } else if (!projectNameRegex.test(name)) {
     errors.name = 'Only letters, numbers, and hyphens allowed';
   } else if (name[0] === '-') {
-    errors.name = 'Project name can\'t start with a hyphen';
+    errors.name = "Project name can't start with a hyphen";
   } else if (name.length > 220) {
     errors.name = 'Maximum length of 220 characters';
   } else if (props.existingProjectNames.indexOf(name) > -1) {
@@ -56,11 +57,17 @@ const validate = (values: EditProjectFormData, props: Props) => {
   return errors;
 };
 
-const toLowerCase = (value?: string): string | undefined => value && value.toLowerCase();
-const spaceToHyphen = (value?: string): string | undefined => value && value.replace(/ /, '-');
-const normalizeProjectName = (value?: string): string | undefined => spaceToHyphen(toLowerCase(value));
+const toLowerCase = (value?: string): string | undefined =>
+  value && value.toLowerCase();
+const spaceToHyphen = (value?: string): string | undefined =>
+  value && value.replace(/ /, '-');
+const normalizeProjectName = (value?: string): string | undefined =>
+  spaceToHyphen(toLowerCase(value));
 
-class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, void> {
+class ProjectSettingsForm extends React.Component<
+  Props & GeneratedStateProps,
+  void
+> {
   constructor(props: GeneratedStateProps & Props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
@@ -100,31 +107,31 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, v
       </button>
     );
 
-    const submitButtonToShow = isProjectNameEdited ? (
-      <Confirmable
-        title="Warning!"
-        message={'Changing the name of your project will change the Git repository address as well. ' +
-          'Are you sure you want to do this?'}
-        action="Change name"
-        onConfirm={handleSubmit}
-      >
-        {submitButton}
-      </Confirmable>
-    ) : submitButton;
+    const submitButtonToShow = isProjectNameEdited
+      ? <Confirmable
+          title="Warning!"
+          message={
+            'Changing the name of your project will change the Git repository address as well. ' +
+            'Are you sure you want to do this?'
+          }
+          action="Change name"
+          onConfirm={handleSubmit}
+        >
+          {submitButton}
+        </Confirmable>
+      : submitButton;
 
     return (
       <form>
         <div className={styles.form}>
-          {error && (
+          {error &&
             <div className={styles['general-error']}>
               {error}
-            </div>
-          )}
-          {deletionError && (
+            </div>}
+          {deletionError &&
             <div className={styles['general-error']}>
               {deletionError.prettyError}
-            </div>
-          )}
+            </div>}
           <Field
             name="name"
             component={FormField}
@@ -146,7 +153,9 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, v
         <footer className={styles.footer}>
           <div className={styles['primary-actions']}>
             <a
-              className={classNames(styles.cancel, { [styles['disabled-link']]: submitting || deletionInProgress })}
+              className={classNames(styles.cancel, {
+                [styles['disabled-link']]: submitting || deletionInProgress,
+              })}
               onClick={this.handleCancel}
             >
               Cancel
@@ -154,18 +163,18 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps, v
             {submitButtonToShow}
           </div>
           <div>
-            {deletionInProgress ? 'Deleting...' : (
-              <Confirmable
-                title="Warning!"
-                message={`Deleting a project cannot be undone. Are you sure you want to delete ${project.name}?`}
-                action="Delete project"
-                onConfirm={deleteProject}
-              >
-                <a className={styles.delete}>
-                  Delete project
-                </a>
-              </Confirmable>
-            )}
+            {deletionInProgress
+              ? 'Deleting...'
+              : <Confirmable
+                  title="Warning!"
+                  message={`Deleting a project cannot be undone. Are you sure you want to delete ${project.name}?`}
+                  action="Delete project"
+                  onConfirm={deleteProject}
+                >
+                  <a className={styles.delete}>
+                    Delete project
+                  </a>
+                </Confirmable>}
           </div>
         </footer>
       </form>
@@ -177,7 +186,9 @@ const mapStateToProps = (state: StateTree, ownProps: Props) => {
   const formSelector = formValueSelector('editProject');
   const visibleProjectName = formSelector(state, 'name') as string | undefined;
   return {
-    isProjectNameEdited: !!visibleProjectName && visibleProjectName !== ownProps.initialValues.name,
+    isProjectNameEdited:
+      !!visibleProjectName &&
+        visibleProjectName !== ownProps.initialValues.name,
   };
 };
 
@@ -189,4 +200,6 @@ export default reduxForm({
     Requests.actions.Projects.EditProject.SUCCESS.type,
     Requests.actions.Projects.EditProject.FAILURE.type,
   ),
-})(connect<GeneratedStateProps, {}, Props>(mapStateToProps)(ProjectSettingsForm));
+})(
+  connect<GeneratedStateProps, {}, Props>(mapStateToProps)(ProjectSettingsForm),
+);

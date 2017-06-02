@@ -22,9 +22,7 @@ const styles = require('./header.scss');
 const errorImage = require('../../images/icon-no-network.svg');
 const minardLogo = require('../../images/minard-logo.svg');
 
-interface PassedProps {
-
-}
+interface PassedProps {}
 
 interface GeneratedStateProps {
   errors: FetchCollectionError[];
@@ -75,7 +73,14 @@ class Header extends React.Component<Props, void> {
       return (
         <section className={styles['header-background']}>
           <div className="container-fluid">
-            <div className={classNames(styles.header, 'row', 'between-l', 'middle-xs')}>
+            <div
+              className={classNames(
+                styles.header,
+                'row',
+                'between-l',
+                'middle-xs',
+              )}
+            >
               <div className={classNames(styles.logo, 'col-xs')}>
                 <MinardLink homepage>
                   <img src={minardLogo} />
@@ -136,25 +141,37 @@ class Header extends React.Component<Props, void> {
         <InviteTeamDialog invitationToken={team && team.invitationToken} />
         <AccountDialog email={userEmail!} />
         <div className="container-fluid">
-          <div className={classNames(styles.header, 'row', 'between-l', 'middle-xs')}>
+          <div
+            className={classNames(
+              styles.header,
+              'row',
+              'between-l',
+              'middle-xs',
+            )}
+          >
             <div className={classNames(styles.logo, 'col-xs')}>
               <MinardLink homepage>
                 <img src={minardLogo} />
               </MinardLink>
             </div>
             <div className={classNames(styles['profile-container'], 'col-xs')}>
-              {team && (
+              {team &&
                 <ToggleMenu
                   label={team.name}
                   icon={<Avatar size="lg" email={userEmail} />}
                   className={styles['team-dropdown']}
                 >
                   {/* TODO: find a better way to make the whole div clickable than the empty span trick below */}
-                  <a href="#" onClick={openAccountDialog}><span className={styles.cover}></span>Account</a>
-                  <a href="#" onClick={openInviteTeamDialog}><span className={styles.cover}></span>Invite your team</a>
-                  <Link to="/login" onClick={this.logout}><span className={styles.cover}></span>Logout</Link>
-                </ToggleMenu>
-              )}
+                  <a href="#" onClick={openAccountDialog}>
+                    <span className={styles.cover} />Account
+                  </a>
+                  <a href="#" onClick={openInviteTeamDialog}>
+                    <span className={styles.cover} />Invite your team
+                  </a>
+                  <Link to="/login" onClick={this.logout}>
+                    <span className={styles.cover} />Logout
+                  </Link>
+                </ToggleMenu>}
             </div>
           </div>
         </div>
@@ -173,8 +190,12 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  logout: () => { dispatch(User.actions.logout()); },
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  logout: () => {
+    dispatch(User.actions.logout());
+  },
   openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(Modal.actions.openModal(ModalType.InviteTeam));
@@ -185,7 +206,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Header);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(Header);

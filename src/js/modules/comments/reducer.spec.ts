@@ -37,7 +37,7 @@ describe('Comments reducer', () => {
       expect(newState).to.not.equal(stateWithComments);
     });
 
-    it('does nothing if the comment doesn\'t exist', () => {
+    it("does nothing if the comment doesn't exist", () => {
       const action = removeComment('notexist');
       const newState = reducer(stateWithComments, action);
       expect(newState).to.deep.equal(stateWithComments);
@@ -46,7 +46,7 @@ describe('Comments reducer', () => {
   });
 
   describe('storeComments', () => {
-    it('stores comments that don\'t already exist', () => {
+    it("stores comments that don't already exist", () => {
       const comments = [
         {
           id: '3',
@@ -113,7 +113,11 @@ describe('Comments reducer', () => {
   });
 
   it(`removes all data with ${CLEAR_STORED_DATA}`, () => {
-    expect(reducer(stateWithComments, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(
+      reducer(stateWithComments, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
   });
 });

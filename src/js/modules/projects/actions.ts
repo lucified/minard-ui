@@ -44,8 +44,13 @@ export const storeProjects = (projects: Project[]): StoreProjectsAction => ({
 
 // Add branches to existing project
 export const ADD_BRANCHES_TO_PROJECT = 'PROJECTS/ADD_BRANCHES_TO_PROJECT';
-export const addBranchesToProject = (id: string, branchIds: string[] | string): AddBranchesToProjectAction => {
-  const branches: string[] = (typeof branchIds === 'string') ? [branchIds] : branchIds;
+export const addBranchesToProject = (
+  id: string,
+  branchIds: string[] | string,
+): AddBranchesToProjectAction => {
+  const branches: string[] = typeof branchIds === 'string'
+    ? [branchIds]
+    : branchIds;
 
   return {
     type: ADD_BRANCHES_TO_PROJECT,
@@ -99,13 +104,17 @@ export const removeProject = (id: string): RemoveProjectAction => ({
 
 // Add users to project based on code pushes from Streaming API
 export const STORE_AUTHORS_TO_PROJECT = 'PROJECTS/STORE_AUTHORS_TO_PROJECT';
-export const storeAuthorsToProject = (id: string, authors: ProjectUser[]): StoreAuthorsToProjectAction => ({
+export const storeAuthorsToProject = (
+  id: string,
+  authors: ProjectUser[],
+): StoreAuthorsToProjectAction => ({
   type: STORE_AUTHORS_TO_PROJECT,
   id,
   authors,
 });
 
-export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT = 'PROJECTS/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT';
+export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT =
+  'PROJECTS/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_PROJECT';
 export const updateLatestActivityTimestampForProject = (
   id: string,
   timestamp: number,
@@ -116,7 +125,10 @@ export const updateLatestActivityTimestampForProject = (
 });
 
 export const REMOVE_BRANCH_FROM_PROJECT = 'PROJECTS/REMOVE_BRANCH_FROM_PROJECT';
-export const removeBranchFromProject = (id: string, branch: string): RemoveBranchAction => ({
+export const removeBranchFromProject = (
+  id: string,
+  branch: string,
+): RemoveBranchAction => ({
   type: REMOVE_BRANCH_FROM_PROJECT,
   id,
   branch,

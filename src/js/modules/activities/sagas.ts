@@ -1,15 +1,32 @@
-import { call, Effect, fork, put, select, take, throttle } from 'redux-saga/effects';
+import {
+  call,
+  Effect,
+  fork,
+  put,
+  select,
+  take,
+  throttle,
+} from 'redux-saga/effects';
 
 import { toActivities } from '../../api/convert';
 import { Api, ApiEntity, ApiEntityResponse } from '../../api/types';
-import { createCollectionFetcher, createEntityFetcher } from '../../sagas/utils';
+import {
+  createCollectionFetcher,
+  createEntityFetcher,
+} from '../../sagas/utils';
 import Requests from '../requests';
-import { LOAD_ACTIVITIES, LOAD_ACTIVITIES_FOR_PROJECT, storeActivities } from './actions';
+import {
+  LOAD_ACTIVITIES,
+  LOAD_ACTIVITIES_FOR_PROJECT,
+  storeActivities,
+} from './actions';
 import { LoadActivitiesAction, LoadActivitiesForProjectAction } from './types';
 
 export default function createSagas(api: Api) {
   // ALL ACTIVITIES
-  function* loadActivities(action: LoadActivitiesAction): IterableIterator<Effect> {
+  function* loadActivities(
+    action: LoadActivitiesAction,
+  ): IterableIterator<Effect> {
     const { teamId, count, until } = action;
     const fetchSuccess = yield call(fetchActivities, teamId, count, until);
     if (fetchSuccess) {
@@ -35,12 +52,16 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* ensureActivitiesRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
+  function* ensureActivitiesRelatedDataLoaded(): IterableIterator<
+    Effect | Effect[]
+  > {
     // Do nothing. Activities are self-contained
   }
 
   // PROJECT ACTIVITIES
-  function* loadActivitiesForProject(action: LoadActivitiesForProjectAction): IterableIterator<Effect> {
+  function* loadActivitiesForProject(
+    action: LoadActivitiesForProjectAction,
+  ): IterableIterator<Effect> {
     const { id, count, until } = action;
 
     // Return if we're already requesting
@@ -48,7 +69,12 @@ export default function createSagas(api: Api) {
       return;
     }
 
-    const fetchSuccess = yield call(fetchActivitiesForProject, id, count, until);
+    const fetchSuccess = yield call(
+      fetchActivitiesForProject,
+      id,
+      count,
+      until,
+    );
     if (fetchSuccess) {
       yield fork(ensureActivitiesRelatedDataLoaded);
     }

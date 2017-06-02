@@ -34,7 +34,9 @@ class CommentList extends React.Component<Props, void> {
     const { commentIds, highlightComment } = this.props;
 
     if (highlightComment && commentIds.indexOf(highlightComment) > -1) {
-      this.scrollToElement(document.getElementById(this.commentIdString(highlightComment)));
+      this.scrollToElement(
+        document.getElementById(this.commentIdString(highlightComment)),
+      );
     } else {
       this.scrollToBottom();
     }
@@ -51,7 +53,9 @@ class CommentList extends React.Component<Props, void> {
       highlightComment &&
       commentIds.indexOf(highlightComment) > -1
     ) {
-      this.scrollToElement(document.getElementById(this.commentIdString(highlightComment)));
+      this.scrollToElement(
+        document.getElementById(this.commentIdString(highlightComment)),
+      );
     }
   }
 
@@ -79,25 +83,37 @@ class CommentList extends React.Component<Props, void> {
   }
 
   public render() {
-    const { isAuthenticatedUser, commentIds, comments, className, highlightComment } = this.props;
+    const {
+      isAuthenticatedUser,
+      commentIds,
+      comments,
+      className,
+      highlightComment,
+    } = this.props;
 
     return (
-      <div ref={this.storeListRef} className={classNames(styles['comment-list'], className)}>
+      <div
+        ref={this.storeListRef}
+        className={classNames(styles['comment-list'], className)}
+      >
         <FlipMove enterAnimation="fade" leaveAnimation="fade">
           {comments.map((comment, i) => {
-            const isHighlighted: boolean = !!comment && highlightComment === comment.id;
+            const isHighlighted: boolean =
+              !!comment && highlightComment === comment.id;
             const idString = this.commentIdString(commentIds[i]);
 
             return (
               <div
                 key={idString}
                 id={idString}
-                className={classNames(
-                  styles.comment,
-                  { [styles.highlighted]: isHighlighted },
-                )}
+                className={classNames(styles.comment, {
+                  [styles.highlighted]: isHighlighted,
+                })}
               >
-                <SingleComment comment={comment} hideDelete={!isAuthenticatedUser} />
+                <SingleComment
+                  comment={comment}
+                  hideDelete={!isAuthenticatedUser}
+                />
               </div>
             );
           })}
@@ -107,7 +123,10 @@ class CommentList extends React.Component<Props, void> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: PassedProps,
+): GeneratedStateProps => {
   const { commentIds } = ownProps;
 
   return {

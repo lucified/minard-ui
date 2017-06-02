@@ -3,7 +3,10 @@ import { call, Effect, fork, put, take, takeEvery } from 'redux-saga/effects';
 
 import { clearStoredCredentials, storeCredentials } from '../../api/auth';
 import { Api, ApiTeam, SignupResponse } from '../../api/types';
-import { login as intercomLogin, logout as intercomLogout } from '../../intercom';
+import {
+  login as intercomLogin,
+  logout as intercomLogout,
+} from '../../intercom';
 import Errors from '../errors';
 import Requests from '../requests';
 import {
@@ -17,18 +20,33 @@ import {
   setUserEmail,
   SIGNUP_USER,
 } from './actions';
-import { LoadTeamInformationAction, LoginAction, RedirectToLoginAction, SignupUserAction } from './types';
+import {
+  LoadTeamInformationAction,
+  LoginAction,
+  RedirectToLoginAction,
+  SignupUserAction,
+} from './types';
 
 export default function createSagas(api: Api) {
-  function *loadTeamInformation(action: LoadTeamInformationAction): IterableIterator<Effect> {
+  function* loadTeamInformation(
+    action: LoadTeamInformationAction,
+  ): IterableIterator<Effect> {
     const { redirect } = action;
 
-    yield put(Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator());
+    yield put(
+      Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator(),
+    );
 
-    const { response, error, details, unauthorized } = yield call(api.Team.fetch);
+    const { response, error, details, unauthorized } = yield call(
+      api.Team.fetch,
+    );
 
     if (response) {
-      const { id, name, 'invitation-token': invitationToken } = response as ApiTeam;
+      const {
+        id,
+        name,
+        'invitation-token': invitationToken,
+      } = response as ApiTeam;
       yield put(setTeam(String(id), name, invitationToken));
 
       if (redirect) {
@@ -40,18 +58,26 @@ export default function createSagas(api: Api) {
         }
       }
 
-      yield put(Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator());
+      yield put(
+        Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator(),
+      );
 
       return true;
     } else {
       // TODO: handle failure, e.g. not authorized or member of team
-      yield put(Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(error, details, unauthorized));
+      yield put(
+        Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(
+          error,
+          details,
+          unauthorized,
+        ),
+      );
 
       return false;
     }
   }
 
-  function *signupUser(action: SignupUserAction): IterableIterator<Effect> {
+  function* signupUser(action: SignupUserAction): IterableIterator<Effect> {
     yield call(login, action);
 
     yield put(Errors.actions.clearSignupError());
@@ -71,7 +97,9 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function *redirectToLogin(action: RedirectToLoginAction): IterableIterator<Effect> {
+  function* redirectToLogin(
+    action: RedirectToLoginAction,
+  ): IterableIterator<Effect> {
     const { returnPath } = action;
 
     if (returnPath) {
@@ -81,7 +109,9 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function *login(action: LoginAction | SignupUserAction): IterableIterator<Effect> {
+  function* login(
+    action: LoginAction | SignupUserAction,
+  ): IterableIterator<Effect> {
     const { email, accessToken, idToken, expiresAt } = action;
 
     intercomLogin(email);
@@ -89,7 +119,7 @@ export default function createSagas(api: Api) {
     yield put(setUserEmail(email, expiresAt));
   }
 
-  function *logout(): IterableIterator<Effect> {
+  function* logout(): IterableIterator<Effect> {
     const { error, unauthorized } = yield call(api.User.logout);
 
     if (error) {

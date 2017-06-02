@@ -4,7 +4,14 @@ import * as moment from 'moment';
 import { logMessage } from '../logger';
 import { EntityType } from '../modules/previews';
 import { getAccessToken } from './auth';
-import { Api, ApiEntityResponse, ApiPreviewResponse, ApiResult, ApiTeam, SignupResponse } from './types';
+import {
+  Api,
+  ApiEntityResponse,
+  ApiPreviewResponse,
+  ApiResult,
+  ApiTeam,
+  SignupResponse,
+} from './types';
 
 if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
@@ -29,15 +36,24 @@ interface Error {
 }
 
 function generateErrorObject(errorResponse: any) {
-  let error: string = errorResponse.message ||
+  let error: string =
+    errorResponse.message ||
     (typeof errorResponse === 'string' ? errorResponse : 'An error occurred');
   let details: string = '';
 
-  if (errorResponse && errorResponse.errors && errorResponse.errors.length > 0) {
+  if (
+    errorResponse &&
+    errorResponse.errors &&
+    errorResponse.errors.length > 0
+  ) {
     const errorTitles = new Set();
-    errorResponse.errors.forEach((singleError: Error) => { errorTitles.add(singleError.title); });
+    errorResponse.errors.forEach((singleError: Error) => {
+      errorTitles.add(singleError.title);
+    });
     error = Array.from(errorTitles.values()).join(' & ');
-    details = errorResponse.errors.map((singleError: Error) => singleError.detail).join('\n');
+    details = errorResponse.errors
+      .map((singleError: Error) => singleError.detail)
+      .join('\n');
   }
 
   return {
@@ -50,7 +66,10 @@ function generateErrorObject(errorResponse: any) {
 /**
  * This method will overwrite the Authorization header if an access token exists.
  */
-async function connectToApi<ResponseType>(path: string, options?: RequestInit): Promise<ApiResult<ResponseType>> {
+async function connectToApi<ResponseType>(
+  path: string,
+  options?: RequestInit,
+): Promise<ApiResult<ResponseType>> {
   const combinedOptions: RequestInit = {
     ...defaultOptions,
     ...options,
@@ -80,18 +99,26 @@ async function connectToApi<ResponseType>(path: string, options?: RequestInit): 
   }
 }
 
-function getApi<ResponseType>(path: string, query?: any): Promise<ApiResult<ResponseType>> {
+function getApi<ResponseType>(
+  path: string,
+  query?: any,
+): Promise<ApiResult<ResponseType>> {
   let queryString = '';
 
   if (query) {
     queryString = '?';
-    queryString += Object.keys(query).map(param => `${param}=${encodeURIComponent(query[param])}`).join('&');
+    queryString += Object.keys(query)
+      .map(param => `${param}=${encodeURIComponent(query[param])}`)
+      .join('&');
   }
 
   return connectToApi<ResponseType>(`${path}${queryString}`);
 }
 
-function postApi<ResponseType>(path: string, payload: any): Promise<ApiResult<ResponseType>> {
+function postApi<ResponseType>(
+  path: string,
+  payload: any,
+): Promise<ApiResult<ResponseType>> {
   return connectToApi(path, {
     method: 'POST',
     headers: {
@@ -106,7 +133,10 @@ function deleteApi(path: string): Promise<ApiResult<{}>> {
   return connectToApi(path, { method: 'DELETE' });
 }
 
-function patchApi(path: string, payload: any): Promise<ApiResult<ApiEntityResponse>> {
+function patchApi(
+  path: string,
+  payload: any,
+): Promise<ApiResult<ApiEntityResponse>> {
   return connectToApi(path, {
     method: 'PATCH',
     headers: {
@@ -140,11 +170,13 @@ const Activity = {
 
 const Branch = {
   fetch: (id: string) => getApi<ApiEntityResponse>(`/api/branches/${id}`),
-  fetchForProject: (id: string) => getApi<ApiEntityResponse>(`/api/projects/${id}/relationships/branches`),
+  fetchForProject: (id: string) =>
+    getApi<ApiEntityResponse>(`/api/projects/${id}/relationships/branches`),
 };
 
 const Comment = {
-  fetchForDeployment: (id: string) => getApi<ApiEntityResponse>(`/api/comments/deployment/${id}`),
+  fetchForDeployment: (id: string) =>
+    getApi<ApiEntityResponse>(`/api/comments/deployment/${id}`),
   create: (deployment: string, message: string, email: string, name?: string) =>
     postApi<ApiEntityResponse>('/api/comments', {
       data: {
@@ -169,7 +201,10 @@ const Commit = {
       query.until = moment(until).toISOString();
     }
 
-    return getApi<ApiEntityResponse>(`/api/branches/${id}/relationships/commits`, query);
+    return getApi<ApiEntityResponse>(
+      `/api/branches/${id}/relationships/commits`,
+      query,
+    );
   },
 };
 
@@ -199,7 +234,11 @@ const Deployment = {
 
       throw { message: 'Error' };
     } catch (error) {
-      logMessage('Error while fetching build log', { path, error, stacktrace: new Error() }, 'info');
+      logMessage(
+        'Error while fetching build log',
+        { path, error, stacktrace: new Error() },
+        'info',
+      );
 
       return generateErrorObject(error);
     }
@@ -207,9 +246,15 @@ const Deployment = {
 };
 
 const Project = {
-  fetchAll: (teamId: string) => getApi<ApiEntityResponse>(`/api/teams/${teamId}/relationships/projects`),
+  fetchAll: (teamId: string) =>
+    getApi<ApiEntityResponse>(`/api/teams/${teamId}/relationships/projects`),
   fetch: (id: string) => getApi<ApiEntityResponse>(`/api/projects/${id}`),
-  create: (teamId: string, name: string, description?: string, projectTemplate?: string) =>
+  create: (
+    teamId: string,
+    name: string,
+    description?: string,
+    projectTemplate?: string,
+  ) =>
     postApi<ApiEntityResponse>('/api/projects', {
       data: {
         type: 'projects',
@@ -249,7 +294,8 @@ const Team = {
 };
 
 const User = {
-  signup: () => connectToApi<SignupResponse>('/signup', { credentials: 'include' }),
+  signup: () =>
+    connectToApi<SignupResponse>('/signup', { credentials: 'include' }),
   logout: () => connectToApi('/logout', { credentials: 'include' }),
 };
 

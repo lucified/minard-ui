@@ -32,12 +32,19 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
   }
 
   const { author, committer } = commit;
-  const otherAuthorEmail = author.email !== committer.email ? committer.email : undefined;
+  const otherAuthorEmail = author.email !== committer.email
+    ? committer.email
+    : undefined;
 
   return (
     <div className={classNames(styles['commit-content'], className)}>
       <div className={styles.avatar}>
-        <Avatar title={author.name || author.email} size="40" email={author.email} iconEmail={otherAuthorEmail} />
+        <Avatar
+          title={author.name || author.email}
+          size="40"
+          email={author.email}
+          iconEmail={otherAuthorEmail}
+        />
       </div>
       <div>
         <div className={styles['commit-metadata']}>
@@ -49,17 +56,23 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
             </span>
             {' · '}
             <span className={styles.hash}>{commit.hash.slice(0, 8)}</span>
-            {deployment && !isFetchError(deployment) && deployment.commentCount !== undefined && (
+            {deployment &&
+              !isFetchError(deployment) &&
+              deployment.commentCount !== undefined &&
               <span>
                 {' · '}
-                <span className={styles['comment-count']}>{deployment.commentCount} comments</span>
-              </span>
-            )}
+                <span className={styles['comment-count']}>
+                  {deployment.commentCount} comments
+                </span>
+              </span>}
           </span>
         </div>
         <div className={styles['commit-body']}>
-          <div className={classNames(styles.message, 'commit-message')}>{commit.message}</div>
-          {commit.description && <div className={styles.description}>{commit.description}</div>}
+          <div className={classNames(styles.message, 'commit-message')}>
+            {commit.message}
+          </div>
+          {commit.description &&
+            <div className={styles.description}>{commit.description}</div>}
         </div>
       </div>
     </div>

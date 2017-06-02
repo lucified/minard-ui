@@ -4,10 +4,7 @@ import { values } from 'lodash';
 import { FetchError } from '../errors/index';
 import Requests from '../requests';
 import { CLEAR_STORED_DATA } from '../user';
-import {
-  addDeploymentToCommit,
-  storeCommits,
-} from './actions';
+import { addDeploymentToCommit, storeCommits } from './actions';
 import reducer from './reducer';
 import { Commit, CommitState } from './types';
 
@@ -107,8 +104,9 @@ describe('Commits reducer', () => {
         },
         message: 'Try to do something',
         deployment: '8',
-        description: 'This is a longer commit explanation for whatever was done to the commit. ' +
-          'It should be truncated in some cases',
+        description:
+          'This is a longer commit explanation for whatever was done to the commit. ' +
+            'It should be truncated in some cases',
       },
     };
     const storeAction = storeCommits(values<Commit>(newCommits));
@@ -126,13 +124,19 @@ describe('Commits reducer', () => {
 
     it('with other commits in state', () => {
       const newState = reducer(stateWithoutExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithoutExistingEntity, ...newCommits});
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        ...newCommits,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
     it('by replacing existing commits', () => {
       const newState = reducer(stateWithExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithExistingEntity, ...newCommits });
+      expect(newState).to.deep.equal({
+        ...stateWithExistingEntity,
+        ...newCommits,
+      });
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
@@ -147,16 +151,17 @@ describe('Commits reducer', () => {
     };
 
     it('with an empty initial state', () => {
-      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal(
-        { [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal({
+        [failedRequestAction.id]: failedRequestAction,
+      });
     });
 
     it('with other entities in state', () => {
       const newState = reducer(stateWithoutExistingEntity, failedRequestAction);
-      expect(newState).to.deep.equal(
-        { ...stateWithoutExistingEntity, [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        [failedRequestAction.id]: failedRequestAction,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
@@ -168,7 +173,7 @@ describe('Commits reducer', () => {
   });
 
   describe('addDeploymentToCommit', () => {
-    it('should add a deployment to a commit that doesn\'t have any', () => {
+    it("should add a deployment to a commit that doesn't have any", () => {
       const action = addDeploymentToCommit('2543452', 'dep1');
       const newState = reducer(stateWithExistingEntity, action);
       const newCommit = newState['2543452'] as Commit;
@@ -200,8 +205,14 @@ describe('Commits reducer', () => {
   });
 
   it(`clears data on ${CLEAR_STORED_DATA}`, () => {
-    expect(reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(
+      reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
   });
 });

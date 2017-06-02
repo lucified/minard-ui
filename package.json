@@ -19,10 +19,22 @@
     "clean-compile": "rm -rf lib",
     "compile": "tsc",
     "lint": "tslint -t verbose 'src/js/**/*.ts' 'src/js/**/*.tsx'",
-    "watch": "webpack --progress --colors --watch"
+    "watch": "webpack --progress --colors --watch",
+    "prettify": "prettier --parser typescript --single-quote --trailing-comma all --write \"src/**/*.ts?(x)\"",
+    "precommit": "lint-staged"
   },
   "engines": {
     "node": "^7.0.0"
+  },
+  "lint-staged": {
+    "*.js?(x)": [
+      "prettier --single-quote --trailing-comma all --write",
+      "git add"
+    ],
+    "*.ts": [
+      "prettier --parser typescript --single-quote --trailing-comma all --write",
+      "git add"
+    ]
   },
   "browserslist": [
     "> 1%",
@@ -85,6 +97,8 @@
     "handlebars": "^4.0.10",
     "handlebars-loader": "^1.5.0",
     "html-webpack-plugin": "^2.28.0",
+    "husky": "^0.13.4",
+    "lint-staged": "^3.6.0",
     "lucify-deploy-config": "^0.1.11",
     "lucify-notifier": "^0.1.16",
     "mocha": "^3.4.2",
@@ -93,6 +107,7 @@
     "node-sass": "^4.5.3",
     "postcss-flexbugs-fixes": "^3.0.0",
     "postcss-loader": "^2.0.5",
+    "prettier": "^1.4.0",
     "react-dev-utils": "^2.0.1",
     "sass-loader": "^6.0.5",
     "source-map-loader": "^0.2.1",

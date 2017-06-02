@@ -1,13 +1,7 @@
 import { FetchError } from '../errors';
 import { User } from '../types';
 
-export enum DeploymentStatus {
-  Success,
-  Failed,
-  Running,
-  Pending,
-  Canceled,
-}
+export enum DeploymentStatus { Success, Failed, Running, Pending, Canceled }
 
 export function toDeploymentStatus(deploymentStatus: string): DeploymentStatus {
   switch (deploymentStatus) {
@@ -29,9 +23,11 @@ export function toDeploymentStatus(deploymentStatus: string): DeploymentStatus {
 export const isSuccessful = (deployment: Deployment) =>
   deployment.status === DeploymentStatus.Success;
 export const isPending = (deployment: Deployment) =>
-  deployment.status === DeploymentStatus.Pending || deployment.status === DeploymentStatus.Running;
+  deployment.status === DeploymentStatus.Pending ||
+  deployment.status === DeploymentStatus.Running;
 export const isFailed = (deployment: Deployment) =>
-  deployment.status === DeploymentStatus.Failed || deployment.status === DeploymentStatus.Canceled;
+  deployment.status === DeploymentStatus.Failed ||
+  deployment.status === DeploymentStatus.Canceled;
 
 // State
 export interface Deployment {

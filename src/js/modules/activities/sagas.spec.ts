@@ -7,7 +7,10 @@ import { createApi, testData } from '../../../../test/test-utils';
 import { toActivities } from '../../api/convert';
 import { ResponseActivityElement } from '../../api/types';
 import Requests from '../requests';
-import Activities, { LoadActivitiesAction, LoadActivitiesForProjectAction } from './index';
+import Activities, {
+  LoadActivitiesAction,
+  LoadActivitiesForProjectAction,
+} from './index';
 import createSagas from './sagas';
 
 describe('Activities sagas', () => {
@@ -103,7 +106,9 @@ describe('Activities sagas', () => {
       const iterator = sagaFunctions.fetchActivities(teamId, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator()),
+        put(
+          Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator(),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -119,7 +124,9 @@ describe('Activities sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.SUCCESS.actionCreator()),
+        put(
+          Requests.actions.Activities.LoadAllActivities.SUCCESS.actionCreator(),
+        ),
       );
 
       const result = iterator.next();
@@ -178,7 +185,9 @@ describe('Activities sagas', () => {
       const iterator = sagaFunctions.fetchActivities(teamId, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator()),
+        put(
+          Requests.actions.Activities.LoadAllActivities.REQUEST.actionCreator(),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -186,7 +195,11 @@ describe('Activities sagas', () => {
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Activities.LoadAllActivities.FAILURE.actionCreator(errorMessage)),
+        put(
+          Requests.actions.Activities.LoadAllActivities.FAILURE.actionCreator(
+            errorMessage,
+          ),
+        ),
       );
 
       const result = iterator.next();
@@ -204,10 +217,18 @@ describe('Activities sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }];
       const count = objects.length;
       const until = undefined;
-      const iterator = sagaFunctions.fetchActivitiesForProject(id, count, until);
+      const iterator = sagaFunctions.fetchActivitiesForProject(
+        id,
+        count,
+        until,
+      );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -223,7 +244,11 @@ describe('Activities sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.SUCCESS.actionCreator(id)),
+        put(
+          Requests.actions.Activities.LoadActivitiesForProject.SUCCESS.actionCreator(
+            id,
+          ),
+        ),
       );
 
       const result = iterator.next();
@@ -236,7 +261,11 @@ describe('Activities sagas', () => {
       const response = testData.activitiesResponse;
       const count = 10;
       const until = 51246243;
-      const iterator = sagaFunctions.fetchActivitiesForProject(id, count, until);
+      const iterator = sagaFunctions.fetchActivitiesForProject(
+        id,
+        count,
+        until,
+      );
       const objects = [{ id: '1' }, { id: '2' }];
 
       iterator.next(); // request action
@@ -261,7 +290,11 @@ describe('Activities sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }];
       const count = objects.length;
       const until = undefined;
-      const iterator = sagaFunctions.fetchActivitiesForProject(id, count, until);
+      const iterator = sagaFunctions.fetchActivitiesForProject(
+        id,
+        count,
+        until,
+      );
 
       iterator.next(); // request action
       iterator.next(); // API call
@@ -279,10 +312,18 @@ describe('Activities sagas', () => {
       const count = 10;
       const until = undefined;
       const errorMessage = 'an error message';
-      const iterator = sagaFunctions.fetchActivitiesForProject(id, count, until);
+      const iterator = sagaFunctions.fetchActivitiesForProject(
+        id,
+        count,
+        until,
+      );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Activities.LoadActivitiesForProject.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -290,7 +331,12 @@ describe('Activities sagas', () => {
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Activities.LoadActivitiesForProject.FAILURE.actionCreator(id, errorMessage)),
+        put(
+          Requests.actions.Activities.LoadActivitiesForProject.FAILURE.actionCreator(
+            id,
+            errorMessage,
+          ),
+        ),
       );
 
       const result = iterator.next();
