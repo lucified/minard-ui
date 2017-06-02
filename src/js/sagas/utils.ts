@@ -66,6 +66,7 @@ export const createLoader = (
   };
 };
 
+// tslint:disable:trailing-comma
 /**
  * Fetchers handle fetching of the entity from the API, dispatching the
  * appropriate Requests actions, storing any included entities and performing
@@ -91,6 +92,7 @@ export const createEntityFetcher = <ApiParams>(
     id: string,
     ...args: ApiParams[]
   ): IterableIterator<Effect> {
+    // tslint:enable:trailing-comma
     yield put(requestActionCreators.REQUEST.actionCreator(id));
 
     const {
@@ -137,6 +139,7 @@ export const createEntityFetcher = <ApiParams>(
   };
 };
 
+// tslint:disable:trailing-comma
 /**
  * Collection fetchers are fetchers that get all the available entities
  * of the desired type for the team, e.g. all projects.
@@ -158,6 +161,7 @@ export const createCollectionFetcher = <ApiParams>(
     teamId: string,
     ...args: ApiParams[]
   ): IterableIterator<Effect> {
+    // tslint:enable:trailing-comma
     yield put(requestActionCreators.REQUEST.actionCreator());
 
     const {

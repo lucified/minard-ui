@@ -31,7 +31,7 @@ const Header = ({
   <div className={classNames(styles.header, className)}>
     {buildLogSelected
       ? <span>
-          {deployment.url
+          {deployment.url  // tslint:disable:jsx-alignment
             ? <MinardLink
                 preview={{
                   [linkDetails.entityType]: {

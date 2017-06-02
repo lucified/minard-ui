@@ -27,6 +27,7 @@ interface RequestActionCreators<
   SuccessCreatorType,
   FailureCreatorType
 > {
+  // tslint:disable-line:one-line
   REQUEST: {
     type: string,
     actionCreator: RequestCreatorType,

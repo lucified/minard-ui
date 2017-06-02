@@ -43,7 +43,7 @@ class Field extends React.Component<Props, void> {
           rows={3}
           innerRef={fieldRef}
           onKeyDown={onKeyDown}
-        />
+        /> // tslint:disable-line:jsx-alignment
       : <input
           {...input}
           disabled={disabled}
@@ -51,7 +51,7 @@ class Field extends React.Component<Props, void> {
           type={type}
           ref={fieldRef}
           onKeyDown={onKeyDown}
-        />;
+        />; // tslint:disable-line:jsx-alignment
 
     return (
       <div className={styles.field}>

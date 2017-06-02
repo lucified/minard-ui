@@ -107,6 +107,7 @@ class ProjectSettingsForm extends React.Component<
       </button>
     );
 
+    // tslint:disable:jsx-alignment
     const submitButtonToShow = isProjectNameEdited
       ? <Confirmable
           title="Warning!"
