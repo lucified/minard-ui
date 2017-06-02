@@ -83,7 +83,7 @@ class LoginView extends React.Component<Props, State> {
           title: 'Minard by Lucify',
         },
       }) as any,
-    ); // tslint:disable-line:no-object-literal-type-assertion
+    );
 
     this.lock.on('authenticated', this.onAuthentication.bind(this));
     this.lock.on('authorization_error', this.onError.bind(this));
@@ -152,12 +152,8 @@ class LoginView extends React.Component<Props, State> {
               action={this.restartLogin}
             >
               <p>
-                Unable to load Minard. If this problem persists,
-                contact
-                {' '}
-                <a href="mailto:support@minard.io">
-                  support@minard.io
-                </a>.
+                Unable to load Minard. If this problem persists, contact
+                {' '}<a href="mailto:support@minard.io">support@minard.io</a>.
               </p>
             </ErrorDialog>
           </div>

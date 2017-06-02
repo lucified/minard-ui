@@ -138,8 +138,7 @@ class AccountDialog extends React.Component<Props, State> {
                 {' '}<strong onClick={selectText}>{email}</strong>
               </p>
               <p>
-                To change your Minard email address, please
-                contact
+                To change your Minard email address, please contact
                 {' '}
                 <a className={styles.url} href="mailto:support@minard.io">
                   support@minard.io
@@ -183,9 +182,8 @@ class AccountDialog extends React.Component<Props, State> {
               </p>
               <p>
                 For security reasons, your Git password was only shown when you
-                signed up for Minard. If
-                you wish to change your password, please
-                contact
+                signed up for Minard. If you wish to change your password,
+                please contact
                 {' '}
                 <a className={styles.url} href="mailto:support@minard.io">
                   support@minard.io

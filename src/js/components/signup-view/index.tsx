@@ -146,8 +146,8 @@ class SignupView extends React.Component<Props, State> {
           <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
             <p>
-              Please try signing up again. If that doesn't work,
-              contact <a href="mailto:support@minard.io">support@minard.io</a>.
+              Please try signing up again. If that doesn't work, contact
+              {' '}<a href="mailto:support@minard.io">support@minard.io</a>.
             </p>
           </ErrorDialog>
         </div>
@@ -165,15 +165,15 @@ class SignupView extends React.Component<Props, State> {
           >
             <p>
               Success! Your Minard user account has been created. To push code
-              to Minard,
-              you will need to use the following Git username and password.
+              to Minard, you will need to use the following Git username and
+              password.
             </p>
             <p>
               <strong>
                 Please store the password in some place safe. This is the only
-                time you will
-                see this password. If you ever lose it, send a message
-                to <a href="mailto:support@minard.io">support@minard.io</a> to
+                time you will see this password. If you ever lose it, send a
+                message to
+                {' '}<a href="mailto:support@minard.io">support@minard.io</a> to
                 have it reset.
               </strong>
             </p>

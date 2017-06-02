@@ -12,6 +12,7 @@ interface Props {
 }
 
 const EmptyProject = ({ project }: Props) => {
+  // prettier-ignore
   return (
     <section className="container-fluid">
       <SimpleSectionTitle><span>Get started</span></SimpleSectionTitle>
@@ -31,13 +32,12 @@ const EmptyProject = ({ project }: Props) => {
               </div>
               <div className={styles.text}>
                 If your project folder is not already a Git repository,
-                initialize
-                it by running the following commands in the folder:
+                initialize it by running the following commands in the folder:
               </div>
               <div className={styles.code}>
                 <pre>
-                  git init # Initialize the Git repository<br />
-                  git add . # Stage your existing files to a new commit<br />
+                  git init   # Initialize the Git repository<br />
+                  git add .  # Stage your existing files to a new commit<br />
                   git commit -m “First commit”
                 </pre>
               </div>
@@ -52,8 +52,7 @@ const EmptyProject = ({ project }: Props) => {
               </div>
               <div className={styles.text}>
                 Now, whenever you push code to <code>minard</code>, Minard will
-                create
-                a new preview:
+                create a new preview:
               </div>
               <div className={styles.code}>
                 <pre onClick={selectText}>
@@ -88,16 +87,14 @@ const EmptyProject = ({ project }: Props) => {
 
               <div className={styles.text}>
                 By default, Minard will not build your project. The preview will
-                be
-                the root of your git repository. You can enable builds and
-                change
-                the deployment root folder by including a
-                {' '}<code>minard.json</code> file
-                in your repository. It has the following format:
+                be the root of your git repository. You can enable builds and
+                change the deployment root folder by including a
+                {' '}<code>minard.json</code> file in your repository. It has
+                the following format:
               </div>
               <div className={styles.code}>
                 <pre onClick={selectText}>
-                  {`{
+{`{
   "publicRoot": "dist",
   "build": {
     "commands": ["npm install", "npm run build"],

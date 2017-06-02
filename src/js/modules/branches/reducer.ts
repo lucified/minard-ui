@@ -138,7 +138,6 @@ const reducer: Reducer<BranchState> = (state = initialState, action: any) => {
         );
 
         if (foundIndex === -1) {
-          // tslint:disable-line:prefer-conditional-expression
           // Not found, replace
           newBranch.commits = newCommitIds.length > 0
             ? newCommitIds
