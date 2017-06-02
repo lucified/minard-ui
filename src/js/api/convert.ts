@@ -25,7 +25,7 @@ const toConvertedArray = <InputType, OutputType>(
     responseEntities = [responseEntities];
   }
 
-  return compact(
+  return compact<OutputType>(
     responseEntities.map(responseEntity => {
       try {
         return converter(responseEntity);
@@ -35,7 +35,7 @@ const toConvertedArray = <InputType, OutputType>(
         return undefined;
       }
     }),
-  ) as OutputType[];
+  );
 };
 
 const splitCommitMessage = (
@@ -55,12 +55,10 @@ const splitCommitMessage = (
 
 // Projects
 const createProjectObject = (project: ResponseProjectElement): Project => {
-  const latestSuccessfullyDeployedCommitObject:
-    | { data?: { id: string } }
-    | undefined =
+  const latestSuccessfullyDeployedCommitObject =
     project.relationships &&
     project.relationships['latest-successfully-deployed-commit'];
-  const latestSuccessfullyDeployedCommit: string | undefined =
+  const latestSuccessfullyDeployedCommit =
     latestSuccessfullyDeployedCommitObject &&
     latestSuccessfullyDeployedCommitObject.data &&
     latestSuccessfullyDeployedCommitObject.data.id;
@@ -160,19 +158,17 @@ export const toActivities = toConvertedArray(createActivityObject);
 
 // Branches
 const createBranchObject = (branch: ResponseBranchElement): Branch => {
-  const latestSuccessfullyDeployedCommitObject:
-    | { data?: { id: string } }
-    | undefined =
+  const latestSuccessfullyDeployedCommitObject =
     branch.relationships &&
     branch.relationships['latest-successfully-deployed-commit'];
-  const latestSuccessfullyDeployedCommit: string | undefined =
+  const latestSuccessfullyDeployedCommit =
     latestSuccessfullyDeployedCommitObject &&
     latestSuccessfullyDeployedCommitObject.data &&
     latestSuccessfullyDeployedCommitObject.data.id;
 
-  const latestCommitObject: { data?: { id: string } } | undefined =
+  const latestCommitObject =
     branch.relationships && branch.relationships['latest-commit'];
-  const latestCommit: string | undefined =
+  const latestCommit =
     latestCommitObject && latestCommitObject.data && latestCommitObject.data.id;
 
   const latestActivityTimestampString =
