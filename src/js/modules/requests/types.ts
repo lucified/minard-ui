@@ -22,6 +22,7 @@ export interface ClearErrorAction extends Action {
 }
 
 /// REQUEST / SUCCESS / FAILURE
+// tslint:disable:one-line
 interface RequestActionCreators<
   RequestCreatorType,
   SuccessCreatorType,
@@ -40,6 +41,7 @@ interface RequestActionCreators<
     actionCreator: FailureCreatorType;
   };
 }
+// tslint:enable:one-line
 
 // When requesting a specific entity
 export interface EntityRequestAction extends Action {
