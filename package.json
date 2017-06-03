@@ -31,7 +31,7 @@
       "prettier --single-quote --trailing-comma all --write",
       "git add"
     ],
-    "*.ts": [
+    "*.ts?(x)": [
       "prettier --parser typescript --single-quote --trailing-comma all --write",
       "git add"
     ]
