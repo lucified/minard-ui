@@ -183,7 +183,10 @@ class ProjectSettingsForm extends React.Component<
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: Props) => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: Props,
+): GeneratedStateProps => {
   const formSelector = formValueSelector('editProject');
   const visibleProjectName = formSelector(state, 'name') as string | undefined;
   return {

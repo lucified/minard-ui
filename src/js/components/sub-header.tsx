@@ -183,7 +183,7 @@ const mapDispatchToProps = (
   },
 });
 
-export default connect<GeneratedProps, {}, {}>(
+export default connect<GeneratedProps, GeneratedDispatchProps, {}>(
   mapStateToProps,
   mapDispatchToProps,
 )(SubHeader);

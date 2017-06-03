@@ -134,4 +134,6 @@ const mapStateToProps = (
   };
 };
 
-export default connect(mapStateToProps)(CommentList);
+export default connect<GeneratedStateProps, {}, PassedProps>(mapStateToProps)(
+  CommentList,
+);

@@ -13,9 +13,9 @@
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-8.3.0.tgz#387070e339400b7a7b3b2f4b78cb5ff229aa67e0"
 
-"@types/auth0-lock@^10.10.1":
-  version "10.10.1"
-  resolved "https://registry.yarnpkg.com/@types/auth0-lock/-/auth0-lock-10.10.1.tgz#4e2a020f8392d6ca843926c16ad77cd2e7bc93d0"
+"@types/auth0-lock@^10.16.0":
+  version "10.16.0"
+  resolved "https://registry.yarnpkg.com/@types/auth0-lock/-/auth0-lock-10.16.0.tgz#792ec94c07079e9e05b470a06064290b6509fd26"
   dependencies:
     "@types/auth0-js" "*"
 
@@ -31,17 +31,17 @@
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.5.1.tgz#da4a145410466eac20e94b51c8778a7551d1d4db"
 
-"@types/lodash@^4.14.64":
-  version "4.14.64"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.64.tgz#979cf3a3d4a368670840bf9b3e448dc33ffe84ee"
+"@types/lodash@^4.14.65":
+  version "4.14.65"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.65.tgz#a0f78d71ffcd3c02628d5f616410c98c424326d5"
 
 "@types/mocha@^2.2.41":
   version "2.2.41"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.41.tgz#e27cf0817153eb9f2713b2d3f6c68f1e1c3ca608"
 
-"@types/node@^7.0.23":
-  version "7.0.23"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.23.tgz#ededfd92e61046c32fcad56ea7e1101733fad4a4"
+"@types/node@^7.0.27":
+  version "7.0.27"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.27.tgz#ba5e1a87aca2b4f5817289615ffe56472927687e"
 
 "@types/react-dom@^15.5.0":
   version "15.5.0"
@@ -73,7 +73,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-redux@^4.4.40":
+"@types/react-redux@4.4.40":
   version "4.4.40"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-4.4.40.tgz#268d1a9b9a42e52562450e2c306630fa38db36ad"
   dependencies:
@@ -88,9 +88,9 @@
     "@types/react" "*"
     "@types/react-router" "*"
 
-"@types/react-router-redux@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-5.0.1.tgz#9e44fd3961b5aa1799acc7ddfec3d0ee45f746d2"
+"@types/react-router-redux@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-router-redux/-/react-router-redux-5.0.2.tgz#01e886d4ebfcb6bb60a8700264ff2b6697b7c97e"
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
@@ -115,9 +115,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^15.0.25":
-  version "15.0.25"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.25.tgz#d396949cccc9a90b61755def9781e5aced9b2261"
+"@types/react@*", "@types/react@^15.0.26":
+  version "15.0.26"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.26.tgz#19d8969edcabb2aa6d10ccfba807e67a93a0a8f4"
 
 "@types/redux-form@^6.6.2":
   version "6.6.2"
@@ -3907,17 +3907,17 @@ minimalistic-assert@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.0.tgz#702be2dda6b37f4836bcb3f5db56641b64a1d3d3"
 
-"minimatch@2 || 3", minimatch@3.0.3, minimatch@^3.0.0, minimatch@^3.0.2, minimatch@~3.0.2:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.3.tgz#2a4e4090b96b2db06a9d7df01055a62a77c9b774"
-  dependencies:
-    brace-expansion "^1.0.0"
-
-minimatch@^3.0.4:
+"minimatch@2 || 3", minimatch@^3.0.4, minimatch@~3.0.2:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   dependencies:
     brace-expansion "^1.1.7"
+
+minimatch@3.0.3, minimatch@^3.0.0, minimatch@^3.0.2:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.3.tgz#2a4e4090b96b2db06a9d7df01055a62a77c9b774"
+  dependencies:
+    brace-expansion "^1.0.0"
 
 minimist@0.0.8, minimist@~0.0.1:
   version "0.0.8"
