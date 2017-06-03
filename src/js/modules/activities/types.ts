@@ -3,7 +3,7 @@ import { DeploymentStatus } from '../deployments';
 // State
 export enum ActivityType {
   Comment,
-  Deployment
+  Deployment,
 }
 
 export interface Activity {

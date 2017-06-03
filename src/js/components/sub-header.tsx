@@ -21,7 +21,7 @@ enum PageType {
   ProjectsList,
   ProjectView,
   BranchesList,
-  BranchView
+  BranchView,
 }
 
 interface GeneratedProps {

@@ -3,7 +3,7 @@ export enum ModalType {
   ProjectSettings,
   Account,
   TeamSettings,
-  InviteTeam
+  InviteTeam,
 }
 
 // State

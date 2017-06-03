@@ -6,7 +6,7 @@ export enum DeploymentStatus {
   Failed,
   Running,
   Pending,
-  Canceled
+  Canceled,
 }
 
 export function toDeploymentStatus(deploymentStatus: string): DeploymentStatus {

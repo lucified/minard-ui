@@ -2,7 +2,7 @@ export enum ConnectionState {
   OPEN,
   INITIAL_CONNECT,
   CONNECTING,
-  CLOSED
+  CLOSED,
 }
 
 // State

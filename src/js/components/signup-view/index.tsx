@@ -43,7 +43,7 @@ interface State {
 
 enum LoadingStatus {
   AUTH0,
-  BACKEND
+  BACKEND,
 }
 
 class SignupView extends React.Component<Props, State> {
