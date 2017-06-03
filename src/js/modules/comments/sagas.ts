@@ -62,10 +62,10 @@ export default function createSagas(api: Api) {
       details,
       unauthorized,
     }: {
-      response?: any,
-      error?: string,
-      details?: string,
-      unauthorized?: boolean,
+      response?: any;
+      error?: string;
+      details?: string;
+      unauthorized?: boolean;
     } = yield call(api.Comment.create, deployment, message, email, name);
 
     if (response) {

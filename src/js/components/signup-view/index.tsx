@@ -41,7 +41,10 @@ interface State {
   auth0Error?: string;
 }
 
-enum LoadingStatus { AUTH0, BACKEND }
+enum LoadingStatus {
+  AUTH0,
+  BACKEND
+}
 
 class SignupView extends React.Component<Props, State> {
   private auth0?: WebAuth;

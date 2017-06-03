@@ -28,16 +28,16 @@ interface RequestActionCreators<
   FailureCreatorType
 > {
   REQUEST: {
-    type: string,
-    actionCreator: RequestCreatorType,
+    type: string;
+    actionCreator: RequestCreatorType;
   };
   SUCCESS: {
-    type: string,
-    actionCreator: SuccessCreatorType,
+    type: string;
+    actionCreator: SuccessCreatorType;
   };
   FAILURE: {
-    type: string,
-    actionCreator: FailureCreatorType,
+    type: string;
+    actionCreator: FailureCreatorType;
   };
 }
 

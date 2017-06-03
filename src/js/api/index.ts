@@ -273,7 +273,7 @@ const Project = {
         },
       },
     }),
-  edit: (id: string, newAttributes: { name?: string, description?: string }) =>
+  edit: (id: string, newAttributes: { name?: string; description?: string }) =>
     patchApi(`/api/projects/${id}`, {
       data: {
         type: 'projects',

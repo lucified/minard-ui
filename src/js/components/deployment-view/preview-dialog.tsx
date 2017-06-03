@@ -23,7 +23,7 @@ interface Props {
   userEmail?: string;
   highlightComment?: string;
   className?: string;
-  linkDetails: { entityType: EntityType, id: string, token: string };
+  linkDetails: { entityType: EntityType; id: string; token: string };
 }
 
 interface State {

@@ -8,24 +8,24 @@ import { Project } from '../../modules/projects';
 
 interface Props {
   rawDeployment?: {
-    deployment: Deployment,
+    deployment: Deployment;
   };
   preview?: {
-    deployment?: Deployment,
-    project?: Project,
-    branch?: Branch,
-    buildLog?: boolean,
+    deployment?: Deployment;
+    project?: Project;
+    branch?: Branch;
+    buildLog?: boolean;
   };
   comment?: {
-    comment: Comment,
-    deployment: Deployment,
+    comment: Comment;
+    deployment: Deployment;
   };
   branch?: {
-    branch: Branch | string,
-    project?: string,
+    branch: Branch | string;
+    project?: string;
   };
   project?: {
-    project: Project | string,
+    project: Project | string;
   };
   homepage?: boolean;
   /* showAll can be used for project or homepage. */

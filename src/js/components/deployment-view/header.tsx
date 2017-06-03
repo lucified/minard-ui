@@ -16,7 +16,7 @@ interface Props {
   isOpen: boolean;
   className?: string;
   isAuthenticatedUser: boolean;
-  linkDetails: { entityType: EntityType, id: string, token: string };
+  linkDetails: { entityType: EntityType; id: string; token: string };
 }
 
 const Header = ({

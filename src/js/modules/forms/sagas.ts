@@ -27,8 +27,8 @@ export default function createSagas() {
       success,
       failure,
     }: {
-      success: CreateEntitySuccessAction | EditEntitySuccessAction,
-      failure: CreateError | EditError,
+      success: CreateEntitySuccessAction | EditEntitySuccessAction;
+      failure: CreateError | EditError;
     } = yield race({
       success: take(successAction),
       failure: take(failureAction),

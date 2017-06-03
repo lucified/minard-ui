@@ -5,12 +5,12 @@ export const FORM_SUBMIT = 'FORMS/FORM_SUBMIT';
 export interface FormSubmitAction {
   type: 'FORMS/FORM_SUBMIT';
   payload: {
-    submitAction: string,
-    successAction: string,
-    failureAction: string,
-    values: any,
-    resolve: (idOrEntity: string | object) => void,
-    reject: (error: any) => void,
+    submitAction: string;
+    successAction: string;
+    failureAction: string;
+    values: any;
+    resolve: (idOrEntity: string | object) => void;
+    reject: (error: any) => void;
   };
 }
 

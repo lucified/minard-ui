@@ -34,10 +34,10 @@ export default function createSagas(api: Api) {
       details,
       unauthorized,
     }: {
-      response?: ApiPreviewResponse,
-      error?: string,
-      details?: string,
-      unauthorized?: boolean,
+      response?: ApiPreviewResponse;
+      error?: string;
+      details?: string;
+      unauthorized?: boolean;
     } = yield call(api.Preview.fetch, id, entityType, token);
 
     if (response) {

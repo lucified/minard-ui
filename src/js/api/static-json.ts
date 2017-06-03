@@ -129,7 +129,7 @@ const Project = {
   ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(newProjectJSON),
   edit: (
     _id: string,
-    _newAttributes: { name?: string, description?: string },
+    _newAttributes: { name?: string; description?: string },
   ): Promise<ApiResult<ApiEntityResponse>> => fetchFile(editedProjectJSON),
   delete: (_id: string): Promise<ApiResult<{}>> =>
     Promise.resolve({ response: {} }),
@@ -139,7 +139,7 @@ const Project = {
 const Team = {
   fetch: () =>
     Promise.resolve({
-      response: ({ id: 3, name: 'Dev team' }) as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
+      response: { id: 3, name: 'Dev team' } as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
     }),
 };
 
@@ -148,7 +148,7 @@ const User = {
     Promise.resolve({
       response: {
         password: 'secretPassword',
-        team: ({ id: 3, name: 'teamName' }) as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
+        team: { id: 3, name: 'teamName' } as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
       },
     }),
   logout: () => Promise.resolve({}),

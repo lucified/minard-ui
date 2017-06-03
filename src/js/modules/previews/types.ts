@@ -5,12 +5,12 @@ export interface Preview {
   commit: string;
   deployment: string;
   project: {
-    id: string,
-    name: string,
+    id: string;
+    name: string;
   };
   branch: {
-    id: string,
-    name: string,
+    id: string;
+    name: string;
   };
 
   // Currently not available from the API and not used

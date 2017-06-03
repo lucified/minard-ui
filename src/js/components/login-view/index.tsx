@@ -42,7 +42,10 @@ interface State {
   loadingStatus: LoadingStatus;
 }
 
-enum LoadingStatus { AUTH0, BACKEND }
+enum LoadingStatus {
+  AUTH0,
+  BACKEND
+}
 
 class LoginView extends React.Component<Props, State> {
   private lock: Auth0LockStatic;
@@ -59,7 +62,7 @@ class LoginView extends React.Component<Props, State> {
     this.lock = new Auth0Lock(
       process.env.AUTH0_CLIENT_ID,
       process.env.AUTH0_DOMAIN,
-      ({
+      {
         // oidcConformant is still in preview stage, which is why it is not documented
         // or found in the typings. Remove the `as any` below once it's included.
         // Read more: https://auth0.com/forum/t/lock-not-always-passing-audience/5121/17
@@ -82,7 +85,7 @@ class LoginView extends React.Component<Props, State> {
         languageDictionary: {
           title: 'Minard by Lucify',
         },
-      }) as any,
+      } as any,
     );
 
     this.lock.on('authenticated', this.onAuthentication.bind(this));

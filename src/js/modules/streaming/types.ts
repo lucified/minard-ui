@@ -1,4 +1,9 @@
-export enum ConnectionState { OPEN, INITIAL_CONNECT, CONNECTING, CLOSED }
+export enum ConnectionState {
+  OPEN,
+  INITIAL_CONNECT,
+  CONNECTING,
+  CLOSED
+}
 
 // State
 export interface StreamingState {

@@ -1,7 +1,13 @@
 import { FetchError } from '../errors';
 import { User } from '../types';
 
-export enum DeploymentStatus { Success, Failed, Running, Pending, Canceled }
+export enum DeploymentStatus {
+  Success,
+  Failed,
+  Running,
+  Pending,
+  Canceled
+}
 
 export function toDeploymentStatus(deploymentStatus: string): DeploymentStatus {
   switch (deploymentStatus) {

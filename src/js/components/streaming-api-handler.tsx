@@ -380,7 +380,7 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 
   private restartConnection(
-    options: { teamId?: string, deployment?: Deployment },
+    options: { teamId?: string; deployment?: Deployment },
   ) {
     const { teamId, deployment } = options;
     const accessToken = getAccessToken();

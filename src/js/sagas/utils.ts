@@ -101,10 +101,10 @@ export const createEntityFetcher = <ApiParams>(
       details,
       unauthorized,
     }: {
-      response?: ApiEntityResponse,
-      error?: string,
-      details?: string,
-      unauthorized?: boolean,
+      response?: ApiEntityResponse;
+      error?: string;
+      details?: string;
+      unauthorized?: boolean;
     } = yield (call as any)(apiFetchFunction, id, ...args); // TODO: fix typings
 
     if (response) {
@@ -170,10 +170,10 @@ export const createCollectionFetcher = <ApiParams>(
       details,
       unauthorized,
     }: {
-      response?: ApiEntityResponse,
-      error?: string,
-      details?: string,
-      unauthorized?: boolean,
+      response?: ApiEntityResponse;
+      error?: string;
+      details?: string;
+      unauthorized?: boolean;
     } = yield (call as any)(apiFetchFunction, teamId, ...args); // TODO: fix typings
 
     if (response) {
@@ -206,9 +206,9 @@ export const createCollectionFetcher = <ApiParams>(
 };
 
 const storingMetadata: {
-  type: ApiEntityTypeString,
-  storeActionCreator: (entities: EntityType[]) => StoreEntityAction,
-  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[],
+  type: ApiEntityTypeString;
+  storeActionCreator: (entities: EntityType[]) => StoreEntityAction;
+  converter: (apiEntities: ApiEntity[] | ApiEntity) => EntityType[];
 }[] = [
   {
     type: 'projects',

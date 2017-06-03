@@ -40,7 +40,7 @@ const toConvertedArray = <InputType, OutputType>(
 
 const splitCommitMessage = (
   rawMessage: string,
-): { message: string, description?: string } => {
+): { message: string; description?: string } => {
   const commitMessageLines = rawMessage.match(/[^\r\n]+/g);
   const message = commitMessageLines ? commitMessageLines[0] : '';
   const description = commitMessageLines && commitMessageLines.length > 1

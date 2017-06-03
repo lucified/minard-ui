@@ -17,13 +17,11 @@ import MinardLink from './common/minard-link';
 const styles = require('./sub-header.scss');
 
 enum PageType {
-
   TeamProjectsView,
   ProjectsList,
   ProjectView,
   BranchesList,
   BranchView
-
 }
 
 interface GeneratedProps {
