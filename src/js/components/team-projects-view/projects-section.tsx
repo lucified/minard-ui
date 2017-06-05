@@ -41,93 +41,117 @@ type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 type PropsWithDefaults = Props & DefaultProps;
 
 class ProjectsSection extends React.Component<Props, void> {
-
   public defaultProps = {
     showAll: false,
   };
 
   public render() {
-    const { projects, isLoading, openCreateNewProjectDialog, showAll, count = 6 } = this.props as PropsWithDefaults;
-    const filteredProjects = (projects.filter(project => !isFetchError(project)) as Project[])
-      .sort((a, b) => {
-        if (a.latestActivityTimestamp === undefined) {
-          return -1;
-        }
+    const {
+      projects,
+      isLoading,
+      openCreateNewProjectDialog,
+      showAll,
+      count = 6,
+    } = this.props as PropsWithDefaults;
+    const filteredProjects = (projects.filter(
+      project => !isFetchError(project),
+    ) as Project[]).sort((a, b) => {
+      if (a.latestActivityTimestamp === undefined) {
+        return -1;
+      }
 
-        if (b.latestActivityTimestamp === undefined) {
-          return 1;
-        }
+      if (b.latestActivityTimestamp === undefined) {
+        return 1;
+      }
 
-        return b.latestActivityTimestamp - a.latestActivityTimestamp;
-      });
-    const projectsToShow = showAll ? filteredProjects : filteredProjects.slice(0, count);
+      return b.latestActivityTimestamp - a.latestActivityTimestamp;
+    });
+    const projectsToShow = showAll
+      ? filteredProjects
+      : filteredProjects.slice(0, count);
     // If we're only showing some of the projects, don't show the loading indicator if we have enough to show
-    const showLoadingIcon = isLoading && (showAll || (filteredProjects.length < count));
+    const showLoadingIcon =
+      isLoading && (showAll || filteredProjects.length < count);
 
     return (
       <section>
         <NewProjectDialog />
         <SimpleSectionTitle
-          rightContent={(
-            <a onClick={openCreateNewProjectDialog} className={classNames(styles['add-project-link'])}>
+          rightContent={
+            <a
+              onClick={openCreateNewProjectDialog}
+              className={classNames(styles['add-project-link'])}
+            >
               + Add new project
             </a>
-          )}
+          }
         >
           <span>
             Projects
           </span>
         </SimpleSectionTitle>
         <FlipMove
-          className={
-            classNames({
-              row: showAll,
-              'start-sm': showAll,
-            })
-          }
+          className={classNames({
+            row: showAll,
+            'start-sm': showAll,
+          })}
           enterAnimation="fade"
           leaveAnimation="fade"
         >
-          {projectsToShow.map(project => (
+          {projectsToShow.map(project =>
             <div
               key={project.id}
-              className={
-                classNames({
-                  'col-xs-12': showAll,
-                  'col-sm-6': showAll,
-                  'col-md-4': showAll,
-                })
-              }
+              className={classNames({
+                'col-xs-12': showAll,
+                'col-sm-6': showAll,
+                'col-md-4': showAll,
+              })}
             >
               <ProjectCard project={project} constantHeight={showAll} />
-            </div>
-          ))}
-          {showLoadingIcon && (
-            <div key="loading" className={classNames('col-xs-12', 'col-sm-6', 'col-md-4')}>
+            </div>,
+          )}
+          {showLoadingIcon &&
+            <div
+              key="loading"
+              className={classNames('col-xs-12', 'col-sm-6', 'col-md-4')}
+            >
               <LoadingIcon className={styles.loading} center />
-            </div>
-          )}
-          {!showLoadingIcon && projectsToShow.length === 0 && (
-            <div key="initial" className={classNames('col-xs-12', styles.empty)}>
+            </div>}
+          {!showLoadingIcon &&
+            projectsToShow.length === 0 &&
+            <div
+              key="initial"
+              className={classNames('col-xs-12', styles.empty)}
+            >
               <h2>Create a new project to get started</h2>
-            </div>
-          )}
+            </div>}
         </FlipMove>
-        {(!showAll && filteredProjects.length > count) && (
+        {!showAll &&
+          filteredProjects.length > count &&
           <div className="row end-xs">
-            <div className={classNames('col-xs-12', styles['show-all-projects-section'])}>
-              <MinardLink className={styles['show-all-projects-link']} showAll homepage>
+            <div
+              className={classNames(
+                'col-xs-12',
+                styles['show-all-projects-section'],
+              )}
+            >
+              <MinardLink
+                className={styles['show-all-projects-link']}
+                showAll
+                homepage
+              >
                 Show all projects ({filteredProjects.length})
               </MinardLink>
             </div>
-          </div>
-        )}
+          </div>}
       </section>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
   openCreateNewProjectDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(Modal.actions.openModal(ModalType.NewProject));
@@ -138,7 +162,8 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProjectsSection);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(ProjectsSection);

@@ -19,7 +19,8 @@ describe('Deployments reducer', () => {
       id: '8',
       status: DeploymentStatus.Success,
       url: '#',
-      screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+      screenshot:
+        'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
       creator: {
         name: undefined,
         email: 'juho@lucify.com',
@@ -56,7 +57,8 @@ describe('Deployments reducer', () => {
         id: '7',
         status: DeploymentStatus.Success,
         url: '#',
-        screenshot: 'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
+        screenshot:
+          'https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png',
         creator: {
           name: 'Ville Saarinen',
           email: 'ville.saarinen@lucify.com',
@@ -69,7 +71,9 @@ describe('Deployments reducer', () => {
     const storeAction = storeDeployments(values<Deployment>(newDeployments));
 
     it('with an empty initial state', () => {
-      expect(reducer(undefined as any, storeAction)).to.deep.equal(newDeployments);
+      expect(reducer(undefined as any, storeAction)).to.deep.equal(
+        newDeployments,
+      );
     });
 
     it('makes no changes with an empty list', () => {
@@ -81,13 +85,19 @@ describe('Deployments reducer', () => {
 
     it('with other deployments in state', () => {
       const newState = reducer(stateWithoutExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithoutExistingEntity, ...newDeployments});
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        ...newDeployments,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
     it('by replacing existing deployments', () => {
       const newState = reducer(stateWithExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithExistingEntity, ...newDeployments });
+      expect(newState).to.deep.equal({
+        ...stateWithExistingEntity,
+        ...newDeployments,
+      });
       expect(newState).to.not.equal(stateWithExistingEntity); // make sure not mutated
     });
   });
@@ -102,16 +112,17 @@ describe('Deployments reducer', () => {
     };
 
     it('with an empty initial state', () => {
-      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal(
-        { [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal({
+        [failedRequestAction.id]: failedRequestAction,
+      });
     });
 
     it('with other entities in state', () => {
       const newState = reducer(stateWithoutExistingEntity, failedRequestAction);
-      expect(newState).to.deep.equal(
-        { ...stateWithoutExistingEntity, [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        [failedRequestAction.id]: failedRequestAction,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
@@ -160,7 +171,7 @@ describe('Deployments reducer', () => {
   });
 
   describe('addCommentsToDeployment', () => {
-    it('should add a comment to a deployment that doesn\'t have any', () => {
+    it("should add a comment to a deployment that doesn't have any", () => {
       const action = addCommentsToDeployment('8', ['comment1', 'comment2']);
       const newState = reducer(stateWithoutExistingEntity, action);
       const newDeployment = newState['8'] as Deployment;
@@ -173,7 +184,10 @@ describe('Deployments reducer', () => {
       const oldDeployment = stateWithExistingEntity['7'] as Deployment;
       const newState = reducer(stateWithExistingEntity, action);
       const newDeployment = newState['7'] as Deployment;
-      expect(newDeployment.comments).to.deep.equal([...oldDeployment.comments as string[], ...action.comments]);
+      expect(newDeployment.comments).to.deep.equal([
+        ...(oldDeployment.comments as string[]),
+        ...action.comments,
+      ]);
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
@@ -212,7 +226,9 @@ describe('Deployments reducer', () => {
     });
 
     it('should decrease the commentCount', () => {
-      const oldDeployment: Deployment = { ...stateWithExistingEntity['7'] as Deployment };
+      const oldDeployment: Deployment = {
+        ...stateWithExistingEntity['7'] as Deployment,
+      };
       const action = removeCommentFromDeployment('7', 'existingComment');
       const newState = reducer(stateWithExistingEntity, action);
       const newDeployment = newState['7'] as Deployment;
@@ -246,7 +262,9 @@ describe('Deployments reducer', () => {
     });
 
     it('should set the correct commentCount', () => {
-      const oldDeployment: Deployment = { ...stateWithExistingEntity['7'] as Deployment };
+      const oldDeployment: Deployment = {
+        ...stateWithExistingEntity['7'] as Deployment,
+      };
       const action = setCommentsForDeployment('7', ['comment1', 'comment2']);
       const newState = reducer(stateWithExistingEntity, action);
       const newDeployment = newState['7'] as Deployment;
@@ -264,7 +282,10 @@ describe('Deployments reducer', () => {
     });
 
     it('should do nothing if the deployment does not exist', () => {
-      const action = setCommentsForDeployment('notExist', ['comment1', 'comment2']);
+      const action = setCommentsForDeployment('notExist', [
+        'comment1',
+        'comment2',
+      ]);
       const newState = reducer(stateWithoutExistingEntity, action);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
@@ -272,8 +293,14 @@ describe('Deployments reducer', () => {
   });
 
   it(`clears data on ${CLEAR_STORED_DATA}`, () => {
-    expect(reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(
+      reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
   });
 });

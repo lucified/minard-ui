@@ -7,10 +7,11 @@ import { Project } from './types';
 
 const selectProjectTree = (state: StateTree) => state.entities.projects;
 
-export const getProjects = createSelector(
-  selectProjectTree,
-  projects => values<Project | FetchError>(projects),
+export const getProjects = createSelector(selectProjectTree, projects =>
+  values<Project | FetchError>(projects),
 );
 
-export const getProject = (state: StateTree, id: string): Project | FetchError | undefined =>
-  selectProjectTree(state)[id];
+export const getProject = (
+  state: StateTree,
+  id: string,
+): Project | FetchError | undefined => selectProjectTree(state)[id];

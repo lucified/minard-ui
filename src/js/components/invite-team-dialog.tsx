@@ -20,7 +20,9 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => void;
+  closeDialog: (
+    e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>,
+  ) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
@@ -50,28 +52,33 @@ class InviteTeamDialog extends React.Component<Props, void> {
           </div>
         </header>
         <div className={styles.instructions}>
-          {invitationToken ? (
-            <div>
-              <p>Get your team onboard by sharing this signup URL with them:</p>
-              <div className={styles.url}>
-                <pre onClick={selectText}>
-                  {`${window.location.protocol}//${window.location.hostname}` +
-                      (window.location.port && window.location.port !== '80' ? `:${window.location.port}` : '') +
+          {invitationToken
+            ? <div>
+                <p>
+                  Get your team onboard by sharing this signup URL with them:
+                </p>
+                <div className={styles.url}>
+                  <pre onClick={selectText}>
+                    {`${window.location.protocol}//${window.location
+                      .hostname}` +
+                      (window.location.port && window.location.port !== '80'
+                        ? `:${window.location.port}`
+                        : '') +
                       `/signup/${invitationToken}`}
-                </pre>
+                  </pre>
+                </div>
+                <p>
+                  <strong>Be mindful of where you share this URL!</strong>
+                  {' '}Anyone can
+                  join your team by using it.
+                </p>
               </div>
-              <p>
-                <strong>Be mindful of where you share this URL!</strong> Anyone can
-                join your team by using it.
-              </p>
-            </div>
-          ) : (
-            <p>
-              It looks like the invitation URL is disabled for your team.
-              Contact <a href="mailto:support@minard.io">support@minard.io</a> to
-              get it enabled.
-            </p>
-          )}
+            : <p>
+                It looks like the invitation URL is disabled for your team.
+                Contact <a href="mailto:support@minard.io">support@minard.io</a>
+                {' '}to
+                get it enabled.
+              </p>}
         </div>
       </ModalDialog>
     );
@@ -82,8 +89,12 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.InviteTeam),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  closeDialog: (e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>) => {
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  closeDialog: (
+    e?: MouseEvent | KeyboardEvent | React.MouseEvent<HTMLElement>,
+  ) => {
     if (e) {
       e.preventDefault();
     }
@@ -92,7 +103,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(InviteTeamDialog);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(InviteTeamDialog);

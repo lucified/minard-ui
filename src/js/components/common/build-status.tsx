@@ -17,7 +17,12 @@ interface PassedProps {
   latest?: boolean;
 }
 
-const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => {
+const BuildStatus = ({
+  className,
+  commit,
+  deployment,
+  latest,
+}: PassedProps) => {
   let content: JSX.Element | null = null;
 
   if (deployment && commit) {
@@ -28,9 +33,14 @@ const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => 
       case DeploymentStatus.Canceled:
         content = (
           <MinardLink preview={{ deployment, buildLog: true }} openInNewWindow>
-            <div key="canceled" className={classNames(styles.box, styles.error)}>
+            <div
+              key="canceled"
+              className={classNames(styles.box, styles.error)}
+            >
               <Icon name="times" className={styles.icon} />
-              {latest ? <span>Latest build canceled</span> : <span>Build canceled</span>}
+              {latest
+                ? <span>Latest build canceled</span>
+                : <span>Build canceled</span>}
             </div>
           </MinardLink>
         );
@@ -40,7 +50,9 @@ const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => 
           <MinardLink preview={{ deployment, buildLog: true }} openInNewWindow>
             <div key="failed" className={classNames(styles.box, styles.error)}>
               <Icon name="times" className={styles.icon} />
-              {latest ? <span>Latest build failed</span> : <span>Build failed</span>}
+              {latest
+                ? <span>Latest build failed</span>
+                : <span>Build failed</span>}
             </div>
           </MinardLink>
         );
@@ -49,7 +61,10 @@ const BuildStatus = ({ className, commit, deployment, latest }: PassedProps) => 
       case DeploymentStatus.Running:
         content = (
           <MinardLink preview={{ deployment, buildLog: true }} openInNewWindow>
-            <div key="running" className={classNames(styles.box, styles.building)}>
+            <div
+              key="running"
+              className={classNames(styles.box, styles.building)}
+            >
               <Icon name="circle-o-notch" spin className={styles.icon} />
               Generating preview
             </div>

@@ -21,7 +21,11 @@ const reducer: Reducer<SelectedState> = (state = initialState, action: any) => {
       const branch = (result && result[3]) || null;
       const showAll = !!/\/all$/.exec(pathname); // This will break if we have an id that is "all"
 
-      if (project !== state.project || branch !== state.branch || showAll !== state.showAll) {
+      if (
+        project !== state.project ||
+        branch !== state.branch ||
+        showAll !== state.showAll
+      ) {
         return {
           project,
           branch,

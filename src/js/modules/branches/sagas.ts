@@ -1,9 +1,21 @@
 import { compact } from 'lodash';
-import { call, Effect, fork, put, select, take, takeEvery } from 'redux-saga/effects';
+import {
+  call,
+  Effect,
+  fork,
+  put,
+  select,
+  take,
+  takeEvery,
+} from 'redux-saga/effects';
 
 import { toBranches } from '../../api/convert';
 import { Api, ApiEntity, ApiEntityResponse } from '../../api/types';
-import { createEntityFetcher, createLoader, fetchIfMissing } from '../../sagas/utils';
+import {
+  createEntityFetcher,
+  createLoader,
+  fetchIfMissing,
+} from '../../sagas/utils';
 import { Commit } from '../commits';
 import { FetchError, isFetchError } from '../errors';
 import Projects, { Project, StoreProjectsAction } from '../projects';
@@ -16,7 +28,12 @@ import {
   UPDATE_BRANCH_WITH_COMMITS,
 } from './actions';
 import { getBranch, getBranchesForProject } from './selectors';
-import { Branch, FetchBranchAction, LoadBranchesForProjectAction, UpdateBranchWithCommitsAction } from './types';
+import {
+  Branch,
+  FetchBranchAction,
+  LoadBranchesForProjectAction,
+  UpdateBranchWithCommitsAction,
+} from './types';
 
 export default function createSagas(api: Api) {
   const fetchBranch = createEntityFetcher(
@@ -26,24 +43,35 @@ export default function createSagas(api: Api) {
     api.Branch.fetch,
   );
 
-  const loadBranch = createLoader(getBranch, fetchBranch, ensureBranchRelatedDataLoaded);
+  const loadBranch = createLoader(
+    getBranch,
+    fetchBranch,
+    ensureBranchRelatedDataLoaded,
+  );
 
-  function* ensureBranchRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const branch = (yield select(getBranch, id)) as Branch | FetchError | undefined;
+  function* ensureBranchRelatedDataLoaded(
+    id: string,
+  ): IterableIterator<Effect | Effect[]> {
+    const branch: Branch | FetchError | undefined = yield select(getBranch, id);
 
     if (branch && !isFetchError(branch)) {
       yield call(fetchIfMissing, 'projects', branch.project);
       if (branch.latestSuccessfullyDeployedCommit) {
-        const commit = (
-          yield call(fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit)
-        ) as Commit | FetchError | undefined;
+        const commit: Commit | FetchError | undefined = yield call(
+          fetchIfMissing,
+          'commits',
+          branch.latestSuccessfullyDeployedCommit,
+        );
         if (commit && !isFetchError(commit) && commit.deployment) {
           yield call(fetchIfMissing, 'deployments', commit.deployment);
         }
       }
       if (branch.latestCommit) {
-        const commit =
-          (yield call(fetchIfMissing, 'commits', branch.latestCommit)) as Commit | FetchError | undefined;
+        const commit: Commit | FetchError | undefined = yield call(
+          fetchIfMissing,
+          'commits',
+          branch.latestCommit,
+        );
         if (commit && !isFetchError(commit) && commit.deployment) {
           yield call(fetchIfMissing, 'deployments', commit.deployment);
         }
@@ -52,12 +80,19 @@ export default function createSagas(api: Api) {
   }
 
   // BRANCHES_FOR_PROJECT
-  function* loadBranchesForProject(action: LoadBranchesForProjectAction): IterableIterator<Effect> {
+  function* loadBranchesForProject(
+    action: LoadBranchesForProjectAction,
+  ): IterableIterator<Effect> {
     const id = action.id;
-    let project = (yield select(Projects.selectors.getProject, id)) as Project | FetchError | undefined;
+    let project: Project | FetchError | undefined = yield select(
+      Projects.selectors.getProject,
+      id,
+    );
 
     while (!project) {
-      const { entities: projects } = (yield take(Projects.actions.STORE_PROJECTS)) as StoreProjectsAction;
+      const { entities: projects }: StoreProjectsAction = yield take(
+        Projects.actions.STORE_PROJECTS,
+      );
       project = projects.find(p => p.id === id);
     }
 
@@ -72,7 +107,9 @@ export default function createSagas(api: Api) {
   }
 
   // UPDATE_BRANCH_WITH_COMMITS
-  function* loadLatestCommitForBranch(action: UpdateBranchWithCommitsAction): IterableIterator<Effect> {
+  function* loadLatestCommitForBranch(
+    action: UpdateBranchWithCommitsAction,
+  ): IterableIterator<Effect> {
     yield call(fetchIfMissing, 'commits', action.latestCommitId);
   }
 
@@ -84,23 +121,33 @@ export default function createSagas(api: Api) {
     addBranchesToProject,
   );
 
-  function* addBranchesToProject(id: string, response: ApiEntityResponse): IterableIterator<Effect> {
-    const branchIds = (response.data as ApiEntity[]).map((branch: any) => branch.id);
+  function* addBranchesToProject(
+    id: string,
+    response: ApiEntityResponse,
+  ): IterableIterator<Effect> {
+    const branchIds = (response.data as ApiEntity[]).map(
+      (branch: any) => branch.id,
+    );
     yield put(Projects.actions.addBranchesToProject(id, branchIds));
   }
 
-  function* ensureBranchesForProjectRelatedDataLoaded(id: string): IterableIterator<Effect | Effect[]> {
-    const branches = (yield select(getBranchesForProject, id)) as Branch[];
+  function* ensureBranchesForProjectRelatedDataLoaded(
+    id: string,
+  ): IterableIterator<Effect | Effect[]> {
+    const branches: Branch[] = yield select(getBranchesForProject, id);
 
     // Ensure latest deployed commits and deployments exist
-    const deployedCommits =
-      (yield compact(branches.map(branch => branch.latestSuccessfullyDeployedCommit))
-        .map(commitId => call(fetchIfMissing, 'commits', commitId))) as Commit[];
-    yield deployedCommits.map(commit => call(fetchIfMissing, 'deployments', commit.deployment));
+    const deployedCommits: Commit[] = yield compact(
+      branches.map(branch => branch.latestSuccessfullyDeployedCommit),
+    ).map(commitId => call(fetchIfMissing, 'commits', commitId));
+    yield deployedCommits.map(commit =>
+      call(fetchIfMissing, 'deployments', commit.deployment),
+    );
 
     // Ensure latest commits exist
-    yield compact(branches.map(branch => branch.latestCommit))
-      .map(commitId => call(fetchIfMissing, 'commits', commitId));
+    yield compact(branches.map(branch => branch.latestCommit)).map(commitId =>
+      call(fetchIfMissing, 'commits', commitId),
+    );
   }
 
   function* startFetchBranch(action: FetchBranchAction) {

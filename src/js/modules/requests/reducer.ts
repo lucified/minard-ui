@@ -11,7 +11,11 @@ import {
   Projects,
   User,
 } from './actions';
-import { EntitySuccessAction, RequestInformation, RequestsState } from './types';
+import {
+  EntitySuccessAction,
+  RequestInformation,
+  RequestsState,
+} from './types';
 
 const initialState: RequestsState = [];
 
@@ -42,58 +46,70 @@ const reducer: Reducer<RequestsState> = (state = initialState, action: any) => {
       const loadActivitiesAction = action as EntitySuccessAction | FetchError;
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => (requestInfo.type !== Activities.LoadActivitiesForProject.REQUEST.type) ||
-          (requestInfo.id !== loadActivitiesAction.id),
+        requestInfo =>
+          requestInfo.type !==
+            Activities.LoadActivitiesForProject.REQUEST.type ||
+          requestInfo.id !== loadActivitiesAction.id,
       );
     case Activities.LoadAllActivities.FAILURE.type:
     case Activities.LoadAllActivities.SUCCESS.type:
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => requestInfo.type !== Activities.LoadAllActivities.REQUEST.type,
+        requestInfo =>
+          requestInfo.type !== Activities.LoadAllActivities.REQUEST.type,
       );
     case User.LoadTeamInformation.FAILURE.type:
     case User.LoadTeamInformation.SUCCESS.type:
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => requestInfo.type !== User.LoadTeamInformation.REQUEST.type,
+        requestInfo =>
+          requestInfo.type !== User.LoadTeamInformation.REQUEST.type,
       );
     case Comments.LoadCommentsForDeployment.FAILURE.type:
     case Comments.LoadCommentsForDeployment.SUCCESS.type:
       const loadCommentsAction = action as EntitySuccessAction | FetchError;
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => (requestInfo.type !== Comments.LoadCommentsForDeployment.REQUEST.type) ||
-          (requestInfo.id !== loadCommentsAction.id),
+        requestInfo =>
+          requestInfo.type !==
+            Comments.LoadCommentsForDeployment.REQUEST.type ||
+          requestInfo.id !== loadCommentsAction.id,
       );
     case Comments.DeleteComment.FAILURE.type:
     case Comments.DeleteComment.SUCCESS.type:
       const deleteCommentAction = action as EntitySuccessAction | DeleteError;
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => (requestInfo.type !== Comments.DeleteComment.REQUEST.type) ||
-          (requestInfo.id !== deleteCommentAction.id),
+        requestInfo =>
+          requestInfo.type !== Comments.DeleteComment.REQUEST.type ||
+          requestInfo.id !== deleteCommentAction.id,
       );
     case Commits.LoadCommitsForBranch.FAILURE.type:
     case Commits.LoadCommitsForBranch.SUCCESS.type:
-      const loadCommitsForBranchAction = action as EntitySuccessAction | FetchError;
+      const loadCommitsForBranchAction = action as
+        | EntitySuccessAction
+        | FetchError;
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => (requestInfo.type !== Commits.LoadCommitsForBranch.REQUEST.type) ||
-          (requestInfo.id !== loadCommitsForBranchAction.id),
+        requestInfo =>
+          requestInfo.type !== Commits.LoadCommitsForBranch.REQUEST.type ||
+          requestInfo.id !== loadCommitsForBranchAction.id,
       );
     case Projects.LoadAllProjects.FAILURE.type:
     case Projects.LoadAllProjects.SUCCESS.type:
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => requestInfo.type !== Projects.LoadAllProjects.REQUEST.type,
+        requestInfo =>
+          requestInfo.type !== Projects.LoadAllProjects.REQUEST.type,
       );
     case Projects.DeleteProject.SUCCESS.type:
     case Projects.DeleteProject.FAILURE.type:
       const deleteProjectAction = action as EntitySuccessAction | DeleteError;
       return returnFilteredStateIfChanged(
         state,
-        requestInfo => (requestInfo.type !== Projects.DeleteProject.REQUEST.type) ||
-          (requestInfo.id !== deleteProjectAction.id),
+        requestInfo =>
+          requestInfo.type !== Projects.DeleteProject.REQUEST.type ||
+          requestInfo.id !== deleteProjectAction.id,
       );
     case CLEAR_STORED_DATA:
       return initialState;

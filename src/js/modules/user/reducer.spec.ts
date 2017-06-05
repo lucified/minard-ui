@@ -23,7 +23,9 @@ describe('User reducer', () => {
   const initialState: UserState = {};
 
   it('returns the correct default state', () => {
-    expect(reducer(undefined as any, { type: 'foobar' })).to.deep.equal(initialState);
+    expect(reducer(undefined as any, { type: 'foobar' })).to.deep.equal(
+      initialState,
+    );
   });
 
   describe('setUserEmail', () => {
@@ -36,7 +38,10 @@ describe('User reducer', () => {
     });
 
     it('should do nothing if nothing changes', () => {
-      const action = setUserEmail(stateWithUser.email!, stateWithUser.expiresAt!);
+      const action = setUserEmail(
+        stateWithUser.email!,
+        stateWithUser.expiresAt!,
+      );
       const newState = reducer(stateWithUser, action);
       expect(newState).to.deep.equal(stateWithUser);
       expect(newState).to.equal(stateWithUser);
@@ -71,7 +76,11 @@ describe('User reducer', () => {
 
     it('should do nothing if nothing changes', () => {
       const existingTeam = stateWithUser.team!;
-      const action = setTeam(existingTeam.id, existingTeam.name, existingTeam.invitationToken);
+      const action = setTeam(
+        existingTeam.id,
+        existingTeam.name,
+        existingTeam.invitationToken,
+      );
       const newState = reducer(stateWithUser, action);
       expect(newState).to.deep.equal(stateWithUser);
       expect(newState).to.equal(stateWithUser);

@@ -24,7 +24,9 @@ class ToggleMenu extends React.Component<Props, State> {
     };
 
     this.toggleMenu = this.toggleMenu.bind(this);
-    this.closeMenuIfClickedAnywhere = this.closeMenuIfClickedAnywhere.bind(this);
+    this.closeMenuIfClickedAnywhere = this.closeMenuIfClickedAnywhere.bind(
+      this,
+    );
     this.storeTitleRef = this.storeTitleRef.bind(this);
   }
 
@@ -32,7 +34,11 @@ class ToggleMenu extends React.Component<Props, State> {
 
   public componentWillUnmount() {
     if (this.state.isOpen) {
-      window.removeEventListener('click', this.closeMenuIfClickedAnywhere, false);
+      window.removeEventListener(
+        'click',
+        this.closeMenuIfClickedAnywhere,
+        false,
+      );
     }
   }
 
@@ -44,7 +50,11 @@ class ToggleMenu extends React.Component<Props, State> {
 
   private toggleMenu() {
     if (this.state.isOpen) {
-      window.removeEventListener('click', this.closeMenuIfClickedAnywhere, false);
+      window.removeEventListener(
+        'click',
+        this.closeMenuIfClickedAnywhere,
+        false,
+      );
       this.setState({ isOpen: false });
     } else {
       window.addEventListener('click', this.closeMenuIfClickedAnywhere, false);
@@ -62,9 +72,16 @@ class ToggleMenu extends React.Component<Props, State> {
 
     return (
       <div className={classNames(styles.menu, className)}>
-        <span className={styles.link} onClick={this.toggleMenu} ref={this.storeTitleRef}>
+        <span
+          className={styles.link}
+          onClick={this.toggleMenu}
+          ref={this.storeTitleRef}
+        >
           <span className={styles.label}>{label}</span>
-          <Icon className={classNames(styles.caret, { [styles.rotate]: isOpen })} name={'caret-down'} />
+          <Icon
+            className={classNames(styles.caret, { [styles.rotate]: isOpen })}
+            name={'caret-down'}
+          />
           {icon && <span className={styles.icon}>{icon}</span>}
         </span>
         <CSSTransitionGroup
@@ -72,13 +89,17 @@ class ToggleMenu extends React.Component<Props, State> {
           transitionEnterTimeout={150}
           transitionLeaveTimeout={150}
         >
-          {isOpen && (
-            <div key="dropdown-options" className={classNames(styles.options, { [styles['with-icon']]: !!icon })}>
-              {React.Children.map(children, child => (
-                <div className={styles.option}>{child}</div>
-              ))}
-            </div>
-          )}
+          {isOpen &&
+            <div
+              key="dropdown-options"
+              className={classNames(styles.options, {
+                [styles['with-icon']]: !!icon,
+              })}
+            >
+              {React.Children.map(children, child =>
+                <div className={styles.option}>{child}</div>,
+              )}
+            </div>}
         </CSSTransitionGroup>
       </div>
     );

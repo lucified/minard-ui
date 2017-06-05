@@ -15,13 +15,9 @@ const SingleActivity = (props: Props) => {
 
   switch (activity.type) {
     case ActivityType.Deployment:
-      return (
-        <DeploymentActivity activity={activity} />
-      );
+      return <DeploymentActivity activity={activity} />;
     case ActivityType.Comment:
-      return (
-        <CommentActivity activity={activity} />
-      );
+      return <CommentActivity activity={activity} />;
     default:
       logMessage('Unknown activity type', { activity });
 

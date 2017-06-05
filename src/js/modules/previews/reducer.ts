@@ -22,11 +22,17 @@ const reducer: Reducer<PreviewState> = (state = initialState, action: any) => {
         };
       }
 
-      console.error('Fetching of preview failed! Not replacing existing entity.');
+      console.error(
+        'Fetching of preview failed! Not replacing existing entity.',
+      );
 
       return state;
     case STORE_PREVIEW:
-      const { preview, requestedEntityType, requestedId } = (action as StorePreviewAction);
+      const {
+        preview,
+        requestedEntityType,
+        requestedId,
+      } = action as StorePreviewAction;
 
       return {
         ...state,

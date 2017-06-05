@@ -9,7 +9,12 @@ import Commits, { Commit } from '../commits';
 import Requests from '../requests';
 import { LoadCommitsForBranchAction } from './index';
 
-import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
+import {
+  createApi,
+  testData,
+  testEntityFetcherSaga,
+  testLoaderSaga,
+} from '../../../../test/test-utils';
 import { fetchIfMissing, storeIncludedEntities } from '../../sagas/utils';
 import createSagas from './sagas';
 
@@ -45,7 +50,12 @@ describe('Commits sagas', () => {
       );
 
       expect(iterator.next(false).value).to.deep.equal(
-        call(sagaFunctions.fetchCommitsForBranch, action.id, action.count, action.until),
+        call(
+          sagaFunctions.fetchCommitsForBranch,
+          action.id,
+          action.count,
+          action.until,
+        ),
       );
     });
 
@@ -74,16 +84,23 @@ describe('Commits sagas', () => {
         take(Branches.actions.STORE_BRANCHES),
       );
 
-      expect(iterator.next({ entities: [{ id: 'foo' }]}).value).to.deep.equal(
+      expect(iterator.next({ entities: [{ id: 'foo' }] }).value).to.deep.equal(
         take(Branches.actions.STORE_BRANCHES),
       );
 
-      expect(iterator.next({ entities: [{ id: 'bar' }, { id: action.id }]}).value).to.deep.equal(
+      expect(
+        iterator.next({ entities: [{ id: 'bar' }, { id: action.id }] }).value,
+      ).to.deep.equal(
         select(Requests.selectors.isLoadingCommitsForBranch, action.id),
       );
 
       expect(iterator.next(false).value).to.deep.equal(
-        call(sagaFunctions.fetchCommitsForBranch, action.id, action.count, action.until),
+        call(
+          sagaFunctions.fetchCommitsForBranch,
+          action.id,
+          action.count,
+          action.until,
+        ),
       );
     });
 
@@ -145,7 +162,11 @@ describe('Commits sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -161,15 +182,28 @@ describe('Commits sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Branches.actions.addCommitsToBranch(
-          id,
-          ['aacceeff02', '12354124', '2543452', '098325343', '29832572fc1', '29752a385'],
-          count,
-        )),
+        put(
+          Branches.actions.addCommitsToBranch(
+            id,
+            [
+              'aacceeff02',
+              '12354124',
+              '2543452',
+              '098325343',
+              '29832572fc1',
+              '29752a385',
+            ],
+            count,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(id)),
+        put(
+          Requests.actions.Commits.LoadCommitsForBranch.SUCCESS.actionCreator(
+            id,
+          ),
+        ),
       );
 
       const result = iterator.next();
@@ -185,7 +219,11 @@ describe('Commits sagas', () => {
       const iterator = sagaFunctions.fetchCommitsForBranch(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -205,15 +243,27 @@ describe('Commits sagas', () => {
       const iterator = sagaFunctions.fetchCommitsForBranch(id, count, until);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Commits.LoadCommitsForBranch.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
         call(api.Commit.fetchForBranch, id, count, until),
       );
 
-      expect(iterator.next({ error: errorMessage, details: detailedMessage }).value).to.deep.equal(
-        put(Requests.actions.Commits.LoadCommitsForBranch.FAILURE.actionCreator(id, errorMessage, detailedMessage)),
+      expect(
+        iterator.next({ error: errorMessage, details: detailedMessage }).value,
+      ).to.deep.equal(
+        put(
+          Requests.actions.Commits.LoadCommitsForBranch.FAILURE.actionCreator(
+            id,
+            errorMessage,
+            detailedMessage,
+          ),
+        ),
       );
 
       const result = iterator.next();
@@ -294,25 +344,23 @@ describe('Commits sagas', () => {
         token: 'testtoken',
       };
 
-      const iterator = sagaFunctions.ensureCommitsForBranchRelatedDataLoaded(branchId);
+      const iterator = sagaFunctions.ensureCommitsForBranchRelatedDataLoaded(
+        branchId,
+      );
       expect(iterator.next().value).to.deep.equal(
         select(Branches.selectors.getBranch, branchId),
       );
 
-      expect(iterator.next(branch).value).to.deep.equal(
-        [
-          call(fetchIfMissing, 'commits', branch.commits[0]),
-          call(fetchIfMissing, 'commits', branch.commits[1]),
-          call(fetchIfMissing, 'commits', branch.commits[2]),
-        ],
-      );
+      expect(iterator.next(branch).value).to.deep.equal([
+        call(fetchIfMissing, 'commits', branch.commits[0]),
+        call(fetchIfMissing, 'commits', branch.commits[1]),
+        call(fetchIfMissing, 'commits', branch.commits[2]),
+      ]);
 
-      expect(iterator.next(commits).value).to.deep.equal(
-        [
-          call(fetchIfMissing, 'deployments', commits[0].deployment),
-          call(fetchIfMissing, 'deployments', commits[2].deployment),
-        ],
-      );
+      expect(iterator.next(commits).value).to.deep.equal([
+        call(fetchIfMissing, 'deployments', commits[0].deployment),
+        call(fetchIfMissing, 'deployments', commits[2].deployment),
+      ]);
 
       expect(iterator.next().done).to.equal(true);
     });

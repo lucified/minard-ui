@@ -3,7 +3,9 @@ import * as React from 'react';
 const Convert = require('ansi-to-html');
 
 import { Api } from '../../api/types';
-const API: Api = process.env.CHARLES ? require('../../api').default : require('../../api/static-json').default;
+const API: Api = process.env.CHARLES
+  ? require('../../api').default
+  : require('../../api/static-json').default;
 import { Deployment } from '../../modules/deployments';
 import Spinner from '../common/spinner';
 
@@ -56,7 +58,11 @@ class BuildLog extends React.Component<Props, State> {
     const { deployment } = this.props;
 
     this.updateLog(deployment.id);
-    this.intervalID = setInterval(this.updateLog, this.refreshCadenceInMs, deployment.id);
+    this.intervalID = setInterval(
+      this.updateLog,
+      this.refreshCadenceInMs,
+      deployment.id,
+    );
   }
 
   public componentWillReceiveProps(nextProps: Props) {
@@ -68,7 +74,11 @@ class BuildLog extends React.Component<Props, State> {
       }
 
       this.updateLog(nextProps.deployment.id);
-      this.intervalID = setInterval(this.updateLog, this.refreshCadenceInMs, nextProps.deployment.id);
+      this.intervalID = setInterval(
+        this.updateLog,
+        this.refreshCadenceInMs,
+        nextProps.deployment.id,
+      );
     }
   }
 
@@ -77,18 +87,17 @@ class BuildLog extends React.Component<Props, State> {
   }
 
   private updateLog(deploymentId: string) {
-    API.Deployment.fetchBuildLog(deploymentId)
-      .then(result => {
-        if (isError(result)) {
-          if (this.intervalID) {
-            clearInterval(this.intervalID);
-          }
-
-          this.setState({ error: result.error });
-        } else {
-          this.setState({ log: result.response, error: undefined });
+    API.Deployment.fetchBuildLog(deploymentId).then(result => {
+      if (isError(result)) {
+        if (this.intervalID) {
+          clearInterval(this.intervalID);
         }
-      });
+
+        this.setState({ error: result.error });
+      } else {
+        this.setState({ log: result.response, error: undefined });
+      }
+    });
   }
 
   public render() {

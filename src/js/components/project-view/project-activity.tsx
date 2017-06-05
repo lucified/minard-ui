@@ -16,7 +16,13 @@ interface Props {
   loadActivities: (count: number, until?: number) => void;
 }
 
-const ProjectActivity = ({ activities, loadActivities, isLoading, allLoaded, project }: Props) => (
+const ProjectActivity = ({
+  activities,
+  loadActivities,
+  isLoading,
+  allLoaded,
+  project,
+}: Props) =>
   <section>
     <SimpleSectionTitle>
       <span>
@@ -36,7 +42,6 @@ const ProjectActivity = ({ activities, loadActivities, isLoading, allLoaded, pro
       loadActivities={loadActivities}
       isLoading={isLoading}
     />
-  </section>
-);
+  </section>;
 
 export default ProjectActivity;

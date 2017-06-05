@@ -2,7 +2,10 @@ import { StateTree } from '../../reducers';
 
 import { StreamingState } from './types';
 
-const selectStreamingTree = (state: StateTree): StreamingState => state.streaming;
+const selectStreamingTree = (state: StateTree): StreamingState =>
+  state.streaming;
 
-export const getConnectionState = (state: StateTree) => selectStreamingTree(state).state;
-export const getConnectionError = (state: StateTree) => selectStreamingTree(state).error;
+export const getConnectionState = (state: StateTree) =>
+  selectStreamingTree(state).state;
+export const getConnectionError = (state: StateTree) =>
+  selectStreamingTree(state).error;

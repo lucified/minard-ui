@@ -117,7 +117,10 @@ describe('Branches reducer', () => {
 
     it('with other branches in state', () => {
       const newState = reducer(stateWithoutExistingEntity, storeAction);
-      expect(newState).to.deep.equal({ ...stateWithoutExistingEntity, ...newBranches });
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        ...newBranches,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
@@ -139,16 +142,17 @@ describe('Branches reducer', () => {
     };
 
     it('with an empty initial state', () => {
-      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal(
-        { [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(reducer(undefined as any, failedRequestAction)).to.deep.equal({
+        [failedRequestAction.id]: failedRequestAction,
+      });
     });
 
     it('with other entities in state', () => {
       const newState = reducer(stateWithoutExistingEntity, failedRequestAction);
-      expect(newState).to.deep.equal(
-        { ...stateWithoutExistingEntity, [failedRequestAction.id]: failedRequestAction },
-      );
+      expect(newState).to.deep.equal({
+        ...stateWithoutExistingEntity,
+        [failedRequestAction.id]: failedRequestAction,
+      });
       expect(newState).to.not.equal(stateWithoutExistingEntity); // make sure not mutated
     });
 
@@ -161,7 +165,11 @@ describe('Branches reducer', () => {
 
   describe('addCommitsToBranch', () => {
     it('to end of existing commits', () => {
-      const addCommitsAction = addCommitsToBranch('1', ['12345678', '87654321'], 3);
+      const addCommitsAction = addCommitsToBranch(
+        '1',
+        ['12345678', '87654321'],
+        3,
+      );
       const newState = reducer(stateWithExistingEntity, addCommitsAction);
       const existingBranch = stateWithExistingEntity['1'] as Branch;
       expect(newState).to.deep.equal({
@@ -176,14 +184,21 @@ describe('Branches reducer', () => {
     });
 
     it('to end of existing commits when only some are new', () => {
-      const addCommitsAction = addCommitsToBranch('1', ['1497539235', '12345678', '87654321'], 4);
+      const addCommitsAction = addCommitsToBranch(
+        '1',
+        ['1497539235', '12345678', '87654321'],
+        4,
+      );
       const newState = reducer(stateWithExistingEntity, addCommitsAction);
       const existingBranch = stateWithExistingEntity['1'] as Branch;
       expect(newState).to.deep.equal({
         ...stateWithExistingEntity,
         1: {
           ...existingBranch,
-          commits: [...existingBranch.commits, ...addCommitsAction.commits.slice(1)],
+          commits: [
+            ...existingBranch.commits,
+            ...addCommitsAction.commits.slice(1),
+          ],
           allCommitsLoaded: true,
         },
       });
@@ -198,7 +213,11 @@ describe('Branches reducer', () => {
     });
 
     it('does nothing if branch does not exist', () => {
-      const addCommitsAction = addCommitsToBranch('doesntexist', ['12345678', '87654321'], 3);
+      const addCommitsAction = addCommitsToBranch(
+        'doesntexist',
+        ['12345678', '87654321'],
+        3,
+      );
       const newState = reducer(stateWithoutExistingEntity, addCommitsAction);
       expect(newState).to.deep.equal(stateWithoutExistingEntity);
       expect(newState).to.equal(stateWithoutExistingEntity);
@@ -213,7 +232,7 @@ describe('Branches reducer', () => {
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
-    it('does nothing if it doesn\'t exist', () => {
+    it("does nothing if it doesn't exist", () => {
       const removeBranchAction = removeBranch('unexistant');
       const newState = reducer(stateWithExistingEntity, removeBranchAction);
       expect(newState).to.deep.equal(stateWithExistingEntity);
@@ -255,13 +274,16 @@ describe('Branches reducer', () => {
         },
         message: 'Try to do something',
         deployment: '8',
-        description: 'This is a longer commit explanation for whatever was done to the commit. ' +
-          'It should be truncated in some cases',
+        description:
+          'This is a longer commit explanation for whatever was done to the commit. ' +
+            'It should be truncated in some cases',
       },
     ];
 
     it('updates the latest deployed commit of the branch', () => {
-      const action = updateBranchWithCommits('5', '01234567', commits, ['125124235']);
+      const action = updateBranchWithCommits('5', '01234567', commits, [
+        '125124235',
+      ]);
       const newState = reducer(stateWithExistingEntity, action);
       const newBranch = newState['5'] as Branch;
       expect(newBranch.latestCommit).to.equal(action.latestCommitId);
@@ -269,7 +291,9 @@ describe('Branches reducer', () => {
     });
 
     it('adds the commits to the beginnig if they are the newest', () => {
-      const action = updateBranchWithCommits('5', '01234567', commits, ['125124235']);
+      const action = updateBranchWithCommits('5', '01234567', commits, [
+        '125124235',
+      ]);
       const newState = reducer(stateWithExistingEntity, action);
       const oldBranch = stateWithExistingEntity['5'] as Branch;
       expect(newState).to.deep.equal({
@@ -277,14 +301,19 @@ describe('Branches reducer', () => {
         5: {
           ...oldBranch,
           latestCommit: action.latestCommitId,
-          commits: [...action.newCommits.map(commit => commit.id), ...oldBranch.commits],
+          commits: [
+            ...action.newCommits.map(commit => commit.id),
+            ...oldBranch.commits,
+          ],
         },
       });
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
     it('replaces some commits if there was a force push and only some commits were changed', () => {
-      const action = updateBranchWithCommits('5', '01234567', commits, ['566342463']);
+      const action = updateBranchWithCommits('5', '01234567', commits, [
+        '566342463',
+      ]);
       const newState = reducer(stateWithExistingEntity, action);
       const oldBranch = stateWithExistingEntity['5'] as Branch;
       expect(newState).to.deep.equal({
@@ -292,14 +321,19 @@ describe('Branches reducer', () => {
         5: {
           ...oldBranch,
           latestCommit: action.latestCommitId,
-          commits: [...action.newCommits.map(commit => commit.id), ...oldBranch.commits.slice(1)],
+          commits: [
+            ...action.newCommits.map(commit => commit.id),
+            ...oldBranch.commits.slice(1),
+          ],
         },
       });
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
-    it('replaces all existing commits if the parent commit ID can\'t be found', () => {
-      const action = updateBranchWithCommits('5', '01234567', commits, ['noexist']);
+    it("replaces all existing commits if the parent commit ID can't be found", () => {
+      const action = updateBranchWithCommits('5', '01234567', commits, [
+        'noexist',
+      ]);
       const newState = reducer(stateWithExistingEntity, action);
       const oldBranch = stateWithExistingEntity['5'] as Branch;
       expect(newState).to.deep.equal({
@@ -328,8 +362,10 @@ describe('Branches reducer', () => {
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
-    it('does nothing if the commits are for a branch that doesn\'t exist', () => {
-      const action = updateBranchWithCommits('noexist', '01234567', commits, ['566342463']);
+    it("does nothing if the commits are for a branch that doesn't exist", () => {
+      const action = updateBranchWithCommits('noexist', '01234567', commits, [
+        '566342463',
+      ]);
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
       expect(newState).to.equal(stateWithExistingEntity);
@@ -352,7 +388,7 @@ describe('Branches reducer', () => {
       expect(newState).to.equal(stateWithExistingEntity);
     });
 
-    it('does nothing if the branch doesn\'t exist', () => {
+    it("does nothing if the branch doesn't exist", () => {
       const action = updateLatestActivityTimestampForBranch('notexist', 13579);
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
@@ -365,7 +401,9 @@ describe('Branches reducer', () => {
       const action = updateLatestDeployedCommit('1', 'abcedfsddd');
       const newState = reducer(stateWithExistingEntity, action);
       const newBranch = newState['1'] as Branch;
-      expect(newBranch.latestSuccessfullyDeployedCommit).to.equal(action.commit);
+      expect(newBranch.latestSuccessfullyDeployedCommit).to.equal(
+        action.commit,
+      );
       expect(newState).to.not.equal(stateWithExistingEntity);
     });
 
@@ -376,7 +414,7 @@ describe('Branches reducer', () => {
       expect(newState).to.equal(stateWithExistingEntity);
     });
 
-    it('does nothing if the branch doesn\'t exist', () => {
+    it("does nothing if the branch doesn't exist", () => {
       const action = updateLatestDeployedCommit('notexist', 'abcedfsddd');
       const newState = reducer(stateWithExistingEntity, action);
       expect(newState).to.deep.equal(stateWithExistingEntity);
@@ -385,8 +423,14 @@ describe('Branches reducer', () => {
   });
 
   it(`clears data on ${CLEAR_STORED_DATA}`, () => {
-    expect(reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA })).to.deep.equal({});
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal({});
+    expect(
+      reducer(stateWithExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(stateWithoutExistingEntity, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal({});
   });
 });

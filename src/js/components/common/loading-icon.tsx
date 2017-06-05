@@ -10,10 +10,15 @@ interface Props {
   center?: boolean;
 }
 
-const LoadingIcon = ({ className, center }: Props) => (
-  <div className={classNames(styles.container, { [styles.center]: !!center }, className)}>
+const LoadingIcon = ({ className, center }: Props) =>
+  <div
+    className={classNames(
+      styles.container,
+      { [styles.center]: !!center },
+      className,
+    )}
+  >
     <div className={styles.loading} />
-  </div>
-);
+  </div>;
 
 export default LoadingIcon;

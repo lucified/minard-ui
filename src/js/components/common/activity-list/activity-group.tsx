@@ -25,7 +25,10 @@ const getProjectLabel = ({ project }: Activity) => {
   return (
     <span>
       {' in '}
-      <MinardLink className={styles['metadata-project']} project={{ project: project.id }}>
+      <MinardLink
+        className={styles['metadata-project']}
+        project={{ project: project.id }}
+      >
         {project.name}
       </MinardLink>
     </span>
@@ -35,7 +38,10 @@ const getProjectLabel = ({ project }: Activity) => {
 const getBranchLabel = ({ branch, project }: Activity) => {
   return (
     <span>
-      <MinardLink className={styles['metadata-branch']} branch={{ branch: branch.id, project: project.id }} >
+      <MinardLink
+        className={styles['metadata-branch']}
+        branch={{ branch: branch.id, project: project.id }}
+      >
         {branch.name}
       </MinardLink>
     </span>
@@ -47,7 +53,9 @@ class ActivityGroup extends React.Component<PassedProps, void> {
     const { activities, showProjectName } = this.props;
     const deploymentTime = activities[0].deployment.creator.timestamp;
     const firstActivity = activities[activities.length - 1];
-    const commentActivities = activities.filter(activity => activity.type === ActivityType.Comment);
+    const commentActivities = activities.filter(
+      activity => activity.type === ActivityType.Comment,
+    );
     const deployment = firstActivity.deployment;
     const commit = firstActivity.commit;
 
@@ -66,7 +74,11 @@ class ActivityGroup extends React.Component<PassedProps, void> {
             <MinardLink preview={{ deployment }}>
               <div className={styles['deployment-details']}>
                 <div className={styles.avatar}>
-                  <Avatar email={deployment.creator.email} size="40" title={name} />
+                  <Avatar
+                    email={deployment.creator.email}
+                    size="40"
+                    title={name}
+                  />
                 </div>
                 <div className={styles['deployment-details-name-and-message']}>
                   <div className={styles['deployment-details-name']}>
@@ -79,40 +91,36 @@ class ActivityGroup extends React.Component<PassedProps, void> {
               </div>
             </MinardLink>
           </div>
-            {isSuccessful(deployment) ? (
-              <div className={styles.screenshot}>
+          {isSuccessful(deployment)
+            ? <div className={styles.screenshot}>
                 <MinardLink preview={{ deployment }}>
                   <DeploymentScreenshot deployment={deployment} />
                 </MinardLink>
               </div>
-            ) : (
-              <div className={styles['build-error']}>
+            : <div className={styles['build-error']}>
                 <BuildStatus
                   deployment={deployment}
                   commit={commit}
                   latest={false}
                 />
-              </div>
-            )}
+              </div>}
         </div>
         <div className={styles['links-wrap']}>
           <div className={styles.links}>
             <div className={styles.link}>
               <MinardLink preview={{ deployment }}>
-                {isSuccessful(deployment) ? (
-                  <div className={styles['link-inner']}>
-                    <Icon className={styles.icon} name="eye" />
-                    Open preview
-                  </div>
-                ) : (
-                  <div className={styles['link-inner']}>
-                    <Icon className={styles.icon} name="align-left" />
-                    Open build log
-                  </div>
-                )}
+                {isSuccessful(deployment)
+                  ? <div className={styles['link-inner']}>
+                      <Icon className={styles.icon} name="eye" />
+                      Open preview
+                    </div>
+                  : <div className={styles['link-inner']}>
+                      <Icon className={styles.icon} name="align-left" />
+                      Open build log
+                    </div>}
               </MinardLink>
             </div>
-            {isSuccessful(deployment) && (
+            {isSuccessful(deployment) &&
               <div className={styles.link}>
                 <MinardLink rawDeployment={{ deployment }} openInNewWindow>
                   <div className={styles['link-inner']}>
@@ -120,11 +128,10 @@ class ActivityGroup extends React.Component<PassedProps, void> {
                     Open naked preview
                   </div>
                 </MinardLink>
-              </div>
-            )}
+              </div>}
           </div>
         </div>
-        {commentActivities.length > 0 && (
+        {commentActivities.length > 0 &&
           <div className={styles.comments}>
             <FlipMove enterAnimation="fade" leaveAnimation="fade">
               {commentActivities.map(activity => {
@@ -134,12 +141,15 @@ class ActivityGroup extends React.Component<PassedProps, void> {
                   timestamp: activity.timestamp,
                 };
                 return (
-                  <SingleComment key={activity.id} comment={comment} hideDelete />
+                  <SingleComment
+                    key={activity.id}
+                    comment={comment}
+                    hideDelete
+                  />
                 );
               })}
             </FlipMove>
-          </div>
-        )}
+          </div>}
       </div>
     );
   }
@@ -147,10 +157,17 @@ class ActivityGroup extends React.Component<PassedProps, void> {
 
 export default ActivityGroup;
 
-export const LoadingActivityGroup = () => (
-  <div className={classNames('row', 'middle-xs', 'between-xs', styles['activity-group'], styles.loading)}>
+export const LoadingActivityGroup = () =>
+  <div
+    className={classNames(
+      'row',
+      'middle-xs',
+      'between-xs',
+      styles['activity-group'],
+      styles.loading,
+    )}
+  >
     <div className={classNames('col-xs-12')}>
       <LoadingIcon center />
     </div>
-  </div>
-);
+  </div>;

@@ -16,9 +16,15 @@ export default function createSagas(api: Api) {
     storeDeployments,
     api.Deployment.fetch,
   );
-  const loadDeployment = createLoader(getDeployment, fetchDeployment, ensureDeploymentRelatedDataLoaded);
+  const loadDeployment = createLoader(
+    getDeployment,
+    fetchDeployment,
+    ensureDeploymentRelatedDataLoaded,
+  );
 
-  function* ensureDeploymentRelatedDataLoaded(_id: string): IterableIterator<Effect> {
+  function* ensureDeploymentRelatedDataLoaded(
+    _id: string,
+  ): IterableIterator<Effect> {
     // Nothing to do
   }
 

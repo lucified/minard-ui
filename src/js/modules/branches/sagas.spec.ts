@@ -10,7 +10,12 @@ import Projects from '../projects';
 import Requests from '../requests';
 import { LoadBranchesForProjectAction } from './index';
 
-import { createApi, testData, testEntityFetcherSaga, testLoaderSaga } from '../../../../test/test-utils';
+import {
+  createApi,
+  testData,
+  testEntityFetcherSaga,
+  testLoaderSaga,
+} from '../../../../test/test-utils';
 import { fetchIfMissing, storeIncludedEntities } from '../../sagas/utils';
 import createSagas from './sagas';
 
@@ -55,13 +60,13 @@ describe('Branches sagas', () => {
         take(Projects.actions.STORE_PROJECTS),
       );
 
-      expect(iterator.next({ entities: [{ id: 'foo' }]}).value).to.deep.equal(
+      expect(iterator.next({ entities: [{ id: 'foo' }] }).value).to.deep.equal(
         take(Projects.actions.STORE_PROJECTS),
       );
 
-      expect(iterator.next({ entities: [{ id: 'bar' }, { id: action.id }]}).value).to.deep.equal(
-        call(sagaFunctions.fetchBranchesForProject, action.id),
-      );
+      expect(
+        iterator.next({ entities: [{ id: 'bar' }, { id: action.id }] }).value,
+      ).to.deep.equal(call(sagaFunctions.fetchBranchesForProject, action.id));
     });
 
     it('ensures needed data exists if fetch was a success', () => {
@@ -70,7 +75,10 @@ describe('Branches sagas', () => {
       iterator.next();
       iterator.next({ id: action.id });
       expect(iterator.next(true).value).to.deep.equal(
-        fork(sagaFunctions.ensureBranchesForProjectRelatedDataLoaded, action.id),
+        fork(
+          sagaFunctions.ensureBranchesForProjectRelatedDataLoaded,
+          action.id,
+        ),
       );
       expect(iterator.next().done).to.equal(true);
     });
@@ -104,7 +112,11 @@ describe('Branches sagas', () => {
       const objects = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -124,7 +136,11 @@ describe('Branches sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.SUCCESS.actionCreator(id)),
+        put(
+          Requests.actions.Branches.LoadBranchesForProject.SUCCESS.actionCreator(
+            id,
+          ),
+        ),
       );
 
       const result = iterator.next();
@@ -138,7 +154,11 @@ describe('Branches sagas', () => {
       const iterator = sagaFunctions.fetchBranchesForProject(id);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -155,7 +175,11 @@ describe('Branches sagas', () => {
       const iterator = sagaFunctions.fetchBranchesForProject(id);
 
       expect(iterator.next().value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(id)),
+        put(
+          Requests.actions.Branches.LoadBranchesForProject.REQUEST.actionCreator(
+            id,
+          ),
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -163,7 +187,12 @@ describe('Branches sagas', () => {
       );
 
       expect(iterator.next({ error: errorMessage }).value).to.deep.equal(
-        put(Requests.actions.Branches.LoadBranchesForProject.FAILURE.actionCreator(id, errorMessage)),
+        put(
+          Requests.actions.Branches.LoadBranchesForProject.FAILURE.actionCreator(
+            id,
+            errorMessage,
+          ),
+        ),
       );
 
       const result = iterator.next();
@@ -206,11 +235,21 @@ describe('Branches sagas', () => {
       );
 
       expect(iterator.next().value).to.deep.equal(
-        call(fetchIfMissing, 'commits', branch.latestSuccessfullyDeployedCommit),
+        call(
+          fetchIfMissing,
+          'commits',
+          branch.latestSuccessfullyDeployedCommit,
+        ),
       );
 
-      expect(iterator.next(latestSuccessfullyDeployedCommit).value).to.deep.equal(
-        call(fetchIfMissing, 'deployments', latestSuccessfullyDeployedCommit.deployment),
+      expect(
+        iterator.next(latestSuccessfullyDeployedCommit).value,
+      ).to.deep.equal(
+        call(
+          fetchIfMissing,
+          'deployments',
+          latestSuccessfullyDeployedCommit.deployment,
+        ),
       );
 
       expect(iterator.next().value).to.deep.equal(
@@ -276,31 +315,35 @@ describe('Branches sagas', () => {
         },
       ];
 
-      const iterator = sagaFunctions.ensureBranchesForProjectRelatedDataLoaded(projectId);
+      const iterator = sagaFunctions.ensureBranchesForProjectRelatedDataLoaded(
+        projectId,
+      );
       expect(iterator.next().value).to.deep.equal(
         select(Branches.selectors.getBranchesForProject, projectId),
       );
 
-      expect(iterator.next(branches).value).to.deep.equal(
-        [
-          call(fetchIfMissing, 'commits', branches[0].latestSuccessfullyDeployedCommit),
-          call(fetchIfMissing, 'commits', branches[1].latestSuccessfullyDeployedCommit),
-        ],
-      );
+      expect(iterator.next(branches).value).to.deep.equal([
+        call(
+          fetchIfMissing,
+          'commits',
+          branches[0].latestSuccessfullyDeployedCommit,
+        ),
+        call(
+          fetchIfMissing,
+          'commits',
+          branches[1].latestSuccessfullyDeployedCommit,
+        ),
+      ]);
 
-      expect(iterator.next(deployedCommits).value).to.deep.equal(
-        [
-          call(fetchIfMissing, 'deployments', deployedCommits[0].deployment),
-          call(fetchIfMissing, 'deployments', deployedCommits[1].deployment),
-        ],
-      );
+      expect(iterator.next(deployedCommits).value).to.deep.equal([
+        call(fetchIfMissing, 'deployments', deployedCommits[0].deployment),
+        call(fetchIfMissing, 'deployments', deployedCommits[1].deployment),
+      ]);
 
-      expect(iterator.next().value).to.deep.equal(
-        [
-          call(fetchIfMissing, 'commits', branches[0].latestCommit),
-          call(fetchIfMissing, 'commits', branches[1].latestCommit),
-        ],
-      );
+      expect(iterator.next().value).to.deep.equal([
+        call(fetchIfMissing, 'commits', branches[0].latestCommit),
+        call(fetchIfMissing, 'commits', branches[1].latestCommit),
+      ]);
 
       expect(iterator.next().done).to.equal(true);
     });

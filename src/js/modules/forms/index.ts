@@ -35,8 +35,20 @@ export function formSubmit(
   };
 }
 
-export const onSubmitPromiseCreator = (submitAction: string, successAction: string, failureAction: string) =>
-  (values: any, dispatch: Dispatch<any>) =>
-    new Promise((resolve, reject) => {
-      dispatch(formSubmit(submitAction, successAction, failureAction, values, resolve, reject));
-    });
+export const onSubmitPromiseCreator = (
+  submitAction: string,
+  successAction: string,
+  failureAction: string,
+) => (values: any, dispatch: Dispatch<any>) =>
+  new Promise((resolve, reject) => {
+    dispatch(
+      formSubmit(
+        submitAction,
+        successAction,
+        failureAction,
+        values,
+        resolve,
+        reject,
+      ),
+    );
+  });

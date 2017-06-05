@@ -18,34 +18,42 @@ interface Props {
   isAuthenticatedUser: boolean;
 }
 
-const CommitSummary = ({ isAuthenticatedUser, className, commit, deployment, preview }: Props) => {
-  const metadata = isAuthenticatedUser ? (
-    <div className={styles.metadata}>
-      <MinardLink branch={{ branch: preview.branch.id, project: preview.project.id }}>
-        {preview.branch.name}
-      </MinardLink>
-      {' in '}
-      <MinardLink project={{ project: preview.project.id }}>
-        {preview.project.name}
-      </MinardLink>
-    </div>
-  ) : (
-    <div className={styles.metadata}>
-      {preview.branch.name} in {preview.project.name}
-    </div>
-  );
+const CommitSummary = ({
+  isAuthenticatedUser,
+  className,
+  commit,
+  deployment,
+  preview,
+}: Props) => {
+  const metadata = isAuthenticatedUser
+    ? <div className={styles.metadata}>
+        <MinardLink
+          branch={{ branch: preview.branch.id, project: preview.project.id }}
+        >
+          {preview.branch.name}
+        </MinardLink>
+        {' in '}
+        <MinardLink project={{ project: preview.project.id }}>
+          {preview.project.name}
+        </MinardLink>
+      </div>
+    : <div className={styles.metadata}>
+        {preview.branch.name} in {preview.project.name}
+      </div>;
 
   return (
     <div className={classNames(styles['commit-summary'], className)}>
       {metadata}
       <div className={styles['commit-message']}>
         {commit.message}
-        {commit.description && (
-          <p>{commit.description}</p>
-        )}
+        {commit.description && <p>{commit.description}</p>}
       </div>
       <div className={styles.bottom}>
-        <MinardLink className={styles['open-link']} openInNewWindow rawDeployment={{ deployment }}>
+        <MinardLink
+          className={styles['open-link']}
+          openInNewWindow
+          rawDeployment={{ deployment }}
+        >
           <Icon className={styles.icon} name="arrows-alt" />
           Open naked preview
         </MinardLink>

@@ -19,17 +19,18 @@ interface Props {
   emptyContentBody: string;
 }
 
-const getEmptyContent = (header: string, body: string) => (
+const getEmptyContent = (header: string, body: string) =>
   <div className={styles.empty}>
     <h2>{header}</h2>
     <p>{body}</p>
-  </div>
-);
+  </div>;
 
 // Group activities by actions related to the same deployment.
 const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
-  return values(groupBy(activities, activity => activity.deployment.id))
-    .sort((a, b) => b[0].deployment.creator.timestamp - a[0].deployment.creator.timestamp);
+  return values(groupBy(activities, activity => activity.deployment.id)).sort(
+    (a, b) =>
+      b[0].deployment.creator.timestamp - a[0].deployment.creator.timestamp,
+  );
 };
 
 class ActivityList extends React.Component<Props, void> {
@@ -62,21 +63,21 @@ class ActivityList extends React.Component<Props, void> {
     return (
       <div>
         <FlipMove enterAnimation="fade" leaveAnimation="fade">
-          {groupedActivities.map(activityGroup => (
+          {groupedActivities.map(activityGroup =>
             <ActivityGroup
               key={activityGroup[0].deployment.id}
               activities={activityGroup}
               showProjectName={showProjectName}
-            />
-          ))}
+            />,
+          )}
         </FlipMove>
         {isLoading && <LoadingActivityGroup />}
-        {!isLoading && !allLoaded && (
+        {!isLoading &&
+          !allLoaded &&
           <Waypoint
             bottomOffset="-300px" // Start loading new activities when the waypoint is 300px below the window
             onEnter={this.loadMoreActivities}
-          />
-        )}
+          />}
       </div>
     );
   }

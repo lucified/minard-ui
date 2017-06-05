@@ -1,4 +1,9 @@
-import { EntityType, LoadPreviewAndCommentsAction, Preview, StorePreviewAction } from './types';
+import {
+  EntityType,
+  LoadPreviewAndCommentsAction,
+  Preview,
+  StorePreviewAction,
+} from './types';
 
 export const STORE_PREVIEW = 'PREVIEW/STORE_PREVIEW';
 export const storePreview = (

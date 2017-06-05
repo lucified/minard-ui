@@ -38,11 +38,12 @@ interface GeneratedDispatchProps {
 type Props = GeneratedProps & GeneratedDispatchProps;
 
 class SubHeader extends React.Component<Props, void> {
-
   private getLeftContent() {
     const { openPageType, project, branch, team } = this.props;
     const items: JSX.Element[] = [
-      <MinardLink key="team" className={styles['sub-header-link']} homepage>{team!.name}</MinardLink>,
+      <MinardLink key="team" className={styles['sub-header-link']} homepage>
+        {team!.name}
+      </MinardLink>,
     ];
 
     if (openPageType === PageType.ProjectsList) {
@@ -60,7 +61,10 @@ class SubHeader extends React.Component<Props, void> {
       items.push(
         <span key="project-name">
           {' '}/{' '}
-          <MinardLink className={styles['sub-header-link']} project={{ project }}>
+          <MinardLink
+            className={styles['sub-header-link']}
+            project={{ project }}
+          >
             {project.name}
           </MinardLink>
         </span>,
@@ -70,7 +74,10 @@ class SubHeader extends React.Component<Props, void> {
         items.push(
           <span key="branch">
             {' '}/{' '}
-            <MinardLink className={styles['sub-header-link']} branch={{ branch }}>
+            <MinardLink
+              className={styles['sub-header-link']}
+              branch={{ branch }}
+            >
               {branch.name}
             </MinardLink>
           </span>,
@@ -85,11 +92,12 @@ class SubHeader extends React.Component<Props, void> {
     if (project && !isFetchError(project)) {
       return (
         <div className={styles['project-right']}>
-          {openPageType === PageType.ProjectView && project.activeUsers.map(user => (
-            <div className={styles.avatar} key={user.email}>
-              <Avatar email={user.email} size="m" title={user.name} shadow />
-            </div>
-          ))}
+          {openPageType === PageType.ProjectView &&
+            project.activeUsers.map(user =>
+              <div className={styles.avatar} key={user.email}>
+                <Avatar email={user.email} size="m" title={user.name} shadow />
+              </div>,
+            )}
           <div className={styles['project-settings']}>
             <Icon className={styles.icon} name="gear" />
             <div className={styles['project-settings-text']}>
@@ -117,7 +125,12 @@ class SubHeader extends React.Component<Props, void> {
       <section className={classNames(styles['sub-header-background'])}>
         <div className="container-fluid">
           <div className={styles.main}>
-            <div className={classNames(styles['sub-header-left'], styles['sub-header'])}>
+            <div
+              className={classNames(
+                styles['sub-header-left'],
+                styles['sub-header'],
+              )}
+            >
               {leftContent}
             </div>
             <div className={styles['sub-header']}>
@@ -144,10 +157,14 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
       branch = Branches.selectors.getBranch(state, selectedBranch);
       openPageType = PageType.BranchView;
     } else {
-      openPageType = isShowingAll ? PageType.BranchesList : PageType.ProjectView;
+      openPageType = isShowingAll
+        ? PageType.BranchesList
+        : PageType.ProjectView;
     }
   } else {
-    openPageType = isShowingAll ? PageType.ProjectsList : PageType.TeamProjectsView;
+    openPageType = isShowingAll
+      ? PageType.ProjectsList
+      : PageType.TeamProjectsView;
   }
 
   return {
@@ -158,10 +175,15 @@ const mapStateToProps = (state: StateTree): GeneratedProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
   openProjectSettingsDialog: (_e: React.MouseEvent<HTMLElement>) => {
     dispatch(Modal.actions.openModal(ModalType.ProjectSettings));
   },
 });
 
-export default connect<GeneratedProps, {}, {}>(mapStateToProps, mapDispatchToProps)(SubHeader);
+export default connect<GeneratedProps, GeneratedDispatchProps, {}>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SubHeader);

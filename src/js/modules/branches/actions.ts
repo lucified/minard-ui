@@ -26,7 +26,9 @@ export const fetchBranch = (id: string): FetchBranchAction => ({
 });
 
 export const LOAD_BRANCHES_FOR_PROJECT = 'BRANCHES/LOAD_BRANCHES_FOR_PROJECT';
-export const loadBranchesForProject = (id: string): LoadBranchesForProjectAction => ({
+export const loadBranchesForProject = (
+  id: string,
+): LoadBranchesForProjectAction => ({
   type: LOAD_BRANCHES_FOR_PROJECT,
   id,
 });
@@ -73,14 +75,19 @@ export const updateBranchWithCommits = (
   parentCommitIds,
 });
 
-export const UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH = 'BRANCHES/UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH';
-export const updateLatestDeployedCommit = (id: string, commit: string): UpdateLatestDeployedCommitAction => ({
+export const UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH =
+  'BRANCHES/UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH';
+export const updateLatestDeployedCommit = (
+  id: string,
+  commit: string,
+): UpdateLatestDeployedCommitAction => ({
   type: UPDATE_LATEST_DEPLOYED_COMMIT_FOR_BRANCH,
   id,
   commit,
 });
 
-export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH = 'BRANCHES/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH';
+export const UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH =
+  'BRANCHES/UPDATE_LATEST_ACTIVITY_TIMESTAMP_FOR_BRANCH';
 export const updateLatestActivityTimestampForBranch = (
   id: string,
   timestamp: number,

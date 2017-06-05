@@ -1,6 +1,12 @@
 import { Action } from 'redux';
 
-import { CreateError, DeleteError, EditError, FetchCollectionError, FetchError } from '../errors';
+import {
+  CreateError,
+  DeleteError,
+  EditError,
+  FetchCollectionError,
+  FetchError,
+} from '../errors';
 
 // State
 export interface RequestInformation {
@@ -16,7 +22,12 @@ export interface ClearErrorAction extends Action {
 }
 
 /// REQUEST / SUCCESS / FAILURE
-interface RequestActionCreators<RequestCreatorType, SuccessCreatorType, FailureCreatorType> {
+// tslint:disable:one-line
+interface RequestActionCreators<
+  RequestCreatorType,
+  SuccessCreatorType,
+  FailureCreatorType
+> {
   REQUEST: {
     type: string;
     actionCreator: RequestCreatorType;
@@ -30,6 +41,7 @@ interface RequestActionCreators<RequestCreatorType, SuccessCreatorType, FailureC
     actionCreator: FailureCreatorType;
   };
 }
+// tslint:enable:one-line
 
 // When requesting a specific entity
 export interface EntityRequestAction extends Action {
@@ -46,7 +58,9 @@ export interface CreateEntityRequestAction extends Action {
 
 type EntityRequestActionCreator = (id: string) => EntityRequestAction;
 type EntitySuccessActionCreator = (id: string) => EntitySuccessAction;
-type CreateEntityRequestActionCreator = (name: string) => CreateEntityRequestAction;
+type CreateEntityRequestActionCreator = (
+  name: string,
+) => CreateEntityRequestAction;
 
 // When request succeeds
 export interface CreateEntitySuccessAction extends Action {
@@ -54,7 +68,10 @@ export interface CreateEntitySuccessAction extends Action {
   name: string;
 }
 
-type CreateEntitySuccessActionCreator = (entity: any, name: string) => CreateEntitySuccessAction;
+type CreateEntitySuccessActionCreator = (
+  entity: any,
+  name: string,
+) => CreateEntitySuccessAction;
 
 export interface EditEntitySuccessAction extends Action {
   result: object;
@@ -62,14 +79,30 @@ export interface EditEntitySuccessAction extends Action {
 
 type EditEntitySuccessActionCreator = (entity: any) => EditEntitySuccessAction;
 // When request fails
-type FetchEntityFailureActionCreator =
-  (id: string, error: string, detail?: string, unauthorized?: boolean) => FetchError;
-type CreateEntityFailureActionCreator =
-  (name: string, error: string, detail?: string, unauthorized?: boolean) => CreateError;
-type EditEntityFailureActionCreator =
-  (id: string, error: string, detail?: string, unauthorized?: boolean) => EditError;
-type DeleteEntityFailureActionCreator =
-  (id: string, error: string, detail?: string, unauthorized?: boolean) => DeleteError;
+type FetchEntityFailureActionCreator = (
+  id: string,
+  error: string,
+  detail?: string,
+  unauthorized?: boolean,
+) => FetchError;
+type CreateEntityFailureActionCreator = (
+  name: string,
+  error: string,
+  detail?: string,
+  unauthorized?: boolean,
+) => CreateError;
+type EditEntityFailureActionCreator = (
+  id: string,
+  error: string,
+  detail?: string,
+  unauthorized?: boolean,
+) => EditError;
+type DeleteEntityFailureActionCreator = (
+  id: string,
+  error: string,
+  detail?: string,
+  unauthorized?: boolean,
+) => DeleteError;
 
 export type FetchEntityActionCreators = RequestActionCreators<
   EntityRequestActionCreator,
@@ -101,7 +134,11 @@ export interface CollectionSuccessAction extends Action {}
 
 type CollectionRequestActionCreator = () => CollectionRequestAction;
 type CollectionSuccessActionCreator = () => CollectionSuccessAction;
-type CollectionFailureActionCreator = (error: string, detail?: string, unauthorized?: boolean) => FetchCollectionError;
+type CollectionFailureActionCreator = (
+  error: string,
+  detail?: string,
+  unauthorized?: boolean,
+) => FetchCollectionError;
 
 export type CollectionActionCreators = RequestActionCreators<
   CollectionRequestActionCreator,

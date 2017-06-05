@@ -7,7 +7,12 @@ import Requests from '../requests';
 
 import { CLEAR_STORED_DATA } from '../user';
 import { ADD_DEPLOYMENT_TO_COMMIT, STORE_COMMITS } from './actions';
-import { AddDeploymentToCommitAction, Commit, CommitState, StoreCommitsAction } from './types';
+import {
+  AddDeploymentToCommitAction,
+  Commit,
+  CommitState,
+  StoreCommitsAction,
+} from './types';
 
 const initialState: CommitState = {};
 
@@ -28,7 +33,9 @@ const reducer: Reducer<CommitState> = (state = initialState, action: any) => {
         };
       }
 
-      logMessage('Fetching failed! Not replacing existing commit entity', { action });
+      logMessage('Fetching failed! Not replacing existing commit entity', {
+        action,
+      });
 
       return state;
     case ADD_DEPLOYMENT_TO_COMMIT:
@@ -50,7 +57,10 @@ const reducer: Reducer<CommitState> = (state = initialState, action: any) => {
         return state;
       }
 
-      console.warn('Trying to add deployment to commit that does not exis', action);
+      console.warn(
+        'Trying to add deployment to commit that does not exis',
+        action,
+      );
 
       return state;
     case STORE_COMMITS:

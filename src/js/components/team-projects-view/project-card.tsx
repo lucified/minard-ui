@@ -37,7 +37,7 @@ const getBottom = (project: Project, deployment?: Deployment) => {
           </div>
         </MinardLink>
       </div>
-      {deployment && (
+      {deployment &&
         <div className={styles.link}>
           <MinardLink preview={{ project }}>
             <div className={styles['link-inner']}>
@@ -47,13 +47,15 @@ const getBottom = (project: Project, deployment?: Deployment) => {
               </span>
             </div>
           </MinardLink>
-        </div>
-      )}
+        </div>}
     </div>
   );
 };
 
-function getDescription(description: string | undefined, constantHeight: boolean) {
+function getDescription(
+  description: string | undefined,
+  constantHeight: boolean,
+) {
   if (constantHeight) {
     if (description) {
       return (
@@ -87,7 +89,7 @@ const ProjectCard = ({
   latestDeployment,
   constantHeight,
 }: PassedProps & GeneratedProps) => {
-  const screenshot = (latestDeployment && latestDeployment.screenshot);
+  const screenshot = latestDeployment && latestDeployment.screenshot;
   const bottom = getBottom(project, latestDeployment);
   const maxAvatarCount = 8;
   return (
@@ -97,41 +99,43 @@ const ProjectCard = ({
           className={styles['card-top']}
           style={{ backgroundImage: `url(${screenshot})` }}
         >
-          {!screenshot && (
+          {!screenshot &&
             <div className={styles['no-screenshot']}>
               <div className={styles['no-screenshot-inner']}>
                 No screenshot is available
                 for this project
               </div>
-            </div>
-          )}
+            </div>}
         </div>
       </MinardLink>
       <MinardLink project={{ project }}>
         <div className={styles['card-middle']}>
           <div className={styles.avatars}>
-            {project.activeUsers.slice(0, maxAvatarCount).map(user => (
-              <Avatar
-                key={`avatar-${user.email}`}
-                className={styles.avatar}
-                title={user.name || user.email}
-                email={user.email}
-                shadow
-              />
-            ))}
+            {project.activeUsers
+              .slice(0, maxAvatarCount)
+              .map(user =>
+                <Avatar
+                  key={`avatar-${user.email}`}
+                  className={styles.avatar}
+                  title={user.name || user.email}
+                  email={user.email}
+                  shadow
+                />,
+              )}
           </div>
           <h3 className={styles.title}>
             {project.name}
           </h3>
-          {latestDeployment ? (
-            <div className={styles['time-ago']}>
-              <TimeAgo minPeriod={10} date={latestDeployment.creator.timestamp} />
-            </div>
-          ) : (
-            <div className={styles['no-previews-yet']}>
-              No previews yet
-            </div>
-          )}
+          {latestDeployment
+            ? <div className={styles['time-ago']}>
+                <TimeAgo
+                  minPeriod={10}
+                  date={latestDeployment.creator.timestamp}
+                />
+              </div>
+            : <div className={styles['no-previews-yet']}>
+                No previews yet
+              </div>}
           {getDescription(project.description, constantHeight)}
         </div>
       </MinardLink>
@@ -144,21 +148,37 @@ const ProjectCard = ({
   );
 };
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: PassedProps,
+): GeneratedProps => {
   const { project } = ownProps;
-  const latestSuccessfullyDeployedCommitId = project.latestSuccessfullyDeployedCommit;
-  const latestDeployedCommit = latestSuccessfullyDeployedCommitId ?
-    Commits.selectors.getCommit(state, latestSuccessfullyDeployedCommitId) : undefined;
+  const latestSuccessfullyDeployedCommitId =
+    project.latestSuccessfullyDeployedCommit;
+  const latestDeployedCommit = latestSuccessfullyDeployedCommitId
+    ? Commits.selectors.getCommit(state, latestSuccessfullyDeployedCommitId)
+    : undefined;
   let latestDeployment: Deployment | FetchError | undefined;
 
-  if (latestDeployedCommit && !isFetchError(latestDeployedCommit) && latestDeployedCommit.deployment) {
-    latestDeployment = Deployments.selectors.getDeployment(state, latestDeployedCommit.deployment);
+  if (
+    latestDeployedCommit &&
+    !isFetchError(latestDeployedCommit) &&
+    latestDeployedCommit.deployment
+  ) {
+    latestDeployment = Deployments.selectors.getDeployment(
+      state,
+      latestDeployedCommit.deployment,
+    );
   }
 
   // TODO: Don't convert error state to loading state?
   return {
-    latestDeployment: isFetchError(latestDeployment) ? undefined : latestDeployment,
+    latestDeployment: isFetchError(latestDeployment)
+      ? undefined
+      : latestDeployment,
   };
 };
 
-export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(ProjectCard);
+export default connect<GeneratedProps, {}, PassedProps>(mapStateToProps)(
+  ProjectCard,
+);

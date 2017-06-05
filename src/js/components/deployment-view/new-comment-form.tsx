@@ -3,7 +3,10 @@ import { Dispatch } from 'redux';
 import { Field, FormProps, initialize, reduxForm } from 'redux-form';
 
 import { removeValue, setValue } from '../../cookie';
-import Comments, { Comment, CreateCommentFormData } from '../../modules/comments';
+import Comments, {
+  Comment,
+  CreateCommentFormData,
+} from '../../modules/comments';
 import { onSubmitPromiseCreator } from '../../modules/forms';
 import Requests from '../../modules/requests';
 
@@ -62,7 +65,9 @@ class NewCommentForm extends React.Component<Props, void> {
   public componentWillReceiveProps(nextProps: Props) {
     if (this.props.submitting && !nextProps.submitting) {
       // Focus the comment field after a submission.
-      this.focusTimeoutId = setTimeout(() => { this.commentFieldRef.focus(); }, 100);
+      this.focusTimeoutId = setTimeout(() => {
+        this.commentFieldRef.focus();
+      }, 100);
     }
   }
 
@@ -81,25 +86,31 @@ class NewCommentForm extends React.Component<Props, void> {
   private handleKeyDown(e: React.KeyboardEvent<any>) {
     const { handleSubmit } = this.props;
 
-    if (handleSubmit && e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
+    if (handleSubmit && e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
       // Submit on ctrl/cmd/meta + enter
       handleSubmit(e);
     }
   }
 
   public render() {
-    const { handleSubmit, pristine, submitting, error, invalid, isAuthenticatedUser } = this.props;
+    const {
+      handleSubmit,
+      pristine,
+      submitting,
+      error,
+      invalid,
+      isAuthenticatedUser,
+    } = this.props;
 
     return (
       <div className={styles['new-comment-form']}>
         <h4 className={styles.title}>Add a comment</h4>
         <form className={styles.form} onSubmit={handleSubmit}>
-          {error && (
+          {error &&
             <div className={styles['general-error']}>
               {error}
-            </div>
-          )}
-          {!isAuthenticatedUser && (
+            </div>}
+          {!isAuthenticatedUser &&
             <Field
               name="email"
               component={FormField}
@@ -107,17 +118,15 @@ class NewCommentForm extends React.Component<Props, void> {
               placeholder="Email"
               disabled={submitting}
               fieldRef={this.storeEmailFieldRef}
-            />
-          )}
-          {!isAuthenticatedUser && (
+            />}
+          {!isAuthenticatedUser &&
             <Field
               name="name"
               component={FormField}
               type="text"
               placeholder="Name (optional)"
               disabled={submitting}
-            />
-          )}
+            />}
           <Field
             name="message"
             component={FormField}
@@ -128,7 +137,11 @@ class NewCommentForm extends React.Component<Props, void> {
             onKeyDown={this.handleKeyDown}
           />
           <footer className={styles.footer}>
-            <button type="submit" className={styles.submit} disabled={pristine || submitting || invalid}>
+            <button
+              type="submit"
+              className={styles.submit}
+              disabled={pristine || submitting || invalid}
+            >
               {submitting ? 'Sending...' : 'Add comment'}
             </button>
           </footer>

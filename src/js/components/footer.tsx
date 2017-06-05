@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-interface Props {
-
-}
+interface Props {}
 
 class Footer extends React.Component<Props, void> {
   public render() {

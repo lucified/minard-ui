@@ -3,7 +3,11 @@ import { Reducer } from 'redux';
 
 import { CLEAR_STORED_DATA } from '../user';
 import { REMOVE_COMMENT, STORE_COMMENTS } from './actions';
-import { CommentState, RemoveCommentAction, StoreCommentsAction } from './types';
+import {
+  CommentState,
+  RemoveCommentAction,
+  StoreCommentsAction,
+} from './types';
 
 const initialState: CommentState = {};
 

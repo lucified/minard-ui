@@ -56,15 +56,15 @@ class ProjectSettingsDialog extends React.Component<Props, void> {
     new Promise((resolve, reject) => {
       deleteProject(project.id, resolve, reject);
     })
-    .then(() => {
-      trackEvent('project-deleted');
+      .then(() => {
+        trackEvent('project-deleted');
 
-      this.clearAndClose();
-      redirectToTeamProjectsView();
-    })
-    .catch((e) => {
-      logException('Error deleting project:', e, { project });
-    });
+        this.clearAndClose();
+        redirectToTeamProjectsView();
+      })
+      .catch(e => {
+        logException('Error deleting project:', e, { project });
+      });
   }
 
   private clearAndClose() {
@@ -79,7 +79,13 @@ class ProjectSettingsDialog extends React.Component<Props, void> {
   }
 
   public render() {
-    const { project, isOpen, deletionInProgress, deletionError, existingProjectNames } = this.props;
+    const {
+      project,
+      isOpen,
+      deletionInProgress,
+      deletionError,
+      existingProjectNames,
+    } = this.props;
 
     return (
       <ModalDialog
@@ -111,12 +117,16 @@ class ProjectSettingsDialog extends React.Component<Props, void> {
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: PassedProps,
+): GeneratedStateProps => {
   const { project } = ownProps;
 
   return {
     isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.ProjectSettings),
-    existingProjectNames: Projects.selectors.getProjects(state)
+    existingProjectNames: Projects.selectors
+      .getProjects(state)
       .filter(projectOrError => !isFetchError(projectOrError))
       .filter(otherProject => (otherProject as Project).name !== project.name) // filter out own name
       .map(otherProject => (otherProject as Project).name),
@@ -125,12 +135,16 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
   closeDialog: (_e?: React.MouseEvent<HTMLElement>) => {
     dispatch(Modal.actions.closeModal(ModalType.ProjectSettings));
   },
   deleteProject: (id, resolve, reject) => {
-    dispatch(Projects.actions.deleteProjectPromiseResolver(id, resolve, reject));
+    dispatch(
+      Projects.actions.deleteProjectPromiseResolver(id, resolve, reject),
+    );
   },
   clearDeletionErrors: () => {
     dispatch(Errors.actions.clearProjectDeletionErrors());
@@ -140,7 +154,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProjectSettingsDialog);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(ProjectSettingsDialog);

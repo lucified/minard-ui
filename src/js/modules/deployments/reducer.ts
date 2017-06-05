@@ -23,7 +23,10 @@ import {
 
 const initialState: DeploymentState = {};
 
-const reducer: Reducer<DeploymentState> = (state = initialState, action: any) => {
+const reducer: Reducer<DeploymentState> = (
+  state = initialState,
+  action: any,
+) => {
   let fetchErrorAction: FetchError;
   let id: string;
   let existingDeployment: Deployment | FetchError;
@@ -40,7 +43,9 @@ const reducer: Reducer<DeploymentState> = (state = initialState, action: any) =>
         };
       }
 
-      logMessage('Fetching failed! Not replacing existing deployment entity', { action });
+      logMessage('Fetching failed! Not replacing existing deployment entity', {
+        action,
+      });
 
       return state;
     case Requests.actions.Comments.LoadCommentsForDeployment.FAILURE.type:
@@ -48,7 +53,10 @@ const reducer: Reducer<DeploymentState> = (state = initialState, action: any) =>
       id = fetchErrorAction.id;
       existingDeployment = state[id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
-        if (!existingDeployment.comments || isFetchError(existingDeployment.comments)) {
+        if (
+          !existingDeployment.comments ||
+          isFetchError(existingDeployment.comments)
+        ) {
           return {
             ...state,
             [id]: {
@@ -58,19 +66,26 @@ const reducer: Reducer<DeploymentState> = (state = initialState, action: any) =>
           };
         }
 
-        logMessage('Not replacing existing comments with FetchError', { action });
+        logMessage('Not replacing existing comments with FetchError', {
+          action,
+        });
 
         return state;
       }
 
-      logMessage('Deployment entity does not exist when setting comments', { action });
+      logMessage('Deployment entity does not exist when setting comments', {
+        action,
+      });
 
       return state;
     // Add/replace deployments into state
     case STORE_DEPLOYMENTS:
       const deploymentsArray = (action as StoreDeploymentsAction).entities;
       if (deploymentsArray && deploymentsArray.length > 0) {
-        const newDeploymentsObject: DeploymentState = mapKeys(deploymentsArray, d => d.id);
+        const newDeploymentsObject: DeploymentState = mapKeys(
+          deploymentsArray,
+          d => d.id,
+        );
 
         return {
           ...state,
@@ -94,7 +109,9 @@ const reducer: Reducer<DeploymentState> = (state = initialState, action: any) =>
         };
       }
 
-      logMessage('Trying to add comments to a deployment that does not exist', { action });
+      logMessage('Trying to add comments to a deployment that does not exist', {
+        action,
+      });
 
       return state;
     // Appends comment to deployment
@@ -105,12 +122,17 @@ const reducer: Reducer<DeploymentState> = (state = initialState, action: any) =>
         let newComments: string[];
         let newCommentCount = existingDeployment.commentCount || 0;
 
-        if (!existingDeployment.comments || isFetchError(existingDeployment.comments)) {
+        if (
+          !existingDeployment.comments ||
+          isFetchError(existingDeployment.comments)
+        ) {
           newComments = addCommentsAction.comments;
           newCommentCount += addCommentsAction.comments.length;
         } else {
           const existingComments = existingDeployment.comments;
-          const commentsToAdd = addCommentsAction.comments.filter(comment => existingComments.indexOf(comment) === -1);
+          const commentsToAdd = addCommentsAction.comments.filter(
+            comment => existingComments.indexOf(comment) === -1,
+          );
           if (commentsToAdd.length > 0) {
             newComments = existingComments.concat(commentsToAdd);
             newCommentCount += commentsToAdd.length;
@@ -134,8 +156,13 @@ const reducer: Reducer<DeploymentState> = (state = initialState, action: any) =>
       const removeCommentAction = action as RemoveCommentFromDeploymentAction;
       existingDeployment = state[removeCommentAction.id];
       if (existingDeployment && !isFetchError(existingDeployment)) {
-        if (existingDeployment.comments && !isFetchError(existingDeployment.comments)) {
-          const newComments = existingDeployment.comments.filter(comment => comment !== removeCommentAction.comment);
+        if (
+          existingDeployment.comments &&
+          !isFetchError(existingDeployment.comments)
+        ) {
+          const newComments = existingDeployment.comments.filter(
+            comment => comment !== removeCommentAction.comment,
+          );
           if (newComments.length < existingDeployment.comments.length) {
             return {
               ...state,

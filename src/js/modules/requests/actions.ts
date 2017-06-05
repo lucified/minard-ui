@@ -1,4 +1,10 @@
-import { CreateError, DeleteError, EditError, FetchCollectionError, FetchError } from '../errors';
+import {
+  CreateError,
+  DeleteError,
+  EditError,
+  FetchCollectionError,
+  FetchError,
+} from '../errors';
 
 import {
   AllActivitiesRequestedAction,
@@ -30,8 +36,12 @@ const prettyErrorMessage = (error: string): string => {
   return error;
 };
 
-const fetchEntityActionCreators = (prefix: string): FetchEntityActionCreators => {
-  const { requestAction, successAction, failureAction } = createActionNames(prefix);
+const fetchEntityActionCreators = (
+  prefix: string,
+): FetchEntityActionCreators => {
+  const { requestAction, successAction, failureAction } = createActionNames(
+    prefix,
+  );
 
   return {
     REQUEST: {
@@ -44,7 +54,12 @@ const fetchEntityActionCreators = (prefix: string): FetchEntityActionCreators =>
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string, unauthorized?: boolean): FetchError => ({
+      actionCreator: (
+        id: string,
+        error: string,
+        details: string,
+        unauthorized?: boolean,
+      ): FetchError => ({
         type: failureAction,
         id,
         error,
@@ -56,8 +71,12 @@ const fetchEntityActionCreators = (prefix: string): FetchEntityActionCreators =>
   };
 };
 
-const createEntityActionCreators = (prefix: string): CreateEntityActionCreators => {
-  const { requestAction, successAction, failureAction } = createActionNames(prefix);
+const createEntityActionCreators = (
+  prefix: string,
+): CreateEntityActionCreators => {
+  const { requestAction, successAction, failureAction } = createActionNames(
+    prefix,
+  );
 
   return {
     REQUEST: {
@@ -66,11 +85,20 @@ const createEntityActionCreators = (prefix: string): CreateEntityActionCreators 
     },
     SUCCESS: {
       type: successAction,
-      actionCreator: (entity: any, name: string) => ({ type: successAction, result: entity, name }),
+      actionCreator: (entity: any, name: string) => ({
+        type: successAction,
+        result: entity,
+        name,
+      }),
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (name: string, error: string, details: string, unauthorized?: boolean): CreateError => ({
+      actionCreator: (
+        name: string,
+        error: string,
+        details: string,
+        unauthorized?: boolean,
+      ): CreateError => ({
         type: failureAction,
         name,
         error,
@@ -83,7 +111,9 @@ const createEntityActionCreators = (prefix: string): CreateEntityActionCreators 
 };
 
 const editEntityActionCreators = (prefix: string): EditEntityActionCreators => {
-  const { requestAction, successAction, failureAction } = createActionNames(prefix);
+  const { requestAction, successAction, failureAction } = createActionNames(
+    prefix,
+  );
 
   return {
     REQUEST: {
@@ -96,7 +126,12 @@ const editEntityActionCreators = (prefix: string): EditEntityActionCreators => {
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string, unauthorized?: boolean): EditError => ({
+      actionCreator: (
+        id: string,
+        error: string,
+        details: string,
+        unauthorized?: boolean,
+      ): EditError => ({
         type: failureAction,
         id,
         error,
@@ -108,8 +143,12 @@ const editEntityActionCreators = (prefix: string): EditEntityActionCreators => {
   };
 };
 
-const deleteEntityActionCreators = (prefix: string): DeleteEntityActionCreators => {
-  const { requestAction, successAction, failureAction } = createActionNames(prefix);
+const deleteEntityActionCreators = (
+  prefix: string,
+): DeleteEntityActionCreators => {
+  const { requestAction, successAction, failureAction } = createActionNames(
+    prefix,
+  );
 
   return {
     REQUEST: {
@@ -122,7 +161,12 @@ const deleteEntityActionCreators = (prefix: string): DeleteEntityActionCreators 
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (id: string, error: string, details: string, unauthorized?: boolean): DeleteError => ({
+      actionCreator: (
+        id: string,
+        error: string,
+        details: string,
+        unauthorized?: boolean,
+      ): DeleteError => ({
         type: failureAction,
         id,
         error,
@@ -134,8 +178,12 @@ const deleteEntityActionCreators = (prefix: string): DeleteEntityActionCreators 
   };
 };
 
-const fetchCollectionActionCreators = (prefix: string): CollectionActionCreators => {
-  const { requestAction, successAction, failureAction } = createActionNames(prefix);
+const fetchCollectionActionCreators = (
+  prefix: string,
+): CollectionActionCreators => {
+  const { requestAction, successAction, failureAction } = createActionNames(
+    prefix,
+  );
 
   return {
     REQUEST: {
@@ -148,7 +196,11 @@ const fetchCollectionActionCreators = (prefix: string): CollectionActionCreators
     },
     FAILURE: {
       type: failureAction,
-      actionCreator: (error: string, details: string, unauthorized?: boolean): FetchCollectionError => ({
+      actionCreator: (
+        error: string,
+        details: string,
+        unauthorized?: boolean,
+      ): FetchCollectionError => ({
         type: failureAction,
         error,
         details,
@@ -169,18 +221,24 @@ export const Projects = {
 
 export const Branches = {
   LoadBranch: fetchEntityActionCreators('BRANCHES/LOAD_BRANCH'),
-  LoadBranchesForProject: fetchEntityActionCreators('BRANCHES/LOAD_BRANCHES_FOR_PROJECT'),
+  LoadBranchesForProject: fetchEntityActionCreators(
+    'BRANCHES/LOAD_BRANCHES_FOR_PROJECT',
+  ),
 };
 
 export const Comments = {
-  LoadCommentsForDeployment: fetchEntityActionCreators('COMMENTS/LOAD_COMMENTS_FOR_DEPLOYMENT'),
+  LoadCommentsForDeployment: fetchEntityActionCreators(
+    'COMMENTS/LOAD_COMMENTS_FOR_DEPLOYMENT',
+  ),
   CreateComment: createEntityActionCreators('COMMENTS/CREATE_COMMENT'),
   DeleteComment: deleteEntityActionCreators('COMMENTS/DELETE_ENTITY'),
 };
 
 export const Commits = {
   LoadCommit: fetchEntityActionCreators('COMMITS/LOAD_COMMIT'),
-  LoadCommitsForBranch: fetchEntityActionCreators('COMMITS/LOAD_COMMITS_FOR_BRANCH'),
+  LoadCommitsForBranch: fetchEntityActionCreators(
+    'COMMITS/LOAD_COMMITS_FOR_BRANCH',
+  ),
 };
 
 export const Deployments = {
@@ -192,12 +250,18 @@ export const Previews = {
 };
 
 export const Activities = {
-  LoadAllActivities: fetchCollectionActionCreators('ACTIVITIES/LOAD_ALL_ACTIVITIES'),
-  LoadActivitiesForProject: fetchEntityActionCreators('ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT'),
+  LoadAllActivities: fetchCollectionActionCreators(
+    'ACTIVITIES/LOAD_ALL_ACTIVITIES',
+  ),
+  LoadActivitiesForProject: fetchEntityActionCreators(
+    'ACTIVITIES/LOAD_ACTIVITIES_FOR_PROJECT',
+  ),
 };
 
 export const User = {
-  LoadTeamInformation: fetchCollectionActionCreators('USER/LOAD_TEAM_INFORMATION'),
+  LoadTeamInformation: fetchCollectionActionCreators(
+    'USER/LOAD_TEAM_INFORMATION',
+  ),
 };
 
 // This action is created once all activities have been requested from the server
@@ -207,8 +271,11 @@ export const allActivitiesRequested = (): AllActivitiesRequestedAction => ({
 });
 
 // This action is created once all activities for a project have been requested from the server
-export const ALL_ACTIVITIES_REQUESTED_FOR_PROJECT = 'ACTIVITIES/ALL_ACTIVITIES_REQUESTED_FOR_PROJECT';
-export const allActivitiesRequestedForProject = (id: string): AllActivitiesRequestedForProjectAction => ({
+export const ALL_ACTIVITIES_REQUESTED_FOR_PROJECT =
+  'ACTIVITIES/ALL_ACTIVITIES_REQUESTED_FOR_PROJECT';
+export const allActivitiesRequestedForProject = (
+  id: string,
+): AllActivitiesRequestedForProjectAction => ({
   type: ALL_ACTIVITIES_REQUESTED_FOR_PROJECT,
   id,
 });

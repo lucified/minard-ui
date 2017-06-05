@@ -23,7 +23,13 @@ interface GenericError {
   unauthorized?: boolean;
 }
 
-export type MinardError = FetchError | FetchCollectionError | CreateError | DeleteError | EditError | SignupError;
+export type MinardError =
+  | FetchError
+  | FetchCollectionError
+  | CreateError
+  | DeleteError
+  | EditError
+  | SignupError;
 
 export interface FetchError extends GenericError {
   id: string;
@@ -31,15 +37,15 @@ export interface FetchError extends GenericError {
 
 export function isFetchError(obj: any): obj is FetchError {
   const possiblyError = obj as FetchError;
-  return possiblyError &&
+  return (
+    possiblyError &&
     possiblyError.type !== undefined &&
     possiblyError.error !== undefined &&
-    possiblyError.id !== undefined;
+    possiblyError.id !== undefined
+  );
 }
 
-export interface FetchCollectionError extends GenericError {
-
-}
+export interface FetchCollectionError extends GenericError {}
 
 export interface CreateError extends GenericError {
   name: string;
@@ -51,10 +57,12 @@ export interface DeleteError extends GenericError {
 
 export const isDeleteError = (obj: any): obj is DeleteError => {
   const possiblyError = obj as DeleteError;
-  return possiblyError &&
+  return (
+    possiblyError &&
     possiblyError.type !== undefined &&
     possiblyError.error !== undefined &&
-    possiblyError.id !== undefined;
+    possiblyError.id !== undefined
+  );
 };
 
 export interface EditError extends GenericError {

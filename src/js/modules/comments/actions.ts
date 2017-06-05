@@ -1,4 +1,9 @@
-import { Comment, DeleteCommentAction, RemoveCommentAction, StoreCommentsAction } from './types';
+import {
+  Comment,
+  DeleteCommentAction,
+  RemoveCommentAction,
+  StoreCommentsAction,
+} from './types';
 
 export const DELETE_COMMENT = 'COMMENTS/DELETE_COMMENT';
 export const deleteComment = (id: string): DeleteCommentAction => ({

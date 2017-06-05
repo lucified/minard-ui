@@ -1,11 +1,21 @@
 import { EntityType } from '../modules/previews';
 
-export type ApiResult<T> = { response: T; } | { error: string; details?: string; unauthorized?: boolean };
+export type ApiResult<T> =
+  | { response: T }
+  | { error: string; details?: string; unauthorized?: boolean };
 
 export interface Api {
   Activity: {
-    fetchAll: (teamId: string, count: number, until?: number) => Promise<ApiResult<ApiEntityResponse>>;
-    fetchAllForProject: (id: string, count: number, until?: number) => Promise<ApiResult<ApiEntityResponse>>;
+    fetchAll: (
+      teamId: string,
+      count: number,
+      until?: number,
+    ) => Promise<ApiResult<ApiEntityResponse>>;
+    fetchAllForProject: (
+      id: string,
+      count: number,
+      until?: number,
+    ) => Promise<ApiResult<ApiEntityResponse>>;
   };
   Branch: {
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
@@ -23,14 +33,22 @@ export interface Api {
   };
   Commit: {
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
-    fetchForBranch: (id: string, count: number, until?: number) => Promise<ApiResult<ApiEntityResponse>>;
+    fetchForBranch: (
+      id: string,
+      count: number,
+      until?: number,
+    ) => Promise<ApiResult<ApiEntityResponse>>;
   };
   Deployment: {
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
     fetchBuildLog: (id: string) => Promise<ApiResult<string>>;
   };
   Preview: {
-    fetch: (id: string, entityType: EntityType, token: string) => Promise<ApiResult<ApiPreviewResponse>>;
+    fetch: (
+      id: string,
+      entityType: EntityType,
+      token: string,
+    ) => Promise<ApiResult<ApiPreviewResponse>>;
   };
   Project: {
     fetchAll: (teamId: string) => Promise<ApiResult<ApiEntityResponse>>;
@@ -41,7 +59,10 @@ export interface Api {
       description?: string,
       projectTemplate?: string,
     ) => Promise<ApiResult<ApiEntityResponse>>;
-    edit: (id: string, newAttributes: { description?: string, name?: string }) => Promise<ApiResult<ApiEntityResponse>>;
+    edit: (
+      id: string,
+      newAttributes: { description?: string; name?: string },
+    ) => Promise<ApiResult<ApiEntityResponse>>;
     delete: (id: string) => Promise<ApiResult<{}>>;
   };
   Team: {
@@ -54,7 +75,13 @@ export interface Api {
 }
 
 // Response formats
-export type ApiEntityTypeString = 'commits' | 'deployments' | 'projects' | 'branches' | 'activities' | 'comments';
+export type ApiEntityTypeString =
+  | 'commits'
+  | 'deployments'
+  | 'projects'
+  | 'branches'
+  | 'activities'
+  | 'comments';
 
 export interface ApiEntity {
   type: ApiEntityTypeString;
@@ -174,7 +201,8 @@ export interface ResponseActivityElement {
       };
       token: string;
     };
-    comment?: { // Only for comments
+    comment?: {
+      // Only for comments
       id: string;
       message: string;
       name?: string;
@@ -205,7 +233,7 @@ export interface ResponseBranchElement {
     };
     project: {
       data: ResponseProjectReference;
-    }
+    };
   };
 }
 
@@ -240,7 +268,12 @@ export interface ResponseCommitElement {
 }
 
 // Deployment
-type DeploymentStatusString = 'success' | 'failed' | 'running' | 'pending' | 'canceled';
+type DeploymentStatusString =
+  | 'success'
+  | 'failed'
+  | 'running'
+  | 'pending'
+  | 'canceled';
 
 export interface ResponseDeploymentElement {
   type: 'deployments';
@@ -262,9 +295,7 @@ export interface ApiTeam {
   path: string;
   'invitation-token'?: string;
   description?: string;
-  visibility_level: number;
   avatar_url?: string;
-  web_url: string;
 }
 
 // User

@@ -30,7 +30,13 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-const SingleComment = ({ comment, className, deletionInProgress, deleteComment, hideDelete }: Props) => {
+const SingleComment = ({
+  comment,
+  className,
+  deletionInProgress,
+  deleteComment,
+  hideDelete,
+}: Props) => {
   if (!comment) {
     // Note: this shouldn't happen since we only store comment IDs to deployments
     // once we receive the actual comment.
@@ -48,18 +54,14 @@ const SingleComment = ({ comment, className, deletionInProgress, deleteComment, 
       </div>
       <div className={styles['comment-content']}>
         <div className={styles.actions}>
-          {!hideDelete && (
-            deletionInProgress ? 'Deleting...' : (
-              <SimpleConfirmable
-                action="Delete"
-                onConfirm={deleteComment}
-              >
-                <a className={styles.delete}>
-                  Delete
-                </a>
-              </SimpleConfirmable>
-            )
-          )}
+          {!hideDelete &&
+            (deletionInProgress
+              ? 'Deleting...'
+              : <SimpleConfirmable action="Delete" onConfirm={deleteComment}>
+                  <a className={styles.delete}>
+                    Delete
+                  </a>
+                </SimpleConfirmable>)}
         </div>
         <div className={styles.metadata}>
           <span className={styles['author-name']}>
@@ -78,18 +80,27 @@ const SingleComment = ({ comment, className, deletionInProgress, deleteComment, 
   );
 };
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: PassedProps,
+): GeneratedStateProps => {
   const { comment } = ownProps;
 
   return {
-    deletionInProgress: !!comment && Requests.selectors.isDeletingComment(state, comment.id),
+    deletionInProgress:
+      !!comment && Requests.selectors.isDeletingComment(state, comment.id),
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>, passedProps: PassedProps): GeneratedDispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+  passedProps: PassedProps,
+): GeneratedDispatchProps => ({
   deleteComment: () => {
     if (!passedProps.comment) {
-      logMessage('Trying to delete a comment that doesn\'t exist!', { props: passedProps });
+      logMessage("Trying to delete a comment that doesn't exist!", {
+        props: passedProps,
+      });
       return;
     }
 
@@ -97,7 +108,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, passedProps: PassedProps): 
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SingleComment);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(SingleComment);

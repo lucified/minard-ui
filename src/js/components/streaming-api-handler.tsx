@@ -6,7 +6,14 @@ import { RouteComponentProps } from 'react-router-dom';
 require('event-source-polyfill');
 
 import { getAccessToken } from '../api/auth';
-import { toActivities, toBranches, toComments, toCommits, toDeployments, toProjects } from '../api/convert';
+import {
+  toActivities,
+  toBranches,
+  toComments,
+  toCommits,
+  toDeployments,
+  toProjects,
+} from '../api/convert';
 import {
   ResponseActivityElement,
   ResponseBranchElement,
@@ -20,7 +27,10 @@ import Activities, { Activity } from '../modules/activities';
 import Branches, { Branch } from '../modules/branches';
 import Comments, { Comment } from '../modules/comments';
 import Commits, { Commit } from '../modules/commits';
-import Deployments, { Deployment, DeploymentStatus } from '../modules/deployments';
+import Deployments, {
+  Deployment,
+  DeploymentStatus,
+} from '../modules/deployments';
 import { FetchError, isFetchError } from '../modules/errors';
 import Previews, { isEntityType } from '../modules/previews';
 import Projects, { Project, ProjectUser } from '../modules/projects';
@@ -45,17 +55,33 @@ interface GeneratedDispatchProps {
   storeBranches: (branches: Branch[]) => void;
   storeDeployments: (deployments: Deployment[]) => void;
   removeProject: (id: string) => void;
-  updateProject: (id: string, name: string, repoUrl: string, description?: string) => void;
+  updateProject: (
+    id: string,
+    name: string,
+    repoUrl: string,
+    description?: string,
+  ) => void;
   addCommentsToDeployment: (id: string, comments: string[]) => void;
   removeCommentFromDeployment: (id: string, comment: string) => void;
   addDeploymentToCommit: (commitId: string, deploymentId: string) => void;
   removeBranch: (id: string) => void;
-  updateBranchWithCommits: (id: string, latestCommitId: string, newCommits: Commit[], parentCommits: string[]) => void;
+  updateBranchWithCommits: (
+    id: string,
+    latestCommitId: string,
+    newCommits: Commit[],
+    parentCommits: string[],
+  ) => void;
   storeAuthorsToProject: (id: string, authors: ProjectUser[]) => void;
   addBranchToProject: (id: string, branch: string) => void;
-  updateLatestActivityTimestampForProject: (id: string, timestamp: number) => void;
+  updateLatestActivityTimestampForProject: (
+    id: string,
+    timestamp: number,
+  ) => void;
   updateLatestDeployedCommitForProject: (id: string, commit: string) => void;
-  updateLatestActivityTimestampForBranch: (id: string, timestamp: number) => void;
+  updateLatestActivityTimestampForBranch: (
+    id: string,
+    timestamp: number,
+  ) => void;
   updateLatestDeployedCommitForBranch: (id: string, commit: string) => void;
   removeBranchFromProject: (id: string, branch: string) => void;
 }
@@ -178,7 +204,11 @@ class StreamingAPIHandler extends React.Component<Props, void> {
       const { id, name, description, 'repo-url': repoUrl } = response;
       this.props.updateProject(id, name, repoUrl, description);
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for project edited', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for project edited',
+        e,
+        { event },
+      );
     }
   }
 
@@ -188,7 +218,11 @@ class StreamingAPIHandler extends React.Component<Props, void> {
       const { id } = response;
       this.props.removeProject(id);
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for project deleted', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for project deleted',
+        e,
+        { event },
+      );
     }
   }
 
@@ -197,14 +231,23 @@ class StreamingAPIHandler extends React.Component<Props, void> {
       const response = JSON.parse(event.data) as NewProjectResponse;
       this.props.storeProjects(toProjects(response.data));
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for project created', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for project created',
+        e,
+        { event },
+      );
     }
   }
 
   private handleDeploymentUpdate(event: EventSourceEvent) {
     try {
       const response = JSON.parse(event.data) as DeploymentUpdateResponse;
-      const { deployment: deploymentResponse, commit, project, branch } = response;
+      const {
+        deployment: deploymentResponse,
+        commit,
+        project,
+        branch,
+      } = response;
       const deployments = toDeployments(deploymentResponse);
       this.props.storeDeployments(deployments);
       this.props.addDeploymentToCommit(commit, deployments[0].id);
@@ -213,7 +256,11 @@ class StreamingAPIHandler extends React.Component<Props, void> {
         this.props.updateLatestDeployedCommitForBranch(branch, commit);
       }
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for deployment updated', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for deployment updated',
+        e,
+        { event },
+      );
     }
   }
 
@@ -222,19 +269,33 @@ class StreamingAPIHandler extends React.Component<Props, void> {
       const response = JSON.parse(event.data) as CommentCreatedResponse;
       const comments = toComments(response);
       this.props.storeComments(comments);
-      this.props.addCommentsToDeployment(comments[0].deployment, comments.map(comment => comment.id));
+      this.props.addCommentsToDeployment(
+        comments[0].deployment,
+        comments.map(comment => comment.id),
+      );
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for comment created', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for comment created',
+        e,
+        { event },
+      );
     }
   }
 
   private handleCommentDeleted(event: EventSourceEvent) {
     try {
       const response = JSON.parse(event.data) as CommentDeletedResponse;
-      this.props.removeCommentFromDeployment(response.deployment, response.comment);
+      this.props.removeCommentFromDeployment(
+        response.deployment,
+        response.comment,
+      );
       this.props.removeComment(response.comment);
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for comment deleted', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for comment deleted',
+        e,
+        { event },
+      );
     }
   }
 
@@ -243,14 +304,24 @@ class StreamingAPIHandler extends React.Component<Props, void> {
       const response = JSON.parse(event.data) as NewActivityResponse;
       this.props.storeActivities(toActivities(response));
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for new activity', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for new activity',
+        e,
+        { event },
+      );
     }
   }
 
   private handleCodePush(event: EventSourceEvent) {
     try {
       const response = JSON.parse(event.data) as CodePushResponse;
-      const { after, before, commits: commitsResponse, parents, project } = response;
+      const {
+        after,
+        before,
+        commits: commitsResponse,
+        parents,
+        project,
+      } = response;
 
       if (!after) {
         const branchId = response.branch as string;
@@ -274,35 +345,56 @@ class StreamingAPIHandler extends React.Component<Props, void> {
         this.props.storeCommits(commits);
         this.props.storeAuthorsToProject(
           branch.project,
-          uniq(commits.map(commit => ({ email: commit.author.email, name: commit.author.name }))),
+          uniq(
+            commits.map(commit => ({
+              email: commit.author.email,
+              name: commit.author.name,
+            })),
+          ),
         );
       }
 
       this.props.updateBranchWithCommits(branch.id, after, commits, parents);
 
-      const latestActivityTimestamp: number | undefined = commits.length > 0 ?
-        commits[0].committer.timestamp : branch.latestActivityTimestamp;
+      const latestActivityTimestamp: number | undefined = commits.length > 0
+        ? commits[0].committer.timestamp
+        : branch.latestActivityTimestamp;
 
       if (latestActivityTimestamp) {
-        this.props.updateLatestActivityTimestampForProject(branch.project, latestActivityTimestamp);
-        this.props.updateLatestActivityTimestampForBranch(branch.id, latestActivityTimestamp);
+        this.props.updateLatestActivityTimestampForProject(
+          branch.project,
+          latestActivityTimestamp,
+        );
+        this.props.updateLatestActivityTimestampForBranch(
+          branch.id,
+          latestActivityTimestamp,
+        );
       }
     } catch (e) {
-      logException('Error: Unable to parse Streaming API response for code pushed', e, { event });
+      logException(
+        'Error: Unable to parse Streaming API response for code pushed',
+        e,
+        { event },
+      );
     }
   }
 
-  private restartConnection(options: { teamId?: string, deployment?: Deployment }) {
+  private restartConnection(
+    options: { teamId?: string; deployment?: Deployment },
+  ) {
     const { teamId, deployment } = options;
     const accessToken = getAccessToken();
     let url: string;
 
-    if (accessToken && teamId) {
+    if (accessToken && teamId) {
       // Logged in, inside the app. Deployment View was not the landing page
-      url = `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(accessToken)}`;
+      url = `${streamingAPIUrl}/${teamId}?token=${encodeURIComponent(
+        accessToken,
+      )}`;
     } else if (deployment) {
       // Not logged in or team info not yet fetched, in Deployment View
-      url = `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
+      url =
+        `${streamingAPIUrl}/deployment/${encodeURIComponent(deployment.id)}` +
         `/${encodeURIComponent(deployment.token)}`;
     } else {
       console.error('Unable to open stream. Missing credentials.');
@@ -315,37 +407,77 @@ class StreamingAPIHandler extends React.Component<Props, void> {
 
     this._source = new EventSource(url, { withCredentials: false });
 
-    this._source.addEventListener('error', (e: EventSourceError) => {
-      console.error('EventSource error:', e);
-      const source = e.target;
-      this.props.setConnectionState(toConnectionState(source.readyState));
+    this._source.addEventListener(
+      'error',
+      (e: EventSourceError) => {
+        console.error('EventSource error:', e);
+        const source = e.target;
+        this.props.setConnectionState(toConnectionState(source.readyState));
 
-      // Once the connection state is CLOSED, the browser will no longer try to reconnect.
-      // We'll recreate the EventSource to start the reconnection loop again after 5 seconds.
-      if (source.readyState === EventSource.CLOSED) {
-        console.log('EventSource: Restarting connection'); // tslint:disable-line:no-console
-        this._source.close();
-        this._source = null;
+        // Once the connection state is CLOSED, the browser will no longer try to reconnect.
+        // We'll recreate the EventSource to start the reconnection loop again after 5 seconds.
+        if (source.readyState === EventSource.CLOSED) {
+          console.log('EventSource: Restarting connection'); // tslint:disable-line:no-console
+          this._source.close();
+          this._source = null;
 
-        setTimeout(this.restartConnection, 5000, options); // TODO: smarter retry logic?
-      }
-    }, false);
-    this._source.addEventListener('open', () => {
-      this.props.setConnectionState(ConnectionState.OPEN);
-    }, false);
-    this._source.addEventListener('message', (event: EventSourceEvent) => {
-      // Generic message with no type. Not used.
-      console.log('received generic message:', event.data); // tslint:disable-line:no-console
-    }, false);
+          setTimeout(this.restartConnection, 5000, options); // TODO: smarter retry logic?
+        }
+      },
+      false,
+    );
+    this._source.addEventListener(
+      'open',
+      () => {
+        this.props.setConnectionState(ConnectionState.OPEN);
+      },
+      false,
+    );
+    this._source.addEventListener(
+      'message',
+      (event: EventSourceEvent) => {
+        // Generic message with no type. Not used.
+        console.log('received generic message:', event.data); // tslint:disable-line:no-console
+      },
+      false,
+    );
 
-    this._source.addEventListener('PROJECT_CREATED', this.handleProjectCreated, false);
-    this._source.addEventListener('PROJECT_EDITED', this.handleProjectEdited, false);
-    this._source.addEventListener('PROJECT_DELETED', this.handleProjectDeleted, false);
+    this._source.addEventListener(
+      'PROJECT_CREATED',
+      this.handleProjectCreated,
+      false,
+    );
+    this._source.addEventListener(
+      'PROJECT_EDITED',
+      this.handleProjectEdited,
+      false,
+    );
+    this._source.addEventListener(
+      'PROJECT_DELETED',
+      this.handleProjectDeleted,
+      false,
+    );
     this._source.addEventListener('CODE_PUSHED', this.handleCodePush, false);
-    this._source.addEventListener('NEW_ACTIVITY', this.handleNewActivity, false);
-    this._source.addEventListener('DEPLOYMENT_UPDATED', this.handleDeploymentUpdate, false);
-    this._source.addEventListener('COMMENT_ADDED', this.handleCommentCreated, false);
-    this._source.addEventListener('COMMENT_DELETED', this.handleCommentDeleted, false);
+    this._source.addEventListener(
+      'NEW_ACTIVITY',
+      this.handleNewActivity,
+      false,
+    );
+    this._source.addEventListener(
+      'DEPLOYMENT_UPDATED',
+      this.handleDeploymentUpdate,
+      false,
+    );
+    this._source.addEventListener(
+      'COMMENT_ADDED',
+      this.handleCommentCreated,
+      false,
+    );
+    this._source.addEventListener(
+      'COMMENT_DELETED',
+      this.handleCommentDeleted,
+      false,
+    );
     // TODO: handle refresh UI
 
     if (this._source.readyState === EventSource.CONNECTING) {
@@ -371,11 +503,12 @@ class StreamingAPIHandler extends React.Component<Props, void> {
     }
   }
 
-  public componentWillReceiveProps({ team, setConnectionState, deployment }: Props) {
-    const {
-      team: previousTeam,
-      deployment: previousDeployment,
-    } = this.props;
+  public componentWillReceiveProps({
+    team,
+    setConnectionState,
+    deployment,
+  }: Props) {
+    const { team: previousTeam, deployment: previousDeployment } = this.props;
 
     if (streamingAPIUrl) {
       if (team) {
@@ -411,29 +544,57 @@ class StreamingAPIHandler extends React.Component<Props, void> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
   // Activities
-  storeActivities: (activities: Activity[]) => { dispatch(Activities.actions.storeActivities(activities)); },
+  storeActivities: (activities: Activity[]) => {
+    dispatch(Activities.actions.storeActivities(activities));
+  },
 
   // Branches
-  storeBranches: (branches: Branch[]) => { dispatch(Branches.actions.storeBranches(branches)); },
-  removeBranch: (id: string) => { dispatch(Branches.actions.removeBranch(id)); },
-  updateBranchWithCommits: (id: string, latestCommitId: string, newCommits: Commit[], parentCommits: string[]) => {
-    dispatch(Branches.actions.updateBranchWithCommits(id, latestCommitId, newCommits, parentCommits));
+  storeBranches: (branches: Branch[]) => {
+    dispatch(Branches.actions.storeBranches(branches));
+  },
+  removeBranch: (id: string) => {
+    dispatch(Branches.actions.removeBranch(id));
+  },
+  updateBranchWithCommits: (
+    id: string,
+    latestCommitId: string,
+    newCommits: Commit[],
+    parentCommits: string[],
+  ) => {
+    dispatch(
+      Branches.actions.updateBranchWithCommits(
+        id,
+        latestCommitId,
+        newCommits,
+        parentCommits,
+      ),
+    );
   },
   updateLatestActivityTimestampForBranch: (id: string, timestamp: number) => {
-    dispatch(Branches.actions.updateLatestActivityTimestampForBranch(id, timestamp));
+    dispatch(
+      Branches.actions.updateLatestActivityTimestampForBranch(id, timestamp),
+    );
   },
   updateLatestDeployedCommitForBranch: (id: string, commit: string) => {
     dispatch(Branches.actions.updateLatestDeployedCommit(id, commit));
   },
 
   // Comments
-  storeComments: (comments: Comment[]) => { dispatch(Comments.actions.storeComments(comments)); },
-  removeComment: (comment: string) => { dispatch(Comments.actions.removeComment(comment)); },
+  storeComments: (comments: Comment[]) => {
+    dispatch(Comments.actions.storeComments(comments));
+  },
+  removeComment: (comment: string) => {
+    dispatch(Comments.actions.removeComment(comment));
+  },
 
   // Commits
-  storeCommits: (commits: Commit[]) => { dispatch(Commits.actions.storeCommits(commits)); },
+  storeCommits: (commits: Commit[]) => {
+    dispatch(Commits.actions.storeCommits(commits));
+  },
   addDeploymentToCommit: (commitId: string, deploymentId: string) => {
     dispatch(Commits.actions.addDeploymentToCommit(commitId, deploymentId));
   },
@@ -450,9 +611,18 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 
   // Projects
-  storeProjects: (projects: Project[]) => { dispatch(Projects.actions.storeProjects(projects)); },
-  removeProject: (id: string) => { dispatch(Projects.actions.removeProject(id)); },
-  updateProject: (id: string, name: string, repoUrl: string, description?: string) => {
+  storeProjects: (projects: Project[]) => {
+    dispatch(Projects.actions.storeProjects(projects));
+  },
+  removeProject: (id: string) => {
+    dispatch(Projects.actions.removeProject(id));
+  },
+  updateProject: (
+    id: string,
+    name: string,
+    repoUrl: string,
+    description?: string,
+  ) => {
     dispatch(Projects.actions.updateProject(id, name, repoUrl, description));
   },
   storeAuthorsToProject: (id: string, authors: ProjectUser[]) => {
@@ -465,7 +635,9 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
     dispatch(Projects.actions.removeBranchFromProject(id, branch));
   },
   updateLatestActivityTimestampForProject: (id: string, timestamp: number) => {
-    dispatch(Projects.actions.updateLatestActivityTimestampForProject(id, timestamp));
+    dispatch(
+      Projects.actions.updateLatestActivityTimestampForProject(id, timestamp),
+    );
   },
   updateLatestDeployedCommitForProject: (id: string, commit: string) => {
     dispatch(Projects.actions.updateLatestDeployedCommitForProject(id, commit));
@@ -477,14 +649,20 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => 
   },
 });
 
-const mapStateToProps = (state: StateTree, ownProps: Props): GeneratedStateProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: Props,
+): GeneratedStateProps => {
   const { id, entityType, token } = ownProps.match.params;
   let deployment: Deployment | FetchError | undefined;
 
   if (id && entityType && token && isEntityType(entityType)) {
     const preview = Previews.selectors.getPreview(state, id, entityType);
     if (preview && !isFetchError(preview)) {
-      deployment = Deployments.selectors.getDeployment(state, preview.deployment);
+      deployment = Deployments.selectors.getDeployment(
+        state,
+        preview.deployment,
+      );
     }
   }
 
@@ -494,7 +672,8 @@ const mapStateToProps = (state: StateTree, ownProps: Props): GeneratedStateProps
   };
 };
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(StreamingAPIHandler);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(StreamingAPIHandler);

@@ -7,7 +7,11 @@ import { update as updateIntercom } from '../../intercom';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
-import Previews, { EntityType, isEntityType, Preview } from '../../modules/previews';
+import Previews, {
+  EntityType,
+  isEntityType,
+  Preview,
+} from '../../modules/previews';
 import User from '../../modules/user';
 import { StateTree } from '../../reducers';
 
@@ -37,7 +41,12 @@ interface GeneratedStateProps {
 }
 
 interface GeneratedDispatchProps {
-  loadPreviewAndComments: (id: string, entityType: EntityType, token: string, isUserLoggedIn: boolean) => void;
+  loadPreviewAndComments: (
+    id: string,
+    entityType: EntityType,
+    token: string,
+    isUserLoggedIn: boolean,
+  ) => void;
   redirectToApp: () => void;
 }
 
@@ -54,13 +63,7 @@ class DeploymentView extends React.Component<Props, void> {
     const {
       loadPreviewAndComments,
       isUserLoggedIn,
-      match: {
-        params: {
-          entityType,
-          token,
-          id,
-        },
-      },
+      match: { params: { entityType, token, id } },
     } = this.props;
 
     if (!isEntityType(entityType)) {
@@ -75,7 +78,11 @@ class DeploymentView extends React.Component<Props, void> {
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadPreviewAndComments, isUserLoggedIn, match: { params: { entityType, token, id } } } = nextProps;
+    const {
+      loadPreviewAndComments,
+      isUserLoggedIn,
+      match: { params: { entityType, token, id } },
+    } = nextProps;
 
     if (
       isUserLoggedIn !== !this.props.isUserLoggedIn || // User logged in/out
@@ -106,26 +113,27 @@ class DeploymentView extends React.Component<Props, void> {
       preview,
       isUserLoggedIn,
       userEmail,
-      match: {
-        params: {
-          entityType,
-          id,
-          token,
-          view,
-          commentId,
-        },
-      },
+      match: { params: { entityType, id, token, view, commentId } },
     } = this.props;
 
     if (!preview) {
       return <div className={styles.blank} />;
     }
 
-    if (!commit || isFetchError(commit) || !deployment || isFetchError(deployment) || isFetchError(preview)) {
+    if (
+      !commit ||
+      isFetchError(commit) ||
+      !deployment ||
+      isFetchError(deployment) ||
+      isFetchError(preview)
+    ) {
       let errorMessage;
 
-      if (isFetchError(preview)) { // tslint:disable-line:prefer-conditional-expression
-        errorMessage = preview.unauthorized ? 'Unauthorized' : 'Unable to load preview.';
+      if (isFetchError(preview)) {
+        // tslint:disable-line:prefer-conditional-expression
+        errorMessage = preview.unauthorized
+          ? 'Unauthorized'
+          : 'Unable to load preview.';
       } else {
         errorMessage = 'Unable to load preview details.';
       }
@@ -161,16 +169,18 @@ class DeploymentView extends React.Component<Props, void> {
           userEmail={userEmail}
           linkDetails={{ entityType, id, token }}
         />
-        {showPreview ?
-          <iframe className={styles.preview} src={deployment.url} /> :
-          <BuildLog deployment={deployment} />
-        }
+        {showPreview
+          ? <iframe className={styles.preview} src={deployment.url} />
+          : <BuildLog deployment={deployment} />}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStateProps => {
+const mapStateToProps = (
+  state: StateTree,
+  ownProps: PassedProps,
+): GeneratedStateProps => {
   const { id, entityType } = ownProps.match.params;
   let commit: Commit | FetchError | undefined;
   let deployment: Deployment | FetchError | undefined;
@@ -191,14 +201,26 @@ const mapStateToProps = (state: StateTree, ownProps: PassedProps): GeneratedStat
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
   loadPreviewAndComments: (id, entityType, token, isUserLoggedIn) => {
-    dispatch(Previews.actions.loadPreviewAndComments(id, entityType, token, isUserLoggedIn));
+    dispatch(
+      Previews.actions.loadPreviewAndComments(
+        id,
+        entityType,
+        token,
+        isUserLoggedIn,
+      ),
+    );
   },
-  redirectToApp: () => { dispatch(push('/')); },
+  redirectToApp: () => {
+    dispatch(push('/'));
+  },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DeploymentView);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(DeploymentView);

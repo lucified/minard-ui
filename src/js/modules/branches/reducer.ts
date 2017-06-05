@@ -44,7 +44,9 @@ const reducer: Reducer<BranchState> = (state = initialState, action: any) => {
         };
       }
 
-      logMessage('Fetching failed! Not replacing existing branch entity', { action });
+      logMessage('Fetching failed! Not replacing existing branch entity', {
+        action,
+      });
 
       return state;
     // Only stores any new commits to the branch
@@ -55,14 +57,17 @@ const reducer: Reducer<BranchState> = (state = initialState, action: any) => {
         // Note: we assume we always get older commits, sorted by time in reverse
 
         if (xor(branch.commits, commitsAction.commits).length > 0) {
-          const newCommitsList = uniq(branch.commits.concat(commitsAction.commits));
+          const newCommitsList = uniq(
+            branch.commits.concat(commitsAction.commits),
+          );
           return {
             ...state,
             [commitsAction.id]: {
               ...branch,
               commits: newCommitsList,
               // When the two are equal, all commits might be loaded but we can't know
-              allCommitsLoaded: commitsAction.commits.length < commitsAction.requestedCount,
+              allCommitsLoaded:
+                commitsAction.commits.length < commitsAction.requestedCount,
             },
           };
         }
@@ -114,24 +119,34 @@ const reducer: Reducer<BranchState> = (state = initialState, action: any) => {
         // Try to find any of the parentIds in the commits of the branch
         let foundIndex = -1;
         if (storeCommitsAction.parentCommitIds.length > 0) {
-          storeCommitsAction.parentCommitIds.forEach((parentCommitId: string) => {
-            if (foundIndex === -1) {
-              foundIndex = newBranch.commits.indexOf(parentCommitId);
-            }
-          });
+          storeCommitsAction.parentCommitIds.forEach(
+            (parentCommitId: string) => {
+              if (foundIndex === -1) {
+                foundIndex = newBranch.commits.indexOf(parentCommitId);
+              }
+            },
+          );
         } else {
           // The event has no parents if the branch was reset to an older commit
-          foundIndex = newBranch.commits.indexOf(storeCommitsAction.latestCommitId);
+          foundIndex = newBranch.commits.indexOf(
+            storeCommitsAction.latestCommitId,
+          );
         }
 
-        const newCommitIds = storeCommitsAction.newCommits.map(commit => commit.id);
+        const newCommitIds = storeCommitsAction.newCommits.map(
+          commit => commit.id,
+        );
 
-        if (foundIndex === -1) { // tslint:disable-line:prefer-conditional-expression
+        if (foundIndex === -1) {
           // Not found, replace
-          newBranch.commits = newCommitIds.length > 0 ? newCommitIds : [storeCommitsAction.latestCommitId];
+          newBranch.commits = newCommitIds.length > 0
+            ? newCommitIds
+            : [storeCommitsAction.latestCommitId];
         } else {
           // Cut off any possibly replaced commits and add existing commit(s) to end
-          newBranch.commits = newCommitIds.concat(newBranch.commits.slice(foundIndex));
+          newBranch.commits = newCommitIds.concat(
+            newBranch.commits.slice(foundIndex),
+          );
         }
 
         return {

@@ -20,22 +20,40 @@ describe('Streaming reducer', () => {
     });
 
     it('saves the error message if present', () => {
-      const action = setConnectionState(ConnectionState.CLOSED, 'unable to connect');
+      const action = setConnectionState(
+        ConnectionState.CLOSED,
+        'unable to connect',
+      );
       const newState = reducer(initialState, action);
-      expect(newState).to.deep.equal({ state: action.state, error: action.error });
+      expect(newState).to.deep.equal({
+        state: action.state,
+        error: action.error,
+      });
       expect(newState).to.not.equal(initialState);
     });
 
     it('saves the error message even if the new state is the same', () => {
-      const initialErrorState: StreamingState = { state: ConnectionState.CLOSED, error: 'first error' };
-      const action = setConnectionState(ConnectionState.CLOSED, 'unable to connect');
+      const initialErrorState: StreamingState = {
+        state: ConnectionState.CLOSED,
+        error: 'first error',
+      };
+      const action = setConnectionState(
+        ConnectionState.CLOSED,
+        'unable to connect',
+      );
       const newState = reducer(initialErrorState, action);
-      expect(newState).to.deep.equal({ state: action.state, error: action.error });
+      expect(newState).to.deep.equal({
+        state: action.state,
+        error: action.error,
+      });
       expect(newState).to.not.equal(initialErrorState);
     });
 
     it('it clears the error message', () => {
-      const initialErrorState: StreamingState = { state: ConnectionState.CLOSED, error: 'first error' };
+      const initialErrorState: StreamingState = {
+        state: ConnectionState.CLOSED,
+        error: 'first error',
+      };
       const action = setConnectionState(ConnectionState.CLOSED);
       const newState = reducer(initialErrorState, action);
       expect(newState).to.deep.equal({ state: action.state, error: undefined });
@@ -52,7 +70,11 @@ describe('Streaming reducer', () => {
 
   it(`clears data on ${CLEAR_STORED_DATA}`, () => {
     const action = { type: CLEAR_STORED_DATA };
-    expect(reducer(initialState, action)).to.deep.equal({ state: ConnectionState.INITIAL_CONNECT });
-    expect(reducer(undefined as any, action)).to.deep.equal({ state: ConnectionState.INITIAL_CONNECT });
+    expect(reducer(initialState, action)).to.deep.equal({
+      state: ConnectionState.INITIAL_CONNECT,
+    });
+    expect(reducer(undefined as any, action)).to.deep.equal({
+      state: ConnectionState.INITIAL_CONNECT,
+    });
   });
 });

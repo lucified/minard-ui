@@ -12,6 +12,7 @@ interface Props {
 }
 
 const EmptyProject = ({ project }: Props) => {
+  // prettier-ignore
   return (
     <section className="container-fluid">
       <SimpleSectionTitle><span>Get started</span></SimpleSectionTitle>
@@ -30,8 +31,8 @@ const EmptyProject = ({ project }: Props) => {
                 My project only exists on my computer
               </div>
               <div className={styles.text}>
-                If your project folder is not already a Git repository, initialize
-                it by running the following commands in the folder:
+                If your project folder is not already a Git repository,
+                initialize it by running the following commands in the folder:
               </div>
               <div className={styles.code}>
                 <pre>
@@ -50,8 +51,8 @@ const EmptyProject = ({ project }: Props) => {
                 </pre>
               </div>
               <div className={styles.text}>
-                Now, whenever you push code to <code>minard</code>, Minard will create
-                a new preview:
+                Now, whenever you push code to <code>minard</code>, Minard will
+                create a new preview:
               </div>
               <div className={styles.code}>
                 <pre onClick={selectText}>
@@ -64,7 +65,8 @@ const EmptyProject = ({ project }: Props) => {
                 My project is in GitHub or another remote Git repository
               </div>
               <div className={styles.text}>
-                Add <code>minard</code> as a new remote and as a secondary <code>origin</code> URL with:
+                Add <code>minard</code> as a new remote and as a secondary
+                {' '}<code>origin</code> URL with:
               </div>
               <div className={styles.code}>
                 <pre>
@@ -84,10 +86,11 @@ const EmptyProject = ({ project }: Props) => {
               </div>
 
               <div className={styles.text}>
-                By default, Minard will not build your project. The preview will be
-                the root of your git repository. You can enable builds and change
-                the deployment root folder by including a <code>minard.json</code> file
-                in your repository. It has the following format:
+                By default, Minard will not build your project. The preview will
+                be the root of your git repository. You can enable builds and
+                change the deployment root folder by including a
+                {' '}<code>minard.json</code> file in your repository. It has
+                the following format:
               </div>
               <div className={styles.code}>
                 <pre onClick={selectText}>

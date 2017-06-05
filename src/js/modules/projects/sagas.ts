@@ -1,4 +1,13 @@
-import { call, Effect, fork, put, select, take, takeEvery, takeLatest } from 'redux-saga/effects';
+import {
+  call,
+  Effect,
+  fork,
+  put,
+  select,
+  take,
+  takeEvery,
+  takeLatest,
+} from 'redux-saga/effects';
 
 import { toProjects } from '../../api/convert';
 import { Api } from '../../api/types';
@@ -48,7 +57,9 @@ export default function createSagas(api: Api) {
   );
 
   // ALL PROJECTS
-  function* loadAllProjects(action: LoadAllProjectsAction): IterableIterator<Effect> {
+  function* loadAllProjects(
+    action: LoadAllProjectsAction,
+  ): IterableIterator<Effect> {
     const { teamId } = action;
     const fetchSuccess = yield call(fetchAllProjects, teamId);
     if (fetchSuccess) {
@@ -56,8 +67,10 @@ export default function createSagas(api: Api) {
     }
   }
 
-  function* ensureAllProjectsRelatedDataLoaded(): IterableIterator<Effect | Effect[]> {
-    const projects = (yield select(getProjects)) as Project[];
+  function* ensureAllProjectsRelatedDataLoaded(): IterableIterator<
+    Effect | Effect[]
+  > {
+    const projects: Project[] = yield select(getProjects);
 
     if (!projects) {
       logException('Error ensuring project', new Error('No projects found!'));
@@ -71,33 +84,44 @@ export default function createSagas(api: Api) {
   }
 
   // PROJECT
-  const loadProject = createLoader(getProject, fetchProject, ensureProjectRelatedDataLoaded);
+  const loadProject = createLoader(
+    getProject,
+    fetchProject,
+    ensureProjectRelatedDataLoaded,
+  );
 
-  function* ensureProjectRelatedDataLoaded(projectOrId: Project | string): IterableIterator<Effect | Effect[]> {
-    let project: Project | FetchError | undefined;
-
-    if (typeof projectOrId === 'string') { // tslint:disable-line:prefer-conditional-expression
-      project = (yield select(getProject, projectOrId)) as Project | FetchError | undefined;
-    } else {
-      project = projectOrId;
-    }
+  function* ensureProjectRelatedDataLoaded(
+    projectOrId: Project | string,
+  ): IterableIterator<Effect | Effect[]> {
+    const project: Project | FetchError | undefined = typeof projectOrId ===
+      'string'
+      ? yield select(getProject, projectOrId)
+      : projectOrId;
 
     if (!project) {
-      logException('Error ensuring project', new Error('No project found!'), { project });
+      logException('Error ensuring project', new Error('No project found!'), {
+        project,
+      });
 
       return;
     }
 
     if (isFetchError(project)) {
-      logException('Error fetching project', new Error('Unable to fetch project!'), { project });
+      logException(
+        'Error fetching project',
+        new Error('Unable to fetch project!'),
+        { project },
+      );
 
       return;
     }
 
     if (project.latestSuccessfullyDeployedCommit) {
-      const commit = (
-        yield call(fetchIfMissing, 'commits', project.latestSuccessfullyDeployedCommit)
-      ) as Commit | FetchError | undefined;
+      const commit: Commit | FetchError | undefined = yield call(
+        fetchIfMissing,
+        'commits',
+        project.latestSuccessfullyDeployedCommit,
+      );
       if (commit && !isFetchError(commit) && commit.deployment) {
         yield call(fetchIfMissing, 'deployments', commit.deployment);
       }
@@ -113,17 +137,32 @@ export default function createSagas(api: Api) {
   }
 
   // CREATE PROJECT
-  function* createProject(action: CreateProjectAction): IterableIterator<Effect> {
+  function* createProject(
+    action: CreateProjectAction,
+  ): IterableIterator<Effect> {
     const { name, description, projectTemplate, teamId } = action.payload;
 
-    yield put(Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name));
+    yield put(
+      Requests.actions.Projects.CreateProject.REQUEST.actionCreator(name),
+    );
 
-    const { response, error, details, unauthorized }: {
-      response?: any,
-      error?: string,
-      details?: string,
-      unauthorized?: boolean,
-    } = yield call(api.Project.create, teamId, name, description, projectTemplate);
+    const {
+      response,
+      error,
+      details,
+      unauthorized,
+    }: {
+      response?: any;
+      error?: string;
+      details?: string;
+      unauthorized?: boolean;
+    } = yield call(
+      api.Project.create,
+      teamId,
+      name,
+      description,
+      projectTemplate,
+    );
 
     if (response) {
       if (response.included) {
@@ -131,37 +170,65 @@ export default function createSagas(api: Api) {
       }
 
       // Store new project
-      const projectObject = (yield call(toProjects, response.data)) as Project[];
+      const projectObject: Project[] = yield call(toProjects, response.data);
       yield put(storeProjects(projectObject));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(projectObject[0], name));
+      yield put(
+        Requests.actions.Projects.CreateProject.SUCCESS.actionCreator(
+          projectObject[0],
+          name,
+        ),
+      );
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.CreateProject.FAILURE.actionCreator(name, error!, details, unauthorized));
+      yield put(
+        Requests.actions.Projects.CreateProject.FAILURE.actionCreator(
+          name,
+          error!,
+          details,
+          unauthorized,
+        ),
+      );
 
       return false;
     }
   }
 
   // Delete PROJECT
-  function* deleteProject(action: DeleteProjectAction): IterableIterator<Effect> {
+  function* deleteProject(
+    action: DeleteProjectAction,
+  ): IterableIterator<Effect> {
     const { id, resolve, reject } = action;
 
-    yield put(Requests.actions.Projects.DeleteProject.REQUEST.actionCreator(id));
+    yield put(
+      Requests.actions.Projects.DeleteProject.REQUEST.actionCreator(id),
+    );
 
-    const { response, error, details, unauthorized } = yield call(api.Project.delete, id);
+    const { response, error, details, unauthorized } = yield call(
+      api.Project.delete,
+      id,
+    );
 
     if (response) {
       yield call(resolve);
-      yield put(Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id));
+      yield put(
+        Requests.actions.Projects.DeleteProject.SUCCESS.actionCreator(id),
+      );
 
       return true;
     } else {
       yield call(reject);
-      yield put(Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(id, error, details, unauthorized));
+      yield put(
+        Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(
+          id,
+          error,
+          details,
+          unauthorized,
+        ),
+      );
 
       return false;
     }
@@ -175,7 +242,11 @@ export default function createSagas(api: Api) {
 
     yield put(Requests.actions.Projects.EditProject.REQUEST.actionCreator(id));
 
-    const { response, error, details, unauthorized } = yield call(api.Project.edit, id, { name, description });
+    const { response, error, details, unauthorized } = yield call(
+      api.Project.edit,
+      id,
+      { name, description },
+    );
 
     if (response) {
       // Store edited project
@@ -183,12 +254,23 @@ export default function createSagas(api: Api) {
       yield put(storeProjects(projectObject));
 
       // Notify form that creation was a success
-      yield put(Requests.actions.Projects.EditProject.SUCCESS.actionCreator(projectObject[0]));
+      yield put(
+        Requests.actions.Projects.EditProject.SUCCESS.actionCreator(
+          projectObject[0],
+        ),
+      );
 
       return true;
     } else {
       // Notify form that creation failed
-      yield put(Requests.actions.Projects.EditProject.FAILURE.actionCreator(id, error, details, unauthorized));
+      yield put(
+        Requests.actions.Projects.EditProject.FAILURE.actionCreator(
+          id,
+          error,
+          details,
+          unauthorized,
+        ),
+      );
 
       return false;
     }

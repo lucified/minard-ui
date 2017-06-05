@@ -57,8 +57,14 @@ describe('Modals reducer', () => {
   });
 
   it(`clears data on ${CLEAR_STORED_DATA}`, () => {
-    expect(reducer({ type: ModalType.ProjectSettings }, { type: CLEAR_STORED_DATA })).to.deep.equal(null);
-    expect(reducer({ type: ModalType.NewProject }, { type: CLEAR_STORED_DATA })).to.deep.equal(null);
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal(null);
+    expect(
+      reducer({ type: ModalType.ProjectSettings }, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal(null);
+    expect(
+      reducer({ type: ModalType.NewProject }, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal(null);
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal(null);
   });
 });

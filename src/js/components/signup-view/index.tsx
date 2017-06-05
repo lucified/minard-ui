@@ -14,7 +14,12 @@ import Header from '../header';
 
 interface GeneratedDispatchProps {
   navigateTo: (url: string) => void;
-  signupUser: (email: string, idToken: string, accessToken: string, expiresAt: number) => void;
+  signupUser: (
+    email: string,
+    idToken: string,
+    accessToken: string,
+    expiresAt: number,
+  ) => void;
 }
 
 interface GeneratedStateProps {
@@ -87,7 +92,8 @@ class SignupView extends React.Component<Props, State> {
         const { idToken, accessToken, expiresIn } = data;
         if (accessToken) {
           // At this point accessToken includes the teamToken
-          this.auth0!.client.userInfo(
+          this
+            .auth0!.client.userInfo(
             accessToken,
             (userInfoError: Auth0Error, profile: Auth0UserProfile) => {
               if (userInfoError) {
@@ -97,7 +103,9 @@ class SignupView extends React.Component<Props, State> {
                 const { email } = profile;
 
                 if (email) {
-                  const expiresAt = moment().add(expiresIn, 'seconds').valueOf();
+                  const expiresAt = moment()
+                    .add(expiresIn, 'seconds')
+                    .valueOf();
 
                   // Will use the teamToken in the accessToken to add the user to the
                   // appropriate team and return the user's git password which is then
@@ -106,7 +114,10 @@ class SignupView extends React.Component<Props, State> {
 
                   this.setState({ loadingStatus: LoadingStatus.BACKEND });
                 } else {
-                  console.error('No email address returned from Auth0!', profile);
+                  console.error(
+                    'No email address returned from Auth0!',
+                    profile,
+                  );
                   this.setState({ auth0Error: 'Unable to get email address' });
                 }
               }
@@ -130,15 +141,16 @@ class SignupView extends React.Component<Props, State> {
     const { password, email, error } = this.props;
     const { loadingStatus, auth0Error } = this.state;
 
-    if (auth0Error || error) { // TODO: Add "back to signup" action
+    if (auth0Error || error) {
+      // TODO: Add "back to signup" action
       return (
         <div>
           <Header />
           <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
             <p>
-              Please try signing up again. If that doesn't work,
-              contact <a href="mailto:support@minard.io">support@minard.io</a>.
+              Please try signing up again. If that doesn't work, contact
+              {' '}<a href="mailto:support@minard.io">support@minard.io</a>.
             </p>
           </ErrorDialog>
         </div>
@@ -149,16 +161,23 @@ class SignupView extends React.Component<Props, State> {
       return (
         <div>
           <Header />
-          <ErrorDialog title="Important" actionText="Continue to Minard" action={this.redirectToApp}>
+          <ErrorDialog
+            title="Important"
+            actionText="Continue to Minard"
+            action={this.redirectToApp}
+          >
             <p>
-              Success! Your Minard user account has been created. To push code to Minard,
-              you will need to use the following Git username and password.
+              Success! Your Minard user account has been created. To push code
+              to Minard, you will need to use the following Git username and
+              password.
             </p>
             <p>
               <strong>
-                Please store the password in some place safe. This is the only time you will
-                see this password. If you ever lose it, send a message
-                to <a href="mailto:support@minard.io">support@minard.io</a> to have it reset.
+                Please store the password in some place safe. This is the only
+                time you will see this password. If you ever lose it, send a
+                message to
+                {' '}<a href="mailto:support@minard.io">support@minard.io</a> to
+                have it reset.
               </strong>
             </p>
             <p>
@@ -202,14 +221,24 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  signupUser: (email: string, idToken: string, accessToken: string, expiresAt: number) => {
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  signupUser: (
+    email: string,
+    idToken: string,
+    accessToken: string,
+    expiresAt: number,
+  ) => {
     dispatch(User.actions.signupUser(email, idToken, accessToken, expiresAt));
   },
-  navigateTo: (url: string) => { dispatch(push(url)); },
+  navigateTo: (url: string) => {
+    dispatch(push(url));
+  },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignupView);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(SignupView);

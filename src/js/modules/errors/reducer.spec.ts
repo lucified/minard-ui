@@ -2,7 +2,12 @@ import { expect } from 'chai';
 
 import Requests from '../requests';
 import { CLEAR_STORED_DATA } from '../user/index';
-import { clearProjectDeletionErrors, clearSignupError, SIGNUP_ERROR, signupError } from './actions';
+import {
+  clearProjectDeletionErrors,
+  clearSignupError,
+  SIGNUP_ERROR,
+  signupError,
+} from './actions';
 import reducer from './reducer';
 import { ErrorState } from './types';
 
@@ -152,8 +157,11 @@ describe('Errors reducer', () => {
 
   it('adds an error when deleting a project fails', () => {
     const initialState: ErrorState = [];
-    const action =
-      Requests.actions.Projects.DeleteProject.FAILURE.actionCreator('foo', 'failed', 'detailed error\nhere');
+    const action = Requests.actions.Projects.DeleteProject.FAILURE.actionCreator(
+      'foo',
+      'failed',
+      'detailed error\nhere',
+    );
     const expectedState = [action];
 
     const newState = reducer(initialState, action);
@@ -162,14 +170,18 @@ describe('Errors reducer', () => {
   });
 
   it('clears the error when trying to delete a project again', () => {
-    const initialState: ErrorState = [{
-      type: Requests.actions.Projects.DeleteProject.FAILURE.type,
-      id: 'foo',
-      error: 'failed',
-      details: 'detailed error\nhere',
-      prettyError: 'failed',
-    }];
-    const action = Requests.actions.Projects.DeleteProject.REQUEST.actionCreator('foo');
+    const initialState: ErrorState = [
+      {
+        type: Requests.actions.Projects.DeleteProject.FAILURE.type,
+        id: 'foo',
+        error: 'failed',
+        details: 'detailed error\nhere',
+        prettyError: 'failed',
+      },
+    ];
+    const action = Requests.actions.Projects.DeleteProject.REQUEST.actionCreator(
+      'foo',
+    );
     const expectedState: any[] = [];
 
     const newState = reducer(initialState, action);
@@ -360,7 +372,11 @@ describe('Errors reducer', () => {
       },
     ];
 
-    expect(reducer(initialState, { type: CLEAR_STORED_DATA })).to.deep.equal([]);
-    expect(reducer(undefined as any, { type: CLEAR_STORED_DATA })).to.deep.equal([]);
+    expect(reducer(initialState, { type: CLEAR_STORED_DATA })).to.deep.equal(
+      [],
+    );
+    expect(
+      reducer(undefined as any, { type: CLEAR_STORED_DATA }),
+    ).to.deep.equal([]);
   });
 });

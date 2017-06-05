@@ -62,7 +62,11 @@ class ProjectsFrame extends React.Component<Props, void> {
       return (
         <div>
           <Header />
-          <ErrorDialog title="Error" actionText="Log in" action={this.redirectToLogin}>
+          <ErrorDialog
+            title="Error"
+            actionText="Log in"
+            action={this.redirectToLogin}
+          >
             <p>
               Unable to load Minard. If this problem persists,
               contact <a href="mailto:support@minard.io">support@minard.io</a>.
@@ -77,7 +81,10 @@ class ProjectsFrame extends React.Component<Props, void> {
         <Header />
         <SubHeader />
         <Switch>
-          <Route path="/project/:projectId/branch/:branchId" component={BranchView} />
+          <Route
+            path="/project/:projectId/branch/:branchId"
+            component={BranchView}
+          />
           <Route path="/project/:projectId/:show?" component={ProjectView} />
           <Route path="/projects/:show?" component={TeamProjectsView} />
         </Switch>
@@ -87,15 +94,20 @@ class ProjectsFrame extends React.Component<Props, void> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  loadAllProjects: (teamId: string) => {
+    dispatch(Projects.actions.loadAllProjects(teamId));
+  },
 });
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProjectsFrame);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(ProjectsFrame);

@@ -56,7 +56,11 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
       project = state[fetchError.id];
 
       // Only store the FetchError if branches does not exist or it's an error
-      if (project && !isFetchError(project) && (!project.branches || isFetchError(project.branches))) {
+      if (
+        project &&
+        !isFetchError(project) &&
+        (!project.branches || isFetchError(project.branches))
+      ) {
         return {
           ...state,
           [fetchError.id]: {
@@ -82,7 +86,11 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
 
       if (project && !isFetchError(project)) {
         let newBranches: string[];
-        if (project.branches && !isFetchError(project.branches) && project.branches.length > 0) {
+        if (
+          project.branches &&
+          !isFetchError(project.branches) &&
+          project.branches.length > 0
+        ) {
           newBranches = uniq(project.branches.concat(branches));
 
           if (xor(project.branches, newBranches).length === 0) {
@@ -110,7 +118,11 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
 
       if (project && !isFetchError(project)) {
         const { name, description, repoUrl } = updateProjectAction;
-        if (project.name !== name || project.description !== description || project.repoUrl !== repoUrl) {
+        if (
+          project.name !== name ||
+          project.description !== description ||
+          project.repoUrl !== repoUrl
+        ) {
           return {
             ...state,
             [id]: {
@@ -130,11 +142,15 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
         const newProjects = projects.reduce<ProjectState>((obj, newProject) => {
           // If existing project has branches, store those
           const existingProject = state[newProject.id];
-          if (existingProject && !isFetchError(existingProject) && existingProject.branches) {
+          if (
+            existingProject &&
+            !isFetchError(existingProject) &&
+            existingProject.branches
+          ) {
             newProject.branches = existingProject.branches;
           }
 
-          return Object.assign(obj, { [newProject.id]: newProject });
+          return Object.assign(obj, { [newProject.id]: newProject }); // tslint:disable-line:prefer-object-spread
         }, {});
 
         return {
@@ -150,7 +166,11 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
       project = state[id];
 
       if (project && !isFetchError(project)) {
-        const combinedAuthors = unionBy(project.activeUsers, action.authors, (user: ProjectUser) => user.email);
+        const combinedAuthors = unionBy(
+          project.activeUsers,
+          action.authors,
+          (user: ProjectUser) => user.email,
+        );
         if (combinedAuthors.length === project.activeUsers.length) {
           // All users already included
           return state;
@@ -221,7 +241,9 @@ const reducer: Reducer<ProjectState> = (state = initialState, action: any) => {
               ...state,
               [id]: {
                 ...project,
-                branches: project.branches.filter(branchId => branchId !== branch),
+                branches: project.branches.filter(
+                  branchId => branchId !== branch,
+                ),
               },
             };
           }

@@ -59,7 +59,11 @@ class TeamProjectsView extends React.Component<Props, void> {
 
   public render() {
     const { activities, projects, match: { params: { show } } } = this.props;
-    const { isLoadingAllActivities, isLoadingProjects, isAllActivitiesRequested } = this.props;
+    const {
+      isLoadingAllActivities,
+      isLoadingProjects,
+      isAllActivitiesRequested,
+    } = this.props;
 
     if (isLoadingProjects && projects.length === 0) {
       return <LoadingIcon className={styles.loading} center />;
@@ -69,7 +73,11 @@ class TeamProjectsView extends React.Component<Props, void> {
       return (
         <div className={styles['all-projects']}>
           <div className="container-fluid">
-            <ProjectsSection projects={projects} isLoading={isLoadingProjects} showAll />
+            <ProjectsSection
+              projects={projects}
+              isLoading={isLoadingProjects}
+              showAll
+            />
           </div>
         </div>
       );
@@ -89,7 +97,11 @@ class TeamProjectsView extends React.Component<Props, void> {
             </div>
             <div className="col-xs-12 col-md-4">
               <div className={styles.projects}>
-                <ProjectsSection projects={projects} isLoading={isLoadingProjects} count={2} />
+                <ProjectsSection
+                  projects={projects}
+                  isLoading={isLoadingProjects}
+                  count={2}
+                />
               </div>
             </div>
           </div>
@@ -108,14 +120,19 @@ const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   team: User.selectors.getTeam(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
-  loadAllProjects: (teamId: string) => { dispatch(Projects.actions.loadAllProjects(teamId)); },
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => ({
+  loadAllProjects: (teamId: string) => {
+    dispatch(Projects.actions.loadAllProjects(teamId));
+  },
   loadActivities: (teamId: string, count: number, until?: number) => {
     dispatch(Activities.actions.loadActivities(teamId, count, until));
   },
 });
 
-export default connect<GeneratedStateProps, GeneratedDispatchProps, PassedProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TeamProjectsView);
+export default connect<
+  GeneratedStateProps,
+  GeneratedDispatchProps,
+  PassedProps
+>(mapStateToProps, mapDispatchToProps)(TeamProjectsView);
