@@ -137,7 +137,7 @@
     "react": "^15.5.4",
     "react-autosize-textarea": "^0.4.3",
     "react-dom": "^15.5.4",
-    "react-flip-move": "2.9.12",
+    "react-flip-move": "^2.9.14",
     "react-fontawesome": "^1.6.1",
     "react-gravatar": "^2.6.3",
     "react-modal": "^1.7.7",
