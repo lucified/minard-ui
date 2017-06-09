@@ -3,9 +3,9 @@ import * as React from 'react';
 const Convert = require('ansi-to-html');
 
 import { Api } from '../../api/types';
-const API: Api = process.env.CHARLES
-  ? require('../../api').default
-  : require('../../api/static-json').default;
+const API: Api = process.env.USE_MOCK
+  ? require('../../api/static-json').default
+  : require('../../api').default;
 import { Deployment } from '../../modules/deployments';
 import Spinner from '../common/spinner';
 
