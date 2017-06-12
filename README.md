@@ -37,32 +37,32 @@ Set up the development environment with:
 yarn
 ```
 
-### Standalone development using the bundled JSON files
-
-```shell
-yarn start # then open http://localhost:3000/ in a browser
-```
-
 ### Development with minard-backend
 
 Install minard-backend locally or on a separate server and start
 minard-ui with:
 
 ```shell
-yarn start -- <minard-backend API URL> # then open http://localhost:3000/ in a browser
+yarn start # then open http://localhost:3000/ in a browser
 ```
 
-By default, when run locally, the minard-backend (charles) API runs
-on port 8000:
+If you are not using default settings, you can specify the location and port of
+the minard-backend server manually:
 
 ```shell
-yarn start -- http://localtest.me:8000
+CHARLES="http://location.of.server:12345" yarn start
 ```
 
 Note that in local development mode, by default, the backend sets cookies
 for the `localtest.me` domain, which should resolve to `127.0.0.1`. Because
 of this, the API URL should be set to `http://localtest.me:8000` when using
 the default settings.
+
+### Standalone development using the bundled JSON files
+
+```shell
+USE_MOCK=true yarn start # then open http://localhost:3000/ in a browser
+```
 
 ## Building for production
 
@@ -109,6 +109,7 @@ Run `yarn run` to see other available commands.
 - **AUTH0_CLIENT_ID**: The client ID for Auth0. Defaults to the client in Lucify's dev account.
 - **AUTH0_DOMAIN**: The domain used for Auth0 authentication. Defaults to Lucify's dev account domain.
 - **AUTH0_AUDIENCE**: The Auth0 audience that we're requesting. Needs to match the correct API in Auth0. Defaults to `http://localtest.me:8000`.
+- **USE_MOCK**: For development. Set this to a truthy value to use the included mock data instead of a backend server. NOTE: the mock data is out of date and might not work correctly.
 
 ## Acknowledgements
 

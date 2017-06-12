@@ -9,9 +9,9 @@ const webpack = require('webpack');
 
 const deployConfig = require('./deploy-config');
 
-const getEntrypoint = (env, charles) => {
+const getEntrypoint = (env, useMockData) => {
   let middle;
-  if (!charles) {
+  if (useMockData) {
     // No remote backend
     middle = 'development.local-json';
   } else if (['staging', 'production'].indexOf(env) > -1) {
@@ -61,18 +61,22 @@ const rules = [
   },
   {
     test: /\.(jpeg|jpg|gif|png)$/,
-    use: [{
-      loader: 'file-loader',
-      options: {
-        name,
+    use: [
+      {
+        loader: 'file-loader',
+        options: {
+          name,
+        },
       },
-    }],
+    ],
   },
   {
     test: /\.hbs$/,
-    use: [{
-      loader: 'handlebars-loader',
-    }],
+    use: [
+      {
+        loader: 'handlebars-loader',
+      },
+    ],
   },
   {
     test: /\.scss$/,
@@ -116,45 +120,53 @@ const rules = [
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    use: [{
-      loader: 'url-loader',
-      options: {
-        limit: 10000,
-        mimetype: 'application/font-woff',
-        name,
+    use: [
+      {
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          mimetype: 'application/font-woff',
+          name,
+        },
       },
-    }],
+    ],
   },
   {
     test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-    use: [{
-      loader: 'url-loader',
-      options: {
-        limit: 10000,
-        mimetype: 'application/octet-stream',
-        name,
+    use: [
+      {
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          mimetype: 'application/octet-stream',
+          name,
+        },
       },
-    }],
+    ],
   },
   {
     test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-    use: [{
-      loader: 'file-loader',
-      options: {
-        name,
+    use: [
+      {
+        loader: 'file-loader',
+        options: {
+          name,
+        },
       },
-    }],
+    ],
   },
   {
     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-    use: [{
-      loader: 'url-loader',
-      options: {
-        limit: 10000,
-        mimetype: 'image/svg+xml',
-        name,
+    use: [
+      {
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          mimetype: 'image/svg+xml',
+          name,
+        },
       },
-    }],
+    ],
   },
 ];
 
@@ -180,25 +192,34 @@ function getCharles() {
   if (deployConfig.env === 'staging' && process.env.CHARLES_STAGING) {
     return process.env.CHARLES_STAGING;
   }
-  return process.env.CHARLES || false;
+  return process.env.CHARLES || 'http://localtest.me:8000';
 }
 
 function getAuth0ClientId() {
-  if (deployConfig.env === 'production' && process.env.AUTH0_CLIENT_ID_PRODUCTION) {
+  if (
+    deployConfig.env === 'production' &&
+    process.env.AUTH0_CLIENT_ID_PRODUCTION
+  ) {
     return process.env.AUTH0_CLIENT_ID_PRODUCTION;
   }
   return process.env.AUTH0_CLIENT_ID || 'ZaeiNyV7S7MpI69cKNHr8wXe5Bdr8tvW';
 }
 
 function getAuth0Domain() {
-  if (deployConfig.env === 'production' && process.env.AUTH0_DOMAIN_PRODUCTION) {
+  if (
+    deployConfig.env === 'production' &&
+    process.env.AUTH0_DOMAIN_PRODUCTION
+  ) {
     return process.env.AUTH0_DOMAIN_PRODUCTION;
   }
   return process.env.AUTH0_DOMAIN || 'lucify-dev.eu.auth0.com';
 }
 
 function getAuth0Audience() {
-  if (deployConfig.env === 'production' && process.env.AUTH0_AUDIENCE_PRODUCTION) {
+  if (
+    deployConfig.env === 'production' &&
+    process.env.AUTH0_AUDIENCE_PRODUCTION
+  ) {
     return process.env.AUTH0_AUDIENCE_PRODUCTION;
   }
   return process.env.AUTH0_AUDIENCE || 'http://localtest.me:8000';
@@ -230,12 +251,13 @@ const config = {
   },
   entry: [
     'babel-polyfill',
-    getEntrypoint(deployConfig.env, getCharles()),
+    getEntrypoint(deployConfig.env, !!process.env.USE_MOCK),
   ],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(getCharles()),
+      'process.env.USE_MOCK': JSON.stringify(!!process.env.USE_MOCK),
       'process.env.STREAMING_API': JSON.stringify(getCharles()),
       'process.env.ENV': JSON.stringify(deployConfig.env),
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
@@ -250,10 +272,12 @@ const config = {
       // https://github.com/webpack/webpack/issues/959#issuecomment-276685210
       allChunks: true,
     }),
-    new CopyWebpackPlugin([{
-      from: 'static/*',
-      flatten: true,
-    }]),
+    new CopyWebpackPlugin([
+      {
+        from: 'static/*',
+        flatten: true,
+      },
+    ]),
     // Put all included NPM packages into its own file.
     // https://webpack.js.org/plugins/commons-chunk-plugin/#combining-implicit-common-vendor-chunks-and-manifest-file
     new webpack.optimize.CommonsChunkPlugin({
