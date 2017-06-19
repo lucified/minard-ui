@@ -66,12 +66,17 @@ class SignupView extends React.Component<Props, State> {
     });
 
     if (teamToken) {
+      // This is loaded initially when the user arrives at the page
       this.setState({ auth0Error: undefined });
       this.auth0.authorize({
         connection: 'Username-Password-Authentication',
         team_token: teamToken,
       });
     } else {
+      // Once the user has signed up at Auth0, they are returned to this page
+      // with a hash in the URL. This function parses that hash and initiates
+      // the signup with the Minard backend. The team token is included in the
+      // JWT.
       this.auth0.parseHash({}, (auth0Error: Auth0Error, data: any) => {
         if (auth0Error) {
           console.error('Unable to sign up', auth0Error);
@@ -101,9 +106,10 @@ class SignupView extends React.Component<Props, State> {
                     .add(expiresIn, 'seconds')
                     .valueOf();
 
-                  // Will use the teamToken in the accessToken to add the user to the
-                  // appropriate team and return the user's git password which is then
-                  // stored to the Redux state
+                  // Will use the teamToken in the accessToken to add the user
+                  // to the appropriate team. The signup saga will store the
+                  // team ID into the Redux state and redirect the user into
+                  // the app.
                   signupUser(email, idToken, accessToken, expiresAt);
 
                   this.setState({ loadingStatus: LoadingStatus.BACKEND });
@@ -139,8 +145,8 @@ class SignupView extends React.Component<Props, State> {
           <ErrorDialog title="Something went wrong">
             <p>{auth0Error || error}</p>
             <p>
-              Please try signing up again. If that doesn't work, contact
-              {' '}<a href="mailto:support@minard.io">support@minard.io</a>.
+              Please try signing up again. If that doesn't work, contact{' '}
+              <a href="mailto:support@minard.io">support@minard.io</a>.
             </p>
           </ErrorDialog>
         </div>

@@ -134,8 +134,8 @@ class AccountDialog extends React.Component<Props, State> {
             </div>
             <div className={styles.text}>
               <p>
-                Your account's email address is
-                {' '}<strong onClick={selectText}>{email}</strong>.
+                Your account's email address is{' '}
+                <strong onClick={selectText}>{email}</strong>.
                 It is also your git username.
               </p>
               <p>
