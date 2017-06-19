@@ -67,7 +67,7 @@ class InviteTeamDialog extends React.Component<Props, void> {
                       `/signup/${invitationToken}`}
                   </pre>
                 </div>
-                <p>
+                <p className={styles.mindful}>
                   <strong>Be mindful of where you share this URL!</strong>
                   {' '}Anyone can
                   join your team by using it.
