@@ -1,10 +1,5 @@
 import { expect } from 'chai';
-import {
-  clearStoredData,
-  setGitPassword,
-  setTeam,
-  setUserEmail,
-} from './actions';
+import { clearStoredData, setTeam, setUserEmail } from './actions';
 import reducer from './reducer';
 import { UserState } from './types';
 
@@ -17,7 +12,6 @@ describe('User reducer', () => {
       name: 'team name',
       invitationToken: 'testtoken',
     },
-    gitPassword: 'secretpassword',
   };
 
   const initialState: UserState = {};
@@ -42,22 +36,6 @@ describe('User reducer', () => {
         stateWithUser.email!,
         stateWithUser.expiresAt!,
       );
-      const newState = reducer(stateWithUser, action);
-      expect(newState).to.deep.equal(stateWithUser);
-      expect(newState).to.equal(stateWithUser);
-    });
-  });
-
-  describe('setGitPassword', () => {
-    it('should update if the password changes', () => {
-      const action = setGitPassword('newPassword');
-      const newState = reducer(initialState, action);
-      expect(newState.gitPassword).to.equal(action.password);
-      expect(newState).to.not.equal(initialState);
-    });
-
-    it('should do nothing if nothing changes', () => {
-      const action = setGitPassword(stateWithUser.gitPassword!);
       const newState = reducer(stateWithUser, action);
       expect(newState).to.deep.equal(stateWithUser);
       expect(newState).to.equal(stateWithUser);

@@ -22,5 +22,3 @@ export const hasStoredUserCredentials = (state: StateTree): boolean => {
 };
 export const getTeam = (state: StateTree): Team | undefined =>
   selectUserTree(state).team;
-export const getUserGitPassword = (state: StateTree): string | undefined =>
-  selectUserTree(state).gitPassword;
