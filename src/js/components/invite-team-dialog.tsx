@@ -68,16 +68,14 @@ class InviteTeamDialog extends React.Component<Props, void> {
                   </pre>
                 </div>
                 <p className={styles.mindful}>
-                  <strong>Be mindful of where you share this URL!</strong>
-                  {' '}Anyone can
-                  join your team by using it.
+                  <strong>Be mindful of where you share this URL!</strong>{' '}
+                  Anyone can join your team by using it.
                 </p>
               </div>
             : <p>
                 It looks like the invitation URL is disabled for your team.
                 Contact <a href="mailto:support@minard.io">support@minard.io</a>
-                {' '}to
-                get it enabled.
+                {' '}to get it enabled.
               </p>}
         </div>
       </ModalDialog>

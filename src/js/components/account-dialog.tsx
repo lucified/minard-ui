@@ -139,8 +139,7 @@ class AccountDialog extends React.Component<Props, State> {
                 It is also your git username.
               </p>
               <p>
-                To change your email address, please contact
-                {' '}
+                To change your email address, please contact{' '}
                 <a className={styles.url} href="mailto:support@minard.io">
                   support@minard.io
                 </a>.
