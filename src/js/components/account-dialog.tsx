@@ -135,10 +135,11 @@ class AccountDialog extends React.Component<Props, State> {
             <div className={styles.text}>
               <p>
                 Your account's email address is
-                {' '}<strong onClick={selectText}>{email}</strong>
+                {' '}<strong onClick={selectText}>{email}</strong>.
+                It is also your git username.
               </p>
               <p>
-                To change your Minard email address, please contact
+                To change your email address, please contact
                 {' '}
                 <a className={styles.url} href="mailto:support@minard.io">
                   support@minard.io
@@ -169,26 +170,6 @@ class AccountDialog extends React.Component<Props, State> {
                   Sorry, we had a problem problem requesting a password reset:
                   {' '}{error}
                 </p>}
-            </div>
-          </div>
-          <div className={styles.section}>
-            <div className={styles.label}>
-              Git credentials
-            </div>
-            <div className={styles.text}>
-              <p>
-                Your Git username is your email address:
-                {' '}<strong onClick={selectText}>{email}</strong>
-              </p>
-              <p>
-                For security reasons, your Git password was only shown when you
-                signed up for Minard. If you wish to change your password,
-                please contact
-                {' '}
-                <a className={styles.url} href="mailto:support@minard.io">
-                  support@minard.io
-                </a>.
-              </p>
             </div>
           </div>
         </div>
