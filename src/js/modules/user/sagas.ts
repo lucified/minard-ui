@@ -15,7 +15,6 @@ import {
   LOGIN,
   LOGOUT,
   REDIRECT_TO_LOGIN,
-  setGitPassword,
   setTeam,
   setUserEmail,
   SIGNUP_USER,
@@ -84,10 +83,9 @@ export default function createSagas(api: Api) {
     const { response, error, details } = yield call(api.User.signup);
 
     if (response) {
-      const { password, team: { id, name } } = response as SignupResponse;
+      const { team: { id, name } } = response as SignupResponse;
       yield put(setTeam(String(id), name));
-      yield put(setGitPassword(password));
-
+      yield put(push('/'));
       return true;
     } else {
       console.error('signupUser error', error, details);

@@ -4,7 +4,6 @@ import {
   LoginAction,
   LogoutAction,
   RedirectToLoginAction,
-  SetGitPasswordAction,
   SetTeamAction,
   SetUserEmailAction,
   SignupUserAction,
@@ -77,12 +76,6 @@ export const loadTeamInformation = (
 ): LoadTeamInformationAction => ({
   type: LOAD_TEAM_INFORMATION,
   redirect,
-});
-
-export const SET_GIT_PASSWORD = 'USER/SET_GIT_PASSWORD';
-export const setGitPassword = (password: string): SetGitPasswordAction => ({
-  type: SET_GIT_PASSWORD,
-  password,
 });
 
 export const REDIRECT_TO_LOGIN = 'USER/REDIRECT_TO_LOGIN';

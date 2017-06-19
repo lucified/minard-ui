@@ -3,7 +3,6 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { push } from 'react-router-redux';
 
 import Errors from '../../modules/errors';
 import User from '../../modules/user';
@@ -13,7 +12,6 @@ import Spinner from '../common/spinner';
 import Header from '../header';
 
 interface GeneratedDispatchProps {
-  navigateTo: (url: string) => void;
   signupUser: (
     email: string,
     idToken: string,
@@ -23,7 +21,6 @@ interface GeneratedDispatchProps {
 }
 
 interface GeneratedStateProps {
-  password?: string;
   email?: string;
   error?: string;
 }
@@ -51,12 +48,9 @@ class SignupView extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-
     this.state = {
       loadingStatus: LoadingStatus.AUTH0,
     };
-
-    this.redirectToApp = this.redirectToApp.bind(this);
   }
 
   public componentWillMount() {
@@ -133,12 +127,8 @@ class SignupView extends React.Component<Props, State> {
     }
   }
 
-  private redirectToApp() {
-    this.props.navigateTo('/');
-  }
-
   public render() {
-    const { password, email, error } = this.props;
+    const { error } = this.props;
     const { loadingStatus, auth0Error } = this.state;
 
     if (auth0Error || error) {
@@ -151,47 +141,6 @@ class SignupView extends React.Component<Props, State> {
             <p>
               Please try signing up again. If that doesn't work, contact
               {' '}<a href="mailto:support@minard.io">support@minard.io</a>.
-            </p>
-          </ErrorDialog>
-        </div>
-      );
-    }
-
-    if (password) {
-      return (
-        <div>
-          <Header />
-          <ErrorDialog
-            title="Important"
-            actionText="Continue to Minard"
-            action={this.redirectToApp}
-          >
-            <p>
-              Success! Your Minard user account has been created. To push code
-              to Minard, you will need to use the following Git username and
-              password.
-            </p>
-            <p>
-              <strong>
-                Please store the password in some place safe. This is the only
-                time you will see this password. If you ever lose it, send a
-                message to
-                {' '}<a href="mailto:support@minard.io">support@minard.io</a> to
-                have it reset.
-              </strong>
-            </p>
-            <p>
-              <strong>Username:</strong>
-              <br />
-              <code>{email}</code>
-            </p>
-            <p>
-              <strong>Password:</strong>
-              <br />
-              <code>{password}</code>
-            </p>
-            <p>
-              Once you have stored this information, continue on to Minard.
             </p>
           </ErrorDialog>
         </div>
@@ -213,9 +162,7 @@ class SignupView extends React.Component<Props, State> {
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => {
   const error = Errors.selectors.getSignupError(state);
-
   return {
-    password: User.selectors.getUserGitPassword(state),
     email: User.selectors.getUserEmail(state),
     error: error && error.error,
   };
@@ -231,9 +178,6 @@ const mapDispatchToProps = (
     expiresAt: number,
   ) => {
     dispatch(User.actions.signupUser(email, idToken, accessToken, expiresAt));
-  },
-  navigateTo: (url: string) => {
-    dispatch(push(url));
   },
 });
 
