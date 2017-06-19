@@ -300,6 +300,5 @@ export interface ApiTeam {
 
 // User
 export interface SignupResponse {
-  password: string;
   team: ApiTeam;
 }
