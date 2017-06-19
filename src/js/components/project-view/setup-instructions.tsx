@@ -42,7 +42,7 @@ const SetupInstructions = ({ project }: Props) => {
             <div className={styles.text}>
               …Or, if you already use GitHub or another remote repository in
               your project, add Minard
-              as a new remote and secodary URL to origin with:
+              as a new remote and a secondary URL to origin with:
             </div>
             <div className={styles.code}>
               <pre>
