@@ -1,6 +1,5 @@
 import * as Raven from 'raven-js';
 
-// Level can be 'info', 'warning', or 'error'
 export const logMessage = (
   message: string,
   extra?: any,
