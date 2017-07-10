@@ -36,7 +36,7 @@ const getBranches = (branches: (Branch | undefined)[]) =>
     )}
   </FlipMove>;
 
-class ProjectBranches extends React.Component<Props, void> {
+class ProjectBranches extends React.Component<Props> {
   public render() {
     const { branches, project, showAll, count = 3 } = this.props;
     const title = showAll ? `All branches for ${project.name}` : 'Branches';
@@ -44,7 +44,11 @@ class ProjectBranches extends React.Component<Props, void> {
     if (!branches) {
       return (
         <section className="container-fluid">
-          <SimpleSectionTitle><span>{title}</span></SimpleSectionTitle>
+          <SimpleSectionTitle>
+            <span>
+              {title}
+            </span>
+          </SimpleSectionTitle>
           <LoadingIcon className={styles.loading} center />
         </section>
       );
@@ -66,9 +70,10 @@ class ProjectBranches extends React.Component<Props, void> {
     const branchesToShow = showAll
       ? filteredBranches
       : filteredBranches.slice(0, count);
-    const content = branchesToShow.length === 0
-      ? getEmptyContent()
-      : getBranches(branchesToShow);
+    const content =
+      branchesToShow.length === 0
+        ? getEmptyContent()
+        : getBranches(branchesToShow);
 
     return (
       <section
@@ -76,7 +81,11 @@ class ProjectBranches extends React.Component<Props, void> {
       >
         <div className={classNames(showAll && 'container-fluid')}>
           <div className={styles.inner}>
-            <SimpleSectionTitle><span>{title}</span></SimpleSectionTitle>
+            <SimpleSectionTitle>
+              <span>
+                {title}
+              </span>
+            </SimpleSectionTitle>
             {content}
             {!showAll &&
               filteredBranches.length > count &&

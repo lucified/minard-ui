@@ -94,14 +94,20 @@ class Confirmable extends React.Component<Props, State> {
               className={classNames(styles.popup, styles['arrow-box'])}
             >
               <div className={styles.content}>
-                <div className={styles.title}>{title}</div>
-                <div className={styles.message}>{message}</div>
+                <div className={styles.title}>
+                  {title}
+                </div>
+                <div className={styles.message}>
+                  {message}
+                </div>
               </div>
               <div className={styles.actions}>
                 <button className={styles.confirm} onClick={this.confirm}>
                   {action}
                 </button>
-                <a className={styles.cancel} onClick={this.hidePopup}>Cancel</a>
+                <a className={styles.cancel} onClick={this.hidePopup}>
+                  Cancel
+                </a>
               </div>
             </div>}
         </CSSTransitionGroup>

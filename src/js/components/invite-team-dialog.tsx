@@ -31,7 +31,7 @@ function getParentElement() {
   return document.querySelector('#minard-app') as HTMLElement;
 }
 
-class InviteTeamDialog extends React.Component<Props, void> {
+class InviteTeamDialog extends React.Component<Props> {
   public render() {
     const { isOpen, closeDialog, invitationToken } = this.props;
 
@@ -74,8 +74,10 @@ class InviteTeamDialog extends React.Component<Props, void> {
               </div>
             : <p>
                 It looks like the invitation URL is disabled for your team.
-                Contact <a href="mailto:support@minard.io">support@minard.io</a>
-                {' '}to get it enabled.
+                Contact <a href="mailto:support@minard.io">
+                  support@minard.io
+                </a>{' '}
+                to get it enabled.
               </p>}
         </div>
       </ModalDialog>

@@ -151,7 +151,7 @@ const User = {
         team: { id: 3, name: 'teamName' } as ApiTeam, // tslint:disable-line:no-object-literal-type-assertion
       },
     }),
-  logout: () => Promise.resolve({}),
+  logout: () => Promise.resolve({ response: {} }),
 };
 
 const API: Api = {

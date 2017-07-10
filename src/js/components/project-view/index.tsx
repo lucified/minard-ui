@@ -40,7 +40,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-class ProjectView extends React.Component<Props, void> {
+class ProjectView extends React.Component<Props> {
   public componentWillMount() {
     const { loadProject, loadActivities, loadBranches } = this.props;
     const { projectId } = this.props.match.params;
@@ -82,8 +82,12 @@ class ProjectView extends React.Component<Props, void> {
       return (
         <div className={styles.error}>
           <h2>Unable to load project</h2>
-          <p><a onClick={this.reloadPage}>Click to reload</a></p>
-          <small>{project.prettyError}</small>
+          <p>
+            <a onClick={this.reloadPage}>Click to reload</a>
+          </p>
+          <small>
+            {project.prettyError}
+          </small>
         </div>
       );
     }
@@ -92,8 +96,12 @@ class ProjectView extends React.Component<Props, void> {
       return (
         <div className={styles.error}>
           <h2>Unable to load branches</h2>
-          <p><a onClick={this.reloadPage}>Click to reload</a></p>
-          <small>{branches.prettyError}</small>
+          <p>
+            <a onClick={this.reloadPage}>Click to reload</a>
+          </p>
+          <small>
+            {branches.prettyError}
+          </small>
         </div>
       );
     }

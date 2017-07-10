@@ -67,9 +67,9 @@ class AccountDialog extends React.Component<Props, State> {
 
   public componentDidMount() {
     this.auth0 = new WebAuth({
-      domain: process.env.AUTH0_DOMAIN,
-      clientID: process.env.AUTH0_CLIENT_ID,
-      audience: process.env.AUTH0_AUDIENCE,
+      domain: process.env.AUTH0_DOMAIN!,
+      clientID: process.env.AUTH0_CLIENT_ID!,
+      audience: process.env.AUTH0_AUDIENCE!,
     });
   }
 
@@ -129,14 +129,12 @@ class AccountDialog extends React.Component<Props, State> {
         </header>
         <div className={styles.instructions}>
           <div className={styles.section}>
-            <div className={styles.label}>
-              Email address
-            </div>
+            <div className={styles.label}>Email address</div>
             <div className={styles.text}>
               <p>
                 Your account's email address is{' '}
-                <strong onClick={selectText}>{email}</strong>.
-                It is also your git username.
+                <strong onClick={selectText}>{email}</strong>. It is also your
+                git username.
               </p>
               <p>
                 To change your email address, please contact{' '}
@@ -147,9 +145,7 @@ class AccountDialog extends React.Component<Props, State> {
             </div>
           </div>
           <div className={styles.section}>
-            <div className={styles.label}>
-              Password
-            </div>
+            <div className={styles.label}>Password</div>
             <div className={styles.text}>
               <button
                 type="submit"
@@ -166,8 +162,8 @@ class AccountDialog extends React.Component<Props, State> {
               </p>
               {error &&
                 <p className={styles.error}>
-                  Sorry, we had a problem problem requesting a password reset:
-                  {' '}{error}
+                  Sorry, we had a problem problem requesting a password reset:{' '}
+                  {error}
                 </p>}
             </div>
           </div>

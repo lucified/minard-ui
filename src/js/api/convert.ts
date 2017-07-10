@@ -43,9 +43,10 @@ const splitCommitMessage = (
 ): { message: string; description?: string } => {
   const commitMessageLines = rawMessage.match(/[^\r\n]+/g);
   const message = commitMessageLines ? commitMessageLines[0] : '';
-  const description = commitMessageLines && commitMessageLines.length > 1
-    ? commitMessageLines.slice(1).join('\n')
-    : undefined;
+  const description =
+    commitMessageLines && commitMessageLines.length > 1
+      ? commitMessageLines.slice(1).join('\n')
+      : undefined;
 
   return {
     message,
@@ -128,9 +129,10 @@ const createActivityObject = (activity: ResponseActivityElement): Activity => {
         email: commit.committer.email,
         timestamp: moment(commit.committer.timestamp).valueOf(),
       },
-      deployment: commit.deployments && commit.deployments.length > 0
-        ? commit.deployments[0]
-        : undefined,
+      deployment:
+        commit.deployments && commit.deployments.length > 0
+          ? commit.deployments[0]
+          : undefined,
     },
     deployment: {
       status: toDeploymentStatus(deployment.status),
@@ -148,7 +150,7 @@ const createActivityObject = (activity: ResponseActivityElement): Activity => {
   };
 
   if (type === ActivityType.Comment) {
-    activityObject.comment = { ...activity.attributes.comment };
+    activityObject.comment = { ...activity.attributes.comment! };
   }
 
   return activityObject;

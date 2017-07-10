@@ -139,9 +139,10 @@ const reducer: Reducer<BranchState> = (state = initialState, action: any) => {
 
         if (foundIndex === -1) {
           // Not found, replace
-          newBranch.commits = newCommitIds.length > 0
-            ? newCommitIds
-            : [storeCommitsAction.latestCommitId];
+          newBranch.commits =
+            newCommitIds.length > 0
+              ? newCommitIds
+              : [storeCommitsAction.latestCommitId];
         } else {
           // Cut off any possibly replaced commits and add existing commit(s) to end
           newBranch.commits = newCommitIds.concat(

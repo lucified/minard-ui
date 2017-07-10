@@ -11,12 +11,13 @@ if (existingUserEmail) {
 
 const existingExpirationAt = getExpirationTime();
 
-const initialState: UserState = existingExpirationAt && existingUserEmail
-  ? {
-      email: existingUserEmail,
-      expiresAt: existingExpirationAt,
-    }
-  : {};
+const initialState: UserState =
+  existingExpirationAt && existingUserEmail
+    ? {
+        email: existingUserEmail,
+        expiresAt: existingExpirationAt,
+      }
+    : {};
 
 const reducer = (state: UserState = initialState, action: any): UserState => {
   switch (action.type) {

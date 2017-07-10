@@ -106,7 +106,7 @@ describe('Commits reducer', () => {
         deployment: '8',
         description:
           'This is a longer commit explanation for whatever was done to the commit. ' +
-            'It should be truncated in some cases',
+          'It should be truncated in some cases',
       },
     };
     const storeAction = storeCommits(values<Commit>(newCommits));

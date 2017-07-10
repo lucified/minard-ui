@@ -1,10 +1,15 @@
 import * as Raven from 'raven-js';
 
-// Level can be 'info', 'warning', or 'error'
 export const logMessage = (
   message: string,
   extra?: any,
-  level = 'error',
+  level:
+    | 'error'
+    | 'critical'
+    | 'info'
+    | 'debug'
+    | 'warning'
+    | undefined = 'error',
 ): void => {
   console.error(message, extra);
   if (Raven.isSetup()) {
@@ -16,7 +21,13 @@ export const logException = (
   message: string,
   ex: any,
   extra?: any,
-  level = 'error',
+  level:
+    | 'error'
+    | 'critical'
+    | 'info'
+    | 'debug'
+    | 'warning'
+    | undefined = 'error',
 ): void => {
   console.error(message, ex, extra);
   if (Raven.isSetup()) {

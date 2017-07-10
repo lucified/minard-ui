@@ -79,7 +79,7 @@ describe('Activities reducer', () => {
         },
         message:
           'Try to do something\n\nThis is a longer commit explanation for whatever was done to the commit. ' +
-            'It should be truncated in some cases',
+          'It should be truncated in some cases',
         deployment: '8',
       },
       deployment: {

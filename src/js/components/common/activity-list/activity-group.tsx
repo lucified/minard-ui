@@ -48,7 +48,7 @@ const getBranchLabel = ({ branch, project }: Activity) => {
   );
 };
 
-class ActivityGroup extends React.Component<PassedProps, void> {
+class ActivityGroup extends React.Component<PassedProps> {
   public render() {
     const { activities, showProjectName } = this.props;
     const deploymentTime = activities[0].deployment.creator.timestamp;
@@ -66,9 +66,8 @@ class ActivityGroup extends React.Component<PassedProps, void> {
             <div className={styles['time-and-branch']}>
               <MinardLink preview={{ deployment }}>
                 <TimeAgo minPeriod={10} date={deploymentTime} />
-              </MinardLink>
-              {' '}&middot;{' '}
-              {getBranchLabel(firstActivity)}
+              </MinardLink>{' '}
+              &middot; {getBranchLabel(firstActivity)}
               {showProjectName && getProjectLabel(firstActivity)}
             </div>
             <MinardLink preview={{ deployment }}>
@@ -136,7 +135,7 @@ class ActivityGroup extends React.Component<PassedProps, void> {
             <FlipMove enterAnimation="fade" leaveAnimation="fade">
               {commentActivities.map(activity => {
                 const comment = {
-                  ...activity.comment,
+                  ...activity.comment!,
                   deployment: activity.deployment.id,
                   timestamp: activity.timestamp,
                 };

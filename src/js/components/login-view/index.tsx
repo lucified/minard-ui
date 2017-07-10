@@ -60,8 +60,8 @@ class LoginView extends React.Component<Props, State> {
 
   public componentDidMount() {
     this.lock = new Auth0Lock(
-      process.env.AUTH0_CLIENT_ID,
-      process.env.AUTH0_DOMAIN,
+      process.env.AUTH0_CLIENT_ID!,
+      process.env.AUTH0_DOMAIN!,
       {
         // oidcConformant is still in preview stage, which is why it is not documented
         // or found in the typings. Remove the `as any` below once it's included.
@@ -155,8 +155,8 @@ class LoginView extends React.Component<Props, State> {
               action={this.restartLogin}
             >
               <p>
-                Unable to load Minard. If this problem persists, contact
-                {' '}<a href="mailto:support@minard.io">support@minard.io</a>.
+                Unable to load Minard. If this problem persists, contact{' '}
+                <a href="mailto:support@minard.io">support@minard.io</a>.
               </p>
             </ErrorDialog>
           </div>

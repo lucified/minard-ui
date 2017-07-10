@@ -91,14 +91,14 @@ class SimpleConfirmable extends React.Component<Props, State> {
               key="confirm-popup"
               className={classNames(styles.popup, styles['arrow-box'])}
             >
-              <div className={styles.content}>
-                Are you sure?
-              </div>
+              <div className={styles.content}>Are you sure?</div>
               <div className={styles.actions}>
                 <button className={styles.confirm} onClick={this.confirm}>
                   {action}
                 </button>
-                <a className={styles.cancel} onClick={this.hidePopup}>Cancel</a>
+                <a className={styles.cancel} onClick={this.hidePopup}>
+                  Cancel
+                </a>
               </div>
             </div>}
         </CSSTransitionGroup>

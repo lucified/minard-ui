@@ -17,7 +17,7 @@ if (!process.env.CHARLES) {
   throw new Error('API host not defined!');
 }
 
-let host: string = process.env.CHARLES;
+let host: string = process.env.CHARLES!;
 // Remove trailing /
 host = host.replace(/\/$/, '');
 

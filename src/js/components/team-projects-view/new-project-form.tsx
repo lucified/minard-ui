@@ -57,7 +57,7 @@ const spaceToHyphen = (value?: string): string | undefined =>
 const normalizeProjectName = (value?: string): string | undefined =>
   spaceToHyphen(toLowerCase(value));
 
-class NewProjectForm extends React.Component<Props, void> {
+class NewProjectForm extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
@@ -145,7 +145,7 @@ class NewProjectForm extends React.Component<Props, void> {
                 component={(field: WrappedFieldProps<void>) =>
                   <Select
                     value={field.input && field.input.value}
-                    onChange={field.input && field.input.onChange}
+                    onChange={field.input && (field.input.onChange as any)}
                     onBlur={() =>
                       field.input && field.input.onBlur(field.input.value)}
                     options={dropdownValues}

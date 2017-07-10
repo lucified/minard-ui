@@ -46,7 +46,10 @@ const CommitSummary = ({
       {metadata}
       <div className={styles['commit-message']}>
         {commit.message}
-        {commit.description && <p>{commit.description}</p>}
+        {commit.description &&
+          <p>
+            {commit.description}
+          </p>}
       </div>
       <div className={styles.bottom}>
         <MinardLink

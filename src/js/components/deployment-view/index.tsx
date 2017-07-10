@@ -52,7 +52,7 @@ interface GeneratedDispatchProps {
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
-class DeploymentView extends React.Component<Props, void> {
+class DeploymentView extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 

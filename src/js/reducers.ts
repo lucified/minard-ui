@@ -33,7 +33,7 @@ export default combineReducers({
   streaming: Streaming.reducer,
   user: User.reducer,
   form: formReducer,
-  routing: routerReducer,
+  routing: routerReducer as any,
 });
 
 export interface StateTree {

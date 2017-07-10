@@ -31,9 +31,7 @@ const getBottom = (project: Project, deployment?: Deployment) => {
         <MinardLink project={{ project }}>
           <div className={styles['link-inner']}>
             <Icon className={styles.icon} name="chevron-right" />
-            <span className={styles['link-text']}>
-              Open project
-            </span>
+            <span className={styles['link-text']}>Open project</span>
           </div>
         </MinardLink>
       </div>
@@ -42,9 +40,7 @@ const getBottom = (project: Project, deployment?: Deployment) => {
           <MinardLink preview={{ project }}>
             <div className={styles['link-inner']}>
               <Icon className={styles.icon} name="eye" />
-              <span className={styles['link-text']}>
-                Latest preview
-              </span>
+              <span className={styles['link-text']}>Latest preview</span>
             </div>
           </MinardLink>
         </div>}
@@ -102,8 +98,7 @@ const ProjectCard = ({
           {!screenshot &&
             <div className={styles['no-screenshot']}>
               <div className={styles['no-screenshot-inner']}>
-                No screenshot is available
-                for this project
+                No screenshot is available for this project
               </div>
             </div>}
         </div>
@@ -133,9 +128,7 @@ const ProjectCard = ({
                   date={latestDeployment.creator.timestamp}
                 />
               </div>
-            : <div className={styles['no-previews-yet']}>
-                No previews yet
-              </div>}
+            : <div className={styles['no-previews-yet']}>No previews yet</div>}
           {getDescription(project.description, constantHeight)}
         </div>
       </MinardLink>

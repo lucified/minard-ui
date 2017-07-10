@@ -25,9 +25,7 @@ const ProjectActivity = ({
 }: Props) =>
   <section>
     <SimpleSectionTitle>
-      <span>
-        Previews
-      </span>
+      <span>Previews</span>
       <span className={styles['show-branches']}>
         <MinardLink showAll project={{ project }}>
           Show branches

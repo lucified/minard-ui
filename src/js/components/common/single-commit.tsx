@@ -26,15 +26,16 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
     return (
       <div className={styles.error}>
         <p>Unable to load commit. Refresh to retry.</p>
-        <small>{commit.prettyError}</small>
+        <small>
+          {commit.prettyError}
+        </small>
       </div>
     );
   }
 
   const { author, committer } = commit;
-  const otherAuthorEmail = author.email !== committer.email
-    ? committer.email
-    : undefined;
+  const otherAuthorEmail =
+    author.email !== committer.email ? committer.email : undefined;
 
   return (
     <div className={classNames(styles['commit-content'], className)}>
@@ -49,13 +50,17 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
       <div>
         <div className={styles['commit-metadata']}>
           <span>
-            <span className={styles.author}>{author.name || author.email}</span>
+            <span className={styles.author}>
+              {author.name || author.email}
+            </span>
             {' · '}
             <span className={styles.timestamp}>
               <TimeAgo minPeriod={10} date={author.timestamp} />
             </span>
             {' · '}
-            <span className={styles.hash}>{commit.hash.slice(0, 8)}</span>
+            <span className={styles.hash}>
+              {commit.hash.slice(0, 8)}
+            </span>
             {deployment &&
               !isFetchError(deployment) &&
               deployment.commentCount !== undefined &&
@@ -72,7 +77,9 @@ const SingleCommit = ({ commit, className, deployment }: Props) => {
             {commit.message}
           </div>
           {commit.description &&
-            <div className={styles.description}>{commit.description}</div>}
+            <div className={styles.description}>
+              {commit.description}
+            </div>}
         </div>
       </div>
     </div>

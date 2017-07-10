@@ -93,10 +93,10 @@ export default function createSagas(api: Api) {
   function* ensureProjectRelatedDataLoaded(
     projectOrId: Project | string,
   ): IterableIterator<Effect | Effect[]> {
-    const project: Project | FetchError | undefined = typeof projectOrId ===
-      'string'
-      ? yield select(getProject, projectOrId)
-      : projectOrId;
+    const project: Project | FetchError | undefined =
+      typeof projectOrId === 'string'
+        ? yield select(getProject, projectOrId)
+        : projectOrId;
 
     if (!project) {
       logException('Error ensuring project', new Error('No project found!'), {

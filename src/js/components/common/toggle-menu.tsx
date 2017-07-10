@@ -77,12 +77,17 @@ class ToggleMenu extends React.Component<Props, State> {
           onClick={this.toggleMenu}
           ref={this.storeTitleRef}
         >
-          <span className={styles.label}>{label}</span>
+          <span className={styles.label}>
+            {label}
+          </span>
           <Icon
             className={classNames(styles.caret, { [styles.rotate]: isOpen })}
             name={'caret-down'}
           />
-          {icon && <span className={styles.icon}>{icon}</span>}
+          {icon &&
+            <span className={styles.icon}>
+              {icon}
+            </span>}
         </span>
         <CSSTransitionGroup
           transitionName="options"
@@ -97,7 +102,9 @@ class ToggleMenu extends React.Component<Props, State> {
               })}
             >
               {React.Children.map(children, child =>
-                <div className={styles.option}>{child}</div>,
+                <div className={styles.option}>
+                  {child}
+                </div>,
               )}
             </div>}
         </CSSTransitionGroup>
