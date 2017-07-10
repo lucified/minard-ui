@@ -73,8 +73,6 @@ class ProjectSettingsDialog extends React.Component<Props> {
   }
 
   private editSuccess() {
-    trackEvent('project-edited');
-
     this.clearAndClose();
   }
 

@@ -3,7 +3,6 @@ import { connect, Dispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { push } from 'react-router-redux';
 
-import { update as updateIntercom } from '../../intercom';
 import Commits, { Commit } from '../../modules/commits';
 import Deployments, { Deployment } from '../../modules/deployments';
 import { FetchError, isFetchError } from '../../modules/errors';
@@ -72,9 +71,6 @@ class DeploymentView extends React.Component<Props> {
     }
 
     loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
-
-    // Don't show Intercom chat launcher when previews are open
-    updateIntercom({ hide_default_launcher: true });
   }
 
   public componentWillReceiveProps(nextProps: Props) {
@@ -96,10 +92,6 @@ class DeploymentView extends React.Component<Props> {
 
       loadPreviewAndComments(id, entityType, token, isUserLoggedIn);
     }
-  }
-
-  public componentWillUnmount() {
-    updateIntercom({ hide_default_launcher: false });
   }
 
   private redirectToApp() {
