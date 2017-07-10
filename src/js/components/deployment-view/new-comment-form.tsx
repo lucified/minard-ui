@@ -39,7 +39,7 @@ const validate = (values: CreateCommentFormData) => {
   return errors;
 };
 
-class NewCommentForm extends React.Component<Props, void> {
+class NewCommentForm extends React.Component<Props> {
   private commentFieldRef: HTMLElement;
   private emailFieldRef: HTMLElement;
   private focusTimeoutId: any;

@@ -8,7 +8,7 @@ interface Props {
   action?: () => void;
 }
 
-export default class ErrorDialog extends React.Component<Props, void> {
+export default class ErrorDialog extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
@@ -20,7 +20,11 @@ export default class ErrorDialog extends React.Component<Props, void> {
 
     const getTitle = () => {
       if (title) {
-        return <h4 className={styles.header}>{title}</h4>;
+        return (
+          <h4 className={styles.header}>
+            {title}
+          </h4>
+        );
       }
       return undefined;
     };
@@ -29,7 +33,9 @@ export default class ErrorDialog extends React.Component<Props, void> {
       if (action && actionText) {
         return (
           <div className={styles['button-container']}>
-            <button onClick={this.handleButtonClick}>{actionText}</button>
+            <button onClick={this.handleButtonClick}>
+              {actionText}
+            </button>
           </div>
         );
       }

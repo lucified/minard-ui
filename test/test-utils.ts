@@ -7,7 +7,12 @@ import { expect } from 'chai';
 import { Action } from 'redux';
 import { call, Effect, fork, put, select } from 'redux-saga/effects';
 
-import { Api, ApiEntityResponse, ApiResult, ApiTeam } from '../src/js/api/types';
+import {
+  Api,
+  ApiEntityResponse,
+  ApiResult,
+  ApiTeam,
+} from '../src/js/api/types';
 import { Branch } from '../src/js/modules/branches';
 import { Commit } from '../src/js/modules/commits';
 import { Deployment } from '../src/js/modules/deployments';
@@ -41,8 +46,13 @@ export function createApi(): Api {
     },
     Comment: {
       fetchForDeployment: (_id: string) => Promise.resolve(emptyResponse),
-      create: (_deployment: string, _message: string, _email: string, _name: string) => Promise.resolve(emptyResponse),
-      delete: (_id: string) => Promise.resolve({ response: {}}),
+      create: (
+        _deployment: string,
+        _message: string,
+        _email: string,
+        _name: string,
+      ) => Promise.resolve(emptyResponse),
+      delete: (_id: string) => Promise.resolve({ response: {} }),
     },
     Commit: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
@@ -58,20 +68,24 @@ export function createApi(): Api {
     Project: {
       fetchAll: () => Promise.resolve(emptyResponse),
       fetch: (_id: string) => Promise.resolve(emptyResponse),
-      create: (_name: string, _description?: string) => Promise.resolve(emptyResponse),
-      edit: (_id: string, _newAttributes: { description?: string, name?: string }) =>
+      create: (_name: string, _description?: string) =>
         Promise.resolve(emptyResponse),
-      delete: (_id: string) => Promise.resolve({ response: {}}),
+      edit: (
+        _id: string,
+        _newAttributes: { description?: string; name?: string },
+      ) => Promise.resolve(emptyResponse),
+      delete: (_id: string) => Promise.resolve({ response: {} }),
     },
     Team: {
-      fetch: () => Promise.resolve({ response: { id: 1, name: 'name' } as ApiTeam }),
+      fetch: () =>
+        Promise.resolve({ response: { id: 1, name: 'name' } as ApiTeam }),
     },
     User: {
       signup: () => Promise.resolve({ response: {
         password: 'secretPass',
         team: { id: 1, name: 'name' } as ApiTeam },
       }),
-      logout: () => Promise.resolve({}),
+      logout: () => Promise.resolve({ response: {} }),
     },
   };
 }
@@ -79,7 +93,10 @@ export function createApi(): Api {
 export function testLoaderSaga(
   name: string,
   loader: (action: any) => IterableIterator<Effect>,
-  selector: (state: StateTree, id: string) => Branch | Commit | Deployment | Project | FetchError | undefined,
+  selector: (
+    state: StateTree,
+    id: string,
+  ) => Branch | Commit | Deployment | Project | FetchError | undefined,
   fetcher: (id: string) => IterableIterator<Effect>,
   ensurer: (id: string) => IterableIterator<Effect | Effect[]>,
 ) {
@@ -93,17 +110,11 @@ export function testLoaderSaga(
     it('fetches the entity and ensures data if it does not exist', () => {
       const iterator = loader(action);
 
-      expect(iterator.next().value).to.deep.equal(
-        select(selector, id),
-      );
+      expect(iterator.next().value).to.deep.equal(select(selector, id));
 
-      expect(iterator.next().value).to.deep.equal(
-        call(fetcher, id),
-      );
+      expect(iterator.next().value).to.deep.equal(call(fetcher, id));
 
-      expect(iterator.next(true).value).to.deep.equal(
-        fork(ensurer, id),
-      );
+      expect(iterator.next(true).value).to.deep.equal(fork(ensurer, id));
 
       expect(iterator.next().done).to.equal(true);
     });
@@ -111,13 +122,9 @@ export function testLoaderSaga(
     it('does not ensure data if fetching fails', () => {
       const iterator = loader(action);
 
-      expect(iterator.next().value).to.deep.equal(
-        select(selector, id),
-      );
+      expect(iterator.next().value).to.deep.equal(select(selector, id));
 
-      expect(iterator.next().value).to.deep.equal(
-        call(fetcher, id),
-      );
+      expect(iterator.next().value).to.deep.equal(call(fetcher, id));
 
       expect(iterator.next(false).done).to.equal(true);
     });
@@ -125,13 +132,9 @@ export function testLoaderSaga(
     it('still ensures data even if entity already exists', () => {
       const iterator = loader(action);
 
-      expect(iterator.next().value).to.deep.equal(
-        select(selector, id),
-      );
+      expect(iterator.next().value).to.deep.equal(select(selector, id));
 
-      expect(iterator.next({ id }).value).to.deep.equal(
-        fork(ensurer, id),
-      );
+      expect(iterator.next({ id }).value).to.deep.equal(fork(ensurer, id));
 
       expect(iterator.next().done).to.equal(true);
     });
@@ -163,13 +166,11 @@ export function testEntityFetcherSaga<ApiParams>(
         put(requestActionCreators.REQUEST.actionCreator(id)),
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        call(apiCall, id),
-      );
+      expect(iterator.next().value).to.deep.equal(call(apiCall, id));
 
-      expect(iterator.next({ response: responseNoInclude }).value).to.deep.equal(
-        call(converter as any, responseNoInclude.data),
-      );
+      expect(
+        iterator.next({ response: responseNoInclude }).value,
+      ).to.deep.equal(call(converter as any, responseNoInclude.data));
 
       expect(iterator.next(objectsToStore).value).to.deep.equal(
         put(storeActionCreator(objectsToStore)),
@@ -191,9 +192,7 @@ export function testEntityFetcherSaga<ApiParams>(
         put(requestActionCreators.REQUEST.actionCreator(id)),
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        call(apiCall, id),
-      );
+      expect(iterator.next().value).to.deep.equal(call(apiCall, id));
 
       if (response.included && response.included.length > 0) {
         expect(iterator.next({ response }).value).to.deep.equal(
@@ -211,12 +210,18 @@ export function testEntityFetcherSaga<ApiParams>(
         put(requestActionCreators.REQUEST.actionCreator(id)),
       );
 
-      expect(iterator.next().value).to.deep.equal(
-        call(apiCall, id),
-      );
+      expect(iterator.next().value).to.deep.equal(call(apiCall, id));
 
-      expect(iterator.next({ error: errorMessage, details }).value).to.deep.equal(
-        put(requestActionCreators.FAILURE.actionCreator(id, errorMessage, details)),
+      expect(
+        iterator.next({ error: errorMessage, details }).value,
+      ).to.deep.equal(
+        put(
+          requestActionCreators.FAILURE.actionCreator(
+            id,
+            errorMessage,
+            details,
+          ),
+        ),
       );
 
       const endResult = iterator.next();

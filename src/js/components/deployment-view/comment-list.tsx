@@ -23,7 +23,7 @@ interface GeneratedStateProps {
 
 type Props = PassedProps & GeneratedStateProps;
 
-class CommentList extends React.Component<Props, void> {
+class CommentList extends React.Component<Props> {
   public constructor(props: Props) {
     super(props);
 
@@ -74,7 +74,7 @@ class CommentList extends React.Component<Props, void> {
 
   private listRef: HTMLElement;
 
-  private storeListRef(ref: HTMLElement) {
+  private storeListRef(ref: HTMLDivElement) {
     this.listRef = ref;
   }
 

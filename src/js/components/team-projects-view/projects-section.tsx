@@ -40,8 +40,8 @@ interface GeneratedDispatchProps {
 type Props = PassedProps & GeneratedDispatchProps & GeneratedStateProps;
 type PropsWithDefaults = Props & DefaultProps;
 
-class ProjectsSection extends React.Component<Props, void> {
-  public defaultProps = {
+class ProjectsSection extends React.Component<Props> {
+  public defaultProps: DefaultProps = {
     showAll: false,
   };
 
@@ -86,9 +86,7 @@ class ProjectsSection extends React.Component<Props, void> {
             </a>
           }
         >
-          <span>
-            Projects
-          </span>
+          <span>Projects</span>
         </SimpleSectionTitle>
         <FlipMove
           className={classNames({

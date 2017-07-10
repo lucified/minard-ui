@@ -37,7 +37,7 @@ function getParentElement() {
   return document.querySelector('#minard-app') as HTMLElement;
 }
 
-class NewProjectDialog extends React.Component<Props, void> {
+class NewProjectDialog extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 

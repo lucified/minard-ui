@@ -37,7 +37,7 @@ interface GeneratedDispatchProps {
 
 type Props = GeneratedProps & GeneratedDispatchProps;
 
-class SubHeader extends React.Component<Props, void> {
+class SubHeader extends React.Component<Props> {
   private getLeftContent() {
     const { openPageType, project, branch, team } = this.props;
     const items: JSX.Element[] = [
@@ -84,7 +84,11 @@ class SubHeader extends React.Component<Props, void> {
         );
       }
     }
-    return <span>{items}</span>;
+    return (
+      <span>
+        {items}
+      </span>
+    );
   }
 
   private getRightContent() {
@@ -101,9 +105,7 @@ class SubHeader extends React.Component<Props, void> {
           <div className={styles['project-settings']}>
             <Icon className={styles.icon} name="gear" />
             <div className={styles['project-settings-text']}>
-              <a onClick={openProjectSettingsDialog}>
-                Project settings
-              </a>
+              <a onClick={openProjectSettingsDialog}>Project settings</a>
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@ interface Props {
   className?: string;
 }
 
-class MinardLink extends React.Component<Props, void> {
+class MinardLink extends React.Component<Props> {
   public render() {
     const {
       branch,
@@ -62,7 +62,11 @@ class MinardLink extends React.Component<Props, void> {
         );
       }
 
-      return <span className={className}>{children}</span>;
+      return (
+        <span className={className}>
+          {children}
+        </span>
+      );
     } else if (preview) {
       const {
         deployment,
@@ -81,12 +85,17 @@ class MinardLink extends React.Component<Props, void> {
           : ''}`;
       } else if (deployment) {
         // Link to build log if deployment is not ready
-        path = deployment.url && !buildLog
-          ? `/preview/deployment/${deployment.id}/${deployment.token}`
-          : `/preview/deployment/${deployment.id}/${deployment.token}/log`;
+        path =
+          deployment.url && !buildLog
+            ? `/preview/deployment/${deployment.id}/${deployment.token}`
+            : `/preview/deployment/${deployment.id}/${deployment.token}/log`;
       } else {
         console.error('Insufficient data for preview!', preview);
-        return <span className={className}>{children}</span>;
+        return (
+          <span className={className}>
+            {children}
+          </span>
+        );
       }
     } else if (comment) {
       const { deployment } = comment;
@@ -95,7 +104,11 @@ class MinardLink extends React.Component<Props, void> {
           'Missing deployment information for comment link!',
           comment,
         );
-        return <span className={className}>{children}</span>;
+        return (
+          <span className={className}>
+            {children}
+          </span>
+        );
       }
 
       path = `/preview/deployment/${deployment.id}/${deployment.token}/comment/${comment
@@ -114,14 +127,19 @@ class MinardLink extends React.Component<Props, void> {
 
       path = `/project/${projectId}/branch/${branchId}`;
     } else if (project) {
-      const projectId = typeof project.project === 'string'
-        ? project.project as string
-        : project.project.id;
+      const projectId =
+        typeof project.project === 'string'
+          ? project.project as string
+          : project.project.id;
       path = `/project/${projectId}${showAll ? '/all' : ''}`;
     } else if (homepage) {
       path = `/projects${showAll ? '/all' : ''}`;
     } else {
-      return <span className={className}>{children}</span>;
+      return (
+        <span className={className}>
+          {children}
+        </span>
+      );
     }
 
     return (

@@ -11,7 +11,7 @@ interface Props {
 
 const CommentActivity = ({ activity }: Props) => {
   const comment = {
-    ...activity.comment,
+    ...activity.comment!,
     deployment: activity.deployment.id,
     timestamp: activity.timestamp,
   };

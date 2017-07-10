@@ -47,7 +47,7 @@ const reloadPage = (e: React.MouseEvent<HTMLElement>) => {
   location.reload(true);
 };
 
-class Header extends React.Component<Props, void> {
+class Header extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
@@ -113,11 +113,7 @@ class Header extends React.Component<Props, void> {
       );
     } else if (connectionState === ConnectionState.CONNECTING) {
       errorClass = styles['connection-box'];
-      errorContent = (
-        <div>
-          Hold on, connecting...
-        </div>
-      );
+      errorContent = <div>Hold on, connecting...</div>;
     }
 
     if (errorContent && errorClass) {

@@ -64,10 +64,7 @@ const spaceToHyphen = (value?: string): string | undefined =>
 const normalizeProjectName = (value?: string): string | undefined =>
   spaceToHyphen(toLowerCase(value));
 
-class ProjectSettingsForm extends React.Component<
-  Props & GeneratedStateProps,
-  void
-> {
+class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps> {
   constructor(props: GeneratedStateProps & Props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
@@ -172,9 +169,7 @@ class ProjectSettingsForm extends React.Component<
                   action="Delete project"
                   onConfirm={deleteProject}
                 >
-                  <a className={styles.delete}>
-                    Delete project
-                  </a>
+                  <a className={styles.delete}>Delete project</a>
                 </Confirmable>}
           </div>
         </footer>
@@ -192,7 +187,7 @@ const mapStateToProps = (
   return {
     isProjectNameEdited:
       !!visibleProjectName &&
-        visibleProjectName !== ownProps.initialValues.name,
+      visibleProjectName !== ownProps.initialValues.name,
   };
 };
 

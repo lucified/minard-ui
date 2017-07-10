@@ -9,7 +9,6 @@ import { StateTree } from '../reducers';
 import { logMessage } from '../logger';
 import BranchView from './branch-view';
 import ErrorDialog from './common/error-dialog';
-import Footer from './footer';
 import Header from './header';
 import ProjectView from './project-view';
 import SubHeader from './sub-header';
@@ -29,7 +28,7 @@ interface GeneratedStateProps {
 
 type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
-class ProjectsFrame extends React.Component<Props, void> {
+class ProjectsFrame extends React.Component<Props> {
   public componentWillMount() {
     const { loadAllProjects, team } = this.props;
 
@@ -68,8 +67,8 @@ class ProjectsFrame extends React.Component<Props, void> {
             action={this.redirectToLogin}
           >
             <p>
-              Unable to load Minard. If this problem persists,
-              contact <a href="mailto:support@minard.io">support@minard.io</a>.
+              Unable to load Minard. If this problem persists, contact{' '}
+              <a href="mailto:support@minard.io">support@minard.io</a>.
             </p>
           </ErrorDialog>
         </div>
@@ -88,7 +87,6 @@ class ProjectsFrame extends React.Component<Props, void> {
           <Route path="/project/:projectId/:show?" component={ProjectView} />
           <Route path="/projects/:show?" component={TeamProjectsView} />
         </Switch>
-        <Footer />
       </div>
     );
   }

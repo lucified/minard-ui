@@ -21,8 +21,12 @@ interface Props {
 
 const getEmptyContent = (header: string, body: string) =>
   <div className={styles.empty}>
-    <h2>{header}</h2>
-    <p>{body}</p>
+    <h2>
+      {header}
+    </h2>
+    <p>
+      {body}
+    </p>
   </div>;
 
 // Group activities by actions related to the same deployment.
@@ -33,7 +37,7 @@ const generateDeploymentGroups = (activities: Activity[]): Activity[][] => {
   );
 };
 
-class ActivityList extends React.Component<Props, void> {
+class ActivityList extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 

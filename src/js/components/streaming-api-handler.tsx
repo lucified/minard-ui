@@ -154,7 +154,8 @@ interface DeleteProjectResponse {
   id: string;
 }
 
-let streamingAPIUrl: string = process.env.STREAMING_API || process.env.CHARLES;
+let streamingAPIUrl: string | undefined =
+  process.env.STREAMING_API || process.env.CHARLES;
 if (streamingAPIUrl) {
   // Remove trailing /
   streamingAPIUrl = streamingAPIUrl.replace(/\/$/, '');
@@ -174,7 +175,7 @@ const toConnectionState = (state: any): ConnectionState => {
   }
 };
 
-class StreamingAPIHandler extends React.Component<Props, void> {
+class StreamingAPIHandler extends React.Component<Props> {
   private _source: any;
 
   constructor(props: Props) {
@@ -356,9 +357,10 @@ class StreamingAPIHandler extends React.Component<Props, void> {
 
       this.props.updateBranchWithCommits(branch.id, after, commits, parents);
 
-      const latestActivityTimestamp: number | undefined = commits.length > 0
-        ? commits[0].committer.timestamp
-        : branch.latestActivityTimestamp;
+      const latestActivityTimestamp: number | undefined =
+        commits.length > 0
+          ? commits[0].committer.timestamp
+          : branch.latestActivityTimestamp;
 
       if (latestActivityTimestamp) {
         this.props.updateLatestActivityTimestampForProject(
