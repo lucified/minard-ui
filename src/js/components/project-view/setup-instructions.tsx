@@ -19,21 +19,19 @@ const SetupInstructions = ({ project }: Props) => {
   return (
     <div className={styles.instructions}>
       <div className={styles.section}>
-        <div className={styles.label}>
-          Code repository
-        </div>
+        <div className={styles.label}>Code repository</div>
         <div className={styles.text}>
           The URL for this project's Git repository is
         </div>
         <div className={styles.code}>
-          <pre onClick={selectText}>{project.repoUrl}</pre>
+          <pre onClick={selectText}>
+            {project.repoUrl}
+          </pre>
         </div>
 
         {!projectIsEmpty &&
           <div>
-            <div className={styles.text}>
-              Clone the repository with:
-            </div>
+            <div className={styles.text}>Clone the repository with:</div>
             <div className={styles.code}>
               <pre onClick={selectText}>
                 git clone -o minard {project.repoUrl}
@@ -46,22 +44,20 @@ const SetupInstructions = ({ project }: Props) => {
             </div>
             <div className={styles.code}>
               <pre>
-                git remote add minard {project.repoUrl}<br />
+                git remote add minard {project.repoUrl}
+                <br />
                 git remote set-url --add origin {project.repoUrl}
               </pre>
             </div>
           </div>}
 
-        <div className={styles.label}>
-          Building the project
-        </div>
+        <div className={styles.label}>Building the project</div>
 
         <div className={styles.text}>
           By default, Minard will not build your project. The preview will be
-          the root of your git repository. You can enable builds and change
-          the deployment root folder by including a <code>minard.json</code>
-          {' '}file
-          in your repository. It has the following format:
+          the root of your git repository. You can enable builds and change the
+          deployment root folder by including a <code>minard.json</code> file in
+          your repository. It has the following format:
         </div>
         <div className={styles.code}>
           <pre onClick={selectText}>

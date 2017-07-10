@@ -45,7 +45,9 @@ const BranchSummary = (props: Props) => {
         <div className={styles['commit-content']}>
           <div className={styles.error}>
             <p>Error loading deployment</p>
-            <small>{latestSuccessfulDeployment.prettyError}</small>
+            <small>
+              {latestSuccessfulDeployment.prettyError}
+            </small>
           </div>
         </div>
       );
@@ -54,15 +56,16 @@ const BranchSummary = (props: Props) => {
         <div className={styles['commit-content']}>
           <div className={styles.error}>
             <p>Error loading commit</p>
-            <small>{latestSuccessfullyDeployedCommit.prettyError}</small>
+            <small>
+              {latestSuccessfullyDeployedCommit.prettyError}
+            </small>
           </div>
         </div>
       );
     } else {
       const { author, committer } = latestSuccessfullyDeployedCommit;
-      const otherAuthorEmail = author.email !== committer.email
-        ? committer.email
-        : undefined;
+      const otherAuthorEmail =
+        author.email !== committer.email ? committer.email : undefined;
       commitContent = (
         <div className={styles['commit-content']}>
           <div className={styles.avatar}>
@@ -96,7 +99,9 @@ const BranchSummary = (props: Props) => {
       <div className={classNames(styles.main)}>
         <MinardLink branch={{ branch }} className={classNames(styles.content)}>
           <div className={styles.header}>
-            <div className={styles.title}>{branch.name}</div>
+            <div className={styles.title}>
+              {branch.name}
+            </div>
           </div>
         </MinardLink>
         <BuildStatus
@@ -116,9 +121,7 @@ const BranchSummary = (props: Props) => {
           ? <MinardLink preview={{ branch }}>
               <div className={styles.link}>
                 <Icon name="eye" />
-                <div className={styles['link-text']}>
-                  Latest preview
-                </div>
+                <div className={styles['link-text']}>Latest preview</div>
               </div>
             </MinardLink>
           : <div className={classNames(styles.link, styles['link-disabled'])}>

@@ -58,9 +58,7 @@ const SingleComment = ({
             (deletionInProgress
               ? 'Deleting...'
               : <SimpleConfirmable action="Delete" onConfirm={deleteComment}>
-                  <a className={styles.delete}>
-                    Delete
-                  </a>
+                  <a className={styles.delete}>Delete</a>
                 </SimpleConfirmable>)}
         </div>
         <div className={styles.metadata}>

@@ -48,9 +48,8 @@ export const addBranchesToProject = (
   id: string,
   branchIds: string[] | string,
 ): AddBranchesToProjectAction => {
-  const branches: string[] = typeof branchIds === 'string'
-    ? [branchIds]
-    : branchIds;
+  const branches: string[] =
+    typeof branchIds === 'string' ? [branchIds] : branchIds;
 
   return {
     type: ADD_BRANCHES_TO_PROJECT,

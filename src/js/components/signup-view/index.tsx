@@ -68,10 +68,12 @@ class SignupView extends React.Component<Props, State> {
     if (teamToken) {
       // This is loaded initially when the user arrives at the page
       this.setState({ auth0Error: undefined });
-      this.auth0.authorize({
-        connection: 'Username-Password-Authentication',
-        team_token: teamToken,
-      } as any); // team_token is Minard's custom field
+      this.auth0.authorize(
+        {
+          connection: 'Username-Password-Authentication',
+          team_token: teamToken,
+        } as any,
+      ); // team_token is Minard's custom field
     } else {
       // Once the user has signed up at Auth0, they are returned to this page
       // with a hash in the URL. This function parses that hash and initiates

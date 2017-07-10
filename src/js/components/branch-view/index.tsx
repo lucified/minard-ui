@@ -77,8 +77,12 @@ class BranchView extends React.Component<Props, StateTree> {
     return (
       <div className={styles.error}>
         <h2>Unable to load branch</h2>
-        <p><a onClick={this.reloadPage}>Click to reload</a></p>
-        <small>{error.prettyError}</small>
+        <p>
+          <a onClick={this.reloadPage}>Click to reload</a>
+        </p>
+        <small>
+          {error.prettyError}
+        </small>
       </div>
     );
   }
