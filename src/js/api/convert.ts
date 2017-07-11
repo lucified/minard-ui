@@ -81,6 +81,7 @@ const createProjectObject = (project: ResponseProjectElement): Project => {
     latestSuccessfullyDeployedCommit,
     repoUrl: project.attributes['repo-url'],
     token: project.attributes.token,
+    webhookUrl: project.attributes['webhook-url'],
   };
 };
 
