@@ -10,7 +10,7 @@ import { Commit, CommitState } from './types';
 
 describe('Commits reducer', () => {
   const stateWithoutExistingEntity: CommitState = {
-    098325343: {
+    '098325343': {
       id: '098325343',
       hash: '0123456789abcdef',
       author: {
