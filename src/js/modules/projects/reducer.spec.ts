@@ -40,6 +40,7 @@ describe('Projects reducer', () => {
       ],
       repoUrl: 'http://mock.repo.url/project.git',
       token: 'testtoken',
+      webhookUrl: 'http://foo.webhook.url',
     },
     2: {
       id: '2',
@@ -51,6 +52,7 @@ describe('Projects reducer', () => {
       activeUsers: [],
       repoUrl: 'http://mock.repo.url/project.git',
       token: 'testtoken',
+      webhookUrl: 'http://foo.webhook.url',
     },
   };
 
@@ -65,6 +67,7 @@ describe('Projects reducer', () => {
       branches: undefined,
       repoUrl: 'http://mock.repo.url/project.git',
       token: 'testtoken',
+      webhookUrl: 'http://foo.webhook.url',
     },
   };
 
@@ -83,6 +86,7 @@ describe('Projects reducer', () => {
       ],
       repoUrl: 'http://mock.repo.url/project.git',
       token: 'testtoken',
+      webhookUrl: 'http://foo.webhook.url',
     },
     1: {
       id: '1',
@@ -98,6 +102,7 @@ describe('Projects reducer', () => {
       ],
       repoUrl: 'http://mock.repo.url/project.git',
       token: 'testtoken',
+      webhookUrl: 'http://foo.webhook.url',
     },
   };
 

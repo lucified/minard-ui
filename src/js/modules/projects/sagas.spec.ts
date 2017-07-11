@@ -150,6 +150,7 @@ describe('Projects sagas', () => {
           activeUsers: [],
           repoUrl: 'http://mock.repo.url/project.git',
           token: 'testtoken',
+          webhookUrl: 'http://foo.webhook.url',
         },
         {
           id: '2',
@@ -158,6 +159,7 @@ describe('Projects sagas', () => {
           activeUsers: [],
           repoUrl: 'http://mock.repo.url/project.git',
           token: 'testtoken',
+          webhookUrl: 'http://foo.webhook.url',
         },
       ];
 
@@ -189,6 +191,7 @@ describe('Projects sagas', () => {
         activeUsers: [],
         repoUrl: 'http://mock.repo.url/project.git',
         token: 'testtoken',
+        webhookUrl: 'http://foo.webhook.url',
       };
       const commit: Commit = {
         id: 'abc',
@@ -227,6 +230,7 @@ describe('Projects sagas', () => {
         activeUsers: [],
         repoUrl: 'http://mock.repo.url/project.git',
         token: 'testtoken',
+        webhookUrl: 'http://foo.webhook.url',
       };
 
       const iterator = sagaFunctions.ensureProjectRelatedDataLoaded(project);
@@ -428,6 +432,7 @@ describe('Projects sagas', () => {
         activeUsers: [],
         repoUrl: '',
         token: 'testtoken',
+        webhookUrl: 'http://foo.webhook.url',
       },
     };
 
