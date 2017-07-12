@@ -148,6 +148,7 @@ export interface ResponseProjectElement {
     'latest-activity-timestamp'?: string;
     'repo-url': string;
     token: string;
+    'webhook-url'?: string;
   };
   relationships?: {
     'latest-successfully-deployed-commit'?: {
