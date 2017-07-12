@@ -76,8 +76,9 @@ const SetupInstructions = ({ project }: Props) => {
 
         <div className={styles.label}>GitHub webhook URL</div>
         <div className={styles.text}>
-          Configure this URL as Webhook in GitHub to sync code from GitHub to
-          Minard. Make sure the content-type is application/json.
+          To sync code from GitHub to Minard, add the following URL as a webhook
+          to a project in GitHub. Make sure the content-type is set to
+          'application/json'.
         </div>
         <div className={styles.code}>
           <pre onClick={selectText}>
