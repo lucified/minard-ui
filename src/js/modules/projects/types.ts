@@ -16,7 +16,7 @@ export interface Project {
   activeUsers: ProjectUser[];
   repoUrl: string;
   token: string;
-  webhookUrl: string;
+  webhookUrl?: string;
 }
 
 export interface ProjectState {
