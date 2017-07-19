@@ -21,7 +21,7 @@ The main technologies used to build minard-ui are:
 
 ## Requirements
 
-Node.js version 6, yarn and tslint must be installed.
+Node.js version 7, yarn and tslint must be installed.
 
 ```shell
 brew update
