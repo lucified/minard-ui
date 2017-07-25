@@ -93,7 +93,9 @@ async function connectToApi<ResponseType>(
 
     throw json;
   } catch (error) {
-    logMessage('Error while calling API', { path, error }, 'info');
+    if (!error.unauthorized) {
+      logMessage('Error while calling API', { path, error }, 'info');
+    }
 
     return generateErrorObject(error);
   }
