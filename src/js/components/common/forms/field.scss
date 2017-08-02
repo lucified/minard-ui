@@ -33,7 +33,8 @@
     top: 8px;
   }
 
-  input, textarea {
+  input,
+  textarea {
     /* Moved to handle icon */
     position: relative;
     left: 22px;
@@ -63,7 +64,8 @@
   ::placeholder {
     opacity: 0.2;
   }
-  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
     opacity: 0.2;
   }
 

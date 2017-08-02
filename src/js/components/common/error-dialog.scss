@@ -41,7 +41,8 @@
     margin-top: 0;
   }
 
-  strong, bold {
+  strong,
+  bold {
     @include nitti-grotesk-medium;
   }
 

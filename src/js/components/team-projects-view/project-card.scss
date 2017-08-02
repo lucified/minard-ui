@@ -93,7 +93,8 @@
   margin-right: 6px;
 }
 
-.author, .target {
+.author,
+.target {
   @include nitti-grotesk-bold;
 }
 
@@ -170,6 +171,6 @@
 .no-screenshot-inner {
   max-width: 200px;
   opacity: 0.7;
-  color: #FCFCFC;
+  color: #fcfcfc;
   @include font-size-L;
 }

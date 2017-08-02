@@ -17,7 +17,8 @@
   margin: 0;
 }
 
-.link.active, .link.active:hover {
+.link.active,
+.link.active:hover {
   border-bottom: $minard-light-cyan 5px solid;
 }
 
@@ -39,10 +40,10 @@
 }
 
 .cover {
-  position:absolute;
-  width:100%;
-  height:100%;
-  top:0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
   left: 0;
 
   z-index: 1;

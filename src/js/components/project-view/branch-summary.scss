@@ -39,7 +39,8 @@
   }
 }
 
-.empty, .error {
+.empty,
+.error {
   color: $minard-mid-gray;
   small {
     @include nitti;
@@ -92,7 +93,7 @@
 }
 
 .commit-content {
-  padding: 0px $default-margin $default-margin $default-margin ;
+  padding: 0px $default-margin $default-margin $default-margin;
   display: flex;
   align-items: center;
   color: $minard-mid-gray;

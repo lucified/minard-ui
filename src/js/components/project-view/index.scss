@@ -28,7 +28,7 @@
 
 .branches {
   display: none;
-  @media(min-width: $breakpoint-sm) {
+  @media (min-width: $breakpoint-sm) {
     display: block;
   }
 }

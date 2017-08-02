@@ -48,7 +48,8 @@
   overflow: hidden;
   border: 1px solid $minard-lightest-gray;
 
-  a { // TODO: remove if MinardLink is removed
+  a {
+    // TODO: remove if MinardLink is removed
     line-height: 0;
   }
 
@@ -61,7 +62,6 @@
 
 .links-wrap {
   @include basicPadding;
-
 }
 
 .links {
@@ -110,7 +110,8 @@
   }
 }
 
-.metadata-branch, .metadata-project {
+.metadata-branch,
+.metadata-project {
   white-space: nowrap;
   @include nitti-grotesk-bold;
 

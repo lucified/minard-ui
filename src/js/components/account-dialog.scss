@@ -33,7 +33,8 @@
   color: $minard-red;
 }
 
-.url, .clickable {
+.url,
+.clickable {
   color: $minard-cyan;
   @include nitti-grotesk-medium;
   @include font-size-M;

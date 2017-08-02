@@ -5,7 +5,8 @@
   margin-bottom: 4px;
   position: relative;
 
-  input, textarea {
+  input,
+  textarea {
     background: white;
     border: 1px solid $minard-lightest-gray;
     border-radius: 3px;
@@ -19,7 +20,8 @@
     line-height: 22px;
     color: $minard-dark-blue;
 
-    &[disabled=disabled], &:disabled {
+    &[disabled=disabled],
+    &:disabled {
       color: $minard-mid-gray;
       background: $minard-lightest-gray;
     }
@@ -32,7 +34,8 @@
   ::placeholder {
     color: $minard-mid-gray;
   }
-  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
     color: $minard-mid-gray;
   }
 
