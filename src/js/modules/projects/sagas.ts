@@ -301,7 +301,7 @@ export default function createSagas(api: Api) {
       const projectObject = yield call(toProjects, response.data);
       yield put(storeProjects(projectObject));
 
-      // Notify form that creation was a success
+      // Notify that setting visibility was a success
       yield put(
         Requests.actions.Projects.SetProjectVisibility.SUCCESS.actionCreator(
           projectObject[0],
@@ -312,7 +312,7 @@ export default function createSagas(api: Api) {
     } else {
       // Restore the old value
       yield put(storeProjects([project]));
-      // Notify form that creation failed
+      // Notify that setting visibility failed
       yield put(
         Requests.actions.Projects.SetProjectVisibility.FAILURE.actionCreator(
           id,
