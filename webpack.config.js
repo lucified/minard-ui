@@ -297,6 +297,7 @@ const config = {
     // https://github.com/webpack/webpack/issues/3128
     // https://github.com/moment/moment/issues/2517
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.ModuleConcatenationPlugin(),
   ],
 };
 
