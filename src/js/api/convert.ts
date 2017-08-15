@@ -82,6 +82,7 @@ const createProjectObject = (project: ResponseProjectElement): Project => {
     repoUrl: project.attributes['repo-url'],
     token: project.attributes.token,
     webhookUrl: project.attributes['webhook-url'],
+    isPublic: project.attributes['is-public'],
   };
 };
 

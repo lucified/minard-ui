@@ -15,6 +15,7 @@ export interface Project {
   latestSuccessfullyDeployedCommit?: string;
   activeUsers: ProjectUser[];
   repoUrl: string;
+  isPublic: boolean;
   token: string;
   webhookUrl?: string;
 }

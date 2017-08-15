@@ -151,6 +151,7 @@ describe('Projects sagas', () => {
           repoUrl: 'http://mock.repo.url/project.git',
           token: 'testtoken',
           webhookUrl: 'http://foo.webhook.url',
+          isPublic: false,
         },
         {
           id: '2',
@@ -160,6 +161,7 @@ describe('Projects sagas', () => {
           repoUrl: 'http://mock.repo.url/project.git',
           token: 'testtoken',
           webhookUrl: 'http://foo.webhook.url',
+          isPublic: false,
         },
       ];
 
@@ -192,6 +194,7 @@ describe('Projects sagas', () => {
         repoUrl: 'http://mock.repo.url/project.git',
         token: 'testtoken',
         webhookUrl: 'http://foo.webhook.url',
+        isPublic: false,
       };
       const commit: Commit = {
         id: 'abc',
@@ -231,6 +234,7 @@ describe('Projects sagas', () => {
         repoUrl: 'http://mock.repo.url/project.git',
         token: 'testtoken',
         webhookUrl: 'http://foo.webhook.url',
+        isPublic: false,
       };
 
       const iterator = sagaFunctions.ensureProjectRelatedDataLoaded(project);
@@ -433,6 +437,7 @@ describe('Projects sagas', () => {
         repoUrl: '',
         token: 'testtoken',
         webhookUrl: 'http://foo.webhook.url',
+        isPublic: false,
       },
     };
 

@@ -149,6 +149,7 @@ export interface ResponseProjectElement {
     'repo-url': string;
     token: string;
     'webhook-url'?: string;
+    'is-public': boolean;
   };
   relationships?: {
     'latest-successfully-deployed-commit'?: {
