@@ -509,4 +509,12 @@ describe('Projects sagas', () => {
       expect(val.done).to.equal(true);
     });
   });
+
+  describe('setProjectVisibility', () => {
+    it('sets the project visibility as soon as the action is triggered');
+    it('calls the API with the correct settings');
+    it('keeps the new visibility after a successful server call');
+    it('sends a request success action once everything is ready');
+    it('reverts the changes if the API call fails');
+  });
 });
