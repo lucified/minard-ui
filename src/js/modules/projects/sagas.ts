@@ -282,7 +282,10 @@ export default function createSagas(api: Api) {
     action: SetProjectVisibilityAction,
   ): IterableIterator<Effect> {
     const { id, isPublic } = action;
+    const project: Project = yield select(getProject, id);
 
+    // Show changes optimistically in the UI. Revert changes if call fails
+    yield put(storeProjects([{ ...project, isPublic }]));
     yield put(
       Requests.actions.Projects.SetProjectVisibility.REQUEST.actionCreator(id),
     );
@@ -307,6 +310,8 @@ export default function createSagas(api: Api) {
 
       return true;
     } else {
+      // Restore the old value
+      yield put(storeProjects([project]));
       // Notify form that creation failed
       yield put(
         Requests.actions.Projects.SetProjectVisibility.FAILURE.actionCreator(
