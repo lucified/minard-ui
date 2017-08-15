@@ -275,12 +275,19 @@ const Project = {
         },
       },
     }),
-  edit: (id: string, newAttributes: { name?: string; description?: string }) =>
+  edit: (
+    id: string,
+    newAttributes: { name?: string; description?: string; isPublic?: boolean },
+  ) =>
     patchApi(`/api/projects/${id}`, {
       data: {
         type: 'projects',
         id,
-        attributes: newAttributes,
+        attributes: {
+          name: newAttributes.name,
+          description: newAttributes.description,
+          'is-public': newAttributes.isPublic,
+        },
       },
     }),
   delete: (id: string) => deleteApi(`/api/projects/${id}`),

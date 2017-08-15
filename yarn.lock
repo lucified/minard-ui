@@ -103,6 +103,12 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-toggle@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-toggle/-/react-toggle-4.0.0.tgz#aa87fa5f9116822fdb50575be61dbc5437907f1d"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-transition-group@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-1.1.2.tgz#a349e70788a6dc723a5f439217011ef926c27b4f"
@@ -5728,6 +5734,12 @@ react-select@^1.0.0-rc.5:
 react-timeago@^3.3.0:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/react-timeago/-/react-timeago-3.4.3.tgz#eb9061eefb044e4a2b09ce8c99d34645b2dbfa25"
+
+react-toggle@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-toggle/-/react-toggle-4.0.1.tgz#0e83e8c94d94232debfa21a938ff3d2b2106ec72"
+  dependencies:
+    classnames "^2.2.5"
 
 react-transform-catch-errors@^1.0.2:
   version "1.0.2"

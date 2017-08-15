@@ -84,6 +84,12 @@ export interface UpdateProjectAction {
   repoUrl: string;
 }
 
+export interface SetProjectVisibilityAction {
+  type: 'PROJECTS/SET_VISIBILITY';
+  id: string;
+  isPublic: boolean;
+}
+
 export interface RemoveProjectAction {
   type: 'PROJECTS/REMOVE_PROJECT';
   id: string;

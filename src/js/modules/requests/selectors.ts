@@ -84,6 +84,16 @@ export const isDeletingComment = (state: StateTree, id: string): boolean =>
       requestInfo.id === id,
   );
 
+export const isSettingVisibilityForProject = (
+  state: StateTree,
+  id: string,
+): boolean =>
+  !!selectRequestsTree(state).find(
+    requestInfo =>
+      requestInfo.type === actions.Projects.SetProjectVisibility.REQUEST.type &&
+      requestInfo.id === id,
+  );
+
 export const isLoadingCommitsForBranch = (
   state: StateTree,
   id: string,

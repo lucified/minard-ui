@@ -61,7 +61,11 @@ export interface Api {
     ) => Promise<ApiResult<ApiEntityResponse>>;
     edit: (
       id: string,
-      newAttributes: { description?: string; name?: string },
+      newAttributes: {
+        description?: string;
+        name?: string;
+        isPublic?: boolean;
+      },
     ) => Promise<ApiResult<ApiEntityResponse>>;
     delete: (id: string) => Promise<ApiResult<{}>>;
   };
