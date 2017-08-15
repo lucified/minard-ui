@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
 import Icon = require('react-fontawesome');
+import { CSSTransitionGroup } from 'react-transition-group';
 
 const styles = require('./toggle-menu.scss');
 

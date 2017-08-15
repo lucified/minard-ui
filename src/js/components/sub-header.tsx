@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
 import Icon = require('react-fontawesome');
+import { connect, Dispatch } from 'react-redux';
 
 import Branches, { Branch } from '../modules/branches';
 import { FetchError, isFetchError } from '../modules/errors';

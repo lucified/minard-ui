@@ -1,8 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import Icon = require('react-fontawesome');
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
-import Icon = require('react-fontawesome');
 
 import { Branch } from '../../modules/branches';
 import Commits, { Commit } from '../../modules/commits';
