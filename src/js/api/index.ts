@@ -263,7 +263,7 @@ const Project = {
         attributes: {
           name,
           description,
-          templateProjectId: projectTemplate,
+          'template-project-id': projectTemplate,
         },
         relationships: {
           team: {
