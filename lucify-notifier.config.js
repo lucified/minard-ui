@@ -16,7 +16,6 @@ module.exports = {
     environment: deployConfig.env,
   },
   github: {
-    s3_credentials: 'lucify-configuration/lucify-notifier/github_integration_credentials.json',
     deploymentOptions: {
       transient_environment: true,
     },
