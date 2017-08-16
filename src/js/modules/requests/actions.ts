@@ -217,6 +217,7 @@ export const Projects = {
   CreateProject: createEntityActionCreators('PROJECTS/CREATE_PROJECT'),
   EditProject: editEntityActionCreators('PROJECTS/EDIT_PROJECT'),
   DeleteProject: deleteEntityActionCreators('PROJECTS/DELETE_PROJECT'),
+  SetProjectVisibility: editEntityActionCreators('PROJECTS/SET_VISIBILITY'),
 };
 
 export const Branches = {

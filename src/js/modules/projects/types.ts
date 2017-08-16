@@ -15,6 +15,7 @@ export interface Project {
   latestSuccessfullyDeployedCommit?: string;
   activeUsers: ProjectUser[];
   repoUrl: string;
+  isPublic: boolean;
   token: string;
   webhookUrl?: string;
 }
@@ -81,6 +82,12 @@ export interface UpdateProjectAction {
   name: string;
   description?: string;
   repoUrl: string;
+}
+
+export interface SetProjectVisibilityAction {
+  type: 'PROJECTS/SET_VISIBILITY';
+  id: string;
+  isPublic: boolean;
 }
 
 export interface RemoveProjectAction {

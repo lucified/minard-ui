@@ -151,6 +151,7 @@ describe('Projects sagas', () => {
           repoUrl: 'http://mock.repo.url/project.git',
           token: 'testtoken',
           webhookUrl: 'http://foo.webhook.url',
+          isPublic: false,
         },
         {
           id: '2',
@@ -160,6 +161,7 @@ describe('Projects sagas', () => {
           repoUrl: 'http://mock.repo.url/project.git',
           token: 'testtoken',
           webhookUrl: 'http://foo.webhook.url',
+          isPublic: false,
         },
       ];
 
@@ -192,6 +194,7 @@ describe('Projects sagas', () => {
         repoUrl: 'http://mock.repo.url/project.git',
         token: 'testtoken',
         webhookUrl: 'http://foo.webhook.url',
+        isPublic: false,
       };
       const commit: Commit = {
         id: 'abc',
@@ -231,6 +234,7 @@ describe('Projects sagas', () => {
         repoUrl: 'http://mock.repo.url/project.git',
         token: 'testtoken',
         webhookUrl: 'http://foo.webhook.url',
+        isPublic: false,
       };
 
       const iterator = sagaFunctions.ensureProjectRelatedDataLoaded(project);
@@ -433,6 +437,7 @@ describe('Projects sagas', () => {
         repoUrl: '',
         token: 'testtoken',
         webhookUrl: 'http://foo.webhook.url',
+        isPublic: false,
       },
     };
 
@@ -503,5 +508,13 @@ describe('Projects sagas', () => {
       expect(val.value).to.equal(false);
       expect(val.done).to.equal(true);
     });
+  });
+
+  describe('setProjectVisibility', () => {
+    it('sets the project visibility as soon as the action is triggered');
+    it('calls the API with the correct settings');
+    it('keeps the new visibility after a successful server call');
+    it('sends a request success action once everything is ready');
+    it('reverts the changes if the API call fails');
   });
 });

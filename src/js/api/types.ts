@@ -61,7 +61,11 @@ export interface Api {
     ) => Promise<ApiResult<ApiEntityResponse>>;
     edit: (
       id: string,
-      newAttributes: { description?: string; name?: string },
+      newAttributes: {
+        description?: string;
+        name?: string;
+        isPublic?: boolean;
+      },
     ) => Promise<ApiResult<ApiEntityResponse>>;
     delete: (id: string) => Promise<ApiResult<{}>>;
   };
@@ -149,6 +153,7 @@ export interface ResponseProjectElement {
     'repo-url': string;
     token: string;
     'webhook-url'?: string;
+    'is-public': boolean;
   };
   relationships?: {
     'latest-successfully-deployed-commit'?: {

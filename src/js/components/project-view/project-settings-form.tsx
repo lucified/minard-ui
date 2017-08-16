@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { Field, FormProps, formValueSelector, reduxForm } from 'redux-form';
 
 import { DeleteError } from '../../modules/errors';
@@ -11,6 +11,7 @@ import { StateTree } from '../../reducers';
 
 import Confirmable from '../common/confirmable';
 import FormField from '../common/forms/field';
+import Toggle from '../common/forms/toggle';
 import SetupInstructions from './setup-instructions';
 
 const styles = require('../common/forms/modal-dialog.scss');
@@ -27,10 +28,19 @@ interface PassedProps {
 
 interface GeneratedStateProps {
   isProjectNameEdited: boolean;
+  projectVisibilityRequestInProgress: boolean;
+}
+
+interface GeneratedDispatchProps {
+  setProjectVisibility: (id: string, isPublic: boolean) => void;
 }
 
 type Props = PassedProps &
-  FormProps<EditProjectFormData, PassedProps & GeneratedStateProps, void>;
+  FormProps<
+    EditProjectFormData,
+    PassedProps & GeneratedStateProps & GeneratedDispatchProps,
+    void
+  >;
 
 const validate = (values: EditProjectFormData, props: Props) => {
   const errors: Partial<EditProjectFormData> = {};
@@ -64,8 +74,10 @@ const spaceToHyphen = (value?: string): string | undefined =>
 const normalizeProjectName = (value?: string): string | undefined =>
   spaceToHyphen(toLowerCase(value));
 
-class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps> {
-  constructor(props: GeneratedStateProps & Props) {
+class ProjectSettingsForm extends React.Component<
+  Props & GeneratedStateProps & GeneratedDispatchProps
+> {
+  constructor(props: GeneratedStateProps & GeneratedDispatchProps & Props) {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -77,6 +89,10 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps> {
       closeDialog(e);
     }
   }
+
+  private handleToggleVisibility = (isPublic: boolean) => {
+    this.props.setProjectVisibility(this.props.initialValues.id, isPublic);
+  };
 
   public render() {
     const {
@@ -91,6 +107,7 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps> {
       deleteProject,
       isProjectNameEdited,
       initialValues: project,
+      projectVisibilityRequestInProgress,
     } = this.props;
 
     const submitButton = (
@@ -146,6 +163,13 @@ class ProjectSettingsForm extends React.Component<Props & GeneratedStateProps> {
             label="Description"
             placeholder="Describe your project"
           />
+          <Toggle
+            label="Visibility"
+            text="Previews are open to everyone"
+            checked={project.isPublic}
+            onChange={this.handleToggleVisibility}
+            disabled={projectVisibilityRequestInProgress}
+          />
           <SetupInstructions project={project} />
         </div>
         <footer className={styles.footer}>
@@ -188,10 +212,26 @@ const mapStateToProps = (
     isProjectNameEdited:
       !!visibleProjectName &&
       visibleProjectName !== ownProps.initialValues.name,
+    projectVisibilityRequestInProgress: Requests.selectors.isSettingVisibilityForProject(
+      state,
+      ownProps.initialValues.id,
+    ),
+  };
+};
+
+const mapDispatchToProps = (
+  dispatch: Dispatch<any>,
+): GeneratedDispatchProps => {
+  return {
+    setProjectVisibility: (id: string, isPublic: boolean) => {
+      dispatch(Projects.actions.setProjectVisibility(id, isPublic));
+    },
   };
 };
 
 export default reduxForm({
+  // redux-form only handles changing the name and description. Visibility
+  // setting is done as soon as the value changes.
   form: 'editProject',
   validate,
   onSubmit: onSubmitPromiseCreator(
@@ -200,5 +240,8 @@ export default reduxForm({
     Requests.actions.Projects.EditProject.FAILURE.type,
   ),
 })(
-  connect<GeneratedStateProps, {}, Props>(mapStateToProps)(ProjectSettingsForm),
+  connect<GeneratedStateProps, GeneratedDispatchProps, Props>(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(ProjectSettingsForm),
 );

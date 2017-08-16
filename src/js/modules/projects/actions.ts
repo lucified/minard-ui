@@ -7,6 +7,7 @@ import {
   ProjectUser,
   RemoveBranchAction,
   RemoveProjectAction,
+  SetProjectVisibilityAction,
   StoreAuthorsToProjectAction,
   StoreProjectsAction,
   UpdateLatestActivityTimestampAction,
@@ -77,6 +78,16 @@ export const deleteProjectPromiseResolver = (
   id,
   resolve,
   reject,
+});
+
+export const SET_PROJECT_VISIBILITY = 'PROJECTS/SET_VISIBILITY';
+export const setProjectVisibility = (
+  id: string,
+  isPublic: boolean,
+): SetProjectVisibilityAction => ({
+  type: SET_PROJECT_VISIBILITY,
+  id,
+  isPublic,
 });
 
 // Update project based on event from Streaming API

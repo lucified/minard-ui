@@ -19,7 +19,9 @@
     "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "quotemark": [true, "single", "avoid-escape", "jsx-double"],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "no-this-assignment": [true, {"allow-destructuring": true}]
   },
   "jsRules": {
     "arrow-parens": false,

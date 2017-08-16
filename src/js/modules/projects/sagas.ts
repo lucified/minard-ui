@@ -29,6 +29,7 @@ import {
   FETCH_PROJECT,
   LOAD_ALL_PROJECTS,
   LOAD_PROJECT,
+  SET_PROJECT_VISIBILITY,
   storeProjects,
 } from './actions';
 import { getProject, getProjects } from './selectors';
@@ -39,6 +40,7 @@ import {
   FetchProjectAction,
   LoadAllProjectsAction,
   Project,
+  SetProjectVisibilityAction,
 } from './types';
 
 export default function createSagas(api: Api) {
@@ -276,6 +278,54 @@ export default function createSagas(api: Api) {
     }
   }
 
+  function* setProjectVisibility(
+    action: SetProjectVisibilityAction,
+  ): IterableIterator<Effect> {
+    const { id, isPublic } = action;
+    const project: Project = yield select(getProject, id);
+
+    // Show changes optimistically in the UI. Revert changes if call fails
+    yield put(storeProjects([{ ...project, isPublic }]));
+    yield put(
+      Requests.actions.Projects.SetProjectVisibility.REQUEST.actionCreator(id),
+    );
+
+    const { response, error, details, unauthorized } = yield call(
+      api.Project.edit,
+      id,
+      { isPublic },
+    );
+
+    if (response) {
+      // Store edited project
+      const projectObject = yield call(toProjects, response.data);
+      yield put(storeProjects(projectObject));
+
+      // Notify that setting visibility was a success
+      yield put(
+        Requests.actions.Projects.SetProjectVisibility.SUCCESS.actionCreator(
+          projectObject[0],
+        ),
+      );
+
+      return true;
+    } else {
+      // Restore the old value
+      yield put(storeProjects([project]));
+      // Notify that setting visibility failed
+      yield put(
+        Requests.actions.Projects.SetProjectVisibility.FAILURE.actionCreator(
+          id,
+          error,
+          details,
+          unauthorized,
+        ),
+      );
+
+      return false;
+    }
+  }
+
   function* startFetchProject(action: FetchProjectAction) {
     yield call(fetchProject, action.id);
   }
@@ -300,6 +350,7 @@ export default function createSagas(api: Api) {
       takeLatest(DELETE_PROJECT, deleteProject),
       takeLatest(EDIT_PROJECT, editProject),
       takeEvery(FETCH_PROJECT, startFetchProject),
+      takeEvery(SET_PROJECT_VISIBILITY, setProjectVisibility),
     ],
   };
 }

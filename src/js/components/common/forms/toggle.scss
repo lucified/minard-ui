@@ -1,0 +1,27 @@
+@import '../../mixins';
+@import '../../definitions';
+
+.field {
+  margin-bottom: 36px;
+
+  .label {
+    margin-bottom: 8px;
+    margin-right: 12px;
+
+    @include nitti-grotesk-medium;
+    @include font-size-M;
+    letter-spacing: -0.21px;
+    line-height: 24px;
+    color: $minard-dark-blue;
+  }
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .checkbox-container {
+    margin-top: 4px;
+  }
+}
