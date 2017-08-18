@@ -7,6 +7,7 @@ import { Branch } from '../modules/branches';
 import { Comment } from '../modules/comments';
 import { Commit } from '../modules/commits';
 import { Deployment, toDeploymentStatus } from '../modules/deployments';
+import { NotificationConfiguration } from '../modules/notifications';
 import { Project } from '../modules/projects';
 import {
   ResponseActivityElement,
@@ -284,3 +285,61 @@ const createDeploymentObject = (
 });
 
 export const toDeployments = toConvertedArray(createDeploymentObject);
+
+// Notifications
+function createNotificationConfiguration(
+  notification: any, // TODO: improve typing
+): NotificationConfiguration {
+  const { id, attributes: { type } } = notification;
+  const baseConfiguration: any = {
+    id,
+    type,
+  };
+  if (notification.attributes['project-id']) {
+    baseConfiguration.projectId = notification.attributes['project-id'];
+  } else if (notification.attributes['team-id']) {
+    baseConfiguration.teamId = notification.attributes['team-id'];
+  } else {
+    throw new Error('Missing team or project ID in notification');
+  }
+
+  switch (type) {
+    case 'flowdock':
+      return {
+        ...baseConfiguration,
+        flowToken: notification.attributes['flow-token'],
+      };
+    case 'slack':
+      return {
+        ...baseConfiguration,
+        slackWebhookUrl: notification.attributes['slack-webhook-url'],
+      };
+    case 'hipchat':
+      return {
+        ...baseConfiguration,
+        hipchatAuthToken: notification.attributes['hipchat-auth-token'],
+        hipchatRoomId: notification.attributes['hipchat-room-id'],
+      };
+    case 'github':
+      if (baseConfiguration.projectId) {
+        return {
+          ...baseConfiguration,
+          githubOwner: notification.attributes['github-owner'],
+          githubRepo: notification.attributes['github-repo'],
+        };
+      }
+
+      return {
+        ...baseConfiguration,
+        githubAppId: notification.attributes['github-app-id'],
+        githubAppPrivateKey: notification.attributes['github-app-private-key'],
+        githubInstallationId: notification.attributes['github-installation-id'],
+      };
+  }
+
+  throw new Error('Unknown notification type');
+}
+
+export const toNotificationConfigurations = toConvertedArray(
+  createNotificationConfiguration,
+);

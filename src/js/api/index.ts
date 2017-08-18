@@ -291,6 +291,8 @@ const Project = {
       },
     }),
   delete: (id: string) => deleteApi(`/api/projects/${id}`),
+  fetchNotifications: (id: string) =>
+    getApi<ApiEntityResponse>(`/api/projects/${id}/relationships/notification`),
 };
 
 const Preview = {
@@ -300,6 +302,8 @@ const Preview = {
 
 const Team = {
   fetch: () => connectToApi<ApiTeam>('/team', { credentials: 'include' }),
+  fetchNotifications: (id: string) =>
+    getApi<ApiEntityResponse>(`/api/teams/${id}/relationships/notification`),
 };
 
 const User = {

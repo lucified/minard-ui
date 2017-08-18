@@ -53,6 +53,12 @@ export interface Api {
   Project: {
     fetchAll: (teamId: string) => Promise<ApiResult<ApiEntityResponse>>;
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
+    fetchNotifications: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
+    // TODO:
+    /* createNotification: (
+      id: string,
+      notificationConfiguration: Notification,
+    ) => Promise<ApiResult<ApiEntityResponse>>; */
     create: (
       teamId: string,
       name: string,
@@ -71,6 +77,12 @@ export interface Api {
   };
   Team: {
     fetch: () => Promise<ApiResult<ApiTeam>>;
+    fetchNotifications: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
+    // TODO:
+    /* createNotification: (
+      id: number,
+      notificationConfiguration: Notification,
+    ) => Promise<ApiResult<ApiEntityResponse>>; */
   };
   User: {
     signup: () => Promise<ApiResult<SignupResponse>>;
@@ -85,7 +97,8 @@ export type ApiEntityTypeString =
   | 'projects'
   | 'branches'
   | 'activities'
-  | 'comments';
+  | 'comments'
+  | 'notifications';
 
 export interface ApiEntity {
   type: ApiEntityTypeString;
@@ -307,4 +320,70 @@ export interface ApiTeam {
 // User
 export interface SignupResponse {
   team: ApiTeam;
+}
+
+// Notifications
+export type NotificationConfigurationResponse =
+  | ApiFlowdockNotificationConfiguration
+  | ApiSlackNotificationConfiguration
+  | ApiHipchatNotificationConfiguration
+  | ApiGitHubTeamNotificationConfiguration
+  | ApiGitHubProjectNotificationConfiguration;
+
+type NotificationType = 'flowdock' | 'slack' | 'hipchat' | 'github';
+
+interface BaseNotificationConfigurationResponse {
+  type: 'notifications';
+  id: string;
+  attributes: {
+    type: NotificationType;
+    'project-id'?: string;
+    'team-id'?: number;
+  };
+}
+
+interface ApiFlowdockNotificationConfiguration
+  extends BaseNotificationConfigurationResponse {
+  attributes: {
+    type: 'flowdock';
+    'flow-token': string;
+  };
+}
+
+interface ApiSlackNotificationConfiguration
+  extends BaseNotificationConfigurationResponse {
+  attributes: {
+    type: 'slack';
+    'slack-webhook-url': string;
+  };
+}
+
+interface ApiHipchatNotificationConfiguration
+  extends BaseNotificationConfigurationResponse {
+  attributes: {
+    type: 'hipchat';
+    'hipchat-auth-token': string;
+    'hipchat-room-id': number;
+  };
+}
+
+interface ApiGitHubTeamNotificationConfiguration
+  extends BaseNotificationConfigurationResponse {
+  attributes: {
+    type: 'github';
+    'team-id': number;
+    'github-app-id': string;
+    'github-app-private-key': string;
+    'github-installation-id': number;
+  };
+}
+
+interface ApiGitHubProjectNotificationConfiguration
+  extends BaseNotificationConfigurationResponse {
+  attributes: {
+    type: 'github';
+    'project-id': string;
+    'github-owner': string;
+    'github-repo': string;
+  };
 }

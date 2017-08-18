@@ -68,6 +68,7 @@ export function createApi(): Api {
     Project: {
       fetchAll: () => Promise.resolve(emptyResponse),
       fetch: (_id: string) => Promise.resolve(emptyResponse),
+      fetchNotifications: (_id: string) => Promise.resolve(emptyResponse),
       create: (_name: string, _description?: string) =>
         Promise.resolve(emptyResponse),
       edit: (
@@ -79,12 +80,16 @@ export function createApi(): Api {
     Team: {
       fetch: () =>
         Promise.resolve({ response: { id: 1, name: 'name' } as ApiTeam }),
+      fetchNotifications: (_id: string) => Promise.resolve(emptyResponse),
     },
     User: {
-      signup: () => Promise.resolve({ response: {
-        password: 'secretPass',
-        team: { id: 1, name: 'name' } as ApiTeam },
-      }),
+      signup: () =>
+        Promise.resolve({
+          response: {
+            password: 'secretPass',
+            team: { id: 1, name: 'name' } as ApiTeam,
+          },
+        }),
       logout: () => Promise.resolve({ response: {} }),
     },
   };

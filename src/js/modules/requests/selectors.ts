@@ -16,7 +16,7 @@ export const isLoadingTeamInformation = createSelector<
   requestInformations =>
     !!requestInformations.find(
       requestInfo =>
-        requestInfo.type === actions.User.LoadTeamInformation.REQUEST.type,
+        requestInfo.type === actions.Team.LoadTeamInformation.REQUEST.type,
     ),
 );
 
