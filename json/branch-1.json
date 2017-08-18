@@ -1,0 +1,76 @@
+{
+  "data": {
+    "type": "branches",
+    "id": "1",
+    "attributes": {
+      "name": "first-branch",
+      "description": "This is a branch description",
+      "latest-activity-timestamp": "2016-08-01T15:51:21.802Z",
+      "minard-json": {
+        "errors": []
+      },
+      "token": "testtoken"
+    },
+    "relationships": {
+      "latest-successfully-deployed-commit": {
+        "data": {
+          "type": "commits",
+          "id": "aacceeff02"
+        }
+      },
+      "latest-commit": {
+        "data": {
+          "type": "commits",
+          "id": "aacceeff02"
+        }
+      },
+      "project": {
+        "data": {
+          "type": "projects",
+          "id": "1"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "type": "commits",
+      "id": "aacceeff02",
+      "attributes": {
+        "author": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-01T15:51:21.802Z"
+        },
+        "hash": "0123456789abcdef",
+        "committer": {
+          "email": "juho@lucify.com",
+          "timestamp": "2016-07-29T13:51:21.802Z"
+        },
+        "message": "Fix colors\n\nThe previous colors didn't look nice. Now they're much prettier."
+      },
+      "relationships": {
+        "deployments": {
+          "data": [{
+            "type": "deployments",
+            "id": "7"
+          }]
+        }
+      }
+    },
+    {
+      "type": "deployments",
+      "id": "7",
+      "attributes": {
+        "url": "#",
+        "screenshot": "https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png",
+        "status": "success",
+        "creator": {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com",
+          "timestamp": "2016-08-02T09:51:21.802Z"
+        }
+      }
+    }
+  ]
+}

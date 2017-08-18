@@ -1,0 +1,25 @@
+{
+  "data": {
+    "type": "branches",
+    "id": "3",
+    "attributes": {
+      "name": "third-long-name-branch",
+      "token": "tokenfoobar"
+    },
+    "relationships": {
+      "latest-successfully-deployed-commit": {
+        "data": {}
+      },
+      "latest-commit": {
+        "data": {}
+      },
+      "project": {
+        "data": {
+          "type": "projects",
+          "id": "1"
+        }
+      }
+    }
+  },
+  "included": []
+}

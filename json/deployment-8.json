@@ -1,0 +1,17 @@
+{
+  "data": {
+    "type": "deployments",
+    "id": "8",
+    "attributes": {
+      "url": "#",
+      "screenshot": "https://www.lucify.com/images/lucify-asylum-countries-open-graph-size-5adef1be36.png",
+      "status": "success",
+      "creator": {
+        "name": "Ville Saarinen",
+        "email": "ville.saarinen@lucify.com",
+        "timestamp": "2016-08-01T09:51:21.802Z"
+      },
+      "token": "tokenfoobar"
+    }
+  }
+}

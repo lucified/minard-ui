@@ -1,0 +1,30 @@
+{
+  "data": {
+    "type": "projects",
+    "id": "1",
+    "attributes": {
+      "name": "first-project",
+      "description": "This is the first-project description. It might not be set.",
+      "active-committers": [
+        {
+          "name": "Ville Saarinen",
+          "email": "ville.saarinen@lucify.com"
+        },
+        {
+          "email": "juho@lucify.com"
+        }
+      ],
+      "latest-activity-timestamp": "2016-08-01T15:51:21.802Z",
+      "repo-url": "http://mock.repo.url/project.git",
+      "token": "tokenfoobar"
+    },
+    "relationships": {
+      "latest-successfully-deployed-commit": {
+        "data": {
+          "type": "commits",
+          "id": "aacceeff02"
+        }
+      }
+    }
+  }
+}

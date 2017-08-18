@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "projects",
+    "id": "3",
+    "attributes": {
+      "name": "new-edited-project",
+      "description": "And now with a description",
+      "active-committers": [],
+      "repo-url": "http://mock.repo.url/project.git",
+      "token": "tokenfoobar"
+    },
+    "relationships": {
+      "latest-successfully-deployed-commit": {
+        "data": {}
+      }
+    }
+  },
+  "included": []
+}
