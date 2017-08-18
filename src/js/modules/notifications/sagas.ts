@@ -1,7 +1,7 @@
 import { call, Effect, put, takeEvery } from 'redux-saga/effects';
 
 import { toNotificationConfigurations } from '../../api/convert';
-import { Api, NotificationConfigurationResponse } from '../../api/types';
+import { Api, ApiEntityResponse } from '../../api/types';
 import Requests from '../requests';
 import {
   FETCH_PROJECT_NOTIFICATION_CONFIGURATIONS,
@@ -32,7 +32,7 @@ export default function createSagas(api: Api) {
       details,
       unauthorized,
     }: {
-      response?: NotificationConfigurationResponse;
+      response?: ApiEntityResponse;
       error?: string;
       details?: string;
       unauthorized?: boolean;
@@ -41,7 +41,7 @@ export default function createSagas(api: Api) {
     if (response) {
       const configurations: NotificationConfiguration[] = yield call(
         toNotificationConfigurations,
-        response,
+        response.data,
       );
       yield put(storeTeamNotificationConfigurations(configurations));
 
@@ -82,7 +82,7 @@ export default function createSagas(api: Api) {
       details,
       unauthorized,
     }: {
-      response?: NotificationConfigurationResponse;
+      response?: ApiEntityResponse;
       error?: string;
       details?: string;
       unauthorized?: boolean;
@@ -91,7 +91,7 @@ export default function createSagas(api: Api) {
     if (response) {
       const configurations: NotificationConfiguration[] = yield call(
         toNotificationConfigurations,
-        response,
+        response.data,
       );
       yield put(storeProjectNotificationConfigurations(id, configurations));
 
