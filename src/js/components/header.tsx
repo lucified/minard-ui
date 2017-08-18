@@ -16,6 +16,7 @@ import Avatar from './common/avatar';
 import ToggleMenu from './common/toggle-menu';
 import ErrorPopup from './error-popup';
 import InviteTeamDialog from './invite-team-dialog';
+import TeamNotificationsDialog from './team-notifications-dialog';
 
 const styles = require('./header.scss');
 const minardLogo = require('../../images/minard-logo.svg');
@@ -32,6 +33,7 @@ interface GeneratedDispatchProps {
   logout: () => void;
   openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => void;
   openAccountDialog: (e: React.MouseEvent<HTMLElement>) => void;
+  openTeamNotificationsDialog: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
@@ -54,6 +56,7 @@ class Header extends React.Component<Props> {
       team,
       openInviteTeamDialog,
       openAccountDialog,
+      openTeamNotificationsDialog,
     } = this.props;
 
     if (!isUserLoggedIn) {
@@ -89,6 +92,7 @@ class Header extends React.Component<Props> {
           <ErrorPopup />
         </CSSTransitionGroup>
         <InviteTeamDialog invitationToken={team && team.invitationToken} />
+        <TeamNotificationsDialog />
         <AccountDialog email={userEmail!} />
         <div className="container-fluid">
           <div
@@ -114,6 +118,9 @@ class Header extends React.Component<Props> {
                   {/* TODO: find a better way to make the whole div clickable than the empty span trick below */}
                   <a href="#" onClick={openAccountDialog}>
                     <span className={styles.cover} />Account
+                  </a>
+                  <a href="#" onClick={openTeamNotificationsDialog}>
+                    <span className={styles.cover} />Notifications
                   </a>
                   <a href="#" onClick={openInviteTeamDialog}>
                     <span className={styles.cover} />Invite your team
@@ -147,6 +154,10 @@ const mapDispatchToProps = (
   openInviteTeamDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(Modal.actions.openModal(ModalType.InviteTeam));
+  },
+  openTeamNotificationsDialog: (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    dispatch(Modal.actions.openModal(ModalType.TeamNotifications));
   },
   openAccountDialog: (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();

@@ -4,6 +4,7 @@ export enum ModalType {
   Account,
   TeamSettings,
   InviteTeam,
+  TeamNotifications,
 }
 
 // State
