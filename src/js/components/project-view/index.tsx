@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import Activities, { Activity } from '../../modules/activities';
 import Branches, { Branch } from '../../modules/branches';
 import { FetchError, isFetchError } from '../../modules/errors';
+import Notifications from '../../modules/notifications';
 import Projects, { Project } from '../../modules/projects';
 import Requests from '../../modules/requests';
 import { StateTree } from '../../reducers';
@@ -36,28 +37,42 @@ interface GeneratedDispatchProps {
   loadProject: (id: string) => void;
   loadActivities: (id: string, count: number, until?: number) => void;
   loadBranches: (id: string) => void;
+  loadProjectNotifications: (id: string) => void;
 }
 
 type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 
 class ProjectView extends React.Component<Props> {
   public componentWillMount() {
-    const { loadProject, loadActivities, loadBranches } = this.props;
+    const {
+      loadProject,
+      loadActivities,
+      loadBranches,
+      loadProjectNotifications,
+    } = this.props;
     const { projectId } = this.props.match.params;
 
     loadProject(projectId);
     loadBranches(projectId);
     loadActivities(projectId, 10);
+    loadProjectNotifications(projectId);
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadProject, loadActivities, loadBranches } = this.props;
     const { projectId } = nextProps.match.params;
 
     if (projectId !== this.props.match.params.projectId) {
+      const {
+        loadProject,
+        loadActivities,
+        loadBranches,
+        loadProjectNotifications,
+      } = this.props;
+
       loadProject(projectId);
       loadBranches(projectId);
       loadActivities(projectId, 10);
+      loadProjectNotifications(projectId);
     }
   }
 
@@ -211,6 +226,9 @@ const dispatchToProps = (dispatch: Dispatch<any>): GeneratedDispatchProps => ({
   },
   loadBranches: (id: string) => {
     dispatch(Branches.actions.loadBranchesForProject(id));
+  },
+  loadProjectNotifications: (id: string) => {
+    dispatch(Notifications.actions.fetchProjectNotificationConfigurations(id));
   },
 });
 

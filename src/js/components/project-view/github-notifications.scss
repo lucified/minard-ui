@@ -1,0 +1,140 @@
+@import '../mixins';
+@import '../definitions';
+
+.field {
+  .label-row {
+    margin-bottom: 12px;
+  }
+
+  .label {
+    margin-right: 12px;
+
+    @include nitti-grotesk-medium;
+    @include font-size-M;
+    letter-spacing: -0.21px;
+    line-height: 24px;
+    color: $minard-dark-blue;
+  }
+
+  .inputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    :first-child {
+      margin-right: 30px;
+    }
+
+    :last-child {
+      padding-right: 0px;
+    }
+  }
+
+  .input {
+    width: 100%;
+    position: relative;
+    left: -24px;
+  }
+
+  .icon {
+    position: absolute;
+    top: 11px;
+    left: 0px;
+    @include font-size-S;
+    color: $minard-mid-gray;
+    margin-right: 12px;
+  }
+
+  .slash {
+    @include font-size-XL;
+    top: -4px;
+  }
+
+  input {
+    /* Moved to handle icon */
+    position: relative;
+    left: 22px;
+    width: 100%;
+    height: 32px;
+
+    border: none;
+    outline: none;
+
+    color: $minard-dark-blue;
+
+    @include nitti-grotesk-light;
+    @include font-size-L;
+    letter-spacing: -1.5px;
+  }
+
+  ::placeholder {
+    opacity: 0.2;
+  }
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    opacity: 0.2;
+  }
+
+  .instructions {
+    @include font-size-M;
+    color: $minard-dark-blue;
+    letter-spacing: -0.17px;
+    line-height: 24px;
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+
+  .error {
+    @include font-size-M;
+    color: $minard-red;
+    letter-spacing: -0.21px;
+    line-height: 21px;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.submit {
+  float: right;
+  background: $minard-cyan;
+  border: 1px solid $minard-light-gray;
+  outline: none;
+  border-radius: 5px;
+  padding: 8px 18px;
+  cursor: pointer;
+
+  @include font-size-M;
+  color: white;
+
+  &:hover {
+    background: $minard-dark-cyan;
+  }
+
+  &[disabled=disabled],
+  &:disabled {
+    cursor: default;
+    pointer-events: none;
+    color: $minard-disabled-mid-gray;
+    background: white;
+  }
+}
+
+.unlink {
+  float: right;
+  @include font-size-M;
+  color: $minard-red;
+  margin-right: 12px;
+
+  &:hover {
+    color: $minard-dark-red;
+  }
+
+  &.disabled {
+    color: $minard-disabled-mid-gray;
+    cursor: default;
+  }
+}

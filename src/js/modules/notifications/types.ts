@@ -121,3 +121,15 @@ export interface StoreTeamNotificationConfigurationsAction {
   type: 'NOTIFICATIONS/STORE_TEAM_CONFIGURATIONS';
   configurations: NotificationConfiguration[];
 }
+
+export interface SetProjectGitHubNotificationsAction {
+  type: 'NOTIFICATIONS/SET_PROJECT_GITHUB_NOTIFICATIONS';
+  id: string;
+  owner: string;
+  repo: string;
+}
+
+export interface DeleteNotificationAction {
+  type: 'NOTIFICATIONS/DELETE_NOTIFICATION';
+  id: string;
+}

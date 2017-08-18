@@ -1,4 +1,7 @@
+import mapValues = require('lodash/mapValues');
 import { Reducer } from 'redux';
+
+import Requests from '../requests';
 
 import {
   STORE_PROJECT_NOTIFICATION_CONFIGURATIONS,
@@ -25,6 +28,14 @@ const reducer: Reducer<NotificationsState> = (
       return {
         ...state,
         team: action.configurations,
+      };
+    case Requests.actions.Notifications.Delete.SUCCESS.type:
+      return {
+        team: state.team && state.team.filter(d => d.id !== action.id),
+        projects: mapValues(
+          state.projects,
+          p => p && p.filter(d => d.id !== action.id),
+        ),
       };
     default:
       return state;

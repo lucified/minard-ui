@@ -1,7 +1,9 @@
 import {
+  DeleteNotificationAction,
   FetchProjectNotificationConfigurationsAction,
   FetchTeamNotificationConfigurationsAction,
   NotificationConfiguration,
+  SetProjectGitHubNotificationsAction,
   StoreProjectNotificationConfigurationsAction,
   StoreTeamNotificationConfigurationsAction,
 } from './types';
@@ -42,4 +44,23 @@ export const storeTeamNotificationConfigurations = (
 ): StoreTeamNotificationConfigurationsAction => ({
   type: STORE_TEAM_NOTIFICATION_CONFIGURATIONS,
   configurations,
+});
+
+export const SET_PROJECT_GITHUB_NOTIFICATIONS =
+  'NOTIFICATIONS/SET_PROJECT_GITHUB_NOTIFICATIONS';
+export const setProjectGitHubNotifications = (
+  projectId: string,
+  owner: string,
+  repo: string,
+): SetProjectGitHubNotificationsAction => ({
+  type: SET_PROJECT_GITHUB_NOTIFICATIONS,
+  id: projectId,
+  owner,
+  repo,
+});
+
+export const DELETE_NOTIFICATION = 'NOTIFICATIONS/DELETE_NOTIFICATION';
+export const deleteNotification = (id: string): DeleteNotificationAction => ({
+  type: DELETE_NOTIFICATION,
+  id,
 });

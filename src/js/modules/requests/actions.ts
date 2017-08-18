@@ -221,6 +221,9 @@ export const Projects = {
   LoadNotificationConfigurations: fetchEntityActionCreators(
     'PROJECTS/LOAD_NOTIFICATION_CONFIGURATIONS',
   ),
+  CreateNotification: createEntityActionCreators(
+    'PROJECTS/CREATE_NOTIFICATION',
+  ),
 };
 
 export const Branches = {
@@ -269,6 +272,10 @@ export const Team = {
   LoadNotificationConfigurations: fetchEntityActionCreators(
     'TEAM/LOAD_NOTIFICATION_CONFIGURATIONS',
   ),
+};
+
+export const Notifications = {
+  Delete: deleteEntityActionCreators('NOTIFICATIONS/DELETE_NOTIFICATION'),
 };
 
 // This action is created once all activities have been requested from the server
