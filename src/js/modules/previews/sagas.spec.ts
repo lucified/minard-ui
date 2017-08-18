@@ -1,9 +1,4 @@
-// tslint:disable:no-object-literal-type-assertion
-
 describe('Previews sagas', () => {
-  // const api = createApi();
-  // const sagaFunctions = createSagas(api).functions;
-
   describe('loadPreview', () => {
     it('fetches preview if it is missing');
     it('does not fetch preview if it already exists');
