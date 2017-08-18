@@ -66,7 +66,6 @@ export interface GitHubTeamNotificationConfiguration
   type: 'github';
   teamId: number;
   githubAppId: string;
-  githubAppPrivateKey: string;
   githubInstallationId: number;
 }
 

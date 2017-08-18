@@ -332,7 +332,6 @@ function createNotificationConfiguration(
       return {
         ...baseConfiguration,
         githubAppId: notification.attributes['github-app-id'],
-        githubAppPrivateKey: notification.attributes['github-app-private-key'],
         githubInstallationId: notification.attributes['github-installation-id'],
       };
   }

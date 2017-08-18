@@ -373,7 +373,6 @@ interface ApiGitHubTeamNotificationConfiguration
     type: 'github';
     'team-id': number;
     'github-app-id': string;
-    'github-app-private-key': string;
     'github-installation-id': number;
   };
 }
