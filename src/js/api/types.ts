@@ -1,3 +1,4 @@
+import { NotificationConfiguration } from '../modules/notifications';
 import { EntityType } from '../modules/previews';
 
 export type ApiResult<T> =
@@ -57,11 +58,9 @@ export interface Api {
     fetchAll: (teamId: string) => Promise<ApiResult<ApiEntityResponse>>;
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
     fetchNotifications: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
-    // TODO:
-    /* createNotification: (
-      id: string,
-      notificationConfiguration: Notification,
-    ) => Promise<ApiResult<ApiEntityResponse>>; */
+    createNotification: (
+      notificationConfiguration: Partial<NotificationConfiguration>, // We're missing the id field
+    ) => Promise<ApiResult<ApiEntityResponse>>;
     create: (
       teamId: string,
       name: string,

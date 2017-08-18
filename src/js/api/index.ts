@@ -2,6 +2,10 @@ import 'isomorphic-fetch';
 import * as moment from 'moment';
 
 import { logMessage } from '../logger';
+import {
+  isGitHubProjectNotificationConfiguration,
+  NotificationConfiguration,
+} from '../modules/notifications';
 import { EntityType } from '../modules/previews';
 import { getAccessToken } from './auth';
 import {
@@ -297,6 +301,25 @@ const Project = {
   delete: (id: string) => deleteApi(`/api/projects/${id}`),
   fetchNotifications: (id: string) =>
     getApi<ApiEntityResponse>(`/api/projects/${id}/relationships/notification`),
+  createNotification: (configuration: Partial<NotificationConfiguration>) => {
+    let payload;
+
+    if (isGitHubProjectNotificationConfiguration(configuration)) {
+      // Note: we're missing the id field here
+      payload = {
+        'project-id': configuration.projectId,
+        'github-repo': configuration.githubRepo,
+        'github-owner': configuration.githubOwner,
+        type: 'github',
+      };
+    } else {
+      throw new Error('Notification creation not supported for this type');
+    }
+
+    return postApi<ApiEntityResponse>('/api/notifications', {
+      data: payload,
+    });
+  },
 };
 
 const Preview = {
