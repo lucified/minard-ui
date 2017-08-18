@@ -9,12 +9,9 @@ const webpack = require('webpack');
 
 const deployConfig = require('./deploy-config');
 
-const getEntrypoint = (env, useMockData) => {
+function getEntrypoint(env) {
   let middle;
-  if (useMockData) {
-    // No remote backend
-    middle = 'development.local-json';
-  } else if (['staging', 'production'].indexOf(env) > -1) {
+  if (['staging', 'production'].indexOf(env) > -1) {
     // Use production configuration in staging
     middle = 'production';
   } else {
@@ -26,7 +23,7 @@ const getEntrypoint = (env, useMockData) => {
   console.log(`Using entrypoint ${entrypoint}`); // eslint-disable-line
 
   return entrypoint;
-};
+}
 
 const name = '[name].[hash:8].[ext]';
 
@@ -249,15 +246,11 @@ const config = {
     path: path.join(__dirname, deployConfig.base.dest),
     publicPath: deployConfig.base.publicPath,
   },
-  entry: [
-    'babel-polyfill',
-    getEntrypoint(deployConfig.env, !!process.env.USE_MOCK),
-  ],
+  entry: ['babel-polyfill', getEntrypoint(deployConfig.env)],
   plugins: [
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
       'process.env.CHARLES': JSON.stringify(getCharles()),
-      'process.env.USE_MOCK': JSON.stringify(!!process.env.USE_MOCK),
       'process.env.STREAMING_API': JSON.stringify(getCharles()),
       'process.env.ENV': JSON.stringify(deployConfig.env),
       'process.env.VERSION': JSON.stringify(deployConfig.base.commit),
