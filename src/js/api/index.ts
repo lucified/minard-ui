@@ -317,7 +317,10 @@ const Project = {
     }
 
     return postApi<ApiEntityResponse>('/api/notifications', {
-      data: payload,
+      data: {
+        type: 'notifications',
+        attributes: payload,
+      },
     });
   },
 };

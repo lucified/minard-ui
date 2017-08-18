@@ -78,7 +78,9 @@ class GitHubNotifications extends React.Component<Props, State> {
     this.setState({ repo: e.currentTarget.value });
   };
 
-  private handleSubmit = () => {
+  private handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
     // TODO: validate input
     const { repo, owner } = this.state;
     this.props.setGitHubRepo(owner, repo);
