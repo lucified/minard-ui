@@ -43,6 +43,9 @@ export interface Api {
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
     fetchBuildLog: (id: string) => Promise<ApiResult<string>>;
   };
+  Notification: {
+    delete: (id: string) => Promise<ApiResult<{}>>;
+  };
   Preview: {
     fetch: (
       id: string,

@@ -247,6 +247,10 @@ const Deployment = {
   },
 };
 
+const Notification = {
+  delete: (id: string) => deleteApi(`/api/notifications/${id}`),
+};
+
 const Project = {
   fetchAll: (teamId: string) =>
     getApi<ApiEntityResponse>(`/api/teams/${teamId}/relationships/projects`),
@@ -318,6 +322,7 @@ const API: Api = {
   Comment,
   Commit,
   Deployment,
+  Notification,
   Preview,
   Project,
   Team,

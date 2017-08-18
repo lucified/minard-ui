@@ -62,6 +62,9 @@ export function createApi(): Api {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
       fetchBuildLog: (_id: string) => Promise.resolve({ response: '' }),
     },
+    Notification: {
+      delete: (_id: string) => Promise.resolve({ response: {} }),
+    },
     Preview: {
       fetch: (_id: string) => Promise.resolve(emptyResponse),
     },
