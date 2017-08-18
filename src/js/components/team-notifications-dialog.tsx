@@ -5,8 +5,7 @@ import { connect, Dispatch } from 'react-redux';
 
 import Modal, { ModalType } from '../modules/modal';
 import Notifications, {
-  isGitHubTeamNotificationConfiguration,
-  NotificationConfiguration,
+  GitHubTeamNotificationConfiguration,
 } from '../modules/notifications';
 import { StateTree } from '../reducers';
 
@@ -14,7 +13,7 @@ const modalStyles = require('./common/forms/modal-dialog.scss');
 const styles = require('./team-notifications-dialog.scss');
 
 interface GeneratedStateProps {
-  notifications?: NotificationConfiguration[];
+  notifications?: GitHubTeamNotificationConfiguration[];
   isOpen: boolean;
 }
 
@@ -31,10 +30,6 @@ function getParentElement() {
 }
 
 function InviteTeamDialog({ isOpen, closeDialog, notifications }: Props) {
-  const gitHubNotifications =
-    notifications &&
-    notifications.filter(isGitHubTeamNotificationConfiguration);
-
   return (
     <ModalDialog
       isOpen={isOpen}
@@ -52,14 +47,14 @@ function InviteTeamDialog({ isOpen, closeDialog, notifications }: Props) {
         </div>
       </header>
       <div className={styles.instructions}>
-        {gitHubNotifications && gitHubNotifications.length > 0
+        {notifications && notifications.length > 0
           ? <div>
               <p>GitHub notifications have been set up for your team.</p>
               <p>
-                <strong>App ID:</strong> {gitHubNotifications[0].githubAppId}
+                <strong>App ID:</strong> {notifications[0].githubAppId}
                 <br />
                 <strong>Installation ID:</strong>
-                {gitHubNotifications[0].githubInstallationId}
+                {notifications[0].githubInstallationId}
               </p>
             </div>
           : <p>GitHub notifications have not been set up for your team.</p>}
@@ -70,7 +65,7 @@ function InviteTeamDialog({ isOpen, closeDialog, notifications }: Props) {
 
 const mapStateToProps = (state: StateTree): GeneratedStateProps => ({
   isOpen: Modal.selectors.isModalOpenOfType(state, ModalType.TeamNotifications),
-  notifications: Notifications.selectors.getTeamNotificationConfigurations(
+  notifications: Notifications.selectors.getTeamGitHubNotificationConfiguration(
     state,
   ),
 });

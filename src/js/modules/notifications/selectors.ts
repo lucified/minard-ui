@@ -1,6 +1,12 @@
+import { createSelector } from 'reselect';
+
 import { StateTree } from '../../reducers';
 
-import { NotificationConfiguration, NotificationsState } from './types';
+import {
+  isGitHubTeamNotificationConfiguration,
+  NotificationConfiguration,
+  NotificationsState,
+} from './types';
 
 const selectNotificationsTree = (state: StateTree): NotificationsState =>
   state.entities.notifications;
@@ -21,3 +27,10 @@ export const getTeamNotificationConfigurations = (
   state: StateTree,
 ): NotificationConfiguration[] | undefined =>
   selectNotificationsTree(state).team;
+
+export const getTeamGitHubNotificationConfiguration = createSelector(
+  getTeamNotificationConfigurations,
+  configurations =>
+    configurations &&
+    configurations.filter(isGitHubTeamNotificationConfiguration),
+);
