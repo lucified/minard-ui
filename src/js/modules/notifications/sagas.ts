@@ -126,9 +126,12 @@ export default function createSagas(api: Api) {
     action: SetProjectGitHubNotificationsAction,
   ): IterableIterator<Effect> {
     const { id, owner, repo } = action;
+    const requestName = `github-${id}`;
 
     yield put(
-      Requests.actions.Projects.CreateNotification.REQUEST.actionCreator(id),
+      Requests.actions.Projects.CreateNotification.REQUEST.actionCreator(
+        requestName,
+      ),
     );
 
     // First delete existing notification if it exists
@@ -141,11 +144,10 @@ export default function createSagas(api: Api) {
         deleteNotificationActionCreator(projectNotifications[0].id),
       );
       if (!deletionResult) {
-        // TODO: show this in UI
         console.error('Unable to delete previous GitHub configuration');
         yield put(
           Requests.actions.Projects.CreateNotification.FAILURE.actionCreator(
-            id,
+            requestName,
             'Previous notification configuration deletion failed',
           ),
         );
@@ -174,7 +176,7 @@ export default function createSagas(api: Api) {
       yield put(
         Requests.actions.Projects.CreateNotification.SUCCESS.actionCreator(
           configurations,
-          id,
+          requestName,
         ),
       );
 
@@ -182,7 +184,7 @@ export default function createSagas(api: Api) {
     } else {
       yield put(
         Requests.actions.Projects.CreateNotification.FAILURE.actionCreator(
-          id,
+          requestName,
           error!,
           details,
           unauthorized,

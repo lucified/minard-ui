@@ -5,6 +5,7 @@ import Requests from '../requests';
 import { SIGNUP_ERROR } from './actions';
 
 import {
+  CreateError,
   DeleteError,
   ErrorState,
   FetchCollectionError,
@@ -43,3 +44,14 @@ export const getSignupError = (state: StateTree): SignupError | undefined =>
   selectErrorTree(state).find(error => error.type === SIGNUP_ERROR) as
     | SignupError
     | undefined;
+
+export const getCreateProjectNotificationError = (
+  state: StateTree,
+  name: string,
+): CreateError | undefined =>
+  selectErrorTree(state).find(
+    error =>
+      error.type ===
+        Requests.actions.Projects.CreateNotification.FAILURE.type &&
+      (error as CreateError).name === name,
+  ) as CreateError | undefined;

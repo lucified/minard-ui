@@ -3,6 +3,7 @@ import * as React from 'react';
 import Icon = require('react-fontawesome');
 import { connect, Dispatch } from 'react-redux';
 
+import Errors from '../../modules/errors';
 import Notifications, {
   GitHubProjectNotificationConfiguration,
   GitHubTeamNotificationConfiguration,
@@ -208,6 +209,11 @@ const mapStateToProps = (
     state,
     ownProps.project.id,
   );
+  const errorObject = Errors.selectors.getCreateProjectNotificationError(
+    state,
+    // TODO: Refactor so that this isn't manually declared here in addition to notifications/sagas
+    `github-${ownProps.project.id}`,
+  );
 
   return {
     teamGitHubNotifications: Notifications.selectors.getTeamGitHubNotificationConfiguration(
@@ -216,6 +222,7 @@ const mapStateToProps = (
     projectGitHubNotifications:
       projectNotifications &&
       projectNotifications.filter(isGitHubProjectNotificationConfiguration),
+    error: errorObject && errorObject.error,
   };
 };
 
