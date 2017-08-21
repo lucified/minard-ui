@@ -33,6 +33,7 @@ type Props = PassedProps & GeneratedStateProps & GeneratedDispatchProps;
 interface State {
   owner: string;
   repo: string;
+  validationError?: string;
 }
 
 class GitHubNotifications extends React.Component<Props, State> {
@@ -63,27 +64,51 @@ class GitHubNotifications extends React.Component<Props, State> {
         (existingConfiguration.githubOwner !== newConfiguration.githubOwner ||
           existingConfiguration.githubRepo !== newConfiguration.githubRepo))
     ) {
+      const owner = newConfiguration ? newConfiguration.githubOwner : '';
+      const repo = newConfiguration ? newConfiguration.githubRepo : '';
       this.setState({
-        repo: newConfiguration ? newConfiguration.githubRepo : '',
-        owner: newConfiguration ? newConfiguration.githubOwner : '',
+        repo,
+        owner,
+        validationError: this.validateInput(owner, repo),
       });
     }
   }
 
+  /**
+   * Returns undefined if no errors found.
+   */
+  private validateInput(owner: string, repo: string): string | undefined {
+    const validator = /^[A-Za-z0-9_.-]*$/;
+    if (!validator.test(repo) || !validator.test(owner)) {
+      return 'Only alphanumeric characters, dashes, underscores, and dots allowed.';
+    }
+
+    return undefined;
+  }
+
   private handleOwnerChange = (e: React.FormEvent<HTMLInputElement>) => {
-    this.setState({ owner: e.currentTarget.value });
+    const owner = e.currentTarget.value.replace(' ', '-');
+    this.setState({
+      owner,
+      validationError: this.validateInput(owner, this.state.repo),
+    });
   };
 
   private handleRepoChange = (e: React.FormEvent<HTMLInputElement>) => {
-    this.setState({ repo: e.currentTarget.value });
+    const repo = e.currentTarget.value.replace(' ', '-');
+    this.setState({
+      repo,
+      validationError: this.validateInput(this.state.owner, repo),
+    });
   };
 
   private handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // TODO: validate input
-    const { repo, owner } = this.state;
-    this.props.setGitHubRepo(owner, repo);
+    const { repo, owner, validationError } = this.state;
+    if (!validationError) {
+      this.props.setGitHubRepo(owner, repo);
+    }
   };
 
   private getExistingConfiguration() {
@@ -101,7 +126,7 @@ class GitHubNotifications extends React.Component<Props, State> {
   };
 
   public render() {
-    const { owner, repo } = this.state;
+    const { owner, repo, validationError } = this.state;
     const { error, teamGitHubNotifications } = this.props;
     const existingSettings = this.getExistingConfiguration();
 
@@ -109,9 +134,9 @@ class GitHubNotifications extends React.Component<Props, State> {
       <div className={styles.field}>
         <div className={styles['label-row']}>
           <label className={styles.label}>Link to GitHub repo</label>
-          {error &&
+          {(error || validationError) &&
             <span className={styles.error}>
-              {error}
+              {error || validationError}
             </span>}
         </div>
         {!teamGitHubNotifications || teamGitHubNotifications.length === 0
@@ -159,6 +184,7 @@ class GitHubNotifications extends React.Component<Props, State> {
                   disabled={
                     !owner ||
                     !repo ||
+                    !!validationError ||
                     (existingSettings &&
                       existingSettings.githubOwner === owner &&
                       existingSettings.githubRepo === repo)
