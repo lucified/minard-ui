@@ -82,7 +82,6 @@ export interface Api {
     fetchNotifications: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
     // TODO:
     /* createNotification: (
-      id: number,
       notificationConfiguration: Notification,
     ) => Promise<ApiResult<ApiEntityResponse>>; */
   };
