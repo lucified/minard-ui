@@ -266,6 +266,7 @@ const Notification = {
     } else {
       throw new Error('Notification creation not supported for this type');
     }
+    // TODO: add missing notification configuration types
 
     return postApi<ApiEntityResponse>('/api/notifications', {
       data: {
