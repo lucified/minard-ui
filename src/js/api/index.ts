@@ -252,6 +252,28 @@ const Deployment = {
 };
 
 const Notification = {
+  create: (configuration: Partial<NotificationConfiguration>) => {
+    let payload;
+
+    if (isGitHubProjectNotificationConfiguration(configuration)) {
+      // Note: we're missing the id field here
+      payload = {
+        'project-id': configuration.projectId,
+        'github-repo': configuration.githubRepo,
+        'github-owner': configuration.githubOwner,
+        type: 'github',
+      };
+    } else {
+      throw new Error('Notification creation not supported for this type');
+    }
+
+    return postApi<ApiEntityResponse>('/api/notifications', {
+      data: {
+        type: 'notifications',
+        attributes: payload,
+      },
+    });
+  },
   delete: (id: string) => deleteApi(`/api/notifications/${id}`),
 };
 
@@ -301,28 +323,6 @@ const Project = {
   delete: (id: string) => deleteApi(`/api/projects/${id}`),
   fetchNotifications: (id: string) =>
     getApi<ApiEntityResponse>(`/api/projects/${id}/relationships/notification`),
-  createNotification: (configuration: Partial<NotificationConfiguration>) => {
-    let payload;
-
-    if (isGitHubProjectNotificationConfiguration(configuration)) {
-      // Note: we're missing the id field here
-      payload = {
-        'project-id': configuration.projectId,
-        'github-repo': configuration.githubRepo,
-        'github-owner': configuration.githubOwner,
-        type: 'github',
-      };
-    } else {
-      throw new Error('Notification creation not supported for this type');
-    }
-
-    return postApi<ApiEntityResponse>('/api/notifications', {
-      data: {
-        type: 'notifications',
-        attributes: payload,
-      },
-    });
-  },
 };
 
 const Preview = {

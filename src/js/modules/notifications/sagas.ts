@@ -155,7 +155,7 @@ export default function createSagas(api: Api) {
 
     // Then set new values
     const { response, error, details, unauthorized } = yield call(
-      api.Project.createNotification,
+      api.Notification.create,
       {
         type: 'github',
         projectId: id,

@@ -45,6 +45,9 @@ export interface Api {
     fetchBuildLog: (id: string) => Promise<ApiResult<string>>;
   };
   Notification: {
+    create: (
+      notificationConfiguration: Partial<NotificationConfiguration>, // We're missing the id field
+    ) => Promise<ApiResult<ApiEntityResponse>>;
     delete: (id: string) => Promise<ApiResult<{}>>;
   };
   Preview: {
@@ -58,9 +61,6 @@ export interface Api {
     fetchAll: (teamId: string) => Promise<ApiResult<ApiEntityResponse>>;
     fetch: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
     fetchNotifications: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
-    createNotification: (
-      notificationConfiguration: Partial<NotificationConfiguration>, // We're missing the id field
-    ) => Promise<ApiResult<ApiEntityResponse>>;
     create: (
       teamId: string,
       name: string,
@@ -80,10 +80,6 @@ export interface Api {
   Team: {
     fetch: () => Promise<ApiResult<ApiTeam>>;
     fetchNotifications: (id: string) => Promise<ApiResult<ApiEntityResponse>>;
-    // TODO:
-    /* createNotification: (
-      notificationConfiguration: Notification,
-    ) => Promise<ApiResult<ApiEntityResponse>>; */
   };
   User: {
     signup: () => Promise<ApiResult<SignupResponse>>;
