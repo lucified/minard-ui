@@ -8,7 +8,7 @@ import {
   CLEAR_SIGNUP_ERROR,
   SIGNUP_ERROR,
 } from './actions';
-import { ErrorState, MinardError } from './types';
+import { CreateError, DeleteError, ErrorState, MinardError } from './types';
 
 const initialState: ErrorState = [];
 
@@ -25,6 +25,7 @@ const reducer: Reducer<ErrorState> = (state = initialState, action: any) => {
     case Requests.actions.Projects.LoadAllProjects.FAILURE.type:
     case Requests.actions.Activities.LoadAllActivities.FAILURE.type:
     case Requests.actions.Projects.DeleteProject.FAILURE.type:
+    case Requests.actions.Projects.CreateNotification.FAILURE.type:
     case SIGNUP_ERROR:
       return state.concat(action);
     case Requests.actions.Projects.LoadAllProjects.REQUEST.type:
@@ -45,7 +46,15 @@ const reducer: Reducer<ErrorState> = (state = initialState, action: any) => {
         state,
         error =>
           error.type !== Requests.actions.Projects.DeleteProject.FAILURE.type ||
-          (error as any).id !== action.id,
+          (error as DeleteError).id !== action.id,
+      );
+    case Requests.actions.Projects.CreateNotification.REQUEST.type:
+      return returnFilteredStateIfChanged(
+        state,
+        error =>
+          error.type !==
+            Requests.actions.Projects.CreateNotification.FAILURE.type ||
+          (error as CreateError).name !== action.name,
       );
     case CLEAR_PROJECT_DELETION_ERRORS:
       return returnFilteredStateIfChanged(

@@ -5,6 +5,7 @@ import createCommentSagas from '../modules/comments/sagas';
 import createCommitSagas from '../modules/commits/sagas';
 import createDeploymentSagas from '../modules/deployments/sagas';
 import createFormSagas from '../modules/forms/sagas';
+import createNotificationsSagas from '../modules/notifications/sagas';
 import createPreviewSagas from '../modules/previews/sagas';
 import createProjectSagas from '../modules/projects/sagas';
 import createUserSagas from '../modules/user/sagas';
@@ -19,6 +20,7 @@ export default function createSagas(api: Api) {
   const previewSagas = createPreviewSagas(api);
   const projectSagas = createProjectSagas(api);
   const userSagas = createUserSagas(api);
+  const notificationsSagas = createNotificationsSagas(api);
 
   return function* rootSaga() {
     yield [
@@ -28,6 +30,7 @@ export default function createSagas(api: Api) {
       ...commitSagas.sagas,
       ...deploymentSagas.sagas,
       ...formSagas.sagas,
+      ...notificationsSagas.sagas,
       ...previewSagas.sagas,
       ...projectSagas.sagas,
       ...userSagas.sagas,

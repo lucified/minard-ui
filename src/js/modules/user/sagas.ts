@@ -33,7 +33,7 @@ export default function createSagas(api: Api) {
     const { redirect } = action;
 
     yield put(
-      Requests.actions.User.LoadTeamInformation.REQUEST.actionCreator(),
+      Requests.actions.Team.LoadTeamInformation.REQUEST.actionCreator(),
     );
 
     const { response, error, details, unauthorized } = yield call(
@@ -58,14 +58,14 @@ export default function createSagas(api: Api) {
       }
 
       yield put(
-        Requests.actions.User.LoadTeamInformation.SUCCESS.actionCreator(),
+        Requests.actions.Team.LoadTeamInformation.SUCCESS.actionCreator(),
       );
 
       return true;
     } else {
       // TODO: handle failure, e.g. not authorized or member of team
       yield put(
-        Requests.actions.User.LoadTeamInformation.FAILURE.actionCreator(
+        Requests.actions.Team.LoadTeamInformation.FAILURE.actionCreator(
           error,
           details,
           unauthorized,

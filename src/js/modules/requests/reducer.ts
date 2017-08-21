@@ -9,7 +9,7 @@ import {
   Comments,
   Commits,
   Projects,
-  User,
+  Team,
 } from './actions';
 import {
   EntitySuccessAction,
@@ -36,7 +36,8 @@ const reducer: Reducer<RequestsState> = (state = initialState, action: any) => {
     case Commits.LoadCommitsForBranch.REQUEST.type:
     case Comments.LoadCommentsForDeployment.REQUEST.type:
     case Comments.DeleteComment.REQUEST.type:
-    case User.LoadTeamInformation.REQUEST.type:
+    case Team.LoadTeamInformation.REQUEST.type:
+    case Team.LoadNotificationConfigurations.REQUEST.type:
     case ALL_ACTIVITIES_REQUESTED: // Note: How are these two cleared?
     case ALL_ACTIVITIES_REQUESTED_FOR_PROJECT:
       return state.concat(action);
@@ -58,12 +59,19 @@ const reducer: Reducer<RequestsState> = (state = initialState, action: any) => {
         requestInfo =>
           requestInfo.type !== Activities.LoadAllActivities.REQUEST.type,
       );
-    case User.LoadTeamInformation.FAILURE.type:
-    case User.LoadTeamInformation.SUCCESS.type:
+    case Team.LoadTeamInformation.FAILURE.type:
+    case Team.LoadTeamInformation.SUCCESS.type:
       return returnFilteredStateIfChanged(
         state,
         requestInfo =>
-          requestInfo.type !== User.LoadTeamInformation.REQUEST.type,
+          requestInfo.type !== Team.LoadTeamInformation.REQUEST.type,
+      );
+    case Team.LoadNotificationConfigurations.FAILURE.type:
+    case Team.LoadNotificationConfigurations.SUCCESS.type:
+      return returnFilteredStateIfChanged(
+        state,
+        requestInfo =>
+          requestInfo.type !== Team.LoadNotificationConfigurations.REQUEST.type,
       );
     case Comments.LoadCommentsForDeployment.FAILURE.type:
     case Comments.LoadCommentsForDeployment.SUCCESS.type:

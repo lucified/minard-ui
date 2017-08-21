@@ -21,7 +21,8 @@
     "quotemark": [true, "single", "avoid-escape", "jsx-double"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
     "semicolon": [true, "always", "ignore-bound-class-methods"],
-    "no-this-assignment": [true, {"allow-destructuring": true}]
+    "no-this-assignment": [true, {"allow-destructuring": true}],
+    "jsx-curly-spacing": "never"
   },
   "jsRules": {
     "arrow-parens": false,

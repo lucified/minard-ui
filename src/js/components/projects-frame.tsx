@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 
+import Notifications from '../modules/notifications';
 import Projects from '../modules/projects';
 import User, { Team } from '../modules/user';
 import { StateTree } from '../reducers';
@@ -20,6 +21,7 @@ type PassedProps = RouteComponentProps<Params>;
 
 interface GeneratedDispatchProps {
   loadAllProjects: (teamId: string) => void;
+  loadTeamNotificationConfigurations: (teamId: string) => void;
 }
 
 interface GeneratedStateProps {
@@ -30,10 +32,15 @@ type Props = GeneratedDispatchProps & GeneratedStateProps & PassedProps;
 
 class ProjectsFrame extends React.Component<Props> {
   public componentWillMount() {
-    const { loadAllProjects, team } = this.props;
+    const {
+      loadAllProjects,
+      loadTeamNotificationConfigurations,
+      team,
+    } = this.props;
 
     if (team) {
       loadAllProjects(team.id);
+      loadTeamNotificationConfigurations(team.id);
     } else {
       // This shouldn't happen.
       logMessage('Inside ProjectsFrame without a team!');
@@ -43,10 +50,15 @@ class ProjectsFrame extends React.Component<Props> {
   }
 
   public componentWillReceiveProps(nextProps: Props) {
-    const { loadAllProjects, team } = nextProps;
+    const {
+      loadAllProjects,
+      loadTeamNotificationConfigurations,
+      team,
+    } = nextProps;
 
     if (team && this.props.team === undefined) {
       loadAllProjects(team.id);
+      loadTeamNotificationConfigurations(team.id);
     }
   }
 
@@ -97,6 +109,9 @@ const mapDispatchToProps = (
 ): GeneratedDispatchProps => ({
   loadAllProjects: (teamId: string) => {
     dispatch(Projects.actions.loadAllProjects(teamId));
+  },
+  loadTeamNotificationConfigurations: (teamId: string) => {
+    dispatch(Notifications.actions.fetchTeamNotificationConfigurations(teamId));
   },
 });
 

@@ -9,7 +9,7 @@ import {
   Comments,
   Commits,
   Projects,
-  User,
+  Team,
 } from './actions';
 import reducer from './reducer';
 import { RequestsState } from './types';
@@ -24,7 +24,7 @@ describe('Requests reducer', () => {
       Commits.LoadCommitsForBranch.REQUEST.type,
       Comments.LoadCommentsForDeployment.REQUEST.type,
       Comments.DeleteComment.REQUEST.type,
-      User.LoadTeamInformation.REQUEST.type,
+      Team.LoadTeamInformation.REQUEST.type,
       ALL_ACTIVITIES_REQUESTED,
       ALL_ACTIVITIES_REQUESTED_FOR_PROJECT,
     ];
@@ -44,7 +44,7 @@ describe('Requests reducer', () => {
     const entityTypesWithoutId = [
       Projects.LoadAllProjects,
       Activities.LoadAllActivities,
-      User.LoadTeamInformation,
+      Team.LoadTeamInformation,
     ];
 
     entityTypesWithoutId.forEach(entityType => {

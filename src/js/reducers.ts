@@ -9,6 +9,7 @@ import Commits, { CommitState } from './modules/commits';
 import Deployments, { DeploymentState } from './modules/deployments';
 import Errors, { ErrorState } from './modules/errors';
 import Modal, { ModalState } from './modules/modal';
+import Notifications, { NotificationsState } from './modules/notifications';
 import Previews, { PreviewState } from './modules/previews';
 import Projects, { ProjectState } from './modules/projects';
 import Requests, { RequestsState } from './modules/requests';
@@ -25,6 +26,7 @@ export default combineReducers({
     deployments: Deployments.reducer,
     previews: Previews.reducer,
     projects: Projects.reducer,
+    notifications: Notifications.reducer,
   }),
   errors: Errors.reducer,
   requests: Requests.reducer,
@@ -45,6 +47,7 @@ export interface StateTree {
     deployments: DeploymentState;
     previews: PreviewState;
     projects: ProjectState;
+    notifications: NotificationsState;
   };
   errors: ErrorState;
   requests: RequestsState;

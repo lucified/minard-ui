@@ -12,6 +12,7 @@ import { StateTree } from '../../reducers';
 import Confirmable from '../common/confirmable';
 import FormField from '../common/forms/field';
 import Toggle from '../common/forms/toggle';
+import GitHubNotifications from './github-notifications';
 import SetupInstructions from './setup-instructions';
 
 const styles = require('../common/forms/modal-dialog.scss');
@@ -171,6 +172,7 @@ class ProjectSettingsForm extends React.Component<
             disabled={projectVisibilityRequestInProgress}
           />
           <SetupInstructions project={project} />
+          <GitHubNotifications project={project} />
         </div>
         <footer className={styles.footer}>
           <div className={styles['primary-actions']}>

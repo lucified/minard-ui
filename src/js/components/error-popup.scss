@@ -1,0 +1,52 @@
+@import 'mixins';
+@import 'definitions';
+
+.error-box {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  height: 90px;
+  border-radius: 0 0 6px 6px;
+  background-color: $minard-light-red;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+
+  @include nitti-grotesk-bold;
+  @include font-size-MS;
+  line-height: 20px;
+  color: white;
+}
+
+.connection-box {
+  @extend .error-box;
+  background-color: $minard-dark-cyan;
+}
+
+.error-image {
+  margin-right: 20px;
+}
+
+// Error transitions
+
+:global {
+  .error-box-enter {
+    top: -100px;
+  }
+
+  .error-box-enter.error-box-enter-active {
+    top: 0px;
+    transition: top 0.3s ease-out;
+  }
+
+  .error-box-leave {
+    top: 0px;
+  }
+
+  .error-box-leave.error-box-leave-active {
+    top: -100px;
+    transition: top 0.3s ease-in;
+  }
+}

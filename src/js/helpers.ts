@@ -1,4 +1,4 @@
-export const selectText = (e: React.MouseEvent<HTMLElement>) => {
+export function selectText(e: React.MouseEvent<HTMLElement>) {
   const node = e.target;
   const doc = document as any;
 
@@ -12,4 +12,11 @@ export const selectText = (e: React.MouseEvent<HTMLElement>) => {
     window.getSelection().removeAllRanges();
     window.getSelection().addRange(range);
   }
-};
+}
+
+export function reloadPage(e: React.MouseEvent<HTMLElement>) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  location.reload(true);
+}

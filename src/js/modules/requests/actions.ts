@@ -218,6 +218,12 @@ export const Projects = {
   EditProject: editEntityActionCreators('PROJECTS/EDIT_PROJECT'),
   DeleteProject: deleteEntityActionCreators('PROJECTS/DELETE_PROJECT'),
   SetProjectVisibility: editEntityActionCreators('PROJECTS/SET_VISIBILITY'),
+  LoadNotificationConfigurations: fetchEntityActionCreators(
+    'PROJECTS/LOAD_NOTIFICATION_CONFIGURATIONS',
+  ),
+  CreateNotification: createEntityActionCreators(
+    'PROJECTS/CREATE_NOTIFICATION',
+  ),
 };
 
 export const Branches = {
@@ -259,10 +265,17 @@ export const Activities = {
   ),
 };
 
-export const User = {
+export const Team = {
   LoadTeamInformation: fetchCollectionActionCreators(
-    'USER/LOAD_TEAM_INFORMATION',
+    'TEAM/LOAD_TEAM_INFORMATION',
   ),
+  LoadNotificationConfigurations: fetchEntityActionCreators(
+    'TEAM/LOAD_NOTIFICATION_CONFIGURATIONS',
+  ),
+};
+
+export const Notifications = {
+  Delete: deleteEntityActionCreators('NOTIFICATIONS/DELETE_NOTIFICATION'),
 };
 
 // This action is created once all activities have been requested from the server
